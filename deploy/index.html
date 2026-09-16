@@ -4608,12 +4608,24 @@ async function saveProfile(p){
     profile = { ...p, ...objSnakeToCamel(row) };
   }catch(e){ console.error('profile save error', e); showToast('Could not save your profile — check your connection.', 'warn'); }
 }
+// glider_best/boss_victories are jsonb columns defaulting to '{}' in Postgres
+// (unlike the other numeric best-score columns, which are nullable integers)
+// — until a real score is saved, the API returns that empty object back, and
+// it's truthy in JS, so unguarded reads render it directly ("[object Object]")
+// instead of treating it as "no score yet". Normalize right after every API
+// merge so every downstream read (display and scoring logic) just sees a
+// number or undefined, like it already expects.
+function normalizeJsonbScoreDefaults(p){
+  if(p && typeof p.gliderBest!=='number') delete p.gliderBest;
+  if(p && typeof p.bossVictories!=='number') delete p.bossVictories;
+  return p;
+}
 async function loadProgress(){
   try{
     const { data:{ session } } = await sb.auth.getSession();
     if(session){
       const row = await apiFetch('/me/progress');
-      progress = { studioTakes: [], ...progress, ...objSnakeToCamel(row) };
+      progress = normalizeJsonbScoreDefaults({ studioTakes: [], ...progress, ...objSnakeToCamel(row) });
       if(Array.isArray(progress.history)) progress.history = {}; // defends against pre-migration rows
       return;
     }
@@ -4624,7 +4636,7 @@ let lastKnownLevel = null;
 async function saveProgress(){
   try{
     const row = await apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
-    progress = { ...progress, ...objSnakeToCamel(row) };
+    progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
   }catch(e){ console.error('progress save error', e); }
   if(profile && typeof levelForXp==='function'){
     const {level, name} = levelForXp(progress.xp||0);
