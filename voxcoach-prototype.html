@@ -1315,7 +1315,7 @@
       <span class="shell-streak" id="shellStreak">🔥 0</span>
       <span class="shell-level" id="shellLevel">Lv. 1</span>
       <div class="account-bar" id="accountBar">
-        <button class="ghost-btn" id="signInBtn">Create free account</button>
+        <button class="ghost-btn" id="signInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
       </div>
     </div>
   </header>
@@ -1326,19 +1326,19 @@
       <h2 class="trial-modal-title" id="authModalTitle">Start your Vocal Journey</h2>
       <p class="trial-modal-sub">Get full access to VoxCoach for 21 days.</p>
       <ul class="trial-checklist">
-        <li>AI Vocal Coach</li>
-        <li>Personalized vocal training</li>
-        <li>Vocal analysis</li>
-        <li>Song practice</li>
-        <li>Vocal World</li>
-        <li>Vocal games</li>
-        <li>Harmony training</li>
-        <li>Progress tracking</li>
-        <li>21-day transformation program</li>
+        <li data-i18n="auth_feature_ai_coach">AI Vocal Coach</li>
+        <li data-i18n="auth_feature_personalized_training">Personalized vocal training</li>
+        <li data-i18n="auth_feature_vocal_analysis">Vocal analysis</li>
+        <li data-i18n="auth_feature_song_practice">Song practice</li>
+        <li data-i18n="auth_feature_vocal_world">Vocal World</li>
+        <li data-i18n="auth_feature_vocal_games">Vocal games</li>
+        <li data-i18n="auth_feature_harmony_training">Harmony training</li>
+        <li data-i18n="auth_feature_progress_tracking">Progress tracking</li>
+        <li data-i18n="auth_feature_21day_program">21-day transformation program</li>
       </ul>
       <div class="trial-banner">
-        <div class="trial-banner-title">21 DAYS FREE</div>
-        <div class="trial-banner-sub">After your 21-day access period, a subscription is required to continue.</div>
+        <div class="trial-banner-title" data-i18n="auth_banner_title">21 DAYS FREE</div>
+        <div class="trial-banner-sub" data-i18n="auth_banner_sub">After your 21-day access period, a subscription is required to continue.</div>
       </div>
       <div class="field" style="margin:18px 0 12px;">
         <label for="authName" data-i18n="auth_name_label">Display name</label>
@@ -1349,7 +1349,7 @@
         <input type="email" id="authEmail" placeholder="you@example.com" class="text-input">
       </div>
       <div class="field" style="margin-bottom:20px;">
-        <label for="authPassword">Password</label>
+        <label for="authPassword" data-i18n="auth_password_label">Password</label>
         <input type="password" id="authPassword" placeholder="At least 6 characters" class="text-input" autocomplete="current-password">
       </div>
       <button class="solid-btn teal" id="authCreateBtn" style="width:100%;justify-content:center;">Start my 21 days free</button>
@@ -1357,7 +1357,7 @@
       <p class="trial-modal-terms">
         <a href="#" id="authModeToggle" style="text-decoration:underline;">Already have an account? Sign in</a>
       </p>
-      <p class="trial-modal-terms">By continuing, you agree to the Terms of Service and Privacy Policy. No payment required today.</p>
+      <p class="trial-modal-terms" data-i18n="auth_terms_text">By continuing, you agree to the Terms of Service and Privacy Policy. No payment required today.</p>
     </div>
   </div>
 
@@ -3813,10 +3813,10 @@
     <div class="modal-card paywall-card">
       <div class="paywall-icon">🎤</div>
       <h2 class="trial-modal-title" id="signinRequiredTitle">Feature name</h2>
-      <p class="trial-modal-sub">Create a free account to unlock this — 21 days of full access, no payment required today.</p>
+      <p class="trial-modal-sub" data-i18n="signin_required_sub">Create a free account to unlock this — 21 days of full access, no payment required today.</p>
       <div class="btn-row" style="margin-top:20px;">
-        <button class="solid-btn teal" id="signinRequiredCreateBtn" style="flex:1;justify-content:center;">Create free account</button>
-        <button class="ghost-btn" id="signinRequiredCancelBtn">Not now</button>
+        <button class="solid-btn teal" id="signinRequiredCreateBtn" style="flex:1;justify-content:center;" data-i18n="dashboard_create_account_btn">Create free account</button>
+        <button class="ghost-btn" id="signinRequiredCancelBtn" data-i18n="signin_required_cancel_btn">Not now</button>
       </div>
     </div>
   </div>
@@ -4606,7 +4606,7 @@ async function saveProfile(p){
   try{
     const row = await apiFetch('/me', { method:'PATCH', body: JSON.stringify(objCamelToSnake(p)) });
     profile = { ...p, ...objSnakeToCamel(row) };
-  }catch(e){ console.error('profile save error', e); showToast('Could not save your profile — check your connection.', 'warn'); }
+  }catch(e){ console.error('profile save error', e); showToast(t('err_save_profile_failed'), 'warn'); }
 }
 // glider_best/boss_victories are jsonb columns defaulting to '{}' in Postgres
 // (unlike the other numeric best-score columns, which are nullable integers)
@@ -4724,7 +4724,7 @@ async function recordRangeCapture(loMidi, hiMidi){
 function renderAccountBar(){
   const bar = document.getElementById('accountBar');
   if(!profile){
-    bar.innerHTML = `<button class="ghost-btn" id="signInBtn">Create free account</button>`;
+    bar.innerHTML = `<button class="ghost-btn" id="signInBtn" data-i18n="dashboard_create_account_btn">${t('dashboard_create_account_btn')}</button>`;
     document.getElementById('signInBtn').addEventListener('click', openAuthModal);
     return;
   }
@@ -4758,12 +4758,12 @@ function setAuthMode(mode){
   nameField.style.display = mode==='signin' ? 'none' : '';
   checklist.style.display = mode==='signin' ? 'none' : '';
   banner.style.display = mode==='signin' ? 'none' : '';
-  document.getElementById('authModalTitle').textContent = mode==='signin' ? 'Welcome back' : 'Start your Vocal Journey';
+  document.getElementById('authModalTitle').textContent = mode==='signin' ? t('auth_title_signin') : t('auth_title');
   document.querySelector('#authModalOverlay .trial-modal-sub').textContent =
-    mode==='signin' ? 'Sign in to continue your vocal journey.' : 'Get full access to VoxCoach for 21 days.';
-  document.getElementById('authCreateBtn').textContent = mode==='signin' ? 'Sign in' : 'Start my 21 days free';
+    mode==='signin' ? t('auth_sub_signin') : t('auth_sub');
+  document.getElementById('authCreateBtn').textContent = mode==='signin' ? t('auth_signin_btn') : t('auth_create_btn');
   document.getElementById('authModeToggle').textContent =
-    mode==='signin' ? 'Need an account? Create one' : 'Already have an account? Sign in';
+    mode==='signin' ? t('auth_toggle_to_signup') : t('auth_toggle_to_signin');
 }
 
 function openAuthModal(){
@@ -4802,12 +4802,25 @@ async function onSignedIn(){
   if(typeof renderHomeScreen==='function') renderHomeScreen();
 }
 
+// Supabase Auth's own error messages are English-only regardless of app
+// language, so map the known ones to real translations rather than ever
+// showing that raw text; anything unrecognized falls back to a translated
+// generic message instead of leaking English.
+function translateAuthError(e){
+  const msg = (e && e.message) || '';
+  if(/invalid login credentials/i.test(msg)) return t('auth_err_invalid_credentials');
+  if(/already registered|already exists/i.test(msg)) return t('auth_err_email_taken');
+  if(/password should be at least/i.test(msg)) return t('auth_err_weak_password');
+  if(/invalid.*email|unable to validate email/i.test(msg)) return t('auth_err_invalid_email');
+  return t('auth_err_generic');
+}
+
 document.getElementById('authCreateBtn').addEventListener('click', async ()=>{
   const name = document.getElementById('authName').value.trim();
   const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
-  if(!email || !password){ showToast('Add an email and password to continue.', 'warn'); return; }
-  if(authMode==='signup' && !name){ showToast('Add a display name to continue.', 'warn'); return; }
+  if(!email || !password){ showToast(t('auth_err_missing_email_password'), 'warn'); return; }
+  if(authMode==='signup' && !name){ showToast(t('auth_err_missing_name'), 'warn'); return; }
 
   const btn = document.getElementById('authCreateBtn');
   btn.disabled = true;
@@ -4822,7 +4835,7 @@ document.getElementById('authCreateBtn').addEventListener('click', async ()=>{
     await onSignedIn();
     if(authMode==='signup' && typeof openOnboarding==='function') openOnboarding();
   }catch(e){
-    showToast(e.message || 'Something went wrong — try again.', 'warn');
+    showToast(translateAuthError(e), 'warn');
   }finally{
     btn.disabled = false;
   }
@@ -10341,6 +10354,20 @@ const TRANSLATIONS = {
     auth_title:'Start your Vocal Journey', auth_sub:'Get full access to VoxCoach for 21 days.',
     auth_name_label:'Display name', auth_email_label:'Email',
     auth_create_btn:'Start my 21 days free', auth_cancel_btn:'Cancel',
+    auth_password_label:'Password',
+    auth_title_signin:'Welcome back', auth_sub_signin:'Sign in to continue your vocal journey.',
+    auth_signin_btn:'Sign in', auth_toggle_to_signin:'Already have an account? Sign in', auth_toggle_to_signup:'Need an account? Create one',
+    auth_feature_ai_coach:'AI Vocal Coach', auth_feature_personalized_training:'Personalized vocal training', auth_feature_vocal_analysis:'Vocal analysis',
+    auth_feature_song_practice:'Song practice', auth_feature_vocal_world:'Vocal World', auth_feature_vocal_games:'Vocal games',
+    auth_feature_harmony_training:'Harmony training', auth_feature_progress_tracking:'Progress tracking', auth_feature_21day_program:'21-day transformation program',
+    auth_banner_title:'21 DAYS FREE', auth_banner_sub:'After your 21-day access period, a subscription is required to continue.',
+    auth_terms_text:'By continuing, you agree to the Terms of Service and Privacy Policy. No payment required today.',
+    auth_err_missing_email_password:'Add an email and password to continue.', auth_err_missing_name:'Add a display name to continue.',
+    auth_err_generic:'Something went wrong — try again.', auth_err_invalid_credentials:'Incorrect email or password. Try again.',
+    auth_err_email_taken:'An account with this email already exists — try signing in instead.', auth_err_weak_password:'Password should be at least 6 characters.',
+    auth_err_invalid_email:"That email address doesn't look valid.",
+    err_save_profile_failed:'Could not save your profile — check your connection.',
+    signin_required_sub:'Create a free account to unlock this — 21 days of full access, no payment required today.', signin_required_cancel_btn:'Not now',
     ob_welcome_title:'Welcome to VoxCoach',
     ob_welcome_sub:"Six quick questions, then straight into your real Day 1 assessment — this isn't a form, it's the start of your vocal journey.",
     ob_back_btn:'Back', ob_get_started_btn:'Get started', ob_start_assessment_btn:'Start my Day 1 assessment', ob_next_btn:'Next',
@@ -10901,6 +10928,20 @@ const TRANSLATIONS = {
     auth_title:'Commencez votre parcours vocal', auth_sub:'Accédez à VoxCoach en totalité pendant 21 jours.',
     auth_name_label:"Nom d'affichage", auth_email_label:'E-mail',
     auth_create_btn:'Commencer mes 21 jours gratuits', auth_cancel_btn:'Annuler',
+    auth_password_label:'Mot de passe',
+    auth_title_signin:'Content de vous revoir', auth_sub_signin:'Connectez-vous pour continuer votre parcours vocal.',
+    auth_signin_btn:'Se connecter', auth_toggle_to_signin:'Vous avez déjà un compte ? Connectez-vous', auth_toggle_to_signup:"Pas encore de compte ? Créez-en un",
+    auth_feature_ai_coach:'Coach vocal IA', auth_feature_personalized_training:'Entraînement vocal personnalisé', auth_feature_vocal_analysis:'Analyse vocale',
+    auth_feature_song_practice:'Entraînement sur des chansons', auth_feature_vocal_world:'Monde Vocal', auth_feature_vocal_games:'Jeux vocaux',
+    auth_feature_harmony_training:"Entraînement à l'harmonie", auth_feature_progress_tracking:'Suivi de la progression', auth_feature_21day_program:'Programme de transformation de 21 jours',
+    auth_banner_title:'21 JOURS GRATUITS', auth_banner_sub:"Après votre période d'accès de 21 jours, un abonnement est nécessaire pour continuer.",
+    auth_terms_text:"En continuant, vous acceptez les Conditions d'utilisation et la Politique de confidentialité. Aucun paiement n'est requis aujourd'hui.",
+    auth_err_missing_email_password:'Ajoutez un e-mail et un mot de passe pour continuer.', auth_err_missing_name:'Ajoutez un nom d\'affichage pour continuer.',
+    auth_err_generic:"Une erreur s'est produite — réessayez.", auth_err_invalid_credentials:'E-mail ou mot de passe incorrect. Réessayez.',
+    auth_err_email_taken:'Un compte existe déjà avec cet e-mail — essayez de vous connecter à la place.', auth_err_weak_password:'Le mot de passe doit contenir au moins 6 caractères.',
+    auth_err_invalid_email:'Cette adresse e-mail ne semble pas valide.',
+    err_save_profile_failed:"Impossible d'enregistrer votre profil — vérifiez votre connexion.",
+    signin_required_sub:"Créez un compte gratuit pour débloquer ceci — 21 jours d'accès complet, aucun paiement requis aujourd'hui.", signin_required_cancel_btn:'Pas maintenant',
     ob_welcome_title:'Bienvenue sur VoxCoach',
     ob_welcome_sub:"Six questions rapides, puis directement votre véritable évaluation du Jour 1 — ce n'est pas un formulaire, c'est le début de votre parcours vocal.",
     ob_back_btn:'Retour', ob_get_started_btn:'Commencer', ob_start_assessment_btn:'Commencer mon évaluation du Jour 1', ob_next_btn:'Suivant',
@@ -11461,6 +11502,20 @@ const TRANSLATIONS = {
     auth_title:'Comienza tu viaje vocal', auth_sub:'Obtén acceso completo a VoxCoach durante 21 días.',
     auth_name_label:'Nombre a mostrar', auth_email_label:'Correo electrónico',
     auth_create_btn:'Comenzar mis 21 días gratis', auth_cancel_btn:'Cancelar',
+    auth_password_label:'Contraseña',
+    auth_title_signin:'Bienvenido de nuevo', auth_sub_signin:'Inicia sesión para continuar tu viaje vocal.',
+    auth_signin_btn:'Iniciar sesión', auth_toggle_to_signin:'¿Ya tienes una cuenta? Inicia sesión', auth_toggle_to_signup:'¿No tienes cuenta? Crea una',
+    auth_feature_ai_coach:'Entrenador vocal con IA', auth_feature_personalized_training:'Entrenamiento vocal personalizado', auth_feature_vocal_analysis:'Análisis vocal',
+    auth_feature_song_practice:'Práctica de canciones', auth_feature_vocal_world:'Mundo Vocal', auth_feature_vocal_games:'Juegos vocales',
+    auth_feature_harmony_training:'Entrenamiento de armonía', auth_feature_progress_tracking:'Seguimiento del progreso', auth_feature_21day_program:'Programa de transformación de 21 días',
+    auth_banner_title:'21 DÍAS GRATIS', auth_banner_sub:'Después de tu período de acceso de 21 días, se requiere una suscripción para continuar.',
+    auth_terms_text:'Al continuar, aceptas los Términos de Servicio y la Política de Privacidad. No se requiere pago hoy.',
+    auth_err_missing_email_password:'Agrega un correo electrónico y una contraseña para continuar.', auth_err_missing_name:'Agrega un nombre a mostrar para continuar.',
+    auth_err_generic:'Algo salió mal — inténtalo de nuevo.', auth_err_invalid_credentials:'Correo electrónico o contraseña incorrectos. Inténtalo de nuevo.',
+    auth_err_email_taken:'Ya existe una cuenta con este correo electrónico — prueba a iniciar sesión.', auth_err_weak_password:'La contraseña debe tener al menos 6 caracteres.',
+    auth_err_invalid_email:'Ese correo electrónico no parece válido.',
+    err_save_profile_failed:'No se pudo guardar tu perfil — verifica tu conexión.',
+    signin_required_sub:'Crea una cuenta gratis para desbloquear esto — 21 días de acceso completo, sin necesidad de pago hoy.', signin_required_cancel_btn:'Ahora no',
     ob_welcome_title:'Bienvenido a VoxCoach',
     ob_welcome_sub:'Seis preguntas rápidas, y luego directo a tu evaluación real del Día 1 — esto no es un formulario, es el comienzo de tu viaje vocal.',
     ob_back_btn:'Atrás', ob_get_started_btn:'Empezar', ob_start_assessment_btn:'Comenzar mi evaluación del Día 1', ob_next_btn:'Siguiente',
@@ -12021,6 +12076,20 @@ const TRANSLATIONS = {
     auth_title:'Vokal Yolculuğuna Başla', auth_sub:"VoxCoach'a 21 gün boyunca tam erişim kazanın.",
     auth_name_label:'Görünen ad', auth_email_label:'E-posta',
     auth_create_btn:'21 ücretsiz günümü başlat', auth_cancel_btn:'İptal',
+    auth_password_label:'Şifre',
+    auth_title_signin:'Tekrar hoş geldiniz', auth_sub_signin:'Vokal yolculuğunuza devam etmek için oturum açın.',
+    auth_signin_btn:'Oturum aç', auth_toggle_to_signin:'Zaten bir hesabınız var mı? Oturum açın', auth_toggle_to_signup:'Hesabınız yok mu? Bir tane oluşturun',
+    auth_feature_ai_coach:'Yapay Zeka Vokal Koçu', auth_feature_personalized_training:'Kişiselleştirilmiş vokal antrenmanı', auth_feature_vocal_analysis:'Vokal analizi',
+    auth_feature_song_practice:'Şarkı pratiği', auth_feature_vocal_world:'Vokal Dünyası', auth_feature_vocal_games:'Vokal oyunları',
+    auth_feature_harmony_training:'Armoni antrenmanı', auth_feature_progress_tracking:'İlerleme takibi', auth_feature_21day_program:'21 günlük dönüşüm programı',
+    auth_banner_title:'21 GÜN ÜCRETSİZ', auth_banner_sub:'21 günlük erişim sürenizin ardından devam etmek için abonelik gerekir.',
+    auth_terms_text:"Devam ederek Hizmet Şartları'nı ve Gizlilik Politikası'nı kabul etmiş olursunuz. Bugün ödeme yapmanız gerekmez.",
+    auth_err_missing_email_password:'Devam etmek için bir e-posta ve şifre girin.', auth_err_missing_name:'Devam etmek için bir görünen ad girin.',
+    auth_err_generic:'Bir şeyler ters gitti — tekrar deneyin.', auth_err_invalid_credentials:'E-posta veya şifre hatalı. Tekrar deneyin.',
+    auth_err_email_taken:'Bu e-posta ile zaten bir hesap var — bunun yerine oturum açmayı deneyin.', auth_err_weak_password:'Şifre en az 6 karakter olmalıdır.',
+    auth_err_invalid_email:'Bu e-posta adresi geçerli görünmüyor.',
+    err_save_profile_failed:'Profiliniz kaydedilemedi — bağlantınızı kontrol edin.',
+    signin_required_sub:'Bunun kilidini açmak için ücretsiz bir hesap oluşturun — 21 gün tam erişim, bugün ödeme gerekmez.', signin_required_cancel_btn:'Şimdi değil',
     ob_welcome_title:"VoxCoach'a Hoş Geldiniz",
     ob_welcome_sub:"Altı hızlı soru, ardından doğrudan gerçek 1. Gün değerlendirmenize geçiyoruz — bu bir form değil, vokal yolculuğunuzun başlangıcı.",
     ob_back_btn:'Geri', ob_get_started_btn:'Başla', ob_start_assessment_btn:'1. Gün değerlendirmemi başlat', ob_next_btn:'İleri',
@@ -12588,6 +12657,8 @@ function applyTranslations(){
   });
   const obOverlay = document.getElementById('onboardingOverlay');
   if(obOverlay && obOverlay.style.display==='flex' && typeof renderOnboardingStep==='function') renderOnboardingStep();
+  const authOverlay = document.getElementById('authModalOverlay');
+  if(authOverlay && authOverlay.style.display==='flex' && typeof setAuthMode==='function') setAuthMode(authMode);
 }
 async function setLanguage(code){
   currentLanguage = code;
