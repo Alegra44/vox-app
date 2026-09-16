@@ -1,0 +1,11 @@
+node_modules/
+supabase/.temp/
+supabase/.branches/
+.vercel
+
+# Real secrets only — .env.example files stay tracked as templates.
+.env
+.env.local
+.env.*.local
+supabase/functions/.env
+!supabase/functions/.env.example
