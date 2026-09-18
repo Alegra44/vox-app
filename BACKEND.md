@@ -1,13 +1,33 @@
 # VoxCoach Backend
 
 Implements migration plan (spec §7) steps 1–5: the Postgres schema (§3), the
-API layer (§4), and the client wiring (`voxcoach-prototype.html`) that calls
+API layer (§4), and the client wiring (`deploy/index.html`) that calls
 it — real Supabase auth, `apiFetch()` sending a Bearer token to the deployed
 edge function, and `loadProfile`/`saveProfile`/`loadProgress`/`saveProgress`
 reading and writing through it. `window.storage` has been fully removed from
 the client. Verified as of 2026-09-16: live end-to-end (browser → API →
 Postgres) for profile/progress; see "Confirmed working end-to-end" below for
 what's actually been confirmed vs. just wired.
+
+## Which client file is the real one
+
+**`deploy/index.html` is the one real source file for the client.** It's the
+file Vercel actually serves at `deploy-alegra1122.vercel.app` (deployed via
+`vercel deploy --prod` from inside `deploy/`, which is linked to the Vercel
+project via `deploy/.vercel/project.json`) — edit it directly for any client
+fix, then redeploy from `deploy/`.
+
+`voxcoach-prototype.html` at the repo root is kept only as a byte-for-byte
+mirror of `deploy/index.html` for anyone browsing the repo root without
+digging into `deploy/`. It is **not** read by anything at runtime and is not
+a separate copy to maintain — it drifted out of sync for a while (commits
+`37171cc`/`87dfb49`/`94677e8` only touched `deploy/index.html`) before being
+resynced on 2026-09-18. Going forward: make every client change in
+`deploy/index.html`, then overwrite `voxcoach-prototype.html` with it (`cp
+deploy/index.html voxcoach-prototype.html`) in the same commit so the two
+never diverge again. Any `voxcoach-prototype.html ~L####` line reference
+below is equally valid against `deploy/index.html` at the same line number,
+since the two files are identical.
 
 ## What's here
 
