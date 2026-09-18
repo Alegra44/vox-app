@@ -1414,10 +1414,10 @@
 
     <!-- Signed-out state -->
     <div class="key-card" id="homeSignedOutCard" style="display:none;">
-      <div class="step-label">Welcome</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:8px 0 12px;">Create a free account to get today's real mission</h2>
-      <p class="desc" style="margin-bottom:18px;">Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.</p>
-      <button class="solid-btn teal" id="homeSignInBtn">Create free account</button>
+      <div class="step-label" data-i18n="home_signedout_eyebrow">Welcome</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:8px 0 12px;" data-i18n="home_signedout_title">Create a free account to get today's real mission</h2>
+      <p class="desc" style="margin-bottom:18px;" data-i18n="home_signedout_desc">Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.</p>
+      <button class="solid-btn teal" id="homeSignInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
     </div>
 
     <!-- Trial status row -->
@@ -1428,10 +1428,10 @@
 
     <!-- Trial complete state -->
     <div class="key-card" id="homeTrialCompleteCard" style="display:none;">
-      <div class="step-label">Your 21-Day Journey is complete 🎤</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:8px 0 10px;">You've built a foundation. Your next chapter is waiting.</h2>
-      <p class="desc" style="margin-bottom:16px;">Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.</p>
-      <button class="solid-btn teal" id="homeChoosePlanBtn">Choose your plan</button>
+      <div class="step-label" data-i18n="home_trialcomplete_eyebrow">Your 21-Day Journey is complete 🎤</div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:8px 0 10px;" data-i18n="home_trialcomplete_title">You've built a foundation. Your next chapter is waiting.</h2>
+      <p class="desc" style="margin-bottom:16px;" data-i18n="home_trialcomplete_desc">Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.</p>
+      <button class="solid-btn teal" id="homeChoosePlanBtn" data-i18n="home_trialcomplete_btn">Choose your plan</button>
     </div>
 
     <!-- Today's Mission hero card -->
@@ -1463,13 +1463,13 @@
     </div>
 
     <div class="key-card" id="proactiveInsightCard" style="display:none;margin-top:16px;">
-      <div class="step-label">💡 I noticed something</div>
+      <div class="step-label" data-i18n="home_proactive_eyebrow">💡 I noticed something</div>
       <p class="desc" id="proactiveInsightText" style="margin-top:8px;"></p>
     </div>
 
     <div class="key-card" id="homeTodaysReportCard" style="display:none;margin-bottom:16px;">
-      <div class="step-label">Today's Report</div>
-      <p class="desc" style="margin:6px 0 12px;">Session start vs. right now — real deltas, not a fixed weekly summary.</p>
+      <div class="step-label" data-i18n="home_todaysreport_eyebrow">Today's Report</div>
+      <p class="desc" style="margin:6px 0 12px;" data-i18n="home_todaysreport_desc">Session start vs. right now — real deltas, not a fixed weekly summary.</p>
       <div id="homeTodaysReportRows"></div>
     </div>
 
@@ -5500,6 +5500,13 @@ const TRANSLATIONS = {
     exfeedback_nopitch:"Didn't catch a clear pitch — try again a little louder or closer to the mic.",
     exfeedback_excellent:'Right on it.', exfeedback_close:'Close — nice control.', exfeedback_nearby:'In the neighborhood, but drifting.',
     exfeedback_offtarget:'Off target — try matching the tone before you start singing.',
+    home_signedout_eyebrow:'Welcome', home_signedout_title:"Create a free account to get today's real mission",
+    home_signedout_desc:"Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.",
+    home_trialcomplete_eyebrow:'Your 21-Day Journey is complete 🎤', home_trialcomplete_title:"You've built a foundation. Your next chapter is waiting.",
+    home_trialcomplete_desc:'Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.',
+    home_trialcomplete_btn:'Choose your plan',
+    home_proactive_eyebrow:'💡 I noticed something', home_todaysreport_eyebrow:"Today's Report",
+    home_todaysreport_desc:'Session start vs. right now — real deltas, not a fixed weekly summary.',
   },
   fr: {
     nav_home:'Accueil', nav_train:'Entraîner', nav_songs:'Chansons', nav_world:'Monde', nav_you:'Vous',
@@ -6419,6 +6426,13 @@ const TRANSLATIONS = {
     exfeedback_nopitch:"Aucune hauteur claire détectée — réessayez un peu plus fort ou plus près du micro.",
     exfeedback_excellent:'En plein dedans.', exfeedback_close:'Proche — bon contrôle.', exfeedback_nearby:'Dans les environs, mais ça dérive.',
     exfeedback_offtarget:'Hors cible — essayez de caler le ton avant de commencer à chanter.',
+    home_signedout_eyebrow:'Bienvenue', home_signedout_title:"Créez un compte gratuit pour obtenir la vraie mission du jour",
+    home_signedout_desc:"Tout sur cet écran est calculé à partir de vos scores réels — il n'y a rien à montrer tant que vous n'en avez pas quelques-uns.",
+    home_trialcomplete_eyebrow:'Votre parcours de 21 jours est terminé 🎤', home_trialcomplete_title:"Vous avez posé des bases. Votre prochain chapitre vous attend.",
+    home_trialcomplete_desc:"Votre progression, vos succès et votre historique sont sauvegardés — rien n'est supprimé. Choisissez un forfait pour continuer à vous entraîner, pratiquer des chansons, jouer dans le Monde Vocal et bénéficier d'un coaching guidé par IA.",
+    home_trialcomplete_btn:'Choisir votre forfait',
+    home_proactive_eyebrow:"💡 J'ai remarqué quelque chose", home_todaysreport_eyebrow:"Rapport du jour",
+    home_todaysreport_desc:"Début de session vs. maintenant — de vrais écarts, pas un résumé hebdomadaire figé.",
   },
   es: {
     nav_home:'Inicio', nav_train:'Entrenar', nav_songs:'Canciones', nav_world:'Mundo', nav_you:'Tú',
@@ -7338,6 +7352,13 @@ const TRANSLATIONS = {
     exfeedback_nopitch:"No se detectó una afinación clara — inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     exfeedback_excellent:'Justo en el blanco.', exfeedback_close:'Cerca — buen control.', exfeedback_nearby:'Por ahí cerca, pero se desvía.',
     exfeedback_offtarget:'Fuera de objetivo — intenta igualar el tono antes de empezar a cantar.',
+    home_signedout_eyebrow:'Bienvenido', home_signedout_title:"Crea una cuenta gratis para obtener la misión real de hoy",
+    home_signedout_desc:"Todo en esta pantalla se calcula a partir de tus puntuaciones reales — no hay nada que mostrar hasta que tengas algunas.",
+    home_trialcomplete_eyebrow:'Tu Recorrido de 21 días ha terminado 🎤', home_trialcomplete_title:"Has construido una base. Tu próximo capítulo te espera.",
+    home_trialcomplete_desc:'Tu progreso, logros e historial están guardados — no se elimina nada. Elige un plan para seguir entrenando, practicando canciones, jugando en el Mundo Vocal y recibiendo coaching guiado por IA.',
+    home_trialcomplete_btn:'Elige tu plan',
+    home_proactive_eyebrow:'💡 Noté algo', home_todaysreport_eyebrow:'Informe de hoy',
+    home_todaysreport_desc:'Inicio de sesión frente a ahora mismo — deltas reales, no un resumen semanal fijo.',
   },
   tr: {
     nav_home:'Ana Sayfa', nav_train:'Antrenman', nav_songs:'Şarkılar', nav_world:'Dünya', nav_you:'Sen',
@@ -8257,6 +8278,13 @@ const TRANSLATIONS = {
     exfeedback_nopitch:"Net bir perde yakalanamadı — biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
     exfeedback_excellent:'Tam isabet.', exfeedback_close:'Yakın — iyi kontrol.', exfeedback_nearby:'Yakınında ama kayıyor.',
     exfeedback_offtarget:'Hedefin dışında — şarkı söylemeye başlamadan önce tonu yakalamayı deneyin.',
+    home_signedout_eyebrow:'Hoş geldiniz', home_signedout_title:"Bugünün gerçek görevini almak için ücretsiz hesap oluşturun",
+    home_signedout_desc:"Bu ekrandaki her şey gerçek skorlarınızdan hesaplanır — birkaç skorunuz olana kadar gösterilecek bir şey yok.",
+    home_trialcomplete_eyebrow:'21 Günlük Yolculuğunuz tamamlandı 🎤', home_trialcomplete_title:"Bir temel kurdunuz. Bir sonraki bölümünüz sizi bekliyor.",
+    home_trialcomplete_desc:'İlerlemeniz, başarılarınız ve geçmişiniz kaydedildi — hiçbir şey silinmedi. Antrenmana, şarkı pratiğine, Vokal Dünyası\'nda oynamaya ve yapay zeka destekli koçluk almaya devam etmek için bir plan seçin.',
+    home_trialcomplete_btn:'Planınızı seçin',
+    home_proactive_eyebrow:'💡 Bir şey fark ettim', home_todaysreport_eyebrow:'Bugünün Raporu',
+    home_todaysreport_desc:'Oturum başlangıcı ile şu an — sabit haftalık özet değil, gerçek farklar.',
   },
 };
 let currentLanguage = 'en';
@@ -8310,6 +8338,7 @@ function applyTranslations(){
     ()=>typeof renderPricingState==='function' && document.getElementById('trialStatusBanner') && renderPricingState(),
     ()=>typeof renderAccountBar==='function' && renderAccountBar(),
     ()=>typeof renderProfile==='function' && document.getElementById('profileSignedOut') && renderProfile(),
+    ()=>typeof renderHomeScreen==='function' && document.getElementById('panel-home') && document.getElementById('panel-home').classList.contains('active') && renderHomeScreen(),
     ()=>typeof updateArcadeBestLabels==='function' && document.getElementById('gliderBestLabel') && updateArcadeBestLabels(),
     ()=>typeof renderArcadeLocks==='function' && document.querySelector('.arcade-game-card') && renderArcadeLocks(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
@@ -10256,7 +10285,7 @@ function renderPricingState(){
     else if(remaining<=3) msg = `${remaining} ${t('pricingstate_daysleft_transform')}`;
     else if(remaining<=7) msg = `${t('pricingstate_championship_p1')} ${remaining} ${t('pricingstate_championship_p2')}`;
     else msg = `${remaining} ${t('pricingstate_daysleft_free')}`;
-    banner.innerHTML = `<strong>${t('journey_day_p1')} ${trialDayNumber()} ${t('journey_billing_trial_mid')} 21</strong> — ${msg}`;
+    banner.innerHTML = `<strong>${t('journey_day_p1')} ${trialDayNumber()} ${t('journey_day_p2')}</strong> — ${msg}`;
     completeCard.style.display = 'none';
   } else {
     banner.className = 'trial-status-banner expired';
