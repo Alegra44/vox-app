@@ -494,6 +494,37 @@
   .practice-chip:hover{border-color:var(--brass);color:var(--brass);}
   .practice-chip.active-part{background:var(--brass);color:#1a1305;border-color:var(--brass);}
 
+  /* ---- I AM THE {PART} (single-part rehearsal) ---- */
+  .rh-levels{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0 10px;}
+  @media (max-width:640px){ .rh-levels{grid-template-columns:1fr;} }
+  .rh-level{
+    display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;
+    border:1px solid var(--hairline);background:var(--surface);color:var(--cream);
+    font-family:'Inter',sans-serif;padding:10px 12px;border-radius:12px;cursor:pointer;
+  }
+  .rh-level:hover{border-color:var(--brass-dim);}
+  .rh-level.passed{border-color:var(--brass-dim);}
+  .rh-level.active{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset;}
+  .rh-level-num{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:0.06em;}
+  .rh-level.active .rh-level-num{color:var(--brass);}
+  .rh-level-name{font-weight:700;font-size:13px;}
+  .rh-level-pct{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+  .rh-level-bar{width:100%;height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;}
+  .rh-level-bar span{display:block;height:100%;background:var(--brass);}
+  .rh-gain-readout{background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;margin-top:12px;}
+  .rh-gain-val{font-family:'Space Mono',monospace;font-size:20px;color:var(--cream);margin:4px 0 8px;}
+  .rh-gain-val small{font-size:12px;color:var(--muted);margin-left:8px;}
+  .rh-roll-wrap{overflow-x:auto;border:1px solid var(--hairline);border-radius:12px;background:var(--surface);margin-top:10px;}
+  .rh-roll-wrap svg{display:block;width:100%;}
+  .rh-notes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .rh-note{
+    border:1px solid var(--hairline);border-left:3px solid var(--part-color, var(--brass));border-radius:10px;
+    padding:6px 10px;background:var(--surface);min-width:92px;
+  }
+  .rh-note b{display:block;font-family:'Space Mono',monospace;font-size:15px;color:var(--cream);}
+  .rh-note span{font-size:11px;color:var(--muted);}
+  .rh-note.current{background:var(--surface-raised);border-color:var(--part-color, var(--brass));}
+
   .roster-row{
     display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--hairline);
   }
@@ -1395,6 +1426,7 @@
     <button data-panel="hearmistake" id="hearMistakeTabBtn">Can You Hear Your Mistake</button>
     <button data-panel="studio" id="studioTabBtn">Studio Mode</button>
     <button data-panel="aiduet" id="aiDuetTabBtn">AI Duet Partner</button>
+    <button data-panel="partrehearsal" id="partRehearsalTabBtn">I Am the Part</button>
     <button data-panel="feedback" id="feedbackTabBtn">Feedback</button>
     <button data-panel="performancedirector" id="performanceDirectorTabBtn">Performance Director</button>
     <button data-panel="mirror" id="mirrorTabBtn">Mirror Mode</button>
@@ -1574,6 +1606,11 @@
         <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
         <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
         <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
+      </div>
+      <div class="hub-category-card">
+        <div class="hc-title" data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</div>
+        <div class="hc-desc" data-i18n="hub_songs_rehearsal_desc">Rehearse one part while the others play around you — your guide fades out over 5 real levels, from Learn to Performance.</div>
+        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="partrehearsal" data-i18n="hub_open_btn">Open</button></div>
       </div>
       <div class="hub-category-card">
         <div class="hc-title" data-i18n="hub_songs_studio_title">🎙️ Studio Mode</div>
@@ -3401,6 +3438,15 @@
         <button class="practice-chip" data-practice-part="Bass">Practice: Bass</button>
         <button class="practice-chip" id="practiceClearBtn" data-i18n="choir_allparts_btn">All parts (clear solo)</button>
       </div>
+
+      <p class="fine-print" style="margin:18px 0 6px;" data-i18n="choir_rehearse_label">Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:</p>
+      <div class="practice-chip-row" id="rehearseEntryRow">
+        <button class="practice-chip" data-rehearse-part="Soprano">Soprano</button>
+        <button class="practice-chip" data-rehearse-part="Lead">Lead</button>
+        <button class="practice-chip" data-rehearse-part="Alto">Alto</button>
+        <button class="practice-chip" data-rehearse-part="Tenor">Tenor</button>
+        <button class="practice-chip" data-rehearse-part="Bass">Bass</button>
+      </div>
     </div>
 
     <div class="key-card" style="margin-top:20px;">
@@ -3410,6 +3456,52 @@
         This view needs a real multi-user backend to populate — no client-only prototype can show other people's data honestly. The rows below are illustrative sample data showing the shape a director's dashboard would take (PRD §3.3), not live figures.
       </p>
       <div id="rosterList"></div>
+    </div>
+  </section>
+
+  <!-- I AM THE {PART} — single-part rehearsal (reuses the Choir Workspace mixer) -->
+  <section class="panel" id="panel-partrehearsal">
+    <div class="journey-hero">
+      <div class="j-title" id="rehearsalTitle">🎙️ I Am the Alto</div>
+      <div class="j-sub" data-i18n="rehearsal_sub">Your line is front and centre, the other parts keep playing around you, and your part's guide track genuinely fades out level by level until you're singing it alone.</div>
+    </div>
+
+    <div class="key-card">
+      <div class="step-label" data-i18n="rehearsal_choose_part">Choose your part</div>
+      <div class="ex-type-row" id="rehearsalPartRow" style="margin:10px 0 12px;flex-wrap:wrap;">
+        <button class="ex-type-btn" data-rh-part="Soprano" aria-pressed="false">Soprano</button>
+        <button class="ex-type-btn" data-rh-part="Lead" aria-pressed="false">Lead</button>
+        <button class="ex-type-btn active" data-rh-part="Alto" aria-pressed="true">Alto</button>
+        <button class="ex-type-btn" data-rh-part="Tenor" aria-pressed="false">Tenor</button>
+        <button class="ex-type-btn" data-rh-part="Bass" aria-pressed="false">Bass</button>
+      </div>
+      <p class="fine-print"><span id="rehearsalSongLabel">Demo Hymn (C Major)</span> — <button class="link-btn" data-enter-panel="choir" data-i18n="rehearsal_change_song">change song</button></p>
+    </div>
+
+    <div class="key-card" style="margin-top:16px;">
+      <div class="step-label" data-i18n="rehearsal_levels_label">Rehearsal level</div>
+      <div class="rh-levels" id="rehearsalLevels" role="group"></div>
+      <p class="desc" id="rehearsalLevelDesc" style="margin:4px 0 12px;"></p>
+      <div class="transport-row" style="margin:0;">
+        <button class="ghost-btn" id="rehearsalPrevBtn" data-i18n="rehearsal_prev_btn">← Previous level</button>
+        <button class="ghost-btn" id="rehearsalNextBtn" data-i18n="rehearsal_next_btn">Next level →</button>
+      </div>
+      <div class="rh-gain-readout">
+        <div class="fine-print" data-i18n="rehearsal_live_gain_label">Live guide gain — read from the real audio GainNode</div>
+        <div class="rh-gain-val"><span id="rehearsalGainValue">—</span><small id="rehearsalGainTarget"></small></div>
+        <div class="vu-meter-track"><div class="vu-meter-fill" id="rehearsalGuideVu"></div></div>
+      </div>
+    </div>
+
+    <div class="key-card" style="margin-top:16px;">
+      <div class="step-label" data-i18n="rehearsal_yourline_label">Your line — real notes &amp; timing</div>
+      <p class="fine-print" style="margin:6px 0 0;" data-i18n="rehearsal_roll_desc">Bold bars are your part's actual notes; faint bars are the other parts, still audible for context.</p>
+      <div class="transport-row">
+        <button class="solid-btn teal" id="rehearsalPlayBtn">▶ Play</button>
+        <button class="ghost-btn" id="rehearsalStopBtn" data-i18n="rehearsal_stop_btn">Stop</button>
+      </div>
+      <div class="rh-roll-wrap"><svg id="rehearsalRoll" aria-hidden="true"></svg></div>
+      <div class="rh-notes" id="rehearsalNotes"></div>
     </div>
   </section>
 
@@ -4034,6 +4126,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     if(btn.dataset.panel==='performancedirector' && typeof renderPdBriefing==='function') renderPdBriefing();
     if(btn.dataset.panel==='passport' && typeof renderVocalPassport==='function') renderVocalPassport();
     if(btn.dataset.panel==='dashboard' && typeof renderDashboard==='function') renderDashboard();
+    if(btn.dataset.panel==='partrehearsal' && typeof renderPartRehearsal==='function') renderPartRehearsal();
   });
 });
 
@@ -4874,6 +4967,37 @@ const TRANSLATIONS = {
     bridge_reuses_tag:'REUSES REGISTER COACH ENGINE',
     bridge_step_label:'Register Runner',
     choir_allparts_btn:'All parts (clear solo)',
+    hub_songs_rehearsal_title:'🎙️ I Am the Part',
+    hub_songs_rehearsal_desc:'Rehearse one part while the others play around you — your guide fades out over 5 real levels, from Learn to Performance.',
+    choir_rehearse_label:'Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:',
+    rehearsal_title_tpl:'I Am the {part}',
+    rehearsal_sub:'Your line is front and centre, the other parts keep playing around you, and your part\'s guide track genuinely fades out level by level until you\'re singing it alone.',
+    rehearsal_choose_part:'Choose your part',
+    rehearsal_change_song:'change song',
+    rehearsal_levels_label:'Rehearsal level',
+    rehearsal_level_word:'LEVEL',
+    rehearsal_prev_btn:'← Previous level',
+    rehearsal_next_btn:'Next level →',
+    rehearsal_guide_word:'guide',
+    rehearsal_noguide:'No guide',
+    rehearsal_target_word:'target',
+    rehearsal_live_gain_label:'Live guide gain — read from the real audio GainNode',
+    rehearsal_yourline_label:'Your line — real notes & timing',
+    rehearsal_roll_desc:'Bold bars are your part\'s actual notes; faint bars are the other parts, still audible for context.',
+    rehearsal_play_btn:'▶ Play',
+    rehearsal_playing_btn:'⏸ Playing…',
+    rehearsal_stop_btn:'Stop',
+    rehearsal_chord_word:'Chord',
+    rehearsal_level_learn:'Learn',
+    rehearsal_level_guided:'Guided',
+    rehearsal_level_ensemble:'Ensemble',
+    rehearsal_level_independent:'Independent',
+    rehearsal_level_performance:'Performance',
+    rehearsal_level_learn_desc:'Your guide part plays at full volume — sing along with it and learn the line.',
+    rehearsal_level_guided_desc:'Guide at 75% — it\'s still there, but you carry more of the line.',
+    rehearsal_level_ensemble_desc:'Guide at 50% — your voice sits as an equal partner with the guide.',
+    rehearsal_level_independent_desc:'Guide at 25% — just a faint safety net under your voice.',
+    rehearsal_level_performance_desc:'No guide at all — the other parts play, and the line is entirely yours.',
     choir_difficultmoments_label:'Real difficult moments',
     choir_director_label:'Director Dashboard',
     choir_mute_btn:'MUTE',
@@ -5804,6 +5928,37 @@ const TRANSLATIONS = {
     bridge_reuses_tag:'RÉUTILISE LE MOTEUR DU COACH DE REGISTRE',
     bridge_step_label:'Coureur de Registre',
     choir_allparts_btn:'Toutes les voix (effacer le solo)',
+    hub_songs_rehearsal_title:'🎙️ Je suis ma voix',
+    hub_songs_rehearsal_desc:'Répétez une voix pendant que les autres jouent autour de vous — votre guide s\'estompe sur 5 vrais niveaux, d\'Apprendre à Performance.',
+    choir_rehearse_label:'Répétez une seule voix — les autres continuent de jouer pendant que votre guide s\'estompe sur 5 niveaux :',
+    rehearsal_title_tpl:'Je suis {part}',
+    rehearsal_sub:'Votre ligne est au premier plan, les autres voix continuent autour de vous, et la piste guide de votre voix s\'estompe vraiment niveau par niveau jusqu\'à ce que vous la chantiez seul.',
+    rehearsal_choose_part:'Choisissez votre voix',
+    rehearsal_change_song:'changer de chanson',
+    rehearsal_levels_label:'Niveau de répétition',
+    rehearsal_level_word:'NIVEAU',
+    rehearsal_prev_btn:'← Niveau précédent',
+    rehearsal_next_btn:'Niveau suivant →',
+    rehearsal_guide_word:'guide',
+    rehearsal_noguide:'Sans guide',
+    rehearsal_target_word:'cible',
+    rehearsal_live_gain_label:'Gain du guide en direct — lu depuis le vrai GainNode audio',
+    rehearsal_yourline_label:'Votre ligne — vraies notes et vrai timing',
+    rehearsal_roll_desc:'Les barres épaisses sont les vraies notes de votre voix ; les barres pâles sont les autres voix, toujours audibles pour le contexte.',
+    rehearsal_play_btn:'▶ Lecture',
+    rehearsal_playing_btn:'⏸ Lecture…',
+    rehearsal_stop_btn:'Arrêter',
+    rehearsal_chord_word:'Accord',
+    rehearsal_level_learn:'Apprendre',
+    rehearsal_level_guided:'Guidé',
+    rehearsal_level_ensemble:'Ensemble',
+    rehearsal_level_independent:'Autonome',
+    rehearsal_level_performance:'Performance',
+    rehearsal_level_learn_desc:'Votre voix guide joue à plein volume — chantez avec elle et apprenez la ligne.',
+    rehearsal_level_guided_desc:'Guide à 75 % — il est toujours là, mais vous portez davantage la ligne.',
+    rehearsal_level_ensemble_desc:'Guide à 50 % — votre voix est à égalité avec le guide.',
+    rehearsal_level_independent_desc:'Guide à 25 % — juste un léger filet de sécurité sous votre voix.',
+    rehearsal_level_performance_desc:'Aucun guide — les autres voix jouent, et la ligne est entièrement à vous.',
     choir_difficultmoments_label:'Vrais moments difficiles',
     choir_director_label:'Tableau de bord du directeur',
     choir_mute_btn:'MUET',
@@ -6734,6 +6889,37 @@ const TRANSLATIONS = {
     bridge_reuses_tag:'REUTILIZA EL MOTOR DEL COACH DE REGISTRO',
     bridge_step_label:'Corredor de Registro',
     choir_allparts_btn:'Todas las voces (borrar solo)',
+    hub_songs_rehearsal_title:'🎙️ Yo soy mi voz',
+    hub_songs_rehearsal_desc:'Ensaya una voz mientras las demás suenan a tu alrededor — tu guía se desvanece en 5 niveles reales, de Aprender a Actuación.',
+    choir_rehearse_label:'Ensaya una sola voz — las demás siguen sonando mientras tu guía se desvanece en 5 niveles:',
+    rehearsal_title_tpl:'Soy {part}',
+    rehearsal_sub:'Tu línea está en primer plano, las demás voces siguen sonando a tu alrededor, y la pista guía de tu voz realmente se desvanece nivel a nivel hasta que la cantas tú solo.',
+    rehearsal_choose_part:'Elige tu voz',
+    rehearsal_change_song:'cambiar canción',
+    rehearsal_levels_label:'Nivel de ensayo',
+    rehearsal_level_word:'NIVEL',
+    rehearsal_prev_btn:'← Nivel anterior',
+    rehearsal_next_btn:'Nivel siguiente →',
+    rehearsal_guide_word:'guía',
+    rehearsal_noguide:'Sin guía',
+    rehearsal_target_word:'objetivo',
+    rehearsal_live_gain_label:'Ganancia de la guía en vivo — leída del GainNode de audio real',
+    rehearsal_yourline_label:'Tu línea — notas y tiempos reales',
+    rehearsal_roll_desc:'Las barras gruesas son las notas reales de tu voz; las barras tenues son las demás voces, todavía audibles como contexto.',
+    rehearsal_play_btn:'▶ Reproducir',
+    rehearsal_playing_btn:'⏸ Reproduciendo…',
+    rehearsal_stop_btn:'Detener',
+    rehearsal_chord_word:'Acorde',
+    rehearsal_level_learn:'Aprender',
+    rehearsal_level_guided:'Guiado',
+    rehearsal_level_ensemble:'Conjunto',
+    rehearsal_level_independent:'Independiente',
+    rehearsal_level_performance:'Actuación',
+    rehearsal_level_learn_desc:'Tu voz guía suena a volumen completo — canta con ella y aprende la línea.',
+    rehearsal_level_guided_desc:'Guía al 75 % — sigue ahí, pero tú llevas más de la línea.',
+    rehearsal_level_ensemble_desc:'Guía al 50 % — tu voz está al mismo nivel que la guía.',
+    rehearsal_level_independent_desc:'Guía al 25 % — solo una leve red de seguridad bajo tu voz.',
+    rehearsal_level_performance_desc:'Sin guía — las demás voces suenan y la línea es completamente tuya.',
     choir_difficultmoments_label:'Momentos difíciles reales',
     choir_director_label:'Panel del director',
     choir_mute_btn:'SILENCIAR',
@@ -7664,6 +7850,37 @@ const TRANSLATIONS = {
     bridge_reuses_tag:'REGISTER KOÇU MOTORUNU YENİDEN KULLANIR',
     bridge_step_label:'Register Koşucusu',
     choir_allparts_btn:'Tüm sesler (solo temizle)',
+    hub_songs_rehearsal_title:'🎙️ Ben Kendi Partimim',
+    hub_songs_rehearsal_desc:'Diğer sesler etrafınızda çalarken tek bir partiyi çalışın — rehberiniz Öğren\'den Performans\'a 5 gerçek seviyede azalır.',
+    choir_rehearse_label:'Tek bir partiyi çalışın — rehberiniz 5 seviyede azalırken diğerleri çalmaya devam eder:',
+    rehearsal_title_tpl:'Ben {part} partisiyim',
+    rehearsal_sub:'Sizin hattınız ön planda, diğer sesler etrafınızda çalmaya devam ediyor ve partinizin rehber kaydı, onu tek başınıza söyleyene kadar seviye seviye gerçekten azalıyor.',
+    rehearsal_choose_part:'Partinizi seçin',
+    rehearsal_change_song:'şarkıyı değiştir',
+    rehearsal_levels_label:'Prova seviyesi',
+    rehearsal_level_word:'SEVİYE',
+    rehearsal_prev_btn:'← Önceki seviye',
+    rehearsal_next_btn:'Sonraki seviye →',
+    rehearsal_guide_word:'rehber',
+    rehearsal_noguide:'Rehber yok',
+    rehearsal_target_word:'hedef',
+    rehearsal_live_gain_label:'Canlı rehber kazancı — gerçek ses GainNode\'undan okunur',
+    rehearsal_yourline_label:'Hattınız — gerçek notalar ve zamanlama',
+    rehearsal_roll_desc:'Kalın çubuklar partinizin gerçek notalarıdır; soluk çubuklar diğer seslerdir ve bağlam için hâlâ duyulur.',
+    rehearsal_play_btn:'▶ Çal',
+    rehearsal_playing_btn:'⏸ Çalıyor…',
+    rehearsal_stop_btn:'Durdur',
+    rehearsal_chord_word:'Akor',
+    rehearsal_level_learn:'Öğren',
+    rehearsal_level_guided:'Rehberli',
+    rehearsal_level_ensemble:'Topluluk',
+    rehearsal_level_independent:'Bağımsız',
+    rehearsal_level_performance:'Performans',
+    rehearsal_level_learn_desc:'Rehber partiniz tam ses düzeyinde çalar — onunla birlikte söyleyin ve hattı öğrenin.',
+    rehearsal_level_guided_desc:'Rehber %75\'te — hâlâ orada, ama hattın daha fazlasını siz taşıyorsunuz.',
+    rehearsal_level_ensemble_desc:'Rehber %50\'de — sesiniz rehberle eşit bir ortak.',
+    rehearsal_level_independent_desc:'Rehber %25\'te — sesinizin altında yalnızca hafif bir güvenlik ağı.',
+    rehearsal_level_performance_desc:'Hiç rehber yok — diğer sesler çalar ve hat tamamen sizindir.',
     choir_difficultmoments_label:'Gerçek zor anlar',
     choir_director_label:'Yönetmen Paneli',
     choir_mute_btn:'SESSİZ',
@@ -8357,6 +8574,8 @@ function applyTranslations(){
     ()=>typeof renderHomeScreen==='function' && document.getElementById('panel-home') && document.getElementById('panel-home').classList.contains('active') && renderHomeScreen(),
     ()=>typeof updateArcadeBestLabels==='function' && document.getElementById('gliderBestLabel') && updateArcadeBestLabels(),
     ()=>typeof renderArcadeLocks==='function' && document.querySelector('.arcade-game-card') && renderArcadeLocks(),
+    ()=>typeof renderRehearseEntryChips==='function' && renderRehearseEntryChips(),
+    ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
 }
 async function setLanguage(code){
@@ -9927,6 +10146,20 @@ let choirEndCtxTime = 0;
 let choirProgressRaf = null;
 const HEAR_OTHERS_SOFTLY_LEVEL = 0.14;
 
+// I Am the {Part} rehearsal: five real levels, each a genuine fraction of the selected part's own
+// mixer gain on its guide track (Learn 100% → Performance 0%). The other parts keep their mixer levels.
+const REHEARSAL_LEVELS = [
+  {key:'learn', guide:1.00},
+  {key:'guided', guide:0.75},
+  {key:'ensemble', guide:0.50},
+  {key:'independent', guide:0.25},
+  {key:'performance', guide:0},
+];
+const partRehearsal = {active:false, part:'Alto', level:0};
+function rehearsalGuideTarget(){
+  return choirState[partRehearsal.part].volume * REHEARSAL_LEVELS[partRehearsal.level].guide;
+}
+
 let choirAnalyserNodes = {}, choirAnalyserBuffers = {};
 function ensureChoirGainNodes(){
   Object.keys(SONG.parts).forEach(part=>{
@@ -9945,6 +10178,10 @@ function ensureChoirGainNodes(){
 
 function computeEffectiveGain(part){
   const s = choirState[part];
+  if(partRehearsal.active){
+    // Rehearsal ignores workspace mute/solo: guide follows the level, everyone else plays at their mixer volume.
+    return part===partRehearsal.part ? rehearsalGuideTarget() : s.volume;
+  }
   const anySolo = Object.values(choirState).some(p=>p.solo);
   if(anySolo){
     if(s.solo) return s.volume;
@@ -9977,7 +10214,7 @@ function scheduleChoirNote(part, freq, startTime, duration){
   choirActiveOscillators.push(osc);
 }
 
-async function playChoir(){
+async function playChoir(opts={}){
   await initAudioOnly();
   ensureChoirGainNodes();
   updateAllChoirGains();
@@ -10000,9 +10237,9 @@ async function playChoir(){
   document.getElementById('choirPlayBtn').textContent = '⏸ Playing…';
 
   if(choirLoopTimeout) clearTimeout(choirLoopTimeout);
-  const loopOn = document.getElementById('choirLoopCheck').checked;
+  const loopOn = opts.loop ?? document.getElementById('choirLoopCheck').checked;
   if(loopOn){
-    choirLoopTimeout = setTimeout(()=>{ if(choirIsPlaying) playChoir(); }, (choirEndCtxTime-audioCtx.currentTime)*1000);
+    choirLoopTimeout = setTimeout(()=>{ if(choirIsPlaying) playChoir(opts); }, (choirEndCtxTime-audioCtx.currentTime)*1000);
   } else {
     choirLoopTimeout = setTimeout(()=>{ choirIsPlaying=false; document.getElementById('choirPlayBtn').textContent='▶ Play'; }, (choirEndCtxTime-audioCtx.currentTime)*1000);
   }
@@ -10060,7 +10297,7 @@ function runChoirProgressAnim(){
   choirProgressRaf = requestAnimationFrame(step);
 }
 
-document.getElementById('choirPlayBtn').addEventListener('click', ()=>{ if(!choirIsPlaying) playChoir(); });
+document.getElementById('choirPlayBtn').addEventListener('click', ()=>{ if(!choirIsPlaying){ partRehearsal.active = false; playChoir(); } });
 document.getElementById('choirStopBtn').addEventListener('click', stopChoir);
 
 ['Soprano','Lead','Alto','Tenor','Bass'].forEach(part=>{
@@ -10122,6 +10359,200 @@ document.getElementById('practiceClearBtn').addEventListener('click', ()=>{
   updateAllChoirGains();
   syncPracticeChipHighlight();
 });
+
+/* ---------------- I Am the {Part} — single-part rehearsal ---------------- */
+// Same GainNodes and playChoir() scheduling as the workspace mixer above — no separate audio path.
+const REHEARSAL_FADE_SEC = 0.8;
+const PART_COLORS = {Soprano:'#a78bda', Lead:'var(--brass)', Alto:'#c9b98a', Tenor:'var(--teal)', Bass:'#e8735d'};
+let partRehearsalRaf = null;
+
+function midiName(midi){ return NOTE_NAMES[((midi%12)+12)%12] + (Math.floor(midi/12)-1); }
+function rehearsalTitleText(part){ return '🎙️ ' + t('rehearsal_title_tpl').replace('{part}', part); }
+
+// Real progressive fade: a linear ramp on the selected part's GainNode from wherever it is now to the new level.
+function fadeRehearsalGuide(){
+  if(!partRehearsal.active || !audioCtx || !choirGainNodes[partRehearsal.part]) return;
+  const param = choirGainNodes[partRehearsal.part].gain;
+  const now = audioCtx.currentTime;
+  holdGainAt(param, now);
+  param.linearRampToValueAtTime(rehearsalGuideTarget(), now+REHEARSAL_FADE_SEC);
+}
+// Freeze a param at its current computed value (read before cancelling, so a mid-fade change never jumps).
+function holdGainAt(param, now){
+  const cur = param.value;
+  param.cancelScheduledValues(now);
+  param.setValueAtTime(cur, now);
+}
+
+function setRehearsalLevel(level){
+  partRehearsal.level = Math.max(0, Math.min(REHEARSAL_LEVELS.length-1, level));
+  fadeRehearsalGuide();
+  renderRehearsalLevels();
+}
+
+function setRehearsalPart(part){
+  if(!SONG.parts[part] || part===partRehearsal.part) return;
+  if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
+  partRehearsal.part = part;
+  if(partRehearsal.active) updateAllChoirGains(); // previous part returns to its mixer level, new part drops to the current level
+  renderPartRehearsal();
+}
+
+function renderRehearsalLevels(){
+  const box = document.getElementById('rehearsalLevels');
+  if(!box) return;
+  const cur = partRehearsal.level;
+  box.innerHTML = REHEARSAL_LEVELS.map((lv,i)=>{
+    const pct = Math.round(lv.guide*100);
+    const pctLabel = pct===0 ? t('rehearsal_noguide') : `${pct}% ${t('rehearsal_guide_word')}`;
+    return `<button class="rh-level${i===cur?' active':''}${i<cur?' passed':''}" data-rh-level="${i}" aria-pressed="${i===cur}">
+      <span class="rh-level-num">${t('rehearsal_level_word')} ${i+1}/5</span>
+      <span class="rh-level-name">${t('rehearsal_level_'+lv.key)}</span>
+      <span class="rh-level-pct">${pctLabel}</span>
+      <span class="rh-level-bar"><span style="width:${pct}%"></span></span>
+    </button>`;
+  }).join('');
+  document.getElementById('rehearsalLevelDesc').textContent = t('rehearsal_level_'+REHEARSAL_LEVELS[cur].key+'_desc');
+  document.getElementById('rehearsalPrevBtn').disabled = cur===0;
+  document.getElementById('rehearsalNextBtn').disabled = cur===REHEARSAL_LEVELS.length-1;
+  document.getElementById('rehearsalGainTarget').textContent =
+    `${t('rehearsal_target_word')} ${rehearsalGuideTarget().toFixed(3)} (${Math.round(REHEARSAL_LEVELS[cur].guide*100)}% × ${choirState[partRehearsal.part].volume.toFixed(2)})`;
+}
+
+function renderRehearsalRoll(){
+  const svg = document.getElementById('rehearsalRoll');
+  const parts = Object.keys(SONG.parts);
+  const sel = partRehearsal.part;
+  const n = SONG.parts[sel].notes.length;
+  const chordDur = songChordDurMs()/1000;
+  const all = parts.flatMap(p=>SONG.parts[p].notes);
+  const lo = Math.min(...all)-2, hi = Math.max(...all)+2;
+  const colW = 100, rowH = 6, top = 24;
+  const W = n*colW, H = top + (hi-lo)*rowH + 8;
+  const y = midi => top + (hi-midi)*rowH;
+  let html = '';
+  for(let i=0;i<n;i++){
+    html += `<line x1="${i*colW}" y1="0" x2="${i*colW}" y2="${H}" style="stroke:var(--hairline);stroke-width:1"/>`;
+    html += `<text x="${i*colW+4}" y="15" style="fill:var(--muted);font:10px 'Space Mono',monospace">${(i*chordDur).toFixed(1)}s</text>`;
+  }
+  // other parts first (visually secondary), selected part drawn last on top
+  parts.filter(p=>p!==sel).forEach(p=>{
+    SONG.parts[p].notes.forEach((m,i)=>{
+      html += `<rect x="${i*colW+3}" y="${y(m)-1.5}" width="${colW*0.94-6}" height="3" rx="1.5" style="fill:${PART_COLORS[p]};opacity:0.3"/>`;
+    });
+  });
+  SONG.parts[sel].notes.forEach((m,i)=>{
+    html += `<rect class="rh-sel-note" data-idx="${i}" x="${i*colW+3}" y="${y(m)-7}" width="${colW*0.94-6}" height="14" rx="4" style="fill:${PART_COLORS[sel]}"/>`;
+    html += `<text x="${i*colW+9}" y="${y(m)+4}" style="fill:#1a1305;font:bold 11px 'Space Mono',monospace">${midiName(m)}</text>`;
+  });
+  html += `<line id="rehearsalPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0"/>`;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.style.minWidth = (n*64)+'px';
+  svg.innerHTML = html;
+
+  document.getElementById('rehearsalNotes').innerHTML = SONG.parts[sel].notes.map((m,i)=>`
+    <div class="rh-note" data-idx="${i}" style="--part-color:${PART_COLORS[sel]};">
+      <b>${midiName(m)}</b>
+      <span>${t('rehearsal_chord_word')} ${i+1} · ${(i*chordDur).toFixed(1)}s–${((i+0.94)*chordDur).toFixed(1)}s</span><br>
+      <span>${SONG.chordLabels[i]||''}</span>
+    </div>`).join('');
+}
+
+function renderPartRehearsal(){
+  if(!SONG.parts[partRehearsal.part]) partRehearsal.part = 'Alto';
+  const part = partRehearsal.part;
+  document.getElementById('rehearsalTitle').textContent = rehearsalTitleText(part);
+  document.getElementById('rehearsalSongLabel').textContent = `${SONG.name} (${SONG.key})`;
+  document.querySelectorAll('#rehearsalPartRow .ex-type-btn').forEach(b=>{
+    const on = b.dataset.rhPart===part;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on?'true':'false');
+  });
+  document.getElementById('rehearsalPlayBtn').textContent = partRehearsal.active && choirIsPlaying ? t('rehearsal_playing_btn') : t('rehearsal_play_btn');
+  renderRehearsalLevels();
+  renderRehearsalRoll();
+}
+
+function renderRehearseEntryChips(){
+  document.querySelectorAll('#rehearseEntryRow [data-rehearse-part]').forEach(chip=>{
+    chip.textContent = rehearsalTitleText(chip.dataset.rehearsePart);
+  });
+}
+
+function resetPartRehearsalPlayUI(){
+  if(partRehearsalRaf) cancelAnimationFrame(partRehearsalRaf);
+  partRehearsalRaf = null;
+  const ph = document.getElementById('rehearsalPlayhead');
+  if(ph) ph.style.opacity = '0';
+  document.querySelectorAll('#rehearsalNotes .rh-note.current').forEach(el=>el.classList.remove('current'));
+  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_play_btn');
+  document.getElementById('rehearsalGainValue').textContent = '—';
+  document.getElementById('rehearsalGuideVu').style.width = '0%';
+}
+
+function runPartRehearsalAnim(){
+  if(partRehearsalRaf) cancelAnimationFrame(partRehearsalRaf);
+  const chordDur = songChordDurMs()/1000;
+  const n = SONG.parts[partRehearsal.part].notes.length;
+  let lastIdx = -1;
+  function step(){
+    if(!partRehearsal.active || !choirIsPlaying || !audioCtx){ resetPartRehearsalPlayUI(); return; }
+    const elapsed = Math.max(0, audioCtx.currentTime - choirStartCtxTime);
+    const W = n*100;
+    const ph = document.getElementById('rehearsalPlayhead');
+    if(ph){
+      const x = Math.min(W, (elapsed/chordDur)*100);
+      ph.setAttribute('x1', x); ph.setAttribute('x2', x); ph.style.opacity = '0.85';
+    }
+    const idx = Math.min(n-1, Math.floor(elapsed/chordDur));
+    if(idx!==lastIdx || !document.querySelector('#rehearsalNotes .rh-note.current')){
+      document.querySelectorAll('#rehearsalNotes .rh-note').forEach(el=>el.classList.toggle('current', +el.dataset.idx===idx));
+      lastIdx = idx;
+    }
+    // Live readout straight from the guide part's real GainNode + analyser — not a mirrored UI value.
+    const part = partRehearsal.part;
+    document.getElementById('rehearsalGainValue').textContent = choirGainNodes[part].gain.value.toFixed(3);
+    const analyser = choirAnalyserNodes[part], buf = choirAnalyserBuffers[part];
+    analyser.getByteTimeDomainData(buf);
+    let sumSq=0;
+    for(let i=0;i<buf.length;i++){ const v=(buf[i]-128)/128; sumSq += v*v; }
+    document.getElementById('rehearsalGuideVu').style.width = Math.min(100, Math.round(Math.sqrt(sumSq/buf.length)*150))+'%';
+    partRehearsalRaf = requestAnimationFrame(step);
+  }
+  partRehearsalRaf = requestAnimationFrame(step);
+}
+
+async function startPartRehearsal(){
+  partRehearsal.active = true;
+  await playChoir({loop:true});
+  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  runPartRehearsalAnim();
+}
+
+function stopPartRehearsal(){
+  partRehearsal.active = false;
+  if(choirIsPlaying) stopChoir();
+  resetPartRehearsalPlayUI();
+}
+
+document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
+document.getElementById('rehearsalStopBtn').addEventListener('click', stopPartRehearsal);
+document.getElementById('rehearsalPrevBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level-1));
+document.getElementById('rehearsalNextBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level+1));
+document.getElementById('rehearsalLevels').addEventListener('click', (e)=>{
+  const btn = e.target.closest('[data-rh-level]');
+  if(btn) setRehearsalLevel(+btn.dataset.rhLevel);
+});
+document.querySelectorAll('#rehearsalPartRow [data-rh-part]').forEach(btn=>{
+  btn.addEventListener('click', ()=>setRehearsalPart(btn.dataset.rhPart));
+});
+document.querySelectorAll('#rehearseEntryRow [data-rehearse-part]').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    partRehearsal.part = chip.dataset.rehearsePart;
+    enterPanel('partrehearsal');
+  });
+});
+renderRehearseEntryChips();
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
 const SAMPLE_ROSTER = [
@@ -12448,6 +12879,7 @@ function stopAllActiveSessions(){
   oneTakeActive = false;
   drillActive = false;
   aiDuetActive = false;
+  if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
 }
 function enterPanel(panelName){
@@ -12466,7 +12898,7 @@ const SHELL_SECTION_MAP = {
   'home':'home', 'train-hub':'train', 'songs-hub':'songs', 'you-hub':'you',
   'tuner':'train','key':'train','range':'train','register':'train','breath':'train',
   'exercises':'train','vibrato':'train','livefeedback':'train','genre':'train','warmup':'train',
-  'choir':'songs','staykey':'songs','karaoke':'songs','emotion':'songs',
+  'choir':'songs','partrehearsal':'songs','staykey':'songs','karaoke':'songs','emotion':'songs',
   'arcade':'world',
   'journey':'you','dashboard':'you','voicehealth':'you','pricing':'you',
 };
