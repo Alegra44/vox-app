@@ -544,6 +544,9 @@
   .cb-arena .boss-name{margin-top:4px;}
   .cx-event{font-family:'Space Mono',monospace;font-size:11px;color:var(--brass);}
   .cx-event.calm{color:var(--muted);}
+  .yc-row{align-items:center;gap:10px;flex-wrap:wrap;}
+  .yc-actions{display:flex;gap:6px;flex-wrap:wrap;}
+  .yc-actions .practice-chip{margin:0;}
   .bm-live{font-family:'Space Mono',monospace;font-size:14px;color:var(--teal);margin:8px 0 2px;min-height:20px;}
   .bm-live.now{color:var(--cream);}
 
@@ -3499,6 +3502,20 @@
       </div>
     </div>
 
+    <div class="key-card" id="yourChoirCard" style="margin-top:20px;">
+      <div class="step-label" data-i18n="yc_title">🎤 Your Choir</div>
+      <p class="desc" id="ycDesc" style="margin:6px 0 8px;"></p>
+      <p class="fine-print" style="margin-bottom:10px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
+      <p class="fine-print" id="ycSummary" style="margin-bottom:6px;"></p>
+      <div id="ycParts"></div>
+      <div class="transport-row">
+        <button class="solid-btn teal" id="ycPlayBtn">▶ Play my choir</button>
+        <button class="ghost-btn" id="ycStopBtn" data-i18n="yc_stop_btn">Stop</button>
+      </div>
+      <p class="fine-print" id="ycStatus" aria-live="polite" style="margin-top:6px;"></p>
+      <p class="fine-print" style="margin-top:8px;" data-i18n="yc_storage_note">Your recordings are saved on this device only.</p>
+    </div>
+
     <div class="key-card" style="margin-top:20px;">
       <div class="step-label"><span data-i18n="choir_director_label">Director Dashboard</span><span class="mock-tag" data-i18n="choir_sampledata_tag">SAMPLE DATA</span></div>
       <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="choir_rosterprogress_h2">Choir roster progress</h2>
@@ -5277,6 +5294,30 @@ const TRANSLATIONS = {
     ch_guide_ac:'A Cappella, guide silent',
     ch_not_reached:'not reached',
     ch_storage_note:'Boss, Chaos and Ladder progress is saved on this device only.',
+    yc_title:'🎤 Your Choir',
+    yc_desc:'Record yourself singing each part, one at a time, then hear all your takes together as a full choir. Each take starts after a 4-beat count-in; while you record, the synth plays the part you are singing and your earlier takes play back, so you can sing along with yourself. Parts you haven’t recorded stay silent. During playback, the faders, Mute and Solo above control your recorded parts.',
+    yc_summary_tpl:'{n} of 5 parts recorded for {song}.',
+    yc_not_recorded:'not recorded — silent in playback',
+    yc_recorded_tpl:'recorded {date} · {s} s · peak {db} dBFS',
+    yc_recording_now:'recording now…',
+    yc_record_btn:'● Record',
+    yc_rerecord_btn:'● Re-record',
+    yc_delete_btn:'Delete',
+    yc_play_btn:'▶ Play my choir',
+    yc_playing_btn:'⏸ Playing…',
+    yc_stop_btn:'Stop',
+    yc_stop_rec_btn:'Stop recording',
+    yc_status_countin_tpl:'Recording {part} — count-in…',
+    yc_status_rec_tpl:'Recording {part} — chord {i}/{n}',
+    yc_status_tail:'Finishing the take…',
+    yc_saved_tpl:'{part} saved.',
+    yc_saved_memory_tpl:'{part} recorded, but this device’s storage is full: the take will be lost when you leave the page.',
+    yc_cancelled:'Recording stopped — nothing was saved.',
+    yc_failed:'Recording isn’t available — check microphone access.',
+    yc_none:'Record at least one part first.',
+    yc_playing_tpl:'Playing {n} recorded parts: {parts}',
+    yc_deleted_tpl:'{part} deleted.',
+    yc_storage_note:'Your recordings are saved on this device only.',
     tt_title:'⏱️ Entrance & Cutoff Trainer',
     tt_mode_entrance:'Entrance Trainer',
     tt_mode_cutoff:'Cutoff Trainer',
@@ -6428,6 +6469,30 @@ const TRANSLATIONS = {
     ch_guide_ac:'A Cappella, guide muet',
     ch_not_reached:'non atteint',
     ch_storage_note:'La progression des boss, du Chaos et de l’Échelle est enregistrée sur cet appareil uniquement.',
+    yc_title:'🎤 Votre chorale',
+    yc_desc:'Enregistrez-vous en chantant chaque voix, une à la fois, puis écoutez toutes vos prises ensemble comme une chorale complète. Chaque prise commence après un décompte de 4 temps ; pendant l’enregistrement, le synthé joue la voix que vous chantez et vos prises précédentes sont rejouées, pour que vous chantiez avec vous-même. Les voix non enregistrées restent muettes. Pendant la lecture, les curseurs, Muet et Solo ci-dessus règlent vos voix enregistrées.',
+    yc_summary_tpl:'{n} voix sur 5 enregistrées pour {song}.',
+    yc_not_recorded:'non enregistrée — muette à la lecture',
+    yc_recorded_tpl:'enregistrée le {date} · {s} s · crête {db} dBFS',
+    yc_recording_now:'enregistrement en cours…',
+    yc_record_btn:'● Enregistrer',
+    yc_rerecord_btn:'● Réenregistrer',
+    yc_delete_btn:'Supprimer',
+    yc_play_btn:'▶ Écouter ma chorale',
+    yc_playing_btn:'⏸ Lecture…',
+    yc_stop_btn:'Arrêter',
+    yc_stop_rec_btn:'Arrêter l’enregistrement',
+    yc_status_countin_tpl:'Enregistrement : {part} — décompte…',
+    yc_status_rec_tpl:'Enregistrement : {part} — accord {i}/{n}',
+    yc_status_tail:'Fin de la prise…',
+    yc_saved_tpl:'{part} enregistrée.',
+    yc_saved_memory_tpl:'{part} enregistrée, mais le stockage de cet appareil est plein : la prise sera perdue en quittant la page.',
+    yc_cancelled:'Enregistrement arrêté — rien n’a été conservé.',
+    yc_failed:'L’enregistrement n’est pas disponible — vérifiez l’accès au micro.',
+    yc_none:'Enregistrez d’abord au moins une voix.',
+    yc_playing_tpl:'Lecture de {n} voix enregistrées : {parts}',
+    yc_deleted_tpl:'{part} supprimée.',
+    yc_storage_note:'Vos enregistrements sont conservés uniquement sur cet appareil.',
     tt_title:'⏱️ Entrées et coupures',
     tt_mode_entrance:'Entraîneur d’entrées',
     tt_mode_cutoff:'Entraîneur de coupures',
@@ -7579,6 +7644,30 @@ const TRANSLATIONS = {
     ch_guide_ac:'A Cappella, guía en silencio',
     ch_not_reached:'no alcanzada',
     ch_storage_note:'El progreso de jefes, Caos y Escalera se guarda solo en este dispositivo.',
+    yc_title:'🎤 Tu coro',
+    yc_desc:'Grábate cantando cada voz, una por una, y luego escucha todas tus tomas juntas como un coro completo. Cada toma empieza tras una cuenta de 4 tiempos; mientras grabas, el sintetizador toca la voz que cantas y tus tomas anteriores se reproducen, para que cantes contigo mismo. Las voces que no has grabado quedan en silencio. Durante la reproducción, los deslizadores, Silenciar y Solo de arriba controlan tus voces grabadas.',
+    yc_summary_tpl:'{n} de 5 voces grabadas para {song}.',
+    yc_not_recorded:'sin grabar — en silencio al reproducir',
+    yc_recorded_tpl:'grabada {date} · {s} s · pico {db} dBFS',
+    yc_recording_now:'grabando…',
+    yc_record_btn:'● Grabar',
+    yc_rerecord_btn:'● Volver a grabar',
+    yc_delete_btn:'Borrar',
+    yc_play_btn:'▶ Escuchar mi coro',
+    yc_playing_btn:'⏸ Reproduciendo…',
+    yc_stop_btn:'Detener',
+    yc_stop_rec_btn:'Detener la grabación',
+    yc_status_countin_tpl:'Grabando {part} — cuenta…',
+    yc_status_rec_tpl:'Grabando {part} — acorde {i}/{n}',
+    yc_status_tail:'Terminando la toma…',
+    yc_saved_tpl:'{part} guardada.',
+    yc_saved_memory_tpl:'{part} grabada, pero el almacenamiento de este dispositivo está lleno: la toma se perderá al salir de la página.',
+    yc_cancelled:'Grabación detenida — no se guardó nada.',
+    yc_failed:'La grabación no está disponible — revisa el acceso al micrófono.',
+    yc_none:'Graba al menos una voz primero.',
+    yc_playing_tpl:'Reproduciendo {n} voces grabadas: {parts}',
+    yc_deleted_tpl:'{part} borrada.',
+    yc_storage_note:'Tus grabaciones se guardan solo en este dispositivo.',
     tt_title:'⏱️ Entradas y cortes',
     tt_mode_entrance:'Entrenador de entradas',
     tt_mode_cutoff:'Entrenador de cortes',
@@ -8730,6 +8819,30 @@ const TRANSLATIONS = {
     ch_guide_ac:'A Cappella, rehber sessiz',
     ch_not_reached:'ulaşılmadı',
     ch_storage_note:'Boss, Kaos ve Merdiven ilerlemesi yalnızca bu cihazda kaydedilir.',
+    yc_title:'🎤 Senin Koron',
+    yc_desc:'Her partiyi tek tek kendiniz söyleyerek kaydedin, ardından tüm kayıtlarınızı tam bir koro olarak birlikte dinleyin. Her kayıt 4 vuruşluk bir sayımdan sonra başlar; kayıt sırasında synth söylediğiniz partiyi çalar ve önceki kayıtlarınız da çalınır, böylece kendinizle birlikte söyleyebilirsiniz. Kaydetmediğiniz partiler sessiz kalır. Dinlerken yukarıdaki sürgüler, Sessiz ve Solo kaydedilmiş partilerinizi kontrol eder.',
+    yc_summary_tpl:'{song} için 5 partiden {n} tanesi kaydedildi.',
+    yc_not_recorded:'kaydedilmedi — çalarken sessiz',
+    yc_recorded_tpl:'{date} tarihinde kaydedildi · {s} sn · tepe {db} dBFS',
+    yc_recording_now:'kaydediliyor…',
+    yc_record_btn:'● Kaydet',
+    yc_rerecord_btn:'● Yeniden kaydet',
+    yc_delete_btn:'Sil',
+    yc_play_btn:'▶ Koromu çal',
+    yc_playing_btn:'⏸ Çalıyor…',
+    yc_stop_btn:'Durdur',
+    yc_stop_rec_btn:'Kaydı durdur',
+    yc_status_countin_tpl:'{part} kaydediliyor — sayım…',
+    yc_status_rec_tpl:'{part} kaydediliyor — akor {i}/{n}',
+    yc_status_tail:'Kayıt tamamlanıyor…',
+    yc_saved_tpl:'{part} kaydedildi.',
+    yc_saved_memory_tpl:'{part} kaydedildi ancak bu cihazın depolama alanı dolu: sayfadan ayrıldığınızda kayıt kaybolacak.',
+    yc_cancelled:'Kayıt durduruldu — hiçbir şey saklanmadı.',
+    yc_failed:'Kayıt kullanılamıyor — mikrofon erişimini kontrol edin.',
+    yc_none:'Önce en az bir parti kaydedin.',
+    yc_playing_tpl:'Kaydedilmiş {n} parti çalıyor: {parts}',
+    yc_deleted_tpl:'{part} silindi.',
+    yc_storage_note:'Kayıtlarınız yalnızca bu cihazda saklanır.',
     tt_title:'⏱️ Giriş ve Kesiş Çalışması',
     tt_mode_entrance:'Giriş Çalışması',
     tt_mode_cutoff:'Kesiş Çalışması',
@@ -9477,6 +9590,7 @@ function applyTranslations(){
     ()=>typeof renderSonicXray==='function' && renderSonicXray(),
     ()=>typeof renderRoster==='function' && document.getElementById('rosterList') && renderRoster(),
     ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
+    ()=>typeof renderYourChoir==='function' && renderYourChoir(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
 }
 async function setLanguage(code){
@@ -11044,6 +11158,9 @@ const choirState = {
 };
 let choirGainNodes = {};
 let choirActiveOscillators = [];
+// Your Choir (phase 6): recorded takes playing into the part GainNodes, stopped with the synth oscillators.
+// playing = stacked playback of your takes; recording = {part, song, ...} while a take is being recorded.
+const yourChoir = {sources:[], playing:false, recording:null, mem:null, buffers:{}, raf:null};
 let choirIsPlaying = false;
 let choirLoopTimeout = null; // cancel function from atAudioTime()
 // Runs fn once the audio clock reaches ctxTime. A plain wall-clock timer drifts from the audio clock
@@ -11173,8 +11290,8 @@ function scheduleChoirNote(part, freq, startTime, duration, detuneCents=0){
 async function playChoir(opts={}){
   await initAudioOnly();
   ensureChoirGainNodes();
+  stopChoirOscillatorsOnly(); // first, so a Your Choir playback it replaces can't leave its trim behind
   updateAllChoirGains();
-  stopChoirOscillatorsOnly();
 
   const beatDur = 60/SONG.tempo;
   const chordDur = beatDur*SONG.beatsPerChord;
@@ -11213,6 +11330,9 @@ async function playChoir(opts={}){
 function stopChoirOscillatorsOnly(){
   choirActiveOscillators.forEach(o=>{ try{ o.stop(); }catch(e){} });
   choirActiveOscillators = [];
+  yourChoir.sources.forEach(s=>{ try{ s.stop(); }catch(e){} });
+  yourChoir.sources = [];
+  if(yourChoir.playing){ yourChoir.playing = false; choirHeadroomFx = null; applyChoirHeadroom(); if(typeof renderYourChoir==='function') renderYourChoir(); }
   if(audioCtx) Object.values(choirFxNodes).forEach(fx=>{ fx.gain.cancelScheduledValues(0); fx.gain.setValueAtTime(1, audioCtx.currentTime); });
 }
 
@@ -11263,7 +11383,7 @@ function runChoirProgressAnim(){
 }
 
 document.getElementById('choirPlayBtn').addEventListener('click', ()=>{ if(!choirIsPlaying){ partRehearsal.active = false; playChoir(); } });
-document.getElementById('choirStopBtn').addEventListener('click', stopChoir);
+document.getElementById('choirStopBtn').addEventListener('click', ()=>{ if(yourChoir.recording) ycStop(); else stopChoir(); });
 
 ['Soprano','Lead','Alto','Tenor','Bass'].forEach(part=>{
   document.getElementById('vol'+part).addEventListener('input', (e)=>{
@@ -12634,6 +12754,188 @@ document.querySelectorAll('#tkDirRow [data-tk-dir]').forEach(btn=>{
     renderLadder();
   });
 });
+
+/* ---------------- Choir World phase 6: Your Choir ---------------- */
+// Record each part yourself with Studio Mode's recorder (recordShortClip), then hear every take stacked.
+// A take is recorded over a 4-beat count-in while the synth plays the part you're recording and your
+// earlier takes play back. On playback each take is decoded and fed into its part's Choir Workspace
+// GainNode, so the faders, Mute/Solo, VU meters and the choir output trim treat your voice exactly as
+// they treat the synth. Unrecorded parts are silent. Takes are stored per song on this device.
+const YC_STORE_KEY = 'yourChoirTakes';
+const YC_TAIL_SEC = 0.5;   // recording keeps going this long after the last note's release
+const YC_SAFETY_SEC = 5;   // the wall-clock cap; the take really ends on the audio clock (ycRecTick)
+const YC_PARTS = ['Soprano','Lead','Alto','Tenor','Bass'];
+
+function ycAll(){
+  if(!yourChoir.mem){ try{ yourChoir.mem = JSON.parse(localStorage.getItem(YC_STORE_KEY)) || {}; }catch(e){ yourChoir.mem = {}; } }
+  return yourChoir.mem;
+}
+function ycTakes(song=currentSongId){ return ycAll()[song] || {}; }
+// Returns false if the device storage is full; the take is still kept for this page session.
+function ycPersist(){
+  try{ localStorage.setItem(YC_STORE_KEY, JSON.stringify(ycAll())); return true; }
+  catch(e){ console.error('storage error', e); return false; }
+}
+async function ycDecode(base64){
+  if(!yourChoir.buffers[base64]){
+    const bytes = Uint8Array.from(atob(base64.split(',')[1]), c=>c.charCodeAt(0));
+    yourChoir.buffers[base64] = await audioCtx.decodeAudioData(bytes.buffer);
+  }
+  return yourChoir.buffers[base64];
+}
+// Plays a take into its part's GainNode with its downbeat (take.lead seconds in) on choirStartCtxTime.
+function ycStartSource(part, buf, take){
+  const src = audioCtx.createBufferSource();
+  src.buffer = buf;
+  src.connect(choirGainNodes[part]);
+  const now = audioCtx.currentTime;
+  const late = Math.max(0, now - choirStartCtxTime); // if the downbeat is already past, start that far in
+  src.start(Math.max(now, choirStartCtxTime), take.lead + late);
+  yourChoir.sources.push(src);
+}
+// Headroom for the choir output trim: a take contributes its real peak (in units of the synth's envelope
+// peak), an unrecorded part nothing, and a part the synth plays (while you record it) the synth's peak.
+function ycHeadroom(takes, synthPart=null){
+  return p=> p===synthPart ? 1 : takes[p] ? takes[p].peak/CHOIR_ENV_PEAK : 0;
+}
+
+async function ycRecord(part){
+  if(yourChoir.recording) return;
+  if(yourChoir.playing || choirIsPlaying) stopChoir();
+  if(!await initAudio() || typeof MediaRecorder==='undefined'){ ycSetStatus(t('yc_failed')); return; }
+  ensureChoirGainNodes();
+  partRehearsal.active = false; // workspace mixing rules (Mute/Solo) apply
+  const song = currentSongId, takes = ycTakes(song);
+  const beat = 60/SONG.tempo, total = songTotalDurMs()/1000;
+  const others = [];
+  for(const p of YC_PARTS) if(p!==part && takes[p]) others.push([p, await ycDecode(takes[p].base64)]);
+  const rec = yourChoir.recording = {part, song, startCtx:null, recorder:null, cancelled:false, lastIdx:-3};
+  choirHeadroomFx = ycHeadroom(takes, part);
+  renderYourChoir();
+  let started = null;
+  const clip = await recordShortClip((beat*4 + total + YC_TAIL_SEC + YC_SAFETY_SEC)*1000, recorder=>{
+    rec.recorder = recorder;
+    rec.startCtx = audioCtx.currentTime;
+    started = (async ()=>{
+      await playChoir({loop:false, leadIn:beat*4, fx:p=>p===part ? null : {gain:0}}); // the synth plays only your part
+      scheduleRehearsalCountIn();
+      others.forEach(([p, buf])=>ycStartSource(p, buf, takes[p]));
+      rec.downbeat = choirStartCtxTime;
+      rec.end = choirStartCtxTime + total + YC_TAIL_SEC;
+      ycRecTick();
+    })();
+  });
+  if(started) await started;
+  cancelAnimationFrame(yourChoir.raf);
+  if(choirIsPlaying) stopChoir();
+  choirHeadroomFx = null;
+  applyChoirHeadroom();
+  // The view stays in its recording state until the take is decoded and saved, so nothing can start in between.
+  const done = text=>{ yourChoir.recording = null; ycSetStatus(text); renderYourChoir(); };
+  if(rec.cancelled){ done(t('yc_cancelled')); return; }
+  if(!clip || rec.startCtx===null){ done(t('yc_failed')); return; }
+  // The downbeat's position in the recording, and the take's real peak from there to the end of the song.
+  const take = {...clip, lead: rec.downbeat - rec.startCtx};
+  let peak = 0;
+  try{
+    const buf = await ycDecode(take.base64);
+    const sr = buf.sampleRate, from = Math.floor(take.lead*sr), to = Math.min(buf.length, Math.ceil((take.lead+total)*sr));
+    for(let c=0;c<buf.numberOfChannels;c++){ const d = buf.getChannelData(c); for(let i=from;i<to;i++){ const v = Math.abs(d[i]); if(v>peak) peak = v; } }
+    take.dur = +(buf.duration - take.lead).toFixed(2);
+  }catch(e){ console.error('could not decode the take', e); done(t('yc_failed')); return; }
+  take.peak = Math.max(peak, 0.001);
+  (ycAll()[song] = ycAll()[song] || {})[part] = take;
+  done(t(ycPersist() ? 'yc_saved_tpl' : 'yc_saved_memory_tpl').replace('{part}', partName(part)));
+}
+function ycRecTick(){
+  const rec = yourChoir.recording;
+  if(!rec) return;
+  // Stop on the audio clock, which the song and the recorded samples both follow (a timer can drift from it).
+  if(rec.end && audioCtx.currentTime >= rec.end && rec.recorder.state!=='inactive'){ rec.recorder.stop(); return; }
+  const songT = audioCtx.currentTime - choirStartCtxTime, n = SONG.parts.Lead.notes.length;
+  const idx = songT<0 ? -1 : Math.min(n, Math.floor(songT/(songChordDurMs()/1000)));
+  if(idx!==rec.lastIdx){
+    rec.lastIdx = idx;
+    ycSetStatus(idx<0 ? t('yc_status_countin_tpl').replace('{part}', partName(rec.part))
+      : idx>=n ? t('yc_status_tail')
+      : t('yc_status_rec_tpl').replace('{part}', partName(rec.part)).replace('{i}', idx+1).replace('{n}', n));
+  }
+  yourChoir.raf = requestAnimationFrame(ycRecTick);
+}
+
+async function ycPlay(){
+  if(yourChoir.recording) return;
+  const takes = ycTakes(), parts = YC_PARTS.filter(p=>takes[p]);
+  if(!parts.length){ ycSetStatus(t('yc_none')); return; }
+  await initAudioOnly();
+  ensureChoirGainNodes();
+  if(choirIsPlaying || yourChoir.playing) stopChoir();
+  partRehearsal.active = false;
+  const bufs = [];
+  for(const p of parts) bufs.push(await ycDecode(takes[p].base64));
+  choirHeadroomFx = ycHeadroom(takes);
+  yourChoir.playing = true;
+  updateAllChoirGains(); // mixer gains and the trim for your takes' real peaks
+  const total = songTotalDurMs()/1000;
+  choirStartCtxTime = audioCtx.currentTime + 0.15;
+  choirEndCtxTime = choirStartCtxTime + total;
+  parts.forEach((p,k)=>ycStartSource(p, bufs[k], takes[p]));
+  choirIsPlaying = true;
+  if(choirLoopTimeout) choirLoopTimeout();
+  choirLoopTimeout = atAudioTime(choirEndCtxTime + 0.1, ()=>{ if(yourChoir.playing) stopChoir(); });
+  runChoirProgressAnim(); // the workspace progress bar and per-part VU meters read your takes' real audio
+  ycSetStatus(t('yc_playing_tpl').replace('{n}', parts.length).replace('{parts}', parts.map(partName).join(', ')));
+  renderYourChoir();
+}
+function ycStop(){
+  if(yourChoir.recording){ yourChoir.recording.cancelled = true; if(yourChoir.recording.recorder && yourChoir.recording.recorder.state!=='inactive') yourChoir.recording.recorder.stop(); return; }
+  if(yourChoir.playing){ stopChoir(); ycSetStatus(''); }
+}
+function ycCancelAll(){ if(yourChoir.recording || yourChoir.playing) ycStop(); }
+function ycDelete(part){
+  if(yourChoir.recording || yourChoir.playing) return;
+  const bySong = ycAll()[currentSongId];
+  if(!bySong || !bySong[part]) return;
+  delete bySong[part];
+  ycPersist();
+  ycSetStatus(t('yc_deleted_tpl').replace('{part}', partName(part)));
+  renderYourChoir();
+}
+function ycSetStatus(text){ const el = document.getElementById('ycStatus'); if(el) el.textContent = text; }
+
+function renderYourChoir(){
+  const box = document.getElementById('ycParts');
+  if(!box) return;
+  const takes = ycTakes(), busy = !!yourChoir.recording, rec = yourChoir.recording;
+  document.getElementById('ycDesc').textContent = t('yc_desc');
+  document.getElementById('ycSummary').textContent = t('yc_summary_tpl')
+    .replace('{n}', YC_PARTS.filter(p=>takes[p]).length).replace('{song}', `${SONGS[currentSongId].name} (${SONGS[currentSongId].key})`);
+  box.innerHTML = YC_PARTS.map(p=>{
+    const tk = takes[p];
+    const state = rec && rec.part===p ? t('yc_recording_now')
+      : tk ? t('yc_recorded_tpl').replace('{date}', new Date(tk.recordedAt).toLocaleString(localeForLang(), {dateStyle:'short', timeStyle:'short'}))
+          .replace('{s}', tk.dur.toLocaleString(localeForLang())).replace('{db}', (20*Math.log10(tk.peak)).toLocaleString(localeForLang(), {maximumFractionDigits:1, minimumFractionDigits:1}))
+      : t('yc_not_recorded');
+    return `<div class="record-row yc-row" data-yc-part="${p}" data-recorded="${!!tk}">
+      <span class="record-label"><span style="color:${PART_COLORS[p]};">●</span> <b>${partName(p)}</b> · ${state}</span>
+      <span class="yc-actions">
+        <button class="practice-chip" data-yc-rec="${p}"${busy||yourChoir.playing?' disabled':''}>${t(tk ? 'yc_rerecord_btn' : 'yc_record_btn')}</button>
+        ${tk ? `<button class="practice-chip" data-yc-del="${p}"${busy||yourChoir.playing?' disabled':''}>${t('yc_delete_btn')}</button>` : ''}
+      </span></div>`;
+  }).join('');
+  const play = document.getElementById('ycPlayBtn');
+  play.textContent = t(yourChoir.playing ? 'yc_playing_btn' : 'yc_play_btn');
+  play.disabled = busy;
+  document.getElementById('ycStopBtn').textContent = t(busy ? 'yc_stop_rec_btn' : 'yc_stop_btn');
+}
+document.getElementById('ycParts').addEventListener('click', e=>{
+  const rec = e.target.closest('[data-yc-rec]'), del = e.target.closest('[data-yc-del]');
+  if(rec && !rec.disabled) ycRecord(rec.dataset.ycRec);
+  else if(del && !del.disabled) ycDelete(del.dataset.ycDel);
+});
+document.getElementById('ycPlayBtn').addEventListener('click', ()=>{ if(!yourChoir.playing) ycPlay(); });
+document.getElementById('ycStopBtn').addEventListener('click', ycStop);
+renderYourChoir();
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
 const SAMPLE_ROSTER = [
@@ -14973,6 +15275,7 @@ function stopAllActiveSessions(){
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof harmonyMemory!=='undefined' && harmonyMemory.active) finishHarmonyMemory(false);
   if(typeof challenge!=='undefined' && challenge.active) finishChallenge(false);
+  if(typeof ycCancelAll==='function') ycCancelAll();
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
   if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false);
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
@@ -15727,6 +16030,7 @@ function selectSong(id){
   if(!SONGS[id]) return; // invalid id, safety guard
   if(id===currentSongId) return; // already selected, no-op
   if(typeof challenge!=='undefined' && challenge.active) finishChallenge(false); // restores SONG from its run variant first
+  if(typeof ycCancelAll==='function') ycCancelAll(); // takes belong to one song
   currentSongId = id;
   SONG = SONGS[id];
   const s = SONG;
@@ -15737,6 +16041,7 @@ function selectSong(id){
   // reset any per-song game state so a stale previous-song result can't linger
   if(typeof bossNoteResults!=='undefined') bossNoteResults=[];
   if(typeof harmonyNoteResults!=='undefined') harmonyNoteResults=[];
+  if(typeof renderYourChoir==='function') renderYourChoir();
   document.getElementById('bossSectionBreakdown')?.style.setProperty('display','none');
   ['bossCurrentSongLabel','harmonyCurrentSongLabel'].forEach(id2=>{
     const el = document.getElementById(id2);
@@ -16031,7 +16336,8 @@ document.getElementById('customRebuildBtn')?.addEventListener('click', ()=>{
 });
 
 /* ---------------- Voice recording — "Hear Yourself Improve" (real MediaRecorder, explicit consent, local-only) ---------------- */
-async function recordShortClip(maxDurationMs=4000){
+// onStart(recorder), if given, runs the moment recording actually begins (Your Choir lines takes up to it).
+async function recordShortClip(maxDurationMs=4000, onStart=null){
   try{ await initAudio(); }catch(e){}
   if(!micStream || typeof MediaRecorder==='undefined') return null;
   const mimeCandidates = ['audio/webm;codecs=opus','audio/webm','audio/mp4'];
@@ -16049,6 +16355,7 @@ async function recordShortClip(maxDurationMs=4000){
         reader.readAsDataURL(blob);
       };
       recorder.onerror = ()=> resolve(null);
+      if(onStart) recorder.onstart = ()=> onStart(recorder);
       recorder.start();
       setTimeout(()=>{ if(recorder.state!=='inactive') recorder.stop(); }, maxDurationMs);
     } catch(e){
