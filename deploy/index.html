@@ -532,13 +532,13 @@
   .ac-note{display:none;border-left:3px solid var(--teal);font-size:13px;}
   #panel-partrehearsal.acappella-on .ac-note{display:block;}
   #acappellaBtn[aria-pressed="true"]{background:var(--teal);color:#082722;border-color:var(--teal);}
-  .tt-early{color:var(--brass);} .tt-late{color:var(--coral);} .tt-ontime{color:var(--teal);}
+  .record-val.tt-early{color:var(--brass);} .record-val.tt-late{color:var(--coral);} .record-val.tt-ontime{color:var(--teal);}
 
   /* ---- HARMONY MEMORY + BREATH MAP ---- */
   .hm-stages{grid-template-columns:repeat(6,1fr);}
   @media (max-width:640px){ .hm-stages{grid-template-columns:1fr 1fr;} }
   .rh-level:disabled{opacity:0.45;cursor:not-allowed;}
-  .hm-held{color:var(--teal);} .hm-off{color:var(--coral);} .hm-silent{color:var(--muted);}
+  .record-val.hm-held{color:var(--teal);} .record-val.hm-off{color:var(--coral);} .record-val.hm-silent{color:var(--muted);}
   .bm-live{font-family:'Space Mono',monospace;font-size:14px;color:var(--teal);margin:8px 0 2px;min-height:20px;}
   .bm-live.now{color:var(--cream);}
 
@@ -10757,7 +10757,18 @@ const choirState = {
 let choirGainNodes = {};
 let choirActiveOscillators = [];
 let choirIsPlaying = false;
-let choirLoopTimeout = null;
+let choirLoopTimeout = null; // cancel function from atAudioTime()
+// Runs fn once the audio clock reaches ctxTime. A plain wall-clock timer drifts from the audio clock
+// (it fired ~0.7 s early over one song in testing), so re-check and keep waiting until it's really time.
+function atAudioTime(ctxTime, fn){
+  let id = null;
+  const check = ()=>{
+    const left = ctxTime - audioCtx.currentTime;
+    if(left<=0.005) fn(); else id = setTimeout(check, Math.max(5, left*1000));
+  };
+  check();
+  return ()=>clearTimeout(id);
+}
 let choirStartCtxTime = 0;
 let choirEndCtxTime = 0;
 let choirProgressRaf = null;
@@ -10862,12 +10873,12 @@ async function playChoir(opts={}){
   choirIsPlaying = true;
   document.getElementById('choirPlayBtn').textContent = '⏸ Playing…';
 
-  if(choirLoopTimeout) clearTimeout(choirLoopTimeout);
+  if(choirLoopTimeout) choirLoopTimeout();
   const loopOn = opts.loop ?? document.getElementById('choirLoopCheck').checked;
   if(loopOn){
-    choirLoopTimeout = setTimeout(()=>{ if(choirIsPlaying) playChoir({...opts, startIdx:0}); }, (choirEndCtxTime-audioCtx.currentTime)*1000);
+    choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{ if(choirIsPlaying) playChoir({...opts, startIdx:0}); });
   } else {
-    choirLoopTimeout = setTimeout(()=>{ choirIsPlaying=false; document.getElementById('choirPlayBtn').textContent='▶ Play'; }, (choirEndCtxTime-audioCtx.currentTime)*1000);
+    choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{ choirIsPlaying=false; document.getElementById('choirPlayBtn').textContent='▶ Play'; });
   }
 
   runChoirProgressAnim();
@@ -10881,7 +10892,7 @@ function stopChoirOscillatorsOnly(){
 
 function stopChoir(){
   stopChoirOscillatorsOnly();
-  if(choirLoopTimeout) clearTimeout(choirLoopTimeout);
+  if(choirLoopTimeout) choirLoopTimeout();
   choirIsPlaying = false;
   document.getElementById('choirPlayBtn').textContent = '▶ Play';
   document.getElementById('choirProgressFill').style.width = '0%';
