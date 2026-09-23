@@ -3517,7 +3517,7 @@
       <p class="fine-print" style="margin-top:6px;" data-i18n="ac_desc">Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.</p>
     </div>
 
-    <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is silent; the other parts are soloed.</div>
+    <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.</div>
 
     <div class="key-card rh-hide-ac" style="margin-top:16px;">
       <div class="step-label" data-i18n="rehearsal_levels_label">Rehearsal level</div>
@@ -5090,7 +5090,7 @@ const TRANSLATIONS = {
     ac_btn_off:'🎧 A Cappella Mode: off',
     ac_btn_on:'🎧 A Cappella Mode: on',
     ac_desc:'Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.',
-    ac_active_note:'A Cappella is on — no visual guide. Your part is silent; the other parts are soloed.',
+    ac_active_note:'A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.',
     tt_title:'⏱️ Entrance & Cutoff Trainer',
     tt_mode_entrance:'Entrance Trainer',
     tt_mode_cutoff:'Cutoff Trainer',
@@ -6137,7 +6137,7 @@ const TRANSLATIONS = {
     ac_btn_off:'🎧 Mode a cappella : désactivé',
     ac_btn_on:'🎧 Mode a cappella : activé',
     ac_desc:'Votre voix devient silencieuse et les quatre autres jouent en Solo. L\'affichage des notes, la Vision harmonique et le guide de niveau sont masqués — juste vous et le chœur.',
-    ac_active_note:'Le mode a cappella est activé — aucun guide visuel. Votre voix est silencieuse ; les autres voix sont en solo.',
+    ac_active_note:'Le mode a cappella est activé — aucun guide visuel. Votre voix est totalement silencieuse ; les quatre autres jouent à leur volume normal de la table de mixage.',
     tt_title:'⏱️ Entrées et coupures',
     tt_mode_entrance:'Entraîneur d’entrées',
     tt_mode_cutoff:'Entraîneur de coupures',
@@ -7184,7 +7184,7 @@ const TRANSLATIONS = {
     ac_btn_off:'🎧 Modo a cappella: desactivado',
     ac_btn_on:'🎧 Modo a cappella: activado',
     ac_desc:'Tu voz queda en silencio y las otras cuatro suenan en Solo. La vista de notas, la Visión armónica y la guía de nivel se ocultan — solo tú y el coro.',
-    ac_active_note:'El modo a cappella está activado — sin guía visual. Tu voz está en silencio; las demás voces están en solo.',
+    ac_active_note:'El modo a cappella está activado — sin guía visual. Tu voz está totalmente en silencio; las otras cuatro suenan a su volumen normal del mezclador.',
     tt_title:'⏱️ Entradas y cortes',
     tt_mode_entrance:'Entrenador de entradas',
     tt_mode_cutoff:'Entrenador de cortes',
@@ -8231,7 +8231,7 @@ const TRANSLATIONS = {
     ac_btn_off:'🎧 A cappella modu: kapalı',
     ac_btn_on:'🎧 A cappella modu: açık',
     ac_desc:'Sizin partiniz susar, diğer dördü Solo ile çalar. Nota görünümü, Armoni Görüşü ve seviye rehberi gizlenir — yalnızca siz ve koro.',
-    ac_active_note:'A cappella açık — görsel rehber yok. Partiniz sessiz; diğer partiler solo.',
+    ac_active_note:'A cappella açık — görsel rehber yok. Partiniz tamamen sessiz; diğer dört parti normal mikser seviyesinde çalar.',
     tt_title:'⏱️ Giriş ve Kesiş Çalışması',
     tt_mode_entrance:'Giriş Çalışması',
     tt_mode_cutoff:'Kesiş Çalışması',
@@ -10582,13 +10582,10 @@ function ensureChoirGainNodes(){
 function computeEffectiveGain(part){
   const s = choirState[part];
   if(partRehearsal.active){
-    if(partRehearsal.acappella){
-      // A Cappella: your own part is silent; the other four are soloed and go through the normal Solo path below.
-      if(part===partRehearsal.part) return 0;
-    } else {
-      // Rehearsal ignores workspace mute/solo: guide follows the level, everyone else plays at their mixer volume.
-      return part===partRehearsal.part ? rehearsalGuideTarget() : s.volume;
-    }
+    // Rehearsal ignores workspace mute/solo: everyone else plays at their mixer volume. Your part follows
+    // the guide level, or is fully silent in A Cappella.
+    if(part!==partRehearsal.part) return s.volume;
+    return partRehearsal.acappella ? 0 : rehearsalGuideTarget();
   }
   const anySolo = Object.values(choirState).some(p=>p.solo);
   if(anySolo){
@@ -10799,7 +10796,7 @@ function fadeRehearsalGuide(){
   const param = choirGainNodes[partRehearsal.part].gain;
   const now = audioCtx.currentTime;
   holdGainAt(param, now);
-  param.linearRampToValueAtTime(rehearsalGuideTarget(), now+REHEARSAL_FADE_SEC);
+  param.linearRampToValueAtTime(computeEffectiveGain(partRehearsal.part), now+REHEARSAL_FADE_SEC); // 0 in A Cappella
 }
 // Freeze a param at its current computed value (read before cancelling, so a mid-fade change never jumps).
 function holdGainAt(param, now){
@@ -10819,7 +10816,6 @@ function setRehearsalPart(part){
   if(timingTrainer.active) finishTimingTrainer(); // targets belong to the old part
   if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
   partRehearsal.part = part;
-  if(partRehearsal.acappella) applyAcappellaSolos();
   if(partRehearsal.active) updateAllChoirGains(); // previous part returns to its mixer level, new part drops to the current level
   renderPartRehearsal();
 }
@@ -11231,30 +11227,13 @@ document.getElementById('microscopeBody').addEventListener('click', (e)=>{
 renderSonicXray();
 
 /* ---------------- A Cappella Mode ---------------- */
-// Reuses the workspace's own Solo flags: the other four parts are soloed, your part is silenced
-// (computeEffectiveGain), and every visual pitch guide in this view is hidden via .acappella-on.
-let acappellaSavedSolos = null;
-function setSoloFlag(part, on){
-  choirState[part].solo = on;
-  document.getElementById('solo'+part)?.classList.toggle('on-solo', on);
-}
-function applyAcappellaSolos(){
-  Object.keys(choirState).forEach(p=>setSoloFlag(p, p!==partRehearsal.part));
-  syncPracticeChipHighlight();
-  updateAllChoirGains();
-}
+// Your part goes fully silent and the other four play at their mixer volume (computeEffectiveGain) —
+// workspace Solo/Mute are left untouched. Every visual pitch guide in this view is hidden via .acappella-on.
 function setAcappella(on){
   if(on===partRehearsal.acappella) return;
   partRehearsal.acappella = on;
-  if(on){
-    acappellaSavedSolos = Object.fromEntries(Object.keys(choirState).map(p=>[p, choirState[p].solo]));
-    applyAcappellaSolos();
-  } else {
-    Object.keys(choirState).forEach(p=>setSoloFlag(p, !!(acappellaSavedSolos && acappellaSavedSolos[p])));
-    acappellaSavedSolos = null;
-    syncPracticeChipHighlight();
-    updateAllChoirGains();
-  }
+  if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
+  updateAllChoirGains();
   document.getElementById('panel-partrehearsal').classList.toggle('acappella-on', on);
   renderAcappellaButton();
 }
@@ -13763,7 +13742,7 @@ function stopAllActiveSessions(){
   aiDuetActive = false;
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
-  if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false); // hand the workspace its own Solo state back
+  if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false);
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
 }
 function enterPanel(panelName){
