@@ -524,6 +524,26 @@
   .rh-note b{display:block;font-family:'Space Mono',monospace;font-size:15px;color:var(--cream);}
   .rh-note span{font-size:11px;color:var(--muted);}
   .rh-note.current{background:var(--surface-raised);border-color:var(--part-color, var(--brass));}
+  .rh-note{cursor:pointer;}
+  .rh-note .rh-note-iv{display:block;color:var(--teal);font-family:'Space Mono',monospace;font-size:10.5px;margin-top:2px;}
+
+  /* ---- SONG INTELLIGENCE: Harmony Vision, Sonic X-Ray, Music Microscope ---- */
+  .hv-box{background:var(--surface);border:1px solid var(--hairline);border-left:3px solid var(--teal);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+  .hv-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.06em;color:var(--teal);}
+  .hv-main{font-family:'Fraunces',serif;font-size:20px;color:var(--cream);margin:4px 0 2px;}
+  .hv-sub{font-size:12px;color:var(--muted);}
+  .xray-svg{cursor:crosshair;}
+  .xray-svg .xray-sec{cursor:pointer;}
+  .xray-svg .xray-sec:hover rect{stroke:var(--brass);}
+  .mx-head{font-family:'Space Mono',monospace;font-size:13px;color:var(--cream);margin-bottom:8px;}
+  .mx-zoom-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
+  .mx-zoom-row .fine-print{margin:0 4px 0 0;}
+  .mx-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
+  .mx-table th{text-align:left;font-weight:600;color:var(--muted);font-size:11px;padding:6px 8px;border-bottom:1px solid var(--hairline);}
+  .mx-table td{padding:7px 8px;border-bottom:1px solid var(--hairline);color:var(--cream);vertical-align:top;}
+  .mx-table td.mono{font-family:'Space Mono',monospace;font-size:12px;}
+  .mx-table-wrap{overflow-x:auto;}
+  .mx-offsets{margin-top:10px;font-size:12.5px;color:var(--cream);background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:10px 12px;}
 
   .roster-row{
     display:flex;align-items:center;gap:14px;padding:11px 0;border-bottom:1px solid var(--hairline);
@@ -3375,6 +3395,16 @@
         <div id="songDnaMoments" style="margin-top:10px;"></div>
       </div>
 
+      <div class="key-card" id="sonicXrayCard" style="margin-bottom:20px;">
+        <div class="step-label" data-i18n="xray_title">🩻 Sonic X-Ray</div>
+        <p class="fine-print" style="margin:6px 0 4px;" data-i18n="xray_desc">All 5 parts across the song's real timeline, drawn from the exact note schedule the mixer plays. Tap a section to jump playback there; tap anywhere on the parts to put that moment under the Music Microscope.</p>
+        <p class="fine-print" style="margin:0 0 8px;" data-i18n="xray_dna_legend">🔥 = a Song DNA difficult moment</p>
+        <div class="rh-roll-wrap"><svg id="xraySvg" class="xray-svg"></svg></div>
+
+        <div class="step-label" style="margin-top:18px;" data-i18n="mx_title">🔬 Music Microscope</div>
+        <div id="microscopeBody" style="margin-top:8px;"></div>
+      </div>
+
       <div class="track-row" style="--part-color:#a78bda;">
         <div class="track-name-wrap">
           <div class="track-name"><span class="swatch" style="background:#a78bda;"></span><span data-part-name="Soprano">Soprano</span></div>
@@ -3500,6 +3530,7 @@
         <button class="solid-btn teal" id="rehearsalPlayBtn">▶ Play</button>
         <button class="ghost-btn" id="rehearsalStopBtn" data-i18n="rehearsal_stop_btn">Stop</button>
       </div>
+      <div class="hv-box" id="harmonyVisionBox"></div>
       <div class="rh-roll-wrap"><svg id="rehearsalRoll" aria-hidden="true"></svg></div>
       <div class="rh-notes" id="rehearsalNotes"></div>
     </div>
@@ -4127,6 +4158,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     if(btn.dataset.panel==='passport' && typeof renderVocalPassport==='function') renderVocalPassport();
     if(btn.dataset.panel==='dashboard' && typeof renderDashboard==='function') renderDashboard();
     if(btn.dataset.panel==='partrehearsal' && typeof renderPartRehearsal==='function') renderPartRehearsal();
+    if(btn.dataset.panel==='choir' && typeof renderSonicXray==='function') renderSonicXray();
   });
 });
 
@@ -4982,6 +5014,55 @@ const TRANSLATIONS = {
     rehearsal_title_Bass:'I Am the Bass',
     choir_practice_prefix:'Practice:',
     aiduet_note_tpl:'The AI will sing {others} — you sing {part}.',
+    xray_title:'🩻 Sonic X-Ray',
+    xray_desc:'All 5 parts across the song\'s real timeline, drawn from the exact note schedule the mixer plays. Tap a section to jump playback there; tap anywhere on the parts to put that moment under the Music Microscope.',
+    xray_dna_legend:'🔥 = a Song DNA difficult moment',
+    section_name_verse:'Verse',
+    section_name_prechorus:'Pre-Chorus',
+    section_name_chorus:'Chorus',
+    section_name_bridge:'Bridge',
+    mx_title:'🔬 Music Microscope',
+    mx_empty:'Tap any point on the Sonic X-Ray above to see exactly what every part is singing at that moment.',
+    mx_zoom_label:'Zoom',
+    mx_zoom_section:'Section',
+    mx_zoom_chord:'Chord',
+    mx_zoom_s1:'1 s',
+    mx_zoom_ms250:'250 ms',
+    mx_col_part:'Part',
+    mx_col_note:'Note',
+    mx_col_span:'Note span',
+    mx_col_state:'At this moment',
+    mx_col_interval:'vs Lead',
+    mx_sounding_tpl:'sounding — {ms} ms into the note',
+    mx_silent_next_tpl:'silent (gap between notes) — next attack in {ms} ms',
+    mx_silent_end:'silent — the song has ended',
+    mx_repeat:'same pitch as the previous chord, sung again',
+    mx_together_tpl:'All {n} parts attack together at {time} s — 0 ms apart. Every part in this arrangement changes on the same beat.',
+    mx_after_tpl:'{part} enters {ms} ms after {first}',
+    mx_reference:'reference',
+    mx_tap_hint:'Tap inside the zoomed view to move the moment precisely. Lighter ends of each bar are the real attack and release.',
+    hv_title:'👁️ HARMONY VISION',
+    hv_above_tpl:'+{n} {st} above Lead',
+    hv_below_tpl:'−{n} {st} below Lead',
+    hv_unison:'Same pitch as Lead',
+    hv_semitone_one:'semitone',
+    hv_semitone_many:'semitones',
+    hv_oct_abbr:'oct.',
+    hv_is_lead:'You\'re on the Lead line — it\'s the reference the other parts\' intervals are measured from.',
+    hv_hint:'Follows the playhead while playing; tap any note to inspect it.',
+    interval_name_0:'Unison',
+    interval_name_1:'Minor 2nd',
+    interval_name_2:'Major 2nd',
+    interval_name_3:'Minor 3rd',
+    interval_name_4:'Major 3rd',
+    interval_name_5:'Perfect 4th',
+    interval_name_6:'Tritone',
+    interval_name_7:'Perfect 5th',
+    interval_name_8:'Minor 6th',
+    interval_name_9:'Major 6th',
+    interval_name_10:'Minor 7th',
+    interval_name_11:'Major 7th',
+    interval_name_12:'Octave',
     rehearsal_sub:'Your line is front and centre, the other parts keep playing around you, and your part\'s guide track genuinely fades out level by level until you\'re singing it alone.',
     rehearsal_choose_part:'Choose your part',
     rehearsal_change_song:'change song',
@@ -5954,6 +6035,55 @@ const TRANSLATIONS = {
     rehearsal_title_Bass:'Je suis basse',
     choir_practice_prefix:'Travailler :',
     aiduet_note_tpl:'L\'IA chante : {others} — votre voix : {part}.',
+    xray_title:'🩻 Radiographie sonore',
+    xray_desc:'Les 5 voix sur la vraie ligne de temps du morceau, tracées à partir du programme exact de notes que joue le mixeur. Touchez une section pour y sauter la lecture ; touchez n\'importe où sur les voix pour placer ce moment sous le Microscope musical.',
+    xray_dna_legend:'🔥 = un moment difficile de l\'ADN de la chanson',
+    section_name_verse:'Couplet',
+    section_name_prechorus:'Pré-refrain',
+    section_name_chorus:'Refrain',
+    section_name_bridge:'Pont',
+    mx_title:'🔬 Microscope musical',
+    mx_empty:'Touchez n\'importe quel point de la Radiographie sonore ci-dessus pour voir exactement ce que chante chaque voix à ce moment.',
+    mx_zoom_label:'Zoom',
+    mx_zoom_section:'Section',
+    mx_zoom_chord:'Accord',
+    mx_zoom_s1:'1 s',
+    mx_zoom_ms250:'250 ms',
+    mx_col_part:'Voix',
+    mx_col_note:'Note',
+    mx_col_span:'Durée de la note',
+    mx_col_state:'À ce moment',
+    mx_col_interval:'vs voix principale',
+    mx_sounding_tpl:'sonne — {ms} ms après le début de la note',
+    mx_silent_next_tpl:'silence (entre deux notes) — prochaine attaque dans {ms} ms',
+    mx_silent_end:'silence — le morceau est terminé',
+    mx_repeat:'même note que l\'accord précédent, rechantée',
+    mx_together_tpl:'Les {n} voix attaquent ensemble à {time} s — 0 ms d\'écart. Dans cet arrangement, toutes les voix changent sur le même temps.',
+    mx_after_tpl:'{part} entre {ms} ms après {first}',
+    mx_reference:'référence',
+    mx_tap_hint:'Touchez la vue agrandie pour déplacer le moment avec précision. Les extrémités plus claires de chaque barre sont l\'attaque et le relâchement réels.',
+    hv_title:'👁️ VISION HARMONIQUE',
+    hv_above_tpl:'+{n} {st} au-dessus de la voix principale',
+    hv_below_tpl:'−{n} {st} sous la voix principale',
+    hv_unison:'Même note que la voix principale',
+    hv_semitone_one:'demi-ton',
+    hv_semitone_many:'demi-tons',
+    hv_oct_abbr:'oct.',
+    hv_is_lead:'Vous chantez la voix principale — la référence à partir de laquelle on mesure les intervalles des autres voix.',
+    hv_hint:'Suit la tête de lecture pendant la lecture ; touchez n\'importe quelle note pour l\'examiner.',
+    interval_name_0:'Unisson',
+    interval_name_1:'Seconde mineure',
+    interval_name_2:'Seconde majeure',
+    interval_name_3:'Tierce mineure',
+    interval_name_4:'Tierce majeure',
+    interval_name_5:'Quarte juste',
+    interval_name_6:'Triton',
+    interval_name_7:'Quinte juste',
+    interval_name_8:'Sixte mineure',
+    interval_name_9:'Sixte majeure',
+    interval_name_10:'Septième mineure',
+    interval_name_11:'Septième majeure',
+    interval_name_12:'Octave',
     rehearsal_sub:'Votre ligne est au premier plan, les autres voix continuent autour de vous, et la piste guide de votre voix s\'estompe vraiment niveau par niveau jusqu\'à ce que vous la chantiez seul.',
     rehearsal_choose_part:'Choisissez votre voix',
     rehearsal_change_song:'changer de chanson',
@@ -6926,6 +7056,55 @@ const TRANSLATIONS = {
     rehearsal_title_Bass:'Soy bajo',
     choir_practice_prefix:'Practicar:',
     aiduet_note_tpl:'La IA canta: {others} — tu voz: {part}.',
+    xray_title:'🩻 Rayos X sonoros',
+    xray_desc:'Las 5 voces a lo largo de la línea de tiempo real de la canción, dibujadas a partir del programa exacto de notas que toca el mezclador. Toca una sección para saltar la reproducción allí; toca cualquier punto de las voces para poner ese momento bajo el Microscopio musical.',
+    xray_dna_legend:'🔥 = un momento difícil del ADN de la canción',
+    section_name_verse:'Estrofa',
+    section_name_prechorus:'Pre-estribillo',
+    section_name_chorus:'Estribillo',
+    section_name_bridge:'Puente',
+    mx_title:'🔬 Microscopio musical',
+    mx_empty:'Toca cualquier punto de los Rayos X sonoros de arriba para ver exactamente qué canta cada voz en ese momento.',
+    mx_zoom_label:'Zoom',
+    mx_zoom_section:'Sección',
+    mx_zoom_chord:'Acorde',
+    mx_zoom_s1:'1 s',
+    mx_zoom_ms250:'250 ms',
+    mx_col_part:'Voz',
+    mx_col_note:'Nota',
+    mx_col_span:'Duración de la nota',
+    mx_col_state:'En este momento',
+    mx_col_interval:'vs voz principal',
+    mx_sounding_tpl:'sonando — {ms} ms desde el inicio de la nota',
+    mx_silent_next_tpl:'silencio (entre notas) — próximo ataque en {ms} ms',
+    mx_silent_end:'silencio — la canción ha terminado',
+    mx_repeat:'misma nota que el acorde anterior, cantada de nuevo',
+    mx_together_tpl:'Las {n} voces atacan juntas a los {time} s — 0 ms de diferencia. En este arreglo todas las voces cambian en el mismo tiempo.',
+    mx_after_tpl:'{part} entra {ms} ms después de {first}',
+    mx_reference:'referencia',
+    mx_tap_hint:'Toca dentro de la vista ampliada para mover el momento con precisión. Los extremos más claros de cada barra son el ataque y la liberación reales.',
+    hv_title:'👁️ VISIÓN ARMÓNICA',
+    hv_above_tpl:'+{n} {st} por encima de la voz principal',
+    hv_below_tpl:'−{n} {st} por debajo de la voz principal',
+    hv_unison:'La misma nota que la voz principal',
+    hv_semitone_one:'semitono',
+    hv_semitone_many:'semitonos',
+    hv_oct_abbr:'oct.',
+    hv_is_lead:'Estás en la voz principal — la referencia desde la que se miden los intervalos de las demás voces.',
+    hv_hint:'Sigue el cabezal durante la reproducción; toca cualquier nota para examinarla.',
+    interval_name_0:'Unísono',
+    interval_name_1:'Segunda menor',
+    interval_name_2:'Segunda mayor',
+    interval_name_3:'Tercera menor',
+    interval_name_4:'Tercera mayor',
+    interval_name_5:'Cuarta justa',
+    interval_name_6:'Tritono',
+    interval_name_7:'Quinta justa',
+    interval_name_8:'Sexta menor',
+    interval_name_9:'Sexta mayor',
+    interval_name_10:'Séptima menor',
+    interval_name_11:'Séptima mayor',
+    interval_name_12:'Octava',
     rehearsal_sub:'Tu línea está en primer plano, las demás voces siguen sonando a tu alrededor, y la pista guía de tu voz realmente se desvanece nivel a nivel hasta que la cantas tú solo.',
     rehearsal_choose_part:'Elige tu voz',
     rehearsal_change_song:'cambiar canción',
@@ -7898,6 +8077,55 @@ const TRANSLATIONS = {
     rehearsal_title_Bass:'Ben bas sesiyim',
     choir_practice_prefix:'Çalış:',
     aiduet_note_tpl:'Yapay zeka şunları söyler: {others} — sizin partiniz: {part}.',
+    xray_title:'🩻 Ses Röntgeni',
+    xray_desc:'5 partinin tamamı, şarkının gerçek zaman çizelgesi boyunca, mikserin çaldığı nota programından birebir çizilir. Çalmayı oraya atlatmak için bir bölüme dokunun; o anı Müzik Mikroskobu\'na koymak için partilerin herhangi bir yerine dokunun.',
+    xray_dna_legend:'🔥 = Şarkı DNA\'sındaki zor bir an',
+    section_name_verse:'Kıta',
+    section_name_prechorus:'Nakarat öncesi',
+    section_name_chorus:'Nakarat',
+    section_name_bridge:'Köprü',
+    mx_title:'🔬 Müzik Mikroskobu',
+    mx_empty:'Her partinin o anda tam olarak ne söylediğini görmek için yukarıdaki Ses Röntgeni\'nde herhangi bir noktaya dokunun.',
+    mx_zoom_label:'Yakınlaştır',
+    mx_zoom_section:'Bölüm',
+    mx_zoom_chord:'Akor',
+    mx_zoom_s1:'1 sn',
+    mx_zoom_ms250:'250 ms',
+    mx_col_part:'Parti',
+    mx_col_note:'Nota',
+    mx_col_span:'Nota süresi',
+    mx_col_state:'Bu anda',
+    mx_col_interval:'Ana sese göre',
+    mx_sounding_tpl:'çalıyor — notanın {ms} ms içinde',
+    mx_silent_next_tpl:'sessiz (notalar arası boşluk) — sonraki atak {ms} ms sonra',
+    mx_silent_end:'sessiz — şarkı bitti',
+    mx_repeat:'önceki akorla aynı nota, yeniden söyleniyor',
+    mx_together_tpl:'{n} partinin tamamı {time} sn\'de birlikte başlar — aralarında 0 ms fark var. Bu düzenlemede her parti aynı vuruşta değişir.',
+    mx_after_tpl:'{part}, {first} partisinden {ms} ms sonra girer',
+    mx_reference:'referans',
+    mx_tap_hint:'Anı tam olarak kaydırmak için yakınlaştırılmış görünümün içine dokunun. Her çubuğun açık renkli uçları gerçek atak ve bırakmadır.',
+    hv_title:'👁️ ARMONİ GÖRÜŞÜ',
+    hv_above_tpl:'Ana sesin +{n} {st} üstünde',
+    hv_below_tpl:'Ana sesin −{n} {st} altında',
+    hv_unison:'Ana sesle aynı nota',
+    hv_semitone_one:'yarım ses',
+    hv_semitone_many:'yarım ses',
+    hv_oct_abbr:'okt.',
+    hv_is_lead:'Ana sestesiniz — diğer partilerin aralıkları buna göre ölçülür.',
+    hv_hint:'Çalarken çalma kafasını izler; incelemek için herhangi bir notaya dokunun.',
+    interval_name_0:'Tam birli',
+    interval_name_1:'Küçük ikili',
+    interval_name_2:'Büyük ikili',
+    interval_name_3:'Küçük üçlü',
+    interval_name_4:'Büyük üçlü',
+    interval_name_5:'Tam dörtlü',
+    interval_name_6:'Triton',
+    interval_name_7:'Tam beşli',
+    interval_name_8:'Küçük altılı',
+    interval_name_9:'Büyük altılı',
+    interval_name_10:'Küçük yedili',
+    interval_name_11:'Büyük yedili',
+    interval_name_12:'Oktav',
     rehearsal_sub:'Sizin hattınız ön planda, diğer sesler etrafınızda çalmaya devam ediyor ve partinizin rehber kaydı, onu tek başınıza söyleyene kadar seviye seviye gerçekten azalıyor.',
     rehearsal_choose_part:'Partinizi seçin',
     rehearsal_change_song:'şarkıyı değiştir',
@@ -8620,6 +8848,7 @@ function applyTranslations(){
     ()=>typeof renderArcadeLocks==='function' && document.querySelector('.arcade-game-card') && renderArcadeLocks(),
     ()=>typeof applyPartNames==='function' && applyPartNames(),
     ()=>typeof renderAiDuetNote==='function' && renderAiDuetNote(),
+    ()=>typeof renderSonicXray==='function' && renderSonicXray(),
     ()=>typeof renderRoster==='function' && document.getElementById('rosterList') && renderRoster(),
     ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
@@ -10245,14 +10474,18 @@ function updateAllChoirGains(){
   });
 }
 
+// Shared by playback and the Song Intelligence views, so what's drawn is exactly what's scheduled.
+const CHOIR_NOTE_FRACTION = 0.94; // each note sounds for this share of its chord, leaving a short gap
+const CHOIR_ATTACK_SEC = 0.05, CHOIR_RELEASE_SEC = 0.12;
+
 function scheduleChoirNote(part, freq, startTime, duration){
   const osc = audioCtx.createOscillator();
   const env = audioCtx.createGain();
   osc.type = 'sine';
   osc.frequency.setValueAtTime(freq, startTime);
   env.gain.setValueAtTime(0, startTime);
-  env.gain.linearRampToValueAtTime(0.9, startTime+0.05);
-  env.gain.linearRampToValueAtTime(0.9, startTime+duration-0.12);
+  env.gain.linearRampToValueAtTime(0.9, startTime+CHOIR_ATTACK_SEC);
+  env.gain.linearRampToValueAtTime(0.9, startTime+duration-CHOIR_RELEASE_SEC);
   env.gain.linearRampToValueAtTime(0, startTime+duration);
   osc.connect(env).connect(choirGainNodes[part]);
   osc.start(startTime);
@@ -10268,13 +10501,14 @@ async function playChoir(opts={}){
 
   const beatDur = 60/SONG.tempo;
   const chordDur = beatDur*SONG.beatsPerChord;
-  choirStartCtxTime = audioCtx.currentTime + 0.08;
+  // opts.startIdx jumps to a chord: the song clock is shifted back so progress/playheads stay in song time.
+  const startIdx = Math.max(0, Math.min(SONG.parts.Lead.notes.length-1, opts.startIdx||0));
+  choirStartCtxTime = audioCtx.currentTime + 0.08 - startIdx*chordDur;
 
   Object.keys(SONG.parts).forEach(part=>{
-    let t = choirStartCtxTime;
-    SONG.parts[part].notes.forEach(midi=>{
-      scheduleChoirNote(part, noteToFreq(midi), t, chordDur*0.94);
-      t += chordDur;
+    SONG.parts[part].notes.forEach((midi,i)=>{
+      if(i<startIdx) return;
+      scheduleChoirNote(part, noteToFreq(midi), choirStartCtxTime + i*chordDur, chordDur*CHOIR_NOTE_FRACTION);
     });
   });
 
@@ -10285,7 +10519,7 @@ async function playChoir(opts={}){
   if(choirLoopTimeout) clearTimeout(choirLoopTimeout);
   const loopOn = opts.loop ?? document.getElementById('choirLoopCheck').checked;
   if(loopOn){
-    choirLoopTimeout = setTimeout(()=>{ if(choirIsPlaying) playChoir(opts); }, (choirEndCtxTime-audioCtx.currentTime)*1000);
+    choirLoopTimeout = setTimeout(()=>{ if(choirIsPlaying) playChoir({...opts, startIdx:0}); }, (choirEndCtxTime-audioCtx.currentTime)*1000);
   } else {
     choirLoopTimeout = setTimeout(()=>{ choirIsPlaying=false; document.getElementById('choirPlayBtn').textContent='▶ Play'; }, (choirEndCtxTime-audioCtx.currentTime)*1000);
   }
@@ -10310,6 +10544,7 @@ function stopChoir(){
     const el = document.getElementById('vu'+part);
     if(el) el.style.width='0%';
   });
+  updateXrayPlayhead(null);
 }
 
 function runChoirProgressAnim(){
@@ -10323,6 +10558,7 @@ function runChoirProgressAnim(){
       return;
     }
     const pct = Math.max(0, Math.min(100, ((audioCtx.currentTime-choirStartCtxTime)/(choirEndCtxTime-choirStartCtxTime))*100));
+    updateXrayPlayhead(Math.max(0, audioCtx.currentTime-choirStartCtxTime));
     document.getElementById('choirProgressFill').style.width = pct+'%';
 
     // Real metering — reads actual samples from each part's own analyser node, not a simulated animation.
@@ -10498,7 +10734,7 @@ function renderRehearsalRoll(){
   });
   SONG.parts[sel].notes.forEach((m,i)=>{
     html += `<rect class="rh-sel-note" data-idx="${i}" x="${i*colW+3}" y="${y(m)-7}" width="${colW*0.94-6}" height="14" rx="4" style="fill:${PART_COLORS[sel]}"/>`;
-    html += `<text x="${i*colW+9}" y="${y(m)+4}" style="fill:#1a1305;font:bold 11px 'Space Mono',monospace">${midiName(m)}</text>`;
+    html += `<text x="${i*colW+9}" y="${y(m)+4}" style="fill:#1a1305;font:bold 11px 'Space Mono',monospace;pointer-events:none">${midiName(m)}</text>`;
   });
   html += `<line id="rehearsalPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0"/>`;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -10508,9 +10744,37 @@ function renderRehearsalRoll(){
   document.getElementById('rehearsalNotes').innerHTML = SONG.parts[sel].notes.map((m,i)=>`
     <div class="rh-note" data-idx="${i}" style="--part-color:${PART_COLORS[sel]};">
       <b>${midiName(m)}</b>
-      <span>${t('rehearsal_chord_word')} ${i+1} · ${(i*chordDur).toFixed(1)}s–${((i+0.94)*chordDur).toFixed(1)}s</span><br>
+      <span>${t('rehearsal_chord_word')} ${i+1} · ${(i*chordDur).toFixed(1)}s–${((i+CHOIR_NOTE_FRACTION)*chordDur).toFixed(1)}s</span><br>
       <span>${SONG.chordLabels[i]||''}</span>
+      ${sel==='Lead' ? '' : `<span class="rh-note-iv">${intervalVsLead(sel,i).short}</span>`}
     </div>`).join('');
+  syncRehearsalCursor(partRehearsal.active && choirIsPlaying ? null : rehearsalCursorIdx);
+}
+
+// Harmony Vision: which chord is "now" — the live playhead while playing, the tapped note when stopped.
+let rehearsalCursorIdx = 0;
+function syncRehearsalCursor(idx){
+  if(idx===null) return;
+  idx = Math.min(idx, SONG.parts.Lead.notes.length-1);
+  document.querySelectorAll('#rehearsalNotes .rh-note').forEach(el=>el.classList.toggle('current', +el.dataset.idx===idx));
+  renderHarmonyVision(idx);
+}
+function renderHarmonyVision(idx){
+  const box = document.getElementById('harmonyVisionBox');
+  if(!box) return;
+  const part = partRehearsal.part;
+  const chordDur = songChordDurMs()/1000;
+  const where = `${t('rehearsal_chord_word')} ${idx+1} · ${(idx*chordDur).toFixed(1)}s · ${SONG.chordLabels[idx]||''}`;
+  if(part==='Lead'){
+    box.innerHTML = `<div class="hv-label">${t('hv_title')}</div><div class="hv-main">${t('hv_is_lead')}</div><div class="hv-sub">${where}</div>`;
+    return;
+  }
+  const iv = intervalVsLead(part, idx);
+  box.dataset.semis = iv.semis; // real value, exposed for verification
+  box.innerHTML = `<div class="hv-label">${t('hv_title')}</div>
+    <div class="hv-main">${iv.text}</div>
+    <div class="hv-sub">${iv.name} · ${partName(part)} ${midiName(SONG.parts[part].notes[idx])} ↔ ${partName('Lead')} ${midiName(SONG.parts.Lead.notes[idx])} · ${where}</div>
+    <div class="hv-sub" style="margin-top:4px;">${t('hv_hint')}</div>`;
 }
 
 function renderPartRehearsal(){
@@ -10539,7 +10803,7 @@ function resetPartRehearsalPlayUI(){
   partRehearsalRaf = null;
   const ph = document.getElementById('rehearsalPlayhead');
   if(ph) ph.style.opacity = '0';
-  document.querySelectorAll('#rehearsalNotes .rh-note.current').forEach(el=>el.classList.remove('current'));
+  syncRehearsalCursor(rehearsalCursorIdx); // keep Harmony Vision on the last real position
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_play_btn');
   document.getElementById('rehearsalGainValue').textContent = '—';
   document.getElementById('rehearsalGuideVu').style.width = '0%';
@@ -10561,7 +10825,8 @@ function runPartRehearsalAnim(){
     }
     const idx = Math.min(n-1, Math.floor(elapsed/chordDur));
     if(idx!==lastIdx || !document.querySelector('#rehearsalNotes .rh-note.current')){
-      document.querySelectorAll('#rehearsalNotes .rh-note').forEach(el=>el.classList.toggle('current', +el.dataset.idx===idx));
+      rehearsalCursorIdx = idx;
+      syncRehearsalCursor(idx);
       lastIdx = idx;
     }
     // Live readout straight from the guide part's real GainNode + analyser — not a mirrored UI value.
@@ -10577,9 +10842,9 @@ function runPartRehearsalAnim(){
   partRehearsalRaf = requestAnimationFrame(step);
 }
 
-async function startPartRehearsal(){
+async function startPartRehearsal(startIdx=0){
   partRehearsal.active = true;
-  await playChoir({loop:true});
+  await playChoir({loop:true, startIdx});
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
 }
@@ -10591,6 +10856,17 @@ function stopPartRehearsal(){
 }
 
 document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
+// Tap a note (chip or roll bar): inspect it in Harmony Vision; if playing, jump playback there too.
+function onRehearsalNoteTap(e){
+  const el = e.target.closest('[data-idx]');
+  if(!el) return;
+  const idx = +el.dataset.idx;
+  rehearsalCursorIdx = idx;
+  if(partRehearsal.active && choirIsPlaying) startPartRehearsal(idx);
+  else syncRehearsalCursor(idx);
+}
+document.getElementById('rehearsalNotes').addEventListener('click', onRehearsalNoteTap);
+document.getElementById('rehearsalRoll').addEventListener('click', onRehearsalNoteTap);
 document.getElementById('rehearsalStopBtn').addEventListener('click', stopPartRehearsal);
 document.getElementById('rehearsalPrevBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level-1));
 document.getElementById('rehearsalNextBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level+1));
@@ -10608,6 +10884,213 @@ document.querySelectorAll('#rehearseEntryRow [data-rehearse-part]').forEach(chip
   });
 });
 applyPartNames();
+
+/* ---------------- Song Intelligence: Sonic X-Ray, Music Microscope, Harmony Vision ---------------- */
+// Every time below comes from the same schedule playChoir() uses: note i of every part starts at
+// i × chord length and sounds for CHOIR_NOTE_FRACTION of it. Nothing is estimated.
+function songTimeline(){
+  const chordDur = songChordDurMs()/1000;
+  const n = SONG.parts.Lead.notes.length;
+  const parts = {};
+  Object.keys(SONG.parts).forEach(p=>{
+    parts[p] = SONG.parts[p].notes.map((midi,i)=>({idx:i, midi, start:i*chordDur, end:(i+CHOIR_NOTE_FRACTION)*chordDur}));
+  });
+  return {chordDur, n, total:n*chordDur, parts};
+}
+function chordIndexAt(tl, sec){ return Math.max(0, Math.min(tl.n-1, Math.floor(sec/tl.chordDur))); }
+function sectionForIndex(idx){ return getSongSections().find(s=>s.indices.includes(idx)); }
+function sectionLabel(name){ return t('section_name_'+name.toLowerCase().replace('-','')); }
+
+// Interval Match's own model: an interval is a semitone distance (target = root + semi), named from the
+// 12-interval table its Professional level drills. Here the root is the Lead note and the target is the part's.
+function intervalDefName(semi){
+  const def = LEVEL_CONFIG.professional.intervals.find(d=>d.semi===semi);
+  return def ? t('interval_name_'+def.semi) : String(semi);
+}
+function intervalNameForSemis(semis){
+  const abs = Math.abs(semis), oct = Math.floor(abs/12), rem = abs%12;
+  if(abs===0) return t('interval_name_0');
+  if(rem===0) return oct===1 ? intervalDefName(12) : `${oct} × ${intervalDefName(12)}`;
+  return oct>0 ? `${intervalDefName(rem)} + ${oct} ${t('hv_oct_abbr')}` : intervalDefName(rem);
+}
+function intervalVsLead(part, idx){
+  const semis = SONG.parts[part].notes[idx] - SONG.parts.Lead.notes[idx];
+  const abs = Math.abs(semis);
+  const text = semis===0 ? t('hv_unison')
+    : t(semis>0 ? 'hv_above_tpl' : 'hv_below_tpl').replace('{n}', abs).replace('{st}', t(abs===1 ? 'hv_semitone_one' : 'hv_semitone_many'));
+  return {semis, name:intervalNameForSemis(semis), text, short: semis===0 ? '0' : `${semis>0?'+':'−'}${abs} · ${intervalNameForSemis(semis)}`};
+}
+
+/* ---- Sonic X-Ray ---- */
+const XRAY_W = 1000, XRAY_SEC_H = 30, XRAY_ROW_H = 38;
+function renderSonicXray(){
+  const svg = document.getElementById('xraySvg');
+  if(!svg) return;
+  const tl = songTimeline();
+  const parts = Object.keys(tl.parts);
+  const H = XRAY_SEC_H + parts.length*XRAY_ROW_H + 4;
+  const x = s => (s/tl.total)*XRAY_W;
+  let html = '';
+  getSongSections().forEach(sec=>{
+    const s0 = sec.indices[0]*tl.chordDur, s1 = (sec.indices[sec.indices.length-1]+1)*tl.chordDur;
+    html += `<g class="xray-sec" data-sec-start="${sec.indices[0]}"><rect x="${x(s0)+1}" y="2" width="${x(s1)-x(s0)-2}" height="${XRAY_SEC_H-8}" rx="6" style="fill:var(--surface-raised);stroke:var(--hairline)"/>`
+      + `<text x="${x(s0)+8}" y="${XRAY_SEC_H/2+2}" style="fill:var(--cream);font:600 11px Inter,sans-serif;pointer-events:none">▶ ${sectionLabel(sec.name)} · ${s0.toFixed(1)}s</text></g>`;
+  });
+  parts.forEach((p,r)=>{
+    const y0 = XRAY_SEC_H + r*XRAY_ROW_H;
+    const notes = tl.parts[p];
+    const lo = Math.min(...notes.map(nt=>nt.midi)), hi = Math.max(...notes.map(nt=>nt.midi));
+    html += `<text x="4" y="${y0+11}" style="fill:var(--muted);font:10px 'Space Mono',monospace;pointer-events:none">${partName(p)}</text>`;
+    notes.forEach(nt=>{
+      const rel = hi===lo ? 0.5 : (nt.midi-lo)/(hi-lo); // contour within this part's own real range
+      const y = y0 + 15 + (1-rel)*10;
+      html += `<rect class="xray-note" data-part="${p}" data-idx="${nt.idx}" x="${x(nt.start)}" y="${y}" width="${x(nt.end)-x(nt.start)}" height="11" rx="3" style="fill:${PART_COLORS[p]};opacity:0.85"/>`
+        + `<text x="${x(nt.start)+3}" y="${y+8.5}" style="fill:#1a1305;font:bold 8.5px 'Space Mono',monospace;pointer-events:none">${midiName(nt.midi)}</text>`;
+    });
+  });
+  computeSongDnaMoments().forEach(m=>{
+    const mx = x(m.time/1000);
+    html += `<line x1="${mx}" y1="${XRAY_SEC_H-4}" x2="${mx}" y2="${H}" style="stroke:var(--coral);stroke-width:1;stroke-dasharray:3 3;pointer-events:none"/>`
+      + `<text x="${mx+2}" y="${XRAY_SEC_H+8}" style="font-size:10px;pointer-events:none">🔥</text>`;
+  });
+  html += `<line id="xrayCursor" x1="0" y1="${XRAY_SEC_H-4}" x2="0" y2="${H}" style="stroke:var(--teal);stroke-width:2;opacity:0;pointer-events:none"/>`
+    + `<line id="xrayPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0;pointer-events:none"/>`;
+  svg.setAttribute('viewBox', `0 0 ${XRAY_W} ${H}`);
+  svg.style.minWidth = Math.max(640, tl.n*70)+'px';
+  svg.innerHTML = html;
+  if(microscope.t!==null) microscope.t = Math.min(microscope.t, tl.total-0.001);
+  renderMicroscope();
+}
+function updateXrayPlayhead(sec){
+  const ph = document.getElementById('xrayPlayhead');
+  if(!ph) return;
+  if(sec===null || partRehearsal.active){ ph.style.opacity = '0'; return; }
+  const x = Math.min(XRAY_W, (sec/(songChordDurMs()/1000*SONG.parts.Lead.notes.length))*XRAY_W);
+  ph.setAttribute('x1', x); ph.setAttribute('x2', x); ph.style.opacity = '0.8';
+}
+function svgTimeFromEvent(svg, e, t0, t1){
+  const r = svg.getBoundingClientRect();
+  const frac = Math.max(0, Math.min(1, (e.clientX - r.left)/r.width));
+  return t0 + frac*(t1-t0);
+}
+document.getElementById('xraySvg').addEventListener('click', (e)=>{
+  const sec = e.target.closest('.xray-sec');
+  if(sec){
+    // Section tap: jump the real mixer playback to that section's first chord.
+    partRehearsal.active = false;
+    playChoir({startIdx:+sec.dataset.secStart});
+    return;
+  }
+  const tl = songTimeline();
+  setMicroscopeTime(Math.min(tl.total-0.001, svgTimeFromEvent(e.currentTarget, e, 0, tl.total)));
+});
+
+/* ---- Music Microscope ---- */
+const MICROSCOPE_ZOOMS = ['section','chord','s1','ms250'];
+const microscope = {t:null, zoom:'chord'};
+function setMicroscopeTime(sec){
+  microscope.t = sec;
+  renderMicroscope();
+}
+function microscopeWindow(tl){
+  const T = microscope.t;
+  let w;
+  if(microscope.zoom==='section'){
+    const sec = sectionForIndex(chordIndexAt(tl, T));
+    return [sec.indices[0]*tl.chordDur, (sec.indices[sec.indices.length-1]+1)*tl.chordDur];
+  }
+  if(microscope.zoom==='chord'){
+    const i = chordIndexAt(tl, T);
+    return [i*tl.chordDur, (i+1)*tl.chordDur];
+  }
+  w = microscope.zoom==='s1' ? 1 : 0.25;
+  let t0 = Math.max(0, T-w/2), t1 = Math.min(tl.total, t0+w);
+  t0 = Math.max(0, t1-w);
+  return [t0, t1];
+}
+function renderMicroscope(){
+  const box = document.getElementById('microscopeBody');
+  if(!box) return;
+  if(microscope.t===null){ box.innerHTML = `<p class="fine-print">${t('mx_empty')}</p>`; return; }
+  const tl = songTimeline();
+  const T = microscope.t;
+  const idx = chordIndexAt(tl, T);
+  const sec = sectionForIndex(idx);
+  const parts = Object.keys(tl.parts);
+  const cur = document.getElementById('xrayCursor');
+  if(cur){ const cx = (T/tl.total)*XRAY_W; cur.setAttribute('x1', cx); cur.setAttribute('x2', cx); cur.style.opacity = '1'; }
+
+  // Zoomed view: real note spans (attack / sustain / release from the same envelope constants), ms ticks.
+  const [w0, w1] = microscopeWindow(tl);
+  const W = 1000, rowH = 28, axisH = 20, H = axisH + parts.length*rowH;
+  const x = s => ((s-w0)/(w1-w0))*W;
+  const span = w1-w0;
+  const step = span>5 ? 1 : span>2 ? 0.5 : span>0.6 ? 0.1 : 0.025;
+  let svg = '';
+  for(let s=Math.ceil(w0/step)*step; s<=w1+1e-9; s+=step){
+    const label = step<0.1 ? `${Math.round(s*1000)} ms` : `${s.toFixed(step<1?1:0)} s`;
+    svg += `<line x1="${x(s)}" y1="${axisH-4}" x2="${x(s)}" y2="${H}" style="stroke:var(--hairline);stroke-width:1"/>`
+      + `<text x="${x(s)+3}" y="12" style="fill:var(--muted);font:10px 'Space Mono',monospace">${label}</text>`;
+  }
+  parts.forEach((p,r)=>{
+    const y = axisH + r*rowH + 6;
+    tl.parts[p].forEach(nt=>{
+      if(nt.end<w0 || nt.start>w1) return;
+      const seg = (a,b,op)=>{ const a2=Math.max(a,w0), b2=Math.min(b,w1); if(b2>a2) svg += `<rect x="${x(a2)}" y="${y}" width="${x(b2)-x(a2)}" height="16" style="fill:${PART_COLORS[p]};opacity:${op}"/>`; };
+      seg(nt.start, nt.start+CHOIR_ATTACK_SEC, 0.45);
+      seg(nt.start+CHOIR_ATTACK_SEC, nt.end-CHOIR_RELEASE_SEC, 0.9);
+      seg(nt.end-CHOIR_RELEASE_SEC, nt.end, 0.45);
+      const lx = Math.max(x(nt.start), 0)+4;
+      if(lx < W-40) svg += `<text x="${lx}" y="${y+12}" style="fill:#1a1305;font:bold 10px 'Space Mono',monospace;pointer-events:none">${partName(p)} ${midiName(nt.midi)}</text>`;
+    });
+  });
+  svg += `<line x1="${x(T)}" y1="0" x2="${x(T)}" y2="${H}" style="stroke:var(--teal);stroke-width:2"/>`;
+
+  // Per-part state at exactly T
+  const rows = parts.map(p=>{
+    const nt = tl.parts[p][idx];
+    const sounding = T>=nt.start && T<nt.end;
+    let state;
+    if(sounding) state = t('mx_sounding_tpl').replace('{ms}', Math.round((T-nt.start)*1000));
+    else if(idx+1<tl.n) state = t('mx_silent_next_tpl').replace('{ms}', Math.round(((idx+1)*tl.chordDur - T)*1000));
+    else state = t('mx_silent_end');
+    const repeat = idx>0 && SONG.parts[p].notes[idx-1]===nt.midi ? `<br><span class="fine-print">${t('mx_repeat')}</span>` : '';
+    const iv = p==='Lead' ? `<span class="fine-print">${t('mx_reference')}</span>` : intervalVsLead(p, idx).short;
+    return `<tr data-mx-part="${p}" data-midi="${nt.midi}" data-sounding="${sounding}">
+      <td><span style="color:${PART_COLORS[p]};">●</span> ${partName(p)}</td>
+      <td class="mono">${midiName(nt.midi)} <span class="fine-print">(MIDI ${nt.midi})</span>${repeat}</td>
+      <td class="mono">${nt.start.toFixed(3)}–${nt.end.toFixed(3)} s</td>
+      <td>${state}</td>
+      <td class="mono">${iv}</td></tr>`;
+  }).join('');
+
+  // Real timing offsets between parts: each part's most recent attack at or before T.
+  const onsets = parts.map(p=>({p, onset:tl.parts[p][idx].start})).sort((a,b)=>a.onset-b.onset);
+  const spreadMs = Math.round((onsets[onsets.length-1].onset - onsets[0].onset)*1000);
+  const offsets = spreadMs===0
+    ? t('mx_together_tpl').replace('{n}', parts.length).replace('{time}', onsets[0].onset.toFixed(3))
+    : onsets.slice(1).map(o=>t('mx_after_tpl').replace('{part}', partName(o.p)).replace('{ms}', Math.round((o.onset-onsets[0].onset)*1000)).replace('{first}', partName(onsets[0].p))).join('<br>');
+
+  box.innerHTML = `
+    <div class="mx-head" id="mxHead" data-t="${T.toFixed(3)}" data-idx="${idx}">${T.toFixed(3)} s · ${t('rehearsal_chord_word')} ${idx+1}/${tl.n} (${SONG.chordLabels[idx]||''}) · ${sectionLabel(sec.name)}</div>
+    <div class="mx-zoom-row"><span class="fine-print">${t('mx_zoom_label')}</span>
+      ${MICROSCOPE_ZOOMS.map(z=>`<button class="practice-chip${microscope.zoom===z?' active-part':''}" data-mx-zoom="${z}">${t('mx_zoom_'+z)}</button>`).join('')}
+    </div>
+    <div class="rh-roll-wrap"><svg id="microscopeSvg" class="xray-svg" viewBox="0 0 ${W} ${H}" style="min-width:640px;" data-w0="${w0}" data-w1="${w1}">${svg}</svg></div>
+    <p class="fine-print" style="margin:6px 0 0;">${t('mx_tap_hint')}</p>
+    <div class="mx-table-wrap"><table class="mx-table">
+      <thead><tr><th>${t('mx_col_part')}</th><th>${t('mx_col_note')}</th><th>${t('mx_col_span')}</th><th>${t('mx_col_state')}</th><th>${t('mx_col_interval')}</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+    <div class="mx-offsets" id="mxOffsets" data-spread-ms="${spreadMs}">${offsets}</div>`;
+}
+document.getElementById('microscopeBody').addEventListener('click', (e)=>{
+  const z = e.target.closest('[data-mx-zoom]');
+  if(z){ microscope.zoom = z.dataset.mxZoom; renderMicroscope(); return; }
+  const svg = e.target.closest('#microscopeSvg');
+  if(svg) setMicroscopeTime(Math.min(songTimeline().total-0.001, svgTimeFromEvent(svg, e, +svg.dataset.w0, +svg.dataset.w1)));
+});
+
+renderSonicXray();
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
 const SAMPLE_ROSTER = [
@@ -11513,6 +11996,39 @@ function renderSongDifficulty(){
   box.innerHTML = `${t('songdifficulty_difficulty')}: <strong style="color:var(--brass);">${starDisplay}</strong> &nbsp;·&nbsp; ${t('songdifficulty_highest')}: ${noteNameFromMidi(highest)} &nbsp;·&nbsp; ${t('songdifficulty_lowest')}: ${noteNameFromMidi(lowest)} &nbsp;·&nbsp; ${recommendedFor}`;
   renderSongDna(leadNotes, lowest, highest, jumps, maxJump);
 }
+// Song DNA's real difficult moments, computed from the Lead line. Shared by Song DNA and Sonic X-Ray.
+function computeSongDnaMoments(){
+  const leadNotes = SONG.parts.Lead.notes;
+  const leadHighest = Math.max(...leadNotes);
+  const jumps = leadNotes.slice(1).map((n,i)=>Math.abs(n-leadNotes[i]));
+  const maxJump = Math.max(...jumps);
+  const chordDurMs = songChordDurMs();
+  const moments = [];
+  const highestIdx = leadNotes.indexOf(leadHighest);
+  moments.push({icon:'🔥', label:`${t('songdna_highsustained')} (${noteNameFromMidi(leadHighest)})`, time: highestIdx*chordDurMs, midi: leadHighest});
+
+  const maxJumpIdx = jumps.indexOf(maxJump);
+  if(maxJumpIdx>=0){
+    moments.push({icon:'🔥', label:`${t('songdna_bigjump')} — ${noteNameFromMidi(leadNotes[maxJumpIdx])} ${t('songdna_to')} ${noteNameFromMidi(leadNotes[maxJumpIdx+1])} (${maxJump} ${t('songdna_semitones')})`, time:(maxJumpIdx+1)*chordDurMs, midi: leadNotes[maxJumpIdx+1]});
+  }
+
+  let longestRunLen=0, longestRunStart=0, curRunLen=0, curRunStart=0;
+  for(let i=1;i<leadNotes.length;i++){
+    if(leadNotes[i]<leadNotes[i-1]){
+      if(curRunLen===0) curRunStart=i-1;
+      curRunLen++;
+      if(curRunLen>longestRunLen){ longestRunLen=curRunLen; longestRunStart=curRunStart; }
+    } else {
+      curRunLen=0;
+    }
+  }
+  if(longestRunLen>=2){
+    moments.push({icon:'🔥', label:`${t('songdna_descending')} (${longestRunLen+1} ${t('songdna_notes')})`, time:longestRunStart*chordDurMs, midi: leadNotes[longestRunStart]});
+  }
+
+  moments.sort((a,b)=>a.time-b.time);
+  return moments;
+}
 function renderSongDna(leadNotes, lowest, highest, jumps, maxJump){
   const dimWrap = document.getElementById('songDnaDimensions');
   const momentsWrap = document.getElementById('songDnaMoments');
@@ -11539,30 +12055,7 @@ function renderSongDna(leadNotes, lowest, highest, jumps, maxJump){
     </div>
   `).join('');
 
-  const moments = [];
-  const highestIdx = leadNotes.indexOf(leadHighest);
-  moments.push({icon:'🔥', label:`${t('songdna_highsustained')} (${noteNameFromMidi(leadHighest)})`, time: highestIdx*chordDurMs, midi: leadHighest});
-
-  const maxJumpIdx = jumps.indexOf(maxJump);
-  if(maxJumpIdx>=0){
-    moments.push({icon:'🔥', label:`${t('songdna_bigjump')} — ${noteNameFromMidi(leadNotes[maxJumpIdx])} ${t('songdna_to')} ${noteNameFromMidi(leadNotes[maxJumpIdx+1])} (${maxJump} ${t('songdna_semitones')})`, time:(maxJumpIdx+1)*chordDurMs, midi: leadNotes[maxJumpIdx+1]});
-  }
-
-  let longestRunLen=0, longestRunStart=0, curRunLen=0, curRunStart=0;
-  for(let i=1;i<leadNotes.length;i++){
-    if(leadNotes[i]<leadNotes[i-1]){
-      if(curRunLen===0) curRunStart=i-1;
-      curRunLen++;
-      if(curRunLen>longestRunLen){ longestRunLen=curRunLen; longestRunStart=curRunStart; }
-    } else {
-      curRunLen=0;
-    }
-  }
-  if(longestRunLen>=2){
-    moments.push({icon:'🔥', label:`${t('songdna_descending')} (${longestRunLen+1} ${t('songdna_notes')})`, time:longestRunStart*chordDurMs, midi: leadNotes[longestRunStart]});
-  }
-
-  moments.sort((a,b)=>a.time-b.time);
+  const moments = computeSongDnaMoments();
   momentsWrap.innerHTML = moments.length>0
     ? moments.map((m,i)=>{
         const totalSec = Math.round(m.time/1000);
@@ -13691,6 +14184,7 @@ function selectSong(id){
   const s = SONG;
   document.getElementById('choirTrackTitle').textContent = `${s.name} — ${s.key} (${s.chordLabels.length} chords)`;
   if(typeof renderSongDifficulty==='function') renderSongDifficulty();
+  if(typeof renderSonicXray==='function'){ microscope.t = null; renderSonicXray(); }
   document.querySelectorAll('#songSelectRow .ex-type-btn').forEach(b=>{ const isSel=b.dataset.songId===id; b.classList.toggle('active', isSel); b.setAttribute('aria-pressed', isSel?'true':'false'); });
   // reset any per-song game state so a stale previous-song result can't linger
   if(typeof bossNoteResults!=='undefined') bossNoteResults=[];
