@@ -11077,7 +11077,26 @@ let choirAnalyserNodes = {}, choirAnalyserBuffers = {};
 // choirFxNodes sit between each note and its part's mixer GainNode: 1 normally, automated per chord by
 // the Phase 5 challenges (Chaos Mode, Choir Bosses) so their volume events never fight the mixer's own ramps.
 let choirFxNodes = {};
+// Every part's output meets on choirOutNode before the speakers. Its gain stays 1 except when a run sets
+// choirHeadroomFx (the Drowner): then it's trimmed so the worst-case sum of all parts stays below
+// CHOIR_PEAK_CEILING, i.e. the other parts are still 1.6× louder than you, but nothing clips.
+let choirOutNode = null, choirHeadroomFx = null;
+const CHOIR_ENV_PEAK = 0.9, CHOIR_PEAK_CEILING = 0.95;
+function applyChoirHeadroom(){
+  if(!choirOutNode) return;
+  let trim = 1;
+  if(choirHeadroomFx){
+    // Worst case = every part at its envelope peak, in phase: Σ peak × mixer gain × largest fx gain.
+    const worst = Object.keys(SONG.parts).reduce((a,p)=>a + CHOIR_ENV_PEAK*computeEffectiveGain(p)*choirHeadroomFx(p), 0);
+    trim = Math.min(1, CHOIR_PEAK_CEILING/worst);
+  }
+  choirOutNode.gain.setTargetAtTime(trim, audioCtx.currentTime, 0.02);
+}
 function ensureChoirGainNodes(){
+  if(!choirOutNode){
+    choirOutNode = audioCtx.createGain();
+    choirOutNode.connect(audioCtx.destination);
+  }
   Object.keys(SONG.parts).forEach(part=>{
     if(!choirGainNodes[part]){
       const g = audioCtx.createGain();
@@ -11086,7 +11105,7 @@ function ensureChoirGainNodes(){
       fx.connect(g);
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 256;
-      g.connect(analyser).connect(audioCtx.destination); // real signal chain — the meter taps actual audio, nothing simulated
+      g.connect(analyser).connect(choirOutNode); // real signal chain — the meter taps actual audio, nothing simulated
       choirGainNodes[part] = g;
       choirFxNodes[part] = fx;
       choirAnalyserNodes[part] = analyser;
@@ -11119,6 +11138,7 @@ function updateAllChoirGains(){
       choirGainNodes[part].gain.setTargetAtTime(computeEffectiveGain(part), audioCtx.currentTime, 0.04);
     }
   });
+  applyChoirHeadroom();
 }
 
 // Shared by playback and the Song Intelligence views, so what's drawn is exactly what's scheduled.
@@ -11132,8 +11152,8 @@ function scheduleChoirNote(part, freq, startTime, duration, detuneCents=0){
   osc.frequency.setValueAtTime(freq, startTime);
   osc.detune.setValueAtTime(detuneCents, startTime);
   env.gain.setValueAtTime(0, startTime);
-  env.gain.linearRampToValueAtTime(0.9, startTime+CHOIR_ATTACK_SEC);
-  env.gain.linearRampToValueAtTime(0.9, startTime+duration-CHOIR_RELEASE_SEC);
+  env.gain.linearRampToValueAtTime(CHOIR_ENV_PEAK, startTime+CHOIR_ATTACK_SEC);
+  env.gain.linearRampToValueAtTime(CHOIR_ENV_PEAK, startTime+duration-CHOIR_RELEASE_SEC);
   env.gain.linearRampToValueAtTime(0, startTime+duration);
   osc.connect(env).connect(choirFxNodes[part]);
   osc.start(startTime);
@@ -12227,7 +12247,7 @@ document.getElementById('hmemStages').addEventListener('click', (e)=>{
 const CH_GUIDE_LEVELS = REHEARSAL_LEVELS.map(lv=>lv.guide);
 const CB_DROWN_GAIN = 1.6, CB_DRIFT_CENTS = 40, CB_SPRINT = 1.3, CB_SILENCE_TEMPO = 1.1;
 const CH_BOSSES = [
-  {key:'drowner', emoji:'🌊', level:2, fx:(p,i,c)=>p===c.part ? null : {gain:CB_DROWN_GAIN}},
+  {key:'drowner', emoji:'🌊', level:2, headroom:true, fx:(p,i,c)=>p===c.part ? null : {gain:CB_DROWN_GAIN}},
   {key:'drifter', emoji:'🌀', level:3, fx:(p,i,c)=>p===c.part ? null : {detune:i%2 ? -CB_DRIFT_CENTS : CB_DRIFT_CENTS}},
   {key:'sprinter', emoji:'⚡', level:3, tempoMul:CB_SPRINT},
   {key:'ghost', emoji:'👻', level:0, fx:(p,i,c)=>p===c.part && i>=c.half ? {gain:0} : null},
@@ -12345,6 +12365,8 @@ async function startChallenge(kind){
   const ctx = {part, half};
   if(kind==='chaos') ctx.plan = cfg.plan = makeChaosPlan(part);
   const fxFn = kind==='chaos' ? chaosFx : cfg.fx;
+  // Drowner: trim the choir output for the loudest fx gain each part gets, so the louder mix never clips.
+  if(cfg.headroom) choirHeadroomFx = p=>Math.max(...SONG.parts[p].notes.map((_,i)=>{ const e = fxFn(p,i,ctx); return e && e.gain!==undefined ? e.gain : 1; }));
   const tl = songTimeline(), notes = tl.parts[part];
   const need = Math.ceil(n*HM_PASS_PCT/100);
   Object.assign(challenge, {
@@ -12415,6 +12437,8 @@ function finishChallenge(completed){
   cancelAnimationFrame(challenge.raf);
   stopPartRehearsal();
   SONG = SONGS[currentSongId];
+  choirHeadroomFx = null;
+  applyChoirHeadroom();
   const {kind, cfg} = challenge;
   if(kind==='boss'){
     partRehearsal.memory = false;

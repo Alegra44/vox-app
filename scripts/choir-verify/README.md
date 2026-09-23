@@ -13,6 +13,7 @@ Serve the client first: `cd deploy && python -m http.server 8765`, then run from
 | `fix.js [url]` | Playback end timed on the audio clock, loop restart, verdict colours |
 | `live.js` | Production click-through (Songs → I Am the Part → Stage 1 + Breath Map); checks the live HTML is identical to `deploy/index.html` |
 | `p5.js [fx\|score\|i18n\|all] [url]` | Phase 5: each boss's real effect (fx gain, measured detune/transposition, tempo, count-in note), a Chaos plan chord by chord, Ladder rungs, live judging/early loss/unlocks with a stand-in singer, and en/fr/es/tr text |
+| `peaks.js [url]` | True peak / RMS of the summed choir output (what reaches the speakers) for normal rehearsal vs a Drowner run, plus the choirOutNode trim |
 | `desc.js` | Stage descriptions and buttons in en/fr/es/tr |
 | `shot.js` | Screenshots of the Breath Map and Harmony Memory cards at desktop and phone widths |
 
