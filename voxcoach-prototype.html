@@ -2059,27 +2059,27 @@
         <div class="mode-card-grid" id="harmonyPartRow" style="grid-template-columns:1fr 1fr 1fr;">
           <button class="ex-type-btn mode-card active" data-harmony-part="Soprano" aria-pressed="true">
             <div class="mode-card-icon" style="color:#a78bda;">●</div>
-            <div class="mode-card-name">Soprano</div>
+            <div class="mode-card-name" data-part-name="Soprano">Soprano</div>
             <div class="mode-card-tag" data-i18n="harmony_part_soprano_tag">Top voice, highest range</div>
           </button>
           <button class="ex-type-btn mode-card" data-harmony-part="Lead" aria-pressed="false">
             <div class="mode-card-icon" style="color:var(--brass);">●</div>
-            <div class="mode-card-name">Lead</div>
+            <div class="mode-card-name" data-part-name="Lead">Lead</div>
             <div class="mode-card-tag" data-i18n="harmony_part_lead_tag">Independent melody line</div>
           </button>
           <button class="ex-type-btn mode-card" data-harmony-part="Alto" aria-pressed="false">
             <div class="mode-card-icon" style="color:#c9b98a;">●</div>
-            <div class="mode-card-name">Alto</div>
+            <div class="mode-card-name" data-part-name="Alto">Alto</div>
             <div class="mode-card-tag" data-i18n="harmony_part_alto_tag">Mid-upper harmony</div>
           </button>
           <button class="ex-type-btn mode-card" data-harmony-part="Tenor" aria-pressed="false">
             <div class="mode-card-icon" style="color:var(--teal);">●</div>
-            <div class="mode-card-name">Tenor</div>
+            <div class="mode-card-name" data-part-name="Tenor">Tenor</div>
             <div class="mode-card-tag" data-i18n="harmony_part_tenor_tag">Mid-lower harmony</div>
           </button>
           <button class="ex-type-btn mode-card" data-harmony-part="Bass" aria-pressed="false">
             <div class="mode-card-icon" style="color:#e8735d;">●</div>
-            <div class="mode-card-name">Bass</div>
+            <div class="mode-card-name" data-part-name="Bass">Bass</div>
             <div class="mode-card-tag" data-i18n="harmony_part_bass_tag">Foundation, lowest voice</div>
           </button>
         </div>
@@ -3173,11 +3173,11 @@
     <div class="key-card">
       <div class="step-label" data-i18n="aiduet_choose_part">Choose your part</div>
       <div class="ex-type-row" id="aiDuetPartRow" style="margin:10px 0 18px;flex-wrap:wrap;">
-        <button class="ex-type-btn active" data-duet-part="Soprano" aria-pressed="true">Soprano</button>
-        <button class="ex-type-btn" data-duet-part="Lead" aria-pressed="false">Lead</button>
-        <button class="ex-type-btn" data-duet-part="Alto" aria-pressed="false">Alto</button>
-        <button class="ex-type-btn" data-duet-part="Tenor" aria-pressed="false">Tenor</button>
-        <button class="ex-type-btn" data-duet-part="Bass" aria-pressed="false">Bass</button>
+        <button class="ex-type-btn active" data-duet-part="Soprano" aria-pressed="true" data-part-name="Soprano">Soprano</button>
+        <button class="ex-type-btn" data-duet-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
+        <button class="ex-type-btn" data-duet-part="Alto" aria-pressed="false" data-part-name="Alto">Alto</button>
+        <button class="ex-type-btn" data-duet-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
+        <button class="ex-type-btn" data-duet-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
       </div>
       <p class="desc" id="aiDuetNote" style="margin-bottom:16px;">The AI will sing Lead, Alto, Tenor, and Bass — you sing Soprano.</p>
       <button class="mic-btn" id="aiDuetStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Start singing with AI</button>
@@ -3377,7 +3377,7 @@
 
       <div class="track-row" style="--part-color:#a78bda;">
         <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:#a78bda;"></span>Soprano</div>
+          <div class="track-name"><span class="swatch" style="background:#a78bda;"></span><span data-part-name="Soprano">Soprano</span></div>
           <div class="vu-meter-track"><div class="vu-meter-fill" id="vuSoprano"></div></div>
         </div>
         <input type="range" class="track-slider" id="volSoprano" min="0" max="100" value="65">
@@ -3387,7 +3387,7 @@
 
       <div class="track-row" style="--part-color:var(--brass);">
         <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--brass);"></span>Lead</div>
+          <div class="track-name"><span class="swatch" style="background:var(--brass);"></span><span data-part-name="Lead">Lead</span></div>
           <div class="vu-meter-track"><div class="vu-meter-fill" id="vuLead"></div></div>
         </div>
         <input type="range" class="track-slider" id="volLead" min="0" max="100" value="85">
@@ -3396,7 +3396,7 @@
       </div>
       <div class="track-row" style="--part-color:#c9b98a;">
         <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:#c9b98a;"></span>Alto</div>
+          <div class="track-name"><span class="swatch" style="background:#c9b98a;"></span><span data-part-name="Alto">Alto</span></div>
           <div class="vu-meter-track"><div class="vu-meter-fill" id="vuAlto"></div></div>
         </div>
         <input type="range" class="track-slider" id="volAlto" min="0" max="100" value="70">
@@ -3405,7 +3405,7 @@
       </div>
       <div class="track-row" style="--part-color:var(--teal);">
         <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--teal);"></span>Tenor</div>
+          <div class="track-name"><span class="swatch" style="background:var(--teal);"></span><span data-part-name="Tenor">Tenor</span></div>
           <div class="vu-meter-track"><div class="vu-meter-fill" id="vuTenor"></div></div>
         </div>
         <input type="range" class="track-slider" id="volTenor" min="0" max="100" value="70">
@@ -3414,7 +3414,7 @@
       </div>
       <div class="track-row" style="--part-color:#e8735d;">
         <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:#e8735d;"></span>Bass</div>
+          <div class="track-name"><span class="swatch" style="background:#e8735d;"></span><span data-part-name="Bass">Bass</span></div>
           <div class="vu-meter-track"><div class="vu-meter-fill" id="vuBass"></div></div>
         </div>
         <input type="range" class="track-slider" id="volBass" min="0" max="100" value="75">
@@ -3469,11 +3469,11 @@
     <div class="key-card">
       <div class="step-label" data-i18n="rehearsal_choose_part">Choose your part</div>
       <div class="ex-type-row" id="rehearsalPartRow" style="margin:10px 0 12px;flex-wrap:wrap;">
-        <button class="ex-type-btn" data-rh-part="Soprano" aria-pressed="false">Soprano</button>
-        <button class="ex-type-btn" data-rh-part="Lead" aria-pressed="false">Lead</button>
-        <button class="ex-type-btn active" data-rh-part="Alto" aria-pressed="true">Alto</button>
-        <button class="ex-type-btn" data-rh-part="Tenor" aria-pressed="false">Tenor</button>
-        <button class="ex-type-btn" data-rh-part="Bass" aria-pressed="false">Bass</button>
+        <button class="ex-type-btn" data-rh-part="Soprano" aria-pressed="false" data-part-name="Soprano">Soprano</button>
+        <button class="ex-type-btn" data-rh-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
+        <button class="ex-type-btn active" data-rh-part="Alto" aria-pressed="true" data-part-name="Alto">Alto</button>
+        <button class="ex-type-btn" data-rh-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
+        <button class="ex-type-btn" data-rh-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
       </div>
       <p class="fine-print"><span id="rehearsalSongLabel">Demo Hymn (C Major)</span> — <button class="link-btn" data-enter-panel="choir" data-i18n="rehearsal_change_song">change song</button></p>
     </div>
@@ -4970,7 +4970,18 @@ const TRANSLATIONS = {
     hub_songs_rehearsal_title:'🎙️ I Am the Part',
     hub_songs_rehearsal_desc:'Rehearse one part while the others play around you — your guide fades out over 5 real levels, from Learn to Performance.',
     choir_rehearse_label:'Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:',
-    rehearsal_title_tpl:'I Am the {part}',
+    part_name_Soprano:'Soprano',
+    part_name_Lead:'Lead',
+    part_name_Alto:'Alto',
+    part_name_Tenor:'Tenor',
+    part_name_Bass:'Bass',
+    rehearsal_title_Soprano:'I Am the Soprano',
+    rehearsal_title_Lead:'I Am the Lead',
+    rehearsal_title_Alto:'I Am the Alto',
+    rehearsal_title_Tenor:'I Am the Tenor',
+    rehearsal_title_Bass:'I Am the Bass',
+    choir_practice_prefix:'Practice:',
+    aiduet_note_tpl:'The AI will sing {others} — you sing {part}.',
     rehearsal_sub:'Your line is front and centre, the other parts keep playing around you, and your part\'s guide track genuinely fades out level by level until you\'re singing it alone.',
     rehearsal_choose_part:'Choose your part',
     rehearsal_change_song:'change song',
@@ -5931,7 +5942,18 @@ const TRANSLATIONS = {
     hub_songs_rehearsal_title:'🎙️ Je suis ma voix',
     hub_songs_rehearsal_desc:'Répétez une voix pendant que les autres jouent autour de vous — votre guide s\'estompe sur 5 vrais niveaux, d\'Apprendre à Performance.',
     choir_rehearse_label:'Répétez une seule voix — les autres continuent de jouer pendant que votre guide s\'estompe sur 5 niveaux :',
-    rehearsal_title_tpl:'Je suis {part}',
+    part_name_Soprano:'Soprano',
+    part_name_Lead:'Voix principale',
+    part_name_Alto:'Alto',
+    part_name_Tenor:'Ténor',
+    part_name_Bass:'Basse',
+    rehearsal_title_Soprano:'Je suis soprano',
+    rehearsal_title_Lead:'Je suis la voix principale',
+    rehearsal_title_Alto:'Je suis alto',
+    rehearsal_title_Tenor:'Je suis ténor',
+    rehearsal_title_Bass:'Je suis basse',
+    choir_practice_prefix:'Travailler :',
+    aiduet_note_tpl:'L\'IA chante : {others} — votre voix : {part}.',
     rehearsal_sub:'Votre ligne est au premier plan, les autres voix continuent autour de vous, et la piste guide de votre voix s\'estompe vraiment niveau par niveau jusqu\'à ce que vous la chantiez seul.',
     rehearsal_choose_part:'Choisissez votre voix',
     rehearsal_change_song:'changer de chanson',
@@ -6892,7 +6914,18 @@ const TRANSLATIONS = {
     hub_songs_rehearsal_title:'🎙️ Yo soy mi voz',
     hub_songs_rehearsal_desc:'Ensaya una voz mientras las demás suenan a tu alrededor — tu guía se desvanece en 5 niveles reales, de Aprender a Actuación.',
     choir_rehearse_label:'Ensaya una sola voz — las demás siguen sonando mientras tu guía se desvanece en 5 niveles:',
-    rehearsal_title_tpl:'Soy {part}',
+    part_name_Soprano:'Soprano',
+    part_name_Lead:'Voz principal',
+    part_name_Alto:'Contralto',
+    part_name_Tenor:'Tenor',
+    part_name_Bass:'Bajo',
+    rehearsal_title_Soprano:'Soy soprano',
+    rehearsal_title_Lead:'Soy la voz principal',
+    rehearsal_title_Alto:'Soy contralto',
+    rehearsal_title_Tenor:'Soy tenor',
+    rehearsal_title_Bass:'Soy bajo',
+    choir_practice_prefix:'Practicar:',
+    aiduet_note_tpl:'La IA canta: {others} — tu voz: {part}.',
     rehearsal_sub:'Tu línea está en primer plano, las demás voces siguen sonando a tu alrededor, y la pista guía de tu voz realmente se desvanece nivel a nivel hasta que la cantas tú solo.',
     rehearsal_choose_part:'Elige tu voz',
     rehearsal_change_song:'cambiar canción',
@@ -7853,7 +7886,18 @@ const TRANSLATIONS = {
     hub_songs_rehearsal_title:'🎙️ Ben Kendi Partimim',
     hub_songs_rehearsal_desc:'Diğer sesler etrafınızda çalarken tek bir partiyi çalışın — rehberiniz Öğren\'den Performans\'a 5 gerçek seviyede azalır.',
     choir_rehearse_label:'Tek bir partiyi çalışın — rehberiniz 5 seviyede azalırken diğerleri çalmaya devam eder:',
-    rehearsal_title_tpl:'Ben {part} partisiyim',
+    part_name_Soprano:'Soprano',
+    part_name_Lead:'Ana ses',
+    part_name_Alto:'Alto',
+    part_name_Tenor:'Tenor',
+    part_name_Bass:'Bas',
+    rehearsal_title_Soprano:'Ben sopranoyum',
+    rehearsal_title_Lead:'Ben ana sesim',
+    rehearsal_title_Alto:'Ben altoyum',
+    rehearsal_title_Tenor:'Ben tenorum',
+    rehearsal_title_Bass:'Ben basım',
+    choir_practice_prefix:'Çalış:',
+    aiduet_note_tpl:'Yapay zeka şunları söyler: {others} — sizin partiniz: {part}.',
     rehearsal_sub:'Sizin hattınız ön planda, diğer sesler etrafınızda çalmaya devam ediyor ve partinizin rehber kaydı, onu tek başınıza söyleyene kadar seviye seviye gerçekten azalıyor.',
     rehearsal_choose_part:'Partinizi seçin',
     rehearsal_change_song:'şarkıyı değiştir',
@@ -8574,7 +8618,9 @@ function applyTranslations(){
     ()=>typeof renderHomeScreen==='function' && document.getElementById('panel-home') && document.getElementById('panel-home').classList.contains('active') && renderHomeScreen(),
     ()=>typeof updateArcadeBestLabels==='function' && document.getElementById('gliderBestLabel') && updateArcadeBestLabels(),
     ()=>typeof renderArcadeLocks==='function' && document.querySelector('.arcade-game-card') && renderArcadeLocks(),
-    ()=>typeof renderRehearseEntryChips==='function' && renderRehearseEntryChips(),
+    ()=>typeof applyPartNames==='function' && applyPartNames(),
+    ()=>typeof renderAiDuetNote==='function' && renderAiDuetNote(),
+    ()=>typeof renderRoster==='function' && document.getElementById('rosterList') && renderRoster(),
     ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
 }
@@ -10367,7 +10413,16 @@ const PART_COLORS = {Soprano:'#a78bda', Lead:'var(--brass)', Alto:'#c9b98a', Ten
 let partRehearsalRaf = null;
 
 function midiName(midi){ return NOTE_NAMES[((midi%12)+12)%12] + (Math.floor(midi/12)-1); }
-function rehearsalTitleText(part){ return '🎙️ ' + t('rehearsal_title_tpl').replace('{part}', part); }
+function rehearsalTitleText(part){ return '🎙️ ' + t('rehearsal_title_'+part); }
+// Translated voice-part names; internal ids (choirState keys, data-* attrs) stay English.
+function partName(part){ return t('part_name_'+part); }
+function applyPartNames(){
+  document.querySelectorAll('[data-part-name]').forEach(el=>{ el.textContent = partName(el.dataset.partName); });
+  document.querySelectorAll('.practice-chip[data-practice-part]').forEach(chip=>{
+    chip.textContent = `${t('choir_practice_prefix')} ${partName(chip.dataset.practicePart)}`;
+  });
+  renderRehearseEntryChips();
+}
 
 // Real progressive fade: a linear ramp on the selected part's GainNode from wherever it is now to the new level.
 function fadeRehearsalGuide(){
@@ -10552,7 +10607,7 @@ document.querySelectorAll('#rehearseEntryRow [data-rehearse-part]').forEach(chip
     enterPanel('partrehearsal');
   });
 });
-renderRehearseEntryChips();
+applyPartNames();
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
 const SAMPLE_ROSTER = [
@@ -10570,7 +10625,7 @@ function renderRoster(){
       <div class="roster-avatar">${r.name.charAt(0)}</div>
       <div class="roster-info">
         <div class="roster-name">${r.name}</div>
-        <div class="roster-part">${r.part}</div>
+        <div class="roster-part">${partName(r.part)}</div>
       </div>
       <div class="roster-bar-wrap"><div class="roster-bar-fill" style="width:${r.pct}%;"></div></div>
       <div class="roster-pct">${r.pct}%</div>
@@ -12660,8 +12715,8 @@ function harmonyLoop(){
   const elapsedWithinNote = elapsedMs - idx*chordDur;
   const showLabel = !harmonyMemoryModeOn || elapsedWithinNote < chordDur*0.35;
   document.getElementById('harmonyNoteLabel').textContent = showLabel
-    ? `${harmonySelectedPart}: ${noteNameFromMidi(targetMidi)}`
-    : `${harmonySelectedPart}: —`;
+    ? `${partName(harmonySelectedPart)}: ${noteNameFromMidi(targetMidi)}`
+    : `${partName(harmonySelectedPart)}: —`;
   document.getElementById('harmonyProgressFill').style.width=Math.min(100,(elapsedMs/totalMs)*100)+'%';
 
   if(idx!==harmonyCurrentIdx){
@@ -15778,10 +15833,14 @@ document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(btn=>{
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     aiDuetSelectedPart = btn.dataset.duetPart;
-    const others = Object.keys(SONG.parts).filter(p=>p!==aiDuetSelectedPart);
-    document.getElementById('aiDuetNote').textContent = `The AI will sing ${others.join(', ')} — you sing ${aiDuetSelectedPart}.`;
+    renderAiDuetNote();
   });
 });
+function renderAiDuetNote(){
+  const others = Object.keys(SONG.parts).filter(p=>p!==aiDuetSelectedPart).map(partName);
+  document.getElementById('aiDuetNote').textContent = t('aiduet_note_tpl').replace('{others}', others.join(', ')).replace('{part}', partName(aiDuetSelectedPart));
+}
+renderAiDuetNote();
 
 document.getElementById('aiDuetStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('AI Duet Partner')) return;
