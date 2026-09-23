@@ -12,6 +12,7 @@ Serve the client first: `cd deploy && python -m http.server 8765`, then run from
 | `s6fr.js [url]` | Stage 6 (From memory) with a French switch mid-run: status line, all gains 0, no note shown |
 | `fix.js [url]` | Playback end timed on the audio clock, loop restart, verdict colours |
 | `live.js` | Production click-through (Songs → I Am the Part → Stage 1 + Breath Map); checks the live HTML is identical to `deploy/index.html` |
+| `p5.js [fx\|score\|i18n\|all] [url]` | Phase 5: each boss's real effect (fx gain, measured detune/transposition, tempo, count-in note), a Chaos plan chord by chord, Ladder rungs, live judging/early loss/unlocks with a stand-in singer, and en/fr/es/tr text |
 | `desc.js` | Stage descriptions and buttons in en/fr/es/tr |
 | `shot.js` | Screenshots of the Breath Map and Harmony Memory cards at desktop and phone widths |
 

@@ -539,6 +539,11 @@
   @media (max-width:640px){ .hm-stages{grid-template-columns:1fr 1fr;} }
   .rh-level:disabled{opacity:0.45;cursor:not-allowed;}
   .record-val.hm-held{color:var(--teal);} .record-val.hm-off{color:var(--coral);} .record-val.hm-silent{color:var(--muted);}
+  .cb-emoji{font-size:22px;line-height:1;}
+  .cb-arena{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:4px 0 14px;}
+  .cb-arena .boss-name{margin-top:4px;}
+  .cx-event{font-family:'Space Mono',monospace;font-size:11px;color:var(--brass);}
+  .cx-event.calm{color:var(--muted);}
   .bm-live{font-family:'Space Mono',monospace;font-size:14px;color:var(--teal);margin:8px 0 2px;min-height:20px;}
   .bm-live.now{color:var(--cream);}
 
@@ -3576,6 +3581,53 @@
       <p class="fine-print" style="margin-top:10px;" data-i18n="hm_storage_note">Stage progress is saved on this device only.</p>
     </div>
 
+    <div class="key-card" id="choirBossCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="cb_title">👹 Choir Bosses</div>
+      <p class="desc" id="cbDesc" style="margin:6px 0 4px;"></p>
+      <div class="rh-levels hm-stages" id="cbBosses" role="group"></div>
+      <p class="desc" id="cbBossDesc" style="margin:4px 0 12px;"></p>
+      <div class="cb-arena">
+        <div class="boss-side">
+          <div class="boss-name" id="cbBossName">—</div>
+          <div class="boss-health-track"><div class="fill enemy" id="cbBossHp" style="width:100%;"></div></div>
+          <div class="fine-print" id="cbBossHpText" style="margin-top:4px;"></div>
+        </div>
+        <div class="boss-side">
+          <div class="boss-name" data-i18n="cb_you_label">YOU</div>
+          <div class="boss-health-track"><div class="fill player" id="cbLives" style="width:100%;"></div></div>
+          <div class="fine-print" id="cbLivesText" style="margin-top:4px;"></div>
+        </div>
+      </div>
+      <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
+      <button class="mic-btn" id="cbStartBtn"><span class="dot-icon"></span><span id="cbStartLabel">Start</span></button>
+      <p class="fine-print" id="cbStatus" style="margin-top:10px;"></p>
+      <div id="cbResults" style="display:none;margin-top:12px;"></div>
+    </div>
+
+    <div class="key-card" id="chaosCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="cx_title">🌪️ Chaos Mode</div>
+      <p class="desc" id="cxDesc" style="margin:6px 0 8px;"></p>
+      <p class="fine-print" id="cxBest" style="margin-bottom:14px;"></p>
+      <button class="mic-btn" id="cxStartBtn"><span class="dot-icon"></span><span id="cxStartLabel">Start</span></button>
+      <p class="fine-print" id="cxStatus" style="margin-top:10px;"></p>
+      <div id="cxResults" style="display:none;margin-top:12px;"></div>
+    </div>
+
+    <div class="key-card" id="ladderCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="tk_title">🪜 Tempo/Key Ladder</div>
+      <p class="desc" id="tkDesc" style="margin:6px 0 4px;"></p>
+      <div class="ex-type-row" id="tkDirRow" style="margin:10px 0 0;flex-wrap:wrap;">
+        <button class="ex-type-btn active" data-tk-dir="up" aria-pressed="true" data-i18n="tk_dir_up">Key goes up</button>
+        <button class="ex-type-btn" data-tk-dir="down" aria-pressed="false" data-i18n="tk_dir_down">Key goes down</button>
+      </div>
+      <div class="rh-levels hm-stages" id="tkRungs" role="group"></div>
+      <p class="desc" id="tkRungDesc" style="margin:4px 0 12px;"></p>
+      <button class="mic-btn" id="tkStartBtn"><span class="dot-icon"></span><span id="tkStartLabel">Start</span></button>
+      <p class="fine-print" id="tkStatus" style="margin-top:10px;"></p>
+      <div id="tkResults" style="display:none;margin-top:12px;"></div>
+      <p class="fine-print" style="margin-top:10px;" data-i18n="ch_storage_note">Boss, Chaos and Ladder progress is saved on this device only.</p>
+    </div>
+
     <div class="key-card" id="timingTrainerCard" style="margin-top:16px;">
       <div class="step-label" data-i18n="tt_title">⏱️ Entrance &amp; Cutoff Trainer</div>
       <div class="ex-type-row" id="ttModeRow" style="margin:10px 0 10px;flex-wrap:wrap;">
@@ -5167,6 +5219,64 @@ const TRANSLATIONS = {
     hm_in_tune:'in tune',
     hm_off_pitch:'off pitch',
     hm_storage_note:'Stage progress is saved on this device only.',
+    cb_title:'👹 Choir Bosses',
+    cb_desc:'Six bosses, each a real change to what plays around you. Every note you hold within ±{cents} cents is a hit; hold {pass}% of your line to win. Miss too many and the boss wins early. Beat a boss to unlock the next one.',
+    cb_boss_word:'BOSS',
+    cb_you_label:'YOU',
+    cb_name_drowner:'The Drowner',
+    cb_name_drifter:'The Drifter',
+    cb_name_sprinter:'The Sprinter',
+    cb_name_ghost:'The Ghost',
+    cb_name_shifter:'The Shifter',
+    cb_name_silence:'The Silence',
+    cb_desc_drowner:'The other four parts play at {gain}× their mixer volume while your guide drops to {guide}%.',
+    cb_desc_drifter:'Every other part is detuned by {cents} cents: sharp on one chord, flat on the next. Your guide is at {guide}%. Hold your own pitch, not theirs.',
+    cb_desc_sprinter:'The whole song at {pct}% speed ({bpm} BPM instead of {base}), with your guide at {guide}%.',
+    cb_desc_ghost:'Your guide plays at full volume for the first {half} chords, then cuts out for the rest of the song. No fade, no warning.',
+    cb_desc_shifter:'From chord {from}, the whole choir moves up a semitone and stays there. Your guide is at {guide}%; follow the new key.',
+    cb_desc_silence:'Final boss. Nothing plays, at {pct}% speed ({bpm} BPM): you hear your starting note during the count-in, then sing your line from memory with no notes on screen.',
+    cb_locked_tpl:'Locked — beat boss {n}',
+    cb_defeated:'defeated',
+    cb_start_tpl:'Fight {name}',
+    cb_hp_tpl:'Hits still needed: {hp}',
+    cb_hp_zero:'Beaten',
+    cb_lives_tpl:'Misses left: {n}',
+    cb_status_tpl:'{name} — chord {i}/{n}: sing {note} · hits: {hits}, misses: {misses}',
+    cb_status_nonote_tpl:'{name} — chord {i}/{n} · hits: {hits}, misses: {misses}',
+    cb_result_tpl:'{name} — result',
+    cb_win_tpl:'You beat {name}. Boss {n} is unlocked.',
+    cb_win_final:'You beat The Silence: all six Choir Bosses are down on this part.',
+    cb_lose_tpl:'{name} wins this time. You need {need} of {n} notes in tune.',
+    cb_lose_early_tpl:'{name} won early: {m} misses ended the fight after chord {i}.',
+    cx_title:'🌪️ Chaos Mode',
+    cx_desc:'The rest of the choir misbehaves. Every run draws a new random plan: on some chords the part nearest your note surges to {gain}× volume, on others everyone else drops out, or the whole choir drifts {cents} cents off pitch. Your part plays at your current rehearsal setting ({guide}). Afterwards, each event is listed next to how you held that note.',
+    cx_start_btn:'Start a Chaos run',
+    cx_best_tpl:'Best on this part: {s}%',
+    cx_no_best:'No Chaos runs on this part yet.',
+    cx_event_calm:'calm',
+    cx_event_surge_tpl:'{part} surges to {gain}×',
+    cx_event_dropout:'everyone else drops out',
+    cx_event_drift_tpl:'choir drifts {cents} cents',
+    cx_status_tpl:'Chaos — chord {i}/{n}: sing {note} · {event}',
+    cx_result_label:'Chaos run result',
+    cx_split_tpl:'Chaos chords: {a} of {b} held · calm chords: {c} of {d} held.',
+    tk_title:'🪜 Tempo/Key Ladder',
+    tk_desc:'Six rungs, each faster and/or further from the written key. The whole choir really plays at the new tempo and pitch. Hold {pass}% of your notes to climb to the next rung. Your part plays at your current rehearsal setting ({guide}).',
+    tk_dir_up:'Key goes up',
+    tk_dir_down:'Key goes down',
+    tk_rung_word:'RUNG',
+    tk_written_key:'written key',
+    tk_rung_desc_tpl:'{bpm} BPM ({pct}% of {base}) in {key} ({shift}; written in {orig}).',
+    tk_rung_same_tpl:'{bpm} BPM ({pct}% of {base}) in the written key, {orig}.',
+    tk_locked_tpl:'Locked — pass rung {n}',
+    tk_start_tpl:'Climb rung {n}',
+    tk_status_tpl:'Rung {r} · {bpm} BPM · {key} — chord {i}/{n}: sing {note}',
+    tk_result_tpl:'Rung {n} result — {rung}',
+    tk_pass_tpl:'Passed — rung {n} is unlocked.',
+    tk_pass_final:'Passed — you reached the top of the ladder.',
+    ch_guide_ac:'A Cappella, guide silent',
+    ch_not_reached:'not reached',
+    ch_storage_note:'Boss, Chaos and Ladder progress is saved on this device only.',
     tt_title:'⏱️ Entrance & Cutoff Trainer',
     tt_mode_entrance:'Entrance Trainer',
     tt_mode_cutoff:'Cutoff Trainer',
@@ -6260,6 +6370,64 @@ const TRANSLATIONS = {
     hm_in_tune:'juste',
     hm_off_pitch:'faux',
     hm_storage_note:'La progression des étapes est enregistrée sur cet appareil uniquement.',
+    cb_title:'👹 Boss de la chorale',
+    cb_desc:'Six boss, chacun un vrai changement dans ce qui joue autour de vous. Chaque note tenue à ±{cents} cents près est un coup porté ; tenez {pass} % de votre ligne pour gagner. Trop d’erreurs et le boss gagne avant la fin. Battez un boss pour débloquer le suivant.',
+    cb_boss_word:'BOSS',
+    cb_you_label:'VOUS',
+    cb_name_drowner:'Le Noyeur',
+    cb_name_drifter:'Le Dériveur',
+    cb_name_sprinter:'Le Sprinteur',
+    cb_name_ghost:'Le Fantôme',
+    cb_name_shifter:'Le Transpositeur',
+    cb_name_silence:'Le Silence',
+    cb_desc_drowner:'Les quatre autres voix jouent à {gain}× leur volume de mixage, et votre guide descend à {guide} %.',
+    cb_desc_drifter:'Toutes les autres voix sont désaccordées de {cents} cents : trop haut sur un accord, trop bas sur le suivant. Votre guide est à {guide} %. Tenez votre justesse, pas la leur.',
+    cb_desc_sprinter:'Toute la chanson à {pct} % de la vitesse ({bpm} BPM au lieu de {base}), avec votre guide à {guide} %.',
+    cb_desc_ghost:'Votre guide joue à plein volume pendant les {half} premiers accords, puis se coupe pour le reste du morceau. Sans fondu, sans prévenir.',
+    cb_desc_shifter:'À partir de l’accord {from}, toute la chorale monte d’un demi-ton et y reste. Votre guide est à {guide} % ; suivez la nouvelle tonalité.',
+    cb_desc_silence:'Boss final. Rien ne joue, à {pct} % de la vitesse ({bpm} BPM) : vous entendez votre note de départ pendant le décompte, puis vous chantez votre ligne de mémoire, sans notes à l’écran.',
+    cb_locked_tpl:'Verrouillé — battez le boss {n}',
+    cb_defeated:'battu',
+    cb_start_tpl:'Affronter {name}',
+    cb_hp_tpl:'Coups encore nécessaires : {hp}',
+    cb_hp_zero:'Battu',
+    cb_lives_tpl:'Erreurs restantes : {n}',
+    cb_status_tpl:'{name} — accord {i}/{n} : chantez {note} · coups : {hits}, erreurs : {misses}',
+    cb_status_nonote_tpl:'{name} — accord {i}/{n} · coups : {hits}, erreurs : {misses}',
+    cb_result_tpl:'{name} — résultat',
+    cb_win_tpl:'Vous avez battu {name}. Le boss {n} est débloqué.',
+    cb_win_final:'Vous avez battu Le Silence : les six boss de la chorale sont vaincus sur cette voix.',
+    cb_lose_tpl:'{name} l’emporte cette fois. Il vous faut {need} notes justes sur {n}.',
+    cb_lose_early_tpl:'{name} a gagné avant la fin : {m} erreurs ont mis fin au combat après l’accord {i}.',
+    cx_title:'🌪️ Mode Chaos',
+    cx_desc:'Le reste de la chorale se dérègle. Chaque essai tire un nouveau plan au hasard : sur certains accords, la voix la plus proche de votre note monte à {gain}× son volume ; sur d’autres, toutes les autres voix se taisent, ou toute la chorale dérive de {cents} cents. Votre voix joue avec votre réglage de répétition actuel ({guide}). À la fin, chaque événement est affiché à côté de votre tenue de la note.',
+    cx_start_btn:'Lancer un essai Chaos',
+    cx_best_tpl:'Meilleur score sur cette voix : {s} %',
+    cx_no_best:'Aucun essai Chaos sur cette voix pour l’instant.',
+    cx_event_calm:'calme',
+    cx_event_surge_tpl:'{part} monte à {gain}×',
+    cx_event_dropout:'toutes les autres voix se taisent',
+    cx_event_drift_tpl:'la chorale dérive de {cents} cents',
+    cx_status_tpl:'Chaos — accord {i}/{n} : chantez {note} · {event}',
+    cx_result_label:'Résultat de l’essai Chaos',
+    cx_split_tpl:'Accords chaotiques : {a} sur {b} tenus · accords calmes : {c} sur {d} tenus.',
+    tk_title:'🪜 Échelle tempo/tonalité',
+    tk_desc:'Six échelons, chacun plus rapide et/ou plus loin de la tonalité écrite. Toute la chorale joue réellement au nouveau tempo et à la nouvelle hauteur. Tenez {pass} % de vos notes pour monter à l’échelon suivant. Votre voix joue avec votre réglage de répétition actuel ({guide}).',
+    tk_dir_up:'La tonalité monte',
+    tk_dir_down:'La tonalité descend',
+    tk_rung_word:'ÉCHELON',
+    tk_written_key:'tonalité écrite',
+    tk_rung_desc_tpl:'{bpm} BPM ({pct} % de {base}) en {key} ({shift} ; écrit en {orig}).',
+    tk_rung_same_tpl:'{bpm} BPM ({pct} % de {base}) dans la tonalité écrite, {orig}.',
+    tk_locked_tpl:'Verrouillé — réussissez l’échelon {n}',
+    tk_start_tpl:'Monter à l’échelon {n}',
+    tk_status_tpl:'Échelon {r} · {bpm} BPM · {key} — accord {i}/{n} : chantez {note}',
+    tk_result_tpl:'Résultat de l’échelon {n} — {rung}',
+    tk_pass_tpl:'Réussi — l’échelon {n} est débloqué.',
+    tk_pass_final:'Réussi — vous êtes en haut de l’échelle.',
+    ch_guide_ac:'A Cappella, guide muet',
+    ch_not_reached:'non atteint',
+    ch_storage_note:'La progression des boss, du Chaos et de l’Échelle est enregistrée sur cet appareil uniquement.',
     tt_title:'⏱️ Entrées et coupures',
     tt_mode_entrance:'Entraîneur d’entrées',
     tt_mode_cutoff:'Entraîneur de coupures',
@@ -7353,6 +7521,64 @@ const TRANSLATIONS = {
     hm_in_tune:'afinada',
     hm_off_pitch:'desafinada',
     hm_storage_note:'El progreso de las etapas se guarda solo en este dispositivo.',
+    cb_title:'👹 Jefes del coro',
+    cb_desc:'Seis jefes, cada uno un cambio real en lo que suena a tu alrededor. Cada nota que sostienes a ±{cents} cents es un golpe; sostén el {pass}% de tu línea para ganar. Si fallas demasiadas, el jefe gana antes del final. Vence a un jefe para desbloquear el siguiente.',
+    cb_boss_word:'JEFE',
+    cb_you_label:'TÚ',
+    cb_name_drowner:'El Ahogador',
+    cb_name_drifter:'El Desafinador',
+    cb_name_sprinter:'El Velocista',
+    cb_name_ghost:'El Fantasma',
+    cb_name_shifter:'El Transpositor',
+    cb_name_silence:'El Silencio',
+    cb_desc_drowner:'Las otras cuatro voces suenan a {gain}× su volumen de mezcla mientras tu guía baja al {guide}%.',
+    cb_desc_drifter:'Todas las demás voces están desafinadas {cents} cents: altas en un acorde, bajas en el siguiente. Tu guía está al {guide}%. Mantén tu afinación, no la suya.',
+    cb_desc_sprinter:'Toda la canción al {pct}% de velocidad ({bpm} BPM en lugar de {base}), con tu guía al {guide}%.',
+    cb_desc_ghost:'Tu guía suena a todo volumen durante los primeros {half} acordes y luego se corta el resto de la canción. Sin fundido, sin aviso.',
+    cb_desc_shifter:'Desde el acorde {from}, todo el coro sube un semitono y se queda ahí. Tu guía está al {guide}%; sigue la nueva tonalidad.',
+    cb_desc_silence:'Jefe final. No suena nada, al {pct}% de velocidad ({bpm} BPM): oyes tu nota inicial durante la cuenta y luego cantas tu línea de memoria, sin notas en pantalla.',
+    cb_locked_tpl:'Bloqueado — vence al jefe {n}',
+    cb_defeated:'vencido',
+    cb_start_tpl:'Enfrentar a {name}',
+    cb_hp_tpl:'Golpes que faltan: {hp}',
+    cb_hp_zero:'Vencido',
+    cb_lives_tpl:'Fallos restantes: {n}',
+    cb_status_tpl:'{name} — acorde {i}/{n}: canta {note} · golpes: {hits}, fallos: {misses}',
+    cb_status_nonote_tpl:'{name} — acorde {i}/{n} · golpes: {hits}, fallos: {misses}',
+    cb_result_tpl:'{name} — resultado',
+    cb_win_tpl:'Venciste a {name}. El jefe {n} está desbloqueado.',
+    cb_win_final:'Venciste a El Silencio: los seis jefes del coro han caído en esta voz.',
+    cb_lose_tpl:'{name} gana esta vez. Necesitas {need} de {n} notas afinadas.',
+    cb_lose_early_tpl:'{name} ganó antes del final: {m} fallos terminaron el combate después del acorde {i}.',
+    cx_title:'🌪️ Modo Caos',
+    cx_desc:'El resto del coro se descontrola. Cada intento sortea un plan nuevo: en algunos acordes la voz más cercana a tu nota sube a {gain}× su volumen, en otros todas las demás se callan, o todo el coro se desafina {cents} cents. Tu voz suena con tu ajuste de ensayo actual ({guide}). Al final, cada evento aparece junto a cómo sostuviste esa nota.',
+    cx_start_btn:'Empezar un intento de Caos',
+    cx_best_tpl:'Mejor resultado en esta voz: {s}%',
+    cx_no_best:'Todavía no hay intentos de Caos en esta voz.',
+    cx_event_calm:'calma',
+    cx_event_surge_tpl:'{part} sube a {gain}×',
+    cx_event_dropout:'todas las demás voces se callan',
+    cx_event_drift_tpl:'el coro se desafina {cents} cents',
+    cx_status_tpl:'Caos — acorde {i}/{n}: canta {note} · {event}',
+    cx_result_label:'Resultado del intento de Caos',
+    cx_split_tpl:'Acordes con caos: {a} de {b} sostenidos · acordes en calma: {c} de {d} sostenidos.',
+    tk_title:'🪜 Escalera de tempo y tonalidad',
+    tk_desc:'Seis peldaños, cada uno más rápido y/o más lejos de la tonalidad escrita. Todo el coro suena de verdad al nuevo tempo y altura. Sostén el {pass}% de tus notas para subir al siguiente peldaño. Tu voz suena con tu ajuste de ensayo actual ({guide}).',
+    tk_dir_up:'La tonalidad sube',
+    tk_dir_down:'La tonalidad baja',
+    tk_rung_word:'PELDAÑO',
+    tk_written_key:'tonalidad escrita',
+    tk_rung_desc_tpl:'{bpm} BPM ({pct}% de {base}) en {key} ({shift}; escrita en {orig}).',
+    tk_rung_same_tpl:'{bpm} BPM ({pct}% de {base}) en la tonalidad escrita, {orig}.',
+    tk_locked_tpl:'Bloqueado — supera el peldaño {n}',
+    tk_start_tpl:'Subir al peldaño {n}',
+    tk_status_tpl:'Peldaño {r} · {bpm} BPM · {key} — acorde {i}/{n}: canta {note}',
+    tk_result_tpl:'Resultado del peldaño {n} — {rung}',
+    tk_pass_tpl:'Superado — el peldaño {n} está desbloqueado.',
+    tk_pass_final:'Superado — llegaste a lo más alto de la escalera.',
+    ch_guide_ac:'A Cappella, guía en silencio',
+    ch_not_reached:'no alcanzada',
+    ch_storage_note:'El progreso de jefes, Caos y Escalera se guarda solo en este dispositivo.',
     tt_title:'⏱️ Entradas y cortes',
     tt_mode_entrance:'Entrenador de entradas',
     tt_mode_cutoff:'Entrenador de cortes',
@@ -8446,6 +8672,64 @@ const TRANSLATIONS = {
     hm_in_tune:'doğru',
     hm_off_pitch:'detone',
     hm_storage_note:'Aşama ilerlemesi yalnızca bu cihazda kaydedilir.',
+    cb_title:'👹 Koro Boss’ları',
+    cb_desc:'Altı boss; her biri etrafınızda çalan müzikte gerçek bir değişiklik. ±{cents} sent içinde tuttuğunuz her nota bir vuruştur; kazanmak için partinizin %{pass}’ini tutun. Çok fazla ıskalarsanız boss erken kazanır. Bir boss’u yenmek bir sonrakinin kilidini açar.',
+    cb_boss_word:'BOSS',
+    cb_you_label:'SİZ',
+    cb_name_drowner:'Boğucu',
+    cb_name_drifter:'Kaydırıcı',
+    cb_name_sprinter:'Sprinter',
+    cb_name_ghost:'Hayalet',
+    cb_name_shifter:'Ton Değiştirici',
+    cb_name_silence:'Sessizlik',
+    cb_desc_drowner:'Diğer dört parti mikser seslerinin {gain} katında çalar, rehberiniz ise %{guide}’ye düşer.',
+    cb_desc_drifter:'Diğer tüm partiler {cents} sent kaydırılmıştır: bir akorda tiz, sonrakinde pes. Rehberiniz %{guide} seviyesinde. Onların perdesini değil, kendi perdenizi koruyun.',
+    cb_desc_sprinter:'Şarkının tamamı %{pct} hızda ({base} yerine {bpm} BPM), rehberiniz %{guide} seviyesinde.',
+    cb_desc_ghost:'Rehberiniz ilk {half} akor boyunca tam seste çalar, sonra şarkının geri kalanında tamamen kesilir. Kısılma yok, uyarı yok.',
+    cb_desc_shifter:'{from}. akordan itibaren tüm koro yarım ton yükselir ve orada kalır. Rehberiniz %{guide} seviyesinde; yeni tonu takip edin.',
+    cb_desc_silence:'Son boss. %{pct} hızda ({bpm} BPM) hiçbir şey çalmaz: sayım sırasında başlangıç notanızı duyarsınız, ardından partinizi ekranda nota olmadan ezberden söylersiniz.',
+    cb_locked_tpl:'Kilitli — {n}. boss’u yenin',
+    cb_defeated:'yenildi',
+    cb_start_tpl:'{name} ile savaş',
+    cb_hp_tpl:'Kazanmak için {hp} vuruş daha',
+    cb_hp_zero:'Yenildi',
+    cb_lives_tpl:'{n} ıskalama hakkı kaldı',
+    cb_status_tpl:'{name} — akor {i}/{n}: {note} söyleyin · {hits} vuruş, {misses} ıskalama',
+    cb_status_nonote_tpl:'{name} — akor {i}/{n} · {hits} vuruş, {misses} ıskalama',
+    cb_result_tpl:'{name} — sonuç',
+    cb_win_tpl:'{name} yenildi. {n}. boss’un kilidi açıldı.',
+    cb_win_final:'Sessizlik yenildi: bu partide altı Koro Boss’unun hepsini yendiniz.',
+    cb_lose_tpl:'Bu sefer {name} kazandı. {n} notanın {need} tanesini doğru perdede tutmanız gerekiyor.',
+    cb_lose_early_tpl:'{name} erken kazandı: {m} ıskalama, savaşı {i}. akordun ardından bitirdi.',
+    cx_title:'🌪️ Kaos Modu',
+    cx_desc:'Koronun geri kalanı yoldan çıkar. Her deneme yeni bir rastgele plan çeker: bazı akorlarda notanıza en yakın parti {gain} kat sese çıkar, bazılarında diğer herkes susar ya da tüm koro {cents} sent kayar. Partiniz mevcut prova ayarınızla çalar ({guide}). Sonunda her olay, o notayı nasıl tuttuğunuzun yanında listelenir.',
+    cx_start_btn:'Kaos denemesi başlat',
+    cx_best_tpl:'Bu partideki en iyi skor: %{s}',
+    cx_no_best:'Bu partide henüz Kaos denemesi yok.',
+    cx_event_calm:'sakin',
+    cx_event_surge_tpl:'{part} {gain} kat sese çıkıyor',
+    cx_event_dropout:'diğer herkes susuyor',
+    cx_event_drift_tpl:'koro {cents} sent kayıyor',
+    cx_status_tpl:'Kaos — akor {i}/{n}: {note} söyleyin · {event}',
+    cx_result_label:'Kaos denemesi sonucu',
+    cx_split_tpl:'Kaos akorları: {b} akorun {a} tanesi tutuldu · sakin akorlar: {d} akorun {c} tanesi tutuldu.',
+    tk_title:'🪜 Tempo/Ton Merdiveni',
+    tk_desc:'Altı basamak; her biri daha hızlı ve/veya yazılı tondan daha uzak. Tüm koro gerçekten yeni tempoda ve perdede çalar. Bir sonraki basamağa çıkmak için notalarınızın %{pass}’ini tutun. Partiniz mevcut prova ayarınızla çalar ({guide}).',
+    tk_dir_up:'Ton yükselsin',
+    tk_dir_down:'Ton alçalsın',
+    tk_rung_word:'BASAMAK',
+    tk_written_key:'yazılı ton',
+    tk_rung_desc_tpl:'{key} tonunda {bpm} BPM ({base} BPM’in %{pct}’i; {shift}; yazılı ton {orig}).',
+    tk_rung_same_tpl:'Yazılı ton {orig} içinde {bpm} BPM ({base} BPM’in %{pct}’i).',
+    tk_locked_tpl:'Kilitli — {n}. basamağı geçin',
+    tk_start_tpl:'{n}. basamağa çık',
+    tk_status_tpl:'Basamak {r} · {bpm} BPM · {key} — akor {i}/{n}: {note} söyleyin',
+    tk_result_tpl:'{n}. basamak sonucu — {rung}',
+    tk_pass_tpl:'Geçildi — {n}. basamağın kilidi açıldı.',
+    tk_pass_final:'Geçildi — merdivenin en üstüne ulaştınız.',
+    ch_guide_ac:'A Cappella, rehber sessiz',
+    ch_not_reached:'ulaşılmadı',
+    ch_storage_note:'Boss, Kaos ve Merdiven ilerlemesi yalnızca bu cihazda kaydedilir.',
     tt_title:'⏱️ Giriş ve Kesiş Çalışması',
     tt_mode_entrance:'Giriş Çalışması',
     tt_mode_cutoff:'Kesiş Çalışması',
@@ -10790,15 +11074,21 @@ function rehearsalGuideTarget(){
 }
 
 let choirAnalyserNodes = {}, choirAnalyserBuffers = {};
+// choirFxNodes sit between each note and its part's mixer GainNode: 1 normally, automated per chord by
+// the Phase 5 challenges (Chaos Mode, Choir Bosses) so their volume events never fight the mixer's own ramps.
+let choirFxNodes = {};
 function ensureChoirGainNodes(){
   Object.keys(SONG.parts).forEach(part=>{
     if(!choirGainNodes[part]){
       const g = audioCtx.createGain();
       g.gain.value = 0;
+      const fx = audioCtx.createGain();
+      fx.connect(g);
       const analyser = audioCtx.createAnalyser();
       analyser.fftSize = 256;
       g.connect(analyser).connect(audioCtx.destination); // real signal chain — the meter taps actual audio, nothing simulated
       choirGainNodes[part] = g;
+      choirFxNodes[part] = fx;
       choirAnalyserNodes[part] = analyser;
       choirAnalyserBuffers[part] = new Uint8Array(analyser.fftSize);
     }
@@ -10835,16 +11125,17 @@ function updateAllChoirGains(){
 const CHOIR_NOTE_FRACTION = 0.94; // each note sounds for this share of its chord, leaving a short gap
 const CHOIR_ATTACK_SEC = 0.05, CHOIR_RELEASE_SEC = 0.12;
 
-function scheduleChoirNote(part, freq, startTime, duration){
+function scheduleChoirNote(part, freq, startTime, duration, detuneCents=0){
   const osc = audioCtx.createOscillator();
   const env = audioCtx.createGain();
   osc.type = 'sine';
   osc.frequency.setValueAtTime(freq, startTime);
+  osc.detune.setValueAtTime(detuneCents, startTime);
   env.gain.setValueAtTime(0, startTime);
   env.gain.linearRampToValueAtTime(0.9, startTime+CHOIR_ATTACK_SEC);
   env.gain.linearRampToValueAtTime(0.9, startTime+duration-CHOIR_RELEASE_SEC);
   env.gain.linearRampToValueAtTime(0, startTime+duration);
-  osc.connect(env).connect(choirGainNodes[part]);
+  osc.connect(env).connect(choirFxNodes[part]);
   osc.start(startTime);
   osc.stop(startTime+duration+0.02);
   choirActiveOscillators.push(osc);
@@ -10862,10 +11153,15 @@ async function playChoir(opts={}){
   const startIdx = Math.max(0, Math.min(SONG.parts.Lead.notes.length-1, opts.startIdx||0));
   choirStartCtxTime = audioCtx.currentTime + 0.08 + (opts.leadIn||0) - startIdx*chordDur; // leadIn: room for a count-in
 
+  // opts.fx(part, i) → {gain, detune} | null: a per-chord effect. The gain step lands on the chord's
+  // start, inside the silent gap after the previous note's release, so it never clicks.
   Object.keys(SONG.parts).forEach(part=>{
     SONG.parts[part].notes.forEach((midi,i)=>{
       if(i<startIdx) return;
-      scheduleChoirNote(part, noteToFreq(midi), choirStartCtxTime + i*chordDur, chordDur*CHOIR_NOTE_FRACTION);
+      const start = choirStartCtxTime + i*chordDur;
+      const fx = opts.fx ? opts.fx(part, i) : null;
+      if(opts.fx) choirFxNodes[part].gain.setValueAtTime(fx && fx.gain!==undefined ? fx.gain : 1, Math.max(audioCtx.currentTime, start));
+      scheduleChoirNote(part, noteToFreq(midi), start, chordDur*CHOIR_NOTE_FRACTION, fx && fx.detune || 0);
     });
   });
 
@@ -10888,6 +11184,7 @@ async function playChoir(opts={}){
 function stopChoirOscillatorsOnly(){
   choirActiveOscillators.forEach(o=>{ try{ o.stop(); }catch(e){} });
   choirActiveOscillators = [];
+  if(audioCtx) Object.values(choirFxNodes).forEach(fx=>{ fx.gain.cancelScheduledValues(0); fx.gain.setValueAtTime(1, audioCtx.currentTime); });
 }
 
 function stopChoir(){
@@ -11033,7 +11330,7 @@ function holdGainAt(param, now){
 }
 
 function setRehearsalLevel(level){
-  if(harmonyMemory.active) return; // a Harmony Memory run owns the guide level
+  if(harmonyMemory.active || challenge.active) return; // a Harmony Memory or challenge run owns the guide level
   partRehearsal.level = Math.max(0, Math.min(REHEARSAL_LEVELS.length-1, level));
   fadeRehearsalGuide();
   renderRehearsalLevels();
@@ -11043,6 +11340,7 @@ function setRehearsalPart(part){
   if(!SONG.parts[part] || part===partRehearsal.part) return;
   if(timingTrainer.active) finishTimingTrainer(); // targets belong to the old part
   if(harmonyMemory.active) finishHarmonyMemory(false);
+  if(challenge.active) finishChallenge(false);
   if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
   partRehearsal.part = part;
   if(partRehearsal.active) updateAllChoirGains(); // previous part returns to its mixer level, new part drops to the current level
@@ -11157,6 +11455,7 @@ function renderPartRehearsal(){
   renderAcappellaButton();
   renderBreathMap();
   renderHarmonyMemory(); // also makes a running stage rewrite its status line on the next frame
+  renderChallenges();
 }
 
 function renderRehearseEntryChips(){
@@ -11225,14 +11524,14 @@ function stopPartRehearsal(){
   resetPartRehearsalPlayUI();
 }
 
-document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!timingTrainer.active && !harmonyMemory.active && !(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
+document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!timingTrainer.active && !harmonyMemory.active && !challenge.active && !(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
 // Tap a note (chip or roll bar): inspect it in Harmony Vision; if playing, jump playback there too.
 function onRehearsalNoteTap(e){
   const el = e.target.closest('[data-idx]');
   if(!el) return;
   const idx = +el.dataset.idx;
   rehearsalCursorIdx = idx;
-  if(timingTrainer.active || harmonyMemory.active) return; // a trainer or Harmony Memory run owns the song clock
+  if(timingTrainer.active || harmonyMemory.active || challenge.active) return; // a trainer, Harmony Memory or challenge run owns the song clock
   if(partRehearsal.active && choirIsPlaying) startPartRehearsal(idx);
   else syncRehearsalCursor(idx);
 }
@@ -11241,6 +11540,7 @@ document.getElementById('rehearsalRoll').addEventListener('click', onRehearsalNo
 document.getElementById('rehearsalStopBtn').addEventListener('click', ()=>{
   if(timingTrainer.active) finishTimingTrainer();
   else if(harmonyMemory.active) finishHarmonyMemory(false);
+  else if(challenge.active) finishChallenge(false);
   else stopPartRehearsal();
 });
 document.getElementById('rehearsalPrevBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level-1));
@@ -11483,7 +11783,7 @@ function renderAcappellaButton(){
   btn.textContent = t(partRehearsal.acappella ? 'ac_btn_on' : 'ac_btn_off');
   btn.setAttribute('aria-pressed', partRehearsal.acappella ? 'true' : 'false');
 }
-document.getElementById('acappellaBtn').addEventListener('click', ()=>{ if(!harmonyMemory.active) setAcappella(!partRehearsal.acappella); });
+document.getElementById('acappellaBtn').addEventListener('click', ()=>{ if(!harmonyMemory.active && !challenge.active) setAcappella(!partRehearsal.acappella); });
 
 /* ---------------- Entrance & Cutoff Trainers ---------------- */
 // Rhythm Trainer's detection (ONSET_RMS_THRESHOLD on the mic analyser, rising/falling voicing edges,
@@ -11584,6 +11884,7 @@ function scheduleRehearsalCountIn(){
 async function startTimingTrainer(){
   if(!await initAudio()) return;
   if(harmonyMemory.active) finishHarmonyMemory(false);
+  if(challenge.active) finishChallenge(false);
   if(partRehearsal.active) stopPartRehearsal();
   const tl = songTimeline();
   const notes = tl.parts[partRehearsal.part];
@@ -11798,6 +12099,7 @@ function renderHarmonyMemory(){
 async function startHarmonyMemory(){
   if(!await initAudio()) return;
   if(timingTrainer.active) finishTimingTrainer();
+  if(challenge.active) finishChallenge(false);
   if(partRehearsal.active) stopPartRehearsal();
   const stage = harmonyMemory.stage, cfg = HM_STAGES[stage];
   const tl = songTimeline(), notes = tl.parts[partRehearsal.part];
@@ -11855,6 +12157,12 @@ function hmMedian(arr){
   const a = [...arr].sort((x,y)=>x-y), m = a.length>>1;
   return a.length%2 ? a[m] : (a[m-1]+a[m])/2;
 }
+// One note's verdict from the pitch frames collected while it sounded (also used by the Phase 5 challenges).
+function judgeHeldNote(midi, cents){
+  if(cents.length<HM_MIN_FRAMES) return {midi, heard:false, frames:cents.length};
+  const med = Math.round(hmMedian(cents));
+  return {midi, heard:true, frames:cents.length, cents:med, held:Math.abs(med)<=HM_TOL_CENTS};
+}
 function finishHarmonyMemory(completed){
   if(!harmonyMemory.active) return;
   harmonyMemory.active = false;
@@ -11866,11 +12174,7 @@ function finishHarmonyMemory(completed){
   renderRehearsalLevels();
   if(completed){
     const {runStage:stage, song, part, notes, cents} = harmonyMemory;
-    const results = notes.map((nt,i)=>{
-      if(cents[i].length<HM_MIN_FRAMES) return {midi:nt.midi, heard:false, frames:cents[i].length};
-      const med = Math.round(hmMedian(cents[i]));
-      return {midi:nt.midi, heard:true, frames:cents[i].length, cents:med, held:Math.abs(med)<=HM_TOL_CENTS};
-    });
+    const results = notes.map((nt,i)=>judgeHeldNote(nt.midi, cents[i]));
     const held = results.filter(r=>r.held).length;
     const score = Math.round(held/notes.length*100);
     const passed = score>=HM_PASS_PCT;
@@ -11911,6 +12215,391 @@ document.getElementById('hmemStages').addEventListener('click', (e)=>{
   if(!btn || btn.disabled || harmonyMemory.active) return;
   harmonyMemory.stage = +btn.dataset.hmStage;
   renderHarmonyMemory();
+});
+
+/* ---------------- Choir World phase 5: Choir Bosses, Chaos Mode, Tempo/Key Ladder ---------------- */
+// One run engine for all three. A run plays the real song through playChoir() with:
+//  - a song variant (tempo × and/or transposition). SONG is swapped for the run, so the schedule, the
+//    roll, songTimeline() and the scoring targets all describe exactly what plays; finishChallenge() restores it;
+//  - per-chord effects on each part's choirFxNodes gain and oscillator detune (playChoir opts.fx);
+//  - your guide at a rehearsal level, A Cappella or memory, as in Harmony Memory.
+// Scoring is Harmony Memory's (judgeHeldNote), and each note is judged live the moment it ends.
+const CH_GUIDE_LEVELS = REHEARSAL_LEVELS.map(lv=>lv.guide);
+const CB_DROWN_GAIN = 1.6, CB_DRIFT_CENTS = 40, CB_SPRINT = 1.3, CB_SILENCE_TEMPO = 1.1;
+const CH_BOSSES = [
+  {key:'drowner', emoji:'🌊', level:2, fx:(p,i,c)=>p===c.part ? null : {gain:CB_DROWN_GAIN}},
+  {key:'drifter', emoji:'🌀', level:3, fx:(p,i,c)=>p===c.part ? null : {detune:i%2 ? -CB_DRIFT_CENTS : CB_DRIFT_CENTS}},
+  {key:'sprinter', emoji:'⚡', level:3, tempoMul:CB_SPRINT},
+  {key:'ghost', emoji:'👻', level:0, fx:(p,i,c)=>p===c.part && i>=c.half ? {gain:0} : null},
+  {key:'shifter', emoji:'🎚️', level:3, shiftHalf:1},
+  {key:'silence', emoji:'🕳️', acappella:true, memory:true, tempoMul:CB_SILENCE_TEMPO, hideNotes:true},
+];
+const CX_SURGE_GAIN = 2, CX_DRIFT_CENTS = 35, CX_TYPES = ['surge','dropout','drift'];
+const TK_RUNGS = [{tempo:1.0, steps:0}, {tempo:1.1, steps:0}, {tempo:1.1, steps:1}, {tempo:1.2, steps:1}, {tempo:1.2, steps:2}, {tempo:1.3, steps:2}];
+const CH_STORE_KEY = 'choirChallengeBest';
+const CH_IDS = {
+  boss:{status:'cbStatus', results:'cbResults'},
+  chaos:{status:'cxStatus', results:'cxResults'},
+  ladder:{status:'tkStatus', results:'tkResults'},
+};
+
+const challenge = {active:false, kind:null, raf:null, lastRun:{}};
+const chSel = {boss:0, rung:0, dir:'up'};
+
+function chLoad(){ try{ return JSON.parse(localStorage.getItem(CH_STORE_KEY)) || {}; }catch(e){ return {}; } }
+// Best scores live at chLoad()[kind][song][part][slot]; slot is the boss index, "up0"–"down5" for the Ladder, 0 for Chaos.
+function chBest(kind, song=currentSongId, part=partRehearsal.part){ return ((chLoad()[kind]||{})[song]||{})[part] || {}; }
+function chSaveBest(kind, song, part, slot, score){
+  try{
+    const all = chLoad();
+    const bySong = (all[kind] = all[kind] || {});
+    const byPart = (bySong[song] = bySong[song] || {});
+    const best = (byPart[part] = byPart[part] || {});
+    if(!(best[slot] >= score)) best[slot] = score;
+    localStorage.setItem(CH_STORE_KEY, JSON.stringify(all));
+  }catch(e){ console.error('storage error', e); }
+}
+// Highest index you may start: the first, then one past every consecutively passed one.
+function chUnlockedUpTo(kind, count, slotOf){
+  const best = chBest(kind);
+  let i = 0;
+  while(i<count-1 && best[slotOf(i)]>=HM_PASS_PCT) i++;
+  return i;
+}
+const tkSlot = (i, dir=chSel.dir)=>dir+i;
+const cbUnlocked = ()=>chUnlockedUpTo('boss', CH_BOSSES.length, i=>i);
+const tkUnlocked = ()=>chUnlockedUpTo('ladder', TK_RUNGS.length, i=>tkSlot(i));
+const tkSteps = (rung, dir)=>(dir==='down' ? -1 : 1)*TK_RUNGS[rung].steps;
+
+// "V — G Major" → "V — G# Major": only the root moves; the roman numerals are key-relative so they stay.
+function transposeChordLabel(label, semis){
+  return label.replace(/\b([A-G]#?) (Major|Minor|Dim)/, (m, root, q)=>NOTE_NAMES[(NOTE_NAMES.indexOf(root)+semis+120)%12]+' '+q);
+}
+function makeSongVariant(base, {tempoMul=1, shift=0, shiftFrom=0}={}){
+  const parts = {};
+  Object.keys(base.parts).forEach(p=>{ parts[p] = {notes: base.parts[p].notes.map((m,i)=>i>=shiftFrom ? m+shift : m)}; });
+  return {...base, tempo: base.tempo*tempoMul, parts,
+    key: shift && shiftFrom===0 ? transposeChordLabel(base.key, shift) : base.key,
+    chordLabels: base.chordLabels.map((l,i)=>i>=shiftFrom ? transposeChordLabel(l, shift) : l)};
+}
+function chShiftText(steps){
+  if(!steps) return t('tk_written_key');
+  const n = Math.abs(steps);
+  return `${steps>0?'+':'−'}${n} ${t(n===1 ? 'hv_semitone_one' : 'hv_semitone_many')}`;
+}
+function chGuideText(){
+  if(partRehearsal.acappella) return t('ch_guide_ac');
+  return `${Math.round(CH_GUIDE_LEVELS[partRehearsal.level]*100)}% ${t('rehearsal_guide_word')}`;
+}
+
+// A fresh random plan per run. Chord 1 is always calm so you can find your note; each event type
+// lands at least once, and every remaining chord gets an event half the time.
+function makeChaosPlan(part, rnd=Math.random){
+  const n = SONG.parts.Lead.notes.length;
+  const slots = Array.from({length:n-1}, (_,k)=>k+1);
+  for(let i=slots.length-1;i>0;i--){ const j = Math.floor(rnd()*(i+1)); [slots[i], slots[j]] = [slots[j], slots[i]]; }
+  const plan = Array(n).fill(null);
+  slots.forEach((i,k)=>{
+    const type = k<CX_TYPES.length ? CX_TYPES[k] : (rnd()<0.5 ? CX_TYPES[Math.floor(rnd()*CX_TYPES.length)] : null);
+    if(!type) return;
+    if(type==='surge'){
+      // The other part nearest your note in pitch: the one most likely to pull you off it.
+      const me = SONG.parts[part].notes[i];
+      const others = Object.keys(SONG.parts).filter(p=>p!==part);
+      const target = others.reduce((a,b)=>Math.abs(SONG.parts[b].notes[i]-me) < Math.abs(SONG.parts[a].notes[i]-me) ? b : a);
+      plan[i] = {type, target};
+    } else plan[i] = type==='drift' ? {type, cents: rnd()<0.5 ? -CX_DRIFT_CENTS : CX_DRIFT_CENTS} : {type};
+  });
+  return plan;
+}
+function chaosFx(p, i, c){
+  const e = c.plan[i];
+  if(!e || p===c.part) return null;
+  if(e.type==='surge') return p===e.target ? {gain:CX_SURGE_GAIN} : null;
+  if(e.type==='dropout') return {gain:0};
+  return {detune:e.cents};
+}
+function chaosEventText(e){
+  if(!e) return t('cx_event_calm');
+  if(e.type==='surge') return t('cx_event_surge_tpl').replace('{part}', partName(e.target)).replace('{gain}', CX_SURGE_GAIN);
+  if(e.type==='dropout') return t('cx_event_dropout');
+  return t('cx_event_drift_tpl').replace('{cents}', (e.cents>0?'+':'')+e.cents);
+}
+
+async function startChallenge(kind){
+  if(!await initAudio()) return;
+  if(timingTrainer.active) finishTimingTrainer();
+  if(harmonyMemory.active) finishHarmonyMemory(false);
+  if(challenge.active) finishChallenge(false);
+  if(partRehearsal.active) stopPartRehearsal();
+  const part = partRehearsal.part, base = SONGS[currentSongId];
+  const n = base.parts.Lead.notes.length, half = Math.floor(n/2);
+  let cfg;
+  if(kind==='boss'){
+    const b = CH_BOSSES[chSel.boss];
+    cfg = {...b, slot:chSel.boss, variant:{tempoMul:b.tempoMul||1, shift:b.shiftHalf||0, shiftFrom:b.shiftHalf ? half : 0}};
+  } else if(kind==='ladder'){
+    cfg = {slot:tkSlot(chSel.rung), rung:chSel.rung, dir:chSel.dir, variant:{tempoMul:TK_RUNGS[chSel.rung].tempo, shift:tkSteps(chSel.rung, chSel.dir)}};
+  } else cfg = {slot:0, variant:{}};
+  SONG = makeSongVariant(base, cfg.variant);
+  const ctx = {part, half};
+  if(kind==='chaos') ctx.plan = cfg.plan = makeChaosPlan(part);
+  const fxFn = kind==='chaos' ? chaosFx : cfg.fx;
+  const tl = songTimeline(), notes = tl.parts[part];
+  const need = Math.ceil(n*HM_PASS_PCT/100);
+  Object.assign(challenge, {
+    active:true, kind, cfg, song:currentSongId, part, notes, total:tl.total, need, lives:n-need+1,
+    cents:notes.map(()=>[]), results:notes.map(()=>null), judged:0, held:0, misses:0, lastIdx:-2, lastJudged:-1,
+    prev:{level:partRehearsal.level, acappella:partRehearsal.acappella},
+  });
+  // Bosses set their own guide; Chaos and the Ladder keep whatever rehearsal level / A Cappella you chose.
+  if(kind==='boss'){
+    if(cfg.level!==undefined) partRehearsal.level = cfg.level;
+    partRehearsal.memory = !!cfg.memory;
+    setAcappella(!!cfg.acappella);
+  }
+  document.getElementById(CH_IDS[kind].results).style.display = 'none';
+  renderPartRehearsal(); // the roll, Breath Map and song label now show the variant that's about to play
+  partRehearsal.active = true;
+  const beat = 60/SONG.tempo;
+  await playChoir({loop:false, leadIn:beat*4, fx: fxFn ? (p,i)=>fxFn(p,i,ctx) : undefined});
+  const clicks = scheduleRehearsalCountIn();
+  // The Silence: your starting note sounds over the first three count-in beats, then nothing plays.
+  if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime), 0.2);
+  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  runPartRehearsalAnim();
+  challenge.raf = requestAnimationFrame(chTick);
+}
+
+function chTick(){
+  if(!challenge.active) return;
+  const songT = audioCtx.currentTime - choirStartCtxTime;
+  const {notes, kind} = challenge;
+  const chordDur = songChordDurMs()/1000;
+  const idx = songT<0 ? -1 : Math.min(notes.length-1, Math.floor(songT/chordDur));
+  if(idx>=0){
+    const nt = notes[idx];
+    if(songT>=nt.start+HM_SKIP_ATTACK_SEC && songT<=nt.end){
+      analyser.getFloatTimeDomainData(dataArray);
+      const f = autoCorrelate(dataArray, audioCtx.sampleRate);
+      if(f>0) challenge.cents[idx].push(centsFromTarget(f, nt.midi));
+    }
+  }
+  while(challenge.judged<notes.length && songT>notes[challenge.judged].end){
+    const i = challenge.judged++;
+    const r = challenge.results[i] = judgeHeldNote(notes[i].midi, challenge.cents[i]);
+    if(r.held) challenge.held++; else challenge.misses++;
+  }
+  if(kind==='boss' && challenge.misses>=challenge.lives){ finishChallenge(true); return; } // the boss wins early
+  if(idx!==challenge.lastIdx || challenge.judged!==challenge.lastJudged){
+    challenge.lastIdx = idx; challenge.lastJudged = challenge.judged;
+    document.getElementById(CH_IDS[kind].status).textContent = chStatusText(idx);
+    if(kind==='boss') renderBossBars();
+  }
+  if(songT > challenge.total + 0.3){ finishChallenge(true); return; }
+  challenge.raf = requestAnimationFrame(chTick);
+}
+function chStatusText(idx){
+  const {notes, kind, cfg} = challenge;
+  if(idx<0) return cfg.memory ? t('hm_countin_ref_tpl').replace('{note}', midiName(notes[0].midi)) : t('tt_countin');
+  const fill = s=>s.replace('{i}', idx+1).replace('{n}', notes.length).replace('{note}', midiName(notes[idx].midi));
+  if(kind==='boss') return fill(t(cfg.hideNotes ? 'cb_status_nonote_tpl' : 'cb_status_tpl'))
+    .replace('{name}', t('cb_name_'+cfg.key)).replace('{hits}', challenge.held).replace('{misses}', challenge.misses);
+  if(kind==='chaos') return fill(t('cx_status_tpl')).replace('{event}', chaosEventText(cfg.plan[idx]));
+  return fill(t('tk_status_tpl')).replace('{r}', cfg.rung+1).replace('{bpm}', Math.round(SONG.tempo)).replace('{key}', SONG.key);
+}
+
+function finishChallenge(completed){
+  if(!challenge.active) return;
+  challenge.active = false;
+  cancelAnimationFrame(challenge.raf);
+  stopPartRehearsal();
+  SONG = SONGS[currentSongId];
+  const {kind, cfg} = challenge;
+  if(kind==='boss'){
+    partRehearsal.memory = false;
+    partRehearsal.level = challenge.prev.level;
+    setAcappella(challenge.prev.acappella);
+  }
+  if(completed){
+    const {song, part, notes, held, need} = challenge;
+    const results = challenge.results.map((r,i)=>r || {midi:notes[i].midi, heard:false, unreached:true});
+    const score = Math.round(held/notes.length*100);
+    const passed = score>=HM_PASS_PCT;
+    const stoppedAt = challenge.judged<notes.length ? challenge.judged : null; // a boss that won early
+    challenge.lastRun[kind] = {cfg, song, part, results, held, need, score, passed, stoppedAt};
+    chSaveBest(kind, song, part, cfg.slot, score);
+    if(passed && kind==='boss' && chSel.boss===cfg.slot && chSel.boss<CH_BOSSES.length-1) chSel.boss++;
+    if(passed && kind==='ladder' && chSel.rung===cfg.rung && chSel.dir===cfg.dir && chSel.rung<TK_RUNGS.length-1) chSel.rung++;
+  }
+  document.getElementById(CH_IDS[kind].status).textContent = '';
+  renderPartRehearsal(); // back to the written song
+}
+
+// Boss HP = hits still needed to win; your bar = misses you can still afford before the boss wins early.
+function renderBossBars(){
+  const run = challenge.active && challenge.kind==='boss' ? challenge : null;
+  const last = challenge.lastRun.boss;
+  const shown = run || (last && last.song===currentSongId && last.part===partRehearsal.part && last.cfg.slot===chSel.boss ? last : null);
+  const b = CH_BOSSES[run ? run.cfg.slot : chSel.boss];
+  const n = SONGS[currentSongId].parts.Lead.notes.length, need = Math.ceil(n*HM_PASS_PCT/100), lives = n-need+1;
+  const held = shown ? shown.held : 0;
+  const misses = !shown ? 0 : run ? run.misses : shown.results.filter(r=>!r.held && !r.unreached).length;
+  const hp = Math.max(0, need-held), livesLeft = Math.max(0, lives-misses);
+  document.getElementById('cbBossName').textContent = `${b.emoji} ${t('cb_name_'+b.key)}`;
+  document.getElementById('cbBossHp').style.width = (hp/need*100)+'%';
+  document.getElementById('cbLives').style.width = (livesLeft/lives*100)+'%';
+  document.getElementById('cbBossHpText').textContent = hp ? t('cb_hp_tpl').replace('{hp}', hp) : t('cb_hp_zero');
+  document.getElementById('cbLivesText').textContent = t('cb_lives_tpl').replace('{n}', livesLeft);
+}
+
+function cbBossDesc(i){
+  const b = CH_BOSSES[i], base = SONGS[currentSongId], half = Math.floor(base.parts.Lead.notes.length/2);
+  const tempoMul = b.tempoMul||1;
+  return t('cb_desc_'+b.key)
+    .replace('{guide}', b.level!==undefined ? Math.round(CH_GUIDE_LEVELS[b.level]*100) : 0)
+    .replace('{gain}', CB_DROWN_GAIN.toLocaleString(localeForLang())).replace('{cents}', CB_DRIFT_CENTS)
+    .replace('{pct}', Math.round(tempoMul*100)).replace('{bpm}', Math.round(base.tempo*tempoMul)).replace('{base}', base.tempo)
+    .replace('{half}', half).replace('{from}', half+1);
+}
+
+function renderChallenges(){
+  renderChoirBosses();
+  renderChaos();
+  renderLadder();
+}
+function chStatusLabel(best, locked, lockedText, passedWord){
+  if(locked) return lockedText;
+  if(best===undefined) return t('hm_not_tried');
+  return t('hm_best_tpl').replace('{s}', best) + (best>=HM_PASS_PCT ? ' · '+passedWord : '');
+}
+function renderChoirBosses(){
+  const box = document.getElementById('cbBosses');
+  if(!box) return;
+  const best = chBest('boss'), open = cbUnlocked(), running = challenge.active && challenge.kind==='boss';
+  if(!running) chSel.boss = Math.min(chSel.boss, open);
+  document.getElementById('cbDesc').textContent = t('cb_desc').replace('{pass}', HM_PASS_PCT).replace('{cents}', HM_TOL_CENTS);
+  box.innerHTML = CH_BOSSES.map((b,i)=>{
+    const locked = i>open;
+    return `<button class="rh-level${i===chSel.boss?' active':''}${best[i]>=HM_PASS_PCT?' passed':''}" data-cb-boss="${i}" aria-pressed="${i===chSel.boss}"${locked||challenge.active?' disabled':''}>
+      <span class="rh-level-num">${t('cb_boss_word')} ${i+1}/${CH_BOSSES.length}</span>
+      <span class="cb-emoji" aria-hidden="true">${b.emoji}</span>
+      <span class="rh-level-name">${t('cb_name_'+b.key)}</span>
+      <span class="rh-level-pct">${chStatusLabel(best[i], locked, t('cb_locked_tpl').replace('{n}', i), t('cb_defeated'))}</span>
+    </button>`;
+  }).join('');
+  document.getElementById('cbBossDesc').textContent = cbBossDesc(chSel.boss);
+  document.getElementById('cbStartLabel').textContent = running ? t('tt_stop_btn') : t('cb_start_tpl').replace('{name}', t('cb_name_'+CH_BOSSES[chSel.boss].key));
+  if(running) challenge.lastIdx = -2; // status line redraws in the current language
+  renderBossBars();
+  renderChallengeResults('boss');
+}
+function renderChaos(){
+  if(!document.getElementById('cxDesc')) return;
+  const running = challenge.active && challenge.kind==='chaos';
+  document.getElementById('cxDesc').textContent = t('cx_desc').replace('{gain}', CX_SURGE_GAIN).replace('{cents}', CX_DRIFT_CENTS).replace('{guide}', chGuideText());
+  const best = chBest('chaos')[0];
+  document.getElementById('cxBest').textContent = best===undefined ? t('cx_no_best') : t('cx_best_tpl').replace('{s}', best);
+  document.getElementById('cxStartLabel').textContent = running ? t('tt_stop_btn') : t('cx_start_btn');
+  if(running) challenge.lastIdx = -2;
+  renderChallengeResults('chaos');
+}
+const tkRungText = (rung, dir)=>`${Math.round(TK_RUNGS[rung].tempo*100)}% · ${chShiftText(tkSteps(rung, dir))}`;
+function renderLadder(){
+  const box = document.getElementById('tkRungs');
+  if(!box) return;
+  const running = challenge.active && challenge.kind==='ladder';
+  const best = chBest('ladder'), open = tkUnlocked();
+  if(!running) chSel.rung = Math.min(chSel.rung, open);
+  document.getElementById('tkDesc').textContent = t('tk_desc').replace('{pass}', HM_PASS_PCT).replace('{guide}', chGuideText());
+  document.querySelectorAll('#tkDirRow [data-tk-dir]').forEach(b=>{
+    const on = b.dataset.tkDir===chSel.dir;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on?'true':'false');
+    b.disabled = challenge.active;
+  });
+  box.innerHTML = TK_RUNGS.map((r,i)=>{
+    const locked = i>open, b = best[tkSlot(i)];
+    return `<button class="rh-level${i===chSel.rung?' active':''}${b>=HM_PASS_PCT?' passed':''}" data-tk-rung="${i}" aria-pressed="${i===chSel.rung}"${locked||challenge.active?' disabled':''}>
+      <span class="rh-level-num">${t('tk_rung_word')} ${i+1}/${TK_RUNGS.length}</span>
+      <span class="rh-level-name">${tkRungText(i, chSel.dir)}</span>
+      <span class="rh-level-pct">${chStatusLabel(b, locked, t('tk_locked_tpl').replace('{n}', i), t('hm_passed'))}</span>
+    </button>`;
+  }).join('');
+  const base = SONGS[currentSongId], r = TK_RUNGS[chSel.rung], steps = tkSteps(chSel.rung, chSel.dir);
+  document.getElementById('tkRungDesc').textContent = t(steps ? 'tk_rung_desc_tpl' : 'tk_rung_same_tpl')
+    .replace('{bpm}', Math.round(base.tempo*r.tempo)).replace('{pct}', Math.round(r.tempo*100)).replace('{base}', base.tempo)
+    .replace('{key}', transposeChordLabel(base.key, steps)).replace('{shift}', chShiftText(steps)).replace('{orig}', base.key);
+  document.getElementById('tkStartLabel').textContent = running ? t('tt_stop_btn') : t('tk_start_tpl').replace('{n}', chSel.rung+1);
+  if(running) challenge.lastIdx = -2;
+  renderChallengeResults('ladder');
+}
+
+function renderChallengeResults(kind){
+  const box = document.getElementById(CH_IDS[kind].results);
+  const r = challenge.lastRun[kind];
+  if(!r || r.song!==currentSongId || r.part!==partRehearsal.part){ box.style.display = 'none'; return; }
+  const n = r.results.length;
+  let head, msg, color;
+  if(kind==='boss'){
+    const name = t('cb_name_'+r.cfg.key);
+    head = `${r.cfg.emoji} ${t('cb_result_tpl').replace('{name}', name)}`;
+    msg = r.passed ? (r.cfg.slot<CH_BOSSES.length-1 ? t('cb_win_tpl').replace('{name}', name).replace('{n}', r.cfg.slot+2) : t('cb_win_final'))
+      : r.stoppedAt!==null ? t('cb_lose_early_tpl').replace('{name}', name).replace('{m}', n-r.need+1).replace('{i}', r.stoppedAt)
+      : t('cb_lose_tpl').replace('{name}', name).replace('{need}', r.need).replace('{n}', n);
+    color = r.passed ? '--teal' : '--coral';
+  } else if(kind==='chaos'){
+    head = t('cx_result_label');
+    const chaos = r.results.filter((x,i)=>r.cfg.plan[i]), calm = r.results.filter((x,i)=>!r.cfg.plan[i]);
+    msg = t('cx_split_tpl').replace('{a}', chaos.filter(x=>x.held).length).replace('{b}', chaos.length)
+      .replace('{c}', calm.filter(x=>x.held).length).replace('{d}', calm.length);
+    color = '--cream';
+  } else {
+    head = t('tk_result_tpl').replace('{n}', r.cfg.rung+1).replace('{rung}', tkRungText(r.cfg.rung, r.cfg.dir));
+    msg = !r.passed ? t('hm_fail_tpl').replace('{need}', r.need).replace('{n}', n)
+      : r.cfg.rung<TK_RUNGS.length-1 ? t('tk_pass_tpl').replace('{n}', r.cfg.rung+2) : t('tk_pass_final');
+    color = r.passed ? '--teal' : '--coral';
+  }
+  const rows = r.results.map((x,i)=>{
+    const ev = kind==='chaos' ? ` · <span class="cx-event${r.cfg.plan[i]?'':' calm'}">${chaosEventText(r.cfg.plan[i])}</span>` : '';
+    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${midiName(x.midi)}${ev}`;
+    if(x.unreached) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val hm-silent">${t('ch_not_reached')}</span></div>`;
+    if(!x.heard) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val hm-silent">${t('hm_not_heard')}</span></div>`;
+    return `<div class="record-row" data-ch-idx="${i}"><span class="record-label">${label}</span>`
+      + `<span class="record-val ${x.held?'hm-held':'hm-off'}">${x.cents>0?'+':''}${x.cents} ${t('hm_cents')} · ${t(x.held?'hm_in_tune':'hm_off_pitch')}</span></div>`;
+  }).join('');
+  box.innerHTML = `
+    <div class="step-label">${head}</div>
+    <div class="ex-accuracy ${accuracyClass(r.score)}" style="margin:8px 0 4px;">${r.score}%</div>
+    <p class="desc">${t('hm_summary_tpl').replace('{held}', r.held).replace('{n}', n).replace('{tol}', HM_TOL_CENTS)}</p>
+    <p class="desc" style="color:var(${color});">${msg}</p>
+    <div style="margin-top:10px;">${rows}</div>`;
+  box.style.display = 'block';
+}
+
+[['cbStartBtn','boss'], ['cxStartBtn','chaos'], ['tkStartBtn','ladder']].forEach(([id, kind])=>{
+  document.getElementById(id).addEventListener('click', ()=>{
+    if(challenge.active && challenge.kind===kind) finishChallenge(false); else startChallenge(kind);
+  });
+});
+document.getElementById('cbBosses').addEventListener('click', (e)=>{
+  const btn = e.target.closest('[data-cb-boss]');
+  if(!btn || btn.disabled || challenge.active) return;
+  chSel.boss = +btn.dataset.cbBoss;
+  renderChoirBosses();
+});
+document.getElementById('tkRungs').addEventListener('click', (e)=>{
+  const btn = e.target.closest('[data-tk-rung]');
+  if(!btn || btn.disabled || challenge.active) return;
+  chSel.rung = +btn.dataset.tkRung;
+  renderLadder();
+});
+document.querySelectorAll('#tkDirRow [data-tk-dir]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(challenge.active || chSel.dir===btn.dataset.tkDir) return;
+    chSel.dir = btn.dataset.tkDir;
+    chSel.rung = 0;
+    renderLadder();
+  });
 });
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
@@ -14250,6 +14939,7 @@ function stopAllActiveSessions(){
   aiDuetActive = false;
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof harmonyMemory!=='undefined' && harmonyMemory.active) finishHarmonyMemory(false);
+  if(typeof challenge!=='undefined' && challenge.active) finishChallenge(false);
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
   if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false);
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
@@ -15003,6 +15693,7 @@ function renderTodaysReport(){
 function selectSong(id){
   if(!SONGS[id]) return; // invalid id, safety guard
   if(id===currentSongId) return; // already selected, no-op
+  if(typeof challenge!=='undefined' && challenge.active) finishChallenge(false); // restores SONG from its run variant first
   currentSongId = id;
   SONG = SONGS[id];
   const s = SONG;
