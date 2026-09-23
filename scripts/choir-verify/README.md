@@ -17,6 +17,7 @@ Serve the client first: `cd deploy && python -m http.server 8765`, then run from
 | `timing.js [url]` | Phase 3: Entrance and Cutoff Trainer offsets measured against a stand-in singer with known edge offsets |
 | `live5.js [url]` | Production click-through for Phase 5: Drowner fight with a true-peak tap on choirOutNode, French boss names, one Chaos run with French results; checks live HTML is identical to `deploy/index.html` |
 | `yc.js [url]` | Phase 6 Your Choir: records parts through the real UI with a test tone as the mic (a real MediaStream into Studio Mode's MediaRecorder), checks take alignment, overdub playback, stacked playback per-part pitch / fader ratios / mute, the stacked output peak with all 5 parts, delete, and en/fr/es/tr text |
+| `live6.js [url]` | Production click-through for Phase 6 in French (picked in the first-visit language chooser): records Alto and Bass with a test-tone mic, plays the 2-part stack, measures per-part pitch/gain/RMS, take alignment and the stacked peak; checks live HTML is identical to `deploy/index.html` |
 | `desc.js` | Stage descriptions and buttons in en/fr/es/tr |
 | `shot.js` | Screenshots of the Breath Map and Harmony Memory cards at desktop and phone widths |
 
