@@ -527,6 +527,13 @@
   .rh-note{cursor:pointer;}
   .rh-note .rh-note-iv{display:block;color:var(--teal);font-family:'Space Mono',monospace;font-size:10.5px;margin-top:2px;}
 
+  /* ---- A CAPPELLA + TIMING TRAINERS ---- */
+  #panel-partrehearsal.acappella-on .rh-hide-ac{display:none !important;}
+  .ac-note{display:none;border-left:3px solid var(--teal);font-size:13px;}
+  #panel-partrehearsal.acappella-on .ac-note{display:block;}
+  #acappellaBtn[aria-pressed="true"]{background:var(--teal);color:#082722;border-color:var(--teal);}
+  .tt-early{color:var(--brass);} .tt-late{color:var(--coral);} .tt-ontime{color:var(--teal);}
+
   /* ---- SONG INTELLIGENCE: Harmony Vision, Sonic X-Ray, Music Microscope ---- */
   .hv-box{background:var(--surface);border:1px solid var(--hairline);border-left:3px solid var(--teal);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
   .hv-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.06em;color:var(--teal);}
@@ -3506,9 +3513,13 @@
         <button class="ex-type-btn" data-rh-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
       </div>
       <p class="fine-print"><span id="rehearsalSongLabel">Demo Hymn (C Major)</span> — <button class="link-btn" data-enter-panel="choir" data-i18n="rehearsal_change_song">change song</button></p>
+      <button class="ghost-btn" id="acappellaBtn" aria-pressed="false" style="margin-top:12px;">🎧 A Cappella</button>
+      <p class="fine-print" style="margin-top:6px;" data-i18n="ac_desc">Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.</p>
     </div>
 
-    <div class="key-card" style="margin-top:16px;">
+    <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is silent; the other parts are soloed.</div>
+
+    <div class="key-card rh-hide-ac" style="margin-top:16px;">
       <div class="step-label" data-i18n="rehearsal_levels_label">Rehearsal level</div>
       <div class="rh-levels" id="rehearsalLevels" role="group"></div>
       <p class="desc" id="rehearsalLevelDesc" style="margin:4px 0 12px;"></p>
@@ -3525,14 +3536,27 @@
 
     <div class="key-card" style="margin-top:16px;">
       <div class="step-label" data-i18n="rehearsal_yourline_label">Your line — real notes &amp; timing</div>
-      <p class="fine-print" style="margin:6px 0 0;" data-i18n="rehearsal_roll_desc">Bold bars are your part's actual notes; faint bars are the other parts, still audible for context.</p>
+      <p class="fine-print rh-hide-ac" style="margin:6px 0 0;" data-i18n="rehearsal_roll_desc">Bold bars are your part's actual notes; faint bars are the other parts, still audible for context.</p>
       <div class="transport-row">
         <button class="solid-btn teal" id="rehearsalPlayBtn">▶ Play</button>
         <button class="ghost-btn" id="rehearsalStopBtn" data-i18n="rehearsal_stop_btn">Stop</button>
       </div>
-      <div class="hv-box" id="harmonyVisionBox"></div>
-      <div class="rh-roll-wrap"><svg id="rehearsalRoll" aria-hidden="true"></svg></div>
-      <div class="rh-notes" id="rehearsalNotes"></div>
+      <div class="hv-box rh-hide-ac" id="harmonyVisionBox"></div>
+      <div class="rh-roll-wrap rh-hide-ac"><svg id="rehearsalRoll" aria-hidden="true"></svg></div>
+      <div class="rh-notes rh-hide-ac" id="rehearsalNotes"></div>
+    </div>
+
+    <div class="key-card" id="timingTrainerCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="tt_title">⏱️ Entrance &amp; Cutoff Trainer</div>
+      <div class="ex-type-row" id="ttModeRow" style="margin:10px 0 10px;flex-wrap:wrap;">
+        <button class="ex-type-btn active" data-tt-mode="entrance" aria-pressed="true" data-i18n="tt_mode_entrance">Entrance Trainer</button>
+        <button class="ex-type-btn" data-tt-mode="cutoff" aria-pressed="false" data-i18n="tt_mode_cutoff">Cutoff Trainer</button>
+      </div>
+      <p class="desc" id="ttDesc" style="margin-bottom:8px;"></p>
+      <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
+      <button class="mic-btn" id="ttStartBtn"><span class="dot-icon"></span><span id="ttStartLabel">Start</span></button>
+      <p class="fine-print" id="ttStatus" style="margin-top:10px;"></p>
+      <div id="ttResults" style="display:none;margin-top:12px;"></div>
     </div>
   </section>
 
@@ -5063,6 +5087,32 @@ const TRANSLATIONS = {
     interval_name_10:'Minor 7th',
     interval_name_11:'Major 7th',
     interval_name_12:'Octave',
+    ac_btn_off:'🎧 A Cappella Mode: off',
+    ac_btn_on:'🎧 A Cappella Mode: on',
+    ac_desc:'Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.',
+    ac_active_note:'A Cappella is on — no visual guide. Your part is silent; the other parts are soloed.',
+    tt_title:'⏱️ Entrance & Cutoff Trainer',
+    tt_mode_entrance:'Entrance Trainer',
+    tt_mode_cutoff:'Cutoff Trainer',
+    tt_desc_entrance:'Sing your part with the choir after a 4-beat count-in. Each time you start a note, your real onset is measured against that note\'s real start time.',
+    tt_desc_cutoff:'Sing your part with the choir after a 4-beat count-in. Each time you stop a note, your real release is measured against that note\'s real end time.',
+    tt_headphones:'🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.',
+    tt_start_btn:'Start',
+    tt_stop_btn:'Stop',
+    tt_countin:'Count-in…',
+    tt_listening_tpl:'Listening — chord {i}/{n}',
+    tt_result_label:'Timing result',
+    tt_target:'target',
+    tt_you:'you',
+    tt_early:'early',
+    tt_late:'late',
+    tt_ontime:'on time',
+    tt_missed_entrance:'no entrance detected',
+    tt_missed_cutoff:'no cutoff detected',
+    tt_summary_tpl:'{hit}/{n} notes caught · average offset {avg} ms',
+    tt_counts_tpl:'{early} early · {ontime} on time · {late} late (on time = within ±{tol} ms)',
+    tt_latency_tpl:'Your device reports {ms} ms of audio output latency. It\'s included in these numbers, not subtracted.',
+    tt_bleed:'Speaker bleed detected: the mic picked up the count-in clicks, so some results may be the playback, not you. Use headphones and try again.',
     rehearsal_sub:'Your line is front and centre, the other parts keep playing around you, and your part\'s guide track genuinely fades out level by level until you\'re singing it alone.',
     rehearsal_choose_part:'Choose your part',
     rehearsal_change_song:'change song',
@@ -6084,6 +6134,32 @@ const TRANSLATIONS = {
     interval_name_10:'Septième mineure',
     interval_name_11:'Septième majeure',
     interval_name_12:'Octave',
+    ac_btn_off:'🎧 Mode a cappella : désactivé',
+    ac_btn_on:'🎧 Mode a cappella : activé',
+    ac_desc:'Votre voix devient silencieuse et les quatre autres jouent en Solo. L\'affichage des notes, la Vision harmonique et le guide de niveau sont masqués — juste vous et le chœur.',
+    ac_active_note:'Le mode a cappella est activé — aucun guide visuel. Votre voix est silencieuse ; les autres voix sont en solo.',
+    tt_title:'⏱️ Entrées et coupures',
+    tt_mode_entrance:'Entraîneur d’entrées',
+    tt_mode_cutoff:'Entraîneur de coupures',
+    tt_desc_entrance:'Chantez votre voix avec le chœur après un décompte de 4 temps. À chaque début de note, votre vraie attaque est mesurée par rapport au vrai début de cette note.',
+    tt_desc_cutoff:'Chantez votre voix avec le chœur après un décompte de 4 temps. À chaque fin de note, votre vrai relâchement est mesuré par rapport à la vraie fin de cette note.',
+    tt_headphones:'🎧 Utilisez un casque — avec des haut-parleurs, le micro peut entendre le chœur et le confondre avec vous.',
+    tt_start_btn:'Commencer',
+    tt_stop_btn:'Arrêter',
+    tt_countin:'Décompte…',
+    tt_listening_tpl:'À l’écoute — accord {i}/{n}',
+    tt_result_label:'Résultat de timing',
+    tt_target:'cible',
+    tt_you:'vous',
+    tt_early:'en avance',
+    tt_late:'en retard',
+    tt_ontime:'à temps',
+    tt_missed_entrance:'aucune entrée détectée',
+    tt_missed_cutoff:'aucune coupure détectée',
+    tt_summary_tpl:'{hit}/{n} notes captées · écart moyen {avg} ms',
+    tt_counts_tpl:'{early} en avance · {ontime} à temps · {late} en retard (à temps = à ±{tol} ms près)',
+    tt_latency_tpl:'Votre appareil indique {ms} ms de latence de sortie audio. Elle est incluse dans ces chiffres, pas soustraite.',
+    tt_bleed:'Fuite des haut-parleurs détectée : le micro a capté les clics du décompte, certains résultats peuvent donc venir de la lecture et non de vous. Utilisez un casque et réessayez.',
     rehearsal_sub:'Votre ligne est au premier plan, les autres voix continuent autour de vous, et la piste guide de votre voix s\'estompe vraiment niveau par niveau jusqu\'à ce que vous la chantiez seul.',
     rehearsal_choose_part:'Choisissez votre voix',
     rehearsal_change_song:'changer de chanson',
@@ -7105,6 +7181,32 @@ const TRANSLATIONS = {
     interval_name_10:'Séptima menor',
     interval_name_11:'Séptima mayor',
     interval_name_12:'Octava',
+    ac_btn_off:'🎧 Modo a cappella: desactivado',
+    ac_btn_on:'🎧 Modo a cappella: activado',
+    ac_desc:'Tu voz queda en silencio y las otras cuatro suenan en Solo. La vista de notas, la Visión armónica y la guía de nivel se ocultan — solo tú y el coro.',
+    ac_active_note:'El modo a cappella está activado — sin guía visual. Tu voz está en silencio; las demás voces están en solo.',
+    tt_title:'⏱️ Entradas y cortes',
+    tt_mode_entrance:'Entrenador de entradas',
+    tt_mode_cutoff:'Entrenador de cortes',
+    tt_desc_entrance:'Canta tu voz con el coro tras una cuenta de 4 tiempos. Cada vez que empiezas una nota, tu ataque real se mide contra el inicio real de esa nota.',
+    tt_desc_cutoff:'Canta tu voz con el coro tras una cuenta de 4 tiempos. Cada vez que terminas una nota, tu corte real se mide contra el final real de esa nota.',
+    tt_headphones:'🎧 Usa auriculares — con altavoces, el micrófono puede oír al coro y confundirlo contigo.',
+    tt_start_btn:'Empezar',
+    tt_stop_btn:'Detener',
+    tt_countin:'Cuenta…',
+    tt_listening_tpl:'Escuchando — acorde {i}/{n}',
+    tt_result_label:'Resultado de tiempo',
+    tt_target:'objetivo',
+    tt_you:'tú',
+    tt_early:'adelantado',
+    tt_late:'atrasado',
+    tt_ontime:'a tiempo',
+    tt_missed_entrance:'no se detectó entrada',
+    tt_missed_cutoff:'no se detectó corte',
+    tt_summary_tpl:'{hit}/{n} notas captadas · desfase medio {avg} ms',
+    tt_counts_tpl:'{early} adelantadas · {ontime} a tiempo · {late} atrasadas (a tiempo = dentro de ±{tol} ms)',
+    tt_latency_tpl:'Tu dispositivo informa {ms} ms de latencia de salida de audio. Está incluida en estas cifras, no restada.',
+    tt_bleed:'Se detectó sonido de los altavoces: el micrófono captó los clics de la cuenta, así que algunos resultados pueden ser la reproducción y no tú. Usa auriculares e inténtalo de nuevo.',
     rehearsal_sub:'Tu línea está en primer plano, las demás voces siguen sonando a tu alrededor, y la pista guía de tu voz realmente se desvanece nivel a nivel hasta que la cantas tú solo.',
     rehearsal_choose_part:'Elige tu voz',
     rehearsal_change_song:'cambiar canción',
@@ -8126,6 +8228,32 @@ const TRANSLATIONS = {
     interval_name_10:'Küçük yedili',
     interval_name_11:'Büyük yedili',
     interval_name_12:'Oktav',
+    ac_btn_off:'🎧 A cappella modu: kapalı',
+    ac_btn_on:'🎧 A cappella modu: açık',
+    ac_desc:'Sizin partiniz susar, diğer dördü Solo ile çalar. Nota görünümü, Armoni Görüşü ve seviye rehberi gizlenir — yalnızca siz ve koro.',
+    ac_active_note:'A cappella açık — görsel rehber yok. Partiniz sessiz; diğer partiler solo.',
+    tt_title:'⏱️ Giriş ve Kesiş Çalışması',
+    tt_mode_entrance:'Giriş Çalışması',
+    tt_mode_cutoff:'Kesiş Çalışması',
+    tt_desc_entrance:'4 vuruşluk sayımdan sonra partinizi koroyla söyleyin. Her notaya başladığınızda gerçek girişiniz, o notanın gerçek başlangıç zamanıyla karşılaştırılır.',
+    tt_desc_cutoff:'4 vuruşluk sayımdan sonra partinizi koroyla söyleyin. Her notayı bitirdiğinizde gerçek kesişiniz, o notanın gerçek bitiş zamanıyla karşılaştırılır.',
+    tt_headphones:'🎧 Kulaklık kullanın — hoparlörden çalarsa mikrofon koroyu duyup sizin sesiniz sanabilir.',
+    tt_start_btn:'Başla',
+    tt_stop_btn:'Durdur',
+    tt_countin:'Sayım…',
+    tt_listening_tpl:'Dinleniyor — akor {i}/{n}',
+    tt_result_label:'Zamanlama sonucu',
+    tt_target:'hedef',
+    tt_you:'siz',
+    tt_early:'erken',
+    tt_late:'geç',
+    tt_ontime:'zamanında',
+    tt_missed_entrance:'giriş algılanmadı',
+    tt_missed_cutoff:'kesiş algılanmadı',
+    tt_summary_tpl:'{hit}/{n} nota yakalandı · ortalama sapma {avg} ms',
+    tt_counts_tpl:'{early} erken · {ontime} zamanında · {late} geç (zamanında = ±{tol} ms içinde)',
+    tt_latency_tpl:'Cihazınız {ms} ms ses çıkış gecikmesi bildiriyor. Bu değer sonuçlara dahildir, çıkarılmamıştır.',
+    tt_bleed:'Hoparlör sızıntısı algılandı: mikrofon sayım tıklamalarını duydu, bu yüzden bazı sonuçlar sizin değil çalan sesin olabilir. Kulaklık kullanıp tekrar deneyin.',
     rehearsal_sub:'Sizin hattınız ön planda, diğer sesler etrafınızda çalmaya devam ediyor ve partinizin rehber kaydı, onu tek başınıza söyleyene kadar seviye seviye gerçekten azalıyor.',
     rehearsal_choose_part:'Partinizi seçin',
     rehearsal_change_song:'şarkıyı değiştir',
@@ -10430,7 +10558,7 @@ const REHEARSAL_LEVELS = [
   {key:'independent', guide:0.25},
   {key:'performance', guide:0},
 ];
-const partRehearsal = {active:false, part:'Alto', level:0};
+const partRehearsal = {active:false, part:'Alto', level:0, acappella:false};
 function rehearsalGuideTarget(){
   return choirState[partRehearsal.part].volume * REHEARSAL_LEVELS[partRehearsal.level].guide;
 }
@@ -10454,8 +10582,13 @@ function ensureChoirGainNodes(){
 function computeEffectiveGain(part){
   const s = choirState[part];
   if(partRehearsal.active){
-    // Rehearsal ignores workspace mute/solo: guide follows the level, everyone else plays at their mixer volume.
-    return part===partRehearsal.part ? rehearsalGuideTarget() : s.volume;
+    if(partRehearsal.acappella){
+      // A Cappella: your own part is silent; the other four are soloed and go through the normal Solo path below.
+      if(part===partRehearsal.part) return 0;
+    } else {
+      // Rehearsal ignores workspace mute/solo: guide follows the level, everyone else plays at their mixer volume.
+      return part===partRehearsal.part ? rehearsalGuideTarget() : s.volume;
+    }
   }
   const anySolo = Object.values(choirState).some(p=>p.solo);
   if(anySolo){
@@ -10503,7 +10636,7 @@ async function playChoir(opts={}){
   const chordDur = beatDur*SONG.beatsPerChord;
   // opts.startIdx jumps to a chord: the song clock is shifted back so progress/playheads stay in song time.
   const startIdx = Math.max(0, Math.min(SONG.parts.Lead.notes.length-1, opts.startIdx||0));
-  choirStartCtxTime = audioCtx.currentTime + 0.08 - startIdx*chordDur;
+  choirStartCtxTime = audioCtx.currentTime + 0.08 + (opts.leadIn||0) - startIdx*chordDur; // leadIn: room for a count-in
 
   Object.keys(SONG.parts).forEach(part=>{
     SONG.parts[part].notes.forEach((midi,i)=>{
@@ -10683,8 +10816,10 @@ function setRehearsalLevel(level){
 
 function setRehearsalPart(part){
   if(!SONG.parts[part] || part===partRehearsal.part) return;
+  if(timingTrainer.active) finishTimingTrainer(); // targets belong to the old part
   if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
   partRehearsal.part = part;
+  if(partRehearsal.acappella) applyAcappellaSolos();
   if(partRehearsal.active) updateAllChoirGains(); // previous part returns to its mixer level, new part drops to the current level
   renderPartRehearsal();
 }
@@ -10790,6 +10925,8 @@ function renderPartRehearsal(){
   document.getElementById('rehearsalPlayBtn').textContent = partRehearsal.active && choirIsPlaying ? t('rehearsal_playing_btn') : t('rehearsal_play_btn');
   renderRehearsalLevels();
   renderRehearsalRoll();
+  renderTimingTrainerIntro();
+  renderAcappellaButton();
 }
 
 function renderRehearseEntryChips(){
@@ -10855,19 +10992,20 @@ function stopPartRehearsal(){
   resetPartRehearsalPlayUI();
 }
 
-document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
+document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!timingTrainer.active && !(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
 // Tap a note (chip or roll bar): inspect it in Harmony Vision; if playing, jump playback there too.
 function onRehearsalNoteTap(e){
   const el = e.target.closest('[data-idx]');
   if(!el) return;
   const idx = +el.dataset.idx;
   rehearsalCursorIdx = idx;
+  if(timingTrainer.active) return; // a trainer run owns the song clock
   if(partRehearsal.active && choirIsPlaying) startPartRehearsal(idx);
   else syncRehearsalCursor(idx);
 }
 document.getElementById('rehearsalNotes').addEventListener('click', onRehearsalNoteTap);
 document.getElementById('rehearsalRoll').addEventListener('click', onRehearsalNoteTap);
-document.getElementById('rehearsalStopBtn').addEventListener('click', stopPartRehearsal);
+document.getElementById('rehearsalStopBtn').addEventListener('click', ()=>{ if(timingTrainer.active) finishTimingTrainer(); else stopPartRehearsal(); });
 document.getElementById('rehearsalPrevBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level-1));
 document.getElementById('rehearsalNextBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level+1));
 document.getElementById('rehearsalLevels').addEventListener('click', (e)=>{
@@ -11091,6 +11229,202 @@ document.getElementById('microscopeBody').addEventListener('click', (e)=>{
 });
 
 renderSonicXray();
+
+/* ---------------- A Cappella Mode ---------------- */
+// Reuses the workspace's own Solo flags: the other four parts are soloed, your part is silenced
+// (computeEffectiveGain), and every visual pitch guide in this view is hidden via .acappella-on.
+let acappellaSavedSolos = null;
+function setSoloFlag(part, on){
+  choirState[part].solo = on;
+  document.getElementById('solo'+part)?.classList.toggle('on-solo', on);
+}
+function applyAcappellaSolos(){
+  Object.keys(choirState).forEach(p=>setSoloFlag(p, p!==partRehearsal.part));
+  syncPracticeChipHighlight();
+  updateAllChoirGains();
+}
+function setAcappella(on){
+  if(on===partRehearsal.acappella) return;
+  partRehearsal.acappella = on;
+  if(on){
+    acappellaSavedSolos = Object.fromEntries(Object.keys(choirState).map(p=>[p, choirState[p].solo]));
+    applyAcappellaSolos();
+  } else {
+    Object.keys(choirState).forEach(p=>setSoloFlag(p, !!(acappellaSavedSolos && acappellaSavedSolos[p])));
+    acappellaSavedSolos = null;
+    syncPracticeChipHighlight();
+    updateAllChoirGains();
+  }
+  document.getElementById('panel-partrehearsal').classList.toggle('acappella-on', on);
+  renderAcappellaButton();
+}
+function renderAcappellaButton(){
+  const btn = document.getElementById('acappellaBtn');
+  btn.textContent = t(partRehearsal.acappella ? 'ac_btn_on' : 'ac_btn_off');
+  btn.setAttribute('aria-pressed', partRehearsal.acappella ? 'true' : 'false');
+}
+document.getElementById('acappellaBtn').addEventListener('click', ()=>setAcappella(!partRehearsal.acappella));
+
+/* ---------------- Entrance & Cutoff Trainers ---------------- */
+// Rhythm Trainer's detection (ONSET_RMS_THRESHOLD on the mic analyser, rising/falling voicing edges,
+// claimNearestTarget within half the target spacing, timingAccuracy) against the real note starts
+// (Entrance) or ends (Cutoff) from songTimeline().
+const TIMING_ONTIME_MS = 40;
+const timingTrainer = {mode:'entrance', active:false, targets:[], results:[], wasVoiced:false, clicks:[], bleedHits:0,
+  window:0, total:0, lastIdx:-2, stopTicker:null};
+
+// The full 2048-sample RMS only drops below threshold up to ~43 ms after a real release, so locate the
+// edge inside the analyser window in 64-sample hops (~1.3 ms) and report seconds before "now".
+function edgeSecondsAgo(buf, sampleRate, rising){
+  const HOP = 64, hops = Math.floor(buf.length/HOP);
+  const voiced = k=>{ let s=0; for(let i=k*HOP;i<(k+1)*HOP;i++) s+=buf[i]*buf[i]; return Math.sqrt(s/HOP) > ONSET_RMS_THRESHOLD; };
+  let k = hops-1;
+  if(rising){ while(k>=0 && voiced(k)) k--; }
+  else { while(k>=0 && !voiced(k)) k--; }
+  return (buf.length - (k+1)*HOP)/sampleRate;
+}
+
+// Detection is driven by the audio clock (~every 5 ms) rather than animation frames, so timing
+// resolution doesn't depend on the display and keeps running if the tab loses focus.
+let tickWorkletReady = null;
+async function startAudioTicker(onTick){
+  try{
+    if(audioCtx.audioWorklet && window.AudioWorkletNode){
+      if(!tickWorkletReady){
+        const src = "class VcTick extends AudioWorkletProcessor{constructor(){super();this.n=0;}process(){if((this.n++&1)===0)this.port.postMessage(0);return true;}}registerProcessor('vc-tick',VcTick);";
+        tickWorkletReady = audioCtx.audioWorklet.addModule(URL.createObjectURL(new Blob([src], {type:'application/javascript'})));
+      }
+      await tickWorkletReady;
+      const node = new AudioWorkletNode(audioCtx, 'vc-tick', {numberOfInputs:0, numberOfOutputs:1});
+      const sink = audioCtx.createGain(); sink.gain.value = 0;
+      node.connect(sink).connect(audioCtx.destination);
+      node.port.onmessage = onTick;
+      return ()=>{ node.port.onmessage = null; node.disconnect(); sink.disconnect(); };
+    }
+  }catch(e){ console.warn('audio-clock ticker unavailable, using animation frames', e); }
+  let raf;
+  const loop = ()=>{ onTick(); raf = requestAnimationFrame(loop); };
+  raf = requestAnimationFrame(loop);
+  return ()=>cancelAnimationFrame(raf);
+}
+
+function renderTimingTrainerIntro(){
+  document.getElementById('ttDesc').textContent = t('tt_desc_'+timingTrainer.mode);
+  document.getElementById('ttStartLabel').textContent = t(timingTrainer.active ? 'tt_stop_btn' : 'tt_start_btn');
+  document.querySelectorAll('#ttModeRow [data-tt-mode]').forEach(b=>{
+    const on = b.dataset.ttMode===timingTrainer.mode;
+    b.classList.toggle('active', on); b.setAttribute('aria-pressed', on?'true':'false');
+  });
+}
+
+function timingTrainerTick(){
+  if(!timingTrainer.active) return;
+  const songT = audioCtx.currentTime - choirStartCtxTime;
+  analyser.getFloatTimeDomainData(dataArray);
+  const isVoiced = computeRMS(dataArray) > ONSET_RMS_THRESHOLD;
+  const rising = isVoiced && !timingTrainer.wasVoiced, falling = !isVoiced && timingTrainer.wasVoiced;
+  timingTrainer.wasVoiced = isVoiced;
+  // The whole-window RMS only confirms a release as it's about to scroll out of the window, so while
+  // still "voiced" keep noting where any trailing silence begins and use that once the release confirms.
+  const hopSec = 64/audioCtx.sampleRate;
+  const trailingSilence = edgeSecondsAgo(dataArray, audioCtx.sampleRate, false);
+  const pendingRelease = timingTrainer.pendingRelease;
+  timingTrainer.pendingRelease = isVoiced ? (trailingSilence>=hopSec ? songT - trailingSilence : null) : null;
+  if(rising || falling){
+    const edgeT = falling && pendingRelease!==null && pendingRelease!==undefined ? pendingRelease
+      : songT - edgeSecondsAgo(dataArray, audioCtx.sampleRate, rising);
+    // An "entrance" landing right on a count-in click means the speakers are leaking into the mic.
+    if(rising && edgeT<0 && timingTrainer.clicks.some(c=>edgeT>=c-0.01 && edgeT-c<0.08)) timingTrainer.bleedHits++;
+    if(rising===(timingTrainer.mode==='entrance')){
+      const i = claimNearestTarget(timingTrainer.targets, timingTrainer.results, edgeT, timingTrainer.window);
+      if(i>=0){
+        const offsetMs = Math.round((edgeT - timingTrainer.targets[i])*1000);
+        timingTrainer.results[i] = {claimed:true, eventT:edgeT, offsetMs, accuracy:timingAccuracy(offsetMs)};
+      }
+    }
+  }
+  const idx = songT<0 ? -1 : Math.min(timingTrainer.targets.length-1, Math.floor(songT/(songChordDurMs()/1000)));
+  if(idx!==timingTrainer.lastIdx){
+    timingTrainer.lastIdx = idx;
+    document.getElementById('ttStatus').textContent = idx<0 ? t('tt_countin')
+      : t('tt_listening_tpl').replace('{i}', idx+1).replace('{n}', timingTrainer.targets.length);
+  }
+  if(songT > timingTrainer.total + 0.6) finishTimingTrainer();
+}
+
+async function startTimingTrainer(){
+  if(!await initAudio()) return;
+  if(partRehearsal.active) stopPartRehearsal();
+  const tl = songTimeline();
+  const notes = tl.parts[partRehearsal.part];
+  Object.assign(timingTrainer, {
+    active:true, wasVoiced:false, pendingRelease:null, bleedHits:0, lastIdx:-2,
+    targets: notes.map(nt=>timingTrainer.mode==='entrance' ? nt.start : nt.end),
+    results: notes.map(()=>({claimed:false})),
+    window: tl.chordDur*0.5, total: tl.total,
+  });
+  document.getElementById('ttResults').style.display = 'none';
+  renderTimingTrainerIntro();
+  partRehearsal.active = true;
+  const beat = 60/SONG.tempo;
+  await playChoir({loop:false, leadIn:beat*4});
+  // 4-beat count-in, scheduled on the same clock as the song
+  timingTrainer.clicks = [0,1,2,3].map(k=>-(4-k)*beat);
+  timingTrainer.clicks.forEach((c,k)=>playTone(k===0?880:660, 0.08, Math.max(0, choirStartCtxTime + c - audioCtx.currentTime), k===0?0.20:0.14));
+  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  runPartRehearsalAnim();
+  timingTrainer.stopTicker = await startAudioTicker(timingTrainerTick);
+}
+
+function finishTimingTrainer(){
+  if(!timingTrainer.active) return;
+  timingTrainer.active = false;
+  if(timingTrainer.stopTicker){ timingTrainer.stopTicker(); timingTrainer.stopTicker = null; }
+  stopPartRehearsal();
+  document.getElementById('ttStatus').textContent = '';
+  renderTimingTrainerIntro();
+  renderTimingResults();
+}
+
+function renderTimingResults(){
+  const box = document.getElementById('ttResults');
+  const mode = timingTrainer.mode;
+  const chordDur = songChordDurMs()/1000;
+  const claimed = timingTrainer.results.filter(r=>r.claimed);
+  const verdict = ms => Math.abs(ms)<=TIMING_ONTIME_MS ? 'ontime' : (ms<0 ? 'early' : 'late');
+  const rows = timingTrainer.results.map((r,i)=>{
+    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${timingTrainer.targets[i].toFixed(3)} s`;
+    if(!r.claimed) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val untracked">${t('tt_missed_'+mode)}</span></div>`;
+    const v = verdict(r.offsetMs);
+    return `<div class="record-row" data-tt-idx="${i}"><span class="record-label">${label} · ${t('tt_you')} ${r.eventT.toFixed(3)} s</span>`
+      + `<span class="record-val tt-${v}">${r.offsetMs>0?'+':''}${r.offsetMs} ms · ${t('tt_'+v)} · ${r.accuracy}%</span></div>`;
+  }).join('');
+  const avgAbs = claimed.length ? Math.round(claimed.reduce((a,r)=>a+Math.abs(r.offsetMs),0)/claimed.length) : 0;
+  const avgAcc = claimed.length ? Math.round(claimed.reduce((a,r)=>a+r.accuracy,0)/claimed.length) : 0;
+  const count = v => claimed.filter(r=>verdict(r.offsetMs)===v).length;
+  const latMs = Math.round(((audioCtx.outputLatency||0) + (audioCtx.baseLatency||0))*1000);
+  box.innerHTML = `
+    <div class="step-label">${t('tt_result_label')} — ${t('tt_mode_'+mode)}</div>
+    <div class="ex-accuracy ${accuracyClass(avgAcc)}" style="margin:8px 0 4px;">${avgAcc}%</div>
+    <p class="desc">${t('tt_summary_tpl').replace('{hit}', claimed.length).replace('{n}', timingTrainer.results.length).replace('{avg}', avgAbs)}</p>
+    <p class="fine-print">${t('tt_counts_tpl').replace('{early}', count('early')).replace('{ontime}', count('ontime')).replace('{late}', count('late')).replace('{tol}', TIMING_ONTIME_MS)}</p>
+    ${timingTrainer.bleedHits>=2 ? `<p class="fine-print" style="color:var(--coral);">${t('tt_bleed')}</p>` : ''}
+    <div style="margin-top:10px;">${rows}</div>
+    <p class="fine-print" style="margin-top:8px;">${t('tt_latency_tpl').replace('{ms}', latMs)}</p>`;
+  box.style.display = 'block';
+}
+
+document.getElementById('ttStartBtn').addEventListener('click', ()=>{
+  if(timingTrainer.active) finishTimingTrainer(); else startTimingTrainer();
+});
+document.querySelectorAll('#ttModeRow [data-tt-mode]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    if(timingTrainer.active) return;
+    timingTrainer.mode = btn.dataset.ttMode;
+    document.getElementById('ttResults').style.display = 'none';
+    renderTimingTrainerIntro();
+  });
+});
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
 const SAMPLE_ROSTER = [
@@ -13427,7 +13761,9 @@ function stopAllActiveSessions(){
   oneTakeActive = false;
   drillActive = false;
   aiDuetActive = false;
+  if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
+  if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false); // hand the workspace its own Solo state back
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
 }
 function enterPanel(panelName){
@@ -14578,6 +14914,20 @@ document.getElementById('recordTodayBtn')?.addEventListener('click', async ()=>{
 });
 
 /* ---------------- Rhythm Trainer (real onset detection against a real metronome) ---------------- */
+// Shared onset-timing detection — also used by the Entrance & Cutoff Trainers.
+const ONSET_RMS_THRESHOLD = 0.02;
+// Nearest still-unclaimed target to an event, if it's within the matching window.
+function claimNearestTarget(targets, results, eventTime, windowSize){
+  let bestIdx=-1, bestDist=Infinity;
+  targets.forEach((ts,i)=>{
+    if(results[i].claimed) return;
+    const dist = Math.abs(eventTime-ts);
+    if(dist<bestDist){ bestDist=dist; bestIdx=i; }
+  });
+  return (bestIdx>=0 && bestDist<windowSize) ? bestIdx : -1;
+}
+function timingAccuracy(offsetMs){ return Math.max(0, Math.round(100 - Math.abs(offsetMs)*0.6)); }
+
 const RHYTHM_BPM = {slow:70, medium:100, fast:130};
 let rhythmTempo = 'medium';
 let rhythmActive = false;
@@ -14644,21 +14994,14 @@ function rhythmOnsetLoop(beatMs){
 
   analyser.getFloatTimeDomainData(dataArray);
   const rms = computeRMS(dataArray);
-  const THRESHOLD = 0.02;
-  const isVoiced = rms > THRESHOLD;
+  const isVoiced = rms > ONSET_RMS_THRESHOLD;
 
   if(isVoiced && !rhythmWasVoiced){
     // Genuine onset (a real rising edge in loudness) — matched to the nearest unclaimed scored beat, within a real window
-    let bestIdx=-1, bestDist=Infinity;
-    rhythmBeatTimestamps.forEach((ts,i)=>{
-      if(rhythmResults[i].claimed) return;
-      const dist = Math.abs(now-ts);
-      if(dist<bestDist){ bestDist=dist; bestIdx=i; }
-    });
-    if(bestIdx>=0 && bestDist < beatMs*0.5){
+    const bestIdx = claimNearestTarget(rhythmBeatTimestamps, rhythmResults, now, beatMs*0.5);
+    if(bestIdx>=0){
       const offsetMs = Math.round(now - rhythmBeatTimestamps[bestIdx]);
-      const accuracy = Math.max(0, Math.round(100 - Math.abs(offsetMs)*0.6));
-      rhythmResults[bestIdx] = {claimed:true, offsetMs, accuracy};
+      rhythmResults[bestIdx] = {claimed:true, offsetMs, accuracy:timingAccuracy(offsetMs)};
     }
   }
   rhythmWasVoiced = isVoiced;
