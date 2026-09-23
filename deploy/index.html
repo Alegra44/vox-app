@@ -10434,6 +10434,9 @@ function nearestChordToneCents(freq, idx){
 }
 
 // simple accompaniment pad — independent gain chain from the Choir Workspace mixer
+// Its gain is set per play so the worst case (every part at the 0.7 envelope peak, in phase) stays below
+// CHOIR_PEAK_CEILING: 4 parts → 0.339, 5 parts → 0.271 (it was a fixed 0.5, which clipped).
+const BACKING_ENV_PEAK = 0.7;
 let backingGainNode = null;
 let backingActiveOsc = [];
 function ensureBackingGain(){
@@ -10449,8 +10452,8 @@ function scheduleBackingNote(freq, startTime, duration){
   osc.type='sine';
   osc.frequency.setValueAtTime(freq, startTime);
   env.gain.setValueAtTime(0, startTime);
-  env.gain.linearRampToValueAtTime(0.7, startTime+0.05);
-  env.gain.linearRampToValueAtTime(0.7, startTime+duration-0.12);
+  env.gain.linearRampToValueAtTime(BACKING_ENV_PEAK, startTime+0.05);
+  env.gain.linearRampToValueAtTime(BACKING_ENV_PEAK, startTime+duration-0.12);
   env.gain.linearRampToValueAtTime(0, startTime+duration);
   osc.connect(env).connect(backingGainNode);
   osc.start(startTime);
@@ -10465,6 +10468,7 @@ async function playBackingPad(includeLead=false){
   const chordDur = songChordDurMs()/1000;
   const t0 = audioCtx.currentTime+0.08;
   const parts = includeLead ? ['Soprano','Lead','Alto','Tenor','Bass'] : ['Soprano','Alto','Tenor','Bass'];
+  backingGainNode.gain.setValueAtTime(CHOIR_PEAK_CEILING/(BACKING_ENV_PEAK*parts.length), audioCtx.currentTime);
   parts.forEach(p=>{
     let t=t0;
     SONG.parts[p].notes.forEach(midi=>{
@@ -11077,24 +11081,29 @@ let choirAnalyserNodes = {}, choirAnalyserBuffers = {};
 // choirFxNodes sit between each note and its part's mixer GainNode: 1 normally, automated per chord by
 // the Phase 5 challenges (Chaos Mode, Choir Bosses) so their volume events never fight the mixer's own ramps.
 let choirFxNodes = {};
-// Every part's output meets on choirOutNode before the speakers. Its gain stays 1 except when a run sets
-// choirHeadroomFx (the Drowner): then it's trimmed so the worst-case sum of all parts stays below
-// CHOIR_PEAK_CEILING, i.e. the other parts are still 1.6× louder than you, but nothing clips.
+// Every part's output meets on choirOutNode before the speakers, trimmed so the worst case can't clip:
+// every part at its envelope peak and in phase, at its mixer volume (no mode plays a part louder than its
+// fader), times the largest fx gain a run gives it on any one chord (choirHeadroomFx(part, i), set by
+// Chaos Mode and the bosses). The trim follows the mixer faders, not the guide level, so fading your
+// guide never makes the choir jump. Relative levels are untouched: only the sum is scaled.
 let choirOutNode = null, choirHeadroomFx = null;
 const CHOIR_ENV_PEAK = 0.9, CHOIR_PEAK_CEILING = 0.95;
+function choirHeadroomTrim(){
+  const parts = Object.keys(SONG.parts), n = SONG.parts.Lead.notes.length;
+  let worst = 0;
+  for(let i=0;i<n;i++){
+    worst = Math.max(worst, parts.reduce((a,p)=>a + CHOIR_ENV_PEAK*choirState[p].volume*(choirHeadroomFx ? choirHeadroomFx(p,i) : 1), 0));
+  }
+  return worst>0 ? Math.min(1, CHOIR_PEAK_CEILING/worst) : 1;
+}
 function applyChoirHeadroom(){
   if(!choirOutNode) return;
-  let trim = 1;
-  if(choirHeadroomFx){
-    // Worst case = every part at its envelope peak, in phase: Σ peak × mixer gain × largest fx gain.
-    const worst = Object.keys(SONG.parts).reduce((a,p)=>a + CHOIR_ENV_PEAK*computeEffectiveGain(p)*choirHeadroomFx(p), 0);
-    trim = Math.min(1, CHOIR_PEAK_CEILING/worst);
-  }
-  choirOutNode.gain.setTargetAtTime(trim, audioCtx.currentTime, 0.02);
+  choirOutNode.gain.setTargetAtTime(choirHeadroomTrim(), audioCtx.currentTime, 0.04); // same time constant as the part gains
 }
 function ensureChoirGainNodes(){
   if(!choirOutNode){
     choirOutNode = audioCtx.createGain();
+    choirOutNode.gain.value = choirHeadroomTrim();
     choirOutNode.connect(audioCtx.destination);
   }
   Object.keys(SONG.parts).forEach(part=>{
@@ -12247,7 +12256,7 @@ document.getElementById('hmemStages').addEventListener('click', (e)=>{
 const CH_GUIDE_LEVELS = REHEARSAL_LEVELS.map(lv=>lv.guide);
 const CB_DROWN_GAIN = 1.6, CB_DRIFT_CENTS = 40, CB_SPRINT = 1.3, CB_SILENCE_TEMPO = 1.1;
 const CH_BOSSES = [
-  {key:'drowner', emoji:'🌊', level:2, headroom:true, fx:(p,i,c)=>p===c.part ? null : {gain:CB_DROWN_GAIN}},
+  {key:'drowner', emoji:'🌊', level:2, fx:(p,i,c)=>p===c.part ? null : {gain:CB_DROWN_GAIN}},
   {key:'drifter', emoji:'🌀', level:3, fx:(p,i,c)=>p===c.part ? null : {detune:i%2 ? -CB_DRIFT_CENTS : CB_DRIFT_CENTS}},
   {key:'sprinter', emoji:'⚡', level:3, tempoMul:CB_SPRINT},
   {key:'ghost', emoji:'👻', level:0, fx:(p,i,c)=>p===c.part && i>=c.half ? {gain:0} : null},
@@ -12365,8 +12374,8 @@ async function startChallenge(kind){
   const ctx = {part, half};
   if(kind==='chaos') ctx.plan = cfg.plan = makeChaosPlan(part);
   const fxFn = kind==='chaos' ? chaosFx : cfg.fx;
-  // Drowner: trim the choir output for the loudest fx gain each part gets, so the louder mix never clips.
-  if(cfg.headroom) choirHeadroomFx = p=>Math.max(...SONG.parts[p].notes.map((_,i)=>{ const e = fxFn(p,i,ctx); return e && e.gain!==undefined ? e.gain : 1; }));
+  // Louder chords (Drowner, Chaos surges) lower the choir output trim for the run, so they never clip.
+  choirHeadroomFx = fxFn ? (p,i)=>{ const e = fxFn(p,i,ctx); return e && e.gain!==undefined ? e.gain : 1; } : null;
   const tl = songTimeline(), notes = tl.parts[part];
   const need = Math.ceil(n*HM_PASS_PCT/100);
   Object.assign(challenge, {
