@@ -534,6 +534,14 @@
   #acappellaBtn[aria-pressed="true"]{background:var(--teal);color:#082722;border-color:var(--teal);}
   .tt-early{color:var(--brass);} .tt-late{color:var(--coral);} .tt-ontime{color:var(--teal);}
 
+  /* ---- HARMONY MEMORY + BREATH MAP ---- */
+  .hm-stages{grid-template-columns:repeat(6,1fr);}
+  @media (max-width:640px){ .hm-stages{grid-template-columns:1fr 1fr;} }
+  .rh-level:disabled{opacity:0.45;cursor:not-allowed;}
+  .hm-held{color:var(--teal);} .hm-off{color:var(--coral);} .hm-silent{color:var(--muted);}
+  .bm-live{font-family:'Space Mono',monospace;font-size:14px;color:var(--teal);margin:8px 0 2px;min-height:20px;}
+  .bm-live.now{color:var(--cream);}
+
   /* ---- SONG INTELLIGENCE: Harmony Vision, Sonic X-Ray, Music Microscope ---- */
   .hv-box{background:var(--surface);border:1px solid var(--hairline);border-left:3px solid var(--teal);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
   .hv-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.06em;color:var(--teal);}
@@ -3546,6 +3554,28 @@
       <div class="rh-notes rh-hide-ac" id="rehearsalNotes"></div>
     </div>
 
+    <div class="key-card" id="breathMapCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="bm_title">🌬️ Breath Map</div>
+      <p class="desc" style="margin:6px 0 8px;" data-i18n="bm_desc">Every breath point in your part, taken from the real playback schedule: the silence between one note's release and the next note's attack.</p>
+      <p class="fine-print" id="bmSummary"></p>
+      <p class="fine-print" id="bmShape" style="margin-top:4px;"></p>
+      <div class="bm-live" id="bmLive" aria-live="polite"></div>
+      <div class="rh-roll-wrap"><svg id="breathMapSvg" aria-hidden="true"></svg></div>
+      <div id="bmRows" style="margin-top:10px;"></div>
+    </div>
+
+    <div class="key-card" id="harmonyMemoryCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="hm_title">🧠 Harmony Memory</div>
+      <p class="desc" id="hmemDesc" style="margin:6px 0 4px;"></p>
+      <div class="rh-levels hm-stages" id="hmemStages" role="group"></div>
+      <p class="desc" id="hmemStageDesc" style="margin:4px 0 12px;"></p>
+      <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
+      <button class="mic-btn" id="hmemStartBtn"><span class="dot-icon"></span><span id="hmemStartLabel">Start</span></button>
+      <p class="fine-print" id="hmemStatus" style="margin-top:10px;"></p>
+      <div id="hmemResults" style="display:none;margin-top:12px;"></div>
+      <p class="fine-print" style="margin-top:10px;" data-i18n="hm_storage_note">Stage progress is saved on this device only.</p>
+    </div>
+
     <div class="key-card" id="timingTrainerCard" style="margin-top:16px;">
       <div class="step-label" data-i18n="tt_title">⏱️ Entrance &amp; Cutoff Trainer</div>
       <div class="ex-type-row" id="ttModeRow" style="margin:10px 0 10px;flex-wrap:wrap;">
@@ -5091,6 +5121,52 @@ const TRANSLATIONS = {
     ac_btn_on:'🎧 A Cappella Mode: on',
     ac_desc:'Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.',
     ac_active_note:'A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.',
+    bm_title:'🌬️ Breath Map',
+    bm_desc:'Every breath point in your part, taken from the real playback schedule: the silence between one note\'s release and the next note\'s attack.',
+    bm_summary_tpl:'{n} breath points · {ms} ms of silence each · longest held note {hold} s',
+    bm_uniform_note:'This arrangement has no rests or longer phrase breaks. Every breath point is the same short gap, so each is a quick catch-breath. Take your full breath during the count-in.',
+    bm_varied_note:'Gap lengths differ in this part. Take your fullest breaths at the longest gaps.',
+    bm_same_pitch:'same pitch',
+    bm_up_tpl:'{n} {st} up',
+    bm_down_tpl:'{n} {st} down',
+    bm_row_tpl:'Breath {k} · {from}–{to} s',
+    bm_next_tpl:'then {note}, {move}',
+    bm_final_tpl:'Final release at {t} s — the song ends there.',
+    bm_live_idle:'Press Play (or start a trainer or Harmony Memory) to follow the breath points live.',
+    bm_live_countin_tpl:'Full breath now — the song starts in {s} s',
+    bm_live_now_tpl:'Breathe — breath {k} ({ms} ms)',
+    bm_live_next_tpl:'Next breath ({k}) in {s} s',
+    bm_live_last:'No more breath points — hold through the final note.',
+    hm_title:'🧠 Harmony Memory',
+    hm_desc:'Learn your line by heart in six stages. Stages 1–4 fade your guide track, stage 5 is A Cappella, and stage 6 is from memory. Each run is scored from the mic: hold at least {pass}% of your notes within ±{cents} cents to unlock the next stage.',
+    hm_stage_word:'STAGE',
+    hm_stage_1:'Full guide',
+    hm_stage_2:'Guide 75%',
+    hm_stage_3:'Guide 50%',
+    hm_stage_4:'Guide 25%',
+    hm_stage_5:'A Cappella',
+    hm_stage_6:'From memory',
+    hm_stage_fade_desc:'Your guide track plays at {pct}% of its mixer volume (gain {gain} = {pct}% × {vol}); the other parts play at their mixer volume. Your notes stay on screen.',
+    hm_stage_5_desc:'A Cappella Mode: your part is silent and the note display is hidden. The other parts play at their mixer volume.',
+    hm_stage_6_desc:'Nothing plays. You hear your starting note during the count-in, then sing your whole line from memory: no choir, no guide, no notes on screen.',
+    hm_locked_tpl:'Locked — pass stage {n}',
+    hm_not_tried:'Not tried yet',
+    hm_best_tpl:'Best {s}%',
+    hm_passed:'passed',
+    hm_start_tpl:'Start stage {n}',
+    hm_countin_ref_tpl:'Count-in — your starting note is {note}',
+    hm_listening_tpl:'Stage {s} — chord {i}/{n}',
+    hm_listening_note_tpl:'Stage {s} — chord {i}/{n}: sing {note}',
+    hm_result_tpl:'Stage {n} result',
+    hm_summary_tpl:'{held}/{n} notes held in tune (within ±{tol} cents)',
+    hm_fail_tpl:'Not passed yet — you need {need} of {n} notes in tune.',
+    hm_pass_tpl:'Passed — stage {n} is unlocked.',
+    hm_pass_final:'Passed — all six stages complete. You know this line by heart.',
+    hm_not_heard:'not heard',
+    hm_cents:'cents',
+    hm_in_tune:'in tune',
+    hm_off_pitch:'off pitch',
+    hm_storage_note:'Stage progress is saved on this device only.',
     tt_title:'⏱️ Entrance & Cutoff Trainer',
     tt_mode_entrance:'Entrance Trainer',
     tt_mode_cutoff:'Cutoff Trainer',
@@ -6138,6 +6214,52 @@ const TRANSLATIONS = {
     ac_btn_on:'🎧 Mode a cappella : activé',
     ac_desc:'Votre voix devient silencieuse et les quatre autres jouent en Solo. L\'affichage des notes, la Vision harmonique et le guide de niveau sont masqués — juste vous et le chœur.',
     ac_active_note:'Le mode a cappella est activé — aucun guide visuel. Votre voix est totalement silencieuse ; les quatre autres jouent à leur volume normal de la table de mixage.',
+    bm_title:'🌬️ Carte des respirations',
+    bm_desc:'Chaque point de respiration de votre voix, tiré du vrai calendrier de lecture : le silence entre la fin d’une note et l’attaque de la suivante.',
+    bm_summary_tpl:'{n} points de respiration · {ms} ms de silence chacun · note tenue la plus longue {hold} s',
+    bm_uniform_note:'Cet arrangement n’a ni silences ni longues pauses de phrase. Chaque point de respiration est le même court intervalle : ce sont des respirations rapides. Prenez votre grande inspiration pendant le décompte.',
+    bm_varied_note:'La durée des intervalles varie dans cette voix. Respirez le plus profondément aux intervalles les plus longs.',
+    bm_same_pitch:'même hauteur',
+    bm_up_tpl:'{n} {st} plus haut',
+    bm_down_tpl:'{n} {st} plus bas',
+    bm_row_tpl:'Respiration {k} · {from}–{to} s',
+    bm_next_tpl:'puis {note}, {move}',
+    bm_final_tpl:'Relâchement final à {t} s — le morceau se termine là.',
+    bm_live_idle:'Appuyez sur Lecture (ou lancez un entraîneur ou Mémoire harmonique) pour suivre les respirations en direct.',
+    bm_live_countin_tpl:'Grande inspiration — le morceau commence dans {s} s',
+    bm_live_now_tpl:'Respirez — respiration {k} ({ms} ms)',
+    bm_live_next_tpl:'Prochaine respiration ({k}) dans {s} s',
+    bm_live_last:'Plus de respiration — tenez jusqu’à la dernière note.',
+    hm_title:'🧠 Mémoire harmonique',
+    hm_desc:'Apprenez votre ligne par cœur en six étapes. Les étapes 1 à 4 atténuent votre piste guide, l’étape 5 est a cappella et l’étape 6 se fait de mémoire. Chaque passage est noté par le micro : tenez au moins {pass} % de vos notes à ±{cents} cents pour débloquer l’étape suivante.',
+    hm_stage_word:'ÉTAPE',
+    hm_stage_1:'Guide complet',
+    hm_stage_2:'Guide 75 %',
+    hm_stage_3:'Guide 50 %',
+    hm_stage_4:'Guide 25 %',
+    hm_stage_5:'A cappella',
+    hm_stage_6:'De mémoire',
+    hm_stage_fade_desc:'Votre piste guide joue à {pct} % de son volume de mixage (gain {gain} = {pct} % × {vol}) ; les autres voix jouent à leur volume de mixage. Vos notes restent affichées.',
+    hm_stage_5_desc:'Mode a cappella : votre voix est silencieuse et l’affichage des notes est masqué. Les autres voix jouent à leur volume de mixage.',
+    hm_stage_6_desc:'Rien ne joue. Vous entendez votre note de départ pendant le décompte, puis vous chantez toute votre ligne de mémoire : pas de chœur, pas de guide, aucune note à l’écran.',
+    hm_locked_tpl:'Verrouillée — réussissez l’étape {n}',
+    hm_not_tried:'Pas encore essayée',
+    hm_best_tpl:'Meilleur {s} %',
+    hm_passed:'réussie',
+    hm_start_tpl:'Commencer l’étape {n}',
+    hm_countin_ref_tpl:'Décompte — votre note de départ est {note}',
+    hm_listening_tpl:'Étape {s} — accord {i}/{n}',
+    hm_listening_note_tpl:'Étape {s} — accord {i}/{n} : chantez {note}',
+    hm_result_tpl:'Résultat de l’étape {n}',
+    hm_summary_tpl:'{held}/{n} notes tenues justes (à ±{tol} cents)',
+    hm_fail_tpl:'Pas encore réussie — il faut {need} notes justes sur {n}.',
+    hm_pass_tpl:'Réussie — l’étape {n} est débloquée.',
+    hm_pass_final:'Réussie — les six étapes sont terminées. Vous connaissez cette ligne par cœur.',
+    hm_not_heard:'non entendue',
+    hm_cents:'cents',
+    hm_in_tune:'juste',
+    hm_off_pitch:'faux',
+    hm_storage_note:'La progression des étapes est enregistrée sur cet appareil uniquement.',
     tt_title:'⏱️ Entrées et coupures',
     tt_mode_entrance:'Entraîneur d’entrées',
     tt_mode_cutoff:'Entraîneur de coupures',
@@ -7185,6 +7307,52 @@ const TRANSLATIONS = {
     ac_btn_on:'🎧 Modo a cappella: activado',
     ac_desc:'Tu voz queda en silencio y las otras cuatro suenan en Solo. La vista de notas, la Visión armónica y la guía de nivel se ocultan — solo tú y el coro.',
     ac_active_note:'El modo a cappella está activado — sin guía visual. Tu voz está totalmente en silencio; las otras cuatro suenan a su volumen normal del mezclador.',
+    bm_title:'🌬️ Mapa de respiración',
+    bm_desc:'Cada punto de respiración de tu voz, tomado del calendario real de reproducción: el silencio entre el final de una nota y el ataque de la siguiente.',
+    bm_summary_tpl:'{n} puntos de respiración · {ms} ms de silencio cada uno · nota sostenida más larga {hold} s',
+    bm_uniform_note:'Este arreglo no tiene silencios ni pausas largas de frase. Cada punto de respiración es el mismo intervalo corto, así que todos son respiraciones rápidas. Toma tu respiración completa durante la cuenta.',
+    bm_varied_note:'La duración de los intervalos varía en esta voz. Respira más a fondo en los intervalos más largos.',
+    bm_same_pitch:'misma altura',
+    bm_up_tpl:'{n} {st} arriba',
+    bm_down_tpl:'{n} {st} abajo',
+    bm_row_tpl:'Respiración {k} · {from}–{to} s',
+    bm_next_tpl:'luego {note}, {move}',
+    bm_final_tpl:'Final a los {t} s — ahí termina la canción.',
+    bm_live_idle:'Pulsa Reproducir (o inicia un entrenador o Memoria armónica) para seguir las respiraciones en directo.',
+    bm_live_countin_tpl:'Respira hondo ahora — la canción empieza en {s} s',
+    bm_live_now_tpl:'Respira — respiración {k} ({ms} ms)',
+    bm_live_next_tpl:'Próxima respiración ({k}) en {s} s',
+    bm_live_last:'No quedan respiraciones — sostén hasta la última nota.',
+    hm_title:'🧠 Memoria armónica',
+    hm_desc:'Aprende tu línea de memoria en seis etapas. Las etapas 1–4 atenúan tu pista guía, la etapa 5 es a cappella y la etapa 6 es de memoria. Cada intento se puntúa con el micrófono: mantén al menos el {pass} % de tus notas a ±{cents} cents para desbloquear la siguiente etapa.',
+    hm_stage_word:'ETAPA',
+    hm_stage_1:'Guía completa',
+    hm_stage_2:'Guía 75 %',
+    hm_stage_3:'Guía 50 %',
+    hm_stage_4:'Guía 25 %',
+    hm_stage_5:'A cappella',
+    hm_stage_6:'De memoria',
+    hm_stage_fade_desc:'Tu pista guía suena al {pct} % de su volumen del mezclador (ganancia {gain} = {pct} % × {vol}); las demás voces suenan a su volumen del mezclador. Tus notas siguen en pantalla.',
+    hm_stage_5_desc:'Modo a cappella: tu voz está en silencio y la vista de notas se oculta. Las demás voces suenan a su volumen del mezclador.',
+    hm_stage_6_desc:'No suena nada. Oyes tu nota inicial durante la cuenta y luego cantas toda tu línea de memoria: sin coro, sin guía y sin notas en pantalla.',
+    hm_locked_tpl:'Bloqueada — supera la etapa {n}',
+    hm_not_tried:'Aún sin intentar',
+    hm_best_tpl:'Mejor {s} %',
+    hm_passed:'superada',
+    hm_start_tpl:'Empezar etapa {n}',
+    hm_countin_ref_tpl:'Cuenta — tu nota inicial es {note}',
+    hm_listening_tpl:'Etapa {s} — acorde {i}/{n}',
+    hm_listening_note_tpl:'Etapa {s} — acorde {i}/{n}: canta {note}',
+    hm_result_tpl:'Resultado de la etapa {n}',
+    hm_summary_tpl:'{held}/{n} notas afinadas (a ±{tol} cents)',
+    hm_fail_tpl:'Aún no superada — necesitas {need} de {n} notas afinadas.',
+    hm_pass_tpl:'Superada — la etapa {n} está desbloqueada.',
+    hm_pass_final:'Superada — las seis etapas completadas. Te sabes esta línea de memoria.',
+    hm_not_heard:'no se oyó',
+    hm_cents:'cents',
+    hm_in_tune:'afinada',
+    hm_off_pitch:'desafinada',
+    hm_storage_note:'El progreso de las etapas se guarda solo en este dispositivo.',
     tt_title:'⏱️ Entradas y cortes',
     tt_mode_entrance:'Entrenador de entradas',
     tt_mode_cutoff:'Entrenador de cortes',
@@ -8232,6 +8400,52 @@ const TRANSLATIONS = {
     ac_btn_on:'🎧 A cappella modu: açık',
     ac_desc:'Sizin partiniz susar, diğer dördü Solo ile çalar. Nota görünümü, Armoni Görüşü ve seviye rehberi gizlenir — yalnızca siz ve koro.',
     ac_active_note:'A cappella açık — görsel rehber yok. Partiniz tamamen sessiz; diğer dört parti normal mikser seviyesinde çalar.',
+    bm_title:'🌬️ Nefes Haritası',
+    bm_desc:'Partinizdeki her nefes noktası, gerçek çalma programından alınır: bir notanın bitişi ile sonraki notanın başlangıcı arasındaki sessizlik.',
+    bm_summary_tpl:'{n} nefes noktası · her biri {ms} ms sessizlik · en uzun tutulan nota {hold} sn',
+    bm_uniform_note:'Bu düzenlemede es ya da uzun cümle araları yok. Her nefes noktası aynı kısa boşluk, yani hepsi hızlı nefes. Tam nefesinizi sayım sırasında alın.',
+    bm_varied_note:'Bu partide boşluk süreleri farklı. En derin nefeslerinizi en uzun boşluklarda alın.',
+    bm_same_pitch:'aynı perde',
+    bm_up_tpl:'{n} {st} yukarı',
+    bm_down_tpl:'{n} {st} aşağı',
+    bm_row_tpl:'Nefes {k} · {from}–{to} sn',
+    bm_next_tpl:'ardından {note}, {move}',
+    bm_final_tpl:'Son bırakış {t} sn’de — şarkı orada biter.',
+    bm_live_idle:'Nefes noktalarını canlı izlemek için Çal’a basın (ya da bir çalışma veya Armoni Hafızası başlatın).',
+    bm_live_countin_tpl:'Şimdi tam nefes alın — şarkı {s} sn sonra başlıyor',
+    bm_live_now_tpl:'Nefes alın — nefes {k} ({ms} ms)',
+    bm_live_next_tpl:'Sonraki nefes ({k}) {s} sn sonra',
+    bm_live_last:'Başka nefes noktası yok — son notaya kadar tutun.',
+    hm_title:'🧠 Armoni Hafızası',
+    hm_desc:'Partinizi altı aşamada ezberleyin. 1–4. aşamalar rehber kaydınızı kısar, 5. aşama a cappella, 6. aşama ezberden. Her deneme mikrofonla puanlanır: bir sonraki aşamayı açmak için notalarınızın en az %{pass} oranını ±{cents} cent içinde tutun.',
+    hm_stage_word:'AŞAMA',
+    hm_stage_1:'Tam rehber',
+    hm_stage_2:'Rehber %75',
+    hm_stage_3:'Rehber %50',
+    hm_stage_4:'Rehber %25',
+    hm_stage_5:'A cappella',
+    hm_stage_6:'Ezberden',
+    hm_stage_fade_desc:'Rehber kaydınız mikser seviyesinin %{pct} oranında çalar (kazanç {gain} = %{pct} × {vol}); diğer partiler kendi mikser seviyelerinde çalar. Notalarınız ekranda kalır.',
+    hm_stage_5_desc:'A cappella modu: partiniz sessizdir ve nota gösterimi gizlenir. Diğer partiler kendi mikser seviyelerinde çalar.',
+    hm_stage_6_desc:'Hiçbir şey çalmaz. Sayım sırasında başlangıç notanızı duyarsınız, ardından tüm partinizi ezberden söylersiniz: koro yok, rehber yok, ekranda nota yok.',
+    hm_locked_tpl:'Kilitli — önce {n}. aşamayı geçin',
+    hm_not_tried:'Henüz denenmedi',
+    hm_best_tpl:'En iyi %{s}',
+    hm_passed:'geçildi',
+    hm_start_tpl:'{n}. aşamayı başlat',
+    hm_countin_ref_tpl:'Sayım — başlangıç notanız {note}',
+    hm_listening_tpl:'Aşama {s} — akor {i}/{n}',
+    hm_listening_note_tpl:'Aşama {s} — akor {i}/{n}: {note} söyleyin',
+    hm_result_tpl:'{n}. aşama sonucu',
+    hm_summary_tpl:'{held}/{n} nota doğru tutuldu (±{tol} cent içinde)',
+    hm_fail_tpl:'Henüz geçilmedi — {n} notadan {need} tanesinin doğru olması gerekiyor.',
+    hm_pass_tpl:'Geçildi — {n}. aşama açıldı.',
+    hm_pass_final:'Geçildi — altı aşamanın hepsi tamam. Bu partiyi ezbere biliyorsunuz.',
+    hm_not_heard:'duyulmadı',
+    hm_cents:'cent',
+    hm_in_tune:'doğru',
+    hm_off_pitch:'detone',
+    hm_storage_note:'Aşama ilerlemesi yalnızca bu cihazda kaydedilir.',
     tt_title:'⏱️ Giriş ve Kesiş Çalışması',
     tt_mode_entrance:'Giriş Çalışması',
     tt_mode_cutoff:'Kesiş Çalışması',
@@ -10558,7 +10772,8 @@ const REHEARSAL_LEVELS = [
   {key:'independent', guide:0.25},
   {key:'performance', guide:0},
 ];
-const partRehearsal = {active:false, part:'Alto', level:0, acappella:false};
+const partRehearsal = {active:false, part:'Alto', level:0, acappella:false, memory:false}; // memory: Harmony Memory stage 6
+const harmonyMemory = {active:false, stage:0, runStage:0, lastIdx:-2, raf:null, lastRun:null};
 function rehearsalGuideTarget(){
   return choirState[partRehearsal.part].volume * REHEARSAL_LEVELS[partRehearsal.level].guide;
 }
@@ -10583,7 +10798,8 @@ function computeEffectiveGain(part){
   const s = choirState[part];
   if(partRehearsal.active){
     // Rehearsal ignores workspace mute/solo: everyone else plays at their mixer volume. Your part follows
-    // the guide level, or is fully silent in A Cappella.
+    // the guide level, or is fully silent in A Cappella. Harmony Memory stage 6 silences every part.
+    if(partRehearsal.memory) return 0;
     if(part!==partRehearsal.part) return s.volume;
     return partRehearsal.acappella ? 0 : rehearsalGuideTarget();
   }
@@ -10806,6 +11022,7 @@ function holdGainAt(param, now){
 }
 
 function setRehearsalLevel(level){
+  if(harmonyMemory.active) return; // a Harmony Memory run owns the guide level
   partRehearsal.level = Math.max(0, Math.min(REHEARSAL_LEVELS.length-1, level));
   fadeRehearsalGuide();
   renderRehearsalLevels();
@@ -10814,6 +11031,7 @@ function setRehearsalLevel(level){
 function setRehearsalPart(part){
   if(!SONG.parts[part] || part===partRehearsal.part) return;
   if(timingTrainer.active) finishTimingTrainer(); // targets belong to the old part
+  if(harmonyMemory.active) finishHarmonyMemory(false);
   if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
   partRehearsal.part = part;
   if(partRehearsal.active) updateAllChoirGains(); // previous part returns to its mixer level, new part drops to the current level
@@ -10926,6 +11144,8 @@ function renderPartRehearsal(){
   if(timingTrainer.active) timingTrainer.lastIdx = -2;
   else if(document.getElementById('ttResults').style.display==='block') renderTimingResults();
   renderAcappellaButton();
+  renderBreathMap();
+  renderHarmonyMemory(); // also makes a running stage rewrite its status line on the next frame
 }
 
 function renderRehearseEntryChips(){
@@ -10943,6 +11163,7 @@ function resetPartRehearsalPlayUI(){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_play_btn');
   document.getElementById('rehearsalGainValue').textContent = '—';
   document.getElementById('rehearsalGuideVu').style.width = '0%';
+  updateBreathLive(null);
 }
 
 function runPartRehearsalAnim(){
@@ -10952,7 +11173,9 @@ function runPartRehearsalAnim(){
   let lastIdx = -1;
   function step(){
     if(!partRehearsal.active || !choirIsPlaying || !audioCtx){ resetPartRehearsalPlayUI(); return; }
-    const elapsed = Math.max(0, audioCtx.currentTime - choirStartCtxTime);
+    const songT = audioCtx.currentTime - choirStartCtxTime;
+    const elapsed = Math.max(0, songT);
+    updateBreathLive(songT);
     const W = n*100;
     const ph = document.getElementById('rehearsalPlayhead');
     if(ph){
@@ -10991,20 +11214,24 @@ function stopPartRehearsal(){
   resetPartRehearsalPlayUI();
 }
 
-document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!timingTrainer.active && !(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
+document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!timingTrainer.active && !harmonyMemory.active && !(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
 // Tap a note (chip or roll bar): inspect it in Harmony Vision; if playing, jump playback there too.
 function onRehearsalNoteTap(e){
   const el = e.target.closest('[data-idx]');
   if(!el) return;
   const idx = +el.dataset.idx;
   rehearsalCursorIdx = idx;
-  if(timingTrainer.active) return; // a trainer run owns the song clock
+  if(timingTrainer.active || harmonyMemory.active) return; // a trainer or Harmony Memory run owns the song clock
   if(partRehearsal.active && choirIsPlaying) startPartRehearsal(idx);
   else syncRehearsalCursor(idx);
 }
 document.getElementById('rehearsalNotes').addEventListener('click', onRehearsalNoteTap);
 document.getElementById('rehearsalRoll').addEventListener('click', onRehearsalNoteTap);
-document.getElementById('rehearsalStopBtn').addEventListener('click', ()=>{ if(timingTrainer.active) finishTimingTrainer(); else stopPartRehearsal(); });
+document.getElementById('rehearsalStopBtn').addEventListener('click', ()=>{
+  if(timingTrainer.active) finishTimingTrainer();
+  else if(harmonyMemory.active) finishHarmonyMemory(false);
+  else stopPartRehearsal();
+});
 document.getElementById('rehearsalPrevBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level-1));
 document.getElementById('rehearsalNextBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level+1));
 document.getElementById('rehearsalLevels').addEventListener('click', (e)=>{
@@ -11245,7 +11472,7 @@ function renderAcappellaButton(){
   btn.textContent = t(partRehearsal.acappella ? 'ac_btn_on' : 'ac_btn_off');
   btn.setAttribute('aria-pressed', partRehearsal.acappella ? 'true' : 'false');
 }
-document.getElementById('acappellaBtn').addEventListener('click', ()=>setAcappella(!partRehearsal.acappella));
+document.getElementById('acappellaBtn').addEventListener('click', ()=>{ if(!harmonyMemory.active) setAcappella(!partRehearsal.acappella); });
 
 /* ---------------- Entrance & Cutoff Trainers ---------------- */
 // Rhythm Trainer's detection (ONSET_RMS_THRESHOLD on the mic analyser, rising/falling voicing edges,
@@ -11334,8 +11561,18 @@ function timingTrainerTick(){
   if(songT > timingTrainer.total + 0.6) finishTimingTrainer();
 }
 
+// 4-beat count-in scheduled on the same clock as the song; call right after playChoir({leadIn:beat*4}).
+// Returns the click times in song seconds (negative = before the downbeat).
+function scheduleRehearsalCountIn(){
+  const beat = 60/SONG.tempo;
+  const clicks = [0,1,2,3].map(k=>-(4-k)*beat);
+  clicks.forEach((c,k)=>playTone(k===0?880:660, 0.08, Math.max(0, choirStartCtxTime + c - audioCtx.currentTime), k===0?0.20:0.14));
+  return clicks;
+}
+
 async function startTimingTrainer(){
   if(!await initAudio()) return;
+  if(harmonyMemory.active) finishHarmonyMemory(false);
   if(partRehearsal.active) stopPartRehearsal();
   const tl = songTimeline();
   const notes = tl.parts[partRehearsal.part];
@@ -11350,9 +11587,7 @@ async function startTimingTrainer(){
   partRehearsal.active = true;
   const beat = 60/SONG.tempo;
   await playChoir({loop:false, leadIn:beat*4});
-  // 4-beat count-in, scheduled on the same clock as the song
-  timingTrainer.clicks = [0,1,2,3].map(k=>-(4-k)*beat);
-  timingTrainer.clicks.forEach((c,k)=>playTone(k===0?880:660, 0.08, Math.max(0, choirStartCtxTime + c - audioCtx.currentTime), k===0?0.20:0.14));
+  timingTrainer.clicks = scheduleRehearsalCountIn();
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   timingTrainer.stopTicker = await startAudioTicker(timingTrainerTick);
@@ -11406,6 +11641,265 @@ document.querySelectorAll('#ttModeRow [data-tt-mode]').forEach(btn=>{
     document.getElementById('ttResults').style.display = 'none';
     renderTimingTrainerIntro();
   });
+});
+
+/* ---------------- Breath Map ---------------- */
+// Breath points are the real silences in your part's schedule: from one note's release (end) to the
+// next note's attack (start), both straight from songTimeline(). Nothing here is estimated.
+function breathMapData(part){
+  const tl = songTimeline();
+  const notes = tl.parts[part];
+  const pts = notes.slice(0,-1).map((nt,i)=>({k:i+1, from:nt.end, to:notes[i+1].start, gap:notes[i+1].start-nt.end, before:nt, after:notes[i+1]}));
+  return {tl, notes, pts, hold:Math.max(...notes.map(nt=>nt.end-nt.start))};
+}
+const bmMs = sec=>Math.round(sec*1000);
+function bmMoveText(from, to){
+  const d = to-from, abs = Math.abs(d);
+  if(d===0) return t('bm_same_pitch');
+  return t(d>0 ? 'bm_up_tpl' : 'bm_down_tpl').replace('{n}', abs).replace('{st}', t(abs===1 ? 'hv_semitone_one' : 'hv_semitone_many'));
+}
+function renderBreathMap(){
+  const part = partRehearsal.part;
+  const {tl, notes, pts, hold} = breathMapData(part);
+  const gaps = pts.map(p=>bmMs(p.gap));
+  const lo = Math.min(...gaps), hi = Math.max(...gaps);
+  document.getElementById('bmSummary').textContent = t('bm_summary_tpl')
+    .replace('{n}', pts.length).replace('{ms}', lo===hi ? lo : `${lo}–${hi}`).replace('{hold}', hold.toFixed(3));
+  document.getElementById('bmShape').textContent = lo===hi ? t('bm_uniform_note') : t('bm_varied_note');
+
+  const colW = 100, H = 54, n = notes.length, W = n*colW;
+  const x = sec=>sec/tl.chordDur*colW;
+  let svg = '';
+  notes.forEach(nt=>{
+    svg += `<rect x="${x(nt.start)}" y="18" width="${x(nt.end)-x(nt.start)}" height="16" rx="3" style="fill:${PART_COLORS[part]};opacity:0.8"/>`;
+    svg += `<text x="${x(nt.start)+6}" y="30" style="fill:#1a1305;font:bold 10px 'Space Mono',monospace">${midiName(nt.midi)}</text>`;
+  });
+  pts.forEach(p=>{
+    svg += `<rect class="bm-gap" data-k="${p.k}" x="${x(p.from)}" y="10" width="${x(p.to)-x(p.from)}" height="32" style="fill:var(--teal);opacity:0.5"/>`;
+    svg += `<text x="${(x(p.from)+x(p.to))/2}" y="52" text-anchor="middle" style="fill:var(--teal);font:bold 10px 'Space Mono',monospace">${p.k}</text>`;
+  });
+  svg += `<line id="bmPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0"/>`;
+  const el = document.getElementById('breathMapSvg');
+  el.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  el.style.minWidth = (n*64)+'px';
+  el.innerHTML = svg;
+
+  document.getElementById('bmRows').innerHTML = pts.map(p=>`
+    <div class="record-row" data-bm-k="${p.k}"><span class="record-label">${t('bm_row_tpl').replace('{k}', p.k).replace('{from}', p.from.toFixed(3)).replace('{to}', p.to.toFixed(3))}</span>
+    <span class="record-val">${bmMs(p.gap)} ms · ${t('bm_next_tpl').replace('{note}', midiName(p.after.midi)).replace('{move}', bmMoveText(p.before.midi, p.after.midi))}</span></div>`).join('')
+    + `<p class="fine-print" style="margin-top:6px;">${t('bm_final_tpl').replace('{t}', notes[n-1].end.toFixed(3))}</p>`;
+  bmLiveState = ''; // force the live cue to redraw in the current language
+  updateBreathLive(partRehearsal.active && choirIsPlaying && audioCtx ? audioCtx.currentTime - choirStartCtxTime : null);
+}
+// Live cue from the audio clock: songT is seconds since the downbeat (negative during a count-in).
+let bmLiveState = '';
+function updateBreathLive(songT){
+  const live = document.getElementById('bmLive');
+  if(!live) return;
+  const ph = document.getElementById('bmPlayhead');
+  if(songT===null){
+    live.textContent = t('bm_live_idle'); live.classList.remove('now');
+    if(ph) ph.style.opacity = '0';
+    bmLiveState = '';
+    return;
+  }
+  const {tl, pts} = breathMapData(partRehearsal.part);
+  let text, now = false;
+  if(songT<0) text = t('bm_live_countin_tpl').replace('{s}', (-songT).toFixed(1));
+  else {
+    const cur = pts.find(p=>songT>=p.from && songT<p.to);
+    const next = pts.find(p=>p.from>songT);
+    if(cur){ text = t('bm_live_now_tpl').replace('{k}', cur.k).replace('{ms}', bmMs(cur.gap)); now = true; }
+    else if(next) text = t('bm_live_next_tpl').replace('{k}', next.k).replace('{s}', (next.from-songT).toFixed(1));
+    else text = t('bm_live_last');
+  }
+  if(text!==bmLiveState){ live.textContent = text; live.classList.toggle('now', now); bmLiveState = text; }
+  if(ph){
+    const xx = Math.max(0, Math.min(tl.n*100, songT/tl.chordDur*100));
+    ph.setAttribute('x1', xx); ph.setAttribute('x2', xx); ph.style.opacity = songT<0 ? '0' : '0.85';
+  }
+}
+
+/* ---------------- Harmony Memory ---------------- */
+// Six progressive stages on the rehearsal view's own GainNodes. Stages 1–4 are Phase 1's guide levels
+// (REHEARSAL_LEVELS 0–3: 100/75/50/25% of your part's mixer volume), stage 5 is A Cappella (setAcappella),
+// stage 6 also silences every other part (partRehearsal.memory) after a count-in that plays your
+// starting note. Each run is scored from the mic per note against your part's real notes.
+const HM_STAGES = [
+  {level:0}, {level:1}, {level:2}, {level:3},
+  {acappella:true}, {acappella:true, memory:true},
+];
+const HM_TOL_CENTS = 50, HM_PASS_PCT = 75, HM_MIN_FRAMES = 5;
+const HM_SKIP_ATTACK_SEC = 0.1; // ignore the scoop into each note
+const HM_STORE_KEY = 'harmonyMemoryBest';
+
+function hmLoadAll(){ try{ return JSON.parse(localStorage.getItem(HM_STORE_KEY)) || {}; }catch(e){ return {}; } }
+function hmBest(song=currentSongId, part=partRehearsal.part){ return ((hmLoadAll()[song]||{})[part]) || []; }
+function hmSaveBest(song, part, stage, score){
+  try{
+    const all = hmLoadAll();
+    const bySong = all[song] = all[song] || {};
+    const arr = bySong[part] = bySong[part] || [];
+    if(!(arr[stage] >= score)) arr[stage] = score;
+    localStorage.setItem(HM_STORE_KEY, JSON.stringify(all));
+  }catch(e){ console.error('storage error', e); }
+}
+// Highest stage index you may start: stage 1 always, then one past every consecutively passed stage.
+function hmUnlockedUpTo(){
+  const best = hmBest();
+  let i = 0;
+  while(i<HM_STAGES.length-1 && best[i]>=HM_PASS_PCT) i++;
+  return i;
+}
+function hmStageDesc(i){
+  const cfg = HM_STAGES[i];
+  if(cfg.memory) return t('hm_stage_6_desc');
+  if(cfg.acappella) return t('hm_stage_5_desc');
+  const guide = REHEARSAL_LEVELS[cfg.level].guide, vol = choirState[partRehearsal.part].volume;
+  return t('hm_stage_fade_desc').replaceAll('{pct}', Math.round(guide*100)).replace('{gain}', (guide*vol).toFixed(3)).replace('{vol}', vol.toFixed(2));
+}
+
+function renderHarmonyMemory(){
+  const box = document.getElementById('hmemStages');
+  if(!box) return;
+  const best = hmBest(), open = hmUnlockedUpTo();
+  if(!harmonyMemory.active) harmonyMemory.stage = Math.min(harmonyMemory.stage, open);
+  const cur = harmonyMemory.stage;
+  document.getElementById('hmemDesc').textContent = t('hm_desc').replace('{pass}', HM_PASS_PCT).replace('{cents}', HM_TOL_CENTS);
+  box.innerHTML = HM_STAGES.map((st,i)=>{
+    const locked = i>open;
+    const status = locked ? t('hm_locked_tpl').replace('{n}', i)
+      : best[i]===undefined ? t('hm_not_tried')
+      : t('hm_best_tpl').replace('{s}', best[i]) + (best[i]>=HM_PASS_PCT ? ' · '+t('hm_passed') : '');
+    return `<button class="rh-level${i===cur?' active':''}${best[i]>=HM_PASS_PCT?' passed':''}" data-hm-stage="${i}" aria-pressed="${i===cur}"${locked||harmonyMemory.active?' disabled':''}>
+      <span class="rh-level-num">${t('hm_stage_word')} ${i+1}/${HM_STAGES.length}</span>
+      <span class="rh-level-name">${t('hm_stage_'+(i+1))}</span>
+      <span class="rh-level-pct">${status}</span>
+    </button>`;
+  }).join('');
+  document.getElementById('hmemStageDesc').textContent = hmStageDesc(cur);
+  document.getElementById('hmemStartLabel').textContent = harmonyMemory.active ? t('tt_stop_btn') : t('hm_start_tpl').replace('{n}', cur+1);
+  if(harmonyMemory.active) harmonyMemory.lastIdx = -2; // status line redraws in the current language
+  else document.getElementById('hmemStatus').textContent = '';
+  renderHmResults();
+}
+
+async function startHarmonyMemory(){
+  if(!await initAudio()) return;
+  if(timingTrainer.active) finishTimingTrainer();
+  if(partRehearsal.active) stopPartRehearsal();
+  const stage = harmonyMemory.stage, cfg = HM_STAGES[stage];
+  const tl = songTimeline(), notes = tl.parts[partRehearsal.part];
+  Object.assign(harmonyMemory, {
+    active:true, runStage:stage, song:currentSongId, part:partRehearsal.part, notes, total:tl.total,
+    cents: notes.map(()=>[]), lastIdx:-2,
+    prev:{level:partRehearsal.level, acappella:partRehearsal.acappella},
+  });
+  if(cfg.level!==undefined) partRehearsal.level = cfg.level;
+  partRehearsal.memory = !!cfg.memory;
+  setAcappella(!!cfg.acappella);
+  renderRehearsalLevels();
+  renderHarmonyMemory();
+  document.getElementById('hmemResults').style.display = 'none';
+  partRehearsal.active = true;
+  const beat = 60/SONG.tempo;
+  await playChoir({loop:false, leadIn:beat*4}); // applies this stage's computeEffectiveGain to every part
+  const clicks = scheduleRehearsalCountIn();
+  // Stage 6: your starting note sounds over the first three count-in beats, then nothing plays.
+  if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime), 0.2);
+  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  runPartRehearsalAnim();
+  harmonyMemory.raf = requestAnimationFrame(hmTick);
+}
+
+function hmTick(){
+  if(!harmonyMemory.active) return;
+  const songT = audioCtx.currentTime - choirStartCtxTime;
+  const notes = harmonyMemory.notes;
+  const chordDur = songChordDurMs()/1000;
+  const idx = songT<0 ? -1 : Math.min(notes.length-1, Math.floor(songT/chordDur));
+  if(idx>=0){
+    const nt = notes[idx];
+    if(songT>=nt.start+HM_SKIP_ATTACK_SEC && songT<=nt.end){
+      analyser.getFloatTimeDomainData(dataArray);
+      const f = autoCorrelate(dataArray, audioCtx.sampleRate);
+      if(f>0) harmonyMemory.cents[idx].push(centsFromTarget(f, nt.midi));
+    }
+  }
+  if(idx!==harmonyMemory.lastIdx){
+    harmonyMemory.lastIdx = idx;
+    const s = harmonyMemory.runStage;
+    // Stages 5–6 never show the note you should be singing.
+    const text = idx<0
+      ? (HM_STAGES[s].memory ? t('hm_countin_ref_tpl').replace('{note}', midiName(notes[0].midi)) : t('tt_countin'))
+      : t(HM_STAGES[s].acappella ? 'hm_listening_tpl' : 'hm_listening_note_tpl')
+          .replace('{s}', s+1).replace('{i}', idx+1).replace('{n}', notes.length).replace('{note}', midiName(notes[idx].midi));
+    document.getElementById('hmemStatus').textContent = text;
+  }
+  if(songT > harmonyMemory.total + 0.3){ finishHarmonyMemory(true); return; }
+  harmonyMemory.raf = requestAnimationFrame(hmTick);
+}
+
+function hmMedian(arr){
+  const a = [...arr].sort((x,y)=>x-y), m = a.length>>1;
+  return a.length%2 ? a[m] : (a[m-1]+a[m])/2;
+}
+function finishHarmonyMemory(completed){
+  if(!harmonyMemory.active) return;
+  harmonyMemory.active = false;
+  cancelAnimationFrame(harmonyMemory.raf);
+  stopPartRehearsal();
+  partRehearsal.memory = false;
+  partRehearsal.level = harmonyMemory.prev.level;
+  setAcappella(harmonyMemory.prev.acappella);
+  renderRehearsalLevels();
+  if(completed){
+    const {runStage:stage, song, part, notes, cents} = harmonyMemory;
+    const results = notes.map((nt,i)=>{
+      if(cents[i].length<HM_MIN_FRAMES) return {midi:nt.midi, heard:false, frames:cents[i].length};
+      const med = Math.round(hmMedian(cents[i]));
+      return {midi:nt.midi, heard:true, frames:cents[i].length, cents:med, held:Math.abs(med)<=HM_TOL_CENTS};
+    });
+    const held = results.filter(r=>r.held).length;
+    const score = Math.round(held/notes.length*100);
+    const passed = score>=HM_PASS_PCT;
+    harmonyMemory.lastRun = {stage, song, part, results, held, score, passed};
+    hmSaveBest(song, part, stage, score);
+    if(passed && stage<HM_STAGES.length-1) harmonyMemory.stage = stage+1;
+  }
+  renderHarmonyMemory();
+}
+
+function renderHmResults(){
+  const box = document.getElementById('hmemResults');
+  const r = harmonyMemory.lastRun;
+  if(!r || r.song!==currentSongId || r.part!==partRehearsal.part){ box.style.display = 'none'; return; }
+  const n = r.results.length, need = Math.ceil(n*HM_PASS_PCT/100);
+  const msg = !r.passed ? t('hm_fail_tpl').replace('{need}', need).replace('{n}', n)
+    : r.stage<HM_STAGES.length-1 ? t('hm_pass_tpl').replace('{n}', r.stage+2) : t('hm_pass_final');
+  const rows = r.results.map((x,i)=>{
+    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${midiName(x.midi)}`;
+    if(!x.heard) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val hm-silent">${t('hm_not_heard')}</span></div>`;
+    return `<div class="record-row" data-hm-idx="${i}"><span class="record-label">${label}</span>`
+      + `<span class="record-val ${x.held?'hm-held':'hm-off'}">${x.cents>0?'+':''}${x.cents} ${t('hm_cents')} · ${t(x.held?'hm_in_tune':'hm_off_pitch')}</span></div>`;
+  }).join('');
+  box.innerHTML = `
+    <div class="step-label">${t('hm_result_tpl').replace('{n}', r.stage+1)} — ${t('hm_stage_'+(r.stage+1))}</div>
+    <div class="ex-accuracy ${accuracyClass(r.score)}" style="margin:8px 0 4px;">${r.score}%</div>
+    <p class="desc">${t('hm_summary_tpl').replace('{held}', r.held).replace('{n}', n).replace('{tol}', HM_TOL_CENTS)}</p>
+    <p class="desc" style="color:var(${r.passed?'--teal':'--coral'});">${msg}</p>
+    <div style="margin-top:10px;">${rows}</div>`;
+  box.style.display = 'block';
+}
+
+document.getElementById('hmemStartBtn').addEventListener('click', ()=>{
+  if(harmonyMemory.active) finishHarmonyMemory(false); else startHarmonyMemory();
+});
+document.getElementById('hmemStages').addEventListener('click', (e)=>{
+  const btn = e.target.closest('[data-hm-stage]');
+  if(!btn || btn.disabled || harmonyMemory.active) return;
+  harmonyMemory.stage = +btn.dataset.hmStage;
+  renderHarmonyMemory();
 });
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
@@ -13744,6 +14238,7 @@ function stopAllActiveSessions(){
   drillActive = false;
   aiDuetActive = false;
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
+  if(typeof harmonyMemory!=='undefined' && harmonyMemory.active) finishHarmonyMemory(false);
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
   if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false);
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
