@@ -10922,6 +10922,9 @@ function renderPartRehearsal(){
   renderRehearsalLevels();
   renderRehearsalRoll();
   renderTimingTrainerIntro();
+  // Language switches land here too: redraw a shown result, and make a running trainer rewrite its status line on the next tick.
+  if(timingTrainer.active) timingTrainer.lastIdx = -2;
+  else if(document.getElementById('ttResults').style.display==='block') renderTimingResults();
   renderAcappellaButton();
 }
 
