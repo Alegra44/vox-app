@@ -121,8 +121,9 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
       const txt = await ev(() => document.getElementById('cwPreviewRehearsal').innerText.replace(/\s+/g, ' '));
       await ev(() => document.body.classList.remove('cw-locked'));
       await p.locator('#cbStartBtn').scrollIntoViewIfNeeded(); await p.locator('#cbStartBtn').click(); await sleep(400);
-      const pw = await ev(() => `${paywallTitle.textContent} — ${paywallReason.textContent} [${paywallPlanChip.textContent}]`);
-      await p.locator('#paywallCancelBtn').click(); await ev(() => applyChoirWorldGateUI());
+      const si = await vis('#signinRequiredOverlay'); // signed out gets the sign-in prompt, not the paywall
+      const pw = si ? await ev(() => `sign-in prompt: ${signinRequiredTitle.textContent}`) : await ev(() => `${paywallTitle.textContent} — ${paywallReason.textContent} [${paywallPlanChip.textContent}]`);
+      await p.locator(si ? '#signinRequiredCancelBtn' : '#paywallCancelBtn').click(); await ev(() => applyChoirWorldGateUI());
       await goSongs();
       const tag = await ev(() => document.querySelector('#panel-songs-hub .cw-lock-only').textContent);
       console.log(`\n[${lg}] preview: ${txt}\n[${lg}] boss paywall: ${pw}\n[${lg}] hub tag: ${tag}`);
