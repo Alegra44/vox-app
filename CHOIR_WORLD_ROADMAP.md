@@ -68,7 +68,7 @@ stamped by the run that did it (`cwStampFirsts` inside `rdSync` / `rdCountTake`)
   since it likely affects text outside Choir World too.
 - **Top bar overflows by 7 px at 390 px width** when the account chip shows a long plan label
   ("YEARLY"): the page scrolls sideways slightly. Already on production before Phase 8.
-- ~~Paywall sentence spacing~~ fixed: the paywall sentence is now one template per language
+- ~~Paywall sentence spacing~~ fixed (20e6d01, live 2026-09-24, dpl_9vV6eaRknVdYSYBqDTP1fzfJvtdH): the paywall sentence is now one template per language
   (`paywall_ispartof_tpl`), so French/Spanish end "…du forfait Chorale." with no stray space. After the
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
