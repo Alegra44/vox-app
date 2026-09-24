@@ -6165,7 +6165,8 @@ const TRANSLATIONS = {
     feature_vocal_journey:'Vocal Journey', feature_boss_battle:'Karaoke Boss Battle', feature_register_runner:'Register Runner',
     feature_harmony_arena:'Harmony Arena', feature_vocal_rift:'The Vocal Rift',
     paywall_trialended_p1:'Your 21-day free access has ended.', paywall_trialended_p2:'continues on a paid plan — your progress is still saved.',
-    paywall_ispartof_p1:'is part of the', paywall_ispartof_p2:'plan.',
+    paywall_ispartof_tpl:'{feature} is part of the {plan} plan.',
+    paywall_trialended_choir_tpl:'Your 21-day free access has ended. {feature} continues on the {plan} plan ({price}) — your progress is still saved.',
     arcade_pro_level_template:'Pro · Level {n}', arcade_won_template:'Won {n}x', arcade_best_template:'Best: {n}',
     arcade_trial_included:'Included in your 21-day trial', arcade_always_open:'Always open', arcade_unlocks_at_level_template:'🔒 Unlocks at Level {n}',
     pricing_planname_monthly:'🎤 Monthly', pricing_planname_yearly:'⭐ Yearly', pricing_planname_teacher:'🎓 Teacher', pricing_planname_choir:'🎹 Choir / Studio',
@@ -7427,7 +7428,8 @@ const TRANSLATIONS = {
     feature_vocal_journey:'Parcours vocal', feature_boss_battle:'Combat de boss karaoké', feature_register_runner:'Coureur de registre',
     feature_harmony_arena:'Arène d\'harmonie', feature_vocal_rift:'La Faille vocale',
     paywall_trialended_p1:'Votre accès gratuit de 21 jours a pris fin.', paywall_trialended_p2:'continue sur un forfait payant — votre progression reste enregistrée.',
-    paywall_ispartof_p1:'fait partie du forfait', paywall_ispartof_p2:'.',
+    paywall_ispartof_tpl:'{feature} fait partie du forfait {plan}.',
+    paywall_trialended_choir_tpl:'Votre accès gratuit de 21 jours a pris fin. {feature} continue avec le forfait {plan} ({price}) — votre progression reste enregistrée.',
     arcade_pro_level_template:'Pro · Niveau {n}', arcade_won_template:'Gagné {n}x', arcade_best_template:'Meilleur : {n}',
     arcade_trial_included:'Inclus dans votre essai de 21 jours', arcade_always_open:'Toujours ouvert', arcade_unlocks_at_level_template:'🔒 Débloqué au niveau {n}',
     pricing_planname_monthly:'🎤 Mensuel', pricing_planname_yearly:'⭐ Annuel', pricing_planname_teacher:'🎓 Enseignant', pricing_planname_choir:'🎹 Chorale / Studio',
@@ -8689,7 +8691,8 @@ const TRANSLATIONS = {
     feature_vocal_journey:'Viaje Vocal', feature_boss_battle:'Combate de jefe karaoke', feature_register_runner:'Corredor de registro',
     feature_harmony_arena:'Arena de Armonía', feature_vocal_rift:'La Grieta Vocal',
     paywall_trialended_p1:'Tu acceso gratuito de 21 días ha terminado.', paywall_trialended_p2:'continúa en un plan de pago — tu progreso sigue guardado.',
-    paywall_ispartof_p1:'es parte del plan', paywall_ispartof_p2:'.',
+    paywall_ispartof_tpl:'{feature} es parte del plan {plan}.',
+    paywall_trialended_choir_tpl:'Tu acceso gratuito de 21 días ha terminado. {feature} continúa con el plan {plan} ({price}) — tu progreso sigue guardado.',
     arcade_pro_level_template:'Pro · Nivel {n}', arcade_won_template:'Ganado {n}x', arcade_best_template:'Mejor: {n}',
     arcade_trial_included:'Incluido en tu prueba de 21 días', arcade_always_open:'Siempre abierto', arcade_unlocks_at_level_template:'🔒 Se desbloquea en el nivel {n}',
     pricing_planname_monthly:'🎤 Mensual', pricing_planname_yearly:'⭐ Anual', pricing_planname_teacher:'🎓 Profesor', pricing_planname_choir:'🎹 Coro / Estudio',
@@ -9951,7 +9954,8 @@ const TRANSLATIONS = {
     feature_vocal_journey:'Vokal Yolculuğu', feature_boss_battle:'Karaoke Boss Battle', feature_register_runner:'Register Koşucusu',
     feature_harmony_arena:'Armoni Arenası', feature_vocal_rift:'Vokal Yarığı',
     paywall_trialended_p1:'21 günlük ücretsiz erişiminiz sona erdi.', paywall_trialended_p2:'ücretli bir planda devam ediyor — ilerlemeniz hâlâ kaydedildi.',
-    paywall_ispartof_p1:'özelliği', paywall_ispartof_p2:'planının bir parçasıdır.',
+    paywall_ispartof_tpl:'{feature} özelliği {plan} planının bir parçasıdır.',
+    paywall_trialended_choir_tpl:'21 günlük ücretsiz erişiminiz sona erdi. {feature} özelliği {plan} planıyla devam ediyor ({price}) — ilerlemeniz hâlâ kaydedildi.',
     arcade_pro_level_template:'Pro · Seviye {n}', arcade_won_template:'{n}x Kazanıldı', arcade_best_template:'En iyi: {n}',
     arcade_trial_included:'21 günlük deneme sürenize dahildir', arcade_always_open:'Her zaman açık', arcade_unlocks_at_level_template:'🔒 Seviye {n} içinde açılır',
     pricing_planname_monthly:'🎤 Aylık', pricing_planname_yearly:'⭐ Yıllık', pricing_planname_teacher:'🎓 Öğretmen', pricing_planname_choir:'🎹 Koro / Stüdyo',
@@ -13903,7 +13907,7 @@ function requireProFeature(featureLabel){
 function requireChoirWorld(featureLabel){
   if(hasChoirWorldAccess()) return true;
   if(!profile){ requireSignIn(featureLabel); return false; }
-  openPaywallPrompt(translateFeatureLabel(featureLabel), 'choir');
+  openPaywallPrompt(translateFeatureLabel(featureLabel), 'choir', true);
   return false;
 }
 function requireChoirFeature(featureLabel){
@@ -13919,15 +13923,21 @@ function showPricingPanel(){
   document.getElementById('panel-pricing').classList.add('active');
   if(typeof renderPricingState==='function') renderPricingState();
 }
-function openPaywallPrompt(featureLabel, suggestedPlan){
+// choirOnly: only the Choir plan unlocks it (Choir World), so the trial-ended sentence can name that plan.
+function openPaywallPrompt(featureLabel, suggestedPlan, choirOnly){
   const planName = planLabel(suggestedPlan==='choir' ? 'choir' : 'monthly');
   const planPrice = suggestedPlan==='choir' ? '$79/mo' : '$9.99/mo';
   const icon = suggestedPlan==='choir' ? '🎼' : '🔒';
   document.getElementById('paywallIcon').textContent = icon;
   document.getElementById('paywallTitle').textContent = featureLabel;
-  document.getElementById('paywallReason').textContent = trialHasExpired()
-    ? `${t('paywall_trialended_p1')} ${featureLabel} ${t('paywall_trialended_p2')}`
-    : `${featureLabel} ${t('paywall_ispartof_p1')} ${planName} ${t('paywall_ispartof_p2')}`;
+  // Whole-sentence templates so each language keeps its own punctuation. After the trial, a Choir-only
+  // feature names the Choir plan; other features (the mixer included) really do continue on any paid plan.
+  const fill = tpl => tpl.replace('{feature}', () => featureLabel).replace('{plan}', () => planName).replace('{price}', () => planPrice); // functions: no $-pattern expansion in '$79/mo'
+  document.getElementById('paywallReason').textContent = !trialHasExpired()
+    ? fill(t('paywall_ispartof_tpl'))
+    : choirOnly
+      ? fill(t('paywall_trialended_choir_tpl'))
+      : `${t('paywall_trialended_p1')} ${featureLabel} ${t('paywall_trialended_p2')}`;
   document.getElementById('paywallPlanChip').textContent = `${planName} · ${planPrice}`;
   document.getElementById('paywallModalOverlay').style.display='flex';
   openModalWithA11y(document.getElementById('paywallModalOverlay'), closePaywallModal);

@@ -50,9 +50,10 @@ whatever their plan.
   since it likely affects text outside Choir World too.
 - **Top bar overflows by 7 px at 390 px width** when the account chip shows a long plan label
   ("YEARLY"): the page scrolls sideways slightly. Already on production before Phase 8.
-- **Paywall sentence spacing:** the paywall's `paywall_ispartof_p2` is appended after a space, so
-  French and Spanish show "…du forfait Chorale ." with a space before the full stop, for every paywalled
-  feature. The trial-ended variant also says a feature "continues on a paid plan" without naming it,
-  even when only the Choir plan unlocks it (the plan chip underneath does say Choir · $79/mo).
+- ~~Paywall sentence spacing~~ fixed: the paywall sentence is now one template per language
+  (`paywall_ispartof_tpl`), so French/Spanish end "…du forfait Chorale." with no stray space. After the
+  trial, Choir World features say they continue on the Choir plan with its price
+  (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
+  Check with `paywall.js`.
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
