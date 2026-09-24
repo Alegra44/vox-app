@@ -17,7 +17,7 @@ reported back before the next phase starts. Production deploys need explicit app
 | 7 | DONE (live 2026-09-24, dpl_GSwwHVrem2Bysbn8hgh7j61BWfPi) | Reporting: Performance Report, "Why Did I Fail?", Readiness Engine, Choir DNA, Choir Passport |
 | 8 | DONE (live 2026-09-24, dpl_GsSgU8oxkt8ZYXjJkLpRP7iJwnJX) | Monetization: gate the entire Choir World feature set (including the Phase 1–3 rehearsal view, trainers, and A Cappella Mode, which are currently unrestricted) behind the Choir/Studio plan, with an honest locked-preview for lower tiers |
 | 9 | DONE (live 2026-09-24, dpl_8mrkgf1Do11dweAKXt2wVU4pWqFB) | Hooks: Home card, Songs hub entry, Journey milestone, new achievements |
-| 10 | BUILT, verified locally (not deployed) | Growth Hooks: Personal Competition delta on the Home card, Your Choir WAV export |
+| 10 | DONE (live 2026-09-24, dpl_3a4aZmkfkbtwMZeMB8aApZwzDMmR) | Growth Hooks: Personal Competition delta on the Home card, Your Choir WAV export |
 
 ### Phase 6 known issue: recorder latency (uncompensated)
 
