@@ -2,13 +2,15 @@
 // a fresh account through the auth modal at 1280x720, runs Harmony Memory stage 1 on Demo Hymn Alto with a
 // stand-in singer (known offsets, one late entry, one silent chord), compares the Performance Report shown
 // with an independent recomputation from the run's raw frames, and logs the choir_readiness the API stored.
-// Confirm the row afterwards: npx supabase db query --linked on the printed user id.
+// Also reads the stored row straight from the DB (npx supabase db query --linked) before the account is
+// deleted at exit.
 // Usage: node scripts/choir-verify/live7.js [url]
 const { chromium } = require('playwright');
 const fs = require('fs'), path = require('path');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';
-const email = `voxcoach-live7-${Date.now()}@example.com`, password = 'L7-' + Math.random().toString(36).slice(2) + '!x9';
+const { track, db } = require('./testAccounts'); // deletes the account this run creates when it exits
+const email = track(`voxcoach-live7-${Date.now()}@example.com`), password = 'L7-' + Math.random().toString(36).slice(2) + '!x9';
 const PLAN = [
   { c: 0 }, { c: 20 }, { c: 80 }, { c: 0, d: 0.55 },  // chord 3 sharp (miss), chord 4 late but in tune
   null, { c: -120 }, { c: 0 }, { c: 0 },              // chord 5 silent, chord 6 over a semitone flat
@@ -94,6 +96,7 @@ const PLAN = [
   console.log('\nPATCH /me/progress:', JSON.stringify(patches));
   console.log('client choir_readiness:', JSON.stringify(await ev(() => progress.choirReadiness)));
   console.log('readiness card (Alto):', await ev(() => document.querySelector('[data-rd-part="Alto"]').innerText.replace(/\s+/g, ' ')));
+  console.log('DB row choir_readiness:', JSON.stringify(db(`select choir_readiness from public.user_progress where user_id = '${uid}'`)[0]));
   console.log('\nUSER_ID', uid, '| screenshot', require('os').tmpdir() + '\\live7-report.png', '| page errors:', errors);
   await b.close();
 })();

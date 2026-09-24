@@ -56,7 +56,7 @@ stamped by the run that did it (`cwStampFirsts` inside `rdSync` / `rdCountTake`)
 - **Journey milestone** (`#journeyChoirMilestone`): the first Harmony Memory stage passed (≥75% of notes
   held). Passes from before Phase 9 count from the stored stage bests, without a date.
 - **Achievements**: `cw_boss` (first Choir Boss beaten), `cw_ready` (any part Ready), `cw_yourchoir`
-  (first Your Choir take). A toast announces each one (and the milestone) once its save returns.
+  (first Your Choir take). A toast announces each one (and the milestone) as soon as the run ends, before the save (so a slow or failed save cannot swallow it).
 
 ## Known issues (app-wide)
 

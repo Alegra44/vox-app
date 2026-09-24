@@ -13725,12 +13725,12 @@ async function rdSync(song, part, extra={}){
   }
   cwStampFirsts(song, part, status, extra);
   renderReadiness();
-  if(profile){ await saveProgress(); cwAnnounceNew(); }
+  if(profile){ cwAnnounceNew(); await saveProgress(); }
 }
 async function rdCountTake(){
   rdAll().ycTakes++;
   cwStampFirsts(null, null, null, {take:true});
-  if(profile){ await saveProgress(); cwAnnounceNew(); }
+  if(profile){ cwAnnounceNew(); await saveProgress(); }
 }
 
 // A rehearsal play-through counts for a level when it ran from chord 1 to the end at that one level,
@@ -13916,6 +13916,8 @@ function cwHmMilestone(){
   const x = cwStoredParts().find(x=>(x.st.hm || []).some(v=>v>=HM_PASS_PCT));
   return x ? {song:x.song, part:x.part} : null;
 }
+// Announced as soon as the run ends, not after the save: the save can be slow or fail, and the achievement is
+// already true locally. The notified list and timeline entry go out with the save that follows.
 function cwAnnounceNew(){
   const fresh = (checkNewAchievementsForTimeline() || []).filter(a=>a.id.startsWith('cw_'));
   const msgs = fresh.map(a=>`${a.icon} ${t('achievement_unlocked_tpl').replace('{name}', a.name)}`);

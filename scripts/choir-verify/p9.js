@@ -9,19 +9,16 @@
 //     saved readiness, the hub without status, and the CTA's destination.
 //  B: plan Teacher with the trial over and no readiness: the upgrade card without saved readiness, the locked
 //     Journey milestone, in en/fr/es.
-// Plans are set with `npx supabase db query --linked` (no client path sets subscription_plan).
+// Plans are set with `npx supabase db query --linked` (no client path sets subscription_plan). Both accounts are
+// deleted when the script exits (testAccounts.js), pass or fail.
 // Usage: node scripts/choir-verify/p9.js [url]
 const { chromium } = require('playwright');
-const { execSync } = require('child_process');
+const { track, db } = require('./testAccounts'); // deletes the accounts this run creates when it exits
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const stamp = Date.now();
-const acc = k => ({ email: `voxcoach-p9-${stamp}-${k}@example.com`, password: 'P9-' + Math.random().toString(36).slice(2) + '!x9' });
+const acc = k => ({ email: track(`voxcoach-p9-${stamp}-${k}@example.com`), password: 'P9-' + Math.random().toString(36).slice(2) + '!x9' });
 const A = acc('a'), B = acc('b');
-const db = sql => {
-  const out = execSync(`npx supabase db query --linked "${sql.replace(/"/g, '\\"')}"`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-  return JSON.parse(out.slice(out.indexOf('{'))).rows;
-};
 
 async function openPage(browser, errors) {
   const ctx = await browser.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });

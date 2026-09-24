@@ -2,13 +2,14 @@
 // (pass), Boss 1 (win) and Boss 2 (loss) on Demo Hymn Alto with a stand-in singer, and logs every
 // PATCH /me/progress body's choir_readiness plus what the API returned. Then a second browser context (a
 // "second device", empty localStorage) signs in to the same account and reports what it loaded.
-// Confirm the row independently afterwards: npx supabase db query --linked "select choir_readiness from
-// public.user_progress where user_id = '<printed id>'"
+// Then reads the stored row straight from the DB (npx supabase db query --linked) as an independent check,
+// before the account is deleted at exit.
 // Usage: node scripts/choir-verify/p7signed.js [url]
 const { chromium } = require('playwright');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
-const email = `voxcoach-p7-${Date.now()}@example.com`, password = 'P7-' + Math.random().toString(36).slice(2) + '!x9';
+const { track, db } = require('./testAccounts'); // deletes the account this run creates when it exits
+const email = track(`voxcoach-p7-${Date.now()}@example.com`), password = 'P7-' + Math.random().toString(36).slice(2) + '!x9';
 
 async function openPage(browser, errors) {
   const ctx = await browser.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });
@@ -108,6 +109,8 @@ async function auth(page, mode) {
   await page2.evaluate(() => { enterPanel('partrehearsal'); selectSong('hymn'); renderReadiness(); });
   console.log('device 2 readiness card:', await page2.evaluate(() => rdRows.innerText.replace(/\s+/g, ' ')));
 
+  const row = db(`select choir_readiness from public.user_progress where user_id = '${uid}'`)[0];
+  console.log('DB row == device 1 final:', JSON.stringify(row.choir_readiness) === JSON.stringify(clientFinal), '|', JSON.stringify(row.choir_readiness).slice(0, 300));
   console.log('\nUSER_ID', uid);
   console.log('page errors:', errors);
   await browser.close();

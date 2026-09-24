@@ -18,7 +18,7 @@ async function open(browser, viewport) {
 (async () => {
   const b = await chromium.launch();
   if (!email) {
-    email = `voxcoach-modalz-${Date.now()}@example.com`; password = 'Mz-' + Date.now() + '!x';
+    email = require('./testAccounts').track(`voxcoach-modalz-${Date.now()}@example.com`); // deleted when this run exits password = 'Mz-' + Date.now() + '!x';
     const p = await open(b, { width: 1280, height: 900 });
     await p.evaluate(async ([e, pw]) => { const { error } = await sb.auth.signUp({ email: e, password: pw, options: { data: { name: 'modalz' } } }); if (error) throw error; }, [email, password]);
     console.log('signed up', email, '| user_id', await p.evaluate(async () => (await sb.auth.getSession()).data.session.user.id));
