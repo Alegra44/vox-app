@@ -12,6 +12,8 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 | `noisy.py <out.wav> <json>` | A clean vibrato tone plus realistic background noise at a set SNR: pink (room), rumble (brown noise + 60 Hz hum), babble (4 talkers), white |
 | `noisemic.js [captures]` | Vibrato under that noise: the Analyzer's old capture loop on the processed mic (noise suppression on) and on an unprocessed mic, vs the Analyzer as it is now; plus how many dB the suppressor removes on each noise |
 | `vq.js vibui` | The Vibrato Analyzer panel with a real click: shown rate/depth/consistency, feedback, mic constraints |
+| `livevq.js [url]` | Production: a fresh account (deleted at exit) clicks Train → Expression → Vibrato and Voice Quality with known WAVs as the mic; logs every getUserMedia call's constraints and track settings |
+| `cvib.js` | Brightness with and without vibrato: the panel's magnitude-weighted centroid vs a power-weighted one on the same spectra |
 | `shotlang.js <wav>` | Screenshots of the result rows in each language |
 
 ## How each metric is computed

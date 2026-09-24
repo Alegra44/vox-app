@@ -74,7 +74,8 @@ stamped by the run that did it (`cwStampFirsts` inside `rdSync` / `rdCountTake`)
 
 ## Voice Quality Analysis — known issues
 
-Voice Quality (`#panel-voicequality`, Train → Expression) is a separate feature line from Choir World; phase 1 is
+Voice Quality (`#panel-voicequality`, Train → Expression) is a separate feature line from Choir World; phase 1 (live 2026-09-24,
+dpl_3yLCTs4WhNCdrSY52DEGwDi7SYum, verified with `scripts/vq-verify/livevq.js`) is
 vibrato, breathiness (HNR) and brightness (spectral centroid), and the Vibrato Analyzer now shares its capture.
 Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
 
@@ -83,6 +84,11 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   auto gain off, and Chrome honours that; Safari, Firefox and mobile browsers (and phones' own mic processing, which
   can sit below the browser) are unverified: they may ignore those constraints or process the signal differently,
   which would change breathiness most (noise suppression removes breath noise) and vibrato depth under noise.
+- **Brightness reads high on notes with vibrato** (found in the live check, 2026-09-24). The centroid is
+  magnitude-weighted (the Register Coach's convention), and vibrato smears the upper harmonics over more FFT bins, which
+  adds magnitude weight to them: a 330 Hz tone reads 633 Hz straight, 679 / 699 / 713 Hz with 6 Hz ±25 / ±50 / ±100 ct.
+  A power-weighted centroid on the same spectra doesn't move (482–483 Hz, expected 482), but switching changes every
+  value and the 2× / 4× reading bands, so it's left for a decision. Check with `scripts/vq-verify/cvib.js`.
 - The reading bands (HNR 20 / 12 dB; brightness 2× / 4× the pitch) are rough guides for this tool, not norms measured
   on real voices; nothing has been measured on a real singer yet.
 
