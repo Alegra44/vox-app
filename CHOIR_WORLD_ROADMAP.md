@@ -84,12 +84,15 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   auto gain off, and Chrome honours that; Safari, Firefox and mobile browsers (and phones' own mic processing, which
   can sit below the browser) are unverified: they may ignore those constraints or process the signal differently,
   which would change breathiness most (noise suppression removes breath noise) and vibrato depth under noise.
-- **Brightness reads high on notes with vibrato** (found in the live check, 2026-09-24). The centroid is
-  magnitude-weighted (the Register Coach's convention), and vibrato smears the upper harmonics over more FFT bins, which
-  adds magnitude weight to them: a 330 Hz tone reads 633 Hz straight, 679 / 699 / 713 Hz with 6 Hz ±25 / ±50 / ±100 ct.
-  A power-weighted centroid on the same spectra doesn't move (482–483 Hz, expected 482), but switching changes every
-  value and the 2× / 4× reading bands, so it's left for a decision. Check with `scripts/vq-verify/cvib.js`.
-- The reading bands (HNR 20 / 12 dB; brightness 2× / 4× the pitch) are rough guides for this tool, not norms measured
+- ~~Brightness reads high on notes with vibrato~~ **fixed** (2026-09-24): the centroid was magnitude-weighted, and
+  vibrato spreads the upper harmonics over more FFT bins, which adds magnitude weight to them (a 330 Hz tone read 633 Hz
+  straight, 679 / 699 / 713 Hz with 6 Hz ±25 / ±50 / ±100 ct). It is now power-weighted, which that spreading doesn't
+  change: straight tones read exactly, vibrato up to ±100 ct moves it ≤ 0.7%. The reading bands were re-derived as a
+  harmonic roll-off (dark steeper than 13 dB/oct, bright shallower than 9; the old 2× / 4× bands as they fell at 220 Hz)
+  and converted to centroid ratios for the sung note, so they mean the same timbre at every pitch (18/18 known-slope
+  tones read correctly at 110 / 220 / 440 Hz, straight and with vibrato; 24/24 tones ½ dB/oct either side of each line,
+  straight and ±50 / ±100 ct, land on the right side). Check with `vq.js centroid`, `bands.js` and `cvib.js`.
+- The reading bands (HNR 20 / 12 dB; brightness 13 / 9 dB per octave) are rough guides for this tool, not norms measured
   on real voices; nothing has been measured on a real singer yet.
 
 ## Known issues (app-wide)
@@ -107,5 +110,13 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
+- **Register Coach reads vibrato as "pushing chest"** (found 2026-09-24, not fixed). Its chest score (centroid ÷ f0,
+  magnitude-weighted, 2048-point analyser on the shared mic) jumps on the same tone once vibrato is added: a 330 Hz tone
+  scoring 34 straight ("head") scores 63–66 with 6 Hz ±25 / ±50 ct, and 57–72% of its frames cross the 62 "pushing
+  chest" line; a straight 49 reads 85, over 86% of frames. That breaks the bridge streak, best-bridge XP, the Bridge
+  lane (50) and drill register matches for anyone who sings with vibrato above the passaggio. It isn't the analyser's
+  smoothing (unsmoothed reads about the same), and power weighting alone only removes part of it (the 49 still reads
+  59–65), so the cause needs finding before a fix; it is also not monotonic in depth (±100 ct reads less than ±50).
+  Check with `scripts/vq-verify/regcoach.js` and `regcoach2.js`.
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).

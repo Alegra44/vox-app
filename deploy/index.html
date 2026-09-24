@@ -11287,7 +11287,12 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
 // detector) from a second 2048-sample analyser behind a 1.5 kHz low-pass: broadband breath noise otherwise swamps the
 // autocorrelation (with white noise at 20 dB HNR it found no pitch at all). Vibrato comes from the pitch trace through analyzeVibrato().
 const VQ_HOLD_MS = 4000, VQ_FFT = 8192, VQ_PITCH_WIN = 2048, VQ_PITCH_LP_HZ = 1500, VQ_HNR_MAX_HZ = 5000, VQ_CENTROID_MAX_HZ = 6000, VQ_CENTROID_FLOOR_DB = 60, VQ_MIN_FRAMES = 30;
-const VQ_HNR_CLEAR = 20, VQ_HNR_BREATHY = 12, VQ_BRIGHT_DARK = 2, VQ_BRIGHT_BRIGHT = 4; // rough reading bands for this tool, not clinical norms
+const VQ_HNR_CLEAR = 20, VQ_HNR_BREATHY = 12; // rough reading bands for this tool, not clinical norms
+// Brightness bands as a harmonic roll-off (dB per octave): steeper than 13 reads dark, shallower than 9 reads bright.
+// They are the old centroid-ratio bands (2× / 4× the pitch, magnitude-weighted) as they fell at 220 Hz, kept as a
+// slope so they mean the same timbre at every pitch (the fixed ratios drifted from 10.4 to 6.2 dB/oct for "bright"
+// between 110 and 440 Hz). vqBrightBounds() turns them into centroid ratios for the note actually sung.
+const VQ_BRIGHT_DARK_DB_OCT = 13, VQ_BRIGHT_BRIGHT_DB_OCT = 9;
 let vqActive = false, vqLast = null;
 // Harmonics-to-noise ratio (dB) of one frame's spectrum (dB power from getFloatFrequencyData), from f0/2 to 5 kHz.
 // Bins within a quarter of the harmonic spacing of a harmonic (at least ±4 bins, the window's main lobe) are harmonic;
@@ -11305,8 +11310,10 @@ function vqHnr(db, binHz, f0){
   const perBin = noise/nNoise, h = harm - perBin*nHarm, n = Math.max(perBin*(hi-lo+1), 1e-30);
   return h>0 ? 10*Math.log10(h/n) : null;
 }
-// Spectral centroid (Hz): the magnitude-weighted mean frequency from 50 Hz to 6 kHz (the Register Coach's definition and
-// upper limit), ignoring bins more than 60 dB under the frame's loudest so the idle mic floor doesn't pull it up.
+// Spectral centroid (Hz): the power-weighted (energy) mean frequency from 50 Hz to 6 kHz, ignoring bins more than 60 dB
+// under the frame's loudest so the idle mic floor doesn't pull it up. Power, not magnitude: vibrato spreads each
+// harmonic over more bins, which leaves its power unchanged but adds to a magnitude sum, and more so the higher the
+// harmonic (a 330 Hz tone read 633 Hz straight, 699 Hz with ±50 ct vibrato, magnitude-weighted).
 function vqCentroid(db, binHz){
   const lo = Math.ceil(50/binHz), hi = Math.min(db.length-1, Math.floor(VQ_CENTROID_MAX_HZ/binHz));
   let peak = -Infinity;
@@ -11314,10 +11321,17 @@ function vqCentroid(db, binHz){
   let w = 0, sum = 0;
   for(let i=lo;i<=hi;i++){
     if(!(db[i] >= peak-VQ_CENTROID_FLOOR_DB)) continue;
-    const m = Math.pow(10, db[i]/20);
-    w += i*binHz*m; sum += m;
+    const pw = Math.pow(10, db[i]/10);
+    w += i*binHz*pw; sum += pw;
   }
   return sum>0 ? w/sum : null;
+}
+// The centroid ÷ f0 that a harmonic tone at f0 would give with amplitudes falling at dbPerOct (a_k = k^-s, s = dB/oct ÷ 6.02),
+// over the same 6 kHz band: [dark below, bright above].
+function vqBrightBounds(f0){
+  const K = Math.max(1, Math.floor(VQ_CENTROID_MAX_HZ/f0));
+  const ratio = dbPerOct=>{ const s = dbPerOct/(20*Math.log10(2)); let w = 0, sum = 0; for(let k=1;k<=K;k++){ const pw = Math.pow(k, -2*s); w += k*pw; sum += pw; } return w/sum; };
+  return [ratio(VQ_BRIGHT_DARK_DB_OCT), ratio(VQ_BRIGHT_BRIGHT_DB_OCT)];
 }
 // ms: hold length; active: stops the capture early when it turns false; spectrum: false skips HNR and centroid.
 async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={}){
@@ -11397,7 +11411,8 @@ function renderVoiceQuality(){
   if(r.centroid!==null){
     const ratio = r.centroid/r.f0;
     set('vqBrightVal', t('vq_bright_val_tpl').replace('{hz}', n(r.centroid, 0)).replace('{r}', n(ratio, 1)));
-    set('vqBrightRead', t(ratio<VQ_BRIGHT_DARK ? 'vq_bright_dark' : ratio>VQ_BRIGHT_BRIGHT ? 'vq_bright_bright' : 'vq_bright_balanced'));
+    const [dark, bright] = vqBrightBounds(r.f0);
+    set('vqBrightRead', t(ratio<dark ? 'vq_bright_dark' : ratio>bright ? 'vq_bright_bright' : 'vq_bright_balanced'));
   }else{ set('vqBrightVal', '—'); set('vqBrightRead', ''); }
 }
 document.getElementById('vqStartBtn').addEventListener('click', async ()=>{

@@ -105,25 +105,49 @@ async function hnr() {
 }
 
 async function centroid() {
-  console.log('\n==== BRIGHTNESS (spectral centroid, magnitude-weighted, 50 Hz–6 kHz)');
+  console.log('\n==== BRIGHTNESS (spectral centroid, power-weighted, 50 Hz–6 kHz), straight and with 6 Hz vibrato');
   const k10 = [...Array(10).keys()].map(k => k + 1);
   const cases = [
     ['pure sine 440 Hz', 440, [1]],
     ['220 Hz, 10 harmonics, 1/k²', 220, k10.map(k => 1 / (k * k))],
     ['220 Hz, 10 harmonics, 1/k', 220, k10.map(k => 1 / k)],
     ['220 Hz, 10 harmonics, flat', 220, k10.map(() => 1)],
-    ['330 Hz, 1/k (same shape, higher note)', 330, k10.map(k => 1 / k)],
+    ['330 Hz, harmonics 1, ½, ⅓, ¼', 330, [1, 0.5, 0.33, 0.25]],
+    ['165 Hz, 1/k (to 6 kHz: 36 harmonics)', 165, [...Array(36).keys()].map(k => 1 / (k + 1))],
   ];
+  const depths = [0, 25, 50, 100];
   for (const [label, f0, H] of cases) {
-    const inj = H.reduce((a, v, k) => a + ((k + 1) * f0 <= CENTROID_MAX ? (k + 1) * f0 * v : 0), 0) / H.reduce((a, v, k) => a + ((k + 1) * f0 <= CENTROID_MAX ? v : 0), 0);
-    const { file } = gen('c', { f0, harmonics: H });
-    const rows = await withMic(file, async page => { const r = []; for (let i = 0; i < RUNS; i++) r.push(await measure(page)); return r; });
-    console.log(`${label.padEnd(38)} injected ${f(inj, 0).padStart(5)} Hz (${f(inj / f0, 2)}× f0)   measured ${rows.map(r => `${f(r.centroid, 0)} Hz (${f(r.centroid / r.f0, 2)}×, err ${f((r.centroid / inj - 1) * 100, 1)}%)`).join(' | ')}`);
+    const inj = H.reduce((a, v, k) => a + ((k + 1) * f0 <= CENTROID_MAX ? (k + 1) * f0 * v * v : 0), 0) / H.reduce((a, v, k) => a + ((k + 1) * f0 <= CENTROID_MAX ? v * v : 0), 0);
+    const cells = [];
+    for (const d of depths) {
+      const { file } = gen('c', { f0, harmonics: H, ...(d ? { vibRate: 6, vibCents: d } : {}) });
+      const rows = await withMic(file, async page => { const r = []; for (let i = 0; i < RUNS; i++) r.push(await measure(page)); return r; });
+      cells.push(`${d ? '±' + d : 'straight'} ${rows.map(r => f(r.centroid, 0)).join('/')} (${rows.map(r => (r.centroid / inj - 1) * 100).map(e => (e >= 0 ? '+' : '') + e.toFixed(1)).join('/')}%)`);
+    }
+    console.log(`${label.padEnd(38)} injected ${f(inj, 0).padStart(4)} Hz | ${cells.join(' | ')}`);
   }
-  // Breath noise brightens the spectrum: the same 1/k tone with noise at 12 dB HNR
   const { file } = gen('c', { f0: 220, harmonics: k10.map(k => 1 / k), noiseRms: 0.05, seed: 3 });
   const r = await withMic(file, measure);
-  console.log(`${'220 Hz 1/k + white noise (rms 0.05)'.padEnd(38)} clean value 751 Hz → measured ${f(r.centroid, 0)} Hz (noise adds high-frequency energy, so it rises)`);
+  const clean = k10.reduce((a, k) => a + 220 * k / (k * k), 0) / k10.reduce((a, k) => a + 1 / (k * k), 0);
+  console.log(`${'220 Hz 1/k + white noise (rms 0.05)'.padEnd(38)} clean value ${f(clean, 0)} Hz → measured ${f(r.centroid, 0)} Hz (noise adds high-frequency energy, so it rises)`);
+
+  console.log('\n-- reading bands: harmonic tones rolling off at a known slope, straight and ±50 ct vibrato (dark < 13 dB/oct steepness, bright > 9)');
+  for (const f0 of [110, 220, 440]) {
+    const K = Math.floor(CENTROID_MAX / f0), out = [];
+    for (const [dbo, want] of [[16, 'dark'], [11, 'balanced'], [6, 'bright']]) {
+      const H = [...Array(K).keys()].map(k => Math.pow(k + 1, -dbo / 6.0206));
+      for (const d of [0, 50]) {
+        const { file } = gen('band', { f0, harmonics: H, ...(d ? { vibRate: 6, vibCents: d } : {}) });
+        const got = await withMic(file, page => page.evaluate(async () => {
+          vqActive = true; const fr = await vqCapture(); vqActive = false; const r = vqSummarize(fr);
+          const [dk, br] = vqBrightBounds(r.f0), ratio = r.centroid / r.f0;
+          return { ratio, dk, br, band: ratio < dk ? 'dark' : ratio > br ? 'bright' : 'balanced' };
+        }));
+        out.push(`${dbo} dB/oct${d ? ' ±50' : ''}: ${got.ratio.toFixed(2)}× (bounds ${got.dk.toFixed(2)}–${got.br.toFixed(2)}) → ${got.band}${got.band === want ? ' ✓' : ' ✗ want ' + want}`);
+      }
+    }
+    console.log(`${f0} Hz  ${out.join(' | ')}`);
+  }
 }
 
 async function ui() {

@@ -1,5 +1,5 @@
-// Spectral centroid with and without vibrato on the same tone: the panel's magnitude-weighted value, and a
-// power-weighted one computed from the same spectra for comparison.
+// Spectral centroid with and without vibrato on the same tone: the panel's value (power-weighted since 2026-09-24),
+// and the old magnitude-weighted one computed from the same spectra for comparison.
 const { chromium } = require('playwright'); const path = require('path'), os = require('os'); const { execFileSync } = require('child_process');
 (async () => {
   for (const [label, spec] of [['no vibrato', {}], ['6 Hz ±25 ct', { vibRate: 6, vibCents: 25 }], ['6 Hz ±50 ct', { vibRate: 6, vibCents: 50 }], ['6 Hz ±100 ct', { vibRate: 6, vibCents: 100 }]]) {
@@ -12,11 +12,11 @@ const { chromium } = require('playwright'); const path = require('path'), os = r
     const r = await p.evaluate(async () => {
       // power-weighted centroid on the same frames: wrap vqCentroid to also compute it
       const pw = [], orig = vqCentroid;
-      vqCentroid = (db, binHz) => { let w = 0, s = 0; const lo = Math.ceil(50 / binHz), hi = Math.floor(6000 / binHz); let pk = -Infinity; for (let i = lo; i <= hi; i++) pk = Math.max(pk, db[i]); for (let i = lo; i <= hi; i++) { if (!(db[i] >= pk - 60)) continue; const q = Math.pow(10, db[i] / 10); w += i * binHz * q; s += q; } pw.push(w / s); return orig(db, binHz); };
+      vqCentroid = (db, binHz) => { let w = 0, s = 0; const lo = Math.ceil(50 / binHz), hi = Math.floor(6000 / binHz); let pk = -Infinity; for (let i = lo; i <= hi; i++) pk = Math.max(pk, db[i]); for (let i = lo; i <= hi; i++) { if (!(db[i] >= pk - 60)) continue; const q = Math.pow(10, db[i] / 20); w += i * binHz * q; s += q; } pw.push(w / s); return orig(db, binHz); };
       vqActive = true; const fr = await vqCapture(); vqActive = false; vqCentroid = orig;
-      return { mag: vqSummarize(fr).centroid, pow: vqMedian(pw) };
+      return { pow: vqSummarize(fr).centroid, mag: vqMedian(pw) };
     });
-    console.log(`${label.padEnd(14)} magnitude-weighted ${r.mag.toFixed(0)} Hz | power-weighted ${r.pow.toFixed(0)} Hz`);
+    console.log(`${label.padEnd(14)} panel (power-weighted) ${r.pow.toFixed(0)} Hz | old magnitude-weighted ${r.mag.toFixed(0)} Hz`);
     await b.close();
   }
   // expected: magnitude Σf·a/Σa = 633 Hz; power Σf·a²/Σa² for a = 1, .5, .33, .25 at 330·k

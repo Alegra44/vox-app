@@ -13,7 +13,10 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 | `noisemic.js [captures]` | Vibrato under that noise: the Analyzer's old capture loop on the processed mic (noise suppression on) and on an unprocessed mic, vs the Analyzer as it is now; plus how many dB the suppressor removes on each noise |
 | `vq.js vibui` | The Vibrato Analyzer panel with a real click: shown rate/depth/consistency, feedback, mic constraints |
 | `livevq.js [url]` | Production: a fresh account (deleted at exit) clicks Train → Expression → Vibrato and Voice Quality with known WAVs as the mic; logs every getUserMedia call's constraints and track settings |
-| `cvib.js` | Brightness with and without vibrato: the panel's magnitude-weighted centroid vs a power-weighted one on the same spectra |
+| `cvib.js` | Brightness with and without vibrato: the panel's power-weighted centroid vs the old magnitude-weighted one on the same spectra |
+| `bands.js` | Brightness reading bands at their edges: tones ½ dB/oct either side of 13 and 9 dB/oct, straight and ±50 / ±100 ct |
+| `regcoach.js` | Register Coach (not Voice Quality): its chest score and head/mixed/pushing frame split on tones set near each decision line, straight and with vibrato |
+| `regcoach2.js` | Register Coach vibrato bias by cause: today's score vs unsmoothed, and power-weighted with and without smoothing (test-only; app unchanged) |
 | `shotlang.js <wav>` | Screenshots of the result rows in each language |
 
 ## How each metric is computed
@@ -26,8 +29,12 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 - **Breathiness (HNR)**: per frame, 8192-point spectrum with no smoothing, f0/2 to 5 kHz. Bins within a quarter of the
   harmonic spacing of a harmonic are harmonic; the rest give the noise level per bin, assumed to lie under the harmonics
   too. HNR = (harmonic energy − noise under it) / (noise per bin × all bins). Median over the hold.
-- **Brightness**: spectral centroid, magnitude-weighted, 50 Hz–6 kHz (the Register Coach's definition), ignoring bins
-  60 dB under the frame's loudest; also shown as a multiple of f0, since it rises with the note.
+- **Brightness**: spectral centroid, **power**-weighted (energy), 50 Hz–6 kHz, ignoring bins 60 dB under the frame's
+  loudest; also shown as a multiple of f0. It was magnitude-weighted (the Register Coach's convention) until
+  2026-09-24, which read 7–13% high on notes with vibrato: vibrato spreads each harmonic over more bins, which leaves
+  its power unchanged but adds to a magnitude sum. Reading bands are a harmonic roll-off: steeper than 13 dB/oct =
+  dark, shallower than 9 dB/oct = bright (the old 2× / 4× magnitude bands as they fell at 220 Hz), turned into centroid
+  ratios for the sung note by `vqBrightBounds(f0)`, so they mean the same timbre at every pitch.
 - Voice Quality opens its own mic stream with echo cancellation, noise suppression and auto gain **off**; noise
   suppression would remove the breath noise the HNR looks for.
 
@@ -42,8 +49,13 @@ Breathiness (220 Hz tone, harmonics 1…⅕, white noise scaled to an exact in-b
 → measured 35.0/25.0/20.0/15.0/12.0/8.0/4.0/−0.1 dB; clean tone 70.1 dB (the 16-bit floor). With 6 Hz ±50 ct vibrato
 the harmonics smear within a 170 ms frame: 25 dB reads 22.6–23.3, 12 dB reads 11.7.
 
-Brightness: sine 440 → 440 Hz; 220 Hz ×10 harmonics 1/k² → 415 (expected 416), 1/k → 751 (751), flat → 1210 (1210);
-330 Hz 1/k → 1126 (1127); adding white noise to the 1/k tone raises it (751 → 1641 Hz).
+Brightness (power-weighted; straight / ±25 / ±50 / ±100 ct vibrato, 2 captures each): sine 440 → 440/440/440/441–443 Hz;
+220 Hz 1/k² → 243 (expected 243), vibrato +0.1…+0.7%; 1/k → 416 (416), ≤ +0.5%; flat → 1210 (1210), ≤ +0.3%;
+330 Hz 1, ½, ⅓, ¼ → 482 (482), ≤ +0.4%; 165 Hz 1/k, 36 harmonics → 426 (426), within ±0.3%. White noise on the 1/k
+tone raises it 416 → 439 Hz. Bands: tones rolling off at 16 / 11 / 6 dB/oct read dark / balanced / bright at 110, 220
+and 440 Hz, straight and with ±50 ct (18/18); at the edges (`bands.js`), tones at 13.5 / 12.5 / 9.5 / 8.5 dB/oct read
+1.068 / 1.094 / 1.279 / 1.426× at 220 Hz (expected 1.069 / 1.095 / 1.279 / 1.427), all within 0.5% with ±50 / ±100 ct,
+24/24 on the right side. Magnitude-weighted, the same 330 Hz tone read 633 / 679 / 699 / 713 Hz.
 
 Vibrato Analyzer mic (decided 2026-09-24): it now uses Voice Quality's capture (unprocessed mic, pitch behind the
 1.5 kHz low-pass). Tested with `noisemic.js` against its old capture on both mic settings, 6 Hz ±50 ct under noise at
