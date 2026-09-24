@@ -2,7 +2,7 @@
 // microphone (--use-file-for-fake-audio-capture), so it goes through the real getUserMedia → AnalyserNode path.
 // The panel's own capture and analysis run on it (vqCapture + vqSummarize), and the injected values are printed
 // next to the measured ones. No server needed: deploy/index.html is served on localhost by request interception.
-// Usage: node scripts/vq-verify/vq.js [vibrato|hnr|centroid|ui|all] [captures per signal, default 2]
+// Usage: node scripts/vq-verify/vq.js [vibrato|hnr|centroid|ui|vibui|all] [captures per signal, default 2]
 const { chromium } = require('playwright');
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os');
@@ -70,10 +70,10 @@ async function vibrato() {
     console.log(`${'4.5 Hz ±30 ct + 600 ms stall'.padEnd(30)} injected 4.5 Hz ±30 ct    measured ${rows.join(' | ')}`);
   }
   // The existing Vibrato Analyzer panel's own capture (captureVibratoTrace, shared mic) on the two signals that broke it
-  console.log('\n-- Vibrato Analyzer panel (captureVibratoTrace + the fixed analyzeVibrato), the two cases that used to fail');
+  console.log('\n-- Vibrato Analyzer panel (its capture, now the unprocessed low-passed one), the two cases that used to fail');
   for (const [label, spec] of [['4.5 Hz ±30 ct (was ±984)', { f0: 330, vibRate: 4.5, vibCents: 30 }], ['6 Hz ±50 ct + 15 ct/s drift (was 74)', { f0: 330, vibRate: 6, vibCents: 50, driftCentsPerSec: 15 }]]) {
     const { file } = gen('vib', { ...spec, harmonics: H });
-    const rows = await withMic(file, async page => { const r = []; for (let i = 0; i < RUNS; i++) r.push(await page.evaluate(async () => { const s = await captureVibratoTrace(4000), a = analyzeVibrato(s, analyser.fftSize / audioCtx.sampleRate); return a.ok ? `${a.rate} Hz ±${a.depth} ct` : 'none'; })); return r; });
+    const rows = await withMic(file, async page => { const r = []; for (let i = 0; i < RUNS; i++) r.push(await page.evaluate(async () => { vibratoActive = true; const s = await captureVibratoTrace(4000); vibratoActive = false; const a = analyzeVibrato(s, VQ_PITCH_WIN / audioCtx.sampleRate); return a.ok ? `${a.rate} Hz ±${a.depth} ct` : 'none'; })); return r; });
     console.log(`${label.padEnd(38)} measured ${rows.join(' | ')}`);
   }
 }
@@ -162,9 +162,25 @@ async function ui() {
   });
 }
 
+async function vibui() {
+  console.log('\n==== VIBRATO ANALYZER PANEL (real button click; sign-in gate stubbed)');
+  for (const [label, spec] of [['6 Hz ±50 ct', { f0: 330, vibRate: 6, vibCents: 50 }], ['straight tone', { f0: 330 }]]) {
+    const { file } = gen('vui', { ...spec, harmonics: [1, 0.5, 0.33, 0.25] });
+    await withMic(file, async page => {
+      await page.evaluate(() => { blockExercise = () => false; enterPanel('vibrato'); const g = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices); window.__streams = []; navigator.mediaDevices.getUserMedia = async c => { const st = await g(c); __streams.push({ c, st }); return st; }; });
+      await page.locator('#vibratoStartBtn').click(); await page.waitForTimeout(300);
+      const during = await page.locator('#vibratoStartLabel').innerText();
+      await page.waitForFunction(() => !vibratoActive, null, { timeout: 15000 });
+      const r = await page.evaluate(() => ({ rate: vibratoRateStat.textContent, depth: vibratoDepthStat.textContent, consistency: vibratoConsistencyStat.textContent, feedback: vibratoFeedback.textContent, wavePoints: vibratoPolyline.getAttribute('points').split(' ').filter(Boolean).length, mic: __streams.map(x => ({ audio: x.c.audio, tracks: x.st.getTracks().map(t => t.readyState) })) }));
+      console.log(`${label.padEnd(14)} injected ${spec.vibRate ? `${spec.vibRate} Hz ±${spec.vibCents} ct` : 'none'} | during "${during}" | shown: rate ${r.rate}, depth ${r.depth}, consistency ${r.consistency}, ${r.wavePoints} wave points\n  feedback: ${r.feedback}\n  mic: ${JSON.stringify(r.mic)}`);
+    });
+  }
+}
+
 (async () => {
   if (which === 'vibrato' || which === 'all') await vibrato();
   if (which === 'hnr' || which === 'all') await hnr();
   if (which === 'centroid' || which === 'all') await centroid();
   if (which === 'ui' || which === 'all') await ui();
+  if (which === 'vibui' || which === 'all') await vibui();
 })().catch(e => { console.error(e); process.exitCode = 1; });

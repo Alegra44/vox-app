@@ -9,7 +9,9 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 |---|---|
 | `gen.py <out.wav> <json>` | Writes a test signal: f0, harmonic amplitudes, sinusoidal vibrato (rate, ± cents), linear pitch drift, white noise RMS |
 | `vq.js [vibrato\|hnr\|centroid\|ui\|all] [captures]` | Injected vs measured for each metric, via the panel's own `vqCapture` + `vqSummarize`; a forced 600 ms main-thread stall; the Vibrato Analyzer panel's own capture on the cases that used to break it; then the panel with a real click, en/fr/es/tr text, stopping mid-hold (mic released), 390 px width |
-| `coach.js <wav>` | Vibrato Analyzer capture (shared, noise-suppressed mic) vs Voice Quality capture (unprocessed) on one WAV |
+| `noisy.py <out.wav> <json>` | A clean vibrato tone plus realistic background noise at a set SNR: pink (room), rumble (brown noise + 60 Hz hum), babble (4 talkers), white |
+| `noisemic.js [captures]` | Vibrato under that noise: the Analyzer's old capture loop on the processed mic (noise suppression on) and on an unprocessed mic, vs the Analyzer as it is now; plus how many dB the suppressor removes on each noise |
+| `vq.js vibui` | The Vibrato Analyzer panel with a real click: shown rate/depth/consistency, feedback, mic constraints |
 | `shotlang.js <wav>` | Screenshots of the result rows in each language |
 
 ## How each metric is computed
@@ -41,6 +43,11 @@ the harmonics smear within a 170 ms frame: 25 dB reads 22.6–23.3, 12 dB reads 
 Brightness: sine 440 → 440 Hz; 220 Hz ×10 harmonics 1/k² → 415 (expected 416), 1/k → 751 (751), flat → 1210 (1210);
 330 Hz 1/k → 1126 (1127); adding white noise to the 1/k tone raises it (751 → 1641 Hz).
 
+Vibrato Analyzer mic (decided 2026-09-24): it now uses Voice Quality's capture (unprocessed mic, pitch behind the
+1.5 kHz low-pass). Tested with `noisemic.js` against its old capture on both mic settings, 6 Hz ±50 ct under noise at
+20→0 dB SNR: the plain unprocessed switch was better with room noise, rumble and talkers but halved the depth under
+hiss at ≤10 dB (±20–29); the suppressed mic read ±92–134 with talkers at 0 dB; the low-passed unprocessed path stayed
+within ~2 ct in every case. Chrome's suppressor removed 16–20 dB of stationary noise but only 8 dB of babble.
+
 Known limits: the reading bands (HNR 20 / 12 dB; brightness 2× / 4× f0) are rough guides for this tool, not norms from
-real voices. The Vibrato Analyzer panel still reads the shared noise-suppressed mic, whose pitch trace is jitterier:
-after the fix its depth reads +2 to +7 ct high (±50 → 51–54, ±30 → 36–38); Voice Quality's unprocessed stream doesn't.
+real voices. Noise tests use synthesized noise and Chrome's own suppressor; Safari, Firefox and phones process the mic differently.
