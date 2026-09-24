@@ -17,6 +17,7 @@ reported back before the next phase starts. Production deploys need explicit app
 | 7 | DONE (live 2026-09-24, dpl_GSwwHVrem2Bysbn8hgh7j61BWfPi) | Reporting: Performance Report, "Why Did I Fail?", Readiness Engine, Choir DNA, Choir Passport |
 | 8 | DONE (live 2026-09-24, dpl_GsSgU8oxkt8ZYXjJkLpRP7iJwnJX) | Monetization: gate the entire Choir World feature set (including the Phase 1–3 rehearsal view, trainers, and A Cappella Mode, which are currently unrestricted) behind the Choir/Studio plan, with an honest locked-preview for lower tiers |
 | 9 | DONE (live 2026-09-24, dpl_8mrkgf1Do11dweAKXt2wVU4pWqFB) | Hooks: Home card, Songs hub entry, Journey milestone, new achievements |
+| 10 | BUILT, verified locally (not deployed) | Growth Hooks: Personal Competition delta on the Home card, Your Choir WAV export |
 
 ### Phase 6 known issue: recorder latency (uncompensated)
 
@@ -57,6 +58,19 @@ stamped by the run that did it (`cwStampFirsts` inside `rdSync` / `rdCountTake`)
   held). Passes from before Phase 9 count from the stored stage bests, without a date.
 - **Achievements**: `cw_boss` (first Choir Boss beaten), `cw_ready` (any part Ready), `cw_yourchoir`
   (first Your Choir take). A toast announces each one (and the milestone) as soon as the run ends, before the save (so a slow or failed save cannot swallow it).
+
+### Phase 10 growth hooks
+
+- **Delta on the Home card** (`cwDeltaText`, `#homeCwDelta`): when a part's status changes, `rdSync` keeps the part's
+  last saved record from before that run as `choir_readiness.parts[song][part].snap` = {ts, status, levels, hm, bosses}
+  (one per part, replaced at the next status change; ts is null and the counts 0 if the part had no record yet). The
+  card shows what went up since then, e.g. "Since you were Learning (today): +2 Harmony Memory stages · +1 boss beaten";
+  nothing when there is no snapshot or nothing went up. The "when" is relative (today, yesterday, 3 days ago, last
+  week, 2 weeks ago) and becomes a date after 5 weeks. Stored in the existing jsonb column, so no migration.
+- **Your Choir export** (`ycExport`, `#ycExportBtn`): plays the stacked takes once with `ycPlay()` (so faders, Mute/Solo
+  and the output trim apply, and you hear it) while an AudioWorklet on `choirOutNode` copies the samples from the
+  downbeat to the song end; they're saved as a 16-bit mono PCM WAV at the context's sample rate. It runs in real time.
+  Stopping early saves nothing. Check with `p10.js`, which decodes the file outside the browser with `wavcheck.py`.
 
 ## Known issues (app-wide)
 

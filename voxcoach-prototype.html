@@ -3597,7 +3597,9 @@
       <div class="transport-row">
         <button class="solid-btn teal" id="ycPlayBtn">▶ Play my choir</button>
         <button class="ghost-btn" id="ycStopBtn" data-i18n="yc_stop_btn">Stop</button>
+        <button class="ghost-btn" id="ycExportBtn">⬇ Download my choir (WAV)</button>
       </div>
+      <p class="fine-print" id="ycExportNote" style="margin-top:6px;"></p>
       <p class="fine-print" id="ycStatus" aria-live="polite" style="margin-top:6px;"></p>
       <p class="fine-print" style="margin-top:8px;" data-i18n="yc_storage_note">Your recordings are saved on this device only.</p>
     </div>
@@ -5535,6 +5537,22 @@ const TRANSLATIONS = {
     yc_none:'Record at least one part first.',
     yc_playing_tpl:'Playing {n} recorded parts: {parts}',
     yc_deleted_tpl:'{part} deleted.',
+    // Growth hooks (phase 10)
+    home_cw_delta_since_tpl:"Since you were {status} ({when}): {items}",
+    home_cw_delta_start_tpl:"Since you started: {items}",
+    home_cw_delta_levels_one:"+{n} rehearsal level played",
+    home_cw_delta_levels_other:"+{n} rehearsal levels played",
+    home_cw_delta_hm_one:"+{n} Harmony Memory stage",
+    home_cw_delta_hm_other:"+{n} Harmony Memory stages",
+    home_cw_delta_bosses_one:"+{n} boss beaten",
+    home_cw_delta_bosses_other:"+{n} bosses beaten",
+    yc_export_btn:"⬇ Download my choir (WAV)",
+    yc_exporting_btn:"⏺ Saving…",
+    yc_export_note:"Downloading plays your choir once, start to end, and saves exactly what you hear (mixer levels, Mute and Solo included) as a WAV file.",
+    yc_exporting_tpl:"Saving {n} recorded parts to a WAV file — let it play to the end ({s} s).",
+    yc_exported_tpl:"Saved {file}: {n} parts ({parts}), {s} s.",
+    yc_export_cancelled:"Stopped before the end — no file was saved.",
+    yc_export_failed:"The file couldn’t be saved in this browser.",
     yc_storage_note:'Your recordings are saved on this device only.',
     tt_title:'⏱️ Entrance & Cutoff Trainer',
     tt_mode_entrance:'Entrance Trainer',
@@ -6823,6 +6841,22 @@ const TRANSLATIONS = {
     yc_none:'Enregistrez d’abord au moins une voix.',
     yc_playing_tpl:'Lecture de {n} voix enregistrées : {parts}',
     yc_deleted_tpl:'{part} supprimée.',
+    // Growth hooks (phase 10)
+    home_cw_delta_since_tpl:"Depuis le statut « {status} » ({when}) : {items}",
+    home_cw_delta_start_tpl:"Depuis vos débuts : {items}",
+    home_cw_delta_levels_one:"+{n} niveau de répétition joué",
+    home_cw_delta_levels_other:"+{n} niveaux de répétition joués",
+    home_cw_delta_hm_one:"+{n} étape de Mémoire harmonique",
+    home_cw_delta_hm_other:"+{n} étapes de Mémoire harmonique",
+    home_cw_delta_bosses_one:"+{n} boss battu",
+    home_cw_delta_bosses_other:"+{n} boss battus",
+    yc_export_btn:"⬇ Télécharger ma chorale (WAV)",
+    yc_exporting_btn:"⏺ Enregistrement…",
+    yc_export_note:"Le téléchargement joue votre chorale une fois, du début à la fin, et enregistre exactement ce que vous entendez (niveaux du mixeur, Muet et Solo compris) dans un fichier WAV.",
+    yc_exporting_tpl:"Enregistrement de {n} voix dans un fichier WAV — laissez jouer jusqu’à la fin ({s} s).",
+    yc_exported_tpl:"{file} enregistré : {n} voix ({parts}), {s} s.",
+    yc_export_cancelled:"Arrêté avant la fin — aucun fichier n’a été enregistré.",
+    yc_export_failed:"Impossible d’enregistrer le fichier dans ce navigateur.",
     yc_storage_note:'Vos enregistrements sont conservés uniquement sur cet appareil.',
     tt_title:'⏱️ Entrées et coupures',
     tt_mode_entrance:'Entraîneur d’entrées',
@@ -8111,6 +8145,22 @@ const TRANSLATIONS = {
     yc_none:'Graba al menos una voz primero.',
     yc_playing_tpl:'Reproduciendo {n} voces grabadas: {parts}',
     yc_deleted_tpl:'{part} borrada.',
+    // Growth hooks (phase 10)
+    home_cw_delta_since_tpl:"Desde que estabas en «{status}» ({when}): {items}",
+    home_cw_delta_start_tpl:"Desde que empezaste: {items}",
+    home_cw_delta_levels_one:"+{n} nivel de ensayo tocado",
+    home_cw_delta_levels_other:"+{n} niveles de ensayo tocados",
+    home_cw_delta_hm_one:"+{n} etapa de Memoria armónica",
+    home_cw_delta_hm_other:"+{n} etapas de Memoria armónica",
+    home_cw_delta_bosses_one:"+{n} jefe vencido",
+    home_cw_delta_bosses_other:"+{n} jefes vencidos",
+    yc_export_btn:"⬇ Descargar mi coro (WAV)",
+    yc_exporting_btn:"⏺ Guardando…",
+    yc_export_note:"Al descargar, tu coro suena una vez de principio a fin y se guarda exactamente lo que oyes (niveles del mezclador, Silencio y Solo incluidos) en un archivo WAV.",
+    yc_exporting_tpl:"Guardando {n} voces grabadas en un archivo WAV — déjalo sonar hasta el final ({s} s).",
+    yc_exported_tpl:"Guardado {file}: {n} voces ({parts}), {s} s.",
+    yc_export_cancelled:"Se detuvo antes del final — no se guardó ningún archivo.",
+    yc_export_failed:"No se pudo guardar el archivo en este navegador.",
     yc_storage_note:'Tus grabaciones se guardan solo en este dispositivo.',
     tt_title:'⏱️ Entradas y cortes',
     tt_mode_entrance:'Entrenador de entradas',
@@ -9399,6 +9449,22 @@ const TRANSLATIONS = {
     yc_none:'Önce en az bir parti kaydedin.',
     yc_playing_tpl:'Kaydedilmiş {n} parti çalıyor: {parts}',
     yc_deleted_tpl:'{part} silindi.',
+    // Growth hooks (phase 10)
+    home_cw_delta_since_tpl:"«{status}» durumundan bu yana ({when}): {items}",
+    home_cw_delta_start_tpl:"Başladığınızdan bu yana: {items}",
+    home_cw_delta_levels_one:"+{n} prova seviyesi tamamlandı",
+    home_cw_delta_levels_other:"+{n} prova seviyesi tamamlandı",
+    home_cw_delta_hm_one:"+{n} Armoni Hafızası aşaması",
+    home_cw_delta_hm_other:"+{n} Armoni Hafızası aşaması",
+    home_cw_delta_bosses_one:"+{n} boss yenildi",
+    home_cw_delta_bosses_other:"+{n} boss yenildi",
+    yc_export_btn:"⬇ Koromu indir (WAV)",
+    yc_exporting_btn:"⏺ Kaydediliyor…",
+    yc_export_note:"İndirme, koronuzu baştan sona bir kez çalar ve duyduğunuzu aynen (mikser seviyeleri, Sessiz ve Solo dahil) bir WAV dosyasına kaydeder.",
+    yc_exporting_tpl:"{n} kayıtlı partisyon WAV dosyasına kaydediliyor — sonuna kadar çalmasına izin verin ({s} sn).",
+    yc_exported_tpl:"{file} kaydedildi: {n} partisyon ({parts}), {s} sn.",
+    yc_export_cancelled:"Sona gelmeden durduruldu — dosya kaydedilmedi.",
+    yc_export_failed:"Dosya bu tarayıcıda kaydedilemedi.",
     yc_storage_note:'Kayıtlarınız yalnızca bu cihazda saklanır.',
     tt_title:'⏱️ Giriş ve Kesiş Çalışması',
     tt_mode_entrance:'Giriş Çalışması',
@@ -11725,7 +11791,7 @@ let choirGainNodes = {};
 let choirActiveOscillators = [];
 // Your Choir (phase 6): recorded takes playing into the part GainNodes, stopped with the synth oscillators.
 // playing = stacked playback of your takes; recording = {part, song, ...} while a take is being recorded.
-const yourChoir = {sources:[], playing:false, recording:null, mem:null, buffers:{}, raf:null};
+const yourChoir = {sources:[], playing:false, recording:null, exporting:null, mem:null, buffers:{}, raf:null}; // exporting: phase 10 WAV export in progress
 let choirIsPlaying = false;
 let choirLoopTimeout = null; // cancel function from atAudioTime()
 // Runs fn once the audio clock reaches ctxTime. A plain wall-clock timer drifts from the audio clock
@@ -13464,10 +13530,91 @@ function ycDelete(part){
 }
 function ycSetStatus(text){ const el = document.getElementById('ycStatus'); if(el) el.textContent = text; }
 
+/* ---- Choir World phase 10: export Your Choir as a WAV file ---- */
+// The stacked playback itself is what gets saved: ycPlay() runs as usual (faders, Mute/Solo and the output trim
+// all apply, and you hear it), and a small AudioWorklet on choirOutNode, the point where every part meets before
+// the speakers, copies those exact samples from the song's downbeat to its end. They're written as a
+// 16-bit mono PCM WAV at the audio context's sample rate. It takes as long as the song does.
+let ycTapReady = null;
+async function ycTapOutput(onBlock){
+  if(!ycTapReady){
+    const src = "class VcTap extends AudioWorkletProcessor{process(inputs){const c=inputs[0][0];if(c)this.port.postMessage({f:currentFrame,d:c.slice(0)});return true;}}registerProcessor('vc-tap',VcTap);";
+    ycTapReady = audioCtx.audioWorklet.addModule(URL.createObjectURL(new Blob([src], {type:'application/javascript'})));
+  }
+  await ycTapReady;
+  // channelCount 1 (explicit): a stereo take is mixed down to mono, a mono one passes through unchanged.
+  const node = new AudioWorkletNode(audioCtx, 'vc-tap', {numberOfInputs:1, numberOfOutputs:1, channelCount:1, channelCountMode:'explicit'});
+  const sink = audioCtx.createGain(); sink.gain.value = 0; // keeps the node pulled by the graph; adds nothing to the speakers
+  choirOutNode.connect(node); node.connect(sink).connect(audioCtx.destination);
+  node.port.onmessage = e=>onBlock(e.data.f, e.data.d);
+  return ()=>{ node.port.onmessage = null; try{ choirOutNode.disconnect(node); }catch(e){} node.disconnect(); sink.disconnect(); };
+}
+function ycWavBlob(samples, sr){
+  const buf = new ArrayBuffer(44 + samples.length*2), v = new DataView(buf);
+  const str = (o, s)=>{ for(let i=0;i<s.length;i++) v.setUint8(o+i, s.charCodeAt(i)); };
+  str(0, 'RIFF'); v.setUint32(4, 36 + samples.length*2, true); str(8, 'WAVE');
+  str(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); // PCM, mono
+  v.setUint32(24, sr, true); v.setUint32(28, sr*2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  str(36, 'data'); v.setUint32(40, samples.length*2, true);
+  for(let i=0;i<samples.length;i++){ const s = Math.max(-1, Math.min(1, samples[i])); v.setInt16(44 + i*2, s<0 ? s*0x8000 : s*0x7fff, true); }
+  return new Blob([buf], {type:'audio/wav'});
+}
+async function ycExport(){
+  if(!requireChoirWorld('Your Choir')) return;
+  if(yourChoir.recording || yourChoir.exporting) return;
+  const song = currentSongId, takes = ycTakes(song), parts = YC_PARTS.filter(p=>takes[p]);
+  if(!parts.length){ ycSetStatus(t('yc_none')); return; }
+  await initAudioOnly();
+  if(!audioCtx.audioWorklet || !window.AudioWorkletNode){ ycSetStatus(t('yc_export_failed')); return; }
+  ensureChoirGainNodes();
+  if(choirIsPlaying || yourChoir.playing) stopChoir();
+  const sr = audioCtx.sampleRate, ex = yourChoir.exporting = {out:null, from:0, got:0};
+  renderYourChoir();
+  let untap = null;
+  try{
+    // Blocks before the downbeat are dropped; ex.out is only allocated once ycPlay() has fixed the song clock.
+    untap = await ycTapOutput((f, d)=>{
+      if(!ex.out) return;
+      const o = f - ex.from;
+      for(let i=Math.max(0, -o); i<d.length && o+i<ex.out.length; i++) ex.out[o+i] = d[i];
+      ex.got = Math.max(ex.got, o + d.length);
+    });
+    await ycPlay();
+    if(!yourChoir.playing) throw new Error('playback did not start');
+    ex.from = Math.round(choirStartCtxTime*sr);
+    ex.out = new Float32Array(Math.round(choirEndCtxTime*sr) - ex.from);
+    const endAt = choirEndCtxTime;
+    const heard = parts.filter(p=>computeEffectiveGain(p)>0); // the file only holds the parts you can hear (Mute/Solo)
+    ycSetStatus(t('yc_exporting_tpl').replace('{n}', heard.length).replace('{s}', fmtNum(ex.out.length/sr, 1)));
+    // Done when the last sample has arrived; stopped early if playback ended before the song did.
+    for(;;){
+      await new Promise(r=>setTimeout(r, 50));
+      if(ex.got>=ex.out.length) break;
+      if(!yourChoir.playing && audioCtx.currentTime < endAt - 0.02){ ycSetStatus(t('yc_export_cancelled')); return; }
+      if(audioCtx.currentTime > endAt + 2) throw new Error('recorded audio stopped arriving');
+    }
+    untap(); untap = null;
+    const name = `your-choir-${song}-${new Date().toISOString().slice(0,10)}.wav`;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(ycWavBlob(ex.out, sr));
+    a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href), 60000);
+    ycSetStatus(t('yc_exported_tpl').replace('{file}', name).replace('{n}', heard.length).replace('{parts}', heard.map(partName).join(', ')).replace('{s}', fmtNum(ex.out.length/sr, 1)));
+  }catch(e){
+    console.error('export error', e);
+    ycSetStatus(t('yc_export_failed'));
+  }finally{
+    if(untap) untap();
+    yourChoir.exporting = null;
+    renderYourChoir();
+  }
+}
+
 function renderYourChoir(){
   const box = document.getElementById('ycParts');
   if(!box) return;
-  const takes = ycTakes(), busy = !!yourChoir.recording, rec = yourChoir.recording;
+  const takes = ycTakes(), busy = !!yourChoir.recording, rec = yourChoir.recording, locked = busy || yourChoir.playing || !!yourChoir.exporting;
   document.getElementById('ycDesc').textContent = t('yc_desc');
   document.getElementById('ycSummary').textContent = t('yc_summary_tpl')
     .replace('{n}', YC_PARTS.filter(p=>takes[p]).length).replace('{song}', `${SONGS[currentSongId].name} (${SONGS[currentSongId].key})`);
@@ -13480,14 +13627,18 @@ function renderYourChoir(){
     return `<div class="record-row yc-row" data-yc-part="${p}" data-recorded="${!!tk}">
       <span class="record-label"><span style="color:${PART_COLORS[p]};">●</span> <b>${partName(p)}</b> · ${state}</span>
       <span class="yc-actions">
-        <button class="practice-chip" data-yc-rec="${p}"${busy||yourChoir.playing?' disabled':''}>${t(tk ? 'yc_rerecord_btn' : 'yc_record_btn')}</button>
-        ${tk ? `<button class="practice-chip" data-yc-del="${p}"${busy||yourChoir.playing?' disabled':''}>${t('yc_delete_btn')}</button>` : ''}
+        <button class="practice-chip" data-yc-rec="${p}"${locked?' disabled':''}>${t(tk ? 'yc_rerecord_btn' : 'yc_record_btn')}</button>
+        ${tk ? `<button class="practice-chip" data-yc-del="${p}"${locked?' disabled':''}>${t('yc_delete_btn')}</button>` : ''}
       </span></div>`;
   }).join('');
   const play = document.getElementById('ycPlayBtn');
   play.textContent = t(yourChoir.playing ? 'yc_playing_btn' : 'yc_play_btn');
   play.disabled = busy;
   document.getElementById('ycStopBtn').textContent = t(busy ? 'yc_stop_rec_btn' : 'yc_stop_btn');
+  const exp = document.getElementById('ycExportBtn');
+  exp.textContent = t(yourChoir.exporting ? 'yc_exporting_btn' : 'yc_export_btn');
+  exp.disabled = locked;
+  document.getElementById('ycExportNote').textContent = t('yc_export_note');
 }
 document.getElementById('ycParts').addEventListener('click', e=>{
   const rec = e.target.closest('[data-yc-rec]'), del = e.target.closest('[data-yc-del]');
@@ -13496,6 +13647,7 @@ document.getElementById('ycParts').addEventListener('click', e=>{
 });
 document.getElementById('ycPlayBtn').addEventListener('click', ()=>{ if(!yourChoir.playing) ycPlay(); });
 document.getElementById('ycStopBtn').addEventListener('click', ycStop);
+document.getElementById('ycExportBtn').addEventListener('click', ycExport);
 renderYourChoir();
 
 // Director dashboard — clearly-labeled sample data (no real multi-user backend in this prototype)
@@ -13714,9 +13866,15 @@ function rdRunSummary(kind, slot, run){
 async function rdSync(song, part, extra={}){
   const inp = rdInputs(song, part), status = rdStatus(inp), cr = rdAll();
   const prev = rdStored(song, part), prevStatus = prev ? prev.status : 'learning';
+  // Phase 10: on a status change, keep the part as it stood before this run (its last saved record) as the
+  // one snapshot the Home card measures progress from. No saved record yet: all zero, since you started (ts null).
+  const snap = status===prevStatus ? (prev && prev.snap) || null
+    : {ts:prev ? Date.parse(prev.updated) || null : null, status:prevStatus,
+       levels:prev ? (prev.levels || []).length : 0, hm:prev ? prev.hmPassed || 0 : 0, bosses:prev ? prev.bossesBeaten || 0 : 0};
   (cr.parts[song] = cr.parts[song] || {})[part] = {
     levels:inp.levels, hm:inp.hm, bosses:inp.bosses, hmPassed:inp.hmPassed, bossesBeaten:inp.bossesBeaten,
     wins:inp.wins + (extra.win ? 1 : 0), losses:inp.losses + (extra.loss ? 1 : 0), status, updated:new Date().toISOString(),
+    ...(snap ? {snap} : {}),
   };
   if(status!==prevStatus) cr.log.push({ts:Date.now(), song, part, from:prevStatus, status});
   if(extra.run){
@@ -13925,6 +14083,25 @@ function cwAnnounceNew(){
   if(msgs.length) showToast(msgs.join(' · '));
 }
 
+// Phase 10: what went up since the part's snapshot (taken at its last status change), e.g.
+// "Since you were Learning (last week): +2 Harmony Memory stages". Empty when there's no snapshot or no change.
+function cwWhen(ts){
+  if(!ts) return null;
+  const day = d=>{ const x = new Date(d); x.setHours(0,0,0,0); return x.getTime(); };
+  const days = Math.round((day(Date.now()) - day(ts))/86400000);
+  const rtf = new Intl.RelativeTimeFormat(localeForLang(), {numeric:'auto'});
+  return days<7 ? rtf.format(-days, 'day') : days<35 ? rtf.format(-Math.round(days/7), 'week') : cpDate(ts);
+}
+function cwDeltaText(song, part, inp){
+  const snap = (rdStored(song, part) || {}).snap;
+  if(!snap) return '';
+  const items = [['levels', inp.levels.length - snap.levels], ['hm', inp.hmPassed - snap.hm], ['bosses', inp.bossesBeaten - snap.bosses]]
+    .filter(([, n])=>n>0).map(([k, n])=>t(`home_cw_delta_${k}_${n===1 ? 'one' : 'other'}`).replace('{n}', n.toLocaleString(localeForLang())));
+  if(!items.length) return '';
+  const when = cwWhen(snap.ts), status = t('rd_status_'+snap.status);
+  return (when ? t('home_cw_delta_since_tpl').replace('{when}', when) : t('home_cw_delta_start_tpl')).replace('{status}', status)
+    .replace('{items}', items.join(' · '));
+}
 function renderHomeChoirCard(){
   const card = document.getElementById('homeChoirCard');
   if(!card) return;
@@ -13955,9 +14132,11 @@ function renderHomeChoirCard(){
       .replace('{h}', Math.min(inp.hmPassed, RD_READY.hm)).replace('{H}', RD_READY.hm)
       .replace('{b}', Math.min(inp.bossesBeaten, RD_READY.bosses)).replace('{B}', RD_READY.bosses)
     : t('home_cw_next_ready');
+  const delta = cwDeltaText(song, part, inp);
   card.innerHTML = `<div class="step-label">${t('cw_label')} <span class="rd-status ${status}">${t('rd_status_'+status)}</span></div>
     ${h2(t('home_cw_status_'+status+'_tpl').replace('{part}', partName(part)))}
     <p class="desc">${songTitle(song)} · ${rdDetailText(inp)}</p>
+    ${delta ? `<p class="desc" id="homeCwDelta" style="margin-top:6px;color:var(--brass);">📈 ${delta}</p>` : ''}
     <p class="desc" style="margin-top:6px;color:var(--teal);">${next}</p>
     <button class="solid-btn teal" data-cw-go="${song}|${part}" style="margin-top:14px;">${t('home_cw_continue_btn')}</button>`;
 }
