@@ -16,7 +16,7 @@ reported back before the next phase starts. Production deploys need explicit app
 | 6 | DONE (live 2026-09-23, dpl_Hm1FPXgu1U4cVt8immnEg4daYXUn; see known issue below) | "Your Choir" in Choir Workspace: record each of the 5 parts with Studio Mode's recorder (count-in, synth guide for the part, earlier takes play back), stacked playback through the workspace mixer GainNodes |
 | 7 | DONE (live 2026-09-24, dpl_GSwwHVrem2Bysbn8hgh7j61BWfPi) | Reporting: Performance Report, "Why Did I Fail?", Readiness Engine, Choir DNA, Choir Passport |
 | 8 | DONE (live 2026-09-24, dpl_GsSgU8oxkt8ZYXjJkLpRP7iJwnJX) | Monetization: gate the entire Choir World feature set (including the Phase 1–3 rehearsal view, trainers, and A Cappella Mode, which are currently unrestricted) behind the Choir/Studio plan, with an honest locked-preview for lower tiers |
-| 9 | | Hooks: Home card, Songs hub entry, Journey milestone, new achievements |
+| 9 | BUILT, verified locally, NOT deployed | Hooks: Home card, Songs hub entry, Journey milestone, new achievements |
 
 ### Phase 6 known issue: recorder latency (uncompensated)
 
@@ -39,6 +39,24 @@ is unchanged: `requireChoirFeature` still lets trial, Choir, Monthly and Yearly 
 Choir World action checks `requireChoirWorld()` itself, so hiding the cards is only the view. A
 subscriber who is still inside their first 21 days keeps full access until the trial window ends,
 whatever their plan.
+
+### Phase 9 hooks
+
+All of them read the readiness already stored in `user_progress.choir_readiness`; nothing new is measured.
+The only new data is `choir_readiness.firsts` ({hmPass, bossWin, ready, ycTake}, each with a timestamp),
+stamped by the run that did it (`cwStampFirsts` inside `rdSync` / `rdCountTake`), so no migration.
+
+- **Home card** (`#homeChoirCard`, `renderHomeChoirCard`): the most recently updated part across both
+  songs ("Your Alto is Developing — continue rehearsing"), its real counts and what is still missing for
+  Ready, with a button into I Am the Part on that song and part. No readiness yet: an entry card. Locked
+  tiers (Phase 8 rules): an upgrade card that names the Choir plan, shows readiness saved during the
+  trial if any, and links to pricing. Hidden when signed out (the signed-out card already covers it).
+- **Songs hub**: Choir World is its own featured card above the grid (I Am the Part, Choir Workspace,
+  Choir Passport, plus a "last rehearsed" status line for unlocked users); the old I Am the Part tile is gone.
+- **Journey milestone** (`#journeyChoirMilestone`): the first Harmony Memory stage passed (≥75% of notes
+  held). Passes from before Phase 9 count from the stored stage bests, without a date.
+- **Achievements**: `cw_boss` (first Choir Boss beaten), `cw_ready` (any part Ready), `cw_yourchoir`
+  (first Your Choir take). A toast announces each one (and the milestone) once its save returns.
 
 ## Known issues (app-wide)
 

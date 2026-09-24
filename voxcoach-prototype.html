@@ -355,6 +355,8 @@
   .cw-preview, .cw-lock-only{display:none !important;}
   body.cw-locked .cw-preview{display:block !important;}
   body.cw-locked .cw-lock-only{display:inline-block !important;}
+  .cw-hub-feature{margin-top:18px;border-color:rgba(79,214,196,0.45);}
+  .hc-desc.cw-hub-status{color:var(--teal);margin-top:-6px;}
   body.cw-locked .cw-gated,
   body.cw-locked #panel-partrehearsal > :not(.journey-hero):not(.cw-preview),
   body.cw-locked #panel-choirpassport > :not(.journey-hero):not(.cw-preview){display:none !important;}
@@ -1579,6 +1581,9 @@
       <div id="homeTodaysReportRows"></div>
     </div>
 
+    <!-- Choir World status (phase 9): filled from the stored readiness by renderHomeChoirCard() -->
+    <div class="key-card" id="homeChoirCard" style="display:none;margin-bottom:16px;"></div>
+
     <div class="home-secondary-list" id="homeSecondaryList">
       <div class="home-secondary-row">
         <div class="hsr-icon">↻</div>
@@ -1675,16 +1680,21 @@
       <div class="j-title" data-i18n="hub_songs_title">🎵 Songs</div>
       <div class="j-sub" data-i18n="hub_songs_sub">Practice a real song, pick a part, pick a mode.</div>
     </div>
+    <div class="hub-category-card cw-hub-feature">
+      <div class="hc-title"><span data-i18n="cw_label">🎼 Choir World</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
+      <div class="hc-desc" data-i18n="cw_hub_desc">Rehearse one part while the rest of the choir sings around you: a guide that fades over 5 levels, Harmony Memory, Choir Bosses, Your Choir recordings, and a readiness status for every part.</div>
+      <div class="hc-desc cw-hub-status" id="cwHubStatus" style="display:none;"></div>
+      <div class="hc-btn-row">
+        <button class="solid-btn teal" data-enter-panel="partrehearsal" data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</button>
+        <button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_songs_choir_title">Choir Workspace</button>
+        <button class="ghost-btn" data-enter-panel="choirpassport" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
+      </div>
+    </div>
     <div class="hub-category-grid">
       <div class="hub-category-card">
         <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
         <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
         <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title"><span data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
-        <div class="hc-desc" data-i18n="hub_songs_rehearsal_desc">Rehearse one part while the others play around you — your guide fades out over 5 real levels, from Learn to Performance.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="partrehearsal" data-i18n="hub_open_btn">Open</button></div>
       </div>
       <div class="hub-category-card">
         <div class="hc-title" data-i18n="hub_songs_studio_title">🎙️ Studio Mode</div>
@@ -1870,6 +1880,9 @@
           <button class="ghost-btn" id="curriculumDoneBtn" data-i18n="journey_mark_done_btn">Mark done</button>
         </div>
       </div>
+
+      <!-- Choir World milestone (phase 9): filled by renderJourneyChoirMilestone() -->
+      <div class="key-card" id="journeyChoirMilestone" style="margin-top:16px;"></div>
 
       <div class="xp-level-row">
         <div class="key-card xp-card" style="margin:0;"><div class="label" style="font-size:11px;text-transform:uppercase;color:var(--muted);" data-i18n="journey_level_label">Level</div><div class="big-val" id="journeyLevelVal">—</div></div>
@@ -5461,6 +5474,31 @@ const TRANSLATIONS = {
     cw_hub_tag:"CHOIR PLAN",
     cw_feature_rehearsal:"🎙️ I Am the Part",
     cw_feature_acappella:"🎧 A Cappella Mode",
+    // Choir World hooks (phase 9)
+    home_cw_status_learning_tpl:"Your {part} is Learning — keep rehearsing",
+    home_cw_status_developing_tpl:"Your {part} is Developing — continue rehearsing",
+    home_cw_status_ready_tpl:"Your {part} is Ready — keep it sharp",
+    home_cw_next_learning_tpl:"Next: play through {dl} rehearsal levels, pass Harmony Memory stage 1, or beat any Choir Boss to reach Developing.",
+    home_cw_next_developing_tpl:"Toward Ready: levels played {l}/{L} · Harmony Memory stages {h}/{H} · bosses beaten {b}/{B}.",
+    home_cw_next_ready:"Every Ready check is done for this part. Try another part, or the other song.",
+    home_cw_continue_btn:"Continue rehearsing",
+    home_cw_empty_title:"Sing your part with a full choir around you",
+    home_cw_empty_desc:"Pick a part in I Am the Part and rehearse it while the other parts sing. Your readiness for each part builds from real runs and shows up here.",
+    home_cw_empty_btn:"Start rehearsing",
+    home_cw_locked_saved_tpl:"Your readiness is saved: {part} on {song} — {status}.",
+    cw_hub_desc:"Rehearse one part while the rest of the choir sings around you: a guide that fades over 5 levels, Harmony Memory, Choir Bosses, Your Choir recordings, and a readiness status for every part.",
+    cw_hub_status_tpl:"Last rehearsed: {part} on {song} — {status}",
+    journey_cw_label:"🎼 Choir World milestone",
+    journey_cw_title:"Hold your part with the choir",
+    journey_cw_desc_tpl:"Pass any Harmony Memory stage in I Am the Part: sing your part while the others sing around you, and hold at least {pct}% of its notes in tune.",
+    journey_cw_open_btn:"Open I Am the Part",
+    journey_cw_done_tpl:"Done on {date}: {part} on {song}, Harmony Memory stage {stage}, {score}% of notes held.",
+    journey_cw_done_nodate_tpl:"Done: {part} on {song}.",
+    journey_cw_toast:"🎼 Journey milestone reached: you held your part with the choir.",
+    achievement_cw_boss:"First Choir Boss Defeated",
+    achievement_cw_ready:"A Part Is Ready",
+    achievement_cw_yourchoir:"First Your Choir Recording",
+    achievement_unlocked_tpl:"Achievement unlocked: {name}",
     rd_open_passport:"🪪 Open Choir Passport",
     dna_title:"🧬 Choir DNA",
     dna_desc:"Your ensemble identity for one song. Each spoke is a part, drawn out as far as its real readiness goes (rehearsal levels, Harmony Memory stages and bosses beaten, weighted equally) and coloured by its status. The centre is your Choir Boss record on this song.",
@@ -6724,6 +6762,31 @@ const TRANSLATIONS = {
     cw_hub_tag:"FORFAIT CHORALE",
     cw_feature_rehearsal:"🎙️ Je suis ma voix",
     cw_feature_acappella:"🎧 Mode a cappella",
+    // Choir World hooks (phase 9)
+    home_cw_status_learning_tpl:"{part} : votre voix est en apprentissage — continuez à répéter",
+    home_cw_status_developing_tpl:"{part} : votre voix est en progrès — continuez à répéter",
+    home_cw_status_ready_tpl:"{part} : votre voix est prête — gardez-la en forme",
+    home_cw_next_learning_tpl:"Prochaine étape : jouez {dl} niveaux de répétition en entier, réussissez l'étape 1 de Mémoire harmonique ou battez un boss de la chorale pour passer « En progrès ».",
+    home_cw_next_developing_tpl:"Vers « Prête » : niveaux joués {l}/{L} · étapes de Mémoire harmonique {h}/{H} · boss battus {b}/{B}.",
+    home_cw_next_ready:"Tous les critères « Prête » sont remplis pour cette voix. Essayez une autre voix ou l'autre chant.",
+    home_cw_continue_btn:"Continuer la répétition",
+    home_cw_empty_title:"Chantez votre voix au milieu d'un chœur complet",
+    home_cw_empty_desc:"Choisissez une voix dans Je suis ma voix et répétez-la pendant que les autres chantent. Votre préparation pour chaque voix se construit à partir de vraies séances et s'affiche ici.",
+    home_cw_empty_btn:"Commencer à répéter",
+    home_cw_locked_saved_tpl:"Votre préparation est enregistrée : {part} sur {song} — {status}.",
+    cw_hub_desc:"Répétez une voix pendant que le reste du chœur chante autour de vous : un guide qui s'efface sur 5 niveaux, la Mémoire harmonique, les boss de la chorale, les enregistrements Votre chorale et un statut de préparation pour chaque voix.",
+    cw_hub_status_tpl:"Dernière répétition : {part} sur {song} — {status}",
+    journey_cw_label:"🎼 Étape du Monde Chorale",
+    journey_cw_title:"Tenez votre voix avec le chœur",
+    journey_cw_desc_tpl:"Réussissez n'importe quelle étape de Mémoire harmonique dans Je suis ma voix : chantez votre voix pendant que les autres chantent autour de vous, et tenez au moins {pct} % de ses notes justes.",
+    journey_cw_open_btn:"Ouvrir Je suis ma voix",
+    journey_cw_done_tpl:"Réussi le {date} : {part} sur {song}, étape {stage} de Mémoire harmonique, {score} % des notes tenues.",
+    journey_cw_done_nodate_tpl:"Réussi : {part} sur {song}.",
+    journey_cw_toast:"🎼 Étape du parcours atteinte : vous avez tenu votre voix avec le chœur.",
+    achievement_cw_boss:"Premier boss de la chorale vaincu",
+    achievement_cw_ready:"Une voix est prête",
+    achievement_cw_yourchoir:"Premier enregistrement Votre chorale",
+    achievement_unlocked_tpl:"Succès débloqué : {name}",
     rd_open_passport:"🪪 Ouvrir le Passeport Chorale",
     dna_title:"🧬 ADN Chorale",
     dna_desc:"Votre identité d'ensemble pour un morceau. Chaque branche est une voix, tracée aussi loin que va sa préparation réelle (niveaux de répétition, étapes de Mémoire harmonique et boss battus, à poids égal) et colorée selon son statut. Au centre : votre bilan contre les Boss de la chorale sur ce morceau.",
@@ -7987,6 +8050,31 @@ const TRANSLATIONS = {
     cw_hub_tag:"PLAN CORO",
     cw_feature_rehearsal:"🎙️ Yo soy mi voz",
     cw_feature_acappella:"🎧 Modo a cappella",
+    // Choir World hooks (phase 9)
+    home_cw_status_learning_tpl:"Tu voz de {part} está en aprendizaje — sigue ensayando",
+    home_cw_status_developing_tpl:"Tu voz de {part} está en desarrollo — sigue ensayando",
+    home_cw_status_ready_tpl:"Tu voz de {part} está lista — mantenla a punto",
+    home_cw_next_learning_tpl:"Siguiente: toca {dl} niveles de ensayo completos, supera la etapa 1 de Memoria armónica o vence a cualquier jefe del coro para pasar a «En desarrollo».",
+    home_cw_next_developing_tpl:"Hacia «Lista»: niveles tocados {l}/{L} · etapas de Memoria armónica {h}/{H} · jefes vencidos {b}/{B}.",
+    home_cw_next_ready:"Todos los criterios de «Lista» están cumplidos para esta voz. Prueba otra voz u otra canción.",
+    home_cw_continue_btn:"Seguir ensayando",
+    home_cw_empty_title:"Canta tu voz con un coro completo a tu alrededor",
+    home_cw_empty_desc:"Elige una voz en Yo soy mi voz y ensáyala mientras las demás cantan. Tu preparación para cada voz se construye con sesiones reales y aparece aquí.",
+    home_cw_empty_btn:"Empezar a ensayar",
+    home_cw_locked_saved_tpl:"Tu preparación está guardada: {part} en {song} — {status}.",
+    cw_hub_desc:"Ensaya una voz mientras el resto del coro canta a tu alrededor: una guía que se desvanece en 5 niveles, Memoria armónica, jefes del coro, grabaciones de Tu coro y un estado de preparación para cada voz.",
+    cw_hub_status_tpl:"Último ensayo: {part} en {song} — {status}",
+    journey_cw_label:"🎼 Hito de Mundo Coral",
+    journey_cw_title:"Sostén tu voz con el coro",
+    journey_cw_desc_tpl:"Supera cualquier etapa de Memoria armónica en Yo soy mi voz: canta tu voz mientras las demás cantan a tu alrededor y mantén afinadas al menos el {pct} % de sus notas.",
+    journey_cw_open_btn:"Abrir Yo soy mi voz",
+    journey_cw_done_tpl:"Logrado el {date}: {part} en {song}, etapa {stage} de Memoria armónica, {score} % de notas sostenidas.",
+    journey_cw_done_nodate_tpl:"Logrado: {part} en {song}.",
+    journey_cw_toast:"🎼 Hito del viaje alcanzado: sostuviste tu voz con el coro.",
+    achievement_cw_boss:"Primer jefe del coro vencido",
+    achievement_cw_ready:"Una voz está lista",
+    achievement_cw_yourchoir:"Primera grabación de Tu coro",
+    achievement_unlocked_tpl:"Logro desbloqueado: {name}",
     rd_open_passport:"🪪 Abrir Pasaporte Coral",
     dna_title:"🧬 ADN Coral",
     dna_desc:"Tu identidad de conjunto en una canción. Cada eje es una voz, trazada hasta donde llega su preparación real (niveles de ensayo, etapas de Memoria armónica y jefes vencidos, con el mismo peso) y coloreada según su estado. En el centro, tu récord contra los Jefes del coro en esta canción.",
@@ -9250,6 +9338,31 @@ const TRANSLATIONS = {
     cw_hub_tag:"KORO PLANI",
     cw_feature_rehearsal:"🎙️ Ben Kendi Partimim",
     cw_feature_acappella:"🎧 A cappella modu",
+    // Choir World hooks (phase 9)
+    home_cw_status_learning_tpl:"{part} partinizi öğreniyorsunuz — çalışmaya devam edin",
+    home_cw_status_developing_tpl:"{part} partiniz gelişiyor — çalışmaya devam edin",
+    home_cw_status_ready_tpl:"{part} partiniz hazır — formda tutun",
+    home_cw_next_learning_tpl:"Sıradaki adım: Gelişiyor durumuna geçmek için {dl} prova seviyesini baştan sona çalın, Armoni Hafızası 1. aşamayı geçin ya da herhangi bir Koro Boss'unu yenin.",
+    home_cw_next_developing_tpl:"Hazır'a doğru: çalınan seviye {l}/{L} · Armoni Hafızası aşaması {h}/{H} · yenilen boss {b}/{B}.",
+    home_cw_next_ready:"Bu parti için Hazır koşullarının hepsi tamam. Başka bir parti ya da diğer şarkıyı deneyin.",
+    home_cw_continue_btn:"Çalışmaya devam et",
+    home_cw_empty_title:"Partinizi etrafınızda tam bir koroyla söyleyin",
+    home_cw_empty_desc:"Ben Kendi Partimim'de bir parti seçin ve diğer partiler söylerken onu çalışın. Her parti için hazırlığınız gerçek çalışmalardan oluşur ve burada görünür.",
+    home_cw_empty_btn:"Çalışmaya başla",
+    home_cw_locked_saved_tpl:"Hazırlığınız kayıtlı: {song} içinde {part} — {status}.",
+    cw_hub_desc:"Koronun geri kalanı etrafınızda söylerken tek bir partiyi çalışın: 5 seviyede kısılan bir rehber, Armoni Hafızası, Koro Boss'ları, Senin Koron kayıtları ve her parti için bir hazırlık durumu.",
+    cw_hub_status_tpl:"Son çalışma: {song} içinde {part} — {status}",
+    journey_cw_label:"🎼 Koro Dünyası kilometre taşı",
+    journey_cw_title:"Partinizi koroyla birlikte tutun",
+    journey_cw_desc_tpl:"Ben Kendi Partimim'de herhangi bir Armoni Hafızası aşamasını geçin: diğerleri etrafınızda söylerken kendi partinizi söyleyin ve notalarının en az %{pct}'ini doğru perdede tutun.",
+    journey_cw_open_btn:"Ben Kendi Partimim'i aç",
+    journey_cw_done_tpl:"{date} tarihinde tamamlandı: {song} içinde {part}, Armoni Hafızası {stage}. aşama, notaların %{score}'i tutuldu.",
+    journey_cw_done_nodate_tpl:"Tamamlandı: {song} içinde {part}.",
+    journey_cw_toast:"🎼 Yolculuk kilometre taşına ulaşıldı: partinizi koroyla birlikte tuttunuz.",
+    achievement_cw_boss:"İlk Koro Boss'u Yenildi",
+    achievement_cw_ready:"Bir Parti Hazır",
+    achievement_cw_yourchoir:"İlk Senin Koron Kaydı",
+    achievement_unlocked_tpl:"Başarı açıldı: {name}",
     rd_open_passport:"🪪 Koro Pasaportunu aç",
     dna_title:"🧬 Koro DNA",
     dna_desc:"Bir şarkı için topluluk kimliğiniz. Her kol bir partidir; gerçek hazırlığı ne kadar ilerlediyse o kadar uzanır (prova seviyeleri, Armoni Hafızası aşamaları ve yenilen bosslar, eşit ağırlıkla) ve durumuna göre renklenir. Ortada bu şarkıdaki Koro Boss siciliniz var.",
@@ -10038,6 +10151,8 @@ function applyTranslations(){
     ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
     ()=>typeof renderYourChoir==='function' && renderYourChoir(),
     ()=>typeof renderReadiness==='function' && renderReadiness(),
+    ()=>typeof renderCwHubStatus==='function' && renderCwHubStatus(),
+    ()=>typeof renderJourneyChoirMilestone==='function' && renderJourneyChoirMilestone(),
     ()=>typeof renderCwPreviews==='function' && document.body.classList.contains('cw-locked') && renderCwPreviews(),
     ()=>typeof renderChoirPassport==='function' && document.getElementById('panel-choirpassport').classList.contains('active') && renderChoirPassport(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
@@ -13608,12 +13723,14 @@ async function rdSync(song, part, extra={}){
     cr.runs.push(extra.run);
     if(cr.runs.length>RD_RUNS_MAX) cr.runs.splice(0, cr.runs.length-RD_RUNS_MAX);
   }
+  cwStampFirsts(song, part, status, extra);
   renderReadiness();
-  if(profile) await saveProgress();
+  if(profile){ await saveProgress(); cwAnnounceNew(); }
 }
 async function rdCountTake(){
   rdAll().ycTakes++;
-  if(profile) await saveProgress();
+  cwStampFirsts(null, null, null, {take:true});
+  if(profile){ await saveProgress(); cwAnnounceNew(); }
 }
 
 // A rehearsal play-through counts for a level when it ran from chord 1 to the end at that one level,
@@ -13715,12 +13832,15 @@ function cwTeaserSong(){
   });
   return best ? best.song : null;
 }
-function renderCwPreviews(){
-  const choir = planPhrase('choir'), price = '$79/mo';
-  const fill = s=>s.replace('{choir}', choir).replace('{price}', price);
-  const reason = !profile ? fill(t('cw_reason_signedout_tpl'))
+const CW_PRICE = '$79/mo';
+function cwReasonText(){
+  const fill = s=>s.replace('{choir}', planPhrase('choir')).replace('{price}', CW_PRICE);
+  return !profile ? fill(t('cw_reason_signedout_tpl'))
     : trialHasExpired() ? fill(t('cw_reason_expired_tpl'))
     : fill(t('cw_reason_plan_tpl')).replace('{plan}', planPhrase(currentTier()));
+}
+function renderCwPreviews(){
+  const price = CW_PRICE, reason = cwReasonText();
   const realSong = profile ? cwTeaserSong() : null;
   [['cwPreviewRehearsal', true], ['cwPreviewPassport', true], ['cwPreviewWorkspace', false]].forEach(([id, teaser])=>{
     const box = document.getElementById(id);
@@ -13760,6 +13880,117 @@ document.addEventListener('click', e=>{
   const cta = e.target.closest('[data-cw-cta]');
   if(!cta) return;
   if(cta.dataset.cwCta==='trial') openAuthModal(); else showPricingPanel();
+});
+
+/* ---------------- Choir World phase 9: Hooks ---------------- */
+// Home card, Songs hub status line, one 21-Day Journey milestone and three achievements. All of them read
+// the readiness the account already stores (user_progress.choir_readiness). The only new data is
+// cr.firsts: when the first Harmony Memory pass, boss win, Ready part and Your Choir take happened,
+// stamped by the run that did it.
+let cwMilestoneJustReached = false;
+function cwStoredParts(){
+  const parts = rdAll().parts, out = [];
+  RD_SONGS.forEach(song=>Object.entries(parts[song] || {}).forEach(([part, st])=>out.push({song, part, st})));
+  return out;
+}
+const cwAnyPart = test=>cwStoredParts().some(x=>test(x.st));
+// The part the user worked on most recently, with the same live readiness the Readiness card shows.
+function cwFocus(){
+  const last = cwStoredParts().reduce((a, x)=>!a || (x.st.updated || '')>(a.st.updated || '') ? x : a, null);
+  if(!last) return null;
+  const inp = rdInputs(last.song, last.part);
+  return {song:last.song, part:last.part, inp, status:rdStatus(inp)};
+}
+function cwStampFirsts(song, part, status, extra){
+  const cr = rdAll(), f = cr.firsts = cr.firsts || {}, ts = Date.now(), r = extra.run;
+  if(r && r.kind==='hm' && r.passed && !f.hmPass){ f.hmPass = {ts, song, part, stage:r.slot, score:r.score}; cwMilestoneJustReached = true; }
+  if(extra.win && !f.bossWin) f.bossWin = {ts, song, part, slot:r.slot};
+  if(status==='ready' && !f.ready) f.ready = {ts, song, part};
+  if(extra.take && !f.ycTake) f.ycTake = {ts};
+}
+// The Journey milestone: the first Harmony Memory stage passed. Runs from before phase 9 count too (from
+// the stored stage bests), just without a date.
+function cwHmMilestone(){
+  const f = (rdAll().firsts || {}).hmPass;
+  if(f) return f;
+  const x = cwStoredParts().find(x=>(x.st.hm || []).some(v=>v>=HM_PASS_PCT));
+  return x ? {song:x.song, part:x.part} : null;
+}
+function cwAnnounceNew(){
+  const fresh = (checkNewAchievementsForTimeline() || []).filter(a=>a.id.startsWith('cw_'));
+  const msgs = fresh.map(a=>`${a.icon} ${t('achievement_unlocked_tpl').replace('{name}', a.name)}`);
+  if(cwMilestoneJustReached){ msgs.unshift(t('journey_cw_toast')); cwMilestoneJustReached = false; }
+  if(msgs.length) showToast(msgs.join(' · '));
+}
+
+function renderHomeChoirCard(){
+  const card = document.getElementById('homeChoirCard');
+  if(!card) return;
+  if(!profile){ card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  const focus = cwFocus();
+  const h2 = txt=>`<h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;">${txt}</h2>`;
+  if(!hasChoirWorldAccess()){
+    // Locked tiers get the upgrade version: what the Choir plan is, and their saved readiness if they have any.
+    card.innerHTML = `<div class="step-label">${t('cw_label')} <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span></div>
+      ${h2(t('cw_heading'))}
+      ${focus ? `<p class="desc" style="color:var(--teal);">${t('home_cw_locked_saved_tpl').replace('{part}', partName(focus.part)).replace('{song}', songTitle(focus.song)).replace('{status}', t('rd_status_'+focus.status))}</p>` : ''}
+      <p class="desc" style="margin-top:6px;">${cwReasonText()}</p>
+      <button class="solid-btn teal" data-cw-cta="plans" style="margin-top:14px;">${t('cw_cta_plans')}</button>`;
+    return;
+  }
+  if(!focus){
+    card.innerHTML = `<div class="step-label">${t('cw_label')}</div>
+      ${h2(t('home_cw_empty_title'))}
+      <p class="desc">${t('home_cw_empty_desc')}</p>
+      <button class="solid-btn teal" data-cw-go="" style="margin-top:14px;">${t('home_cw_empty_btn')}</button>`;
+    return;
+  }
+  const {song, part, inp, status} = focus;
+  const next = status==='learning' ? t('home_cw_next_learning_tpl').replace('{dl}', RD_DEVELOPING.levels)
+    : status==='developing' ? t('home_cw_next_developing_tpl')
+      .replace('{l}', Math.min(inp.levels.length, RD_READY.levels)).replace('{L}', RD_READY.levels)
+      .replace('{h}', Math.min(inp.hmPassed, RD_READY.hm)).replace('{H}', RD_READY.hm)
+      .replace('{b}', Math.min(inp.bossesBeaten, RD_READY.bosses)).replace('{B}', RD_READY.bosses)
+    : t('home_cw_next_ready');
+  card.innerHTML = `<div class="step-label">${t('cw_label')} <span class="rd-status ${status}">${t('rd_status_'+status)}</span></div>
+    ${h2(t('home_cw_status_'+status+'_tpl').replace('{part}', partName(part)))}
+    <p class="desc">${songTitle(song)} · ${rdDetailText(inp)}</p>
+    <p class="desc" style="margin-top:6px;color:var(--teal);">${next}</p>
+    <button class="solid-btn teal" data-cw-go="${song}|${part}" style="margin-top:14px;">${t('home_cw_continue_btn')}</button>`;
+}
+function renderCwHubStatus(){
+  const el = document.getElementById('cwHubStatus');
+  if(!el) return;
+  const focus = profile && hasChoirWorldAccess() ? cwFocus() : null;
+  el.style.display = focus ? '' : 'none';
+  el.textContent = focus ? t('cw_hub_status_tpl').replace('{part}', partName(focus.part)).replace('{song}', songTitle(focus.song)).replace('{status}', t('rd_status_'+focus.status)) : '';
+}
+function renderJourneyChoirMilestone(){
+  const box = document.getElementById('journeyChoirMilestone');
+  if(!box) return;
+  const m = profile ? cwHmMilestone() : null, open = hasChoirWorldAccess();
+  let foot;
+  if(m){
+    const done = m.ts ? t('journey_cw_done_tpl').replace('{date}', cpDate(m.ts)).replace('{stage}', m.stage+1).replace('{score}', m.score) : t('journey_cw_done_nodate_tpl');
+    foot = `<p class="desc" style="margin-top:10px;color:var(--teal);">✓ ${done.replace('{part}', partName(m.part)).replace('{song}', songTitle(m.song))}</p>`;
+  } else if(open){
+    foot = `<button class="solid-btn teal" data-cw-go="" style="margin-top:12px;">${t('journey_cw_open_btn')}</button>`;
+  } else {
+    foot = `<p class="fine-print" style="margin-top:10px;">${cwReasonText()}</p><button class="solid-btn teal" data-cw-cta="plans" style="margin-top:12px;">${t('cw_cta_plans')}</button>`;
+  }
+  box.innerHTML = `<div class="step-label">${t('journey_cw_label')}${!m && !open ? ` <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span>` : ''}</div>
+    <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:8px 0 4px;">${m ? '✓ ' : ''}${t('journey_cw_title')}</h2>
+    <p class="desc">${t('journey_cw_desc_tpl').replace('{pct}', HM_PASS_PCT)}</p>${foot}`;
+}
+// "Continue rehearsing" / "Start rehearsing": straight into I Am the Part, on the song and part it names.
+document.addEventListener('click', e=>{
+  const go = e.target.closest('[data-cw-go]');
+  if(!go) return;
+  const [song, part] = go.dataset.cwGo.split('|');
+  if(song && SONGS[song]) selectSong(song);
+  if(part) partRehearsal.part = part;
+  enterPanel('partrehearsal');
 });
 
 /* ---- Choir Passport ---- */
@@ -14919,6 +15150,10 @@ const ACHIEVEMENTS = [
     progress.lowestMidi!==undefined && progress.highestMidi!==undefined && progress.lowestMidi!==null && (progress.highestMidi-progress.lowestMidi)>=24},
   {id:'pitch_master', icon:'⭐', get name(){return t('achievement_pitch_master');}, check:()=>{ const s=computeSkillProfile(); return s.pitch!==null && s.pitch>=85; }},
   {id:'perf_ready', icon:'🏆', get name(){return t('achievement_perf_ready');}, check:()=>!!progress.triedKaraoke || !!progress.triedEmotion},
+  // Choir World (phase 9), from the account's stored readiness
+  {id:'cw_boss', icon:'👹', get name(){return t('achievement_cw_boss');}, check:()=>cwAnyPart(st=>(st.wins||0)>0 || (st.bossesBeaten||0)>0)},
+  {id:'cw_ready', icon:'🎼', get name(){return t('achievement_cw_ready');}, check:()=>cwAnyPart(st=>st.status==='ready')},
+  {id:'cw_yourchoir', icon:'🎤', get name(){return t('achievement_cw_yourchoir');}, check:()=>(rdAll().ycTakes||0)>0},
 ];
 
 function renderAchievements(gridId){
@@ -15074,6 +15309,7 @@ function renderJourney(){
   }
 
   renderAchievements();
+  renderJourneyChoirMilestone();
   renderSnapshotCompare();
 }
 
@@ -16232,6 +16468,7 @@ function showShellSection(section){
   } else if(section==='songs'){
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-songs-hub').classList.add('active');
+    renderCwHubStatus();
   } else if(section==='world'){
     enterPanel('arcade');
   } else if(section==='you'){
@@ -16266,6 +16503,7 @@ function renderHomeScreen(){
   document.getElementById('homeGreeting').textContent = profile ? `${greetWord}, ${profile.name}` : greetWord;
   document.getElementById('homeStreakLine').textContent = profile ? `🔥 ${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}` : t('home_signin_streak');
 
+  renderHomeChoirCard();
   if(!profile){
     document.getElementById('homeMissionCard').style.display='none';
     document.getElementById('homeSignedOutCard').style.display='block';
@@ -18048,14 +18286,17 @@ function logTimelineEvent(type, label){
   saveProgress();
 }
 function checkNewAchievementsForTimeline(){
-  if(!profile) return;
+  if(!profile) return [];
   if(!progress.notifiedAchievements) progress.notifiedAchievements = [];
+  const fresh = [];
   ACHIEVEMENTS.forEach(a=>{
     if(a.check() && !progress.notifiedAchievements.includes(a.id)){
       progress.notifiedAchievements.push(a.id);
       logTimelineEvent('achievement', a.name);
+      fresh.push(a);
     }
   });
+  return fresh;
 }
 
 /* ---------------- Vocal Health Radar (real session patterns, not medical diagnosis) ---------------- */

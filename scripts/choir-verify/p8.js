@@ -55,7 +55,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
     const vis = sel => ev(s => [...document.querySelectorAll(s)].some(el => el.getClientRects().length > 0), sel);
     const shown = panelSel => ev(s => [...document.querySelector(s).children].filter(el => el.getClientRects().length > 0).map(el => el.id || el.className.split(' ')[0]), panelSel);
     const goSongs = async () => { await p.locator('.snb-item[data-shell="songs"]').click(); await sleep(400); };
-    const openHub = async panel => { await goSongs(); const btn = p.locator(`#panel-songs-hub [data-enter-panel="${panel}"]`); await btn.scrollIntoViewIfNeeded(); await btn.click(); await sleep(700); };
+    const openHub = async panel => { await goSongs(); const btn = p.locator(`#panel-songs-hub [data-enter-panel="${panel}"]`).first(); /* the Choir World card (phase 9) comes first */ await btn.scrollIntoViewIfNeeded(); await btn.click(); await sleep(700); };
 
     // --- what a real user sees
     await goSongs();
