@@ -57,6 +57,7 @@ export const PROGRESS_PATCHABLE_COLUMNS = [
   "tried_emotion",
   "used_choir_solo",
   "used_key_recommendation",
+  "choir_readiness",
 ] as const;
 
 export function pickAllowed(

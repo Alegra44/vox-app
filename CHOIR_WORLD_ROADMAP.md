@@ -29,4 +29,13 @@ and timing its arrival at the mic, then shifting each take's `lead` by that amou
 now, but it should be addressed before Your Choir is positioned as a serious rehearsal tool rather
 than a fun feature.
 
+## Known issues (app-wide)
+
+- **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
+  (`text-transform: uppercase`) is then transformed with English rules, which is wrong in Turkish: `i`
+  should uppercase to `İ` (dotted) but comes out as `I`, so the dotted/dotless pair (i/İ, ı/I) is
+  mixed up on every CSS-uppercased label. Not blocking, but worth fixing in a dedicated pass
+  (set `document.documentElement.lang` on every language switch and check the result per language),
+  since it likely affects text outside Choir World too.
+
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).

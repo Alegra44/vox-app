@@ -532,6 +532,26 @@
   .ac-note{display:none;border-left:3px solid var(--teal);font-size:13px;}
   #panel-partrehearsal.acappella-on .ac-note{display:block;}
   #acappellaBtn[aria-pressed="true"]{background:var(--teal);color:#082722;border-color:var(--teal);}
+  /* Choir World phase 7: Performance Report, "Why Did I Fail?", Readiness, Choir DNA */
+  .pr-report{margin-top:12px;padding-top:10px;border-top:1px solid var(--hairline);}
+  .pr-report .record-label small{display:block;color:var(--muted);font-size:11px;margin-top:2px;line-height:1.4;}
+  .why-btn{margin-left:8px;font-size:11px;}
+  .why-detail{margin:4px 0 10px;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--bg);}
+  .why-detail .why-k{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
+  .why-detail .why-k:first-child{margin-top:0;}
+  .why-detail p{margin:2px 0 0;font-size:13px;line-height:1.45;}
+  .why-detail svg{width:100%;max-width:380px;display:block;margin:8px 0 2px;}
+  .rd-row{padding:8px 0;border-bottom:1px solid var(--hairline);}
+  .rd-row:last-child{border-bottom:0;}
+  .rd-row.current .rd-part{color:var(--teal);}
+  .rd-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;}
+  .rd-part{font-weight:600;}
+  .rd-detail{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+  .rd-status{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+  .rd-status.learning{color:var(--muted);}
+  .rd-status.developing{color:var(--brass);}
+  .rd-status.ready{color:var(--teal);}
+  .dna-svg{width:100%;max-width:340px;margin:12px auto 0;display:block;}
   .record-val.tt-early{color:var(--brass);} .record-val.tt-late{color:var(--coral);} .record-val.tt-ontime{color:var(--teal);}
 
   /* ---- HARMONY MEMORY + BREATH MAP ---- */
@@ -1476,6 +1496,7 @@
     <button data-panel="emotionmode" id="emotionModeTabBtn">Emotion Mode</button>
     <button data-panel="vocallab" id="vocalLabTabBtn">Vocal Lab</button>
     <button data-panel="passport" id="passportTabBtn">Vocal Passport</button>
+    <button data-panel="choirpassport" id="choirPassportTabBtn">Choir Passport</button>
   </nav>
 
   <!-- ============ HOME (new default) ============ -->
@@ -3377,6 +3398,44 @@
     </div>
   </section>
 
+  <!-- CHOIR PASSPORT PANEL (Choir World phase 7) -->
+  <section class="panel" id="panel-choirpassport">
+    <div class="journey-hero">
+      <div class="j-title" data-i18n="cp_title">🪪 Choir Passport</div>
+      <div class="j-sub" data-i18n="cp_sub">Your ensemble identity in one place. Every field comes from runs you've actually done in Choir World. Nothing new is measured and nothing is filled in to cover a gap.</div>
+    </div>
+
+    <div id="cpEmpty" class="key-card" style="display:none;color:var(--muted);"></div>
+
+    <div id="cpContent" style="display:none;">
+      <div class="key-card">
+        <div class="step-label" data-i18n="cp_identity_label">Ensemble record</div>
+        <div id="cpRows"></div>
+      </div>
+
+      <div class="key-card" style="margin-top:16px;text-align:center;">
+        <div class="step-label" data-i18n="dna_title">🧬 Choir DNA</div>
+        <div class="ex-type-row" id="cpDnaSongRow" style="margin:10px 0 0;justify-content:center;flex-wrap:wrap;"></div>
+        <svg id="cpDnaSvg" class="dna-svg" viewBox="0 0 380 330" role="img"></svg>
+        <p class="fine-print" id="cpDnaNote" style="margin-top:6px;"></p>
+        <p class="fine-print" style="margin-top:6px;" id="cpDnaDesc"></p>
+      </div>
+
+      <p class="fine-print" style="margin-top:16px;" data-i18n="cp_blend_note">Honest about scope: blend isn't shown. Nothing in this app measures how your voice blends with the other parts, so a blend score would be invented. Readiness history and your scored runs are the real record instead.</p>
+
+      <div class="key-card" style="margin-top:16px;">
+        <div class="step-label" data-i18n="cp_history_label">📈 Readiness history</div>
+        <div id="cpHistory" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="key-card" style="margin-top:16px;">
+        <div class="step-label" data-i18n="cp_runs_hist_label">🎯 Recent scored runs</div>
+        <div id="cpRuns" style="margin-top:10px;"></div>
+      </div>
+      <p class="fine-print" id="cpSyncNote" style="margin-top:16px;text-align:center;"></p>
+    </div>
+  </section>
+
   <!-- CHOIR WORKSPACE PANEL -->
   <section class="panel" id="panel-choir">
     <div class="journey-hero">
@@ -3516,6 +3575,13 @@
       <p class="fine-print" style="margin-top:8px;" data-i18n="yc_storage_note">Your recordings are saved on this device only.</p>
     </div>
 
+    <div class="key-card" id="choirDnaWorkspaceCard" style="margin-top:20px;text-align:center;">
+      <div class="step-label" data-i18n="dna_title">🧬 Choir DNA</div>
+      <svg id="choirDnaWorkspaceSvg" class="dna-svg" viewBox="0 0 380 330" role="img"></svg>
+      <p class="fine-print" id="choirDnaWorkspaceNote" style="margin-top:6px;"></p>
+      <button class="ghost-btn" data-enter-panel="choirpassport" style="margin-top:12px;" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
+    </div>
+
     <div class="key-card" style="margin-top:20px;">
       <div class="step-label"><span data-i18n="choir_director_label">Director Dashboard</span><span class="mock-tag" data-i18n="choir_sampledata_tag">SAMPLE DATA</span></div>
       <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="choir_rosterprogress_h2">Choir roster progress</h2>
@@ -3545,6 +3611,15 @@
       <p class="fine-print"><span id="rehearsalSongLabel">Demo Hymn (C Major)</span> — <button class="link-btn" data-enter-panel="choir" data-i18n="rehearsal_change_song">change song</button></p>
       <button class="ghost-btn" id="acappellaBtn" aria-pressed="false" style="margin-top:12px;">🎧 A Cappella</button>
       <p class="fine-print" style="margin-top:6px;" data-i18n="ac_desc">Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.</p>
+    </div>
+
+    <div class="key-card" id="readinessCard" style="margin-top:16px;">
+      <div class="step-label" data-i18n="rd_title">📈 Readiness</div>
+      <p class="desc" id="rdDesc" style="margin:6px 0 4px;"></p>
+      <p class="fine-print" id="rdRule" style="margin-bottom:10px;"></p>
+      <div id="rdRows"></div>
+      <p class="fine-print" id="rdSyncNote" style="margin-top:10px;"></p>
+      <button class="ghost-btn" data-enter-panel="choirpassport" style="margin-top:12px;" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
     </div>
 
     <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.</div>
@@ -4279,9 +4354,11 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     if(btn.dataset.panel==='studio' && typeof renderStudioMode==='function') renderStudioMode();
     if(btn.dataset.panel==='performancedirector' && typeof renderPdBriefing==='function') renderPdBriefing();
     if(btn.dataset.panel==='passport' && typeof renderVocalPassport==='function') renderVocalPassport();
+    if(btn.dataset.panel==='choirpassport' && typeof renderChoirPassport==='function') renderChoirPassport();
     if(btn.dataset.panel==='dashboard' && typeof renderDashboard==='function') renderDashboard();
     if(btn.dataset.panel==='partrehearsal' && typeof renderPartRehearsal==='function') renderPartRehearsal();
     if(btn.dataset.panel==='choir' && typeof renderSonicXray==='function') renderSonicXray();
+    if(btn.dataset.panel==='choir' && typeof renderReadiness==='function') renderReadiness();
   });
 });
 
@@ -5311,6 +5388,70 @@ const TRANSLATIONS = {
     yc_status_rec_tpl:'Recording {part} — chord {i}/{n}',
     yc_status_tail:'Finishing the take…',
     yc_saved_tpl:'{part} saved.',
+    pr_dim_held:"Notes held",
+    pr_held_detail_tpl:"{held}/{n} notes held within ±{tol} cents",
+    pr_pitch_detail_tpl:"Typically {c} cents from the target across the {h} notes heard",
+    pr_timing_detail_tpl:"{on}/{h} notes heard: your voice arrived in the first {pct}% of the note · median {ms} ms after it started",
+    pr_none_heard:"No notes were heard",
+    pr_method_note:"Scored the same way as Performance Director. Pitch is 100 minus 0.6 × your average cents off in each note. Timing is 100 when your voice arrived in the first {pct}% of a note and 50 when it came later. Both count only notes that were heard. Tap \"Why?\" on a missed note to see what was expected next to what the mic heard.",
+    why_btn:"Why?",
+    why_hide:"Hide",
+    why_expected_label:"Expected",
+    why_heard_label:"What the mic heard",
+    why_reason_label:"Why it missed",
+    why_expected_tpl:"{note} ({hz} Hz), {from}–{to} s into the song. To count, the median of at least {frames} pitch readings (taken after the first {skip} ms) has to be within ±{tol} cents.",
+    why_sang_tpl:"Median pitch {note} {off} cents ({hz} Hz), which is {med} cents from the target. {in} of {k} readings were within ±{tol} cents.",
+    why_entry_tpl:"Your voice was first detected {ms} ms after the note started (on time is within {lim} ms).",
+    why_no_voice:"No voice was detected at any point during this note.",
+    why_unreached_sang:"Not sung.",
+    why_reason_unreached:"The boss won before this chord, so it was never sung.",
+    why_reason_silent:"No pitch was caught here, so there was nothing to judge.",
+    why_reason_few_tpl:"Only {k} pitch readings were caught. A note needs at least {min} to be judged, so it counts as not heard.",
+    why_reason_off_tpl:"Your median was {c} cents {dir}, outside the ±{tol} cent window.",
+    why_sharp:"sharp",
+    why_flat:"flat",
+    why_closer_tpl:"That's closer to {note} than to {target}.",
+    why_plot_caption:"Each dot is one pitch reading, placed at the moment it was read. The band is ±{tol} cents, the shaded start is the first {skip} ms (not judged), and the dashed line is where your voice arrived.",
+    rd_title:"📈 Readiness",
+    rd_desc:"Each part's status on this song comes from what you've actually done with it: rehearsal levels played through from the first chord to the last, Harmony Memory stages passed, and Choir Bosses beaten.",
+    rd_rule_tpl:"Developing: play through {dl} rehearsal levels, pass Harmony Memory stage 1, or beat any boss. Ready: play through all {levels} levels, pass Harmony Memory stage {hm}, and beat {bosses} bosses.",
+    rd_status_learning:"Learning",
+    rd_status_developing:"Developing",
+    rd_status_ready:"Ready",
+    rd_row_tpl:"Levels played {l}/{L} · Harmony Memory {h}/{H} · Bosses beaten {b}/{B} · Boss record {w}–{x}",
+    rd_you:"(you)",
+    rd_synced:"Saved to your account, so it follows you to other devices.",
+    rd_local_only:"You're not signed in, so readiness isn't saved to an account. Harmony Memory and Boss scores stay on this device.",
+    rd_open_passport:"🪪 Open Choir Passport",
+    dna_title:"🧬 Choir DNA",
+    dna_desc:"Your ensemble identity for one song. Each spoke is a part, drawn out as far as its real readiness goes (rehearsal levels, Harmony Memory stages and bosses beaten, weighted equally) and coloured by its status. The centre is your Choir Boss record on this song.",
+    dna_note_tpl:"{r} ready · {d} developing · {l} learning · Boss record {w}–{x}",
+    dna_boss_aria_tpl:"Choir Boss record: won {w}, lost {l}.",
+    cp_title:"🪪 Choir Passport",
+    cp_sub:"Your ensemble identity in one place. Every field comes from runs you've actually done in Choir World. Nothing new is measured and nothing is filled in to cover a gap.",
+    cp_signin:"Sign in to keep a Choir Passport. Readiness is stored with your account, so it follows you across devices.",
+    cp_identity_label:"Ensemble record",
+    cp_ready_label:"Parts ready",
+    cp_ready_tpl:"{r} of {n} ({d} developing)",
+    cp_song_all_learning:"Every part is still Learning",
+    cp_boss_label:"Choir Boss record",
+    cp_boss_tpl:"Won {w} · lost {l}",
+    cp_beaten_label:"Bosses beaten",
+    cp_beaten_tpl:"{d} of {n}, on at least one part",
+    cp_hm_label:"Best Harmony Memory",
+    cp_hm_tpl:"{s} of {n} stages ({part}, {song})",
+    cp_none:"None yet",
+    cp_runs_label:"Scored runs",
+    cp_runs_tpl:"{n} · the last {k} averaged {avg}% of notes held",
+    cp_yc_label:"Your Choir takes recorded",
+    cp_yc_tpl:"{n} ({k} saved on this device now)",
+    cp_blend_note:"Honest about scope: blend isn't shown. Nothing in this app measures how your voice blends with the other parts, so a blend score would be invented. Readiness history and your scored runs are the real record instead.",
+    cp_history_label:"📈 Readiness history",
+    cp_history_empty:"No status changes yet. Pass a Harmony Memory stage or beat a boss to move a part to Developing.",
+    cp_history_tpl:"{part} ({song}): {from} → {to}",
+    cp_runs_hist_label:"🎯 Recent scored runs",
+    cp_runs_empty:"No scored runs yet.",
+    cp_run_tpl:"pitch {p} · timing {t}",
     yc_saved_memory_tpl:'{part} recorded, but this device’s storage is full: the take will be lost when you leave the page.',
     yc_cancelled:'Recording stopped — nothing was saved.',
     yc_failed:'Recording isn’t available — check microphone access.',
@@ -6486,6 +6627,70 @@ const TRANSLATIONS = {
     yc_status_rec_tpl:'Enregistrement : {part} — accord {i}/{n}',
     yc_status_tail:'Fin de la prise…',
     yc_saved_tpl:'{part} enregistrée.',
+    pr_dim_held:"Notes tenues",
+    pr_held_detail_tpl:"{held}/{n} notes tenues à ±{tol} cents",
+    pr_pitch_detail_tpl:"En général à {c} cents de la cible sur les {h} notes entendues",
+    pr_timing_detail_tpl:"{on}/{h} notes entendues : votre voix est arrivée dans les premiers {pct} % de la note · médiane {ms} ms après son début",
+    pr_none_heard:"Aucune note n'a été entendue",
+    pr_method_note:"Même notation que le Directeur de Performance. La justesse vaut 100 moins 0,6 × votre écart moyen en cents sur chaque note. Le timing vaut 100 quand votre voix arrive dans les premiers {pct} % d'une note, 50 si elle arrive plus tard. Les deux ne comptent que les notes entendues. Touchez « Pourquoi ? » sur une note manquée pour voir ce qui était attendu à côté de ce que le micro a entendu.",
+    why_btn:"Pourquoi ?",
+    why_hide:"Masquer",
+    why_expected_label:"Attendu",
+    why_heard_label:"Ce que le micro a entendu",
+    why_reason_label:"Pourquoi elle est manquée",
+    why_expected_tpl:"{note} ({hz} Hz), de {from} à {to} s dans le morceau. Pour compter, la médiane d'au moins {frames} mesures de hauteur (prises après les {skip} premières ms) doit être à ±{tol} cents.",
+    why_sang_tpl:"Hauteur médiane {note} {off} cents ({hz} Hz), soit {med} cents par rapport à la cible. {in} mesures sur {k} étaient à ±{tol} cents.",
+    why_entry_tpl:"Votre voix a été détectée {ms} ms après le début de la note (à temps = moins de {lim} ms).",
+    why_no_voice:"Aucune voix n'a été détectée pendant cette note.",
+    why_unreached_sang:"Non chantée.",
+    why_reason_unreached:"Le boss a gagné avant cet accord, il n'a donc jamais été chanté.",
+    why_reason_silent:"Aucune hauteur n'a été captée ici, il n'y avait donc rien à juger.",
+    why_reason_few_tpl:"Seulement {k} mesures de hauteur ont été captées. Il en faut au moins {min} pour juger une note, elle compte donc comme non entendue.",
+    why_reason_off_tpl:"Votre médiane était {c} cents trop {dir}, hors de la fenêtre de ±{tol} cents.",
+    why_sharp:"haut",
+    why_flat:"bas",
+    why_closer_tpl:"C'est plus proche de {note} que de {target}.",
+    why_plot_caption:"Chaque point est une mesure de hauteur, placée au moment où elle a été prise. La bande couvre ±{tol} cents, le début grisé correspond aux {skip} premières ms (non jugées) et la ligne pointillée marque l'arrivée de votre voix.",
+    rd_title:"📈 Préparation",
+    rd_desc:"Le statut de chaque voix sur ce morceau vient de ce que vous avez réellement fait : niveaux de répétition joués du premier au dernier accord, étapes de Mémoire harmonique réussies et Boss de la chorale battus.",
+    rd_rule_tpl:"En progrès : jouez {dl} niveaux de répétition en entier, réussissez l'étape 1 de Mémoire harmonique ou battez un boss. Prête : jouez les {levels} niveaux en entier, réussissez l'étape {hm} de Mémoire harmonique et battez {bosses} boss.",
+    rd_status_learning:"Apprentissage",
+    rd_status_developing:"En progrès",
+    rd_status_ready:"Prête",
+    rd_row_tpl:"Niveaux joués {l}/{L} · Mémoire harmonique {h}/{H} · Boss battus {b}/{B} · Bilan boss {w}–{x}",
+    rd_you:"(vous)",
+    rd_synced:"Enregistré sur votre compte, donc disponible sur vos autres appareils.",
+    rd_local_only:"Vous n'êtes pas connecté·e : la préparation n'est pas enregistrée sur un compte. Les scores de Mémoire harmonique et des Boss restent sur cet appareil.",
+    rd_open_passport:"🪪 Ouvrir le Passeport Chorale",
+    dna_title:"🧬 ADN Chorale",
+    dna_desc:"Votre identité d'ensemble pour un morceau. Chaque branche est une voix, tracée aussi loin que va sa préparation réelle (niveaux de répétition, étapes de Mémoire harmonique et boss battus, à poids égal) et colorée selon son statut. Au centre : votre bilan contre les Boss de la chorale sur ce morceau.",
+    dna_note_tpl:"{r} prête(s) · {d} en progrès · {l} en apprentissage · Bilan boss {w}–{x}",
+    dna_boss_aria_tpl:"Bilan Boss de la chorale : gagnés {w}, perdus {l}.",
+    cp_title:"🪪 Passeport Chorale",
+    cp_sub:"Votre identité d'ensemble, réunie en un seul endroit. Chaque champ vient de sessions réellement faites dans Choir World. Rien de nouveau n'est mesuré et rien n'est inventé pour combler un vide.",
+    cp_signin:"Connectez-vous pour tenir un Passeport Chorale. La préparation est enregistrée sur votre compte et vous suit sur tous vos appareils.",
+    cp_identity_label:"Bilan d'ensemble",
+    cp_ready_label:"Voix prêtes",
+    cp_ready_tpl:"{r} sur {n} ({d} en progrès)",
+    cp_song_all_learning:"Toutes les voix sont encore en apprentissage",
+    cp_boss_label:"Bilan Boss de la chorale",
+    cp_boss_tpl:"Gagnés : {w} · perdus : {l}",
+    cp_beaten_label:"Boss battus",
+    cp_beaten_tpl:"{d} sur {n}, sur au moins une voix",
+    cp_hm_label:"Meilleure Mémoire harmonique",
+    cp_hm_tpl:"{s} étapes sur {n} ({part}, {song})",
+    cp_none:"Rien pour le moment",
+    cp_runs_label:"Sessions notées",
+    cp_runs_tpl:"{n} · les {k} dernières : {avg} % de notes tenues en moyenne",
+    cp_yc_label:"Prises Votre chorale enregistrées",
+    cp_yc_tpl:"{n} ({k} actuellement sur cet appareil)",
+    cp_blend_note:"Honnête sur la portée : le fondu vocal n'est pas affiché. Rien dans cette app ne mesure comment votre voix se fond avec les autres, un score de fondu serait donc inventé. L'historique de préparation et vos sessions notées sont le vrai bilan.",
+    cp_history_label:"📈 Historique de préparation",
+    cp_history_empty:"Aucun changement de statut pour l'instant. Réussissez une étape de Mémoire harmonique ou battez un boss pour faire passer une voix en progrès.",
+    cp_history_tpl:"{part} ({song}) : {from} → {to}",
+    cp_runs_hist_label:"🎯 Sessions notées récentes",
+    cp_runs_empty:"Aucune session notée pour le moment.",
+    cp_run_tpl:"justesse {p} · timing {t}",
     yc_saved_memory_tpl:'{part} enregistrée, mais le stockage de cet appareil est plein : la prise sera perdue en quittant la page.',
     yc_cancelled:'Enregistrement arrêté — rien n’a été conservé.',
     yc_failed:'L’enregistrement n’est pas disponible — vérifiez l’accès au micro.',
@@ -7661,6 +7866,70 @@ const TRANSLATIONS = {
     yc_status_rec_tpl:'Grabando {part} — acorde {i}/{n}',
     yc_status_tail:'Terminando la toma…',
     yc_saved_tpl:'{part} guardada.',
+    pr_dim_held:"Notas sostenidas",
+    pr_held_detail_tpl:"{held}/{n} notas sostenidas a ±{tol} cents",
+    pr_pitch_detail_tpl:"Normalmente a {c} cents del objetivo en las {h} notas oídas",
+    pr_timing_detail_tpl:"{on}/{h} notas oídas: tu voz llegó en el primer {pct} % de la nota · mediana {ms} ms después de su inicio",
+    pr_none_heard:"No se oyó ninguna nota",
+    pr_method_note:"Se puntúa igual que en el Director de Actuación. La afinación es 100 menos 0,6 × tu desviación media en cents en cada nota. El tiempo vale 100 si tu voz llegó en el primer {pct} % de la nota y 50 si llegó más tarde. Ambos solo cuentan las notas oídas. Toca «¿Por qué?» en una nota fallada para ver lo esperado junto a lo que oyó el micrófono.",
+    why_btn:"¿Por qué?",
+    why_hide:"Ocultar",
+    why_expected_label:"Esperado",
+    why_heard_label:"Lo que oyó el micrófono",
+    why_reason_label:"Por qué falló",
+    why_expected_tpl:"{note} ({hz} Hz), de {from} a {to} s de la canción. Para contar, la mediana de al menos {frames} lecturas de tono (tomadas tras los primeros {skip} ms) debe estar a ±{tol} cents.",
+    why_sang_tpl:"Tono mediano {note} {off} cents ({hz} Hz), es decir {med} cents respecto al objetivo. {in} de {k} lecturas estaban a ±{tol} cents.",
+    why_entry_tpl:"Tu voz se detectó {ms} ms después del inicio de la nota (a tiempo = antes de {lim} ms).",
+    why_no_voice:"No se detectó voz en ningún momento de esta nota.",
+    why_unreached_sang:"No cantada.",
+    why_reason_unreached:"El jefe ganó antes de este acorde, así que nunca se cantó.",
+    why_reason_silent:"Aquí no se captó ningún tono, así que no había nada que juzgar.",
+    why_reason_few_tpl:"Solo se captaron {k} lecturas de tono. Una nota necesita al menos {min} para juzgarse, así que cuenta como no oída.",
+    why_reason_off_tpl:"Tu mediana estuvo {c} cents {dir}, fuera de la ventana de ±{tol} cents.",
+    why_sharp:"alta",
+    why_flat:"baja",
+    why_closer_tpl:"Eso está más cerca de {note} que de {target}.",
+    why_plot_caption:"Cada punto es una lectura de tono, colocada en el momento en que se tomó. La banda es ±{tol} cents, el inicio sombreado son los primeros {skip} ms (no se juzgan) y la línea discontinua marca cuándo llegó tu voz.",
+    rd_title:"📈 Preparación",
+    rd_desc:"El estado de cada voz en esta canción sale de lo que realmente has hecho con ella: niveles de ensayo tocados del primer al último acorde, etapas de Memoria armónica superadas y Jefes del coro vencidos.",
+    rd_rule_tpl:"En desarrollo: toca {dl} niveles de ensayo completos, supera la etapa 1 de Memoria armónica o vence a cualquier jefe. Lista: toca los {levels} niveles completos, supera la etapa {hm} de Memoria armónica y vence a {bosses} jefes.",
+    rd_status_learning:"Aprendiendo",
+    rd_status_developing:"En desarrollo",
+    rd_status_ready:"Lista",
+    rd_row_tpl:"Niveles tocados {l}/{L} · Memoria armónica {h}/{H} · Jefes vencidos {b}/{B} · Récord de jefes {w}–{x}",
+    rd_you:"(tú)",
+    rd_synced:"Guardado en tu cuenta, así que te sigue a otros dispositivos.",
+    rd_local_only:"No has iniciado sesión, así que la preparación no se guarda en una cuenta. Las puntuaciones de Memoria armónica y de Jefes se quedan en este dispositivo.",
+    rd_open_passport:"🪪 Abrir Pasaporte Coral",
+    dna_title:"🧬 ADN Coral",
+    dna_desc:"Tu identidad de conjunto en una canción. Cada eje es una voz, trazada hasta donde llega su preparación real (niveles de ensayo, etapas de Memoria armónica y jefes vencidos, con el mismo peso) y coloreada según su estado. En el centro, tu récord contra los Jefes del coro en esta canción.",
+    dna_note_tpl:"{r} lista(s) · {d} en desarrollo · {l} aprendiendo · Récord de jefes {w}–{x}",
+    dna_boss_aria_tpl:"Récord contra los Jefes del coro: ganados {w}, perdidos {l}.",
+    cp_title:"🪪 Pasaporte Coral",
+    cp_sub:"Tu identidad de conjunto en un solo lugar. Cada campo viene de sesiones que realmente has hecho en Choir World. No se mide nada nuevo ni se inventa nada para llenar un hueco.",
+    cp_signin:"Inicia sesión para tener un Pasaporte Coral. La preparación se guarda en tu cuenta, así que te sigue en todos tus dispositivos.",
+    cp_identity_label:"Récord de conjunto",
+    cp_ready_label:"Voces listas",
+    cp_ready_tpl:"{r} de {n} ({d} en desarrollo)",
+    cp_song_all_learning:"Todas las voces siguen aprendiendo",
+    cp_boss_label:"Récord contra los Jefes del coro",
+    cp_boss_tpl:"Ganados: {w} · perdidos: {l}",
+    cp_beaten_label:"Jefes vencidos",
+    cp_beaten_tpl:"{d} de {n}, en al menos una voz",
+    cp_hm_label:"Mejor Memoria armónica",
+    cp_hm_tpl:"{s} de {n} etapas ({part}, {song})",
+    cp_none:"Nada todavía",
+    cp_runs_label:"Sesiones puntuadas",
+    cp_runs_tpl:"{n} · las últimas {k}: {avg} % de notas sostenidas de media",
+    cp_yc_label:"Tomas de Tu coro grabadas",
+    cp_yc_tpl:"{n} ({k} guardadas ahora en este dispositivo)",
+    cp_blend_note:"Honestos sobre el alcance: el empaste no se muestra. Nada en esta app mide cómo empasta tu voz con las demás, así que una puntuación de empaste sería inventada. El historial de preparación y tus sesiones puntuadas son el registro real.",
+    cp_history_label:"📈 Historial de preparación",
+    cp_history_empty:"Aún no hay cambios de estado. Supera una etapa de Memoria armónica o vence a un jefe para que una voz pase a En desarrollo.",
+    cp_history_tpl:"{part} ({song}): {from} → {to}",
+    cp_runs_hist_label:"🎯 Sesiones puntuadas recientes",
+    cp_runs_empty:"Aún no hay sesiones puntuadas.",
+    cp_run_tpl:"afinación {p} · tiempo {t}",
     yc_saved_memory_tpl:'{part} grabada, pero el almacenamiento de este dispositivo está lleno: la toma se perderá al salir de la página.',
     yc_cancelled:'Grabación detenida — no se guardó nada.',
     yc_failed:'La grabación no está disponible — revisa el acceso al micrófono.',
@@ -8836,6 +9105,70 @@ const TRANSLATIONS = {
     yc_status_rec_tpl:'{part} kaydediliyor — akor {i}/{n}',
     yc_status_tail:'Kayıt tamamlanıyor…',
     yc_saved_tpl:'{part} kaydedildi.',
+    pr_dim_held:"Tutulan notalar",
+    pr_held_detail_tpl:"{held}/{n} nota ±{tol} sent içinde tutuldu",
+    pr_pitch_detail_tpl:"Duyulan {h} notada hedeften genellikle {c} sent uzakta",
+    pr_timing_detail_tpl:"Duyulan {h} notanın {on} tanesinde sesiniz notanın ilk %{pct} kısmında geldi · başlangıçtan ortanca {ms} ms sonra",
+    pr_none_heard:"Hiç nota duyulmadı",
+    pr_method_note:"Performans Yönetmeni ile aynı puanlama. Perde, 100 eksi her notadaki ortalama sent sapmanızın 0,6 katıdır. Zamanlama, sesiniz notanın ilk %{pct} kısmında geldiyse 100, daha geç geldiyse 50'dir. İkisi de yalnızca duyulan notaları sayar. Kaçan bir notada \"Neden?\"e dokunarak beklenenle mikrofonun duyduğunu yan yana görün.",
+    why_btn:"Neden?",
+    why_hide:"Gizle",
+    why_expected_label:"Beklenen",
+    why_heard_label:"Mikrofonun duyduğu",
+    why_reason_label:"Neden kaçtı",
+    why_expected_tpl:"{note} ({hz} Hz), şarkının {from}–{to} saniyesi. Sayılması için en az {frames} perde ölçümünün (ilk {skip} ms'den sonra alınan) ortancası ±{tol} sent içinde olmalı.",
+    why_sang_tpl:"Ortanca perde {note} {off} sent ({hz} Hz), yani hedeften {med} sent. {k} ölçümün {in} tanesi ±{tol} sent içindeydi.",
+    why_entry_tpl:"Sesiniz nota başladıktan {ms} ms sonra algılandı (zamanında = {lim} ms içinde).",
+    why_no_voice:"Bu nota boyunca hiç ses algılanmadı.",
+    why_unreached_sang:"Söylenmedi.",
+    why_reason_unreached:"Boss bu akordan önce kazandı, bu yüzden hiç söylenmedi.",
+    why_reason_silent:"Burada hiç perde yakalanmadı, değerlendirilecek bir şey yoktu.",
+    why_reason_few_tpl:"Yalnızca {k} perde ölçümü yakalandı. Bir notanın değerlendirilmesi için en az {min} gerekir, bu yüzden duyulmadı sayılır.",
+    why_reason_off_tpl:"Ortancanız {c} sent {dir}, ±{tol} sentlik aralığın dışında.",
+    why_sharp:"tizdi",
+    why_flat:"pesti",
+    why_closer_tpl:"Bu ses {target} notasına değil, {note} notasına daha yakın.",
+    why_plot_caption:"Her nokta bir perde ölçümüdür ve alındığı ana yerleştirilmiştir. Bant ±{tol} senttir, gölgeli başlangıç ilk {skip} ms'dir (değerlendirilmez) ve kesikli çizgi sesinizin geldiği andır.",
+    rd_title:"📈 Hazırlık",
+    rd_desc:"Her partinin bu şarkıdaki durumu, onunla gerçekten yaptıklarınızdan gelir: ilk akordan son akora kadar çalınan prova seviyeleri, geçilen Armoni Hafızası aşamaları ve yenilen Koro Boss’ları.",
+    rd_rule_tpl:"Gelişiyor: {dl} prova seviyesini baştan sona çalın, Armoni Hafızası 1. aşamayı geçin ya da herhangi bir boss'u yenin. Hazır: {levels} seviyenin hepsini baştan sona çalın, Armoni Hafızası {hm}. aşamayı geçin ve {bosses} boss yenin.",
+    rd_status_learning:"Öğreniyor",
+    rd_status_developing:"Gelişiyor",
+    rd_status_ready:"Hazır",
+    rd_row_tpl:"Çalınan seviye {l}/{L} · Armoni Hafızası {h}/{H} · Yenilen boss {b}/{B} · Boss sicili {w}–{x}",
+    rd_you:"(siz)",
+    rd_synced:"Hesabınıza kaydedildi, diğer cihazlarınızda da görünür.",
+    rd_local_only:"Giriş yapmadınız, bu yüzden hazırlık bir hesaba kaydedilmiyor. Armoni Hafızası ve Boss puanları bu cihazda kalır.",
+    rd_open_passport:"🪪 Koro Pasaportunu aç",
+    dna_title:"🧬 Koro DNA",
+    dna_desc:"Bir şarkı için topluluk kimliğiniz. Her kol bir partidir; gerçek hazırlığı ne kadar ilerlediyse o kadar uzanır (prova seviyeleri, Armoni Hafızası aşamaları ve yenilen bosslar, eşit ağırlıkla) ve durumuna göre renklenir. Ortada bu şarkıdaki Koro Boss siciliniz var.",
+    dna_note_tpl:"{r} hazır · {d} gelişiyor · {l} öğreniyor · Boss sicili {w}–{x}",
+    dna_boss_aria_tpl:"Koro Boss sicili: {w} galibiyet, {l} mağlubiyet.",
+    cp_title:"🪪 Koro Pasaportu",
+    cp_sub:"Topluluk kimliğiniz tek bir yerde. Her alan, Choir World'de gerçekten yaptığınız çalışmalardan gelir. Yeni hiçbir şey ölçülmez, bir boşluğu doldurmak için hiçbir şey uydurulmaz.",
+    cp_signin:"Koro Pasaportu tutmak için giriş yapın. Hazırlık hesabınızda saklanır, böylece tüm cihazlarınızda sizinle gelir.",
+    cp_identity_label:"Topluluk sicili",
+    cp_ready_label:"Hazır partiler",
+    cp_ready_tpl:"{n} partiden {r} hazır ({d} gelişiyor)",
+    cp_song_all_learning:"Tüm partiler hâlâ öğreniyor",
+    cp_boss_label:"Koro Boss sicili",
+    cp_boss_tpl:"{w} galibiyet · {l} mağlubiyet",
+    cp_beaten_label:"Yenilen bosslar",
+    cp_beaten_tpl:"{n} bosstan {d} tanesi, en az bir partide",
+    cp_hm_label:"En iyi Armoni Hafızası",
+    cp_hm_tpl:"{n} aşamadan {s} ({part}, {song})",
+    cp_none:"Henüz yok",
+    cp_runs_label:"Puanlanan çalışmalar",
+    cp_runs_tpl:"{n} · son {k} çalışmada ortalama notaların %{avg} kadarı tutuldu",
+    cp_yc_label:"Kaydedilen Senin Koron kayıtları",
+    cp_yc_tpl:"{n} (şu an bu cihazda {k} kayıt)",
+    cp_blend_note:"Kapsam konusunda dürüst olalım: uyum (blend) gösterilmiyor. Bu uygulamada sesinizin diğer partilerle nasıl kaynaştığını ölçen hiçbir şey yok, bu yüzden bir uyum puanı uydurma olurdu. Gerçek kayıt, hazırlık geçmişi ve puanlanan çalışmalarınızdır.",
+    cp_history_label:"📈 Hazırlık geçmişi",
+    cp_history_empty:"Henüz durum değişikliği yok. Bir partiyi Gelişiyor'a taşımak için bir Armoni Hafızası aşamasını geçin ya da bir boss'u yenin.",
+    cp_history_tpl:"{part} ({song}): {from} → {to}",
+    cp_runs_hist_label:"🎯 Son puanlanan çalışmalar",
+    cp_runs_empty:"Henüz puanlanan çalışma yok.",
+    cp_run_tpl:"perde {p} · zamanlama {t}",
     yc_saved_memory_tpl:'{part} kaydedildi ancak bu cihazın depolama alanı dolu: sayfadan ayrıldığınızda kayıt kaybolacak.',
     yc_cancelled:'Kayıt durduruldu — hiçbir şey saklanmadı.',
     yc_failed:'Kayıt kullanılamıyor — mikrofon erişimini kontrol edin.',
@@ -9591,6 +9924,8 @@ function applyTranslations(){
     ()=>typeof renderRoster==='function' && document.getElementById('rosterList') && renderRoster(),
     ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
     ()=>typeof renderYourChoir==='function' && renderYourChoir(),
+    ()=>typeof renderReadiness==='function' && renderReadiness(),
+    ()=>typeof renderChoirPassport==='function' && document.getElementById('panel-choirpassport').classList.contains('active') && renderChoirPassport(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
 }
 async function setLanguage(code){
@@ -10006,6 +10341,7 @@ let appInitPromise = (async function initAccountAndDashboard(){
   if(typeof renderSongDifficulty==='function') renderSongDifficulty();
   if(typeof renderGenreGrid==='function') renderGenreGrid();
   if(typeof renderJourney==='function') renderJourney();
+  if(typeof renderReadiness==='function') renderReadiness(); // the account's stored readiness just loaded
   if(typeof updateShellTopbar==='function') updateShellTopbar();
   if(typeof renderReweightCard==='function') renderReweightCard();
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
@@ -11318,7 +11654,11 @@ async function playChoir(opts={}){
   if(choirLoopTimeout) choirLoopTimeout();
   const loopOn = opts.loop ?? document.getElementById('choirLoopCheck').checked;
   if(loopOn){
-    choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{ if(choirIsPlaying) playChoir({...opts, startIdx:0}); });
+    choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{
+      if(!choirIsPlaying) return;
+      if(opts.onLoopEnd) opts.onLoopEnd(); // a full pass just finished (the rehearsal view counts it for Readiness)
+      playChoir({...opts, startIdx:0});
+    });
   } else {
     choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{ choirIsPlaying=false; document.getElementById('choirPlayBtn').textContent='▶ Play'; });
   }
@@ -11481,6 +11821,7 @@ function holdGainAt(param, now){
 function setRehearsalLevel(level){
   if(harmonyMemory.active || challenge.active) return; // a Harmony Memory or challenge run owns the guide level
   partRehearsal.level = Math.max(0, Math.min(REHEARSAL_LEVELS.length-1, level));
+  if(partRehearsal.pass) partRehearsal.pass.clean = false; // a pass only counts at one level throughout
   fadeRehearsalGuide();
   renderRehearsalLevels();
 }
@@ -11605,6 +11946,7 @@ function renderPartRehearsal(){
   renderBreathMap();
   renderHarmonyMemory(); // also makes a running stage rewrite its status line on the next frame
   renderChallenges();
+  renderReadiness();
 }
 
 function renderRehearseEntryChips(){
@@ -11662,7 +12004,8 @@ function runPartRehearsalAnim(){
 
 async function startPartRehearsal(startIdx=0){
   partRehearsal.active = true;
-  await playChoir({loop:true, startIdx});
+  rdStartPass(startIdx);
+  await playChoir({loop:true, startIdx, onLoopEnd:rdPassEnded});
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
 }
@@ -11922,6 +12265,7 @@ renderSonicXray();
 function setAcappella(on){
   if(on===partRehearsal.acappella) return;
   partRehearsal.acappella = on;
+  if(partRehearsal.pass) partRehearsal.pass.clean = false;
   if(partRehearsal.active && audioCtx && choirGainNodes[partRehearsal.part]) holdGainAt(choirGainNodes[partRehearsal.part].gain, audioCtx.currentTime);
   updateAllChoirGains();
   document.getElementById('panel-partrehearsal').classList.toggle('acappella-on', on);
@@ -12254,7 +12598,7 @@ async function startHarmonyMemory(){
   const tl = songTimeline(), notes = tl.parts[partRehearsal.part];
   Object.assign(harmonyMemory, {
     active:true, runStage:stage, song:currentSongId, part:partRehearsal.part, notes, total:tl.total,
-    cents: notes.map(()=>[]), lastIdx:-2,
+    cents: notes.map(()=>[]), times: notes.map(()=>[]), firstVoiced: notes.map(()=>null), lastIdx:-2,
     prev:{level:partRehearsal.level, acappella:partRehearsal.acappella},
   });
   if(cfg.level!==undefined) partRehearsal.level = cfg.level;
@@ -12280,14 +12624,7 @@ function hmTick(){
   const notes = harmonyMemory.notes;
   const chordDur = songChordDurMs()/1000;
   const idx = songT<0 ? -1 : Math.min(notes.length-1, Math.floor(songT/chordDur));
-  if(idx>=0){
-    const nt = notes[idx];
-    if(songT>=nt.start+HM_SKIP_ATTACK_SEC && songT<=nt.end){
-      analyser.getFloatTimeDomainData(dataArray);
-      const f = autoCorrelate(dataArray, audioCtx.sampleRate);
-      if(f>0) harmonyMemory.cents[idx].push(centsFromTarget(f, nt.midi));
-    }
-  }
+  if(idx>=0) captureNoteFrame(harmonyMemory, idx, notes[idx], songT);
   if(idx!==harmonyMemory.lastIdx){
     harmonyMemory.lastIdx = idx;
     const s = harmonyMemory.runStage;
@@ -12327,9 +12664,10 @@ function finishHarmonyMemory(completed){
     const held = results.filter(r=>r.held).length;
     const score = Math.round(held/notes.length*100);
     const passed = score>=HM_PASS_PCT;
-    harmonyMemory.lastRun = {stage, song, part, results, held, score, passed};
+    const run = harmonyMemory.lastRun = {stage, song, part, notes, cents, times:harmonyMemory.times, firstVoiced:harmonyMemory.firstVoiced, results, held, score, passed, whyIdx:null};
     hmSaveBest(song, part, stage, score);
     if(passed && stage<HM_STAGES.length-1) harmonyMemory.stage = stage+1;
+    rdSync(song, part, {run:rdRunSummary('hm', stage, run)});
   }
   renderHarmonyMemory();
 }
@@ -12341,18 +12679,13 @@ function renderHmResults(){
   const n = r.results.length, need = Math.ceil(n*HM_PASS_PCT/100);
   const msg = !r.passed ? t('hm_fail_tpl').replace('{need}', need).replace('{n}', n)
     : r.stage<HM_STAGES.length-1 ? t('hm_pass_tpl').replace('{n}', r.stage+2) : t('hm_pass_final');
-  const rows = r.results.map((x,i)=>{
-    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${midiName(x.midi)}`;
-    if(!x.heard) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val hm-silent">${t('hm_not_heard')}</span></div>`;
-    return `<div class="record-row" data-hm-idx="${i}"><span class="record-label">${label}</span>`
-      + `<span class="record-val ${x.held?'hm-held':'hm-off'}">${x.cents>0?'+':''}${x.cents} ${t('hm_cents')} · ${t(x.held?'hm_in_tune':'hm_off_pitch')}</span></div>`;
-  }).join('');
   box.innerHTML = `
     <div class="step-label">${t('hm_result_tpl').replace('{n}', r.stage+1)} — ${t('hm_stage_'+(r.stage+1))}</div>
     <div class="ex-accuracy ${accuracyClass(r.score)}" style="margin:8px 0 4px;">${r.score}%</div>
     <p class="desc">${t('hm_summary_tpl').replace('{held}', r.held).replace('{n}', n).replace('{tol}', HM_TOL_CENTS)}</p>
     <p class="desc" style="color:var(${r.passed?'--teal':'--coral'});">${msg}</p>
-    <div style="margin-top:10px;">${rows}</div>`;
+    ${perfReportHtml(r)}
+    <div style="margin-top:10px;">${noteRowsHtml(r, 'hm-idx')}</div>`;
   box.style.display = 'block';
 }
 
@@ -12500,7 +12833,7 @@ async function startChallenge(kind){
   const need = Math.ceil(n*HM_PASS_PCT/100);
   Object.assign(challenge, {
     active:true, kind, cfg, song:currentSongId, part, notes, total:tl.total, need, lives:n-need+1,
-    cents:notes.map(()=>[]), results:notes.map(()=>null), judged:0, held:0, misses:0, lastIdx:-2, lastJudged:-1,
+    cents:notes.map(()=>[]), times:notes.map(()=>[]), firstVoiced:notes.map(()=>null), results:notes.map(()=>null), judged:0, held:0, misses:0, lastIdx:-2, lastJudged:-1,
     prev:{level:partRehearsal.level, acappella:partRehearsal.acappella},
   });
   // Bosses set their own guide; Chaos and the Ladder keep whatever rehearsal level / A Cappella you chose.
@@ -12528,14 +12861,7 @@ function chTick(){
   const {notes, kind} = challenge;
   const chordDur = songChordDurMs()/1000;
   const idx = songT<0 ? -1 : Math.min(notes.length-1, Math.floor(songT/chordDur));
-  if(idx>=0){
-    const nt = notes[idx];
-    if(songT>=nt.start+HM_SKIP_ATTACK_SEC && songT<=nt.end){
-      analyser.getFloatTimeDomainData(dataArray);
-      const f = autoCorrelate(dataArray, audioCtx.sampleRate);
-      if(f>0) challenge.cents[idx].push(centsFromTarget(f, nt.midi));
-    }
-  }
+  if(idx>=0) captureNoteFrame(challenge, idx, notes[idx], songT);
   while(challenge.judged<notes.length && songT>notes[challenge.judged].end){
     const i = challenge.judged++;
     const r = challenge.results[i] = judgeHeldNote(notes[i].midi, challenge.cents[i]);
@@ -12580,8 +12906,10 @@ function finishChallenge(completed){
     const score = Math.round(held/notes.length*100);
     const passed = score>=HM_PASS_PCT;
     const stoppedAt = challenge.judged<notes.length ? challenge.judged : null; // a boss that won early
-    challenge.lastRun[kind] = {cfg, song, part, results, held, need, score, passed, stoppedAt};
+    const run = challenge.lastRun[kind] = {cfg, song, part, notes, cents:challenge.cents, times:challenge.times, firstVoiced:challenge.firstVoiced,
+      results, held, need, score, passed, stoppedAt, whyIdx:null};
     chSaveBest(kind, song, part, cfg.slot, score);
+    rdSync(song, part, {run:rdRunSummary(kind, cfg.slot, run), win:kind==='boss' && passed, loss:kind==='boss' && !passed});
     if(passed && kind==='boss' && chSel.boss===cfg.slot && chSel.boss<CH_BOSSES.length-1) chSel.boss++;
     if(passed && kind==='ladder' && chSel.rung===cfg.rung && chSel.dir===cfg.dir && chSel.rung<TK_RUNGS.length-1) chSel.rung++;
   }
@@ -12712,20 +13040,14 @@ function renderChallengeResults(kind){
       : r.cfg.rung<TK_RUNGS.length-1 ? t('tk_pass_tpl').replace('{n}', r.cfg.rung+2) : t('tk_pass_final');
     color = r.passed ? '--teal' : '--coral';
   }
-  const rows = r.results.map((x,i)=>{
-    const ev = kind==='chaos' ? ` · <span class="cx-event${r.cfg.plan[i]?'':' calm'}">${chaosEventText(r.cfg.plan[i])}</span>` : '';
-    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${midiName(x.midi)}${ev}`;
-    if(x.unreached) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val hm-silent">${t('ch_not_reached')}</span></div>`;
-    if(!x.heard) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val hm-silent">${t('hm_not_heard')}</span></div>`;
-    return `<div class="record-row" data-ch-idx="${i}"><span class="record-label">${label}</span>`
-      + `<span class="record-val ${x.held?'hm-held':'hm-off'}">${x.cents>0?'+':''}${x.cents} ${t('hm_cents')} · ${t(x.held?'hm_in_tune':'hm_off_pitch')}</span></div>`;
-  }).join('');
+  const ev = i=>kind==='chaos' ? ` · <span class="cx-event${r.cfg.plan[i]?'':' calm'}">${chaosEventText(r.cfg.plan[i])}</span>` : '';
   box.innerHTML = `
     <div class="step-label">${head}</div>
     <div class="ex-accuracy ${accuracyClass(r.score)}" style="margin:8px 0 4px;">${r.score}%</div>
     <p class="desc">${t('hm_summary_tpl').replace('{held}', r.held).replace('{n}', n).replace('{tol}', HM_TOL_CENTS)}</p>
     <p class="desc" style="color:var(${color});">${msg}</p>
-    <div style="margin-top:10px;">${rows}</div>`;
+    ${perfReportHtml(r)}
+    <div style="margin-top:10px;">${noteRowsHtml(r, 'ch-idx', ev)}</div>`;
   box.style.display = 'block';
 }
 
@@ -12846,6 +13168,7 @@ async function ycRecord(part){
   take.peak = Math.max(peak, 0.001);
   (ycAll()[song] = ycAll()[song] || {})[part] = take;
   done(t(ycPersist() ? 'yc_saved_tpl' : 'yc_saved_memory_tpl').replace('{part}', partName(part)));
+  rdCountTake();
 }
 function ycRecTick(){
   const rec = yourChoir.recording;
@@ -12946,6 +13269,379 @@ const SAMPLE_ROSTER = [
   {name:'Sam W.', part:'Bass', pct:92},
   {name:'Nina C.', part:'Alto', pct:56},
 ];
+/* ---------------- Choir World phase 7: Reporting & Identity ---------------- */
+// Performance Report, "Why Did I Fail?", Readiness Engine, Choir DNA and Choir Passport. Nothing new is
+// measured: they read the per-note pitch frames the Harmony Memory / Boss / Chaos / Ladder runs already
+// judge (captureNoteFrame now also keeps when each frame was read and when your voice first arrived),
+// the stored stage and boss bests, full rehearsal play-throughs and Your Choir takes. Readiness lives in
+// user_progress.choir_readiness so it follows the account across devices.
+const PR_ONTIME_FRACTION = 0.4; // Performance Director's timing rule: your voice arrives within the note's first 40%
+const RD_PASS_KEY = 'rehearsalPasses';
+const RD_READY = {levels:REHEARSAL_LEVELS.length, hm:5, bosses:2};
+const RD_DEVELOPING = {levels:3, hm:1, bosses:1};
+const RD_RUNS_MAX = 100;
+const RD_SONGS = ['hymn','ballad'];
+
+// Shared by Harmony Memory and the challenges. Voice is looked for from the note's start (timing); the
+// pitch frames that judgeHeldNote() scores still skip the first HM_SKIP_ATTACK_SEC, exactly as before.
+function captureNoteFrame(run, idx, nt, songT){
+  if(songT<nt.start || songT>nt.end) return;
+  analyser.getFloatTimeDomainData(dataArray);
+  const f = autoCorrelate(dataArray, audioCtx.sampleRate);
+  if(f<=0) return;
+  const at = songT - nt.start;
+  if(run.firstVoiced[idx]===null) run.firstVoiced[idx] = at;
+  if(at>=HM_SKIP_ATTACK_SEC){
+    run.cents[idx].push(centsFromTarget(f, nt.midi));
+    run.times[idx].push(at);
+  }
+}
+
+/* ---- Performance Report ---- */
+const prAvg = a=>a.reduce((x,y)=>x+y, 0)/a.length;
+function prNoteStats(run, i){
+  const nt = run.notes[i], r = run.results[i];
+  const cents = (run.cents && run.cents[i]) || [], times = (run.times && run.times[i]) || [];
+  const entry = run.firstVoiced ? run.firstVoiced[i] : null, len = nt.end - nt.start;
+  return {nt, r, cents, times, entry, len,
+    // Performance Director's per-note pitch formula, on the same frames the verdict was judged from
+    pitchAcc: r.heard ? Math.max(0, Math.round(100 - prAvg(cents.map(Math.abs))*0.6)) : null,
+    onTime: entry===null ? null : entry < len*PR_ONTIME_FRACTION,
+    inTune: cents.filter(c=>Math.abs(c)<=HM_TOL_CENTS).length};
+}
+function computePerfReport(run){
+  const stats = run.notes.map((_,i)=>prNoteStats(run, i));
+  const heard = stats.filter(s=>s.r.heard);
+  const entries = heard.map(s=>s.entry).filter(e=>e!==null);
+  return {
+    n: run.notes.length, held: run.held, score: run.score, heard: heard.length,
+    pitch: heard.length ? Math.round(prAvg(heard.map(s=>s.pitchAcc))) : null,
+    avgCents: heard.length ? Math.round(prAvg(heard.map(s=>Math.abs(s.r.cents)))) : null,
+    timing: heard.length ? Math.round(prAvg(heard.map(s=>s.onTime ? 100 : 50))) : null,
+    onTime: heard.filter(s=>s.onTime).length,
+    medEntryMs: entries.length ? Math.round(hmMedian(entries)*1000) : null,
+  };
+}
+function perfReportHtml(run){
+  if(!run.cents) return '';
+  const rep = computePerfReport(run);
+  const dims = [
+    {label:t('pr_dim_held'), val:rep.score,
+      detail:t('pr_held_detail_tpl').replace('{held}', rep.held).replace('{n}', rep.n).replace('{tol}', HM_TOL_CENTS)},
+    {label:t('skill_pitch'), val:rep.pitch,
+      detail:rep.heard ? t('pr_pitch_detail_tpl').replace('{c}', rep.avgCents).replace('{h}', rep.heard) : t('pr_none_heard')},
+    {label:t('pd_dim_timing'), val:rep.timing,
+      detail:rep.heard ? t('pr_timing_detail_tpl').replace('{on}', rep.onTime).replace('{h}', rep.heard)
+        .replace('{pct}', Math.round(PR_ONTIME_FRACTION*100)).replace('{ms}', rep.medEntryMs) : t('pr_none_heard')},
+  ];
+  const rows = dims.map(d=>`<div class="record-row"><span class="record-label">${d.label}<small>${d.detail}</small></span>`
+    + `<span class="record-val" style="color:var(--teal);">${d.val===null ? '—' : d.val}</span></div>`).join('');
+  const scored = dims.filter(d=>d.val!==null);
+  const weakest = scored.reduce((a,b)=>a.val<=b.val ? a : b);
+  const insight = rep.heard ? `${t('pd_insight_prefix')} ${weakest.label} (${weakest.val}).` : t('pd_insight_notenough');
+  return `<div class="pr-report">
+    <div class="step-label" style="text-align:center;">${t('pd_report_label')}</div>
+    <div style="margin-top:8px;">${rows}</div>
+    <p class="desc" style="margin-top:10px;text-align:center;color:var(--teal);">${insight}</p>
+    <p class="fine-print" style="margin-top:6px;">${t('pr_method_note').replace('{pct}', Math.round(PR_ONTIME_FRACTION*100))}</p>
+  </div>`;
+}
+
+/* ---- "Why Did I Fail?" ---- */
+// Per-note rows for Harmony Memory and the challenges. Every missed note gets a "Why?" that opens the
+// expected note and window next to what the mic actually caught for it.
+function noteRowsHtml(run, idxAttr, extra=()=>''){
+  return run.results.map((x,i)=>{
+    const why = x.held ? '' : ` <button class="link-btn why-btn" data-why="${i}" aria-expanded="${run.whyIdx===i}">${t(run.whyIdx===i ? 'why_hide' : 'why_btn')}</button>`;
+    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${midiName(x.midi)}${extra(i)}`;
+    const val = x.unreached ? `<span class="record-val hm-silent">${t('ch_not_reached')}</span>`
+      : !x.heard ? `<span class="record-val hm-silent">${t('hm_not_heard')}</span>`
+      : `<span class="record-val ${x.held?'hm-held':'hm-off'}">${x.cents>0?'+':''}${x.cents} ${t('hm_cents')} · ${t(x.held?'hm_in_tune':'hm_off_pitch')}</span>`;
+    return `<div class="record-row"${x.heard ? ` data-${idxAttr}="${i}"` : ''}><span class="record-label">${label}${why}</span>${val}</div>`
+      + (run.whyIdx===i && run.cents ? whyDetailHtml(run, i) : '');
+  }).join('');
+}
+const signed = c=>(c>0?'+':c<0?'−':'')+Math.abs(c);
+const fmtNum = (x, d)=>x.toLocaleString(localeForLang(), {minimumFractionDigits:d, maximumFractionDigits:d});
+function whyDetailHtml(run, i){
+  const s = prNoteStats(run, i), {nt, r, cents} = s;
+  const expected = t('why_expected_tpl').replace('{note}', midiName(nt.midi)).replace('{hz}', fmtNum(noteToFreq(nt.midi), 1))
+    .replace('{from}', fmtNum(nt.start, 2)).replace('{to}', fmtNum(nt.end, 2)).replace('{frames}', HM_MIN_FRAMES)
+    .replace('{skip}', Math.round(HM_SKIP_ATTACK_SEC*1000)).replace('{tol}', HM_TOL_CENTS);
+  const limitMs = Math.round(s.len*PR_ONTIME_FRACTION*1000);
+  let heard, reason;
+  if(r.unreached){
+    heard = t('why_unreached_sang');
+    reason = t('why_reason_unreached');
+  } else {
+    const lines = [];
+    if(cents.length){
+      const med = Math.round(hmMedian(cents)), sung = nt.midi + med/100, near = Math.round(sung);
+      lines.push(t('why_sang_tpl').replace('{note}', midiName(near)).replace('{off}', signed(Math.round((sung-near)*100)))
+        .replace('{hz}', fmtNum(noteToFreq(sung), 1)).replace('{med}', signed(med))
+        .replace('{in}', s.inTune).replace('{k}', cents.length).replace('{tol}', HM_TOL_CENTS));
+    }
+    lines.push(s.entry===null ? t('why_no_voice')
+      : t('why_entry_tpl').replace('{ms}', Math.round(s.entry*1000)).replace('{lim}', limitMs));
+    heard = lines.join(' ');
+    if(!cents.length) reason = t('why_reason_silent');
+    else if(!r.heard) reason = t('why_reason_few_tpl').replace('{k}', cents.length).replace('{min}', HM_MIN_FRAMES);
+    else {
+      reason = t('why_reason_off_tpl').replace('{c}', Math.abs(r.cents)).replace('{dir}', t(r.cents>0 ? 'why_sharp' : 'why_flat')).replace('{tol}', HM_TOL_CENTS);
+      const near = Math.round(nt.midi + r.cents/100);
+      if(near!==nt.midi) reason += ' ' + t('why_closer_tpl').replace('{note}', midiName(near)).replace('{target}', midiName(nt.midi));
+    }
+  }
+  return `<div class="why-detail" data-why-detail="${i}">
+    <div class="why-k">${t('why_expected_label')}</div><p>${expected}</p>
+    <div class="why-k">${t('why_heard_label')}</div><p>${heard}</p>
+    <div class="why-k">${t('why_reason_label')}</div><p style="color:var(--coral);">${reason}</p>
+    ${!cents.length ? '' : whyPlotSvg(s)}
+    ${!cents.length ? '' : `<p class="fine-print">${t('why_plot_caption').replace('{tol}', HM_TOL_CENTS).replace('{skip}', Math.round(HM_SKIP_ATTACK_SEC*1000))}</p>`}
+  </div>`;
+}
+// Cents against time over the note's window: the ±tolerance band, the unjudged attack, where your voice arrived.
+function whyPlotSvg(s){
+  const W = 380, H = 120, L = 40, R = 10, T = 8, B = 20, RANGE = 200;
+  const x = sec=>L + Math.max(0, Math.min(1, sec/s.len))*(W-L-R);
+  const y = c=>T + (1 - (Math.max(-RANGE, Math.min(RANGE, c))+RANGE)/(2*RANGE))*(H-T-B);
+  let g = `<rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="none" stroke="var(--hairline)"/>`;
+  g += `<rect x="${L}" y="${y(HM_TOL_CENTS)}" width="${W-L-R}" height="${y(-HM_TOL_CENTS)-y(HM_TOL_CENTS)}" fill="rgba(79,214,196,0.14)"/>`;
+  g += `<rect x="${L}" y="${T}" width="${x(HM_SKIP_ATTACK_SEC)-L}" height="${H-T-B}" fill="var(--hairline)" opacity="0.5"/>`;
+  g += `<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--teal)" stroke-dasharray="3 3"/>`;
+  [[RANGE, '+'+RANGE], [0, midiName(s.nt.midi)], [-RANGE, '−'+RANGE]].forEach(([c, lab])=>{
+    g += `<text x="${L-4}" y="${y(c)+3}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">${lab}</text>`;
+  });
+  g += `<text x="${L}" y="${H-5}" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">0 s</text>`;
+  g += `<text x="${W-R}" y="${H-5}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">${fmtNum(s.len, 2)} s</text>`;
+  if(s.entry!==null) g += `<line x1="${x(s.entry)}" x2="${x(s.entry)}" y1="${T}" y2="${H-B}" stroke="var(--brass)" stroke-dasharray="2 2"/>`;
+  s.cents.forEach((c,k)=>{
+    g += `<circle cx="${x(s.times[k]).toFixed(1)}" cy="${y(c).toFixed(1)}" r="2.2" fill="var(${Math.abs(c)<=HM_TOL_CENTS ? '--teal' : '--coral'})"/>`;
+  });
+  return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${g}</svg>`;
+}
+[['hmemResults', ()=>harmonyMemory.lastRun, renderHmResults],
+ ...Object.entries(CH_IDS).map(([kind, ids])=>[ids.results, ()=>challenge.lastRun[kind], ()=>renderChallengeResults(kind)]),
+].forEach(([id, getRun, rerender])=>{
+  document.getElementById(id).addEventListener('click', e=>{
+    const btn = e.target.closest('[data-why]');
+    const run = btn && getRun();
+    if(!run) return;
+    const i = +btn.dataset.why;
+    run.whyIdx = run.whyIdx===i ? null : i;
+    rerender();
+    const again = document.querySelector(`#${id} [data-why="${i}"]`);
+    if(again) again.focus();
+  });
+});
+
+/* ---- Readiness Engine ---- */
+function rdAll(){
+  if(!progress) return {parts:{}, log:[], runs:[], ycTakes:0}; // before progress has loaded: nothing stored yet
+  let cr = progress.choirReadiness;
+  if(!cr || typeof cr!=='object' || Array.isArray(cr)) cr = progress.choirReadiness = {};
+  cr.parts = cr.parts || {}; cr.log = cr.log || []; cr.runs = cr.runs || []; cr.ycTakes = cr.ycTakes || 0;
+  return cr;
+}
+function rdStored(song, part){ return (rdAll().parts[song] || {})[part] || null; }
+function rdLocalPasses(){ try{ return JSON.parse(localStorage.getItem(RD_PASS_KEY)) || {}; }catch(e){ return {}; } }
+const rdMax = (a, b)=>(a===undefined || a===null) ? (b===undefined ? null : b) : (b===undefined || b===null) ? a : Math.max(a, b);
+// What this device knows (localStorage bests and play-throughs) merged with what the account has stored,
+// so a part never looks less ready on a second device.
+function rdInputs(song, part){
+  const st = rdStored(song, part) || {};
+  const levels = [...new Set([...((rdLocalPasses()[song] || {})[part] || []), ...(st.levels || [])])].sort((a,b)=>a-b);
+  const hmLocal = (hmLoadAll()[song] || {})[part] || [];
+  const hm = HM_STAGES.map((_,i)=>rdMax(hmLocal[i], (st.hm || [])[i]));
+  const bossLocal = ((chLoad().boss || {})[song] || {})[part] || {};
+  const bosses = CH_BOSSES.map((_,i)=>rdMax(bossLocal[i], (st.bosses || [])[i]));
+  let hmPassed = 0;
+  while(hmPassed<HM_STAGES.length && hm[hmPassed]>=HM_PASS_PCT) hmPassed++;
+  return {levels, hm, bosses, hmPassed, bossesBeaten:bosses.filter(b=>b>=HM_PASS_PCT).length, wins:st.wins || 0, losses:st.losses || 0};
+}
+function rdStatus(inp){
+  if(inp.levels.length>=RD_READY.levels && inp.hmPassed>=RD_READY.hm && inp.bossesBeaten>=RD_READY.bosses) return 'ready';
+  if(inp.levels.length>=RD_DEVELOPING.levels || inp.hmPassed>=RD_DEVELOPING.hm || inp.bossesBeaten>=RD_DEVELOPING.bosses) return 'developing';
+  return 'learning';
+}
+// 0–1 for Choir DNA: the three signals weighted equally.
+const rdProgress = inp=>(inp.levels.length/REHEARSAL_LEVELS.length + inp.hmPassed/HM_STAGES.length + inp.bossesBeaten/CH_BOSSES.length)/3;
+
+function rdRunSummary(kind, slot, run){
+  const rep = computePerfReport(run);
+  return {ts:Date.now(), kind, song:run.song, part:run.part, slot, score:run.score, passed:run.passed,
+    held:run.held, n:run.notes.length, pitch:rep.pitch, timing:rep.timing};
+}
+// Recompute one part's record, log a status change, and save it to the account.
+async function rdSync(song, part, extra={}){
+  const inp = rdInputs(song, part), status = rdStatus(inp), cr = rdAll();
+  const prev = rdStored(song, part), prevStatus = prev ? prev.status : 'learning';
+  (cr.parts[song] = cr.parts[song] || {})[part] = {
+    levels:inp.levels, hm:inp.hm, bosses:inp.bosses, hmPassed:inp.hmPassed, bossesBeaten:inp.bossesBeaten,
+    wins:inp.wins + (extra.win ? 1 : 0), losses:inp.losses + (extra.loss ? 1 : 0), status, updated:new Date().toISOString(),
+  };
+  if(status!==prevStatus) cr.log.push({ts:Date.now(), song, part, from:prevStatus, status});
+  if(extra.run){
+    cr.runs.push(extra.run);
+    if(cr.runs.length>RD_RUNS_MAX) cr.runs.splice(0, cr.runs.length-RD_RUNS_MAX);
+  }
+  renderReadiness();
+  if(profile) await saveProgress();
+}
+async function rdCountTake(){
+  rdAll().ycTakes++;
+  if(profile) await saveProgress();
+}
+
+// A rehearsal play-through counts for a level when it ran from chord 1 to the end at that one level,
+// with your guide audible (not A Cappella) and the same song and part throughout.
+function rdStartPass(startIdx){
+  partRehearsal.pass = {startIdx, level:partRehearsal.level, clean:!partRehearsal.acappella, song:currentSongId, part:partRehearsal.part};
+}
+function rdPassEnded(){
+  const p = partRehearsal.pass;
+  if(partRehearsal.active && p && p.clean && p.startIdx===0 && p.level===partRehearsal.level && !partRehearsal.acappella
+     && p.song===currentSongId && p.part===partRehearsal.part && SONG===SONGS[currentSongId]) rdRecordPass(p.song, p.part, p.level);
+  rdStartPass(0); // the loop restarts from chord 1
+}
+function rdRecordPass(song, part, level){
+  const all = rdLocalPasses(), bySong = all[song] = all[song] || {}, arr = bySong[part] = bySong[part] || [];
+  if(!arr.includes(level)){
+    arr.push(level);
+    try{ localStorage.setItem(RD_PASS_KEY, JSON.stringify(all)); }catch(e){ console.error('storage error', e); }
+  }
+  const st = rdStored(song, part);
+  if(!st || !(st.levels || []).includes(level)) rdSync(song, part); // only save when the account doesn't have it yet
+}
+
+const songTitle = id=>{ const k = 'choir_song_'+id+'_name', v = t(k); return v===k ? SONGS[id].name : v; };
+function rdDetailText(inp){
+  return t('rd_row_tpl').replace('{l}', inp.levels.length).replace('{L}', REHEARSAL_LEVELS.length)
+    .replace('{h}', inp.hmPassed).replace('{H}', HM_STAGES.length).replace('{b}', inp.bossesBeaten).replace('{B}', CH_BOSSES.length)
+    .replace('{w}', inp.wins).replace('{x}', inp.losses);
+}
+function renderReadiness(){
+  const box = document.getElementById('rdRows');
+  if(box){
+    document.getElementById('rdDesc').textContent = t('rd_desc');
+    document.getElementById('rdRule').textContent = t('rd_rule_tpl')
+      .replace('{dl}', RD_DEVELOPING.levels).replace('{levels}', RD_READY.levels).replace('{hm}', RD_READY.hm).replace('{bosses}', RD_READY.bosses);
+    box.innerHTML = YC_PARTS.map(p=>{
+      const inp = rdInputs(currentSongId, p), st = rdStatus(inp);
+      return `<div class="rd-row${p===partRehearsal.part ? ' current' : ''}" data-rd-part="${p}">
+        <div class="rd-head"><span class="rd-part">${partName(p)}${p===partRehearsal.part ? ' '+t('rd_you') : ''}</span><span class="rd-status ${st}">${t('rd_status_'+st)}</span></div>
+        <div class="rd-detail">${rdDetailText(inp)}</div></div>`;
+    }).join('');
+    document.getElementById('rdSyncNote').textContent = t(profile ? 'rd_synced' : 'rd_local_only');
+  }
+  renderChoirDna('choirDnaWorkspaceSvg', 'choirDnaWorkspaceNote', currentSongId);
+}
+
+/* ---- Choir DNA ---- */
+// Voice Fingerprint's radar, for the ensemble: one spoke per part, drawn out as far as its real readiness
+// goes, coloured by status, with your Choir Boss record for that song in the middle.
+function renderChoirDna(svgId, noteId, song){
+  const svg = document.getElementById(svgId);
+  if(!svg) return;
+  const parts = YC_PARTS.map(p=>{ const inp = rdInputs(song, p); return {p, inp, st:rdStatus(inp), v:rdProgress(inp)}; });
+  const cx = 190, cy = 162, maxR = 104, inner = 34;
+  const ang = i=>(-90 + i*72)*Math.PI/180;
+  const at = (i, r)=>[cx + r*Math.cos(ang(i)), cy + r*Math.sin(ang(i))];
+  const rOf = v=>inner + v*(maxR-inner);
+  const col = st=>st==='ready' ? 'var(--teal)' : st==='developing' ? 'var(--brass)' : 'var(--muted)';
+  let g = '';
+  [0, 1/3, 2/3, 1].forEach(f=>{ g += `<polygon points="${parts.map((_,i)=>at(i, rOf(f)).join(',')).join(' ')}" fill="none" stroke="var(--hairline)" stroke-width="1"/>`; });
+  parts.forEach((x,i)=>{
+    const [ex, ey] = at(i, maxR), [lx, ly] = at(i, maxR+26);
+    g += `<line x1="${at(i, inner)[0].toFixed(1)}" y1="${at(i, inner)[1].toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="var(--hairline)"/>`;
+    g += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" fill="var(--cream)" font-size="12" font-family="Space Mono, monospace">${partName(x.p)}</text>`;
+    g += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${col(x.st)}" font-size="10" font-family="Space Mono, monospace">${t('rd_status_'+x.st)} · ${Math.round(x.v*100)}%</text>`;
+  });
+  const pts = parts.map((x,i)=>at(i, rOf(x.v)));
+  g += `<polygon points="${pts.map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' ')}" fill="rgba(79,214,196,0.18)" stroke="var(--teal)" stroke-width="2"/>`;
+  parts.forEach((x,i)=>{ g += `<circle cx="${pts[i][0].toFixed(1)}" cy="${pts[i][1].toFixed(1)}" r="5" fill="${col(x.st)}" stroke="var(--bg)" stroke-width="1.5"/>`; });
+  const wins = parts.reduce((a,x)=>a+x.inp.wins, 0), losses = parts.reduce((a,x)=>a+x.inp.losses, 0);
+  g += `<circle cx="${cx}" cy="${cy}" r="${inner-4}" fill="var(--bg)" stroke="var(--hairline)"/>`;
+  g += `<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="16">👹</text>`;
+  g += `<text x="${cx}" y="${cy+13}" text-anchor="middle" fill="var(--cream)" font-size="12" font-family="Space Mono, monospace">${wins}–${losses}</text>`;
+  svg.innerHTML = g;
+  svg.setAttribute('aria-label', `${t('dna_title')}: ${parts.map(x=>`${partName(x.p)} ${t('rd_status_'+x.st)}`).join(', ')}. ${t('dna_boss_aria_tpl').replace('{w}', wins).replace('{l}', losses)}`);
+  const note = document.getElementById(noteId);
+  if(note){
+    const c = st=>parts.filter(x=>x.st===st).length;
+    note.textContent = `${songTitle(song)} — ` + t('dna_note_tpl').replace('{r}', c('ready')).replace('{d}', c('developing')).replace('{l}', c('learning'))
+      .replace('{w}', wins).replace('{x}', losses);
+  }
+}
+
+/* ---- Choir Passport ---- */
+let cpDnaSong = null;
+function cpRunLabel(r){
+  if(r.kind==='hm') return `${t('hm_title')} · ${t('hm_stage_word')} ${r.slot+1}`;
+  if(r.kind==='boss') return `${CH_BOSSES[r.slot].emoji} ${t('cb_name_'+CH_BOSSES[r.slot].key)}`;
+  if(r.kind==='chaos') return t('cx_title');
+  const dir = String(r.slot).replace(/\d+$/, ''), rung = +String(r.slot).replace(/^\D+/, '');
+  return `${t('tk_title')} · ${tkRungText(rung, dir)}`;
+}
+const cpDate = ts=>new Date(ts).toLocaleDateString(localeForLang(), {year:'numeric', month:'short', day:'numeric'});
+function renderChoirPassport(){
+  const empty = document.getElementById('cpEmpty'), content = document.getElementById('cpContent');
+  if(!empty || !content) return;
+  if(!profile){
+    empty.style.display = 'block'; content.style.display = 'none';
+    empty.textContent = t('cp_signin');
+    return;
+  }
+  empty.style.display = 'none'; content.style.display = 'block';
+  const cr = rdAll();
+  const all = [];
+  RD_SONGS.forEach(song=>YC_PARTS.forEach(p=>{ const inp = rdInputs(song, p); all.push({song, p, inp, st:rdStatus(inp)}); }));
+  const count = st=>all.filter(x=>x.st===st).length;
+  const wins = all.reduce((a,x)=>a+x.inp.wins, 0), losses = all.reduce((a,x)=>a+x.inp.losses, 0);
+  const beaten = CH_BOSSES.filter((_,i)=>all.some(x=>x.inp.bosses[i]>=HM_PASS_PCT)).length;
+  const bestHm = all.reduce((a,x)=>x.inp.hmPassed>(a ? a.inp.hmPassed : 0) ? x : a, null);
+  const takesHere = RD_SONGS.reduce((a,s)=>a+Object.keys(ycTakes(s)).length, 0);
+  const last = cr.runs.slice(-10);
+  const row = (label, val)=>`<div class="curriculum-detail-row"><span class="cd-label">${label}</span><span>${val}</span></div>`;
+  const songLine = song=>{
+    const parts = all.filter(x=>x.song===song && x.st!=='learning');
+    return parts.length ? parts.map(x=>`${partName(x.p)}: <span class="rd-status ${x.st}">${t('rd_status_'+x.st)}</span>`).join(' · ') : t('cp_song_all_learning');
+  };
+  document.getElementById('cpRows').innerHTML =
+    row(t('cp_ready_label'), t('cp_ready_tpl').replace('{r}', count('ready')).replace('{n}', all.length).replace('{d}', count('developing')))
+    + RD_SONGS.map(s=>row(songTitle(s), songLine(s))).join('')
+    + row(t('cp_boss_label'), t('cp_boss_tpl').replace('{w}', wins).replace('{l}', losses))
+    + row(t('cp_beaten_label'), t('cp_beaten_tpl').replace('{d}', beaten).replace('{n}', CH_BOSSES.length))
+    + row(t('cp_hm_label'), bestHm ? t('cp_hm_tpl').replace('{s}', bestHm.inp.hmPassed).replace('{n}', HM_STAGES.length).replace('{part}', partName(bestHm.p)).replace('{song}', songTitle(bestHm.song)) : t('cp_none'))
+    + row(t('cp_runs_label'), cr.runs.length ? t('cp_runs_tpl').replace('{n}', cr.runs.length).replace('{k}', last.length).replace('{avg}', Math.round(prAvg(last.map(r=>r.score)))) : t('cp_none'))
+    + row(t('cp_yc_label'), t('cp_yc_tpl').replace('{n}', cr.ycTakes).replace('{k}', takesHere));
+
+  if(!cpDnaSong) cpDnaSong = currentSongId;
+  document.getElementById('cpDnaSongRow').innerHTML = RD_SONGS.map(s=>
+    `<button class="ex-type-btn${s===cpDnaSong ? ' active' : ''}" data-cp-song="${s}" aria-pressed="${s===cpDnaSong}">${songTitle(s)}</button>`).join('');
+  renderChoirDna('cpDnaSvg', 'cpDnaNote', cpDnaSong);
+  document.getElementById('cpDnaDesc').textContent = t('dna_desc');
+
+  const log = cr.log.slice().reverse();
+  document.getElementById('cpHistory').innerHTML = log.length
+    ? log.map(e=>`<div class="record-row"><span class="record-label">${t('cp_history_tpl').replace('{part}', partName(e.part)).replace('{song}', songTitle(e.song))
+        .replace('{from}', t('rd_status_'+e.from)).replace('{to}', `<span class="rd-status ${e.status}">${t('rd_status_'+e.status)}</span>`)}</span>`
+        + `<span class="record-val" style="color:var(--muted);">${cpDate(e.ts)}</span></div>`).join('')
+    : `<p class="desc" style="color:var(--muted);">${t('cp_history_empty')}</p>`;
+  document.getElementById('cpRuns').innerHTML = cr.runs.length
+    ? cr.runs.slice(-12).reverse().map(r=>`<div class="record-row"><span class="record-label">${cpRunLabel(r)} · ${partName(r.part)} (${songTitle(r.song)})<small style="display:block;color:var(--muted);font-size:11px;">${cpDate(r.ts)} · `
+        + t('cp_run_tpl').replace('{p}', r.pitch===null ? '—' : r.pitch).replace('{t}', r.timing===null ? '—' : r.timing) + `</small></span>`
+        + `<span class="record-val ${r.passed ? 'hm-held' : 'hm-off'}">${r.score}%</span></div>`).join('')
+    : `<p class="desc" style="color:var(--muted);">${t('cp_runs_empty')}</p>`;
+  document.getElementById('cpSyncNote').textContent = t('rd_synced');
+}
+document.getElementById('cpDnaSongRow').addEventListener('click', e=>{
+  const b = e.target.closest('[data-cp-song]');
+  if(!b) return;
+  cpDnaSong = b.dataset.cpSong;
+  renderChoirPassport();
+});
+
 function renderRoster(){
   const list = document.getElementById('rosterList');
   list.innerHTML = SAMPLE_ROSTER.map(r=>`
@@ -15296,7 +15992,7 @@ const SHELL_SECTION_MAP = {
   'home':'home', 'train-hub':'train', 'songs-hub':'songs', 'you-hub':'you',
   'tuner':'train','key':'train','range':'train','register':'train','breath':'train',
   'exercises':'train','vibrato':'train','livefeedback':'train','genre':'train','warmup':'train',
-  'choir':'songs','partrehearsal':'songs','staykey':'songs','karaoke':'songs','emotion':'songs',
+  'choir':'songs','partrehearsal':'songs','choirpassport':'songs','staykey':'songs','karaoke':'songs','emotion':'songs',
   'arcade':'world',
   'journey':'you','dashboard':'you','voicehealth':'you','pricing':'you',
 };
@@ -16037,6 +16733,7 @@ function selectSong(id){
   document.getElementById('choirTrackTitle').textContent = `${s.name} — ${s.key} (${s.chordLabels.length} chords)`;
   if(typeof renderSongDifficulty==='function') renderSongDifficulty();
   if(typeof renderSonicXray==='function'){ microscope.t = null; renderSonicXray(); }
+  if(typeof renderReadiness==='function') renderReadiness();
   document.querySelectorAll('#songSelectRow .ex-type-btn').forEach(b=>{ const isSel=b.dataset.songId===id; b.classList.toggle('active', isSel); b.setAttribute('aria-pressed', isSel?'true':'false'); });
   // reset any per-song game state so a stale previous-song result can't linger
   if(typeof bossNoteResults!=='undefined') bossNoteResults=[];
