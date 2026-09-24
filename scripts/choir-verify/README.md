@@ -20,6 +20,7 @@ Serve the client first: `cd deploy && python -m http.server 8765`, then run from
 | `live6.js [url]` | Production click-through for Phase 6 in French (picked in the first-visit language chooser): records Alto and Bass with a test-tone mic, plays the 2-part stack, measures per-part pitch/gain/RMS, take alignment and the stacked peak; checks live HTML is identical to `deploy/index.html` |
 | `p7.js [report\|why\|ready\|i18n\|all] [url]` | Phase 7: Performance Report and "Why Did I Fail?" against a stand-in singer with known offsets/entry delays (recomputed independently from the raw frames), Readiness play-through counting and status rules, Choir DNA, Choir Passport, and en/fr/es/tr text (signed out) |
 | `p7signed.js [url]` | Phase 7 signed in: signs up a fresh account through the auth modal, runs Harmony Memory stage 1 + a boss win + a boss loss, logs each `PATCH /me/progress` `choir_readiness`, then signs in on a second context with empty localStorage and checks the readiness loaded from the account. Confirm the row with `npx supabase db query --linked` on the printed user id |
+| `modalz.js [url] [email password]` | Sign-in modal above the bottom nav: at 1280x720 and 390x844, checks the element on top at the "Already have an account? Sign in" link and signs in with real clicks (no credentials: signs up a new account) |
 | `desc.js` | Stage descriptions and buttons in en/fr/es/tr |
 | `shot.js` | Screenshots of the Breath Map and Harmony Memory cards at desktop and phone widths |
 
