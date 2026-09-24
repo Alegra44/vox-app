@@ -810,6 +810,13 @@
   .warmup-step .ws-title{font-weight:600;font-size:13.5px;}
   .warmup-step .ws-sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
 
+  /* ---- VOICE QUALITY ---- */
+  .vq-rows{display:flex;flex-direction:column;gap:10px;max-width:560px;margin:0 auto;}
+  .vq-row{display:flex;gap:14px;align-items:center;}
+  .vq-row .stat-chip{width:260px;flex-shrink:0;box-sizing:border-box;}
+  .vq-row .stat-chip .val{font-size:15px;}
+  .vq-row .desc{margin:0;font-size:13px;text-align:left;}
+  @media (max-width:520px){ .vq-row{flex-direction:column;align-items:stretch;} .vq-row .stat-chip{width:auto;} .vq-row .desc{text-align:center;} }
   /* ---- VOICE HEALTH ---- */
   .health-status-banner{
     border-radius:12px;padding:16px 20px;margin-bottom:22px;font-size:13.5px;line-height:1.6;
@@ -1480,6 +1487,7 @@
     <button data-panel="registerdrills" id="registerDrillsTabBtn">Register Drills</button>
     <button data-panel="breath">Breath Trainer</button>
     <button data-panel="vibrato">Vibrato Analyzer</button>
+    <button data-panel="voicequality">Voice Quality</button>
     <button data-panel="voicehealth">Voice Health</button>
     <button data-panel="staykey">Stay in Key</button>
     <button data-panel="emotion">Emotional Singing</button>
@@ -1651,6 +1659,7 @@
         <div class="hc-desc" data-i18n="hub_train_expression_desc">Vibrato analysis, live multi-signal feedback, and a real-time visual of your register and stability.</div>
         <div class="hc-btn-row">
           <button class="ghost-btn" data-enter-panel="vibrato" data-i18n="tool_vibrato">Vibrato</button>
+          <button class="ghost-btn" data-enter-panel="voicequality" data-i18n="tool_voice_quality">Voice Quality</button>
           <button class="ghost-btn" data-enter-panel="livefeedback" data-i18n="tool_live_feedback">Live Feedback</button>
           <button class="ghost-btn" data-enter-panel="resonance" data-i18n="tool_resonance">Resonance Visualizer</button>
           <button class="ghost-btn" data-enter-panel="mirror" data-i18n="tool_mirror">Mirror Mode</button>
@@ -2845,6 +2854,29 @@
         <div class="stat-chip"><div class="label" data-i18n="vibrato_consistency_label">Consistency</div><div class="val" id="vibratoConsistencyStat">—</div></div>
       </div>
       <p class="ex-feedback-text" id="vibratoFeedback" style="text-align:center;margin-top:14px;"></p>
+    </div>
+  </section>
+
+  <!-- VOICE QUALITY PANEL -->
+  <section class="panel" id="panel-voicequality">
+    <div class="journey-hero">
+      <div class="j-title"><span data-i18n="vq_title">🔬 Voice Quality</span><span class="beta-tag" style="margin-left:10px;" data-i18n="beta_analysis_tag">BETA ANALYSIS</span></div>
+      <div class="j-sub" data-i18n="vq_sub">Hold one comfortable note on an open vowel ("ah") for 4 seconds.</div>
+    </div>
+    <div class="tuner-hero-card">
+      <div class="btn-row" style="justify-content:center;margin-bottom:18px;">
+        <button class="mic-btn" id="vqStartBtn"><span class="dot-icon"></span><span id="vqStartLabel">Hold a note for 4s</span></button>
+      </div>
+      <div id="vqResult" style="display:none;">
+        <p class="fine-print" id="vqNote" style="text-align:center;margin-bottom:12px;"></p>
+        <div class="vq-rows">
+          <div class="vq-row"><div class="stat-chip"><div class="label" data-i18n="vq_vib_label">Vibrato</div><div class="val" id="vqVibVal">—</div></div><p class="desc" id="vqVibRead"></p></div>
+          <div class="vq-row"><div class="stat-chip"><div class="label" data-i18n="vq_hnr_label">Breathiness (HNR)</div><div class="val" id="vqHnrVal">—</div></div><p class="desc" id="vqHnrRead"></p></div>
+          <div class="vq-row"><div class="stat-chip"><div class="label" data-i18n="vq_bright_label">Brightness</div><div class="val" id="vqBrightVal">—</div></div><p class="desc" id="vqBrightRead"></p></div>
+        </div>
+      </div>
+      <p class="fine-print" style="margin-top:16px;" data-i18n="vq_how">How it's measured.</p>
+      <p class="fine-print" style="margin-top:8px;" data-i18n="vq_fine">Training estimates, not a medical assessment.</p>
     </div>
   </section>
 
@@ -5039,6 +5071,32 @@ const TRANSLATIONS = {
     breath_sub:'Sustain "Ah" as long and as steadily as you can. Measures real sustain duration and loudness consistency — timing ends automatically when your breath runs out (detected as sustained silence), not on a guess.',
     breath_duration_label:'Duration',
     breath_consistency_label:'Consistency',
+    // Voice Quality (phase 1)
+    tool_voice_quality:"Voice Quality",
+    vq_title:"🔬 Voice Quality",
+    vq_sub:"Hold one comfortable note on an open vowel (\"ah\") for 4 seconds. Three estimates come from your live microphone signal: vibrato, breathiness and brightness. They are training cues, not a lab or medical measurement.",
+    vq_start_btn:"Hold a note for 4s",
+    vq_listening:"Listening…",
+    vq_mic_needed:"Microphone access is needed for this measurement. Please allow mic permission and try again.",
+    vq_none:"Didn't catch a clear held note. Try again, a little closer to the mic.",
+    vq_note_tpl:"Measured on {note} ({hz} Hz), {s} s of steady voice.",
+    vq_vib_label:"Vibrato",
+    vq_vib_val_tpl:"{rate} Hz · ±{ext} ct",
+    vq_vib_none:"No regular vibrato: a straight tone. That's a choice, not a fault.",
+    vq_vib_inrange:"Within the commonly cited natural range (about 5–6.5 Hz).",
+    vq_vib_outrange:"Outside the commonly cited natural range (about 5–6.5 Hz). Worth noticing, not necessarily wrong.",
+    vq_hnr_label:"Breathiness (HNR)",
+    vq_hnr_val_tpl:"{db} dB",
+    vq_hnr_clear:"Clear tone: the harmonics stand well above the noise between them.",
+    vq_hnr_some:"Some air in the tone. Possible contributors: a soft or airy onset, a relaxed breathy style, or mic and room noise.",
+    vq_hnr_breathy:"Breathy tone: the noise is close to the harmonics. Possible contributors: air escaping as you sing, a deliberately breathy style, tiredness, or mic and room noise. Not a diagnosis.",
+    vq_bright_label:"Brightness",
+    vq_bright_val_tpl:"{hz} Hz · {r}× pitch",
+    vq_bright_dark:"Darker, warmer tone: most of the energy sits in the lowest harmonics.",
+    vq_bright_balanced:"Balanced tone, between dark and bright.",
+    vq_bright_bright:"Brighter, more forward tone: strong upper harmonics.",
+    vq_how:"How it's measured: vibrato is the timing of the peaks in your pitch trace and the swing of each cycle (± cents). Breathiness compares the energy at your harmonics with the noise floor between them, up to 5 kHz, as a harmonics-to-noise ratio (higher = clearer). Brightness is the spectral centroid, the energy-weighted average frequency up to 6 kHz; it's also shown as a multiple of your pitch, because it rises with the note. Noise suppression is off for this measurement so breath noise isn't filtered out.",
+    vq_fine:"These are training estimates from your microphone, not a medical assessment. Mic, room, distance, vowel and pitch all move them, so compare yourself on the same setup, note and vowel. The bands (for example, 20 dB or more reads as clear) are rough guides for this tool, not clinical norms. If hoarseness or breathiness persists, or singing hurts, a voice teacher or voice professional is the right person to ask.",
     vibrato_title:'🌊 Vibrato',
     beta_analysis_tag:'BETA ANALYSIS',
     vibrato_sub:'Hold a note and let natural vibrato happen. Real peak-detection on your live pitch trace over a ~4 second hold, not a preset animation — single-mic tracking makes this an approximation, so treat it as a coaching cue, not a lab measurement.',
@@ -6343,6 +6401,32 @@ const TRANSLATIONS = {
     breath_sub:'Tenez "Ah" aussi longtemps et aussi régulièrement que possible. Mesure la durée de tenue réelle et la consistance du volume — le chronométrage se termine automatiquement quand votre souffle s\'épuise (détecté comme un silence prolongé), pas par supposition.',
     breath_duration_label:'Durée',
     breath_consistency_label:'Régularité',
+    // Voice Quality (phase 1)
+    tool_voice_quality:"Qualité vocale",
+    vq_title:"🔬 Qualité vocale",
+    vq_sub:"Tenez une note confortable sur une voyelle ouverte (« a ») pendant 4 secondes. Trois estimations viennent du signal de votre micro en direct : vibrato, souffle et brillance. Ce sont des repères d’entraînement, pas une mesure de laboratoire ni une mesure médicale.",
+    vq_start_btn:"Tenez une note 4 s",
+    vq_listening:"Écoute…",
+    vq_mic_needed:"L’accès au micro est nécessaire pour cette mesure. Autorisez le micro et réessayez.",
+    vq_none:"Aucune note tenue nette n’a été détectée. Réessayez, un peu plus près du micro.",
+    vq_note_tpl:"Mesuré sur {note} ({hz} Hz), {s} s de voix stable.",
+    vq_vib_label:"Vibrato",
+    vq_vib_val_tpl:"{rate} Hz · ±{ext} ct",
+    vq_vib_none:"Pas de vibrato régulier : un son droit. C’est un choix, pas un défaut.",
+    vq_vib_inrange:"Dans la plage naturelle couramment citée (environ 5–6,5 Hz).",
+    vq_vib_outrange:"Hors de la plage naturelle couramment citée (environ 5–6,5 Hz). À remarquer, pas forcément une erreur.",
+    vq_hnr_label:"Souffle (HNR)",
+    vq_hnr_val_tpl:"{db} dB",
+    vq_hnr_clear:"Son clair : les harmoniques dépassent nettement le bruit qui les sépare.",
+    vq_hnr_some:"Un peu d’air dans le son. Causes possibles : une attaque douce ou soufflée, un style détendu et soufflé, ou le bruit du micro et de la pièce.",
+    vq_hnr_breathy:"Son soufflé : le bruit est proche des harmoniques. Causes possibles : de l’air qui s’échappe pendant le chant, un style volontairement soufflé, la fatigue, ou le bruit du micro et de la pièce. Ce n’est pas un diagnostic.",
+    vq_bright_label:"Brillance",
+    vq_bright_val_tpl:"{hz} Hz · {r}× la hauteur",
+    vq_bright_dark:"Son plus sombre et chaleureux : l’énergie se concentre sur les harmoniques les plus graves.",
+    vq_bright_balanced:"Son équilibré, entre sombre et brillant.",
+    vq_bright_bright:"Son plus brillant et projeté : harmoniques aiguës marquées.",
+    vq_how:"Comment c’est mesuré : le vibrato est le rythme des crêtes de votre tracé de hauteur et l’amplitude de chaque cycle (± cents). Le souffle compare l’énergie de vos harmoniques au bruit de fond qui les sépare, jusqu’à 5 kHz, sous forme de rapport harmoniques/bruit (plus élevé = plus clair). La brillance est le centroïde spectral, la fréquence moyenne pondérée par l’énergie jusqu’à 6 kHz ; elle est aussi affichée en multiple de votre hauteur, car elle monte avec la note. La réduction de bruit est désactivée pour cette mesure afin de ne pas filtrer le bruit du souffle.",
+    vq_fine:"Ce sont des estimations d’entraînement tirées de votre micro, pas un bilan médical. Le micro, la pièce, la distance, la voyelle et la hauteur les font varier : comparez-vous avec le même matériel, la même note et la même voyelle. Les seuils (par exemple, 20 dB ou plus = clair) sont des repères approximatifs propres à cet outil, pas des normes cliniques. Si un enrouement ou un souffle persiste, ou si chanter fait mal, un professeur de chant ou un professionnel de la voix est la bonne personne à consulter.",
     vibrato_title:'🌊 Vibrato',
     beta_analysis_tag:'ANALYSE BÊTA',
     vibrato_sub:'Tenez une note et laissez le vibrato naturel se produire. Vraie détection de crêtes sur votre trace de justesse en direct sur ~4 secondes de tenue, pas une animation préréglée — le suivi mono-micro fait de ceci une approximation, traitez-le comme une indication de coaching, pas une mesure de laboratoire.',
@@ -7647,6 +7731,32 @@ const TRANSLATIONS = {
     breath_sub:'Sostén "Ah" tan largo y establemente como puedas. Mide la duración real de sostenido y la consistencia del volumen — el cronometraje termina automáticamente cuando se acaba tu aliento (detectado como silencio sostenido), no por suposición.',
     breath_duration_label:'Duración',
     breath_consistency_label:'Consistencia',
+    // Voice Quality (phase 1)
+    tool_voice_quality:"Calidad vocal",
+    vq_title:"🔬 Calidad vocal",
+    vq_sub:"Sostén una nota cómoda en una vocal abierta («a») durante 4 segundos. Tres estimaciones salen de la señal de tu micrófono en vivo: vibrato, aire en la voz y brillo. Son referencias de entrenamiento, no una medición de laboratorio ni médica.",
+    vq_start_btn:"Sostén una nota 4 s",
+    vq_listening:"Escuchando…",
+    vq_mic_needed:"Se necesita acceso al micrófono para esta medición. Permite el micrófono e inténtalo de nuevo.",
+    vq_none:"No se detectó una nota sostenida clara. Inténtalo de nuevo, un poco más cerca del micrófono.",
+    vq_note_tpl:"Medido en {note} ({hz} Hz), {s} s de voz estable.",
+    vq_vib_label:"Vibrato",
+    vq_vib_val_tpl:"{rate} Hz · ±{ext} ct",
+    vq_vib_none:"Sin vibrato regular: un tono recto. Es una elección, no un fallo.",
+    vq_vib_inrange:"Dentro del rango natural citado habitualmente (unos 5–6,5 Hz).",
+    vq_vib_outrange:"Fuera del rango natural citado habitualmente (unos 5–6,5 Hz). Vale la pena notarlo; no es necesariamente un error.",
+    vq_hnr_label:"Aire en la voz (HNR)",
+    vq_hnr_val_tpl:"{db} dB",
+    vq_hnr_clear:"Tono claro: los armónicos sobresalen bien por encima del ruido entre ellos.",
+    vq_hnr_some:"Algo de aire en el tono. Posibles factores: un ataque suave o aireado, un estilo relajado y aireado, o el ruido del micrófono y de la sala.",
+    vq_hnr_breathy:"Tono aireado: el ruido está cerca de los armónicos. Posibles factores: aire que se escapa al cantar, un estilo aireado a propósito, cansancio, o el ruido del micrófono y de la sala. No es un diagnóstico.",
+    vq_bright_label:"Brillo",
+    vq_bright_val_tpl:"{hz} Hz · {r}× la altura",
+    vq_bright_dark:"Tono más oscuro y cálido: la energía se concentra en los armónicos más graves.",
+    vq_bright_balanced:"Tono equilibrado, entre oscuro y brillante.",
+    vq_bright_bright:"Tono más brillante y proyectado: armónicos agudos marcados.",
+    vq_how:"Cómo se mide: el vibrato es el ritmo de los picos de tu trazo de afinación y la oscilación de cada ciclo (± cents). El aire en la voz compara la energía de tus armónicos con el ruido de fondo entre ellos, hasta 5 kHz, como relación armónicos/ruido (más alto = más claro). El brillo es el centroide espectral, la frecuencia media ponderada por la energía hasta 6 kHz; también se muestra como múltiplo de tu altura, porque sube con la nota. La supresión de ruido está desactivada en esta medición para no filtrar el ruido del aire.",
+    vq_fine:"Son estimaciones de entrenamiento a partir de tu micrófono, no una evaluación médica. El micrófono, la sala, la distancia, la vocal y la altura las cambian, así que compárate con el mismo equipo, la misma nota y la misma vocal. Los umbrales (por ejemplo, 20 dB o más se lee como claro) son guías aproximadas de esta herramienta, no normas clínicas. Si la ronquera o el aire en la voz persisten, o si cantar duele, un profesor de canto o un profesional de la voz es la persona adecuada a quien consultar.",
     vibrato_title:'🌊 Vibrato',
     beta_analysis_tag:'ANÁLISIS BETA',
     vibrato_sub:'Sostén una nota y deja que ocurra el vibrato natural. Detección real de picos en tu trazo de afinación en vivo durante ~4 segundos de sostenido, no una animación preestablecida — el seguimiento con un solo micrófono hace de esto una aproximación, trátalo como una señal de coaching, no una medición de laboratorio.',
@@ -8951,6 +9061,32 @@ const TRANSLATIONS = {
     breath_sub:'"Ah" sesini olabildiğince uzun ve sabit tutun. Gerçek sürdürme süresini ve ses düzeyi tutarlılığını ölçer — zamanlama, nefesiniz bittiğinde otomatik olarak sona erer (sürdürülen sessizlik olarak algılanır), tahminle değil.',
     breath_duration_label:'Süre',
     breath_consistency_label:'Tutarlılık',
+    // Voice Quality (phase 1)
+    tool_voice_quality:"Ses Kalitesi",
+    vq_title:"🔬 Ses Kalitesi",
+    vq_sub:"Rahat bir notayı açık bir ünlüyle (\"a\") 4 saniye tutun. Canlı mikrofon sinyalinizden üç tahmin çıkarılır: vibrato, nefeslilik ve parlaklık. Bunlar antrenman ipuçlarıdır; laboratuvar ya da tıbbi ölçüm değildir.",
+    vq_start_btn:"Bir notayı 4 sn tutun",
+    vq_listening:"Dinleniyor…",
+    vq_mic_needed:"Bu ölçüm için mikrofon erişimi gerekiyor. Mikrofon iznini verip tekrar deneyin.",
+    vq_none:"Net, tutulan bir nota algılanmadı. Mikrofona biraz daha yaklaşıp tekrar deneyin.",
+    vq_note_tpl:"{note} ({hz} Hz) üzerinde, {s} sn sabit sesle ölçüldü.",
+    vq_vib_label:"Vibrato",
+    vq_vib_val_tpl:"{rate} Hz · ±{ext} sent",
+    vq_vib_none:"Düzenli vibrato yok: düz bir ses. Bu bir tercih, hata değil.",
+    vq_vib_inrange:"Sık belirtilen doğal aralıkta (yaklaşık 5–6,5 Hz).",
+    vq_vib_outrange:"Sık belirtilen doğal aralığın (yaklaşık 5–6,5 Hz) dışında. Dikkat etmeye değer, ama mutlaka yanlış değil.",
+    vq_hnr_label:"Nefeslilik (HNR)",
+    vq_hnr_val_tpl:"{db} dB",
+    vq_hnr_clear:"Net ses: harmonikler aralarındaki gürültünün belirgin biçimde üstünde.",
+    vq_hnr_some:"Seste biraz hava var. Olası etkenler: yumuşak ya da havalı bir başlangıç, rahat ve nefesli bir üslup ya da mikrofon ve oda gürültüsü.",
+    vq_hnr_breathy:"Nefesli ses: gürültü harmoniklere yakın. Olası etkenler: şarkı söylerken kaçan hava, bilinçli olarak nefesli bir üslup, yorgunluk ya da mikrofon ve oda gürültüsü. Bu bir teşhis değildir.",
+    vq_bright_label:"Parlaklık",
+    vq_bright_val_tpl:"{hz} Hz · perdenin {r} katı",
+    vq_bright_dark:"Daha koyu, sıcak ses: enerji en pes harmoniklerde toplanıyor.",
+    vq_bright_balanced:"Koyu ile parlak arasında dengeli ses.",
+    vq_bright_bright:"Daha parlak, öne çıkan ses: güçlü üst harmonikler.",
+    vq_how:"Nasıl ölçülür: vibrato, perde izinizdeki tepelerin zamanlaması ve her döngünün salınımıdır (± sent). Nefeslilik, harmoniklerinizdeki enerjiyi aralarındaki gürültü tabanıyla 5 kHz'e kadar karşılaştırır ve harmonik/gürültü oranı olarak verir (yüksek = daha net). Parlaklık, 6 kHz'e kadar enerjiyle ağırlıklandırılmış ortalama frekans olan spektral ağırlık merkezidir; notayla birlikte yükseldiği için perdenizin katı olarak da gösterilir. Nefes gürültüsü filtrelenmesin diye bu ölçümde gürültü bastırma kapalıdır.",
+    vq_fine:"Bunlar mikrofonunuzdan elde edilen antrenman tahminleridir, tıbbi bir değerlendirme değildir. Mikrofon, oda, mesafe, ünlü ve perde hepsini etkiler; kendinizi aynı düzen, aynı nota ve aynı ünlüyle karşılaştırın. Eşikler (örneğin 20 dB ve üzeri net sayılır) bu araca özgü kaba ölçütlerdir, klinik normlar değildir. Ses kısıklığı ya da nefeslilik sürerse veya şarkı söylemek acı veriyorsa, bir şan öğretmenine ya da ses uzmanına danışmak doğru olur.",
     vibrato_title:'🌊 Vibrato',
     beta_analysis_tag:'BETA ANALİZ',
     vibrato_sub:'Bir notayı tutun ve doğal vibratonun oluşmasına izin verin. ~4 saniyelik tutuş boyunca canlı perde izinizde gerçek tepe-algılama, önceden ayarlanmış bir animasyon değil — tek mikrofonlu izleme bunu bir yaklaşım yapar, bunu bir laboratuvar ölçümü değil koçluk ipucu olarak değerlendirin.',
@@ -10192,6 +10328,7 @@ function applyTranslations(){
     ()=>typeof setExerciseLevel==='function' && document.getElementById('timeBudgetNote') && setExerciseLevel(exerciseLevel),
     ()=>typeof renderGenreGrid==='function' && document.getElementById('genreGrid') && renderGenreGrid(),
     ()=>typeof renderVoiceHealth==='function' && renderVoiceHealth(),
+    ()=>typeof renderVoiceQuality==='function' && renderVoiceQuality(),
     ()=>typeof renderWarmupContext==='function' && document.getElementById('warmupContext') && renderWarmupContext(),
     ()=>typeof renderSkillTree==='function' && renderSkillTree(),
     ()=>typeof renderVocalLab==='function' && renderVocalLab(),
@@ -11029,10 +11166,16 @@ async function captureVibratoTrace(durationMs=4000){
   });
 }
 
-function analyzeVibrato(samples){
+// windowSec: the length of the pitch detector's analysis window (see the depth correction below).
+function analyzeVibrato(samples, windowSec=0){
   if(samples.length < 20) return {ok:false};
-  const meanMidi = samples.reduce((a,b)=>a+b.midi,0)/samples.length;
-  const trace = samples.map(s=>({t:s.t, cents:(s.midi-meanMidi)*100}));
+  // Frames more than 3 semitones from the median are pitch-detector slips (octave or fifth errors), not vibrato:
+  // a single one used to set the whole depth (a ±30 ct vibrato read as 984 ct).
+  const sortedMidi = samples.map(s=>s.midi).sort((a,b)=>a-b), medMidi = sortedMidi[sortedMidi.length>>1];
+  const kept = samples.filter(s=>Math.abs(s.midi-medMidi)<=3);
+  if(kept.length < 20) return {ok:false};
+  const meanMidi = kept.reduce((a,b)=>a+b.midi,0)/kept.length;
+  const trace = kept.map(s=>({t:s.t, cents:(s.midi-meanMidi)*100}));
 
   // simple peak-picking on the cents curve (local maxima, min 100ms apart)
   const peaks = [];
@@ -11049,8 +11192,14 @@ function analyzeVibrato(samples){
 
   if(peaks.length < 2) return {ok:false, trace};
 
+  // A stall in the capture (no frames for a moment, e.g. the page was busy) can hide a peak, so one interval would
+  // span two cycles: intervals across a gap in the trace are left out.
+  const gaps = trace.slice(1).map((x,i)=>[trace[i].t, x.t]).filter(([a,b])=>b-a > VIBRATO_MAX_FRAME_GAP_MS);
   const periods = [];
-  for(let i=1;i<peaks.length;i++) periods.push((peaks[i].t-peaks[i-1].t)/1000);
+  for(let i=1;i<peaks.length;i++){
+    if(!gaps.some(([a,b])=>a>=peaks[i-1].t && b<=peaks[i].t)) periods.push((peaks[i].t-peaks[i-1].t)/1000);
+  }
+  if(!periods.length) return {ok:false, trace};
   const meanPeriod = periods.reduce((a,b)=>a+b,0)/periods.length;
   const rate = 1/meanPeriod;
 
@@ -11058,11 +11207,27 @@ function analyzeVibrato(samples){
   const periodRelStd = Math.sqrt(periodVariance)/meanPeriod;
   const consistency = Math.max(0, Math.round(100 - periodRelStd*160));
 
-  const allCents = trace.map(s=>s.cents);
-  const depth = Math.round((Math.max(...allCents) - Math.min(...allCents))/2);
+  // Depth (± cents) per cycle: each peak against the troughs either side of it, halved; the median over the cycles.
+  // Measured locally, so a slow pitch drift over the hold doesn't count as vibrato (max − min of the whole trace
+  // turned ±50 ct plus a 15 ct/s drift into 74 ct).
+  const swings = [];
+  peaks.forEach(pk=>{
+    const ref = [troughs.filter(x=>x.t<pk.t).pop(), troughs.find(x=>x.t>pk.t)].filter(Boolean);
+    if(ref.length) swings.push((pk.cents - ref.reduce((a,x)=>a+x.cents,0)/ref.length)/2);
+  });
+  if(!swings.length) return {ok:false, trace};
+  swings.sort((a,b)=>a-b);
+  // Each pitch reading is one autocorrelation over windowSec of audio, i.e. the pitch averaged over that window,
+  // which shrinks a sine-shaped swing at `rate` by sin(x)/x with x = π·rate·windowSec (×0.89 at 6 Hz for 2048
+  // samples at 48 kHz). Undo that known factor.
+  const x = Math.PI*rate*windowSec, shrink = x>0 ? Math.max(0.5, Math.sin(x)/x) : 1;
+  const depth = Math.round(swings[swings.length>>1]/shrink);
+  // A straight tone still has small pitch-tracking wobbles that peak-picking turns into a "rate"; below this swing it isn't vibrato.
+  if(depth < VIBRATO_MIN_CENTS) return {ok:false, trace, straight:true};
 
   return {ok:true, rate: Math.round(rate*10)/10, depth, consistency, trace};
 }
+const VIBRATO_MIN_CENTS = 8, VIBRATO_MAX_FRAME_GAP_MS = 80;
 
 function drawVibratoWave(trace){
   const poly = document.getElementById('vibratoPolyline');
@@ -11088,7 +11253,7 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
   document.getElementById('vibratoFeedback').textContent = '';
 
   const samples = await captureVibratoTrace(4000);
-  const result = analyzeVibrato(samples);
+  const result = analyzeVibrato(samples, analyser.fftSize/audioCtx.sampleRate);
 
   vibratoActive = false;
   btn.classList.remove('listening');
@@ -11120,6 +11285,145 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
 
   registerExerciseCompletion();
 });
+
+/* ---------------- Voice Quality (phase 1: vibrato, breathiness, brightness) ---------------- */
+// Three estimates from the mic signal itself over a 4 s held note. The mic is opened on its own stream with the browser's
+// echo cancellation, noise suppression and auto gain off: noise suppression would filter out the very breath noise the
+// breathiness estimate looks for. Each animation frame reads one 8192-point AnalyserNode (no smoothing, ~5.9 Hz bins at
+// 48 kHz) for the harmonics-to-noise ratio and the spectral centroid, and the pitch (autoCorrelate, the Vibrato Analyzer's
+// detector) from a second 2048-sample analyser behind a 1.5 kHz low-pass: broadband breath noise otherwise swamps the
+// autocorrelation (with white noise at 20 dB HNR it found no pitch at all). Vibrato comes from the pitch trace through analyzeVibrato().
+const VQ_HOLD_MS = 4000, VQ_FFT = 8192, VQ_PITCH_WIN = 2048, VQ_PITCH_LP_HZ = 1500, VQ_HNR_MAX_HZ = 5000, VQ_CENTROID_MAX_HZ = 6000, VQ_CENTROID_FLOOR_DB = 60, VQ_MIN_FRAMES = 30;
+const VQ_HNR_CLEAR = 20, VQ_HNR_BREATHY = 12, VQ_BRIGHT_DARK = 2, VQ_BRIGHT_BRIGHT = 4; // rough reading bands for this tool, not clinical norms
+let vqActive = false, vqLast = null;
+// Harmonics-to-noise ratio (dB) of one frame's spectrum (dB power from getFloatFrequencyData), from f0/2 to 5 kHz.
+// Bins within a quarter of the harmonic spacing of a harmonic (at least ±4 bins, the window's main lobe) are harmonic;
+// the rest, between the harmonics, give the noise level per bin, which is taken to lie under the harmonics as well.
+// HNR = (harmonic energy − the noise under it) / (noise level × every bin in the band).
+function vqHnr(db, binHz, f0){
+  const lo = Math.max(1, Math.round(0.5*f0/binHz)), hi = Math.min(db.length-1, Math.floor(VQ_HNR_MAX_HZ/binHz));
+  const half = Math.max(4, 0.25*f0/binHz);
+  let harm = 0, nHarm = 0, noise = 0, nNoise = 0;
+  for(let i=lo;i<=hi;i++){
+    const pw = Math.pow(10, db[i]/10), k = Math.max(1, Math.round(i*binHz/f0));
+    if(Math.abs(i - k*f0/binHz) <= half){ harm += pw; nHarm++; } else { noise += pw; nNoise++; }
+  }
+  if(!nHarm || !nNoise) return null;
+  const perBin = noise/nNoise, h = harm - perBin*nHarm, n = Math.max(perBin*(hi-lo+1), 1e-30);
+  return h>0 ? 10*Math.log10(h/n) : null;
+}
+// Spectral centroid (Hz): the magnitude-weighted mean frequency from 50 Hz to 6 kHz (the Register Coach's definition and
+// upper limit), ignoring bins more than 60 dB under the frame's loudest so the idle mic floor doesn't pull it up.
+function vqCentroid(db, binHz){
+  const lo = Math.ceil(50/binHz), hi = Math.min(db.length-1, Math.floor(VQ_CENTROID_MAX_HZ/binHz));
+  let peak = -Infinity;
+  for(let i=lo;i<=hi;i++) if(db[i]>peak) peak = db[i];
+  let w = 0, sum = 0;
+  for(let i=lo;i<=hi;i++){
+    if(!(db[i] >= peak-VQ_CENTROID_FLOOR_DB)) continue;
+    const m = Math.pow(10, db[i]/20);
+    w += i*binHz*m; sum += m;
+  }
+  return sum>0 ? w/sum : null;
+}
+async function vqCapture(){
+  await initAudioOnly();
+  const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
+  const src = audioCtx.createMediaStreamSource(stream), an = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser();
+  an.fftSize = VQ_FFT; an.smoothingTimeConstant = 0;
+  pitchAn.fftSize = VQ_PITCH_WIN;
+  src.connect(an);
+  const lp = [0, 1].map(()=>{ const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = VQ_PITCH_LP_HZ; f.Q.value = Math.SQRT1_2; return f; });
+  src.connect(lp[0]).connect(lp[1]).connect(pitchAn);
+  const sr = audioCtx.sampleRate, binHz = sr/VQ_FFT, time = new Float32Array(VQ_PITCH_WIN), spec = new Float32Array(an.frequencyBinCount);
+  const frames = [], t0 = audioCtx.currentTime;
+  let lastT = -1;
+  try{
+    await new Promise(resolve=>{
+      (function frame(){
+        if(!vqActive) return resolve();
+        const t = (audioCtx.currentTime - t0)*1000; // the audio clock, which the analysed samples follow
+        if(t!==lastT){
+          lastT = t;
+          pitchAn.getFloatTimeDomainData(time);
+          const f0 = autoCorrelate(time, sr);
+          if(f0>60 && f0<1400){
+            an.getFloatFrequencyData(spec);
+            frames.push({t, f0, midi:69+12*Math.log2(f0/440), hnr:vqHnr(spec, binHz, f0), centroid:vqCentroid(spec, binHz)});
+          }
+        }
+        if(t>=VQ_HOLD_MS) return resolve();
+        requestAnimationFrame(frame);
+      })();
+    });
+  }finally{
+    src.disconnect(); lp.forEach(f=>f.disconnect());
+    stream.getTracks().forEach(tr=>tr.stop());
+  }
+  return frames;
+}
+const vqMedian = a=>{ if(!a.length) return null; const s = [...a].sort((x,y)=>x-y); return s[s.length>>1]; };
+function vqSummarize(frames){
+  if(frames.length < VQ_MIN_FRAMES) return {ok:false};
+  // Pitch-detector slips (more than 3 semitones off the held note) put the harmonic grid in the wrong place: drop them everywhere.
+  const m0 = vqMedian(frames.map(f=>f.midi)), steady = frames.filter(f=>Math.abs(f.midi-m0)<=3);
+  if(steady.length < VQ_MIN_FRAMES) return {ok:false};
+  const midi = vqMedian(steady.map(f=>f.midi)), f0 = 440*Math.pow(2, (midi-69)/12);
+  return {ok:true, f0, midi, frames:steady.length, seconds:(steady[steady.length-1].t - steady[0].t)/1000,
+    vib:analyzeVibrato(steady.map(f=>({t:f.t, midi:f.midi})), VQ_PITCH_WIN/audioCtx.sampleRate),
+    hnr:vqMedian(steady.map(f=>f.hnr).filter(v=>v!==null)),
+    centroid:vqMedian(steady.map(f=>f.centroid).filter(v=>v!==null))};
+}
+function renderVoiceQuality(){
+  const box = document.getElementById('vqResult');
+  if(!box) return;
+  document.getElementById('vqStartLabel').textContent = t(vqActive ? 'vq_listening' : 'vq_start_btn');
+  const r = vqLast, set = (id, v)=>{ document.getElementById(id).textContent = v; };
+  if(!r){ box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  if(!r.ok){
+    ['vqVibVal', 'vqHnrVal', 'vqBrightVal'].forEach(id=>set(id, '—'));
+    ['vqVibRead', 'vqHnrRead', 'vqBrightRead'].forEach(id=>set(id, ''));
+    set('vqNote', t('vq_none'));
+    return;
+  }
+  const L = localeForLang(), n = (v, d)=>v.toLocaleString(L, {minimumFractionDigits:d, maximumFractionDigits:d});
+  set('vqNote', t('vq_note_tpl').replace('{note}', midiName(Math.round(r.midi))).replace('{hz}', n(r.f0, 0)).replace('{s}', n(r.seconds, 1)));
+  if(r.vib.ok){
+    set('vqVibVal', t('vq_vib_val_tpl').replace('{rate}', n(r.vib.rate, 1)).replace('{ext}', r.vib.depth));
+    set('vqVibRead', t(r.vib.rate<4 || r.vib.rate>7.5 ? 'vq_vib_outrange' : 'vq_vib_inrange'));
+  }else{
+    set('vqVibVal', '—');
+    set('vqVibRead', t('vq_vib_none'));
+  }
+  if(r.hnr!==null){
+    set('vqHnrVal', t('vq_hnr_val_tpl').replace('{db}', n(r.hnr, 1)));
+    set('vqHnrRead', t(r.hnr>=VQ_HNR_CLEAR ? 'vq_hnr_clear' : r.hnr>=VQ_HNR_BREATHY ? 'vq_hnr_some' : 'vq_hnr_breathy'));
+  }else{ set('vqHnrVal', '—'); set('vqHnrRead', ''); }
+  if(r.centroid!==null){
+    const ratio = r.centroid/r.f0;
+    set('vqBrightVal', t('vq_bright_val_tpl').replace('{hz}', n(r.centroid, 0)).replace('{r}', n(ratio, 1)));
+    set('vqBrightRead', t(ratio<VQ_BRIGHT_DARK ? 'vq_bright_dark' : ratio>VQ_BRIGHT_BRIGHT ? 'vq_bright_bright' : 'vq_bright_balanced'));
+  }else{ set('vqBrightVal', '—'); set('vqBrightRead', ''); }
+}
+document.getElementById('vqStartBtn').addEventListener('click', async ()=>{
+  if(vqActive) return;
+  if(blockExercise()) return;
+  vqActive = true;
+  const btn = document.getElementById('vqStartBtn');
+  btn.classList.add('listening');
+  vqLast = null;
+  renderVoiceQuality();
+  let frames = null;
+  try{ frames = await vqCapture(); }
+  catch(e){ console.error('voice quality capture', e); showToast(t('vq_mic_needed'), 'warn'); }
+  const done = vqActive && frames; // not when the mic failed or you navigated away mid-hold
+  vqActive = false;
+  btn.classList.remove('listening');
+  if(done){ vqLast = vqSummarize(frames); if(vqLast.ok) registerExerciseCompletion(); }
+  renderVoiceQuality();
+});
+renderVoiceQuality();
 
 /* ---------------- Choir Workspace ---------------- */
 // Original, royalty-free 4-part progression: I - V - vi - IV - I - IV - V - I in C major
@@ -16595,6 +16899,7 @@ function stopAllActiveSessions(){
   oneTakeActive = false;
   drillActive = false;
   aiDuetActive = false;
+  if(typeof vqActive!=='undefined') vqActive = false;
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof harmonyMemory!=='undefined' && harmonyMemory.active) finishHarmonyMemory(false);
   if(typeof challenge!=='undefined' && challenge.active) finishChallenge(false);
@@ -16618,7 +16923,7 @@ document.querySelectorAll('[data-enter-panel]').forEach(btn=>{
 const SHELL_SECTION_MAP = {
   'home':'home', 'train-hub':'train', 'songs-hub':'songs', 'you-hub':'you',
   'tuner':'train','key':'train','range':'train','register':'train','breath':'train',
-  'exercises':'train','vibrato':'train','livefeedback':'train','genre':'train','warmup':'train',
+  'exercises':'train','vibrato':'train','voicequality':'train','livefeedback':'train','genre':'train','warmup':'train',
   'choir':'songs','partrehearsal':'songs','choirpassport':'songs','staykey':'songs','karaoke':'songs','emotion':'songs',
   'arcade':'world',
   'journey':'you','dashboard':'you','voicehealth':'you','pricing':'you',
