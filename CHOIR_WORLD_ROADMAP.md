@@ -84,14 +84,16 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   auto gain off, and Chrome honours that; Safari, Firefox and mobile browsers (and phones' own mic processing, which
   can sit below the browser) are unverified: they may ignore those constraints or process the signal differently,
   which would change breathiness most (noise suppression removes breath noise) and vibrato depth under noise.
-- ~~Brightness reads high on notes with vibrato~~ **fixed** (2026-09-24): the centroid was magnitude-weighted, and
+- ~~Brightness reads high on notes with vibrato~~ **fixed** (9ce59cd + 630fe3b, live 2026-09-24, dpl_Y9AJou1nHAh94CGxLqKV1zFDBdeu): the centroid was magnitude-weighted, and
   vibrato spreads the upper harmonics over more FFT bins, which adds magnitude weight to them (a 330 Hz tone read 633 Hz
   straight, 679 / 699 / 713 Hz with 6 Hz ±25 / ±50 / ±100 ct). It is now power-weighted, which that spreading doesn't
   change: straight tones read exactly, vibrato up to ±100 ct moves it ≤ 0.7%. The reading bands were re-derived as a
   harmonic roll-off (dark steeper than 13 dB/oct, bright shallower than 9; the old 2× / 4× bands as they fell at 220 Hz)
   and converted to centroid ratios for the sung note, so they mean the same timbre at every pitch (18/18 known-slope
   tones read correctly at 110 / 220 / 440 Hz, straight and with vibrato; 24/24 tones ½ dB/oct either side of each line,
-  straight and ±50 / ±100 ct, land on the right side). Check with `vq.js centroid`, `bands.js` and `cvib.js`.
+  straight and ±50 / ±100 ct, land on the right side). The ratio is shown to two decimals and the band is read from the
+  shown value, so each shown ratio is one band (checked live). Check with `vq.js centroid`, `bands.js`, `cvib.js` and
+  `brightui.js [url]`.
 - The reading bands (HNR 20 / 12 dB; brightness 13 / 9 dB per octave) are rough guides for this tool, not norms measured
   on real voices; nothing has been measured on a real singer yet.
 
