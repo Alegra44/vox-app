@@ -350,6 +350,16 @@
     position:fixed;inset:0;background:rgba(8,7,5,0.72);backdrop-filter:blur(3px);
     display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;
   }
+  /* Choir World gate (phase 8): without the Choir plan or the trial, the Phase 1–7 features are swapped
+     for one locked preview. Hiding is only the view: every Choir World action also checks requireChoirWorld(). */
+  .cw-preview, .cw-lock-only{display:none !important;}
+  body.cw-locked .cw-preview{display:block !important;}
+  body.cw-locked .cw-lock-only{display:inline-block !important;}
+  body.cw-locked .cw-gated,
+  body.cw-locked #panel-partrehearsal > :not(.journey-hero):not(.cw-preview),
+  body.cw-locked #panel-choirpassport > :not(.journey-hero):not(.cw-preview){display:none !important;}
+  .cw-list{margin:8px 0 0;padding-left:20px;}
+  .cw-list li{margin:5px 0;font-size:14px;color:var(--cream);line-height:1.45;}
   .modal-card{
     background:var(--surface-raised);border:1px solid var(--hairline);border-radius:18px;
     padding:30px 28px;max-width:380px;width:100%;box-shadow:var(--shadow);
@@ -1672,7 +1682,7 @@
         <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</div>
+        <div class="hc-title"><span data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
         <div class="hc-desc" data-i18n="hub_songs_rehearsal_desc">Rehearse one part while the others play around you — your guide fades out over 5 real levels, from Learn to Performance.</div>
         <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="partrehearsal" data-i18n="hub_open_btn">Open</button></div>
       </div>
@@ -3405,6 +3415,8 @@
       <div class="j-sub" data-i18n="cp_sub">Your ensemble identity in one place. Every field comes from runs you've actually done in Choir World. Nothing new is measured and nothing is filled in to cover a gap.</div>
     </div>
 
+    <div class="key-card cw-preview" id="cwPreviewPassport"></div>
+
     <div id="cpEmpty" class="key-card" style="display:none;color:var(--muted);"></div>
 
     <div id="cpContent" style="display:none;">
@@ -3477,7 +3489,7 @@
         <div id="songDnaMoments" style="margin-top:10px;"></div>
       </div>
 
-      <div class="key-card" id="sonicXrayCard" style="margin-bottom:20px;">
+      <div class="key-card cw-gated" id="sonicXrayCard" style="margin-bottom:20px;">
         <div class="step-label" data-i18n="xray_title">🩻 Sonic X-Ray</div>
         <p class="fine-print" style="margin:6px 0 4px;" data-i18n="xray_desc">All 5 parts across the song's real timeline, drawn from the exact note schedule the mixer plays. Tap a section to jump playback there; tap anywhere on the parts to put that moment under the Music Microscope.</p>
         <p class="fine-print" style="margin:0 0 8px;" data-i18n="xray_dna_legend">🔥 = a Song DNA difficult moment</p>
@@ -3551,8 +3563,8 @@
         <button class="practice-chip" id="practiceClearBtn" data-i18n="choir_allparts_btn">All parts (clear solo)</button>
       </div>
 
-      <p class="fine-print" style="margin:18px 0 6px;" data-i18n="choir_rehearse_label">Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:</p>
-      <div class="practice-chip-row" id="rehearseEntryRow">
+      <p class="fine-print cw-gated" style="margin:18px 0 6px;" data-i18n="choir_rehearse_label">Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:</p>
+      <div class="practice-chip-row cw-gated" id="rehearseEntryRow">
         <button class="practice-chip" data-rehearse-part="Soprano">Soprano</button>
         <button class="practice-chip" data-rehearse-part="Lead">Lead</button>
         <button class="practice-chip" data-rehearse-part="Alto">Alto</button>
@@ -3561,7 +3573,9 @@
       </div>
     </div>
 
-    <div class="key-card" id="yourChoirCard" style="margin-top:20px;">
+    <div class="key-card cw-preview" id="cwPreviewWorkspace" style="margin-top:20px;"></div>
+
+    <div class="key-card cw-gated" id="yourChoirCard" style="margin-top:20px;">
       <div class="step-label" data-i18n="yc_title">🎤 Your Choir</div>
       <p class="desc" id="ycDesc" style="margin:6px 0 8px;"></p>
       <p class="fine-print" style="margin-bottom:10px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
@@ -3575,7 +3589,7 @@
       <p class="fine-print" style="margin-top:8px;" data-i18n="yc_storage_note">Your recordings are saved on this device only.</p>
     </div>
 
-    <div class="key-card" id="choirDnaWorkspaceCard" style="margin-top:20px;text-align:center;">
+    <div class="key-card cw-gated" id="choirDnaWorkspaceCard" style="margin-top:20px;text-align:center;">
       <div class="step-label" data-i18n="dna_title">🧬 Choir DNA</div>
       <svg id="choirDnaWorkspaceSvg" class="dna-svg" viewBox="0 0 380 330" role="img"></svg>
       <p class="fine-print" id="choirDnaWorkspaceNote" style="margin-top:6px;"></p>
@@ -3598,6 +3612,8 @@
       <div class="j-title" id="rehearsalTitle">🎙️ I Am the Alto</div>
       <div class="j-sub" data-i18n="rehearsal_sub">Your line is front and centre, the other parts keep playing around you, and your part's guide track genuinely fades out level by level until you're singing it alone.</div>
     </div>
+
+    <div class="key-card cw-preview" id="cwPreviewRehearsal"></div>
 
     <div class="key-card">
       <div class="step-label" data-i18n="rehearsal_choose_part">Choose your part</div>
@@ -3828,6 +3844,7 @@
             <li data-i18n="pricing_choir_f2">Pre-separated licensed track catalog</li>
             <li data-i18n="pricing_choir_f3">Director dashboard</li>
             <li data-i18n="pricing_choir_f4">Flat rate, no per-seat pricing</li>
+            <li data-i18n="pricing_choir_f5">Choir World: part rehearsal, trainers, Harmony Memory, Choir Bosses, Your Choir and Choir Passport</li>
           </ul>
           <button class="plan-btn solid-btn teal" data-plan="choir" data-price="$79/mo" data-i18n="pricing_continue_choir_btn">Continue with Choir</button>
         </div>
@@ -5422,6 +5439,28 @@ const TRANSLATIONS = {
     rd_you:"(you)",
     rd_synced:"Saved to your account, so it follows you to other devices.",
     rd_local_only:"You're not signed in, so readiness isn't saved to an account. Harmony Memory and Boss scores stay on this device.",
+    // Choir World gate (phase 8)
+    cw_label:"🎼 Choir World",
+    cw_heading:"Choir World is part of the Choir plan",
+    cw_reason_plan_tpl:"You're on the {plan}. Choir World is included only in the {choir} ({price}).",
+    cw_reason_expired_tpl:"Your 21-day free trial has ended. Choir World continues on the {choir} ({price}) — everything you did in it during the trial is still saved.",
+    cw_reason_signedout_tpl:"Create an account to start your 21-day free trial — it includes all of Choir World. After the trial, Choir World is part of the {choir} ({price}).",
+    cw_unlocks_label:"What the Choir plan unlocks",
+    cw_u1:"I Am the Part rehearsal: 5 levels where your guide really fades out, with Harmony Vision and A Cappella Mode",
+    cw_u2:"Sonic X-Ray and Music Microscope",
+    cw_u3:"Entrance & Cutoff Trainer and Breath Map",
+    cw_u4:"Harmony Memory: 6 stages, from the full guide to singing from memory",
+    cw_u5:"Choir Bosses, Chaos Mode and Tempo/Key Ladder",
+    cw_u6:"Your Choir: record every part yourself and hear the takes stacked",
+    cw_u7:"Performance Report, “Why?” on every missed note, Readiness, Choir DNA and Choir Passport",
+    cw_mixer_note:"Still included in your plan: the Choir Workspace mixer — mute, solo and volume per part.",
+    cw_teaser_real_tpl:"Your real Choir DNA for {song}, from runs you've already done. On the Choir plan you pick up exactly where you left off.",
+    cw_teaser_example:"Example only — not your data. Your own radar fills in from real runs: rehearsal levels played, Harmony Memory stages passed and bosses beaten, per part.",
+    cw_cta_plans:"See the Choir plan",
+    cw_cta_trial:"Start 21-day free trial",
+    cw_hub_tag:"CHOIR PLAN",
+    cw_feature_rehearsal:"🎙️ I Am the Part",
+    cw_feature_acappella:"🎧 A Cappella Mode",
     rd_open_passport:"🪪 Open Choir Passport",
     dna_title:"🧬 Choir DNA",
     dna_desc:"Your ensemble identity for one song. Each spoke is a part, drawn out as far as its real readiness goes (rehearsal levels, Harmony Memory stages and bosses beaten, weighted equally) and coloured by its status. The centre is your Choir Boss record on this song.",
@@ -5658,6 +5697,7 @@ const TRANSLATIONS = {
     pricing_choir_f1:'Full choir mixer — mute/solo/volume per part',
     pricing_choir_f2:'Pre-separated licensed track catalog',
     pricing_choir_f3:'Director dashboard',
+    pricing_choir_f5:"Choir World: part rehearsal, trainers, Harmony Memory, Choir Bosses, Your Choir and Choir Passport",
     pricing_choir_f4:'Flat rate, no per-seat pricing',
     pricing_comefar_h2:'Your voice has come this far.',
     pricing_continue_choir_btn:'Continue with Choir',
@@ -6661,6 +6701,28 @@ const TRANSLATIONS = {
     rd_you:"(vous)",
     rd_synced:"Enregistré sur votre compte, donc disponible sur vos autres appareils.",
     rd_local_only:"Vous n'êtes pas connecté·e : la préparation n'est pas enregistrée sur un compte. Les scores de Mémoire harmonique et des Boss restent sur cet appareil.",
+    // Choir World gate (phase 8)
+    cw_label:"🎼 Monde Chorale",
+    cw_heading:"Le Monde Chorale fait partie du forfait Chorale",
+    cw_reason_plan_tpl:"Vous êtes sur le {plan}. Le Monde Chorale n'est inclus que dans le {choir} ({price}).",
+    cw_reason_expired_tpl:"Votre essai gratuit de 21 jours est terminé. Le Monde Chorale continue avec le {choir} ({price}) — tout ce que vous y avez fait pendant l'essai reste enregistré.",
+    cw_reason_signedout_tpl:"Créez un compte pour commencer votre essai gratuit de 21 jours — il inclut tout le Monde Chorale. Après l'essai, le Monde Chorale fait partie du {choir} ({price}).",
+    cw_unlocks_label:"Ce que débloque le forfait Chorale",
+    cw_u1:"La répétition Je suis ma voix : 5 niveaux où votre guide s'estompe vraiment, avec la Vision harmonique et le mode a cappella",
+    cw_u2:"Radiographie sonore et Microscope musical",
+    cw_u3:"Entrées et coupures, et Carte des respirations",
+    cw_u4:"Mémoire harmonique : 6 étapes, du guide complet au chant de mémoire",
+    cw_u5:"Boss de la chorale, Mode Chaos et Échelle tempo/tonalité",
+    cw_u6:"Votre chorale : enregistrez chaque voix vous-même et écoutez les prises superposées",
+    cw_u7:"Rapport de performance, « Pourquoi ? » sur chaque note manquée, Préparation, ADN Chorale et Passeport Chorale",
+    cw_mixer_note:"Toujours inclus dans votre forfait : le mixeur de l'Espace Chorale — muet, solo et volume par voix.",
+    cw_teaser_real_tpl:"Votre vrai ADN Chorale pour {song}, issu des séances que vous avez déjà faites. Avec le forfait Chorale, vous reprenez exactement là où vous en étiez.",
+    cw_teaser_example:"Exemple uniquement — ce ne sont pas vos données. Votre propre radar se remplit à partir de vraies séances : niveaux de répétition joués, étapes de Mémoire harmonique réussies et boss vaincus, pour chaque voix.",
+    cw_cta_plans:"Voir le forfait Chorale",
+    cw_cta_trial:"Commencer l'essai gratuit de 21 jours",
+    cw_hub_tag:"FORFAIT CHORALE",
+    cw_feature_rehearsal:"🎙️ Je suis ma voix",
+    cw_feature_acappella:"🎧 Mode a cappella",
     rd_open_passport:"🪪 Ouvrir le Passeport Chorale",
     dna_title:"🧬 ADN Chorale",
     dna_desc:"Votre identité d'ensemble pour un morceau. Chaque branche est une voix, tracée aussi loin que va sa préparation réelle (niveaux de répétition, étapes de Mémoire harmonique et boss battus, à poids égal) et colorée selon son statut. Au centre : votre bilan contre les Boss de la chorale sur ce morceau.",
@@ -6897,6 +6959,7 @@ const TRANSLATIONS = {
     pricing_choir_f1:'Mixeur de chorale complet — muet/solo/volume par voix',
     pricing_choir_f2:'Catalogue de pistes sous licence pré-séparées',
     pricing_choir_f3:'Tableau de bord du directeur',
+    pricing_choir_f5:"Monde Chorale : répétition par voix, entraîneurs, Mémoire harmonique, Boss de la chorale, Votre chorale et Passeport Chorale",
     pricing_choir_f4:'Tarif fixe, pas de tarification par place',
     pricing_comefar_h2:'Votre voix est arrivée jusqu\'ici.',
     pricing_continue_choir_btn:'Continuer avec Chorale',
@@ -7900,6 +7963,28 @@ const TRANSLATIONS = {
     rd_you:"(tú)",
     rd_synced:"Guardado en tu cuenta, así que te sigue a otros dispositivos.",
     rd_local_only:"No has iniciado sesión, así que la preparación no se guarda en una cuenta. Las puntuaciones de Memoria armónica y de Jefes se quedan en este dispositivo.",
+    // Choir World gate (phase 8)
+    cw_label:"🎼 Mundo Coral",
+    cw_heading:"Mundo Coral forma parte del plan Coro",
+    cw_reason_plan_tpl:"Tienes el {plan}. Mundo Coral solo está incluido en el {choir} ({price}).",
+    cw_reason_expired_tpl:"Tu prueba gratuita de 21 días ha terminado. Mundo Coral continúa con el {choir} ({price}) — todo lo que hiciste en él durante la prueba sigue guardado.",
+    cw_reason_signedout_tpl:"Crea una cuenta para empezar tu prueba gratuita de 21 días — incluye todo Mundo Coral. Después de la prueba, Mundo Coral forma parte del {choir} ({price}).",
+    cw_unlocks_label:"Lo que desbloquea el plan Coro",
+    cw_u1:"El ensayo Yo soy mi voz: 5 niveles en los que tu guía se desvanece de verdad, con Visión armónica y modo a cappella",
+    cw_u2:"Rayos X sonoros y Microscopio musical",
+    cw_u3:"Entradas y cortes, y Mapa de respiración",
+    cw_u4:"Memoria armónica: 6 etapas, de la guía completa a cantar de memoria",
+    cw_u5:"Jefes del coro, Modo Caos y Escalera de tempo y tonalidad",
+    cw_u6:"Tu coro: graba cada voz tú mismo y escucha las tomas superpuestas",
+    cw_u7:"Informe de actuación, «¿Por qué?» en cada nota fallada, Preparación, ADN Coral y Pasaporte Coral",
+    cw_mixer_note:"Sigue incluido en tu plan: el mezclador del Espacio de Coro — silenciar, solo y volumen por voz.",
+    cw_teaser_real_tpl:"Tu ADN Coral real de {song}, a partir de las sesiones que ya hiciste. Con el plan Coro sigues exactamente donde lo dejaste.",
+    cw_teaser_example:"Solo un ejemplo — no son tus datos. Tu propio radar se llena con sesiones reales: niveles de ensayo tocados, etapas de Memoria armónica superadas y jefes vencidos, por voz.",
+    cw_cta_plans:"Ver el plan Coro",
+    cw_cta_trial:"Empezar la prueba gratuita de 21 días",
+    cw_hub_tag:"PLAN CORO",
+    cw_feature_rehearsal:"🎙️ Yo soy mi voz",
+    cw_feature_acappella:"🎧 Modo a cappella",
     rd_open_passport:"🪪 Abrir Pasaporte Coral",
     dna_title:"🧬 ADN Coral",
     dna_desc:"Tu identidad de conjunto en una canción. Cada eje es una voz, trazada hasta donde llega su preparación real (niveles de ensayo, etapas de Memoria armónica y jefes vencidos, con el mismo peso) y coloreada según su estado. En el centro, tu récord contra los Jefes del coro en esta canción.",
@@ -8136,6 +8221,7 @@ const TRANSLATIONS = {
     pricing_choir_f1:'Mezclador de coro completo — silenciar/solo/volumen por voz',
     pricing_choir_f2:'Catálogo de pistas con licencia pre-separadas',
     pricing_choir_f3:'Panel del director',
+    pricing_choir_f5:"Mundo Coral: ensayo por voz, entrenadores, Memoria armónica, Jefes del coro, Tu coro y Pasaporte Coral",
     pricing_choir_f4:'Tarifa fija, sin precios por asiento',
     pricing_comefar_h2:'Tu voz ha llegado hasta aquí.',
     pricing_continue_choir_btn:'Continuar con Coro',
@@ -9139,6 +9225,28 @@ const TRANSLATIONS = {
     rd_you:"(siz)",
     rd_synced:"Hesabınıza kaydedildi, diğer cihazlarınızda da görünür.",
     rd_local_only:"Giriş yapmadınız, bu yüzden hazırlık bir hesaba kaydedilmiyor. Armoni Hafızası ve Boss puanları bu cihazda kalır.",
+    // Choir World gate (phase 8)
+    cw_label:"🎼 Koro Dünyası",
+    cw_heading:"Koro Dünyası, Koro planına dahildir",
+    cw_reason_plan_tpl:"{plan} kullanıyorsunuz. Koro Dünyası yalnızca {choir} içinde yer alır ({price}).",
+    cw_reason_expired_tpl:"21 günlük ücretsiz denemeniz sona erdi. Koro Dünyası {choir} ile devam ediyor ({price}) — deneme sırasında burada yaptığınız her şey hâlâ kayıtlı.",
+    cw_reason_signedout_tpl:"21 günlük ücretsiz denemenizi başlatmak için bir hesap oluşturun — deneme Koro Dünyası'nın tamamını içerir. Denemeden sonra Koro Dünyası {choir} içinde yer alır ({price}).",
+    cw_unlocks_label:"Koro planının açtıkları",
+    cw_u1:"Ben Kendi Partimim provası: rehberinizin gerçekten azaldığı 5 seviye, Armoni Görüşü ve A cappella modu ile",
+    cw_u2:"Ses Röntgeni ve Müzik Mikroskobu",
+    cw_u3:"Giriş ve Kesiş Çalışması ile Nefes Haritası",
+    cw_u4:"Armoni Hafızası: tam rehberden ezberden söylemeye 6 aşama",
+    cw_u5:"Koro Boss’ları, Kaos Modu ve Tempo/Ton Merdiveni",
+    cw_u6:"Senin Koron: her partiyi kendiniz kaydedin ve kayıtları üst üste dinleyin",
+    cw_u7:"Performans Raporu, kaçırılan her notada “Neden?”, Hazırlık, Koro DNA ve Koro Pasaportu",
+    cw_mixer_note:"Planınıza hâlâ dahil: Koro Çalışma Alanı mikseri — her parti için sessiz, solo ve ses seviyesi.",
+    cw_teaser_real_tpl:"{song} için gerçek Koro DNA'nız, daha önce yaptığınız çalışmalardan. Koro planıyla tam kaldığınız yerden devam edersiniz.",
+    cw_teaser_example:"Yalnızca örnek — sizin verileriniz değil. Kendi radarınız gerçek çalışmalardan dolar: her parti için çalınan prova seviyeleri, geçilen Armoni Hafızası aşamaları ve yenilen boss'lar.",
+    cw_cta_plans:"Koro planını gör",
+    cw_cta_trial:"21 günlük ücretsiz denemeyi başlat",
+    cw_hub_tag:"KORO PLANI",
+    cw_feature_rehearsal:"🎙️ Ben Kendi Partimim",
+    cw_feature_acappella:"🎧 A cappella modu",
     rd_open_passport:"🪪 Koro Pasaportunu aç",
     dna_title:"🧬 Koro DNA",
     dna_desc:"Bir şarkı için topluluk kimliğiniz. Her kol bir partidir; gerçek hazırlığı ne kadar ilerlediyse o kadar uzanır (prova seviyeleri, Armoni Hafızası aşamaları ve yenilen bosslar, eşit ağırlıkla) ve durumuna göre renklenir. Ortada bu şarkıdaki Koro Boss siciliniz var.",
@@ -9375,6 +9483,7 @@ const TRANSLATIONS = {
     pricing_choir_f1:'Tam koro mikseri — ses grubu başına sessize alma/solo/ses düzeyi',
     pricing_choir_f2:'Önceden ayrılmış lisanslı parça kataloğu',
     pricing_choir_f3:'Yönetmen paneli',
+    pricing_choir_f5:"Koro Dünyası: parti provası, çalışmalar, Armoni Hafızası, Koro Boss’ları, Senin Koron ve Koro Pasaportu",
     pricing_choir_f4:'Sabit ücret, koltuk başına fiyatlandırma yok',
     pricing_comefar_h2:'Sesiniz buraya kadar geldi.',
     pricing_continue_choir_btn:'Koro ile devam et',
@@ -9925,6 +10034,7 @@ function applyTranslations(){
     ()=>typeof renderPartRehearsal==='function' && document.getElementById('panel-partrehearsal').classList.contains('active') && renderPartRehearsal(),
     ()=>typeof renderYourChoir==='function' && renderYourChoir(),
     ()=>typeof renderReadiness==='function' && renderReadiness(),
+    ()=>typeof renderCwPreviews==='function' && document.body.classList.contains('cw-locked') && renderCwPreviews(),
     ()=>typeof renderChoirPassport==='function' && document.getElementById('panel-choirpassport').classList.contains('active') && renderChoirPassport(),
   ].forEach(fn=>{ try{ fn(); }catch(e){ console.error('re-render on language switch failed', e); } });
 }
@@ -11752,6 +11862,7 @@ function applyChoirGateUI(){
   ['Soprano','Lead','Alto','Tenor','Bass'].forEach(part=>{
     document.getElementById('vol'+part).disabled = !unlocked;
   });
+  applyChoirWorldGateUI();
 }
 
 function clearAllSolos(){
@@ -12003,6 +12114,7 @@ function runPartRehearsalAnim(){
 }
 
 async function startPartRehearsal(startIdx=0){
+  if(!requireChoirWorld('I Am the Part')) return;
   partRehearsal.active = true;
   rdStartPass(startIdx);
   await playChoir({loop:true, startIdx, onLoopEnd:rdPassEnded});
@@ -12141,6 +12253,7 @@ function svgTimeFromEvent(svg, e, t0, t1){
   return t0 + frac*(t1-t0);
 }
 document.getElementById('xraySvg').addEventListener('click', (e)=>{
+  if(!requireChoirWorld('Sonic X-Ray')) return;
   const sec = e.target.closest('.xray-sec');
   if(sec){
     // Section tap: jump the real mixer playback to that section's first chord.
@@ -12263,6 +12376,7 @@ renderSonicXray();
 // Your part goes fully silent and the other four play at their mixer volume (computeEffectiveGain) —
 // workspace Solo/Mute are left untouched. Every visual pitch guide in this view is hidden via .acappella-on.
 function setAcappella(on){
+  if(on && !requireChoirWorld('A Cappella Mode')) return;
   if(on===partRehearsal.acappella) return;
   partRehearsal.acappella = on;
   if(partRehearsal.pass) partRehearsal.pass.clean = false;
@@ -12375,6 +12489,7 @@ function scheduleRehearsalCountIn(){
 }
 
 async function startTimingTrainer(){
+  if(!requireChoirWorld('Entrance & Cutoff Trainer')) return;
   if(!await initAudio()) return;
   if(harmonyMemory.active) finishHarmonyMemory(false);
   if(challenge.active) finishChallenge(false);
@@ -12590,6 +12705,7 @@ function renderHarmonyMemory(){
 }
 
 async function startHarmonyMemory(){
+  if(!requireChoirWorld('Harmony Memory')) return;
   if(!await initAudio()) return;
   if(timingTrainer.active) finishTimingTrainer();
   if(challenge.active) finishChallenge(false);
@@ -12809,6 +12925,7 @@ function chaosEventText(e){
 }
 
 async function startChallenge(kind){
+  if(!requireChoirWorld({boss:'Choir Bosses', chaos:'Chaos Mode', ladder:'Tempo/Key Ladder'}[kind])) return;
   if(!await initAudio()) return;
   if(timingTrainer.active) finishTimingTrainer();
   if(harmonyMemory.active) finishHarmonyMemory(false);
@@ -13122,6 +13239,7 @@ function ycHeadroom(takes, synthPart=null){
 }
 
 async function ycRecord(part){
+  if(!requireChoirWorld('Your Choir')) return;
   if(yourChoir.recording) return;
   if(yourChoir.playing || choirIsPlaying) stopChoir();
   if(!await initAudio() || typeof MediaRecorder==='undefined'){ ycSetStatus(t('yc_failed')); return; }
@@ -13187,6 +13305,7 @@ function ycRecTick(){
 }
 
 async function ycPlay(){
+  if(!requireChoirWorld('Your Choir')) return;
   if(yourChoir.recording) return;
   const takes = ycTakes(), parts = YC_PARTS.filter(p=>takes[p]);
   if(!parts.length){ ycSetStatus(t('yc_none')); return; }
@@ -13540,10 +13659,10 @@ function renderReadiness(){
 /* ---- Choir DNA ---- */
 // Voice Fingerprint's radar, for the ensemble: one spoke per part, drawn out as far as its real readiness
 // goes, coloured by status, with your Choir Boss record for that song in the middle.
-function renderChoirDna(svgId, noteId, song){
+function renderChoirDna(svgId, noteId, song, example){
   const svg = document.getElementById(svgId);
   if(!svg) return;
-  const parts = YC_PARTS.map(p=>{ const inp = rdInputs(song, p); return {p, inp, st:rdStatus(inp), v:rdProgress(inp)}; });
+  const parts = YC_PARTS.map(p=>{ const inp = example ? example[p] : rdInputs(song, p); return {p, inp, st:rdStatus(inp), v:rdProgress(inp)}; });
   const cx = 190, cy = 162, maxR = 104, inner = 34;
   const ang = i=>(-90 + i*72)*Math.PI/180;
   const at = (i, r)=>[cx + r*Math.cos(ang(i)), cy + r*Math.sin(ang(i))];
@@ -13567,12 +13686,77 @@ function renderChoirDna(svgId, noteId, song){
   svg.innerHTML = g;
   svg.setAttribute('aria-label', `${t('dna_title')}: ${parts.map(x=>`${partName(x.p)} ${t('rd_status_'+x.st)}`).join(', ')}. ${t('dna_boss_aria_tpl').replace('{w}', wins).replace('{l}', losses)}`);
   const note = document.getElementById(noteId);
-  if(note){
+  if(note && example) note.textContent = t('cw_teaser_example');
+  else if(note){
     const c = st=>parts.filter(x=>x.st===st).length;
     note.textContent = `${songTitle(song)} — ` + t('dna_note_tpl').replace('{r}', c('ready')).replace('{d}', c('developing')).replace('{l}', c('learning'))
       .replace('{w}', wins).replace('{x}', losses);
   }
 }
+
+/* ---- Choir World locked preview (phase 8) ---- */
+// Shown instead of the phase 1–7 features to anyone without hasChoirWorldAccess(). One real teaser: the
+// Choir DNA radar drawn from the user's own readiness if they have any (e.g. from their trial), otherwise
+// an example radar labelled as an example. No blurred screenshots, no countdowns.
+const CW_EXAMPLE_DNA = (()=>{
+  const mk = (levels, hmPassed, bossesBeaten, wins, losses)=>({levels:[...Array(levels).keys()], hmPassed, bossesBeaten, wins, losses});
+  return {Soprano:mk(5, 5, 2, 3, 1), Lead:mk(4, 3, 1, 1, 1), Alto:mk(3, 2, 1, 1, 2), Tenor:mk(1, 0, 0, 0, 1), Bass:mk(4, 2, 0, 0, 0)};
+})();
+// The song the user has the most real readiness for, or null when they have none.
+function cwTeaserSong(){
+  let best = null;
+  RD_SONGS.forEach(song=>{
+    const v = YC_PARTS.reduce((a,p)=>{ const inp = rdInputs(song, p); return a + rdProgress(inp) + inp.wins + inp.losses; }, 0);
+    if(v>0 && (!best || v>best.v)) best = {song, v};
+  });
+  return best ? best.song : null;
+}
+function renderCwPreviews(){
+  const choir = planPhrase('choir'), price = '$79/mo';
+  const fill = s=>s.replace('{choir}', choir).replace('{price}', price);
+  const reason = !profile ? fill(t('cw_reason_signedout_tpl'))
+    : trialHasExpired() ? fill(t('cw_reason_expired_tpl'))
+    : fill(t('cw_reason_plan_tpl')).replace('{plan}', planPhrase(currentTier()));
+  const realSong = profile ? cwTeaserSong() : null;
+  [['cwPreviewRehearsal', true], ['cwPreviewPassport', true], ['cwPreviewWorkspace', false]].forEach(([id, teaser])=>{
+    const box = document.getElementById(id);
+    if(!box) return;
+    box.innerHTML = `<div class="step-label">${t('cw_label')} <span class="mock-tag">${planLabel('choir')} · ${price}</span></div>
+      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;">${t('cw_heading')}</h2>
+      <p class="desc" data-cw-reason>${reason}</p>
+      ${teaser ? `<div style="text-align:center;margin-top:14px;">
+        <div class="step-label">${t('dna_title')}</div>
+        <svg id="${id}Dna" class="dna-svg" viewBox="0 0 380 330" role="img"></svg>
+        <p class="fine-print" id="${id}DnaNote" style="margin-top:6px;"></p>
+        ${realSong ? `<p class="fine-print" style="margin-top:4px;">${t('cw_teaser_real_tpl').replace('{song}', songTitle(realSong))}</p>` : ''}
+      </div>` : ''}
+      <div class="step-label" style="margin-top:16px;">${t('cw_unlocks_label')}</div>
+      <ul class="cw-list">${[1,2,3,4,5,6,7].map(i=>`<li>${t('cw_u'+i)}</li>`).join('')}</ul>
+      ${profile && hasChoirAccess() ? `<p class="fine-print" style="margin-top:12px;">${t('cw_mixer_note')}</p>` : ''}
+      <button class="solid-btn teal" data-cw-cta="${profile ? 'plans' : 'trial'}" style="margin-top:16px;">${t(profile ? 'cw_cta_plans' : 'cw_cta_trial')}</button>`;
+    if(teaser) renderChoirDna(id+'Dna', id+'DnaNote', realSong || currentSongId, realSong ? null : CW_EXAMPLE_DNA);
+  });
+}
+function applyChoirWorldGateUI(){
+  const locked = !hasChoirWorldAccess();
+  document.body.classList.toggle('cw-locked', locked);
+  if(!locked) return;
+  // Losing access mid-session (sign-out, trial ending): stop anything Choir World still has running.
+  try{
+    if(timingTrainer.active) finishTimingTrainer();
+    if(harmonyMemory.active) finishHarmonyMemory(false);
+    if(challenge.active) finishChallenge(false);
+    if(partRehearsal.active) stopPartRehearsal();
+    if(yourChoir.recording || yourChoir.playing) ycStop();
+    if(partRehearsal.acappella) setAcappella(false);
+  }catch(e){ console.error('choir world stop error', e); }
+  renderCwPreviews();
+}
+document.addEventListener('click', e=>{
+  const cta = e.target.closest('[data-cw-cta]');
+  if(!cta) return;
+  if(cta.dataset.cwCta==='trial') openAuthModal(); else showPricingPanel();
+});
 
 /* ---- Choir Passport ---- */
 let cpDnaSong = null;
@@ -13681,6 +13865,10 @@ function planPhrase(id){ return t('plan_phrase_template').replace('{p}', planLab
 function isPaid(){ return hasActiveSubscription() || isInTrial(); }
 // Choir mixer specifically: included in the trial, or the Choir plan itself, or any paid plan (a paid singer shouldn't lose access to a feature the trial showed them).
 function hasChoirAccess(){ return isInTrial() || (profile && (profile.subscriptionPlan==='choir' || profile.subscriptionPlan==='monthly' || profile.subscriptionPlan==='yearly')); }
+// Choir World (the phase 1–7 rehearsal, trainers, games, Your Choir and reports) is the Choir plan's own
+// feature set: the Choir plan itself, or anyone still inside the 21-day trial (like every other gate here).
+// Monthly/Yearly keep the workspace mixer through hasChoirAccess(); Choir World needs the Choir plan.
+function hasChoirWorldAccess(){ return isInTrial() || !!(profile && profile.subscriptionPlan==='choir'); }
 function hasTeacherAccess(){ return isInTrial() || (profile && profile.subscriptionPlan==='teacher'); }
 
 // Call sites pass real English feature names as plain strings (e.g. requireProFeature('Stay in Key')).
@@ -13698,6 +13886,9 @@ const FEATURE_LABEL_KEYS = {
   'Ear → Voice → Ear':'tool_ear_voice_ear', 'Sing It 5 Ways':'tool_five_ways', 'One Take Challenge':'tool_one_take',
   'Vocal Puzzle':'tool_vocal_puzzle', 'Studio Mode':'hub_songs_studio_title', 'Emotion Mode':'tool_emotion_mode',
   'Performance Director':'hub_songs_pd_title', 'Register Drills':'tool_register_drills', 'AI Duet Partner':'hub_songs_aiduet_title',
+  'I Am the Part':'cw_feature_rehearsal', 'A Cappella Mode':'cw_feature_acappella', 'Sonic X-Ray':'xray_title',
+  'Entrance & Cutoff Trainer':'tt_title', 'Harmony Memory':'hm_title', 'Choir Bosses':'cb_title', 'Chaos Mode':'cx_title',
+  'Tempo/Key Ladder':'tk_title', 'Your Choir':'yc_title',
 };
 function translateFeatureLabel(raw){
   const key = FEATURE_LABEL_KEYS[raw];
@@ -13709,11 +13900,24 @@ function requireProFeature(featureLabel){
   openPaywallPrompt(translateFeatureLabel(featureLabel), 'monthly');
   return false;
 }
+function requireChoirWorld(featureLabel){
+  if(hasChoirWorldAccess()) return true;
+  if(!profile){ requireSignIn(featureLabel); return false; }
+  openPaywallPrompt(translateFeatureLabel(featureLabel), 'choir');
+  return false;
+}
 function requireChoirFeature(featureLabel){
   if(hasChoirAccess()) return true;
   if(!profile){ requireSignIn(featureLabel); return false; }
   openPaywallPrompt(translateFeatureLabel(featureLabel), 'choir');
   return false;
+}
+function showPricingPanel(){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pricingTabBtn').classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-pricing').classList.add('active');
+  if(typeof renderPricingState==='function') renderPricingState();
 }
 function openPaywallPrompt(featureLabel, suggestedPlan){
   const planName = planLabel(suggestedPlan==='choir' ? 'choir' : 'monthly');
@@ -13735,11 +13939,7 @@ function closePaywallModal(){
 document.getElementById('paywallCancelBtn').addEventListener('click', closePaywallModal);
 document.getElementById('paywallViewPlansBtn').addEventListener('click', ()=>{
   closePaywallModal();
-  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.remove('active'));
-  document.getElementById('pricingTabBtn').classList.add('active');
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('panel-pricing').classList.add('active');
-  if(typeof renderPricingState==='function') renderPricingState();
+  showPricingPanel();
 });
 
 function requireSignIn(featureLabel){
