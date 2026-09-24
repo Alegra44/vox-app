@@ -1,6 +1,7 @@
 // Phase 9 Hooks check, signed in, with real runs (stand-in singer for the pitch, a test-tone MediaStream as the
 // Your Choir mic). Creates two fresh accounts through the real auth modal (voxcoach-p9-<ts>-a / -b@example.com):
-//  A (trial): Home card / Songs hub / Journey milestone / achievements before any run, then Harmony Memory
+//  A (trial): Home card / Songs hub / Journey milestone / achievements before any run, after a failed Harmony
+//     Memory run and a lost boss (Learning: no milestone, no achievement), then Harmony Memory
 //     stage 1 (the Journey milestone), Boss 1 win (First Choir Boss), a Your Choir take (First Your Choir
 //     recording), 5 rehearsal level play-throughs, Harmony Memory stages 2–5 and Boss 2 win (Alto → Ready),
 //     checking after each run what was stamped, saved (PATCH /me/progress) and announced, and the Home card.
@@ -81,13 +82,14 @@ async function view(page, label) {
 
   // ---- real runs
   await ev(async () => { enterPanel('partrehearsal'); selectSong('hymn'); setRehearsalPart('Alto'); setRehearsalLevel(0); harmonyMemory.stage = 0; renderPartRehearsal(); });
-  const standIn = () => ev(() => {
+  // silent: the stand-in never sings, so the run fails (nothing heard)
+  const standIn = silent => ev(sil => {
     const osc = audioCtx.createOscillator(), g = audioCtx.createGain(), an = audioCtx.createAnalyser();
     an.fftSize = 2048; g.gain.value = 0; osc.connect(g).connect(an); osc.start();
     const run = harmonyMemory.active ? harmonyMemory : challenge;
-    run.notes.forEach(nt => { const on = choirStartCtxTime + nt.start; osc.frequency.setValueAtTime(noteToFreq(nt.midi), on); g.gain.setValueAtTime(0.3, on); g.gain.setValueAtTime(0, choirStartCtxTime + nt.end - 0.01); });
+    run.notes.forEach(nt => { const on = choirStartCtxTime + nt.start; osc.frequency.setValueAtTime(noteToFreq(nt.midi), on); g.gain.setValueAtTime(sil ? 0 : 0.3, on); g.gain.setValueAtTime(0, choirStartCtxTime + nt.end - 0.01); });
     analyser = an;
-  });
+  }, !!silent);
   const waitDone = () => ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); });
   const after = async (label, before) => {
     await waitPatches(before);
@@ -96,22 +98,27 @@ async function view(page, label) {
     const last = patches[patches.length - 1];
     console.log(`${label}: toasts ${JSON.stringify(s.toasts)} | firsts ${JSON.stringify(s.firsts)} | Alto ${s.alto} | cw achievements unlocked ${JSON.stringify(s.unlocked)} notified ${JSON.stringify(s.notified)} | last PATCH HTTP ${last && last.status} firsts sent ${JSON.stringify(last && last.firsts && Object.keys(last.firsts))}`);
   };
-  const hm = async stage => {
+  const hm = async (stage, silent) => {
     const before = patches.length;
     await ev(s => { harmonyMemory.stage = s; renderPartRehearsal(); }, stage);
     await ev(async () => { document.getElementById('hmemStartBtn').click(); while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
-    await standIn(); await waitDone();
+    await standIn(silent); await waitDone();
     await after(`HM stage ${stage + 1} (${JSON.stringify(await ev(() => ({ score: harmonyMemory.lastRun.score, passed: harmonyMemory.lastRun.passed })))})`, before);
   };
-  const boss = async slot => {
+  const boss = async (slot, silent) => {
     const before = patches.length;
     await ev(s => { chSel.boss = s; renderChoirBosses(); }, slot);
     await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
-    await standIn(); await waitDone();
+    await standIn(silent); await waitDone();
     await after(`Boss ${slot + 1} (${JSON.stringify(await ev(() => ({ score: challenge.lastRun.boss.score, passed: challenge.lastRun.boss.passed })))})`, before);
   };
 
   console.log('\n== Runs on Demo Hymn, Alto');
+  // Failed runs first: the part has readiness data but is still Learning, and nothing may unlock
+  await hm(0, true);
+  await boss(0, true);
+  await view(page, 'A after a failed Harmony Memory run and a lost boss (Learning)');
+  await ev(() => enterPanel('partrehearsal'));
   await hm(0);
   await view(page, 'A after Harmony Memory stage 1');
   await ev(() => enterPanel('partrehearsal'));
