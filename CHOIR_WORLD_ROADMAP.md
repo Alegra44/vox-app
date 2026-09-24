@@ -72,6 +72,20 @@ stamped by the run that did it (`cwStampFirsts` inside `rdSync` / `rdCountTake`)
   downbeat to the song end; they're saved as a 16-bit mono PCM WAV at the context's sample rate. It runs in real time.
   Stopping early saves nothing. Check with `p10.js`, which decodes the file outside the browser with `wavcheck.py`.
 
+## Voice Quality Analysis — known issues
+
+Voice Quality (`#panel-voicequality`, Train → Expression) is a separate feature line from Choir World; phase 1 is
+vibrato, breathiness (HNR) and brightness (spectral centroid), and the Vibrato Analyzer now shares its capture.
+Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
+
+- **Noise-robustness testing was done in Chrome only.** The vibrato and breathiness tests (`vq.js`, `noisemic.js`) ran
+  in Chromium with synthesized signals fed as the mic. The capture asks for echo cancellation, noise suppression and
+  auto gain off, and Chrome honours that; Safari, Firefox and mobile browsers (and phones' own mic processing, which
+  can sit below the browser) are unverified: they may ignore those constraints or process the signal differently,
+  which would change breathiness most (noise suppression removes breath noise) and vibrato depth under noise.
+- The reading bands (HNR 20 / 12 dB; brightness 2× / 4× the pitch) are rough guides for this tool, not norms measured
+  on real voices; nothing has been measured on a real singer yet.
+
 ## Known issues (app-wide)
 
 - **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
