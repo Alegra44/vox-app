@@ -17,6 +17,9 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 | `bands.js` | Brightness reading bands at their edges: tones ½ dB/oct either side of 13 and 9 dB/oct, straight and ±50 / ±100 ct |
 | `brightui.js [url]` | Brightness as shown: exact ratios swept across both lines at 110–880 Hz in en/fr (each shown ratio must be one band), then real-click holds of tones at the lines; with a URL, on production with a throwaway account |
 | `regcoach.js` | Register Coach (not Voice Quality): its chest score and head/mixed/pushing frame split on tones set near each decision line, straight and with vibrato |
+| `rcmodel.js` | Register Coach score reproduced without a browser (sample-exact tone, AnalyserNode emulation, the app's `autoCorrelate`): pitch same frame vs lagged vs true f0, and candidate scorings with vibrato and white noise |
+| `rcmic.js` | Register Coach score on the same WAVs per mic processing setting (app default, all off, NS / EC / AGC alone), with the harmonic levels and floor each delivers |
+| `rcfix.js` | The proposed Register Coach fix, test-only: a second unprocessed spectrum stream next to the shared mic, power-averaged, vs today |
 | `regcoach2.js` | Register Coach vibrato bias by cause: today's score vs unsmoothed, and power-weighted with and without smoothing (test-only; app unchanged) |
 | `shotlang.js <wav>` | Screenshots of the result rows in each language |
 

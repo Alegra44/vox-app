@@ -112,13 +112,29 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
-- **Register Coach reads vibrato as "pushing chest"** (found 2026-09-24, not fixed). Its chest score (centroid ÷ f0,
-  magnitude-weighted, 2048-point analyser on the shared mic) jumps on the same tone once vibrato is added: a 330 Hz tone
-  scoring 34 straight ("head") scores 63–66 with 6 Hz ±25 / ±50 ct, and 57–72% of its frames cross the 62 "pushing
-  chest" line; a straight 49 reads 85, over 86% of frames. That breaks the bridge streak, best-bridge XP, the Bridge
-  lane (50) and drill register matches for anyone who sings with vibrato above the passaggio. It isn't the analyser's
-  smoothing (unsmoothed reads about the same), and power weighting alone only removes part of it (the 49 still reads
-  59–65), so the cause needs finding before a fix; it is also not monotonic in depth (±100 ct reads less than ±50).
-  Check with `scripts/vq-verify/regcoach.js` and `regcoach2.js`.
+- **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25, fix
+  proposed, not implemented). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
+  98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and
+  skews best-bridge XP, the Bridge lane (50), drill register matches, boss and live-feedback register checks.
+  - **Cause: the shared mic's noise suppression** (`initAudio` asks for it). With the same WAVs, noise suppression alone
+    reproduces the jump, while all-off / echo-cancel-only / auto-gain-only read within ~1 point of a no-mic model. The
+    suppressor's gains follow the moving harmonics and lift the floor between them from about −86 to −50 dB re the
+    fundamental; the score sums magnitude over every bin to 6 kHz, so that floor drags the centroid up. The depth
+    pattern (±100 ct reads less than ±50) is the suppressor's; every unsuppressed path rises steadily with depth.
+  - **Not the cause:** pitch/spectrum sync. Both come from the same analyser in the same frame (≤ 1 render quantum
+    apart); in a sample-exact model, the app's pitch is within 9 ct of the true instantaneous f0 at ±100 ct, using the
+    true or mean f0 instead gives the same score, and taking pitch from a frame ±83 ms away moves it ≤ 3 points.
+    Nor the analyser smoothing on its own.
+  - **Second, smaller cause:** magnitude weighting itself (the Voice Quality issue): unsuppressed, a 50 still reads 62
+    at ±100 ct, and room noise at 20 dB below the tone lifts a 35 to 76.
+  - **Proposed fix** (tested in the browser, test-only): score from an unprocessed spectrum (a second, spectrum-only
+    stream with processing off; pitch stays on the shared mic), power-weighted with power averaged per bin (the
+    analyser's own smoothing averages magnitude, which reads vibrato low), turned into the score through the equivalent
+    magnitude ratio so straight tones keep today's scores and the 35 / 50 / 62 lines. Result: within 0.9 points of
+    straight at every depth; noise at 20 dB lifts a 35 to 43, not 76. Open: a second getUserMedia stream is verified in
+    desktop Chrome only (iOS Safari may end the first track); the Bridge game and live feedback have their own copies of
+    the formula; scores of real, formant-shaped voices will move somewhat, as the mapping assumes a smooth roll-off.
+  - Check with `scripts/vq-verify/rcmodel.js` (no browser), `rcmic.js` (per mic setting), `rcfix.js` (the proposal),
+    `regcoach.js` / `regcoach2.js` (first findings).
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
