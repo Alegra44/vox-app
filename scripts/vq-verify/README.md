@@ -15,6 +15,7 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 | `livevq.js [url]` | Production: a fresh account (deleted at exit) clicks Train → Expression → Vibrato and Voice Quality with known WAVs as the mic; logs every getUserMedia call's constraints and track settings |
 | `cvib.js` | Brightness with and without vibrato: the panel's power-weighted centroid vs the old magnitude-weighted one on the same spectra |
 | `bands.js` | Brightness reading bands at their edges: tones ½ dB/oct either side of 13 and 9 dB/oct, straight and ±50 / ±100 ct |
+| `brightui.js [url]` | Brightness as shown: exact ratios swept across both lines at 110–880 Hz in en/fr (each shown ratio must be one band), then real-click holds of tones at the lines; with a URL, on production with a throwaway account |
 | `regcoach.js` | Register Coach (not Voice Quality): its chest score and head/mixed/pushing frame split on tones set near each decision line, straight and with vibrato |
 | `regcoach2.js` | Register Coach vibrato bias by cause: today's score vs unsmoothed, and power-weighted with and without smoothing (test-only; app unchanged) |
 | `shotlang.js <wav>` | Screenshots of the result rows in each language |
@@ -55,7 +56,8 @@ Brightness (power-weighted; straight / ±25 / ±50 / ±100 ct vibrato, 2 capture
 tone raises it 416 → 439 Hz. Bands: tones rolling off at 16 / 11 / 6 dB/oct read dark / balanced / bright at 110, 220
 and 440 Hz, straight and with ±50 ct (18/18); at the edges (`bands.js`), tones at 13.5 / 12.5 / 9.5 / 8.5 dB/oct read
 1.068 / 1.094 / 1.279 / 1.426× at 220 Hz (expected 1.069 / 1.095 / 1.279 / 1.427), all within 0.5% with ±50 / ±100 ct,
-24/24 on the right side. Magnitude-weighted, the same 330 Hz tone read 633 / 679 / 699 / 713 Hz.
+24/24 on the right side. The ratio is shown to two decimals (the dark line is near 1.08×) and the band is read from
+the shown value, so e.g. at 220 Hz 1.08× is always dark and 1.09× balanced (`brightui.js`). Magnitude-weighted, the same 330 Hz tone read 633 / 679 / 699 / 713 Hz.
 
 Vibrato Analyzer mic (decided 2026-09-24): it now uses Voice Quality's capture (unprocessed mic, pitch behind the
 1.5 kHz low-pass). Tested with `noisemic.js` against its old capture on both mic settings, 6 Hz ±50 ct under noise at
@@ -63,5 +65,5 @@ Vibrato Analyzer mic (decided 2026-09-24): it now uses Voice Quality's capture (
 hiss at ≤10 dB (±20–29); the suppressed mic read ±92–134 with talkers at 0 dB; the low-passed unprocessed path stayed
 within ~2 ct in every case. Chrome's suppressor removed 16–20 dB of stationary noise but only 8 dB of babble.
 
-Known limits: the reading bands (HNR 20 / 12 dB; brightness 2× / 4× f0) are rough guides for this tool, not norms from
+Known limits: the reading bands (HNR 20 / 12 dB; brightness 13 / 9 dB per octave of harmonic roll-off) are rough guides for this tool, not norms from
 real voices. Noise tests use synthesized noise and Chrome's own suppressor; Safari, Firefox and phones process the mic differently.

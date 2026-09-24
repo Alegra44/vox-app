@@ -11409,8 +11409,10 @@ function renderVoiceQuality(){
     set('vqHnrRead', t(r.hnr>=VQ_HNR_CLEAR ? 'vq_hnr_clear' : r.hnr>=VQ_HNR_BREATHY ? 'vq_hnr_some' : 'vq_hnr_breathy'));
   }else{ set('vqHnrVal', '—'); set('vqHnrRead', ''); }
   if(r.centroid!==null){
-    const ratio = r.centroid/r.f0;
-    set('vqBrightVal', t('vq_bright_val_tpl').replace('{hz}', n(r.centroid, 0)).replace('{r}', n(ratio, 1)));
+    // Two decimals (the dark line sits near 1.08×, so one decimal couldn't tell dark from balanced), and the band is
+    // read from the rounded value shown, so each shown ratio falls in exactly one band.
+    const ratio = Math.round(r.centroid/r.f0*100)/100;
+    set('vqBrightVal', t('vq_bright_val_tpl').replace('{hz}', n(r.centroid, 0)).replace('{r}', n(ratio, 2)));
     const [dark, bright] = vqBrightBounds(r.f0);
     set('vqBrightRead', t(ratio<dark ? 'vq_bright_dark' : ratio>bright ? 'vq_bright_bright' : 'vq_bright_balanced'));
   }else{ set('vqBrightVal', '—'); set('vqBrightRead', ''); }
