@@ -1,7 +1,8 @@
 # A clean vibrato tone plus realistic background noise at a set signal-to-noise ratio (full band, power), as a
 # 16-bit mono 48 kHz WAV. Usage: python noisy.py <out.wav> <json>
 #   {"f0":262, "vibRate":6, "vibCents":50, "noise":"pink|rumble|babble|white|none", "snrDb":10, "seconds":20, "seed":1,
-#    "toneOff":false (noise only, for measuring what noise suppression removes)}
+#    "toneOff":false (noise only, for measuring what noise suppression removes),
+#    "harmonics":[1,0.5,0.33,0.25,0.2] (tone amplitudes)}
 # Noise types:
 #   pink   1/f noise: generic room, traffic, distant ventilation
 #   rumble HVAC: brown (1/f²) noise plus a 60 Hz hum with harmonics 120/180/240 Hz
@@ -15,7 +16,7 @@ rng = np.random.default_rng(spec.get('seed', 1))
 
 cents = spec.get('vibCents', 50) * np.sin(2 * np.pi * spec.get('vibRate', 6) * t)
 phase = 2 * np.pi * np.cumsum(spec.get('f0', 262) * 2 ** (cents / 1200)) / sr
-tone = sum(a * np.sin((k + 1) * phase) for k, a in enumerate([1, 0.5, 0.33, 0.25, 0.2]))
+tone = sum(a * np.sin((k + 1) * phase) for k, a in enumerate(spec.get('harmonics', [1, 0.5, 0.33, 0.25, 0.2])))
 
 def colored(exp):  # power spectrum ∝ 1/f^exp
     X = np.fft.rfft(rng.normal(size=n)); f = np.fft.rfftfreq(n, 1 / sr); f[0] = f[1]

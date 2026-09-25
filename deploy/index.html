@@ -4514,6 +4514,13 @@ async function initAudio(){
 }
 
 function loop(){
+  if(mode==='register'){
+    const fr = readRegisterFrame();
+    liveFreq = fr.freq>0 ? fr.freq : null;
+    updateRegisterUI(fr.freq, fr.chest);
+    rafId = requestAnimationFrame(loop);
+    return;
+  }
   analyser.getFloatTimeDomainData(dataArray);
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   liveFreq = freq>0 ? freq : null;
@@ -4521,7 +4528,6 @@ function loop(){
   if(mode==='tuner') updateTunerUI(freq);
   if(mode==='rangeLow') updateRangeLiveUI(freq, 'lowLiveNote');
   if(mode==='rangeHigh') updateRangeLiveUI(freq, 'highLiveNote');
-  if(mode==='register') updateRegisterUI(freq);
 
   rafId = requestAnimationFrame(loop);
 }
@@ -10834,7 +10840,6 @@ document.getElementById('downloadRangePosterBtn').addEventListener('click', ()=>
 document.getElementById('downloadRecapPosterBtn').addEventListener('click', ()=>exportPoster('recapPoster','voxcoach-monthly-recap.png'));
 
 /* ---------------- Register Coach (chest / mixed / head) ---------------- */
-let freqDataArr = null;
 let bridgeFrameCount = 0;   // consecutive frames spent "clean" above passaggio
 let bestBridgeFrames = 0;
 
@@ -10871,29 +10876,77 @@ function midiToY(midi, lowMidi, highMidi, topY, bottomY){
   return bottomY - pct*(bottomY-topY);
 }
 
-function getSpectralChestScore(freq){
-  if(!freqDataArr && analyser) freqDataArr = new Float32Array(analyser.frequencyBinCount);
-  if(!freq || !analyser || !freqDataArr) return null;
-  analyser.getFloatFrequencyData(freqDataArr);
-  const sampleRate = audioCtx.sampleRate;
-  const binHz = sampleRate/analyser.fftSize;
-  let weighted=0, total=0;
-  const maxBin = Math.min(freqDataArr.length, Math.floor(6000/binHz));
-  for(let i=1;i<maxBin;i++){
-    const mag = Math.pow(10, freqDataArr[i]/20); // dB -> linear
-    const f = i*binHz;
-    weighted += f*mag;
-    total += mag;
-  }
-  const centroid = total>0 ? weighted/total : freq;
-  const brightnessRatio = centroid/freq;
-  // map ratio ~1.5 (pure/head-like) .. ~5.5 (harmonic-rich/chest-like) to a 0-100 "chest character" score
-  return Math.max(0, Math.min(100, ((brightnessRatio-1.5)/(5.5-1.5))*100));
+// Register input: every chest/head reading (Register Coach, live feedback, Register Runner, Register Drills, the Register
+// Wraith boss, the Resonance Visualizer) comes from its own mic stream with noise suppression and auto gain off. The shared
+// mic's noise suppression follows a singer's vibrato and lifts the floor between the harmonics, which read as chest
+// (a head-voice tone scoring 34 straight scored 64–69 with ±25–50 ct vibrato). Echo cancellation stays on so the app's
+// own playback (the boss's backing pad) doesn't leak into the reading; on its own it doesn't move the score. As in
+// Voice Quality, pitch comes from a second analyser behind the 1.5 kHz low-pass (VQ_PITCH_LP_HZ), which keeps the
+// autocorrelation working in broadband noise now that nothing suppresses it. The stream closes itself once no frame
+// has been read for REG_IDLE_MS, so every way a tool stops (its button, navigation, game over) releases the mic.
+const REG_FFT = 2048, REG_SMOOTH = 0.8, REG_IDLE_MS = 3000;
+let regIn = null, regOpening = null;
+async function openRegisterInput(){
+  await initAudioOnly();
+  if(regIn) return true;
+  if(!regOpening) regOpening = (async ()=>{
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:false, autoGainControl:false}});
+      const src = audioCtx.createMediaStreamSource(stream), spec = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser();
+      spec.fftSize = REG_FFT; spec.smoothingTimeConstant = 0; // smoothed below on power; the analyser's own smoothing averages magnitude
+      pitchAn.fftSize = REG_FFT;
+      src.connect(spec);
+      const lp = [0, 1].map(()=>{ const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = VQ_PITCH_LP_HZ; f.Q.value = Math.SQRT1_2; return f; });
+      src.connect(lp[0]).connect(lp[1]).connect(pitchAn);
+      regIn = {stream, src, lp, spec, pitchAn, time:new Float32Array(REG_FFT), raw:new Float32Array(REG_FFT), db:new Float32Array(REG_FFT/2), pw:new Float64Array(REG_FFT/2), pwInit:false, lastRead:performance.now()};
+      regIn.idle = setInterval(()=>{ if(regIn && performance.now()-regIn.lastRead > REG_IDLE_MS) closeRegisterInput(); }, 500);
+      return true;
+    }catch(e){
+      showToast('Microphone access is needed for this demo. Please allow mic permission and try again.', 'warn');
+      return false;
+    }finally{ regOpening = null; }
+  })();
+  return regOpening;
+}
+function closeRegisterInput(){
+  if(!regIn) return;
+  clearInterval(regIn.idle);
+  regIn.src.disconnect(); regIn.lp.forEach(f=>f.disconnect());
+  regIn.stream.getTracks().forEach(tr=>tr.stop());
+  regIn = null;
+}
+// One frame: the pitch (low-passed path), the chest score from the same moment, and the unfiltered signal (for loudness).
+function readRegisterFrame(){
+  const r = regIn;
+  if(!r) return {freq:-1, chest:null, raw:null};
+  r.lastRead = performance.now();
+  r.pitchAn.getFloatTimeDomainData(r.time);
+  const freq = autoCorrelate(r.time, audioCtx.sampleRate);
+  r.spec.getFloatTimeDomainData(r.raw);
+  r.spec.getFloatFrequencyData(r.db);
+  for(let i=0;i<r.pw.length;i++){ const p = Math.pow(10, r.db[i]/10); r.pw[i] = r.pwInit ? REG_SMOOTH*r.pw[i] + (1-REG_SMOOTH)*p : p; }
+  r.pwInit = true;
+  return {freq, chest: freq>0 ? chestScoreFromPower(r.pw, audioCtx.sampleRate/REG_FFT, freq) : null, raw:r.raw};
+}
+// The chest score (0–100) from a power spectrum: the power-weighted centroid up to 6 kHz ÷ f0, put on the scale the score
+// has always used (the magnitude-weighted centroid ÷ f0, 1.5 → 0 "pure/head-like" … 5.5 → 100 "harmonic-rich/chest-like")
+// through the harmonic roll-off a_k = k^-s that gives this power centroid, so a steady tone keeps the score it always
+// had and the 35 / 50 / 62 lines keep their meaning. Power, not magnitude: vibrato spreads each harmonic over more bins,
+// which leaves its power unchanged but adds to a magnitude sum, more so the higher the harmonic.
+function chestScoreFromPower(pw, binHz, f0){
+  let w = 0, sum = 0;
+  const hi = Math.min(pw.length, Math.floor(6000/binHz));
+  for(let i=1;i<hi;i++){ w += i*binHz*pw[i]; sum += pw[i]; }
+  if(!(sum>0) || !(f0>0)) return null;
+  const K = Math.max(1, Math.floor(6000/f0)), powRatio = w/sum/f0;
+  const centroidOf = p=>{ let a = 0, b = 0; for(let k=1;k<=K;k++){ const v = Math.pow(k, -p); a += k*v; b += v; } return a/b; }; // amplitudes k^-p
+  let lo = 0, up = 8;
+  for(let it=0;it<40;it++){ const m = (lo+up)/2; if(centroidOf(2*m) > powRatio) lo = m; else up = m; } // power weights are k^-2s
+  const magRatio = centroidOf((lo+up)/2);
+  return Math.max(0, Math.min(100, ((magRatio-1.5)/(5.5-1.5))*100));
 }
 
-function updateRegisterUI(freq){
-  if(!freqDataArr && analyser) freqDataArr = new Float32Array(analyser.frequencyBinCount);
-
+function updateRegisterUI(freq, chestScore){
   if(!freq || freq<50 || freq>1200 || !analyser){
     document.getElementById('regLabel').textContent='—';
     document.getElementById('regFeedback').textContent='Listening…';
@@ -10904,7 +10957,6 @@ function updateRegisterUI(freq){
     return;
   }
 
-  const chestScore = getSpectralChestScore(freq);
   const note = freqToNote(freq);
   document.getElementById('regNoteStat').textContent = `${note.name}${note.octave}`;
   document.getElementById('regChestScoreStat').textContent = Math.round(chestScore)+'%';
@@ -10996,10 +11048,9 @@ document.getElementById('regMicBtn').addEventListener('click', async ()=>{
     return;
   }
   if(!requireProFeature('Register Coach')) return;
-  const ok = await initAudio();
+  const ok = await openRegisterInput();
   if(!ok) return;
   drawBridgeZones();
-  freqDataArr = null;
   bridgeFrameCount = 0;
   mode='register';
   btn.classList.add('listening');
@@ -11993,7 +12044,6 @@ document.getElementById('karaokeStartBtn').addEventListener('click', ()=>{
 /* ---------------- Real-Time Feedback Checklist ---------------- */
 let lfActive = false;
 let lfRafId = null;
-let lfFreqDataArr = null;
 let lfCentsBuffer = [];
 let lfRmsBuffer = [];
 
@@ -12013,7 +12063,7 @@ function setChecklistRow(prefix, state, text){
 
 async function startLiveFeedback(){
   if(!requireProFeature('Real-Time Feedback')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   lfActive = true;
   lfCentsBuffer = [];
   lfRmsBuffer = [];
@@ -12031,9 +12081,8 @@ function stopLiveFeedback(){
 }
 function lfLoop(){
   if(!lfActive) return;
-  analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(dataArray);
-  const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const fr = readRegisterFrame(), freq = fr.freq;
+  const rms = fr.raw ? computeRMS(fr.raw) : 0;
 
   if(freq>0){
     const note = freqToNote(freq);
@@ -12062,21 +12111,8 @@ function lfLoop(){
       setChecklistRow('Breath', consistency>=65?'good':'warn', consistency>=65?'Steady breath support':'Volume dipping');
     }
 
-    if(!lfFreqDataArr && analyser) lfFreqDataArr = new Float32Array(analyser.frequencyBinCount);
-    if(lfFreqDataArr){
-      analyser.getFloatFrequencyData(lfFreqDataArr);
-      const sampleRate = audioCtx.sampleRate;
-      const binHz = sampleRate/analyser.fftSize;
-      let weighted=0, total=0;
-      const maxBin = Math.min(lfFreqDataArr.length, Math.floor(6000/binHz));
-      for(let i=1;i<maxBin;i++){
-        const mag = Math.pow(10, lfFreqDataArr[i]/20);
-        weighted += (i*binHz)*mag;
-        total += mag;
-      }
-      const centroid = total>0 ? weighted/total : freq;
-      const brightnessRatio = centroid/freq;
-      const chestScore = Math.max(0, Math.min(100, ((brightnessRatio-1.5)/(5.5-1.5))*100));
+    if(fr.chest!==null){
+      const chestScore = fr.chest;
       const {lowMidi, highMidi} = registerRangeBounds();
       const passaggioMidi = Math.round(lowMidi + 0.6*(highMidi-lowMidi));
       if(note.midi>=passaggioMidi && chestScore>=62){
@@ -16160,7 +16196,7 @@ document.getElementById('gliderStartBtn').addEventListener('click', ()=>{
 
 /* ---------------- Game 2: Karaoke Boss Battle (Pro) ---------------- */
 let bossActive=false, bossStartTime=0, bossRafId=null, bossHealth=100, playerHealth=100, bossCurrentIdx=-1, bossCentsBuf=[];
-let bossRmsBuf=[], bossChestBuf=[], bossNoteOnsetTime=null, bossNoteWindowStart=0;
+let bossRmsBuf=[], bossChestBuf=[], bossNoteOnsetTime=null, bossNoteWindowStart=0, bossUsesRegisterInput=false;
 let bossNoteResults=[]; // per-note pitchAcc, real data used to find the actual weakest note
 let bossCurrentTargetMidi=null;
 
@@ -16207,7 +16243,8 @@ document.querySelectorAll('#bossDifficultyRow .ex-type-btn').forEach(btn=>{
 
 async function startBoss(){
   if(!requireProFeature('Karaoke Boss Battle')) return;
-  await initAudio();
+  bossUsesRegisterInput = BOSS_TYPES[selectedBossType].key==='register';
+  if(bossUsesRegisterInput){ if(!await openRegisterInput()) return; } else await initAudio();
   await playBackingPad(false);
   bossActive=true; bossStartTime=performance.now(); bossHealth=100; playerHealth=100; bossCurrentIdx=-1; bossCentsBuf=[]; bossNoteResults=[];
   bossRmsBuf=[]; bossChestBuf=[]; bossNoteOnsetTime=null; bossNoteWindowStart=performance.now();
@@ -16322,14 +16359,14 @@ function bossLoop(){
     bossCurrentIdx=idx; bossCentsBuf=[]; bossRmsBuf=[]; bossChestBuf=[]; bossNoteOnsetTime=null; bossNoteWindowStart=performance.now();
   }
 
-  analyser.getFloatTimeDomainData(dataArray);
-  const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
+  let freq, buf, chestScore=null;
+  if(bossUsesRegisterInput){ const fr=readRegisterFrame(); freq=fr.freq; buf=fr.raw; chestScore=fr.chest; }
+  else { analyser.getFloatTimeDomainData(dataArray); freq=autoCorrelate(dataArray, audioCtx.sampleRate); buf=dataArray; }
   if(freq>0){
     if(bossNoteOnsetTime===null) bossNoteOnsetTime=performance.now();
     const cents=centsFromTarget(freq, targetMidi);
     if(cents!==null && Math.abs(cents)<300) bossCentsBuf.push(cents);
-    bossRmsBuf.push(computeRMS(dataArray));
-    const chestScore = getSpectralChestScore(freq);
+    bossRmsBuf.push(computeRMS(buf));
     if(chestScore!==null) bossChestBuf.push(chestScore);
   }
 
@@ -16461,13 +16498,13 @@ document.getElementById('bossRematchBtn').addEventListener('click', ()=>{
 });
 
 /* ---------------- Game 3: Register Runner (Pro) ---------------- */
-let bridgeActive=false, bridgeRafId=null, bridgeScroll=0, bridgeLane='chest', bridgeLives=3, bridgeScoreVal=0, bridgeObstacles=[], bridgeFreqDataArr=null, bridgeLastSpawnWorldX=0;
+let bridgeActive=false, bridgeRafId=null, bridgeScroll=0, bridgeLane='chest', bridgeLives=3, bridgeScoreVal=0, bridgeObstacles=[], bridgeLastSpawnWorldX=0;
 const BRIDGE_SCROLL_SPEED=2.6;
 const BRIDGE_LANE_Y={chest:180, head:60};
 
 async function startBridgeRunner(){
   if(!requireProFeature('Register Runner')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   bridgeActive=true; bridgeScroll=0; bridgeLane='chest'; bridgeLives=3; bridgeScoreVal=0; bridgeObstacles=[]; bridgeLastSpawnWorldX=400;
   document.getElementById('bridgeGameOver').style.display='none';
   document.getElementById('bridgeStartLabel').textContent='Running — tap to stop';
@@ -16489,26 +16526,8 @@ function bridgeLoop(){
   const ctx=canvas.getContext('2d');
   const W=canvas.width, H=canvas.height;
 
-  analyser.getFloatTimeDomainData(dataArray);
-  const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
-  if(freq>0){
-    if(!bridgeFreqDataArr && analyser) bridgeFreqDataArr=new Float32Array(analyser.frequencyBinCount);
-    if(bridgeFreqDataArr){
-      analyser.getFloatFrequencyData(bridgeFreqDataArr);
-      const sampleRate=audioCtx.sampleRate;
-      const binHz=sampleRate/analyser.fftSize;
-      let weighted=0, total=0;
-      const maxBin=Math.min(bridgeFreqDataArr.length, Math.floor(6000/binHz));
-      for(let i=1;i<maxBin;i++){
-        const mag=Math.pow(10, bridgeFreqDataArr[i]/20);
-        weighted += (i*binHz)*mag; total+=mag;
-      }
-      const centroid = total>0 ? weighted/total : freq;
-      const brightnessRatio = centroid/freq;
-      const chestScore = Math.max(0, Math.min(100, ((brightnessRatio-1.5)/(5.5-1.5))*100));
-      bridgeLane = chestScore>=50 ? 'chest' : 'head';
-    }
-  }
+  const fr = readRegisterFrame();
+  if(fr.freq>0 && fr.chest!==null) bridgeLane = fr.chest>=50 ? 'chest' : 'head';
 
   bridgeScroll += BRIDGE_SCROLL_SPEED;
   bridgeScoreVal = Math.floor(bridgeScroll/10);
@@ -17753,7 +17772,7 @@ drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);
 
 async function startResonanceVisualizer(){
   if(!requireProFeature('Resonance Visualizer')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   resonanceActive = true;
   resonanceCentsBuffer = [];
   document.getElementById('resonanceStartLabel').textContent = 'Stop';
@@ -17776,8 +17795,7 @@ document.getElementById('resonanceStartBtn')?.addEventListener('click', ()=>{
 
 function resonanceLoop(){
   if(!resonanceActive) return;
-  analyser.getFloatTimeDomainData(dataArray);
-  const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const fr = readRegisterFrame(), freq = fr.freq;
 
   if(freq>0){
     const note = freqToNote(freq);
@@ -17796,7 +17814,7 @@ function resonanceLoop(){
       }
       oscillation = Math.max(0, Math.min(100, crossings*9));
     }
-    const chestScore = getSpectralChestScore(freq) ?? 50;
+    const chestScore = fr.chest ?? 50;
     const zone = chestScore>=62 ? 'Chest' : chestScore>=35 ? 'Mixed' : 'Head';
 
     document.getElementById('resRegisterStat').textContent = zone;
@@ -19658,7 +19676,7 @@ updateDrillPreCopy();
 
 document.getElementById('drillStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Register Drills')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   drillActive = true;
   drillResults = [];
   document.getElementById('drillPreCard').style.display='none';
@@ -19690,13 +19708,11 @@ async function runDrillSequence(){
     await new Promise(resolve=>{
       function frame(){
         if(!drillActive){ resolve(); return; }
-        analyser.getFloatTimeDomainData(dataArray);
-        const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+        const fr = readRegisterFrame(), freq = fr.freq;
         if(freq>0){
           const cents = centsFromTarget(freq, targetMidi);
           if(cents!==null && Math.abs(cents)<300) centsBuf.push(cents);
-          const chestScore = getSpectralChestScore(freq);
-          if(chestScore!==null) chestBuf.push(chestScore);
+          if(fr.chest!==null) chestBuf.push(fr.chest);
         }
         const t = performance.now()-start;
         if(t < DRILL_CAPTURE_MS) requestAnimationFrame(frame); else resolve();
