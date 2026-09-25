@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="vocal-load.js"></script>
+<script src="vocal-load-store.js"></script>
 <style>
   :root{
     --bg:#0e0d0b;
@@ -464,6 +466,12 @@
   .reg-feedback.warn{color:var(--coral);}
 
   .reg-stat-row{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+  .vl-gauge{margin:14px auto 0;max-width:260px;}
+  .vl-gauge-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);}
+  .vl-gauge-val{color:var(--cream);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .vl-gauge-track{height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;margin-top:6px;}
+  .vl-gauge-fill{height:100%;width:0%;background:var(--teal);transition:width .4s ease;}
+  .vl-gauge.over .vl-gauge-fill{background:var(--coral);}
 
   .beta-tag{
     display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;
@@ -2765,6 +2773,10 @@
             <div class="stat-chip"><div class="label" data-i18n="register_crossing_label">Clean crossing</div><div class="val" id="regBridgeStat">0.0s</div></div>
           </div>
           <p class="fine-print" id="regBestStat" style="text-align:center;margin-top:14px;">Best clean crossing saved: —</p>
+          <div class="vl-gauge" id="vlGauge" role="meter" aria-labelledby="vlGaugeLabel" aria-valuemin="0" aria-valuemax="100" style="display:none;">
+            <div class="vl-gauge-head"><span id="vlGaugeLabel" data-i18n="vl_gauge_label">Vocal load today</span><span class="vl-gauge-val" id="vlGaugeVal">—</span></div>
+            <div class="vl-gauge-track"><div class="vl-gauge-fill" id="vlGaugeFill"></div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -4518,6 +4530,7 @@ function loop(){
     const fr = readRegisterFrame();
     liveFreq = fr.freq>0 ? fr.freq : null;
     updateRegisterUI(fr.freq, fr.chest);
+    vlFeed(fr.freq, fr.raw);
     rafId = requestAnimationFrame(loop);
     return;
   }
@@ -6020,6 +6033,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:'of 21 free access', ob_trialchip_welcomeback:'Welcome back',
     record_delta_suffix:'from your last best',
     registercoach_beststat_p1:'Best clean crossing saved:', registercoach_signin_beststat:'Sign in to save your best crossing across sessions.',
+    vl_gauge_label:'Vocal load today', vl_gauge_pct_tpl:'{p}% of daily budget',
     rift_avg_p1:'Avg:', rift_closed:'Rift closed', rift_missed:'Missed', rift_no_pitch_heard:'No clear pitch heard',
     rift_rounds_completed:'rounds completed', rift_rounds_p1:'Rounds:', rift_start_label:'Enter the Rift (Pro)', rift_time_p1:'Time:',
     rift_type_interval:'Interval Jump', rift_type_quick:'Quick Catch', rift_type_sustain:'Sustain Hold',
@@ -7350,6 +7364,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:"sur 21 jours d'accès gratuit", ob_trialchip_welcomeback:'Content de vous revoir',
     record_delta_suffix:'par rapport à votre record précédent',
     registercoach_beststat_p1:'Meilleure transition propre enregistrée :', registercoach_signin_beststat:'Connectez-vous pour sauvegarder votre meilleure transition entre sessions.',
+    vl_gauge_label:'Charge vocale du jour', vl_gauge_pct_tpl:'{p} % du budget quotidien',
     rift_avg_p1:'Moy. :', rift_closed:'Faille fermée', rift_missed:'Manqué', rift_no_pitch_heard:'Aucune hauteur claire détectée',
     rift_rounds_completed:'manches terminées', rift_rounds_p1:'Manches :', rift_start_label:'Entrer dans la Faille (Pro)', rift_time_p1:'Temps :',
     rift_type_interval:"Saut d'intervalle", rift_type_quick:'Prise rapide', rift_type_sustain:'Tenue soutenue',
@@ -8680,6 +8695,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:'de 21 días de acceso gratuito', ob_trialchip_welcomeback:'Bienvenido de nuevo',
     record_delta_suffix:'respecto a tu récord anterior',
     registercoach_beststat_p1:'Mejor transición limpia guardada:', registercoach_signin_beststat:'Inicia sesión para guardar tu mejor transición entre sesiones.',
+    vl_gauge_label:'Carga vocal de hoy', vl_gauge_pct_tpl:'{p} % del presupuesto diario',
     rift_avg_p1:'Prom.:', rift_closed:'Grieta cerrada', rift_missed:'Fallado', rift_no_pitch_heard:'No se detectó una nota clara',
     rift_rounds_completed:'rondas completadas', rift_rounds_p1:'Rondas:', rift_start_label:'Entrar en la Grieta (Pro)', rift_time_p1:'Tiempo:',
     rift_type_interval:'Salto de intervalo', rift_type_quick:'Captura rápida', rift_type_sustain:'Sostenido',
@@ -10010,6 +10026,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:'/ 21 gün ücretsiz erişim', ob_trialchip_welcomeback:'Tekrar hoş geldiniz',
     record_delta_suffix:'önceki rekorunuza göre',
     registercoach_beststat_p1:'Kaydedilen en iyi temiz geçiş:', registercoach_signin_beststat:'Oturumlar arasında en iyi geçişinizi kaydetmek için oturum açın.',
+    vl_gauge_label:'Bugünkü ses yükü', vl_gauge_pct_tpl:'Günlük bütçe: %{p}',
     rift_avg_p1:'Ort.:', rift_closed:'Yarık kapandı', rift_missed:'Kaçırıldı', rift_no_pitch_heard:'Net bir perde algılanmadı',
     rift_rounds_completed:'tur tamamlandı', rift_rounds_p1:'Tur:', rift_start_label:'Yarığa gir (Pro)', rift_time_p1:'Süre:',
     rift_type_interval:'Aralık Sıçraması', rift_type_quick:'Hızlı Yakalama', rift_type_sustain:'Uzun Tutuş',
@@ -10335,6 +10352,7 @@ function applyTranslations(){
     ()=>typeof renderGenreGrid==='function' && document.getElementById('genreGrid') && renderGenreGrid(),
     ()=>typeof renderVoiceHealth==='function' && renderVoiceHealth(),
     ()=>typeof renderVoiceQuality==='function' && renderVoiceQuality(),
+    ()=>typeof renderVocalLoadGauge==='function' && renderVocalLoadGauge(),
     ()=>typeof renderWarmupContext==='function' && document.getElementById('warmupContext') && renderWarmupContext(),
     ()=>typeof renderSkillTree==='function' && renderSkillTree(),
     ()=>typeof renderVocalLab==='function' && renderVocalLab(),
@@ -10621,6 +10639,7 @@ async function onSignedIn(){
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
   if(typeof renderArcadeLocks==='function') renderArcadeLocks();
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof loadVocalLoadToday==='function') loadVocalLoadToday();
 }
 
 // Supabase Auth's own error messages are English-only regardless of app
@@ -10663,8 +10682,10 @@ document.getElementById('authCreateBtn').addEventListener('click', async ()=>{
 });
 
 document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
+  if(typeof vlEnd==='function') vlEnd(); // saved while still signed in
   try{ await sb.auth.signOut(); }catch(e){ console.error('sign out error', e); }
   profile = null;
+  if(typeof renderVocalLoadGauge==='function') renderVocalLoadGauge();
   lastKnownLevel = null;
   renderAccountBar();
   renderDashboard();
@@ -10768,6 +10789,7 @@ let appInitPromise = (async function initAccountAndDashboard(){
   renderAccountBar();
   renderDashboard();
   updateBestBridgeLabel();
+  if(typeof loadVocalLoadToday==='function') loadVocalLoadToday(); // not awaited: the splash doesn't wait on it
   applyChoirGateUI();
   renderPricingState();
   updateExCapNote();
@@ -11037,12 +11059,119 @@ function updateBestBridgeLabel(){
   }
 }
 
+/* ---------------- Vocal Load Dosimetry: Register Coach pilot (phase 3a) ---------------- */
+// Today's vocal load. While Register Coach listens, every frame of its unprocessed register input (the pitch and the
+// buffer's RMS: the loudness the engine was verified on) goes into a session of the engine (vocal-load.js), which the
+// checkpointer (vocal-load-store.js) saves to /api/me/vocal-load every 60 s of singing, at a 5 s pause, when the page
+// is hidden and at the end. A session starts with the first frame (reading today's total and the rolling baseline from
+// the server first; frames wait meanwhile) and ends when the Coach stops or no frame has come for VL_IDLE_MS, which
+// covers every way it can stop. The gauge shows today's total as a % of the daily budget to every signed-in user,
+// whatever their plan.
+const VL_IDLE_MS = 3000;
+let vlDay = {day:null, load:0};  // today's total as last known: the server's, plus sessions finished on this page
+let vlRun = null;                // the session in progress
+let vlToken = null;              // kept so the page-hide checkpoint can be sent synchronously
+
+async function vlRefreshToken(){
+  try{ const { data:{ session } } = await sb.auth.getSession(); vlToken = session ? session.access_token : null; }catch(e){}
+}
+async function vlFetchState(day){ await vlRefreshToken(); return apiFetch('/me/vocal-load?day='+day); }
+async function loadVocalLoadToday(){
+  if(!profile){ vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
+  const day = todayStr();
+  try{ const st = await vlFetchState(day); vlDay = {day, load:Number(st.dayLoad)||0}; }
+  catch(e){ console.error('vocal load state error', e); }
+  renderVocalLoadGauge();
+}
+function vlWrite(p, opts){
+  const body = JSON.stringify({day:p.day, startedAt:p.startedAt, activeSeconds:p.activeSeconds, load:p.load,
+    medianRms:p.medianRms, p5Midi:p.p5Midi, p95Midi:p.p95Midi, ended:p.ended});
+  const path = '/me/vocal-load/sessions/'+p.sessionId;
+  if(opts.keepalive){
+    // page hide: sent right now, with the token already in hand (the page may be frozen once this handler returns)
+    if(!vlToken) return Promise.reject(new Error('no access token'));
+    return fetch(API_BASE+path, {method:'PUT', keepalive:true, body,
+      headers:{'Content-Type':'application/json', Authorization:'Bearer '+vlToken, apikey:SUPABASE_ANON_KEY}})
+      .then(r=>{ if(!r.ok) throw new Error('vocal load checkpoint '+r.status); });
+  }
+  return vlRefreshToken().then(()=>apiFetch(path, {method:'PUT', body}));
+}
+function vlLogWrite(res){ if(res && !res.ok) console.error('vocal load checkpoint not saved', res.reason, res.errors || res.error); }
+function vlStart(){
+  const startedAtMs = Date.now();
+  const r = vlRun = {startedAtMs, day:VocalLoadStore.dayOf(startedAtMs), buffer:[], ready:false, lastFrame:null, prior:0, pct:null, ending:false};
+  vlFetchState(r.day).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
+    r.prior = st ? (Number(st.dayLoad)||0) : (vlDay.day===r.day ? vlDay.load : 0);
+    const saved = progress && progress.lowestMidi!=null && progress.highestMidi!=null ? {lowMidi:progress.lowestMidi, highMidi:progress.highestMidi} : null;
+    r.session = VocalLoad.createSession(VocalLoad.computeBaseline(st ? st.sessions : [], saved), {priorLoadToday:r.prior});
+    r.cp = VocalLoadStore.createCheckpointer({session:r.session, sessionId:crypto.randomUUID(), startedAtMs, day:r.day, write:vlWrite});
+    r.ready = true;
+    r.buffer.splice(0).forEach(f=>vlPush(r, f));
+    if(r.ending) vlFinish(r);
+    renderVocalLoadGauge();
+  });
+}
+function vlPush(r, f){
+  const st = r.session.push(f);
+  r.pct = st.percentOfDay;
+  const w = r.cp.frame(st, Date.now()); if(w) w.then(vlLogWrite);
+}
+// One frame of the register input: freq from autoCorrelate (≤ 0: no pitch), raw the unfiltered buffer (for the RMS).
+function vlFeed(freq, raw){
+  if(!profile || !raw || typeof VocalLoad==='undefined') return;
+  if(!vlRun) vlStart();
+  const r = vlRun, now = performance.now();
+  const f = {dt: r.lastFrame===null ? 0 : (now-r.lastFrame)/1000, rms:computeRMS(raw), f0:freq};
+  r.lastFrame = now;
+  if(r.ready) vlPush(r, f); else r.buffer.push(f);
+  renderVocalLoadGauge();
+}
+function vlEnd(){
+  const r = vlRun; if(!r) return;
+  vlRun = null;
+  if(r.ready) vlFinish(r); else r.ending = true; // finished once the server state has arrived
+}
+function vlFinish(r){
+  const w = r.cp.end(Date.now()); if(w) w.then(vlLogWrite);
+  vlDay = {day:r.day, load:r.prior + r.session.finish().load};
+  renderVocalLoadGauge();
+}
+setInterval(()=>{ if(vlRun && vlRun.lastFrame!==null && performance.now()-vlRun.lastFrame > VL_IDLE_MS) vlEnd(); }, 1000);
+// Also on beforeunload: the save is a PUT with a token, so it needs a CORS preflight, and Chrome drops a keepalive
+// request made once the page is unloading (pagehide, or visibilitychange during unload); at beforeunload the page is
+// still alive and it goes out. A second save of the same totals changes nothing.
+function vlOnHidden(){ const r = vlRun; if(r && r.ready){ const w = r.cp.hidden(Date.now()); if(w) w.then(vlLogWrite); } }
+window.addEventListener('beforeunload', vlOnHidden);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden') vlOnHidden(); });
+window.addEventListener('pagehide', vlOnHidden);
+
+function vlPercent(){
+  if(vlRun && vlRun.ready) return vlRun.pct!==null ? vlRun.pct : vlRun.prior/VocalLoad.DAILY_BUDGET*100;
+  return vlDay.day===todayStr() ? vlDay.load/VocalLoad.DAILY_BUDGET*100 : 0;
+}
+function renderVocalLoadGauge(){
+  const box = document.getElementById('vlGauge');
+  if(!box) return;
+  if(!profile || typeof VocalLoad==='undefined'){ box.style.display='none'; return; }
+  box.style.display='';
+  const pct = vlPercent(), shown = pct < 10 ? Math.round(pct*10)/10 : Math.round(pct);
+  const txt = t('vl_gauge_pct_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1}));
+  const val = document.getElementById('vlGaugeVal'), fill = document.getElementById('vlGaugeFill');
+  if(val.textContent!==txt){ val.textContent = txt; box.setAttribute('aria-valuetext', txt); }
+  const w = Math.min(100, pct).toFixed(1)+'%';
+  if(fill.style.width!==w) fill.style.width = w;
+  box.setAttribute('aria-valuenow', String(Math.round(pct)));
+  box.setAttribute('aria-valuemax', String(Math.max(100, Math.round(pct))));
+  box.classList.toggle('over', pct>=100);
+}
+
 document.getElementById('regMicBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('regMicBtn');
   const label = document.getElementById('regMicBtnLabel');
   if(mode==='register'){
     mode=null;
     cancelAnimationFrame(rafId);
+    vlEnd();
     btn.classList.remove('listening');
     label.textContent='Start listening';
     return;
