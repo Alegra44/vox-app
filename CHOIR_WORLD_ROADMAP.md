@@ -113,7 +113,7 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
 - **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25; **fixed
-  in 1932924, not deployed yet** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
+  in 1932924, live 2026-09-25 as dpl_9RMYqhcfT9a7XSrZtJRG7sUymvwY** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
   98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and
   skews best-bridge XP, the Bridge lane (50), drill register matches, boss and live-feedback register checks.
   - **Cause: the shared mic's noise suppression** (`initAudio` asks for it). With the same WAVs, noise suppression alone
@@ -141,9 +141,19 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
     the Pitch boss and other features keep the shared mic. Verified with `regfix.js` (HEAD vs working tree): straight
     tones within 2 points of before and every drill / boss register decision unchanged; a head tone reading 31–39 with
     ±50 ct vibrato before now reads 14–15 (straight 15), a chest tone 98–100 → 75–76 (straight 76); the Bridge lane on a
-    close 60 / 40 pair went from 52% to 100% right, straight and ±50 ct. Open: at ±100 ct that pair's chest note has 11%
-    of frames in the wrong lane (per-frame jitter around a median of 58; no lane smoothing); an unprocessed mic is
-    verified in desktop Chrome only; a new stream is silent for its first ~400 ms (drill note 1 still scores as notes 2–5).
+    close 60 / 40 pair went from 52% to 100% right, straight and ±50 ct. A new stream is silent for its first ~400 ms
+    (drill note 1 still scores as notes 2–5).
+    Checked on production after the deploy (`REG_URL=<url> regfix.js`, a throwaway trial account through the real
+    buttons and Pro gate, deleted after): the live page is byte-identical to the commit; Register Coach across 330 / 440 Hz
+    at 35 / 50 / 62 / 80, straight and ±25 / ±50 / ±100 ct, stays within 0.8 points of each tone's straight score; Bridge,
+    Drills and the Register Wraith read the same as locally (Bridge ±100 ct close pair: 12% of the chest note's frames).
+  - **Follow-ups (open, not blocking):**
+    - [ ] **Bridge lane smoothing for wide vibrato near the lane line.** With ±100 ct vibrato, a note a few points above
+      the 50 line (a 60 / 40 pair: chest note reads median 58, frames 50–67) lands in the wrong lane on 11% of its frames;
+      the lane follows each frame's score with no smoothing. Straight and ±50 ct are 100%.
+    - [ ] **Safari and mobile browsers untested.** The fix (unprocessed register input: noise suppression / auto-gain off)
+      is verified in desktop Chrome only; Safari (macOS / iOS) and Android browsers may ignore those constraints or
+      process the mic differently.
   - Check with `scripts/vq-verify/rcmodel.js` (no browser), `rcmic.js` (per mic setting), `rcfix.js` (the proposal),
     `regcoach.js` / `regcoach2.js` (first findings).
 
