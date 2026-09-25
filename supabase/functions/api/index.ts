@@ -20,6 +20,7 @@ import teacher from "./routes/teacher.ts";
 import clips from "./routes/clips.ts";
 import billing from "./routes/billing.ts";
 import feedback from "./routes/feedback.ts";
+import vocalLoad from "./routes/vocalLoad.ts";
 
 const app = new Hono<{ Variables: AppVariables }>().basePath("/api");
 
@@ -54,6 +55,7 @@ app.route("/teacher", teacher);
 app.route("/me/clips", clips);
 app.route("/billing", billing);
 app.route("/feedback", feedback);
+app.route("/me/vocal-load", vocalLoad);
 
 app.onError((err, c) => {
   console.error(err);

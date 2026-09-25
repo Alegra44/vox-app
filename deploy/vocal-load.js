@@ -127,6 +127,7 @@
         if (s.cal.total >= C.CALIBRATION_S - EPS) s.baseRms = weightedQuantile(s.cal.rms, s.cal.t, 0.5);
       }
       if (real) { blocks.rms.push(rms); blocks.midi.push(midi); blocks.t.push(b.t); if (onBlock) onBlock({ rate: r, rms, midi, seconds: b.t, load: s.done }); }
+      else if (s.extra) s.extra.push({ rms, midi, t: b.t });
       s.blk = { e2: 0, m: 0, t: 0 };
     }
     // One decided frame { d, rms, midi (null: unpitched or a slip) } into state s.
@@ -155,15 +156,21 @@
       const p = clone(S); drain(p, false);
       return { load: p.done, activeSeconds: p.activeS, percentOfDay: (priorLoadToday + p.done) / DAILY_BUDGET * 100, baselineRms: S.baseRms, calibrating: S.baseRms === null };
     }
+    const summaryOf = (s, rms, midi, t) => ({
+      activeSeconds: s.activeS, load: s.done, sessionPercent: s.done / DAILY_BUDGET * 100, percentOfDay: (priorLoadToday + s.done) / DAILY_BUDGET * 100,
+      medianRms: weightedQuantile(rms, t, 0.5), p5Midi: weightedQuantile(midi, t, 0.05), p95Midi: weightedQuantile(midi, t, 0.95), baselineRms: s.baseRms,
+    });
     function finish() {
       if (!finished) { drain(S, true); Q.length = 0; finished = true; }
-      return {
-        activeSeconds: S.activeS, load: S.done, sessionPercent: S.done / DAILY_BUDGET * 100, percentOfDay: (priorLoadToday + S.done) / DAILY_BUDGET * 100,
-        medianRms: weightedQuantile(blocks.rms, blocks.t, 0.5), p5Midi: weightedQuantile(blocks.midi, blocks.t, 0.05),
-        p95Midi: weightedQuantile(blocks.midi, blocks.t, 0.95), baselineRms: S.baseRms,
-      };
+      return summaryOf(S, blocks.rms, blocks.midi, blocks.t);
     }
-    return { push, finish };
+    // What finish() would return if the session ended now, without ending it (for checkpoints).
+    function snapshot() {
+      if (finished) return finish();
+      const p = clone(S); p.extra = []; drain(p, false);
+      return summaryOf(p, blocks.rms.concat(p.extra.map(x => x.rms)), blocks.midi.concat(p.extra.map(x => x.midi)), blocks.t.concat(p.extra.map(x => x.t)));
+    }
+    return { push, finish, snapshot };
   }
 
   const api = { CONSTANTS: C, DAILY_BUDGET, computeBaseline, createSession, loudnessRatio, pitchRatio, loadRate, freqToMidi, weightedQuantile };
