@@ -112,6 +112,18 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
+- **Register Coach ignores the saved range after a page reload** (open, not fixed; found 2026-09-25 while building
+  Vocal Load Dosimetry). `registerRangeBounds()` reads `lowNote` / `highNote`. Those are in-memory globals, set only
+  by a Range Finder run since the page loaded and reset to null on every load. So after a reload it silently falls back
+  to A2–C5 (MIDI 45–72), even though Register Coach's subtitle says it "Uses your Range Finder range if you've captured
+  it". The saved range exists and is correct: `user_progress.lowest_midi` / `highest_midi` (`progress.lowestMidi` /
+  `highestMidi`, written by `recordRangeCapture`). Register Coach just doesn't read it. The same function also sets the
+  range for the passaggio line and the Bridge zones (`drawBridgeZones`), Real-Time Feedback's register row (`lfLoop`),
+  Pitch Match, Interval and Scale Run targets (`newPitchTarget`, `newIntervalTarget`, `newScaleRoot`), the warm-up
+  context and the Glider's scale, so they all use A2–C5 after a reload too.
+  - **Repro:** sign in with an account that has a saved range different from A2–C5 (e.g. C3–C6), reload, open Register
+    Coach: the passaggio sits at A2–C5's, round(45 + 0.6 × 27) = MIDI 61 (C♯4), not the saved range's, round(48 + 0.6 × 36)
+    = MIDI 70 (A♯4). Run the Range Finder in the same page load and it moves.
 - **An exercise started while progress is still loading drops its activity/XP tick** (open, not fixed; found
   2026-09-25 during the Register Coach production checks). `recordActivity()` only checks that `profile` has loaded,
   not `progress`, and `onSignedIn()` awaits `loadProfile()` and then `loadProgress()`. So on every page load (and right
