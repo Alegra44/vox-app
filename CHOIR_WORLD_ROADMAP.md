@@ -112,6 +112,18 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
+- **An exercise started while progress is still loading drops its activity/XP tick** (open, not fixed; found
+  2026-09-25 during the Register Coach production checks). `recordActivity()` only checks that `profile` has loaded,
+  not `progress`, and `onSignedIn()` awaits `loadProfile()` and then `loadProgress()`. So on every page load (and right
+  after sign-up), for one `/me/progress` round-trip, `profile` is set while `progress` is still `null`. Starting an
+  exercise in that window throws `TypeError: Cannot read properties of null (reading 'history')` inside
+  `recordActivity()`, and that session's activity, streak and base XP are silently lost. The exercise itself keeps
+  working. All 14 `recordActivity()` callers are affected. It has been there since the initial commit (aa76461) and is
+  not from the Register Coach fix, which doesn't touch any of these functions.
+  - **Repro:** sign in (or load the app with a saved session) and start an exercise, e.g. Register Coach's mic button,
+    as soon as the account chip appears, before `/me/progress` returns. Easiest with network throttling. The console
+    shows the TypeError, and `progress.history[today]` doesn't go up. Seen 5 times in about 25 production sessions
+    driven by `REG_URL=<url> scripts/vq-verify/regfix.js`, which starts an exercise as soon as `profile` exists.
 - **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25; **fixed
   in 1932924, live 2026-09-25 as dpl_9RMYqhcfT9a7XSrZtJRG7sUymvwY** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
   98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and
