@@ -112,8 +112,8 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
-- **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25, fix
-  proposed, not implemented). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
+- **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25; **fixed
+  in 1932924, not deployed yet** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
   98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and
   skews best-bridge XP, the Bridge lane (50), drill register matches, boss and live-feedback register checks.
   - **Cause: the shared mic's noise suppression** (`initAudio` asks for it). With the same WAVs, noise suppression alone
@@ -134,6 +134,16 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
     straight at every depth; noise at 20 dB lifts a 35 to 43, not 76. Open: a second getUserMedia stream is verified in
     desktop Chrome only (iOS Safari may end the first track); the Bridge game and live feedback have their own copies of
     the formula; scores of real, formant-shaped voices will move somewhat, as the mapping assumes a smooth roll-off.
+  - **Fix as built (1932924):** instead of the proposal's second stream, every register reading (Register Coach, live
+    feedback, Register Runner, Drills, Register Wraith, Resonance Visualizer) goes through one unprocessed register input
+    (`openRegisterInput` / `readRegisterFrame`: noise suppression and auto-gain off, echo cancel on; pitch behind a 1.5 kHz
+    low-pass; `chestScoreFromPower`, power-weighted and mapped back to the old scale). It closes itself after 3 s idle;
+    the Pitch boss and other features keep the shared mic. Verified with `regfix.js` (HEAD vs working tree): straight
+    tones within 2 points of before and every drill / boss register decision unchanged; a head tone reading 31–39 with
+    ±50 ct vibrato before now reads 14–15 (straight 15), a chest tone 98–100 → 75–76 (straight 76); the Bridge lane on a
+    close 60 / 40 pair went from 52% to 100% right, straight and ±50 ct. Open: at ±100 ct that pair's chest note has 11%
+    of frames in the wrong lane (per-frame jitter around a median of 58; no lane smoothing); an unprocessed mic is
+    verified in desktop Chrome only; a new stream is silent for its first ~400 ms (drill note 1 still scores as notes 2–5).
   - Check with `scripts/vq-verify/rcmodel.js` (no browser), `rcmic.js` (per mic setting), `rcfix.js` (the proposal),
     `regcoach.js` / `regcoach2.js` (first findings).
 
