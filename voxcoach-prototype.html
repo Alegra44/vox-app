@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="vocal-load.js"></script>
+<script src="vocal-load-store.js"></script>
 <style>
   :root{
     --bg:#0e0d0b;
@@ -464,6 +466,12 @@
   .reg-feedback.warn{color:var(--coral);}
 
   .reg-stat-row{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
+  .vl-gauge{margin:14px auto 0;max-width:260px;}
+  .vl-gauge-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);}
+  .vl-gauge-val{color:var(--cream);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .vl-gauge-track{height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;margin-top:6px;}
+  .vl-gauge-fill{height:100%;width:0%;background:var(--teal);transition:width .4s ease;}
+  .vl-gauge.over .vl-gauge-fill{background:var(--coral);}
 
   .beta-tag{
     display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;
@@ -2025,6 +2033,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="gliderStartBtn"><span class="dot-icon"></span><span id="gliderStartLabel">Start flying</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeGlider" data-vl-sidecar style="display:none;"></div>
         <div class="arcade-overlay-msg" id="gliderGameOver" style="display:none;margin-top:16px;">
           <div class="om-title" id="gliderGameOverTitle">Crashed!</div>
           <div class="om-sub" id="gliderGameOverSub"></div>
@@ -2112,6 +2121,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="bossStartBtn"><span class="dot-icon"></span><span id="bossStartLabel" data-i18n="boss_start_label">Start battle (Pro)</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeBoss" data-vl-sidecar style="display:none;"></div>
         <div class="arcade-overlay-msg" id="bossGameOver" style="display:none;margin-top:16px;">
           <div class="om-title" id="bossGameOverTitle" role="status" aria-live="assertive">—</div>
           <div class="om-sub" id="bossGameOverSub"></div>
@@ -2560,6 +2570,7 @@
             <button class="solid-btn teal" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="pitchNextBtn" data-i18n="ex_new_note_btn">New note</button>
           </div>
+          <div class="vl-gauge" id="vlGaugePitch" data-vl-sidecar style="display:none;"></div>
           <div class="ex-result" id="pitchResult" role="status" aria-live="polite" style="display:none;">
             <div class="ex-accuracy" id="pitchAccuracyVal">—</div>
             <div class="ex-feedback-text" id="pitchFeedback"></div>
@@ -2765,6 +2776,10 @@
             <div class="stat-chip"><div class="label" data-i18n="register_crossing_label">Clean crossing</div><div class="val" id="regBridgeStat">0.0s</div></div>
           </div>
           <p class="fine-print" id="regBestStat" style="text-align:center;margin-top:14px;">Best clean crossing saved: —</p>
+          <div class="vl-gauge" id="vlGauge" role="meter" aria-labelledby="vlGaugeLabel" aria-valuemin="0" aria-valuemax="100" style="display:none;">
+            <div class="vl-gauge-head"><span id="vlGaugeLabel" data-i18n="vl_gauge_label">Vocal load today</span><span class="vl-gauge-val" id="vlGaugeVal">—</span></div>
+            <div class="vl-gauge-track"><div class="vl-gauge-fill" id="vlGaugeFill"></div></div>
+          </div>
         </div>
       </div>
     </div>
@@ -2920,6 +2935,7 @@
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="stayKeyStartBtn"><span class="dot-icon"></span><span id="stayKeyStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeStayKey" data-vl-sidecar style="display:none;"></div>
       <div class="progress-bar-thin" style="margin-top:16px;"><div class="fill" id="stayKeyProgressFill"></div></div>
 
       <div class="ex-result" id="stayKeyResult" style="display:none;text-align:center;margin-top:20px;">
@@ -2984,6 +3000,7 @@
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="karaokeStartBtn"><span class="dot-icon"></span><span id="karaokeStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeKaraoke" data-vl-sidecar style="display:none;"></div>
 
       <div class="karaoke-live-line" id="karaokeLiveLine"></div>
 
@@ -3732,6 +3749,7 @@
       <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
       <button class="mic-btn" id="hmemStartBtn"><span class="dot-icon"></span><span id="hmemStartLabel">Start</span></button>
       <p class="fine-print" id="hmemStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeHmem" data-vl-sidecar style="display:none;"></div>
       <div id="hmemResults" style="display:none;margin-top:12px;"></div>
       <p class="fine-print" style="margin-top:10px;" data-i18n="hm_storage_note">Stage progress is saved on this device only.</p>
     </div>
@@ -4514,6 +4532,14 @@ async function initAudio(){
 }
 
 function loop(){
+  if(mode==='register'){
+    const fr = readRegisterFrame();
+    liveFreq = fr.freq>0 ? fr.freq : null;
+    updateRegisterUI(fr.freq, fr.chest);
+    vlFeed(fr.freq, fr.raw);
+    rafId = requestAnimationFrame(loop);
+    return;
+  }
   analyser.getFloatTimeDomainData(dataArray);
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   liveFreq = freq>0 ? freq : null;
@@ -4521,7 +4547,6 @@ function loop(){
   if(mode==='tuner') updateTunerUI(freq);
   if(mode==='rangeLow') updateRangeLiveUI(freq, 'lowLiveNote');
   if(mode==='rangeHigh') updateRangeLiveUI(freq, 'highLiveNote');
-  if(mode==='register') updateRegisterUI(freq);
 
   rafId = requestAnimationFrame(loop);
 }
@@ -6014,6 +6039,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:'of 21 free access', ob_trialchip_welcomeback:'Welcome back',
     record_delta_suffix:'from your last best',
     registercoach_beststat_p1:'Best clean crossing saved:', registercoach_signin_beststat:'Sign in to save your best crossing across sessions.',
+    vl_gauge_label:'Vocal load today', vl_gauge_pct_tpl:'{p}% of daily budget',
     rift_avg_p1:'Avg:', rift_closed:'Rift closed', rift_missed:'Missed', rift_no_pitch_heard:'No clear pitch heard',
     rift_rounds_completed:'rounds completed', rift_rounds_p1:'Rounds:', rift_start_label:'Enter the Rift (Pro)', rift_time_p1:'Time:',
     rift_type_interval:'Interval Jump', rift_type_quick:'Quick Catch', rift_type_sustain:'Sustain Hold',
@@ -7344,6 +7370,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:"sur 21 jours d'accès gratuit", ob_trialchip_welcomeback:'Content de vous revoir',
     record_delta_suffix:'par rapport à votre record précédent',
     registercoach_beststat_p1:'Meilleure transition propre enregistrée :', registercoach_signin_beststat:'Connectez-vous pour sauvegarder votre meilleure transition entre sessions.',
+    vl_gauge_label:'Charge vocale du jour', vl_gauge_pct_tpl:'{p} % du budget quotidien',
     rift_avg_p1:'Moy. :', rift_closed:'Faille fermée', rift_missed:'Manqué', rift_no_pitch_heard:'Aucune hauteur claire détectée',
     rift_rounds_completed:'manches terminées', rift_rounds_p1:'Manches :', rift_start_label:'Entrer dans la Faille (Pro)', rift_time_p1:'Temps :',
     rift_type_interval:"Saut d'intervalle", rift_type_quick:'Prise rapide', rift_type_sustain:'Tenue soutenue',
@@ -8674,6 +8701,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:'de 21 días de acceso gratuito', ob_trialchip_welcomeback:'Bienvenido de nuevo',
     record_delta_suffix:'respecto a tu récord anterior',
     registercoach_beststat_p1:'Mejor transición limpia guardada:', registercoach_signin_beststat:'Inicia sesión para guardar tu mejor transición entre sesiones.',
+    vl_gauge_label:'Carga vocal de hoy', vl_gauge_pct_tpl:'{p} % del presupuesto diario',
     rift_avg_p1:'Prom.:', rift_closed:'Grieta cerrada', rift_missed:'Fallado', rift_no_pitch_heard:'No se detectó una nota clara',
     rift_rounds_completed:'rondas completadas', rift_rounds_p1:'Rondas:', rift_start_label:'Entrar en la Grieta (Pro)', rift_time_p1:'Tiempo:',
     rift_type_interval:'Salto de intervalo', rift_type_quick:'Captura rápida', rift_type_sustain:'Sostenido',
@@ -10004,6 +10032,7 @@ const TRANSLATIONS = {
     ob_trialchip_freeaccess:'/ 21 gün ücretsiz erişim', ob_trialchip_welcomeback:'Tekrar hoş geldiniz',
     record_delta_suffix:'önceki rekorunuza göre',
     registercoach_beststat_p1:'Kaydedilen en iyi temiz geçiş:', registercoach_signin_beststat:'Oturumlar arasında en iyi geçişinizi kaydetmek için oturum açın.',
+    vl_gauge_label:'Bugünkü ses yükü', vl_gauge_pct_tpl:'Günlük bütçe: %{p}',
     rift_avg_p1:'Ort.:', rift_closed:'Yarık kapandı', rift_missed:'Kaçırıldı', rift_no_pitch_heard:'Net bir perde algılanmadı',
     rift_rounds_completed:'tur tamamlandı', rift_rounds_p1:'Tur:', rift_start_label:'Yarığa gir (Pro)', rift_time_p1:'Süre:',
     rift_type_interval:'Aralık Sıçraması', rift_type_quick:'Hızlı Yakalama', rift_type_sustain:'Uzun Tutuş',
@@ -10329,6 +10358,7 @@ function applyTranslations(){
     ()=>typeof renderGenreGrid==='function' && document.getElementById('genreGrid') && renderGenreGrid(),
     ()=>typeof renderVoiceHealth==='function' && renderVoiceHealth(),
     ()=>typeof renderVoiceQuality==='function' && renderVoiceQuality(),
+    ()=>typeof renderVocalLoadGauge==='function' && renderVocalLoadGauge(),
     ()=>typeof renderWarmupContext==='function' && document.getElementById('warmupContext') && renderWarmupContext(),
     ()=>typeof renderSkillTree==='function' && renderSkillTree(),
     ()=>typeof renderVocalLab==='function' && renderVocalLab(),
@@ -10615,6 +10645,7 @@ async function onSignedIn(){
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
   if(typeof renderArcadeLocks==='function') renderArcadeLocks();
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof loadVocalLoadToday==='function') loadVocalLoadToday();
 }
 
 // Supabase Auth's own error messages are English-only regardless of app
@@ -10657,8 +10688,10 @@ document.getElementById('authCreateBtn').addEventListener('click', async ()=>{
 });
 
 document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
+  if(typeof vlEnd==='function') vlEnd(); // saved while still signed in
   try{ await sb.auth.signOut(); }catch(e){ console.error('sign out error', e); }
   profile = null;
+  if(typeof renderVocalLoadGauge==='function') renderVocalLoadGauge();
   lastKnownLevel = null;
   renderAccountBar();
   renderDashboard();
@@ -10762,6 +10795,7 @@ let appInitPromise = (async function initAccountAndDashboard(){
   renderAccountBar();
   renderDashboard();
   updateBestBridgeLabel();
+  if(typeof loadVocalLoadToday==='function') loadVocalLoadToday(); // not awaited: the splash doesn't wait on it
   applyChoirGateUI();
   renderPricingState();
   updateExCapNote();
@@ -10834,7 +10868,6 @@ document.getElementById('downloadRangePosterBtn').addEventListener('click', ()=>
 document.getElementById('downloadRecapPosterBtn').addEventListener('click', ()=>exportPoster('recapPoster','voxcoach-monthly-recap.png'));
 
 /* ---------------- Register Coach (chest / mixed / head) ---------------- */
-let freqDataArr = null;
 let bridgeFrameCount = 0;   // consecutive frames spent "clean" above passaggio
 let bestBridgeFrames = 0;
 
@@ -10871,29 +10904,77 @@ function midiToY(midi, lowMidi, highMidi, topY, bottomY){
   return bottomY - pct*(bottomY-topY);
 }
 
-function getSpectralChestScore(freq){
-  if(!freqDataArr && analyser) freqDataArr = new Float32Array(analyser.frequencyBinCount);
-  if(!freq || !analyser || !freqDataArr) return null;
-  analyser.getFloatFrequencyData(freqDataArr);
-  const sampleRate = audioCtx.sampleRate;
-  const binHz = sampleRate/analyser.fftSize;
-  let weighted=0, total=0;
-  const maxBin = Math.min(freqDataArr.length, Math.floor(6000/binHz));
-  for(let i=1;i<maxBin;i++){
-    const mag = Math.pow(10, freqDataArr[i]/20); // dB -> linear
-    const f = i*binHz;
-    weighted += f*mag;
-    total += mag;
-  }
-  const centroid = total>0 ? weighted/total : freq;
-  const brightnessRatio = centroid/freq;
-  // map ratio ~1.5 (pure/head-like) .. ~5.5 (harmonic-rich/chest-like) to a 0-100 "chest character" score
-  return Math.max(0, Math.min(100, ((brightnessRatio-1.5)/(5.5-1.5))*100));
+// Register input: every chest/head reading (Register Coach, live feedback, Register Runner, Register Drills, the Register
+// Wraith boss, the Resonance Visualizer) comes from its own mic stream with noise suppression and auto gain off. The shared
+// mic's noise suppression follows a singer's vibrato and lifts the floor between the harmonics, which read as chest
+// (a head-voice tone scoring 34 straight scored 64–69 with ±25–50 ct vibrato). Echo cancellation stays on so the app's
+// own playback (the boss's backing pad) doesn't leak into the reading; on its own it doesn't move the score. As in
+// Voice Quality, pitch comes from a second analyser behind the 1.5 kHz low-pass (VQ_PITCH_LP_HZ), which keeps the
+// autocorrelation working in broadband noise now that nothing suppresses it. The stream closes itself once no frame
+// has been read for REG_IDLE_MS, so every way a tool stops (its button, navigation, game over) releases the mic.
+const REG_FFT = 2048, REG_SMOOTH = 0.8, REG_IDLE_MS = 3000;
+let regIn = null, regOpening = null;
+async function openRegisterInput({quiet=false}={}){ // quiet: no toast if it fails (a feature's own mic is already open)
+  await initAudioOnly();
+  if(regIn) return true;
+  if(!regOpening) regOpening = (async ()=>{
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:false, autoGainControl:false}});
+      const src = audioCtx.createMediaStreamSource(stream), spec = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser();
+      spec.fftSize = REG_FFT; spec.smoothingTimeConstant = 0; // smoothed below on power; the analyser's own smoothing averages magnitude
+      pitchAn.fftSize = REG_FFT;
+      src.connect(spec);
+      const lp = [0, 1].map(()=>{ const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = VQ_PITCH_LP_HZ; f.Q.value = Math.SQRT1_2; return f; });
+      src.connect(lp[0]).connect(lp[1]).connect(pitchAn);
+      regIn = {stream, src, lp, spec, pitchAn, time:new Float32Array(REG_FFT), raw:new Float32Array(REG_FFT), db:new Float32Array(REG_FFT/2), pw:new Float64Array(REG_FFT/2), pwInit:false, lastRead:performance.now()};
+      regIn.idle = setInterval(()=>{ if(regIn && performance.now()-regIn.lastRead > REG_IDLE_MS) closeRegisterInput(); }, 500);
+      return true;
+    }catch(e){
+      if(!quiet) showToast('Microphone access is needed for this demo. Please allow mic permission and try again.', 'warn');
+      return false;
+    }finally{ regOpening = null; }
+  })();
+  return regOpening;
+}
+function closeRegisterInput(){
+  if(!regIn) return;
+  clearInterval(regIn.idle);
+  regIn.src.disconnect(); regIn.lp.forEach(f=>f.disconnect());
+  regIn.stream.getTracks().forEach(tr=>tr.stop());
+  regIn = null;
+}
+// One frame: the pitch (low-passed path), the chest score from the same moment, and the unfiltered signal (for loudness).
+function readRegisterFrame(){
+  const r = regIn;
+  if(!r) return {freq:-1, chest:null, raw:null};
+  r.lastRead = performance.now();
+  r.pitchAn.getFloatTimeDomainData(r.time);
+  const freq = autoCorrelate(r.time, audioCtx.sampleRate);
+  r.spec.getFloatTimeDomainData(r.raw);
+  r.spec.getFloatFrequencyData(r.db);
+  for(let i=0;i<r.pw.length;i++){ const p = Math.pow(10, r.db[i]/10); r.pw[i] = r.pwInit ? REG_SMOOTH*r.pw[i] + (1-REG_SMOOTH)*p : p; }
+  r.pwInit = true;
+  return {freq, chest: freq>0 ? chestScoreFromPower(r.pw, audioCtx.sampleRate/REG_FFT, freq) : null, raw:r.raw};
+}
+// The chest score (0–100) from a power spectrum: the power-weighted centroid up to 6 kHz ÷ f0, put on the scale the score
+// has always used (the magnitude-weighted centroid ÷ f0, 1.5 → 0 "pure/head-like" … 5.5 → 100 "harmonic-rich/chest-like")
+// through the harmonic roll-off a_k = k^-s that gives this power centroid, so a steady tone keeps the score it always
+// had and the 35 / 50 / 62 lines keep their meaning. Power, not magnitude: vibrato spreads each harmonic over more bins,
+// which leaves its power unchanged but adds to a magnitude sum, more so the higher the harmonic.
+function chestScoreFromPower(pw, binHz, f0){
+  let w = 0, sum = 0;
+  const hi = Math.min(pw.length, Math.floor(6000/binHz));
+  for(let i=1;i<hi;i++){ w += i*binHz*pw[i]; sum += pw[i]; }
+  if(!(sum>0) || !(f0>0)) return null;
+  const K = Math.max(1, Math.floor(6000/f0)), powRatio = w/sum/f0;
+  const centroidOf = p=>{ let a = 0, b = 0; for(let k=1;k<=K;k++){ const v = Math.pow(k, -p); a += k*v; b += v; } return a/b; }; // amplitudes k^-p
+  let lo = 0, up = 8;
+  for(let it=0;it<40;it++){ const m = (lo+up)/2; if(centroidOf(2*m) > powRatio) lo = m; else up = m; } // power weights are k^-2s
+  const magRatio = centroidOf((lo+up)/2);
+  return Math.max(0, Math.min(100, ((magRatio-1.5)/(5.5-1.5))*100));
 }
 
-function updateRegisterUI(freq){
-  if(!freqDataArr && analyser) freqDataArr = new Float32Array(analyser.frequencyBinCount);
-
+function updateRegisterUI(freq, chestScore){
   if(!freq || freq<50 || freq>1200 || !analyser){
     document.getElementById('regLabel').textContent='—';
     document.getElementById('regFeedback').textContent='Listening…';
@@ -10904,7 +10985,6 @@ function updateRegisterUI(freq){
     return;
   }
 
-  const chestScore = getSpectralChestScore(freq);
   const note = freqToNote(freq);
   document.getElementById('regNoteStat').textContent = `${note.name}${note.octave}`;
   document.getElementById('regChestScoreStat').textContent = Math.round(chestScore)+'%';
@@ -10985,21 +11065,172 @@ function updateBestBridgeLabel(){
   }
 }
 
+/* ---------------- Vocal Load Dosimetry: Register Coach pilot (phase 3a) ---------------- */
+// Today's vocal load. While Register Coach listens, every frame of its unprocessed register input (the pitch and the
+// buffer's RMS: the loudness the engine was verified on) goes into a session of the engine (vocal-load.js), which the
+// checkpointer (vocal-load-store.js) saves to /api/me/vocal-load every 60 s of singing, at a 5 s pause, when the page
+// is hidden and at the end. A session starts with the first frame (reading today's total and the rolling baseline from
+// the server first; frames wait meanwhile) and ends when the Coach stops or no frame has come for VL_IDLE_MS, which
+// covers every way it can stop. The gauge shows today's total as a % of the daily budget to every signed-in user,
+// whatever their plan.
+const VL_IDLE_MS = 3000;
+let vlDay = {day:null, load:0};  // today's total as last known: the server's, plus sessions finished on this page
+let vlRun = null;                // the session in progress
+let vlToken = null;              // kept so the page-hide checkpoint can be sent synchronously
+
+async function vlRefreshToken(){
+  try{ const { data:{ session } } = await sb.auth.getSession(); vlToken = session ? session.access_token : null; }catch(e){}
+}
+async function vlFetchState(day){ await vlRefreshToken(); return apiFetch('/me/vocal-load?day='+day); }
+async function loadVocalLoadToday(){
+  if(!profile){ vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
+  const day = todayStr();
+  try{ const st = await vlFetchState(day); vlDay = {day, load:Number(st.dayLoad)||0}; }
+  catch(e){ console.error('vocal load state error', e); }
+  renderVocalLoadGauge();
+}
+function vlWrite(p, opts){
+  const body = JSON.stringify({day:p.day, startedAt:p.startedAt, activeSeconds:p.activeSeconds, load:p.load,
+    medianRms:p.medianRms, p5Midi:p.p5Midi, p95Midi:p.p95Midi, ended:p.ended});
+  const path = '/me/vocal-load/sessions/'+p.sessionId;
+  if(opts.keepalive){
+    // page hide: sent right now, with the token already in hand (the page may be frozen once this handler returns)
+    if(!vlToken) return Promise.reject(new Error('no access token'));
+    return fetch(API_BASE+path, {method:'PUT', keepalive:true, body,
+      headers:{'Content-Type':'application/json', Authorization:'Bearer '+vlToken, apikey:SUPABASE_ANON_KEY}})
+      .then(r=>{ if(!r.ok) throw new Error('vocal load checkpoint '+r.status); });
+  }
+  return vlRefreshToken().then(()=>apiFetch(path, {method:'PUT', body}));
+}
+function vlLogWrite(res){ if(res && !res.ok) console.error('vocal load checkpoint not saved', res.reason, res.errors || res.error); }
+function vlStart(){
+  const startedAtMs = Date.now();
+  const r = vlRun = {startedAtMs, day:VocalLoadStore.dayOf(startedAtMs), buffer:[], ready:false, lastFrame:null, prior:0, pct:null, ending:false};
+  vlFetchState(r.day).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
+    r.prior = st ? (Number(st.dayLoad)||0) : (vlDay.day===r.day ? vlDay.load : 0);
+    const saved = progress && progress.lowestMidi!=null && progress.highestMidi!=null ? {lowMidi:progress.lowestMidi, highMidi:progress.highestMidi} : null;
+    r.session = VocalLoad.createSession(VocalLoad.computeBaseline(st ? st.sessions : [], saved), {priorLoadToday:r.prior});
+    r.cp = VocalLoadStore.createCheckpointer({session:r.session, sessionId:crypto.randomUUID(), startedAtMs, day:r.day, write:vlWrite});
+    r.ready = true;
+    r.buffer.splice(0).forEach(f=>vlPush(r, f));
+    if(r.ending) vlFinish(r);
+    renderVocalLoadGauge();
+  });
+}
+function vlPush(r, f){
+  const st = r.session.push(f);
+  r.pct = st.percentOfDay;
+  const w = r.cp.frame(st, Date.now()); if(w) w.then(vlLogWrite);
+}
+// One frame of the register input: freq from autoCorrelate (≤ 0: no pitch), raw the unfiltered buffer (for the RMS).
+function vlFeed(freq, raw){
+  if(!profile || !raw || typeof VocalLoad==='undefined') return;
+  if(!vlRun) vlStart();
+  const r = vlRun, now = performance.now();
+  const f = {dt: r.lastFrame===null ? 0 : (now-r.lastFrame)/1000, rms:computeRMS(raw), f0:freq};
+  r.lastFrame = now;
+  if(r.ready) vlPush(r, f); else r.buffer.push(f);
+  renderVocalLoadGauge();
+}
+function vlEnd(){
+  const r = vlRun; if(!r) return;
+  vlRun = null;
+  if(r.ready) vlFinish(r); else r.ending = true; // finished once the server state has arrived
+}
+function vlFinish(r){
+  const w = r.cp.end(Date.now()); if(w) w.then(vlLogWrite);
+  vlDay = {day:r.day, load:r.prior + r.session.finish().load};
+  renderVocalLoadGauge();
+}
+setInterval(()=>{ if(vlRun && vlRun.lastFrame!==null && performance.now()-vlRun.lastFrame > VL_IDLE_MS) vlEnd(); }, 1000);
+// Also on beforeunload: the save is a PUT with a token, so it needs a CORS preflight, and Chrome drops a keepalive
+// request made once the page is unloading (pagehide, or visibilitychange during unload); at beforeunload the page is
+// still alive and it goes out. A second save of the same totals changes nothing.
+function vlOnHidden(){ const r = vlRun; if(r && r.ready){ const w = r.cp.hidden(Date.now()); if(w) w.then(vlLogWrite); } }
+window.addEventListener('beforeunload', vlOnHidden);
+document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState==='hidden') vlOnHidden(); });
+window.addEventListener('pagehide', vlOnHidden);
+
+function vlPercent(){
+  if(vlRun && vlRun.ready) return vlRun.pct!==null ? vlRun.pct : vlRun.prior/VocalLoad.DAILY_BUDGET*100;
+  return vlDay.day===todayStr() ? vlDay.load/VocalLoad.DAILY_BUDGET*100 : 0;
+}
+// Every .vl-gauge shows the same number. Register Coach's is written out in its panel; the other features' are empty
+// placeholders that get the same markup here, with ids of their own for the label. A placeholder marked data-vl-sidecar
+// belongs to a feature fed by vlSidecar (below) and stays hidden where that can't run.
+const VL_SIDECAR_BLOCKED = (()=>{
+  const ua = navigator.userAgent || '';
+  const chromium = /Chrome\/|Chromium\//.test(ua) && !/Android|Mobile|CriOS|EdgiOS|FxiOS/.test(ua);
+  const touchMac = navigator.platform==='MacIntel' && navigator.maxTouchPoints>1; // iPadOS reporting itself as a Mac
+  return !chromium || /iPad|iPhone|iPod/.test(ua) || touchMac;
+})();
+document.querySelectorAll('.vl-gauge:empty').forEach(box=>{
+  box.setAttribute('role', 'meter'); box.setAttribute('aria-labelledby', box.id+'Label');
+  box.setAttribute('aria-valuemin', '0'); box.setAttribute('aria-valuemax', '100');
+  box.innerHTML = `<div class="vl-gauge-head"><span id="${box.id}Label" data-i18n="vl_gauge_label"></span><span class="vl-gauge-val">—</span></div>`
+    + `<div class="vl-gauge-track"><div class="vl-gauge-fill"></div></div>`;
+  box.querySelector('[data-i18n]').textContent = t('vl_gauge_label');
+});
+function renderVocalLoadGauge(){
+  const boxes = document.querySelectorAll('.vl-gauge');
+  if(!profile || typeof VocalLoad==='undefined'){ boxes.forEach(box=>{ box.style.display='none'; }); return; }
+  const pct = vlPercent(), shown = pct < 10 ? Math.round(pct*10)/10 : Math.round(pct);
+  const txt = t('vl_gauge_pct_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1}));
+  const w = Math.min(100, pct).toFixed(1)+'%';
+  boxes.forEach(box=>{
+    if(box.hasAttribute('data-vl-sidecar') && VL_SIDECAR_BLOCKED){ box.style.display='none'; return; }
+    box.style.display='';
+    const val = box.querySelector('.vl-gauge-val'), fill = box.querySelector('.vl-gauge-fill');
+    if(val.textContent!==txt){ val.textContent = txt; box.setAttribute('aria-valuetext', txt); }
+    if(fill.style.width!==w) fill.style.width = w;
+    box.setAttribute('aria-valuenow', String(Math.round(pct)));
+    box.setAttribute('aria-valuemax', String(Math.max(100, Math.round(pct))));
+    box.classList.toggle('over', pct>=100);
+  });
+}
+
+/* ---------------- Vocal Load Dosimetry: features on the shared mic (phase 3b) ---------------- */
+// Features that sing into the shared mic (initAudio: noise suppression and auto gain on, which flatten the loudness the
+// engine reads) feed today's load from the register input, opened alongside their own mic. They keep reading their own
+// stream exactly as before; nothing here touches it. vlSidecar(isActive) is called once the feature has started and
+// feeds one register frame per animation frame while isActive() holds, ending the session the moment it doesn't.
+// Only in desktop Chromium, the one place a second capture of the same mic next to the first has been verified to leave
+// the first alone. WebKit (every iOS browser, Safari) can mute an open capture track when a second one opens, and
+// Firefox and Android are untested, so there the second stream is never opened: these features don't add to the load
+// there and don't show the gauge (VL_SIDECAR_BLOCKED, above). Never for a feature that reads the register input itself
+// (a second reader would change its chest smoothing).
+let vlSideRaf = null, vlSideGen = 0;
+async function vlSidecar(isActive){
+  if(!profile || VL_SIDECAR_BLOCKED || typeof VocalLoad==='undefined') return;
+  const gen = ++vlSideGen;
+  cancelAnimationFrame(vlSideRaf);
+  vlEnd(); // a session left open by the tool used just before (its idle timeout hasn't run yet) isn't this one
+  if(!await openRegisterInput({quiet:true}) || gen!==vlSideGen) return;
+  const tick = ()=>{
+    if(gen!==vlSideGen) return;
+    if(!isActive()){ vlEnd(); return; }
+    const fr = readRegisterFrame();
+    vlFeed(fr.freq, fr.raw);
+    vlSideRaf = requestAnimationFrame(tick);
+  };
+  tick();
+}
+
 document.getElementById('regMicBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('regMicBtn');
   const label = document.getElementById('regMicBtnLabel');
   if(mode==='register'){
     mode=null;
     cancelAnimationFrame(rafId);
+    vlEnd();
     btn.classList.remove('listening');
     label.textContent='Start listening';
     return;
   }
   if(!requireProFeature('Register Coach')) return;
-  const ok = await initAudio();
+  const ok = await openRegisterInput();
   if(!ok) return;
   drawBridgeZones();
-  freqDataArr = null;
   bridgeFrameCount = 0;
   mode='register';
   btn.classList.add('listening');
@@ -11287,7 +11518,12 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
 // detector) from a second 2048-sample analyser behind a 1.5 kHz low-pass: broadband breath noise otherwise swamps the
 // autocorrelation (with white noise at 20 dB HNR it found no pitch at all). Vibrato comes from the pitch trace through analyzeVibrato().
 const VQ_HOLD_MS = 4000, VQ_FFT = 8192, VQ_PITCH_WIN = 2048, VQ_PITCH_LP_HZ = 1500, VQ_HNR_MAX_HZ = 5000, VQ_CENTROID_MAX_HZ = 6000, VQ_CENTROID_FLOOR_DB = 60, VQ_MIN_FRAMES = 30;
-const VQ_HNR_CLEAR = 20, VQ_HNR_BREATHY = 12, VQ_BRIGHT_DARK = 2, VQ_BRIGHT_BRIGHT = 4; // rough reading bands for this tool, not clinical norms
+const VQ_HNR_CLEAR = 20, VQ_HNR_BREATHY = 12; // rough reading bands for this tool, not clinical norms
+// Brightness bands as a harmonic roll-off (dB per octave): steeper than 13 reads dark, shallower than 9 reads bright.
+// They are the old centroid-ratio bands (2× / 4× the pitch, magnitude-weighted) as they fell at 220 Hz, kept as a
+// slope so they mean the same timbre at every pitch (the fixed ratios drifted from 10.4 to 6.2 dB/oct for "bright"
+// between 110 and 440 Hz). vqBrightBounds() turns them into centroid ratios for the note actually sung.
+const VQ_BRIGHT_DARK_DB_OCT = 13, VQ_BRIGHT_BRIGHT_DB_OCT = 9;
 let vqActive = false, vqLast = null;
 // Harmonics-to-noise ratio (dB) of one frame's spectrum (dB power from getFloatFrequencyData), from f0/2 to 5 kHz.
 // Bins within a quarter of the harmonic spacing of a harmonic (at least ±4 bins, the window's main lobe) are harmonic;
@@ -11305,8 +11541,10 @@ function vqHnr(db, binHz, f0){
   const perBin = noise/nNoise, h = harm - perBin*nHarm, n = Math.max(perBin*(hi-lo+1), 1e-30);
   return h>0 ? 10*Math.log10(h/n) : null;
 }
-// Spectral centroid (Hz): the magnitude-weighted mean frequency from 50 Hz to 6 kHz (the Register Coach's definition and
-// upper limit), ignoring bins more than 60 dB under the frame's loudest so the idle mic floor doesn't pull it up.
+// Spectral centroid (Hz): the power-weighted (energy) mean frequency from 50 Hz to 6 kHz, ignoring bins more than 60 dB
+// under the frame's loudest so the idle mic floor doesn't pull it up. Power, not magnitude: vibrato spreads each
+// harmonic over more bins, which leaves its power unchanged but adds to a magnitude sum, and more so the higher the
+// harmonic (a 330 Hz tone read 633 Hz straight, 699 Hz with ±50 ct vibrato, magnitude-weighted).
 function vqCentroid(db, binHz){
   const lo = Math.ceil(50/binHz), hi = Math.min(db.length-1, Math.floor(VQ_CENTROID_MAX_HZ/binHz));
   let peak = -Infinity;
@@ -11314,10 +11552,17 @@ function vqCentroid(db, binHz){
   let w = 0, sum = 0;
   for(let i=lo;i<=hi;i++){
     if(!(db[i] >= peak-VQ_CENTROID_FLOOR_DB)) continue;
-    const m = Math.pow(10, db[i]/20);
-    w += i*binHz*m; sum += m;
+    const pw = Math.pow(10, db[i]/10);
+    w += i*binHz*pw; sum += pw;
   }
   return sum>0 ? w/sum : null;
+}
+// The centroid ÷ f0 that a harmonic tone at f0 would give with amplitudes falling at dbPerOct (a_k = k^-s, s = dB/oct ÷ 6.02),
+// over the same 6 kHz band: [dark below, bright above].
+function vqBrightBounds(f0){
+  const K = Math.max(1, Math.floor(VQ_CENTROID_MAX_HZ/f0));
+  const ratio = dbPerOct=>{ const s = dbPerOct/(20*Math.log10(2)); let w = 0, sum = 0; for(let k=1;k<=K;k++){ const pw = Math.pow(k, -2*s); w += k*pw; sum += pw; } return w/sum; };
+  return [ratio(VQ_BRIGHT_DARK_DB_OCT), ratio(VQ_BRIGHT_BRIGHT_DB_OCT)];
 }
 // ms: hold length; active: stops the capture early when it turns false; spectrum: false skips HNR and centroid.
 async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={}){
@@ -11395,9 +11640,12 @@ function renderVoiceQuality(){
     set('vqHnrRead', t(r.hnr>=VQ_HNR_CLEAR ? 'vq_hnr_clear' : r.hnr>=VQ_HNR_BREATHY ? 'vq_hnr_some' : 'vq_hnr_breathy'));
   }else{ set('vqHnrVal', '—'); set('vqHnrRead', ''); }
   if(r.centroid!==null){
-    const ratio = r.centroid/r.f0;
-    set('vqBrightVal', t('vq_bright_val_tpl').replace('{hz}', n(r.centroid, 0)).replace('{r}', n(ratio, 1)));
-    set('vqBrightRead', t(ratio<VQ_BRIGHT_DARK ? 'vq_bright_dark' : ratio>VQ_BRIGHT_BRIGHT ? 'vq_bright_bright' : 'vq_bright_balanced'));
+    // Two decimals (the dark line sits near 1.08×, so one decimal couldn't tell dark from balanced), and the band is
+    // read from the rounded value shown, so each shown ratio falls in exactly one band.
+    const ratio = Math.round(r.centroid/r.f0*100)/100;
+    set('vqBrightVal', t('vq_bright_val_tpl').replace('{hz}', n(r.centroid, 0)).replace('{r}', n(ratio, 2)));
+    const [dark, bright] = vqBrightBounds(r.f0);
+    set('vqBrightRead', t(ratio<dark ? 'vq_bright_dark' : ratio>bright ? 'vq_bright_bright' : 'vq_bright_balanced'));
   }else{ set('vqBrightVal', '—'); set('vqBrightRead', ''); }
 }
 document.getElementById('vqStartBtn').addEventListener('click', async ()=>{
@@ -11547,6 +11795,7 @@ async function startStayInKey(){
   document.getElementById('stayKeyStartLabel').textContent = t('action_stop');
   document.getElementById('stayKeyStartBtn').classList.add('listening');
   stayKeyLoop();
+  vlSidecar(()=>stayKeyActive);
 }
 function stayKeyLoop(){
   if(!stayKeyActive) return;
@@ -11838,6 +12087,7 @@ async function startKaraoke(){
   document.getElementById('karaokeStartLabel').textContent = t('action_stop');
   document.getElementById('karaokeStartBtn').classList.add('listening');
   karaokeLoop();
+  vlSidecar(()=>karaokeActive);
 }
 function finalizeKaraokeNote(idx){
   if(idx<0) return;
@@ -11976,7 +12226,6 @@ document.getElementById('karaokeStartBtn').addEventListener('click', ()=>{
 /* ---------------- Real-Time Feedback Checklist ---------------- */
 let lfActive = false;
 let lfRafId = null;
-let lfFreqDataArr = null;
 let lfCentsBuffer = [];
 let lfRmsBuffer = [];
 
@@ -11996,7 +12245,7 @@ function setChecklistRow(prefix, state, text){
 
 async function startLiveFeedback(){
   if(!requireProFeature('Real-Time Feedback')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   lfActive = true;
   lfCentsBuffer = [];
   lfRmsBuffer = [];
@@ -12014,9 +12263,8 @@ function stopLiveFeedback(){
 }
 function lfLoop(){
   if(!lfActive) return;
-  analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(dataArray);
-  const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const fr = readRegisterFrame(), freq = fr.freq;
+  const rms = fr.raw ? computeRMS(fr.raw) : 0;
 
   if(freq>0){
     const note = freqToNote(freq);
@@ -12045,21 +12293,8 @@ function lfLoop(){
       setChecklistRow('Breath', consistency>=65?'good':'warn', consistency>=65?'Steady breath support':'Volume dipping');
     }
 
-    if(!lfFreqDataArr && analyser) lfFreqDataArr = new Float32Array(analyser.frequencyBinCount);
-    if(lfFreqDataArr){
-      analyser.getFloatFrequencyData(lfFreqDataArr);
-      const sampleRate = audioCtx.sampleRate;
-      const binHz = sampleRate/analyser.fftSize;
-      let weighted=0, total=0;
-      const maxBin = Math.min(lfFreqDataArr.length, Math.floor(6000/binHz));
-      for(let i=1;i<maxBin;i++){
-        const mag = Math.pow(10, lfFreqDataArr[i]/20);
-        weighted += (i*binHz)*mag;
-        total += mag;
-      }
-      const centroid = total>0 ? weighted/total : freq;
-      const brightnessRatio = centroid/freq;
-      const chestScore = Math.max(0, Math.min(100, ((brightnessRatio-1.5)/(5.5-1.5))*100));
+    if(fr.chest!==null){
+      const chestScore = fr.chest;
       const {lowMidi, highMidi} = registerRangeBounds();
       const passaggioMidi = Math.round(lowMidi + 0.6*(highMidi-lowMidi));
       if(note.midi>=passaggioMidi && chestScore>=62){
@@ -13215,6 +13450,7 @@ async function startHarmonyMemory(){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   harmonyMemory.raf = requestAnimationFrame(hmTick);
+  vlSidecar(()=>harmonyMemory.active);
 }
 
 function hmTick(){
@@ -14963,6 +15199,7 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   const cfg = levelCfg();
   const btn = document.getElementById('pitchListenBtn');
   btn.disabled = true; btn.textContent=t('action_listening');
+  vlSidecar(()=>btn.disabled);
   const res = await captureAccuracyForTarget(pitchTargetMidi, 1600, {
     accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, showCentsDetail:cfg.showCentsDetail
   });
@@ -16050,6 +16287,7 @@ async function startGlider(){
   document.getElementById('gliderStartBtn').classList.add('listening');
   if(profile) recordActivity();
   gliderLoop();
+  vlSidecar(()=>gliderActive);
 }
 function gliderLoop(){
   if(!gliderActive) return;
@@ -16143,7 +16381,7 @@ document.getElementById('gliderStartBtn').addEventListener('click', ()=>{
 
 /* ---------------- Game 2: Karaoke Boss Battle (Pro) ---------------- */
 let bossActive=false, bossStartTime=0, bossRafId=null, bossHealth=100, playerHealth=100, bossCurrentIdx=-1, bossCentsBuf=[];
-let bossRmsBuf=[], bossChestBuf=[], bossNoteOnsetTime=null, bossNoteWindowStart=0;
+let bossRmsBuf=[], bossChestBuf=[], bossNoteOnsetTime=null, bossNoteWindowStart=0, bossUsesRegisterInput=false;
 let bossNoteResults=[]; // per-note pitchAcc, real data used to find the actual weakest note
 let bossCurrentTargetMidi=null;
 
@@ -16190,7 +16428,8 @@ document.querySelectorAll('#bossDifficultyRow .ex-type-btn').forEach(btn=>{
 
 async function startBoss(){
   if(!requireProFeature('Karaoke Boss Battle')) return;
-  await initAudio();
+  bossUsesRegisterInput = BOSS_TYPES[selectedBossType].key==='register';
+  if(bossUsesRegisterInput){ if(!await openRegisterInput()) return; } else await initAudio();
   await playBackingPad(false);
   bossActive=true; bossStartTime=performance.now(); bossHealth=100; playerHealth=100; bossCurrentIdx=-1; bossCentsBuf=[]; bossNoteResults=[];
   bossRmsBuf=[]; bossChestBuf=[]; bossNoteOnsetTime=null; bossNoteWindowStart=performance.now();
@@ -16202,6 +16441,7 @@ async function startBoss(){
   document.getElementById('bossStartLabel').textContent='Battling — tap to flee';
   document.getElementById('bossStartBtn').classList.add('listening');
   bossLoop();
+  if(!bossUsesRegisterInput) vlSidecar(()=>bossActive);
 }
 function bossFinalizeNote(idx){
   if(idx<0) return;
@@ -16305,14 +16545,14 @@ function bossLoop(){
     bossCurrentIdx=idx; bossCentsBuf=[]; bossRmsBuf=[]; bossChestBuf=[]; bossNoteOnsetTime=null; bossNoteWindowStart=performance.now();
   }
 
-  analyser.getFloatTimeDomainData(dataArray);
-  const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
+  let freq, buf, chestScore=null;
+  if(bossUsesRegisterInput){ const fr=readRegisterFrame(); freq=fr.freq; buf=fr.raw; chestScore=fr.chest; }
+  else { analyser.getFloatTimeDomainData(dataArray); freq=autoCorrelate(dataArray, audioCtx.sampleRate); buf=dataArray; }
   if(freq>0){
     if(bossNoteOnsetTime===null) bossNoteOnsetTime=performance.now();
     const cents=centsFromTarget(freq, targetMidi);
     if(cents!==null && Math.abs(cents)<300) bossCentsBuf.push(cents);
-    bossRmsBuf.push(computeRMS(dataArray));
-    const chestScore = getSpectralChestScore(freq);
+    bossRmsBuf.push(computeRMS(buf));
     if(chestScore!==null) bossChestBuf.push(chestScore);
   }
 
@@ -16444,13 +16684,13 @@ document.getElementById('bossRematchBtn').addEventListener('click', ()=>{
 });
 
 /* ---------------- Game 3: Register Runner (Pro) ---------------- */
-let bridgeActive=false, bridgeRafId=null, bridgeScroll=0, bridgeLane='chest', bridgeLives=3, bridgeScoreVal=0, bridgeObstacles=[], bridgeFreqDataArr=null, bridgeLastSpawnWorldX=0;
+let bridgeActive=false, bridgeRafId=null, bridgeScroll=0, bridgeLane='chest', bridgeLives=3, bridgeScoreVal=0, bridgeObstacles=[], bridgeLastSpawnWorldX=0;
 const BRIDGE_SCROLL_SPEED=2.6;
 const BRIDGE_LANE_Y={chest:180, head:60};
 
 async function startBridgeRunner(){
   if(!requireProFeature('Register Runner')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   bridgeActive=true; bridgeScroll=0; bridgeLane='chest'; bridgeLives=3; bridgeScoreVal=0; bridgeObstacles=[]; bridgeLastSpawnWorldX=400;
   document.getElementById('bridgeGameOver').style.display='none';
   document.getElementById('bridgeStartLabel').textContent='Running — tap to stop';
@@ -16472,26 +16712,8 @@ function bridgeLoop(){
   const ctx=canvas.getContext('2d');
   const W=canvas.width, H=canvas.height;
 
-  analyser.getFloatTimeDomainData(dataArray);
-  const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
-  if(freq>0){
-    if(!bridgeFreqDataArr && analyser) bridgeFreqDataArr=new Float32Array(analyser.frequencyBinCount);
-    if(bridgeFreqDataArr){
-      analyser.getFloatFrequencyData(bridgeFreqDataArr);
-      const sampleRate=audioCtx.sampleRate;
-      const binHz=sampleRate/analyser.fftSize;
-      let weighted=0, total=0;
-      const maxBin=Math.min(bridgeFreqDataArr.length, Math.floor(6000/binHz));
-      for(let i=1;i<maxBin;i++){
-        const mag=Math.pow(10, bridgeFreqDataArr[i]/20);
-        weighted += (i*binHz)*mag; total+=mag;
-      }
-      const centroid = total>0 ? weighted/total : freq;
-      const brightnessRatio = centroid/freq;
-      const chestScore = Math.max(0, Math.min(100, ((brightnessRatio-1.5)/(5.5-1.5))*100));
-      bridgeLane = chestScore>=50 ? 'chest' : 'head';
-    }
-  }
+  const fr = readRegisterFrame();
+  if(fr.freq>0 && fr.chest!==null) bridgeLane = fr.chest>=50 ? 'chest' : 'head';
 
   bridgeScroll += BRIDGE_SCROLL_SPEED;
   bridgeScoreVal = Math.floor(bridgeScroll/10);
@@ -17736,7 +17958,7 @@ drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);
 
 async function startResonanceVisualizer(){
   if(!requireProFeature('Resonance Visualizer')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   resonanceActive = true;
   resonanceCentsBuffer = [];
   document.getElementById('resonanceStartLabel').textContent = 'Stop';
@@ -17759,8 +17981,7 @@ document.getElementById('resonanceStartBtn')?.addEventListener('click', ()=>{
 
 function resonanceLoop(){
   if(!resonanceActive) return;
-  analyser.getFloatTimeDomainData(dataArray);
-  const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const fr = readRegisterFrame(), freq = fr.freq;
 
   if(freq>0){
     const note = freqToNote(freq);
@@ -17779,7 +18000,7 @@ function resonanceLoop(){
       }
       oscillation = Math.max(0, Math.min(100, crossings*9));
     }
-    const chestScore = getSpectralChestScore(freq) ?? 50;
+    const chestScore = fr.chest ?? 50;
     const zone = chestScore>=62 ? 'Chest' : chestScore>=35 ? 'Mixed' : 'Head';
 
     document.getElementById('resRegisterStat').textContent = zone;
@@ -19641,7 +19862,7 @@ updateDrillPreCopy();
 
 document.getElementById('drillStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Register Drills')) return;
-  await initAudio();
+  if(!await openRegisterInput()) return;
   drillActive = true;
   drillResults = [];
   document.getElementById('drillPreCard').style.display='none';
@@ -19673,13 +19894,11 @@ async function runDrillSequence(){
     await new Promise(resolve=>{
       function frame(){
         if(!drillActive){ resolve(); return; }
-        analyser.getFloatTimeDomainData(dataArray);
-        const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+        const fr = readRegisterFrame(), freq = fr.freq;
         if(freq>0){
           const cents = centsFromTarget(freq, targetMidi);
           if(cents!==null && Math.abs(cents)<300) centsBuf.push(cents);
-          const chestScore = getSpectralChestScore(freq);
-          if(chestScore!==null) chestBuf.push(chestScore);
+          if(fr.chest!==null) chestBuf.push(fr.chest);
         }
         const t = performance.now()-start;
         if(t < DRILL_CAPTURE_MS) requestAnimationFrame(frame); else resolve();

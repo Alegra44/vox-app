@@ -136,6 +136,15 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
     as soon as the account chip appears, before `/me/progress` returns. Easiest with network throttling. The console
     shows the TypeError, and `progress.history[today]` doesn't go up. Seen 5 times in about 25 production sessions
     driven by `REG_URL=<url> scripts/vq-verify/regfix.js`, which starts an exercise as soon as `profile` exists.
+- **The Glider can't crash after a frame with no pitch** (open, not fixed; found 2026-09-25 during the Vocal Load 3b
+  checks). `autoCorrelate` returns −1 for "no pitch", but `gliderPitchToY` only returns null for a falsy `freq`, so −1
+  becomes `log2(−1/440)` = NaN. `gliderY += (NaN − gliderY) × 0.25` makes `gliderY` NaN for the rest of the run, the
+  "no pitch → fall" branch never runs again, and every crash comparison is false: the glider can't crash, the score
+  climbs until the player stops it, and the best score and XP that come with it are saved. One silent frame is enough,
+  e.g. before the singer starts or while they take a breath. It predates Vocal Load, which doesn't touch Glider's own code.
+  - **Repro:** open Glider and start it without singing, or with the mic muted. Nothing crashes, and `gliderY` reads
+    NaN in the console. Seen headless with a Safari user agent (where the Vocal Load sidecar doesn't run): score 353
+    after 30 s, `gliderActive` still true.
 - **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25; **fixed
   in 1932924, live 2026-09-25 as dpl_9RMYqhcfT9a7XSrZtJRG7sUymvwY** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
   98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and

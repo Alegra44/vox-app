@@ -2033,6 +2033,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="gliderStartBtn"><span class="dot-icon"></span><span id="gliderStartLabel">Start flying</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeGlider" data-vl-sidecar style="display:none;"></div>
         <div class="arcade-overlay-msg" id="gliderGameOver" style="display:none;margin-top:16px;">
           <div class="om-title" id="gliderGameOverTitle">Crashed!</div>
           <div class="om-sub" id="gliderGameOverSub"></div>
@@ -2120,6 +2121,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="bossStartBtn"><span class="dot-icon"></span><span id="bossStartLabel" data-i18n="boss_start_label">Start battle (Pro)</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeBoss" data-vl-sidecar style="display:none;"></div>
         <div class="arcade-overlay-msg" id="bossGameOver" style="display:none;margin-top:16px;">
           <div class="om-title" id="bossGameOverTitle" role="status" aria-live="assertive">—</div>
           <div class="om-sub" id="bossGameOverSub"></div>
@@ -2568,6 +2570,7 @@
             <button class="solid-btn teal" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="pitchNextBtn" data-i18n="ex_new_note_btn">New note</button>
           </div>
+          <div class="vl-gauge" id="vlGaugePitch" data-vl-sidecar style="display:none;"></div>
           <div class="ex-result" id="pitchResult" role="status" aria-live="polite" style="display:none;">
             <div class="ex-accuracy" id="pitchAccuracyVal">—</div>
             <div class="ex-feedback-text" id="pitchFeedback"></div>
@@ -2932,6 +2935,7 @@
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="stayKeyStartBtn"><span class="dot-icon"></span><span id="stayKeyStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeStayKey" data-vl-sidecar style="display:none;"></div>
       <div class="progress-bar-thin" style="margin-top:16px;"><div class="fill" id="stayKeyProgressFill"></div></div>
 
       <div class="ex-result" id="stayKeyResult" style="display:none;text-align:center;margin-top:20px;">
@@ -2996,6 +3000,7 @@
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="karaokeStartBtn"><span class="dot-icon"></span><span id="karaokeStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeKaraoke" data-vl-sidecar style="display:none;"></div>
 
       <div class="karaoke-live-line" id="karaokeLiveLine"></div>
 
@@ -3744,6 +3749,7 @@
       <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
       <button class="mic-btn" id="hmemStartBtn"><span class="dot-icon"></span><span id="hmemStartLabel">Start</span></button>
       <p class="fine-print" id="hmemStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeHmem" data-vl-sidecar style="display:none;"></div>
       <div id="hmemResults" style="display:none;margin-top:12px;"></div>
       <p class="fine-print" style="margin-top:10px;" data-i18n="hm_storage_note">Stage progress is saved on this device only.</p>
     </div>
@@ -10908,7 +10914,7 @@ function midiToY(midi, lowMidi, highMidi, topY, bottomY){
 // has been read for REG_IDLE_MS, so every way a tool stops (its button, navigation, game over) releases the mic.
 const REG_FFT = 2048, REG_SMOOTH = 0.8, REG_IDLE_MS = 3000;
 let regIn = null, regOpening = null;
-async function openRegisterInput(){
+async function openRegisterInput({quiet=false}={}){ // quiet: no toast if it fails (a feature's own mic is already open)
   await initAudioOnly();
   if(regIn) return true;
   if(!regOpening) regOpening = (async ()=>{
@@ -10924,7 +10930,7 @@ async function openRegisterInput(){
       regIn.idle = setInterval(()=>{ if(regIn && performance.now()-regIn.lastRead > REG_IDLE_MS) closeRegisterInput(); }, 500);
       return true;
     }catch(e){
-      showToast('Microphone access is needed for this demo. Please allow mic permission and try again.', 'warn');
+      if(!quiet) showToast('Microphone access is needed for this demo. Please allow mic permission and try again.', 'warn');
       return false;
     }finally{ regOpening = null; }
   })();
@@ -11149,20 +11155,65 @@ function vlPercent(){
   if(vlRun && vlRun.ready) return vlRun.pct!==null ? vlRun.pct : vlRun.prior/VocalLoad.DAILY_BUDGET*100;
   return vlDay.day===todayStr() ? vlDay.load/VocalLoad.DAILY_BUDGET*100 : 0;
 }
+// Every .vl-gauge shows the same number. Register Coach's is written out in its panel; the other features' are empty
+// placeholders that get the same markup here, with ids of their own for the label. A placeholder marked data-vl-sidecar
+// belongs to a feature fed by vlSidecar (below) and stays hidden where that can't run.
+const VL_SIDECAR_BLOCKED = (()=>{
+  const ua = navigator.userAgent || '';
+  const chromium = /Chrome\/|Chromium\//.test(ua) && !/Android|Mobile|CriOS|EdgiOS|FxiOS/.test(ua);
+  const touchMac = navigator.platform==='MacIntel' && navigator.maxTouchPoints>1; // iPadOS reporting itself as a Mac
+  return !chromium || /iPad|iPhone|iPod/.test(ua) || touchMac;
+})();
+document.querySelectorAll('.vl-gauge:empty').forEach(box=>{
+  box.setAttribute('role', 'meter'); box.setAttribute('aria-labelledby', box.id+'Label');
+  box.setAttribute('aria-valuemin', '0'); box.setAttribute('aria-valuemax', '100');
+  box.innerHTML = `<div class="vl-gauge-head"><span id="${box.id}Label" data-i18n="vl_gauge_label"></span><span class="vl-gauge-val">—</span></div>`
+    + `<div class="vl-gauge-track"><div class="vl-gauge-fill"></div></div>`;
+  box.querySelector('[data-i18n]').textContent = t('vl_gauge_label');
+});
 function renderVocalLoadGauge(){
-  const box = document.getElementById('vlGauge');
-  if(!box) return;
-  if(!profile || typeof VocalLoad==='undefined'){ box.style.display='none'; return; }
-  box.style.display='';
+  const boxes = document.querySelectorAll('.vl-gauge');
+  if(!profile || typeof VocalLoad==='undefined'){ boxes.forEach(box=>{ box.style.display='none'; }); return; }
   const pct = vlPercent(), shown = pct < 10 ? Math.round(pct*10)/10 : Math.round(pct);
   const txt = t('vl_gauge_pct_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1}));
-  const val = document.getElementById('vlGaugeVal'), fill = document.getElementById('vlGaugeFill');
-  if(val.textContent!==txt){ val.textContent = txt; box.setAttribute('aria-valuetext', txt); }
   const w = Math.min(100, pct).toFixed(1)+'%';
-  if(fill.style.width!==w) fill.style.width = w;
-  box.setAttribute('aria-valuenow', String(Math.round(pct)));
-  box.setAttribute('aria-valuemax', String(Math.max(100, Math.round(pct))));
-  box.classList.toggle('over', pct>=100);
+  boxes.forEach(box=>{
+    if(box.hasAttribute('data-vl-sidecar') && VL_SIDECAR_BLOCKED){ box.style.display='none'; return; }
+    box.style.display='';
+    const val = box.querySelector('.vl-gauge-val'), fill = box.querySelector('.vl-gauge-fill');
+    if(val.textContent!==txt){ val.textContent = txt; box.setAttribute('aria-valuetext', txt); }
+    if(fill.style.width!==w) fill.style.width = w;
+    box.setAttribute('aria-valuenow', String(Math.round(pct)));
+    box.setAttribute('aria-valuemax', String(Math.max(100, Math.round(pct))));
+    box.classList.toggle('over', pct>=100);
+  });
+}
+
+/* ---------------- Vocal Load Dosimetry: features on the shared mic (phase 3b) ---------------- */
+// Features that sing into the shared mic (initAudio: noise suppression and auto gain on, which flatten the loudness the
+// engine reads) feed today's load from the register input, opened alongside their own mic. They keep reading their own
+// stream exactly as before; nothing here touches it. vlSidecar(isActive) is called once the feature has started and
+// feeds one register frame per animation frame while isActive() holds, ending the session the moment it doesn't.
+// Only in desktop Chromium, the one place a second capture of the same mic next to the first has been verified to leave
+// the first alone. WebKit (every iOS browser, Safari) can mute an open capture track when a second one opens, and
+// Firefox and Android are untested, so there the second stream is never opened: these features don't add to the load
+// there and don't show the gauge (VL_SIDECAR_BLOCKED, above). Never for a feature that reads the register input itself
+// (a second reader would change its chest smoothing).
+let vlSideRaf = null, vlSideGen = 0;
+async function vlSidecar(isActive){
+  if(!profile || VL_SIDECAR_BLOCKED || typeof VocalLoad==='undefined') return;
+  const gen = ++vlSideGen;
+  cancelAnimationFrame(vlSideRaf);
+  vlEnd(); // a session left open by the tool used just before (its idle timeout hasn't run yet) isn't this one
+  if(!await openRegisterInput({quiet:true}) || gen!==vlSideGen) return;
+  const tick = ()=>{
+    if(gen!==vlSideGen) return;
+    if(!isActive()){ vlEnd(); return; }
+    const fr = readRegisterFrame();
+    vlFeed(fr.freq, fr.raw);
+    vlSideRaf = requestAnimationFrame(tick);
+  };
+  tick();
 }
 
 document.getElementById('regMicBtn').addEventListener('click', async ()=>{
@@ -11744,6 +11795,7 @@ async function startStayInKey(){
   document.getElementById('stayKeyStartLabel').textContent = t('action_stop');
   document.getElementById('stayKeyStartBtn').classList.add('listening');
   stayKeyLoop();
+  vlSidecar(()=>stayKeyActive);
 }
 function stayKeyLoop(){
   if(!stayKeyActive) return;
@@ -12035,6 +12087,7 @@ async function startKaraoke(){
   document.getElementById('karaokeStartLabel').textContent = t('action_stop');
   document.getElementById('karaokeStartBtn').classList.add('listening');
   karaokeLoop();
+  vlSidecar(()=>karaokeActive);
 }
 function finalizeKaraokeNote(idx){
   if(idx<0) return;
@@ -13397,6 +13450,7 @@ async function startHarmonyMemory(){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   harmonyMemory.raf = requestAnimationFrame(hmTick);
+  vlSidecar(()=>harmonyMemory.active);
 }
 
 function hmTick(){
@@ -15145,6 +15199,7 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   const cfg = levelCfg();
   const btn = document.getElementById('pitchListenBtn');
   btn.disabled = true; btn.textContent=t('action_listening');
+  vlSidecar(()=>btn.disabled);
   const res = await captureAccuracyForTarget(pitchTargetMidi, 1600, {
     accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, showCentsDetail:cfg.showCentsDetail
   });
@@ -16232,6 +16287,7 @@ async function startGlider(){
   document.getElementById('gliderStartBtn').classList.add('listening');
   if(profile) recordActivity();
   gliderLoop();
+  vlSidecar(()=>gliderActive);
 }
 function gliderLoop(){
   if(!gliderActive) return;
@@ -16385,6 +16441,7 @@ async function startBoss(){
   document.getElementById('bossStartLabel').textContent='Battling — tap to flee';
   document.getElementById('bossStartBtn').classList.add('listening');
   bossLoop();
+  if(!bossUsesRegisterInput) vlSidecar(()=>bossActive);
 }
 function bossFinalizeNote(idx){
   if(idx<0) return;
