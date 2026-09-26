@@ -2318,6 +2318,7 @@
         <span class="dot-icon"></span>
         <span id="micBtnLabel">Start listening</span>
       </button>
+      <div class="vl-gauge" id="vlGaugeTuner" data-vl-sidecar style="display:none;"></div>
 
       <div class="health-status-banner neutral" id="vocalHealthBanner" style="display:none;margin-top:12px;"></div>
 
@@ -2394,6 +2395,7 @@
         <div class="range-note-live" id="highLiveNote">—</div>
         <button class="capture-btn" id="captureHighBtn" data-i18n="range_capture_high_btn">Capture highest note</button>
       </div>
+      <div class="vl-gauge" id="vlGaugeRange" data-vl-sidecar style="display:none;"></div>
 
       <div id="rangeResult" class="result-card" style="display:none;">
         <div class="step-label" data-i18n="range_result_label">Your result</div>
@@ -2595,6 +2597,7 @@
             <button class="solid-btn teal" id="intervalListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="intervalNextBtn" data-i18n="ex_new_interval_btn">New interval</button>
           </div>
+          <div class="vl-gauge" id="vlGaugeInterval" data-vl-sidecar style="display:none;"></div>
           <div class="ex-result" id="intervalResult" style="display:none;">
             <div class="ex-accuracy" id="intervalAccuracyVal">—</div>
             <div class="ex-feedback-text" id="intervalFeedback"></div>
@@ -2629,6 +2632,7 @@
             <button class="solid-btn teal" id="scaleStartBtn">Start scale run</button>
             <button class="ghost-btn" id="scaleNextBtn" data-i18n="ex_new_root_btn">New root</button>
           </div>
+          <div class="vl-gauge" id="vlGaugeScale" data-vl-sidecar style="display:none;"></div>
           <div class="scale-dots" id="scaleDots"></div>
           <div class="ex-result" id="scaleResult" style="display:none;">
             <div class="ex-accuracy" id="scaleAccuracyVal">—</div>
@@ -2835,6 +2839,7 @@
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="breathStartBtn"><span class="dot-icon"></span><span id="breathStartLabel" data-i18n="breath_start_hold_label">Start hold</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeBreath" data-vl-sidecar style="display:none;"></div>
 
       <div class="ex-result" id="breathResult" style="display:none;text-align:center;margin-top:22px;">
         <div class="ex-accuracy" id="breathAccuracyVal">—</div>
@@ -2958,6 +2963,7 @@
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="emotionStartBtn"><span class="dot-icon"></span><span id="emotionStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeEmotion" data-vl-sidecar style="display:none;"></div>
 
       <div class="dual-score-row" id="emotionResult" style="display:none;">
         <div class="dual-score"><div class="dual-label" data-i18n="emotion_pitch_label">Pitch</div><div class="dual-val" id="emotionPitchVal">—</div></div>
@@ -3033,6 +3039,7 @@
       <div class="btn-row" style="justify-content:center;margin-top:18px;">
         <button class="mic-btn" id="liveFeedbackStartBtn"><span class="dot-icon"></span><span id="liveFeedbackStartLabel">Start listening</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeLiveFb" style="display:none;"></div>
     </div>
   </section>
 
@@ -3098,6 +3105,7 @@
       <div class="step-label" id="customRunnerProgress">Note 1 of 6</div>
       <div class="chord-label-display" id="customRunnerTarget" style="margin-top:10px;">—</div>
       <p class="desc" id="customRunnerStatus" style="margin-top:10px;">Listening…</p>
+      <div class="vl-gauge" id="vlGaugeCustom" data-vl-sidecar style="display:none;"></div>
     </div>
 
     <div class="key-card" id="customResultCard" style="display:none;margin-top:16px;text-align:center;">
@@ -3127,6 +3135,7 @@
       <div class="rhythm-beat-dots" id="rhythmBeatDots"></div>
       <button class="mic-btn" id="rhythmStartBtn" style="margin-top:20px;"><span class="dot-icon"></span><span id="rhythmStartLabel" data-i18n="action_start">Start</span></button>
       <p class="fine-print" id="rhythmLiveStatus" style="margin-top:12px;"></p>
+      <div class="vl-gauge" id="vlGaugeRhythm" data-vl-sidecar style="display:none;"></div>
     </div>
 
     <div class="key-card" id="rhythmResultCard" style="display:none;margin-top:16px;text-align:center;">
@@ -3362,6 +3371,7 @@
       </div>
       <p class="desc" id="mirrorStatus" style="text-align:center;margin-top:14px;min-height:20px;"></p>
       <button class="mic-btn" id="mirrorPlayBtn" style="margin-top:6px;"><span class="dot-icon"></span>Play a new phrase</button>
+      <div class="vl-gauge" id="vlGaugeMirror" data-vl-sidecar style="display:none;"></div>
 
       <div class="ex-result" id="mirrorResultCard" style="display:none;text-align:center;margin-top:20px;">
         <div class="ex-accuracy" id="mirrorResultAcc">—</div>
@@ -4649,6 +4659,7 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
   label.textContent='Listening — tap to stop';
   cancelAnimationFrame(rafId);
   loop();
+  vlSidecar(()=>mode==='tuner');
 });
 
 /* ---------------- Range Finder ---------------- */
@@ -4674,6 +4685,7 @@ document.getElementById('rangeStartBtn').addEventListener('click', async ()=>{
   mode='rangeLow';
   cancelAnimationFrame(rafId);
   loop();
+  vlSidecar(()=>mode==='rangeLow' || mode==='rangeHigh');
   showStep('rangeLow');
 });
 
@@ -11275,6 +11287,7 @@ async function startBreathHold(){
   const ring = document.getElementById('breathRingFill');
   if(ring){ ring.style.strokeDashoffset = 553; ring.style.stroke = 'var(--teal)'; ring.dataset.atTarget = '0'; }
   breathLoop();
+  vlSidecar(()=>breathActive);
 }
 
 const BREATH_RING_CIRC = 553;
@@ -11883,6 +11896,7 @@ async function startEmotionalSinging(){
   document.getElementById('emotionStartLabel').textContent = t('action_stop');
   document.getElementById('emotionStartBtn').classList.add('listening');
   emotionLoop();
+  vlSidecar(()=>emotionActive);
 }
 function emotionLoop(){
   if(!emotionActive) return;
@@ -12257,6 +12271,7 @@ async function startLiveFeedback(){
 function stopLiveFeedback(){
   lfActive = false;
   cancelAnimationFrame(lfRafId);
+  vlEnd();
   document.getElementById('liveFeedbackStartLabel').textContent = 'Start listening';
   document.getElementById('liveFeedbackStartBtn').classList.remove('listening');
   ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral','Listening…'));
@@ -12264,6 +12279,7 @@ function stopLiveFeedback(){
 function lfLoop(){
   if(!lfActive) return;
   const fr = readRegisterFrame(), freq = fr.freq;
+  vlFeed(freq, fr.raw);
   const rms = fr.raw ? computeRMS(fr.raw) : 0;
 
   if(freq>0){
@@ -15249,6 +15265,7 @@ document.getElementById('intervalListenBtn').addEventListener('click', async ()=
   const cfg = levelCfg();
   const btn = document.getElementById('intervalListenBtn');
   btn.disabled = true; btn.textContent=t('action_listening');
+  vlSidecar(()=>btn.disabled);
   const res = await captureAccuracyForTarget(intervalTargetMidi, 1600, {
     accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding
   });
@@ -15314,6 +15331,7 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   const steps = currentScaleSteps();
   const btn = document.getElementById('scaleStartBtn');
   btn.disabled = true;
+  vlSidecar(()=>btn.disabled);
   document.getElementById('scaleResult').style.display='none';
   const results = [];
   for(let i=0;i<steps.length;i++){
@@ -18148,6 +18166,8 @@ document.getElementById('customStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('customRunnerCard').style.display='block';
   customResults = [];
   const durationMs = CUSTOM_TEMPO_MS[customTempo];
+  const runner = document.getElementById('customRunnerCard');
+  vlSidecar(()=>runner.style.display==='block');
 
   for(let i=0;i<customSequence.length;i++){
     const targetMidi = customSequence[i];
@@ -18349,6 +18369,7 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('rhythmLiveStatus').textContent = t('rhythm_listen_instructions');
   renderRhythmDots(-1);
   rhythmOnsetLoop(beatMs);
+  vlSidecar(()=>rhythmActive);
 });
 
 function rhythmOnsetLoop(beatMs){
@@ -18473,6 +18494,7 @@ function startMirrorEcho(){
   mirrorEchoStartTime = performance.now();
   mirrorUserTrace = [];
   mirrorEchoLoop();
+  vlSidecar(()=>mirrorActive);
 }
 function mirrorEchoLoop(){
   if(!mirrorActive) return;
