@@ -10702,6 +10702,8 @@ async function onSignedIn(){
   applyChoirGateUI();
   renderPricingState();
   updateExCapNote();
+  setExerciseLevel(exerciseLevel); // redraws the exercise targets from the account's saved range, just loaded
+  if(typeof renderSongDifficulty==='function') renderSongDifficulty();
   if(typeof renderJourney==='function') renderJourney();
   if(typeof updateShellTopbar==='function') updateShellTopbar();
   if(typeof renderReweightCard==='function') renderReweightCard();
@@ -10862,9 +10864,9 @@ let appInitPromise = (async function initAccountAndDashboard(){
   applyChoirGateUI();
   renderPricingState();
   updateExCapNote();
-  if(profile && profile.exerciseLevel && LEVEL_CONFIG[profile.exerciseLevel]){
-    setExerciseLevel(profile.exerciseLevel);
-  }
+  // Always re-run: the first targets (Pitch Match, Interval, Scale Run, Ear) were drawn at script load, before the
+  // saved range was loaded.
+  setExerciseLevel(profile && profile.exerciseLevel && LEVEL_CONFIG[profile.exerciseLevel] ? profile.exerciseLevel : exerciseLevel);
   if(typeof renderWarmupContext==='function') renderWarmupContext();
   if(typeof renderVoiceHealth==='function') renderVoiceHealth();
   if(typeof renderSongDifficulty==='function') renderSongDifficulty();
@@ -10934,13 +10936,23 @@ document.getElementById('downloadRecapPosterBtn').addEventListener('click', ()=>
 let bridgeFrameCount = 0;   // consecutive frames spent "clean" above passaggio
 let bestBridgeFrames = 0;
 
-function registerRangeBounds(){
+// The singer's range: a Range Finder capture made since this page loaded wins; otherwise the
+// account's saved range (progress.lowestMidi / highestMidi, loaded at startup and sign-in);
+// otherwise null. lowNote/highNote are reset on every page load, so reading only them made
+// every range-based feature fall back to A2–C5 after a reload.
+function userRange(){
   if(lowNote && highNote){
     let lo=lowNote, hi=highNote;
     if(lo.midi>hi.midi){ const t=lo; lo=hi; hi=t; }
     return {lowMidi:lo.midi, highMidi:hi.midi};
   }
-  return {lowMidi:45, highMidi:72}; // default A2 -> C5
+  if(progress && progress.lowestMidi!=null && progress.highestMidi!=null && progress.highestMidi>progress.lowestMidi){
+    return {lowMidi:progress.lowestMidi, highMidi:progress.highestMidi};
+  }
+  return null;
+}
+function registerRangeBounds(){
+  return userRange() || {lowMidi:45, highMidi:72}; // default A2 -> C5
 }
 
 function drawBridgeZones(){
@@ -15824,9 +15836,9 @@ function renderSongDifficulty(){
   const starDisplay = '★'.repeat(stars) + '☆'.repeat(5-stars);
 
   let recommendedFor = t('songdifficulty_alllevels');
-  if(lowNote && highNote){
-    let lo=lowNote, hi=highNote; if(lo.midi>hi.midi){ const swap=lo; lo=hi; hi=swap; }
-    if(lowest>=lo.midi && highest<=hi.midi) recommendedFor = t('songdifficulty_fitsrange');
+  const range = userRange();
+  if(range){
+    if(lowest>=range.lowMidi && highest<=range.highMidi) recommendedFor = t('songdifficulty_fitsrange');
     else recommendedFor = t('songdifficulty_outsiderange');
   }
 

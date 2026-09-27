@@ -129,8 +129,14 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   trial, Choir World features say they continue on the Choir plan with its price
   (`paywall_trialended_choir_tpl`); the mixer keeps "a paid plan", since Monthly/Yearly unlock it too.
   Check with `paywall.js`.
-- **Register Coach ignores the saved range after a page reload** (open, not fixed; found 2026-09-25 while building
-  Vocal Load Dosimetry). `registerRangeBounds()` reads `lowNote` / `highNote`. Those are in-memory globals, set only
+- **Register Coach ignores the saved range after a page reload** (FIXED and deployed 2026-09-27, dpl_5kEmsQp; found
+  2026-09-25 while building Vocal Load Dosimetry). Fix: `userRange()` returns a Range Finder capture made on this page
+  if there is one, otherwise the saved range, otherwise null, and `registerRangeBounds()` falls back to A2–C5 only on
+  null. Song Difficulty also uses `userRange()`. `setExerciseLevel` now always re-runs after progress loads (at startup
+  and at sign-in), so the first Pitch Match / Interval / Scale Run / Ear targets, drawn at script load, are redrawn from
+  the saved range. After a reload the saved range is the account's *widest ever* (captures only widen it), while on the
+  page that ran the capture it's that capture. Check: `scripts/range-verify/reload.js` (30/30 on production; the old code
+  fails 11). Original report: `registerRangeBounds()` reads `lowNote` / `highNote`. Those are in-memory globals, set only
   by a Range Finder run since the page loaded and reset to null on every load. So after a reload it silently falls back
   to A2–C5 (MIDI 45–72), even though Register Coach's subtitle says it "Uses your Range Finder range if you've captured
   it". The saved range exists and is correct: `user_progress.lowest_midi` / `highest_midi` (`progress.lowestMidi` /
