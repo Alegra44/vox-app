@@ -28,6 +28,9 @@ function check(label, ok, detail) { ok ? pass++ : fail++; console.log(`  ${ok ? 
 //   C4, MIDI 60: 1 + 15 / 16.2 = 1.925926
 //   MIDI 55.546875 (Glider only, Melody Road: the hymn's C and D gaps sit at y = 230 and 160 of 320, and this tone at
 //   y = 320 − (55.546875 − 45) / 27 × 320 = 195, midway, so it flies until the gaps narrow): 1 + 10.546875 / 16.2 = 1.651042
+//   Glider waits in the first gap (starting at its centre, y = 230 here) until the first sung note, with no scroll, score
+//   or crash. The mic is warmed first, so the tone is there on the first frame: it takes off on frame 1, and the time
+//   the feature listened is all singing. Both are checked on every Glider run.
 const BUDGET = 6800;
 const TONES = { c4: { midi: 60, rate: 1 + 15 / 16.2 }, glider: { midi: 55.546875, rate: 1 + 10.546875 / 16.2 } };
 for (const [k, tn] of Object.entries(TONES)) {
@@ -106,20 +109,32 @@ const RESULT = {
   staykey: () => ({ shown: document.getElementById('stayKeyAccuracyVal').textContent, inKeyShare: +(stayKeyInKeyFrames / Math.max(1, stayKeyTotalFrames)).toFixed(3) }),
   karaoke: () => ({ notes: karaokeResults.map(r => r ? `${r.pitchAcc}/${r.timingScore}/${r.heard ? 'h' : '-'}` : 'x').join(' '), pitch: document.getElementById('karaokePitchVal').textContent, timing: document.getElementById('karaokeTimingVal').textContent }),
   hmem: () => ({ held: harmonyMemory.lastRun?.results.map(r => r.held ? 1 : 0).join(''), score: harmonyMemory.lastRun?.score, passed: harmonyMemory.lastRun?.passed }),
-  glider: () => ({ score: gliderScoreVal, coins: gliderCoins, title: document.getElementById('gliderGameOverTitle').textContent.replace(/New best!?|Crashed!?/i, 'end') }),
+  glider: () => ({ score: gliderScoreVal, coins: gliderCoins, title: document.getElementById('gliderGameOverTitle').textContent.replace(/New best!?|Crashed!?/i, 'end'),
+    startY: __gstart && __gstart.y, firstGapY: __gstart && __gstart.first, tookOffOnFrame: __gstart && __gstart.offAt }),
   boss: () => ({ boss: Math.round(bossHealth), player: Math.round(playerHealth), notes: bossNoteResults.map(r => r && r.pitchAcc !== undefined ? r.pitchAcc : (typeof r === 'number' ? r : JSON.stringify(r))).join(' ') }),
 };
 // Compared with and without the sidecar: exact, except per-frame counts (Stay in Key's in-key share) and Glider's
 // frame-paced score, which may differ by a frame or two of rAF timing.
 const SAME = {
   staykey: (a, b) => Math.abs(a.inKeyShare - b.inKeyShare) <= 0.02 && Math.abs(parseInt(a.shown) - parseInt(b.shown)) <= 2,
-  glider: (a, b) => Math.abs(a.score - b.score) <= 2 && a.coins === b.coins && a.title === b.title,
+  glider: (a, b) => Math.abs(a.score - b.score) <= 2 && a.coins === b.coins && a.title === b.title && a.startY === b.startY && a.tookOffOnFrame === b.tookOffOnFrame,
 };
 // Before each run: the same start state for both runs.
 const PREP = {
   pitch: target => `pitchTargetMidi = ${target}; document.getElementById('pitchTargetNote').textContent = noteNameFromMidi(${target});`,
   hmem: () => `document.querySelector('#rehearsalPartRow [data-rh-part="Lead"]').click(); document.querySelector('[data-hm-stage="0"]')?.click();`,
-  glider: () => `document.querySelector('[data-glider-mode="melody"]')?.click(); document.querySelector('[data-glider-difficulty="beginner"]')?.click(); __seed(7)`,
+  // also records, per run, where the glider starts, the first gap's centre, and the frame it takes off on (a wrapper
+  // around gliderLoop, installed once; startGlider and requestAnimationFrame call it by its global name)
+  glider: () => `document.querySelector('[data-glider-mode="melody"]')?.click(); document.querySelector('[data-glider-difficulty="beginner"]')?.click(); __seed(7);
+    window.__gstart = null;
+    if (!window.__gWrapped) { const loop = gliderLoop; window.__gWrapped = true;
+      window.gliderLoop = function () {
+        if (gliderActive && !__gstart) __gstart = { y: gliderY, first: gliderPoints[0].gapY, frames: 0, offAt: null };
+        if (__gstart && gliderActive) __gstart.frames++;
+        const r = loop.apply(this, arguments);
+        if (__gstart && __gstart.offAt === null && gliderTookOff) __gstart.offAt = __gstart.frames;
+        return r;
+      }; }`,
   boss: () => `document.querySelector('[data-boss-type="pitch"]').click(); document.querySelector('[data-boss-difficulty="beginner"]').click(); __seed(7)`,
 };
 
@@ -182,6 +197,8 @@ async function feature(page, f, label, { target } = {}) {
   const on = await runOnce(page, f, { live: true, target });
   const same = SAME[f] ? SAME[f](off.result, on.result) : JSON.stringify(off.result) === JSON.stringify(on.result);
   check('feature result identical with the sidecar live', same, `off ${JSON.stringify(off.result)} | on ${JSON.stringify(on.result)}`);
+  if (f === 'glider') for (const [k, r] of [['off', off.result], ['on', on.result]])
+    check(`${k}: starts at the first gap's centre, takes off on frame 1 (no wait)`, r.startY === r.firstGapY && r.tookOffOnFrame === 1, `start y ${r.startY}, first gap ${r.firstGapY}, took off on frame ${r.tookOffOnFrame}`);
   const m = on.mid, o = off.mid;
   // the shared mic opens once per page (on the first run); the register input opens on every live run
   check('both live at once: the feature\'s own mic + the register input', m.shared && m.live && m.regLive && m.gum.filter(REG_STREAM).length === 1, `opened this run [${m.gum.join(' + ')}]`);
@@ -270,6 +287,7 @@ async function feature(page, f, label, { target } = {}) {
     });
     await sleep(4000);
     check('Glider ran on its own stream only, no session stored', r.mid.live && !r.mid.gum.some(REG_STREAM) && !r.mid.reg && rowsDb().length === before, `opened [${r.mid.gum.join(' + ')}], rows ${before}→${rowsDb().length}, score ${r.result.score}`);
+    check('Glider started at the first gap\'s centre and took off on frame 1', r.result.startY === r.result.firstGapY && r.result.tookOffOnFrame === 1, `start y ${r.result.startY}, first gap ${r.result.firstGapY}, frame ${r.result.tookOffOnFrame}`);
     const hid = [];
     for (const [f, id] of Object.entries(GAUGES)) { const g = await gauge(page, id); if (g.visible !== (f === 'coach')) hid.push(`${f} visible ${g.visible}`); }
     check('the six features\' gauges hidden, Register Coach\'s still shown', hid.length === 0, hid.join('; ') || 'ok');
