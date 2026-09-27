@@ -145,6 +145,12 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   - **Repro:** open Glider and start it without singing, or with the mic muted. Nothing crashes, and `gliderY` reads
     NaN in the console. Seen headless with a Safari user agent (where the Vocal Load sidecar doesn't run): score 353
     after 30 s, `gliderActive` still true.
+- **One unexplained 59/60 in the Vocal Load batch 3a checks** (unreproduced flake; 2026-09-27). One production run of
+  group 1 (`VLB_ONLY=bridge,wraith,resonance,drills scripts/vocal-load-verify/batch3a.js <url>`: Register Runner, the
+  Register Wraith boss, the Resonance Visualizer, Register Drills) reported 59 passed and 1 failed. Only the summary
+  line was captured, so there is no record of which check failed or why. The next two production runs of the same
+  group passed 60/60, the second with its full log saved. Logged as a single flake with no diagnostic record. If a
+  run of this group fails again, save the whole log and start from the ✗ line.
 - **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25; **fixed
   in 1932924, live 2026-09-25 as dpl_9RMYqhcfT9a7XSrZtJRG7sUymvwY** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
   98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and
