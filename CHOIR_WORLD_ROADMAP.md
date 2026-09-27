@@ -150,7 +150,8 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   Register Wraith boss, the Resonance Visualizer, Register Drills) reported 59 passed and 1 failed. Only the summary
   line was captured, so there is no record of which check failed or why. The next two production runs of the same
   group passed 60/60, the second with its full log saved. Logged as a single flake with no diagnostic record. If a
-  run of this group fails again, save the whole log and start from the ✗ line.
+  run of this group fails again, save the whole log and start from the ✗ line. Likely explanation, found
+  later: the test mic dropping out under memory pressure (see "Testing infrastructure notes" below).
 - **Entrance & Cutoff Trainer: a false entrance on its first tick** (pre-existing, not fixed; found 2026-09-27 while
   checking Vocal Load batch 3b, not caused by it). The trainer starts out assuming silence (`wasVoiced = false`), so if
   the singer is already making sound when it starts, its first tick reads as a note start. That start comes before the
@@ -205,3 +206,18 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
     `regcoach.js` / `regcoach2.js` (first findings).
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
+
+## Testing infrastructure notes
+
+These are about the test setup, not the app.
+
+- **The synthetic mic can drop to exact zero under memory pressure** (found 2026-09-27, Vocal Load batch 3b). The
+  verify scripts feed Chromium a WAV file as its microphone (`--use-file-for-fake-audio-capture`). With about 390 MB of
+  7.9 GB RAM free (90% committed), that capture went to exact-zero silence for 0.05–0.6 s at a time, several times a
+  run: 5 of 6 diagnostic runs of the Entrance & Cutoff Trainer, with the Vocal Load feed stubbed out and live alike.
+  None of the gaps lined up with a stream being closed, and the WAV has no gaps (every 50 ms block is 0.270–0.272
+  RMS). A group A run of `batch3b.js` failed 66/68 that way, both failures in stubbed runs, then passed 68/68 on the
+  next run. It is the likely explanation for the unreproduced 59/60 in batch 3a (above). Dropouts can only make a check
+  fail, never pass, so a clean run is valid at any memory level. **If an unexplained failure shows up in a live run,
+  check free memory (`(Get-CimInstance Win32_PerfFormattedData_PerfOS_Memory).AvailableMBytes`) before assuming an app
+  bug**, and look in the full log for exact-zero RMS or a run of silence where the tone should be.
