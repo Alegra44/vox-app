@@ -5794,6 +5794,7 @@ const TRANSLATIONS = {
     feedback_thanks_desc:'Your feedback was saved. It genuinely helps shape what gets built next.',
     feedback_thanks_title:'Thank you',
     glider_choose_course:'Choose your course',
+    glider_takeoff_hint:'Sing to take off',
     glider_course_desc:'Sing to fly, go quiet to fall — 7 real courses, not reskins of the same obstacle generator.',
     glider_mode_agility:'Agility Run',
     glider_mode_highway:'Pitch Highway',
@@ -7129,6 +7130,7 @@ const TRANSLATIONS = {
     feedback_thanks_desc:'Votre avis a été enregistré. Il aide vraiment à façonner ce qui sera construit ensuite.',
     feedback_thanks_title:'Merci',
     glider_choose_course:'Choisissez votre parcours',
+    glider_takeoff_hint:'Chantez pour décoller',
     glider_course_desc:'Chantez pour voler, taisez-vous pour tomber — 7 vrais parcours, pas de simples re-habillages du même générateur d\'obstacles.',
     glider_mode_agility:'Course Agilité',
     glider_mode_highway:'Autoroute Justesse',
@@ -8464,6 +8466,7 @@ const TRANSLATIONS = {
     feedback_thanks_desc:'Tu comentario fue guardado. Realmente ayuda a dar forma a lo que se construirá después.',
     feedback_thanks_title:'Gracias',
     glider_choose_course:'Elige tu recorrido',
+    glider_takeoff_hint:'Canta para despegar',
     glider_course_desc:'Canta para volar, guarda silencio para caer — 7 recorridos reales, no reskins del mismo generador de obstáculos.',
     glider_mode_agility:'Carrera de Agilidad',
     glider_mode_highway:'Autopista de Afinación',
@@ -9799,6 +9802,7 @@ const TRANSLATIONS = {
     feedback_thanks_desc:'Geri bildiriminiz kaydedildi. Bir sonraki yapılacakları gerçekten şekillendirmeye yardımcı oluyor.',
     feedback_thanks_title:'Teşekkürler',
     glider_choose_course:'Parkurunuzu seçin',
+    glider_takeoff_hint:'Havalanmak için söyleyin',
     glider_course_desc:'Uçmak için söyleyin, düşmek için sessiz kalın — 7 gerçek parkur, aynı engel üretecinin yeniden kaplamaları değil.',
     glider_mode_agility:'Çeviklik Koşusu',
     glider_mode_highway:'Perde Otoyolu',
@@ -16261,7 +16265,7 @@ function updateArcadeBestLabels(){
 }
 
 /* ---------------- Game 1: Pitch Glider / Vocal Journey (free, unlimited) ---------------- */
-let gliderActive=false, gliderY=160, gliderScroll=0, gliderScoreVal=0, gliderRafId=null;
+let gliderActive=false, gliderY=160, gliderScroll=0, gliderScoreVal=0, gliderRafId=null, gliderTookOff=false;
 let gliderPoints=[];
 let gliderCombo=0, gliderCoins=0, gliderDifficultyFactor=1.0, gliderFocusLabel='';
 const GLIDER_CANVAS_H = 320;
@@ -16404,6 +16408,8 @@ function gliderEnsurePoints(upToWorldX){
   }
 }
 function gliderGapAtWorldX(wx){
+  // the lead-in before the first gap point flies through that first gap (not the last one generated)
+  if(gliderPoints.length && wx<=gliderPoints[0].worldX) return {gapY:gliderPoints[0].gapY, gapH:gliderPoints[0].gapH};
   for(let i=0;i<gliderPoints.length-1;i++){
     const a=gliderPoints[i], b=gliderPoints[i+1];
     if(wx>=a.worldX && wx<=b.worldX){
@@ -16415,7 +16421,7 @@ function gliderGapAtWorldX(wx){
   return {gapY:last.gapY, gapH:last.gapH};
 }
 function gliderPitchToY(freq, H){
-  if(!freq) return null;
+  if(!(freq>0)) return null; // autoCorrelate returns -1 for "no pitch": null makes the glider fall ("go quiet to fall")
   const midi = 69+12*Math.log2(freq/440);
   return gliderMidiToY(midi, H);
 }
@@ -16431,8 +16437,10 @@ async function startGlider(){
   gliderCurrentMidi = null;
   gliderBridgeCounter = 0;
   gliderKeyShiftCenter = 160; gliderKeyShiftCounter = 0;
-  gliderActive=true; gliderY=160; gliderScroll=0; gliderScoreVal=0; gliderCombo=0; gliderCoins=0; gliderPoints=[];
+  gliderActive=true; gliderScroll=0; gliderScoreVal=0; gliderCombo=0; gliderCoins=0; gliderPoints=[];
   gliderEnsurePoints(0);
+  gliderY = gliderPoints[0].gapY; // start in the middle of the lead-in gap
+  gliderTookOff = false;          // held there, not scrolling or scoring, until the first sung note
   document.getElementById('gliderGameOver').style.display='none';
   document.getElementById('gliderStartLabel').textContent='Flying — tap to stop';
   document.getElementById('gliderStartBtn').classList.add('listening');
@@ -16449,19 +16457,22 @@ function gliderLoop(){
   analyser.getFloatTimeDomainData(dataArray);
   const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
   const desiredY=gliderPitchToY(freq, H);
-  if(desiredY!==null){ gliderY += (desiredY-gliderY)*0.25; }
-  else { gliderY += 3.2; }
-  gliderY = Math.max(6, Math.min(H-6, gliderY));
-
-  gliderScroll += gliderScrollSpeedVal;
-  gliderScoreVal = Math.floor(gliderScroll/10);
-  gliderEnsurePoints(gliderScroll+W);
+  if(desiredY!==null) gliderTookOff = true;
+  // Before the first sung note the glider waits in the lead-in gap: no gravity, no scrolling, no score, no crash.
+  if(gliderTookOff){
+    if(desiredY!==null){ gliderY += (desiredY-gliderY)*0.25; }
+    else { gliderY += 3.2; }
+    gliderY = Math.max(6, Math.min(H-6, gliderY));
+    gliderScroll += gliderScrollSpeedVal;
+    gliderScoreVal = Math.floor(gliderScroll/10);
+    gliderEnsurePoints(gliderScroll+W);
+  }
 
   const gliderScreenX=90;
   const worldX=gliderScroll+gliderScreenX;
   const gap=gliderGapAtWorldX(worldX);
   const topEdge=gap.gapY-gap.gapH/2, bottomEdge=gap.gapY+gap.gapH/2;
-  const crashed = (gliderY-8 < topEdge) || (gliderY+8 > bottomEdge);
+  const crashed = gliderTookOff && ((gliderY-8 < topEdge) || (gliderY+8 > bottomEdge));
 
   // coin collection: award when passing a gap-point's world position close to its center while alive
   gliderPoints.forEach(p=>{
@@ -16496,6 +16507,11 @@ function gliderLoop(){
   });
   ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';
   ctx.beginPath(); ctx.arc(gliderScreenX, gliderY, 8, 0, Math.PI*2); ctx.fill();
+  if(!gliderTookOff){
+    ctx.fillStyle='#f1ead9'; ctx.font='600 18px system-ui, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(t('glider_takeoff_hint'), W/2, 28);
+    ctx.textAlign='start'; ctx.textBaseline='alphabetic';
+  }
 
   document.getElementById('gliderScoreLabel').textContent='Score: '+gliderScoreVal;
   document.getElementById('gliderComboLabel').textContent='🪙 '+gliderCoins+' · Combo: '+gliderCombo;
@@ -16510,7 +16526,8 @@ function finishGlider(){
   document.getElementById('gliderStartBtn').classList.remove('listening');
   let isBest=false;
   if(profile){
-    if(!progress.gliderBest || gliderScoreVal>progress.gliderBest){
+    // a run stopped before take-off never flew: no best, no XP (else start/stop would farm the new-best XP)
+    if(gliderTookOff && (!progress.gliderBest || gliderScoreVal>progress.gliderBest)){
       const hadPriorBest = !!progress.gliderBest;
       const delta = gliderScoreVal-(progress.gliderBest||0);
       progress.gliderBest=gliderScoreVal; isBest=true;

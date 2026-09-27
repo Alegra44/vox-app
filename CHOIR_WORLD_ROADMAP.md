@@ -159,8 +159,21 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
     as soon as the account chip appears, before `/me/progress` returns. Easiest with network throttling. The console
     shows the TypeError, and `progress.history[today]` doesn't go up. Seen 5 times in about 25 production sessions
     driven by `REG_URL=<url> scripts/vq-verify/regfix.js`, which starts an exercise as soon as `profile` exists.
-- **The Glider can't crash after a frame with no pitch** (open, not fixed; found 2026-09-25 during the Vocal Load 3b
-  checks). `autoCorrelate` returns −1 for "no pitch", but `gliderPitchToY` only returns null for a falsy `freq`, so −1
+- **The Glider can't crash after a frame with no pitch** (FIXED and deployed 2026-09-28, dpl_HHDB2xi, with the start-of-run bug it was hiding).
+  The fix has three parts:
+  - **No-pitch handling:** `gliderPitchToY` returns null for anything but a positive frequency, so no pitch makes the
+    glider fall, as the course description says ("Sing to fly, go quiet to fall").
+  - **Start-of-run bug:** that fall exposed an older bug. For the lead-in stretch (world x before the first gap
+    point), `gliderGapAtWorldX` used the *last* generated point, and the glider always started at y = 160. Most runs
+    then crashed on their first frames: 200 seeded courses per mode found the start outside the gap in 11–200 of 200
+    runs depending on the course. The lead-in now uses the first point, and the glider starts at its centre.
+  - **Freeze until the first note:** the glider waits in the lead-in gap until the first sung note, with no gravity,
+    scrolling, score or crash, and a "Sing to take off" hint (`glider_takeoff_hint`, 4 languages) is drawn on the
+    canvas. A run stopped before take-off saves no best and earns no new-best XP.
+
+  Checks: `scripts/glider-verify/courses.js` (all 7 courses, 200 seeds each, stepping the real loop; 52/52 on production) and
+  `flight.js` (real account, a steered oscillator as the mic; 38/38 on production). Existing players' bests may be inflated by the old
+  bug; they were left as they are. Original report: `autoCorrelate` returns −1 for "no pitch", but `gliderPitchToY` only returns null for a falsy `freq`, so −1
   becomes `log2(−1/440)` = NaN. `gliderY += (NaN − gliderY) × 0.25` makes `gliderY` NaN for the rest of the run, the
   "no pitch → fall" branch never runs again, and every crash comparison is false: the glider can't crash, the score
   climbs until the player stops it, and the best score and XP that come with it are saved. One silent frame is enough,
