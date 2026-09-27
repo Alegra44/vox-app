@@ -1855,6 +1855,7 @@
           <div class="assess-check" id="voiceRecordCheck">○</div>
         </div>
       </div>
+      <div class="vl-gauge" id="vlGaugeJourney" data-vl-sidecar style="display:none;"></div>
 
       <p class="fine-print" style="margin-top:6px;" data-i18n="journey_open_hint">Each "Open" jumps to the real tool. Come back here and mark it done once you've tried it — this page doesn't auto-detect across tabs, so it asks honestly instead of guessing.</p>
 
@@ -2219,6 +2220,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="harmonyStartBtn"><span class="dot-icon"></span><span id="harmonyStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeHarmony" data-vl-sidecar style="display:none;"></div>
 
         <div class="ex-result" id="harmonyResult" style="display:none;text-align:center;margin-top:18px;">
           <div class="ex-accuracy" id="harmonyAccVal">—</div>
@@ -2285,6 +2287,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="bridgeStartBtn"><span class="dot-icon"></span><span id="bridgeStartLabel" data-i18n="bridgerunner_start_label">Start running (Pro)</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeBridge" style="display:none;"></div>
         <div class="arcade-overlay-msg" id="bridgeGameOver" style="display:none;margin-top:16px;">
           <div class="om-title" id="bridgeGameOverTitle">Wiped out!</div>
           <div class="om-sub" id="bridgeGameOverSub"></div>
@@ -2807,6 +2810,7 @@
       <div class="step-label" id="drillStepLabel">Note 1 of 5</div>
       <div class="chord-label-display" id="drillNote" style="margin-top:10px;">—</div>
       <p class="desc" id="drillStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeDrill" style="display:none;"></div>
     </div>
     <div class="key-card" id="drillResultCard" style="display:none;">
       <div class="step-label" style="text-align:center;" data-i18n="registerdrills_results_label">Real results</div>
@@ -2862,6 +2866,7 @@
       <div class="btn-row" style="justify-content:center;margin-bottom:18px;">
         <button class="mic-btn" id="vibratoStartBtn"><span class="dot-icon"></span><span id="vibratoStartLabel">Hold a note for 4s</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeVibrato" style="display:none;"></div>
 
       <svg class="vibrato-wave" viewBox="0 0 480 140" id="vibratoWaveSvg">
         <line x1="0" y1="70" x2="480" y2="70" stroke="var(--hairline)" stroke-width="1"/>
@@ -2887,6 +2892,7 @@
       <div class="btn-row" style="justify-content:center;margin-bottom:18px;">
         <button class="mic-btn" id="vqStartBtn"><span class="dot-icon"></span><span id="vqStartLabel">Hold a note for 4s</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeVq" style="display:none;"></div>
       <div id="vqResult" style="display:none;">
         <p class="fine-print" id="vqNote" style="text-align:center;margin-bottom:12px;"></p>
         <div class="vq-rows">
@@ -3054,6 +3060,7 @@
       <div class="btn-row" style="justify-content:center;margin-top:16px;">
         <button class="mic-btn" id="resonanceStartBtn"><span class="dot-icon"></span><span id="resonanceStartLabel">Start</span></button>
       </div>
+      <div class="vl-gauge" id="vlGaugeResonance" style="display:none;"></div>
       <div class="reg-stat-row" style="margin-top:16px;">
         <div class="stat-chip"><div class="label" data-i18n="resonance_register_label">Register</div><div class="val" id="resRegisterStat">—</div></div>
         <div class="stat-chip"><div class="label" data-i18n="resonance_steadiness_label">Steadiness</div><div class="val" id="resSteadyStat">—</div></div>
@@ -3301,6 +3308,7 @@
         <span class="dot-icon"></span><span id="studioRecordLabel" data-i18n="studio_record_btn">RECORD</span>
       </button>
       <p class="fine-print" id="studioRecordNote" style="margin-top:12px;"></p>
+      <div class="vl-gauge" id="vlGaugeStudio" data-vl-sidecar style="display:none;"></div>
     </div>
     <div class="key-card" style="margin-top:24px;">
       <div class="step-label" data-i18n="studio_takes_label">Your real takes</div>
@@ -3326,6 +3334,7 @@
       </div>
       <p class="desc" id="aiDuetNote" style="margin-bottom:16px;">The AI will sing Lead, Alto, Tenor, and Bass — you sing Soprano.</p>
       <button class="mic-btn" id="aiDuetStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Start singing with AI</button>
+      <div class="vl-gauge" id="vlGaugeDuet" data-vl-sidecar style="display:none;"></div>
     </div>
   </section>
 
@@ -3653,6 +3662,7 @@
       <p class="fine-print" style="margin-bottom:10px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
       <p class="fine-print" id="ycSummary" style="margin-bottom:6px;"></p>
       <div id="ycParts"></div>
+      <div class="vl-gauge" id="vlGaugeYc" data-vl-sidecar style="display:none;"></div>
       <div class="transport-row">
         <button class="solid-btn teal" id="ycPlayBtn">▶ Play my choir</button>
         <button class="ghost-btn" id="ycStopBtn" data-i18n="yc_stop_btn">Stop</button>
@@ -3852,6 +3862,7 @@
             <div class="vc-label" data-i18n="pricing_today_label">Today</div>
             <div id="todayAudioEmpty">
               <button class="ghost-btn" id="recordTodayBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="pricing_recordtoday_btn">🎙️ Record today's clip</button>
+              <div class="vl-gauge" id="vlGaugeToday" data-vl-sidecar style="display:none;"></div>
             </div>
             <audio id="todayAudioPlayer" controls style="width:100%;margin-top:8px;display:none;"></audio>
           </div>
@@ -11587,7 +11598,7 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={})
   src.connect(an);
   const lp = [0, 1].map(()=>{ const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = VQ_PITCH_LP_HZ; f.Q.value = Math.SQRT1_2; return f; });
   src.connect(lp[0]).connect(lp[1]).connect(pitchAn);
-  const sr = audioCtx.sampleRate, binHz = sr/VQ_FFT, time = new Float32Array(VQ_PITCH_WIN), spec = new Float32Array(an.frequencyBinCount);
+  const sr = audioCtx.sampleRate, binHz = sr/VQ_FFT, time = new Float32Array(VQ_PITCH_WIN), spec = new Float32Array(an.frequencyBinCount), raw = new Float32Array(VQ_FFT);
   const frames = [], t0 = audioCtx.currentTime;
   let lastT = -1;
   try{
@@ -11599,6 +11610,8 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={})
           lastT = t;
           pitchAn.getFloatTimeDomainData(time);
           const f0 = autoCorrelate(time, sr);
+          an.getFloatTimeDomainData(raw); // the unfiltered signal, for today's vocal load
+          vlFeed(f0, raw);
           if(f0>60 && f0<1400){
             if(spectrum) an.getFloatFrequencyData(spec);
             frames.push({t, f0, midi:69+12*Math.log2(f0/440), hnr:spectrum ? vqHnr(spec, binHz, f0) : null, centroid:spectrum ? vqCentroid(spec, binHz) : null});
@@ -11609,6 +11622,7 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={})
       })();
     });
   }finally{
+    vlEnd();
     src.disconnect(); lp.forEach(f=>f.disconnect());
     stream.getTracks().forEach(tr=>tr.stop());
   }
@@ -13985,6 +13999,7 @@ async function ycRecord(part){
   const others = [];
   for(const p of YC_PARTS) if(p!==part && takes[p]) others.push([p, await ycDecode(takes[p].base64)]);
   const rec = yourChoir.recording = {part, song, startCtx:null, recorder:null, cancelled:false, lastIdx:-3};
+  vlSidecar(()=>yourChoir.recording===rec && (!rec.recorder || rec.recorder.state!=='inactive')); // not while the take is saved
   choirHeadroomFx = ycHeadroom(takes, part);
   renderYourChoir();
   let started = null;
@@ -16431,6 +16446,8 @@ document.querySelectorAll('#bossTypeRow .ex-type-btn').forEach(btn=>{
     btn.setAttribute('aria-pressed','true');
     selectedBossType = btn.dataset.bossType;
     const boss = BOSS_TYPES[selectedBossType];
+    document.getElementById('vlGaugeBoss').toggleAttribute('data-vl-sidecar', boss.key!=='register');
+    renderVocalLoadGauge();
     document.getElementById('bossEmoji').textContent = boss.emoji;
     document.getElementById('bossNameLabel').textContent = boss.name.toUpperCase();
   });
@@ -16564,7 +16581,7 @@ function bossLoop(){
   }
 
   let freq, buf, chestScore=null;
-  if(bossUsesRegisterInput){ const fr=readRegisterFrame(); freq=fr.freq; buf=fr.raw; chestScore=fr.chest; }
+  if(bossUsesRegisterInput){ const fr=readRegisterFrame(); freq=fr.freq; buf=fr.raw; chestScore=fr.chest; vlFeed(freq, buf); }
   else { analyser.getFloatTimeDomainData(dataArray); freq=autoCorrelate(dataArray, audioCtx.sampleRate); buf=dataArray; }
   if(freq>0){
     if(bossNoteOnsetTime===null) bossNoteOnsetTime=performance.now();
@@ -16606,6 +16623,7 @@ function bossFindWeakestNote(){
 function finishBoss(result){
   bossFinalizeNote(bossCurrentIdx);
   bossActive=false;
+  if(bossUsesRegisterInput) vlEnd();
   cancelAnimationFrame(bossRafId);
   stopBackingPad();
   document.getElementById('bossStartLabel').textContent=t('boss_start_label');
@@ -16731,6 +16749,7 @@ function bridgeLoop(){
   const W=canvas.width, H=canvas.height;
 
   const fr = readRegisterFrame();
+  vlFeed(fr.freq, fr.raw);
   if(fr.freq>0 && fr.chest!==null) bridgeLane = fr.chest>=50 ? 'chest' : 'head';
 
   bridgeScroll += BRIDGE_SCROLL_SPEED;
@@ -16774,6 +16793,7 @@ function bridgeLoop(){
 }
 function finishBridgeRunner(){
   bridgeActive=false;
+  vlEnd();
   cancelAnimationFrame(bridgeRafId);
   document.getElementById('bridgeStartLabel').textContent=t('bridgerunner_start_label');
   document.getElementById('bridgeStartBtn').classList.remove('listening');
@@ -16794,7 +16814,7 @@ function finishBridgeRunner(){
   document.getElementById('bridgeBestLabelLive').textContent=t('game_best_p1')+' '+(profile?(progress.bridgeBest||0):0);
   registerExerciseCompletion();
 }
-function stopBridgeRunner(){ if(bridgeActive){ bridgeActive=false; cancelAnimationFrame(bridgeRafId); } }
+function stopBridgeRunner(){ if(bridgeActive){ bridgeActive=false; cancelAnimationFrame(bridgeRafId); vlEnd(); } }
 document.getElementById('bridgeStartBtn').addEventListener('click', ()=>{
   if(bridgeActive) finishBridgeRunner(); else startBridgeRunner();
 });
@@ -16892,6 +16912,7 @@ async function startHarmonyArena(){
   document.getElementById('harmonyStartLabel').textContent='Singing — tap to stop';
   document.getElementById('harmonyStartBtn').classList.add('listening');
   harmonyLoop();
+  vlSidecar(()=>harmonyActive);
 }
 function harmonyFinalizeNote(idx){
   if(harmonyNoteBuf.length===0){ harmonyNoteResults[idx] = null; return; }
@@ -17985,6 +18006,7 @@ async function startResonanceVisualizer(){
 }
 function stopResonanceVisualizer(){
   resonanceActive = false;
+  vlEnd();
   cancelAnimationFrame(resonanceRafId);
   document.getElementById('resonanceStartLabel').textContent = 'Start';
   document.getElementById('resonanceStartBtn').classList.remove('listening');
@@ -18000,6 +18022,7 @@ document.getElementById('resonanceStartBtn')?.addEventListener('click', ()=>{
 function resonanceLoop(){
   if(!resonanceActive) return;
   const fr = readRegisterFrame(), freq = fr.freq;
+  vlFeed(freq, fr.raw);
 
   if(freq>0){
     const note = freqToNote(freq);
@@ -18236,6 +18259,7 @@ document.getElementById('journeyRecordBtn')?.addEventListener('click', async ()=
   const btn = document.getElementById('journeyRecordBtn');
   const check = document.getElementById('voiceRecordCheck');
   btn.disabled = true; btn.textContent = '🔴 Recording… (4s)';
+  vlSidecar(()=>btn.disabled);
   const clip = await recordShortClip(4000);
   btn.disabled = false;
   if(clip){
@@ -18283,6 +18307,7 @@ document.getElementById('recordTodayBtn')?.addEventListener('click', async ()=>{
   if(!profile) return;
   const btn = document.getElementById('recordTodayBtn');
   btn.disabled = true; btn.textContent = '🔴 Recording… (4s)';
+  vlSidecar(()=>btn.disabled);
   const clip = await recordShortClip(4000);
   btn.disabled = false; btn.textContent = '🎙️ Record today\'s clip';
   if(clip){
@@ -19590,6 +19615,7 @@ document.getElementById('studioRecordBtn')?.addEventListener('click', async ()=>
   const label = document.getElementById('studioRecordLabel');
   btn.disabled = true;
   label.textContent = t('studio_recording_label');
+  vlSidecar(()=>btn.disabled);
   const clip = await recordShortClip(15000);
   btn.disabled = false;
   label.textContent = t('studio_record_btn');
@@ -19917,6 +19943,7 @@ async function runDrillSequence(){
       function frame(){
         if(!drillActive){ resolve(); return; }
         const fr = readRegisterFrame(), freq = fr.freq;
+        vlFeed(freq, fr.raw);
         if(freq>0){
           const cents = centsFromTarget(freq, targetMidi);
           if(cents!==null && Math.abs(cents)<300) centsBuf.push(cents);
@@ -19946,6 +19973,7 @@ async function runDrillSequence(){
 
 function finishDrillSequence(){
   drillActive = false;
+  vlEnd();
   document.getElementById('drillRunnerCard').style.display='none';
   document.getElementById('drillResultCard').style.display='block';
   document.getElementById('drillResultRows').innerHTML = drillResults.map((r,i)=>
@@ -20083,6 +20111,7 @@ document.getElementById('aiDuetStartBtn')?.addEventListener('click', async ()=>{
   updateAllChoirGains();
   await playChoir();
   aiDuetActive = true;
+  vlSidecar(()=>aiDuetActive && choirIsPlaying);
   document.getElementById('aiDuetStartBtn').innerHTML = '<span class="dot-icon"></span>Stop';
 });
 

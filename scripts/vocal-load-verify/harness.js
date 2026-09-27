@@ -2,9 +2,11 @@
 // the same checks. A batch script lists its features and calls run(FEATURES). For each feature:
 //   - it is reached through its hub, its gauge shows today's total so far
 //   - it runs once with the load feed stubbed out (vlSidecar for a feature on the shared mic, vlFeed for one that reads
-//     the register input itself: = the code before 3b) and once live, and its own result is the same both times
-//   - a shared-mic feature: while the sidecar runs, its own mic track is live, unmuted, NS/AGC/EC unchanged, and its own
-//     analyser hears the same tone. A register-input feature: no second register stream is opened for the load
+//     the register input or its own unprocessed stream itself: = the code before 3b) and once live, and its own result
+//     is the same both times
+//   - kind 'sidecar' (shared mic): while the sidecar runs, its own mic track is live, unmuted, NS/AGC/EC unchanged, and
+//     its own analyser hears the same tone. Kind 'register' (reads the register input): no second register stream is
+//     opened for the load. Kind 'own' (its own unprocessed capture, vqCapture): no extra stream, no register input
 //   - the stored session: exactly one, active seconds ≈ how long the feature listened, load = active × rate by hand,
 //     pitch ≈ the tone's; the gauge moved while it ran and ends at today's stored total / 6800
 // Then: every gauge (these features' and Register Coach's) resumes today's total after a reload, the daily table is the
@@ -53,7 +55,7 @@ async function openPage(b, { signedIn = true, ua } = {}) {
   page.on('console', m => { if (m.type() === 'error' && /vocal load/i.test(m.text())) errors.push(m.text()); });
   const resp = await page.goto(URL_ || LOCAL, { waitUntil: 'load' }); await sleep(3000);
   if (!resp || resp.status() >= 400) throw new Error('page answered ' + (resp && resp.status()));
-  if (!await page.evaluate(() => typeof sb !== 'undefined')) throw new Error('Supabase client missing (CDN script failed to load)');
+  if (!await page.evaluate(() => { try { return typeof sb !== 'undefined'; } catch { return false; } })) throw new Error('Supabase client missing (CDN script failed to load)');
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) { await lang.click(); await sleep(300); }
   if (signedIn && !auth) {
     await page.evaluate(() => openAuthModal());
@@ -69,10 +71,19 @@ async function openPage(b, { signedIn = true, ua } = {}) {
 }
 // Through the navigation bar and the hub, as a user would.
 async function goTo(page, F) {
+  if (F.xp) { // the level a game unlocks at: set on the server (an in-page change is overwritten by the next sync), then
+    db(`update public.user_progress set xp = greatest(xp, ${F.xp}) where user_id = '${uid()}'`); // reloaded as the app does
+    await page.evaluate(async () => { await loadProgress(); renderArcadeLocks(); });
+  }
   await page.locator(`.snb-item[data-shell="${F.shell}"]`).click(); await sleep(500);
   await page.locator(F.enter).first().click(); await sleep(800);
   if (F.tab) { await page.locator(F.tab).click(); await sleep(300); } // a tab inside the panel
-  return page.evaluate(id => { const e = document.getElementById(id); return !!e && e.offsetParent !== null; }, F.startBtn);
+  if (F.show) { await page.evaluate(F.show); await sleep(300); }      // state the panel needs before its button shows
+  const ok = await page.evaluate(sel => { const e = document.querySelector(sel); return !!e && e.offsetParent !== null; }, startSel(F));
+  if (!ok) console.log('     (not visible:', await page.evaluate(sel => JSON.stringify({ xp: progress && progress.xp, level: progress && levelForXp(progress.xp || 0).level,
+    panels: [...document.querySelectorAll('section[id^="panel-"]')].filter(s => s.offsetParent !== null).map(s => s.id),
+    btn: !!document.querySelector(sel), toast: (document.querySelector('.toast, #toast') || {}).textContent || '' }), startSel(F)), ')');
+  return ok;
 }
 const gauge = (page, id) => page.evaluate(id => {
   const g = document.getElementById(id);
@@ -88,12 +99,14 @@ const warm = page => page.evaluate(async () => {
   st.getTracks().forEach(t => t.stop()); await ac.close(); window.__gum = []; return heard;
 });
 
+const startSel = F => F.startSel || '#' + F.startBtn;
 const REG_STREAM = c => /"noiseSuppression":false/.test(c);
 // The load feed a feature uses, stubbed out (live: false) or restored.
 const STUB = {
   sidecar: live => { window.__vlSidecar = window.__vlSidecar || vlSidecar; vlSidecar = live ? window.__vlSidecar : () => {}; },
   register: live => { window.__vlFeed = window.__vlFeed || vlFeed; vlFeed = live ? window.__vlFeed : () => {}; },
 };
+STUB.own = STUB.register;
 async function runOnce(page, F, { live }) {
   // the previous run's register input has closed itself
   await page.waitForFunction(() => !regIn, null, { timeout: 10000 }).catch(() => { throw new Error('register input still open before the run'); });
@@ -101,7 +114,7 @@ async function runOnce(page, F, { live }) {
   if (F.prep) await page.evaluate(F.prep);
   await sleep(300);
   if (!await warm(page)) throw new Error('fake mic silent');
-  if (F.start) await F.start(page); else await page.locator('#' + F.startBtn).click();
+  if (F.start) await F.start(page); else await page.locator(startSel(F)).click();
   await page.waitForFunction(F.active, null, { timeout: 15000 });
   const tStart = Date.now();
   await sleep(F.mid || 3000);
@@ -151,6 +164,10 @@ async function feature(page, F) {
       `on: ns ${m.ns} agc ${m.agc} ec ${m.ec} muted ${m.muted} | off: ns ${o.ns} agc ${o.agc} ec ${o.ec}`);
     check('feature\'s own analyser hears the same tone', Math.abs(m.freq - TONE.hz) < 0.03 * TONE.hz && Math.abs(m.freq - o.freq) < 2 && Math.abs(m.rms - o.rms) <= 0.15 * o.rms,
       `on ${m.freq} Hz rms ${m.rms} | off ${o.freq} Hz rms ${o.rms}`);
+  } else if (F.kind === 'own') {
+    // its own capture is the one the load reads: the same streams opened as without the feed, and no register input
+    check('no extra stream opened for the load, no register input', m.gum.length === o.gum.length && m.gum.length <= 1 && !m.reg,
+      `on [${m.gum.join(' + ')}] | off [${o.gum.join(' + ')}]`);
   } else {
     // its own register stream is the one the load reads: exactly as many register streams opened as without the feed
     check('no second register stream opened for the load', m.gum.filter(REG_STREAM).length === o.gum.filter(REG_STREAM).length && m.gum.filter(REG_STREAM).length <= 1 && m.regLive,
@@ -162,7 +179,10 @@ async function feature(page, F) {
   const a = Number(mine[0]?.active_seconds), l = Number(mine[0]?.load);
   // the register input opens after the feature starts (~0.4 s of silence into a running AudioContext) and the last
   // ~0.25 s hold can land either side of the stop, so active time sits a little under how long the feature listened
-  check(`active seconds ≈ time the feature listened (${on.listened.toFixed(2)} s, −1.8/+0.3)`, a >= on.listened - 1.8 && a <= on.listened + 0.3, `${a.toFixed(3)} s`);
+  if (F.expectActive) { // a feature that reads the mic only part of the time it runs (by hand, in its table entry)
+    const [lo, hi, why] = F.expectActive(on.listened);
+    check(`active seconds ≈ ${why} (${lo.toFixed(2)}–${hi.toFixed(2)} s)`, a >= lo && a <= hi, `${a.toFixed(3)} s`);
+  } else check(`active seconds ≈ time the feature listened (${on.listened.toFixed(2)} s, −1.8/+0.3)`, a >= on.listened - 1.8 && a <= on.listened + 0.3, `${a.toFixed(3)} s`);
   check(`stored load = active × ${TONE.rate.toFixed(6)} (hand), within 0.5%`, Math.abs(l - a * TONE.rate) <= 0.005 * a * TONE.rate, `stored ${l.toFixed(4)} vs hand ${(a * TONE.rate).toFixed(4)}`);
   check(`pitch stored ≈ ${TONE.midi}`, Math.abs(mine[0]?.p5_midi - TONE.midi) < 0.2 && Math.abs(mine[0]?.p95_midi - TONE.midi) < 0.2, `p5 ${Number(mine[0]?.p5_midi).toFixed(3)}, p95 ${Number(mine[0]?.p95_midi).toFixed(3)}`);
   // (a capture under 2 s, like Pitch Match's in batch1.js, can be over before today's state has come back from the server)
@@ -227,7 +247,7 @@ async function run(FEATURES) {
       check(`${S.key} ran on its own stream only, no session stored`, r.mid.live && !r.mid.gum.some(REG_STREAM) && !r.mid.reg && rowsDb().length === before, `opened [${r.mid.gum.join(' + ')}], rows ${before}→${rowsDb().length}`);
     }
     const bad = [];
-    for (const F of [...list, { key: 'coach', gauge: 'vlGauge', kind: 'register' }]) { const g = await gauge(page, F.gauge); if (g.visible !== (F.kind === 'register')) bad.push(`${F.key} visible ${g.visible}`); }
+    for (const F of [...list, { key: 'coach', gauge: 'vlGauge', kind: 'register' }]) { if (F.safariPrep) await page.evaluate(F.safariPrep); const g = await gauge(page, F.gauge); if (g.visible !== (F.kind !== 'sidecar')) bad.push(`${F.key} visible ${g.visible}`); }
     check('sidecar features\' gauges hidden, register-input features\' still shown', bad.length === 0, bad.join('; ') || 'ok');
     await ctx.close();
 

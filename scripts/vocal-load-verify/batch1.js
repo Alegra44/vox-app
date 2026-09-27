@@ -59,7 +59,7 @@ async function openPage(b, { signedIn = true, ua } = {}) {
   page.on('console', m => { if (m.type() === 'error' && /vocal load/i.test(m.text())) errors.push(m.text()); });
   const resp = await page.goto(URL_ || LOCAL, { waitUntil: 'load' }); await sleep(3000);
   if (!resp || resp.status() >= 400) throw new Error('page answered ' + (resp && resp.status()));
-  if (!await page.evaluate(() => typeof sb !== 'undefined')) throw new Error('Supabase client missing (CDN script failed to load)');
+  if (!await page.evaluate(() => { try { return typeof sb !== 'undefined'; } catch { return false; } })) throw new Error('Supabase client missing (CDN script failed to load)');
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) { await lang.click(); await sleep(300); }
   if (signedIn && !auth) {
     await page.evaluate(() => openAuthModal());
