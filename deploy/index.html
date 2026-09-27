@@ -472,6 +472,12 @@
   .vl-gauge-track{height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;margin-top:6px;}
   .vl-gauge-fill{height:100%;width:0%;background:var(--teal);transition:width .4s ease;}
   .vl-gauge.over .vl-gauge-fill{background:var(--coral);}
+  .vl-disclaimer{text-align:center;margin:10px auto 0;max-width:420px;}
+  .vl-break{border:1px solid var(--brass-dim);border-radius:12px;background:var(--surface-raised);padding:12px 14px;margin:0 0 16px;}
+  .vl-break.over{border-color:var(--coral);}
+  .vl-break-msg{margin:0;color:var(--cream);}
+  .vl-break .vl-disclaimer{text-align:left;margin:6px 0 0;max-width:none;}
+  .vl-break-close{margin-top:10px;}
 
   .beta-tag{
     display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;
@@ -1599,6 +1605,12 @@
 
     <!-- Choir World status (phase 9): filled from the stored readiness by renderHomeChoirCard() -->
     <div class="key-card" id="homeChoirCard" style="display:none;margin-bottom:16px;"></div>
+
+    <!-- Vocal Load Dosimetry (phase 3c): today's load, shown to every signed-in user -->
+    <div class="key-card" id="homeVlCard" style="display:none;margin-bottom:16px;">
+      <div class="vl-gauge" id="vlGaugeHome" style="display:none;margin-top:0;"></div>
+      <p class="fine-print vl-disclaimer" data-i18n="vl_disclaimer">This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional.</p>
+    </div>
 
     <div class="home-secondary-list" id="homeSecondaryList">
       <div class="home-secondary-row">
@@ -6075,6 +6087,10 @@ const TRANSLATIONS = {
     record_delta_suffix:'from your last best',
     registercoach_beststat_p1:'Best clean crossing saved:', registercoach_signin_beststat:'Sign in to save your best crossing across sessions.',
     vl_gauge_label:'Vocal load today', vl_gauge_pct_tpl:'{p}% of daily budget',
+    vl_disclaimer:'This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional.',
+    vl_break_80:"You've reached 80% of today's vocal load budget. This is a good moment for a break: rest your voice for a while and drink some water.",
+    vl_break_100:"You've reached 100% of today's vocal load budget. Consider resting your voice for the rest of the day, or keeping your singing light.",
+    vl_break_dismiss:'Dismiss',
     rift_avg_p1:'Avg:', rift_closed:'Rift closed', rift_missed:'Missed', rift_no_pitch_heard:'No clear pitch heard',
     rift_rounds_completed:'rounds completed', rift_rounds_p1:'Rounds:', rift_start_label:'Enter the Rift (Pro)', rift_time_p1:'Time:',
     rift_type_interval:'Interval Jump', rift_type_quick:'Quick Catch', rift_type_sustain:'Sustain Hold',
@@ -7406,6 +7422,10 @@ const TRANSLATIONS = {
     record_delta_suffix:'par rapport à votre record précédent',
     registercoach_beststat_p1:'Meilleure transition propre enregistrée :', registercoach_signin_beststat:'Connectez-vous pour sauvegarder votre meilleure transition entre sessions.',
     vl_gauge_label:'Charge vocale du jour', vl_gauge_pct_tpl:'{p} % du budget quotidien',
+    vl_disclaimer:'Il s’agit d’une estimation fondée sur la hauteur et le volume de votre voix, pas d’une mesure médicale. En cas de douleur ou d’enrouement, consultez un professionnel de la voix.',
+    vl_break_80:'Vous avez atteint 80 % du budget de charge vocale du jour. C’est un bon moment pour faire une pause : reposez votre voix un moment et buvez un peu d’eau.',
+    vl_break_100:'Vous avez atteint 100 % du budget de charge vocale du jour. Pensez à reposer votre voix pour le reste de la journée, ou à chanter légèrement.',
+    vl_break_dismiss:'Fermer',
     rift_avg_p1:'Moy. :', rift_closed:'Faille fermée', rift_missed:'Manqué', rift_no_pitch_heard:'Aucune hauteur claire détectée',
     rift_rounds_completed:'manches terminées', rift_rounds_p1:'Manches :', rift_start_label:'Entrer dans la Faille (Pro)', rift_time_p1:'Temps :',
     rift_type_interval:"Saut d'intervalle", rift_type_quick:'Prise rapide', rift_type_sustain:'Tenue soutenue',
@@ -8737,6 +8757,10 @@ const TRANSLATIONS = {
     record_delta_suffix:'respecto a tu récord anterior',
     registercoach_beststat_p1:'Mejor transición limpia guardada:', registercoach_signin_beststat:'Inicia sesión para guardar tu mejor transición entre sesiones.',
     vl_gauge_label:'Carga vocal de hoy', vl_gauge_pct_tpl:'{p} % del presupuesto diario',
+    vl_disclaimer:'Es una estimación basada en el tono y el volumen de tu voz, no una medición médica. Si tienes dolor o ronquera, consulta a un profesional de la voz.',
+    vl_break_80:'Has llegado al 80 % del presupuesto de carga vocal de hoy. Es un buen momento para hacer una pausa: descansa la voz un rato y bebe un poco de agua.',
+    vl_break_100:'Has llegado al 100 % del presupuesto de carga vocal de hoy. Considera descansar la voz el resto del día o cantar de forma ligera.',
+    vl_break_dismiss:'Cerrar',
     rift_avg_p1:'Prom.:', rift_closed:'Grieta cerrada', rift_missed:'Fallado', rift_no_pitch_heard:'No se detectó una nota clara',
     rift_rounds_completed:'rondas completadas', rift_rounds_p1:'Rondas:', rift_start_label:'Entrar en la Grieta (Pro)', rift_time_p1:'Tiempo:',
     rift_type_interval:'Salto de intervalo', rift_type_quick:'Captura rápida', rift_type_sustain:'Sostenido',
@@ -10068,6 +10092,10 @@ const TRANSLATIONS = {
     record_delta_suffix:'önceki rekorunuza göre',
     registercoach_beststat_p1:'Kaydedilen en iyi temiz geçiş:', registercoach_signin_beststat:'Oturumlar arasında en iyi geçişinizi kaydetmek için oturum açın.',
     vl_gauge_label:'Bugünkü ses yükü', vl_gauge_pct_tpl:'Günlük bütçe: %{p}',
+    vl_disclaimer:'Bu, sesinizin perdesine ve yüksekliğine dayalı bir tahmindir, tıbbi bir ölçüm değildir. Ağrınız veya ses kısıklığınız varsa bir ses uzmanına başvurun.',
+    vl_break_80:'Bugünkü ses yükü bütçenizin %80’ine ulaştınız. Mola vermek için iyi bir an: sesinizi bir süre dinlendirin ve biraz su için.',
+    vl_break_100:'Bugünkü ses yükü bütçenizin %100’üne ulaştınız. Günün geri kalanında sesinizi dinlendirmeyi ya da hafif şarkı söylemeyi düşünün.',
+    vl_break_dismiss:'Kapat',
     rift_avg_p1:'Ort.:', rift_closed:'Yarık kapandı', rift_missed:'Kaçırıldı', rift_no_pitch_heard:'Net bir perde algılanmadı',
     rift_rounds_completed:'tur tamamlandı', rift_rounds_p1:'Tur:', rift_start_label:'Yarığa gir (Pro)', rift_time_p1:'Süre:',
     rift_type_interval:'Aralık Sıçraması', rift_type_quick:'Hızlı Yakalama', rift_type_sustain:'Uzun Tutuş',
@@ -11166,6 +11194,7 @@ function vlFeed(freq, raw){
   r.lastFrame = now;
   if(r.ready) vlPush(r, f); else r.buffer.push(f);
   renderVocalLoadGauge();
+  vlCheckBreak();
 }
 function vlEnd(){
   const r = vlRun; if(!r) return;
@@ -11208,7 +11237,9 @@ document.querySelectorAll('.vl-gauge:empty').forEach(box=>{
 });
 function renderVocalLoadGauge(){
   const boxes = document.querySelectorAll('.vl-gauge');
-  if(!profile || typeof VocalLoad==='undefined'){ boxes.forEach(box=>{ box.style.display='none'; }); return; }
+  const home = document.getElementById('homeVlCard');
+  if(!profile || typeof VocalLoad==='undefined'){ boxes.forEach(box=>{ box.style.display='none'; }); home.style.display='none'; vlHideBreak(); return; }
+  home.style.display='';
   const pct = vlPercent(), shown = pct < 10 ? Math.round(pct*10)/10 : Math.round(pct);
   const txt = t('vl_gauge_pct_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1}));
   const w = Math.min(100, pct).toFixed(1)+'%';
@@ -11222,6 +11253,67 @@ function renderVocalLoadGauge(){
     box.setAttribute('aria-valuemax', String(Math.max(100, Math.round(pct))));
     box.classList.toggle('over', pct>=100);
   });
+}
+
+/* ---------------- Vocal Load Dosimetry: break suggestion (phase 3c) ---------------- */
+// While a feature is feeding today's load, the moment today's total reaches 80% of the budget (and again at 100%) a
+// banner suggests a break, at the top of that feature's panel. It never stops or blocks anything. Each threshold can
+// be dismissed once per day; until then it comes back while singing (after a reload too). The first threshold shown
+// on a day carries the disclaimer. Dismissals are kept in this browser, per user and day (UTC, like the load's day).
+const VL_BREAK_LEVELS = [100, 80];
+let vlBreakShown = null; // {day, level} on screen
+function vlBreakKey(day){ return 'vlBreak:'+(profile && (profile.id || profile.email) || '')+':'+day; }
+function vlBreakState(day){
+  try{ return JSON.parse(localStorage.getItem(vlBreakKey(day))) || {dismissed:[], disclaimer:null}; }
+  catch(e){ return {dismissed:[], disclaimer:null, noStore:true}; }
+}
+function vlBreakSave(day, st){ try{ localStorage.setItem(vlBreakKey(day), JSON.stringify(st)); }catch(e){} }
+function vlCheckBreak(){
+  const r = vlRun; if(!r || !r.ready || !profile) return;
+  const pct = vlPercent(), level = VL_BREAK_LEVELS.find(l=>pct>=l);
+  if(!level) return;
+  // already up: only follows the singer to the feature now feeding the load
+  if(vlBreakShown && vlBreakShown.day===r.day && vlBreakShown.level===level){ vlPlaceBreak(); return; }
+  const st = vlBreakState(r.day);
+  if(st.dismissed.includes(level)) return; // at 100% after dismissing 100: nothing (80 is behind it)
+  if(st.disclaimer===null){ st.disclaimer = level; vlBreakSave(r.day, st); }
+  vlShowBreak(r.day, level, st.noStore || st.disclaimer===level);
+}
+function vlShowBreak(day, level, disclaimer){
+  let box = document.getElementById('vlBreak');
+  if(!box){
+    box = document.createElement('div');
+    box.id = 'vlBreak'; box.className = 'vl-break'; box.setAttribute('role', 'status'); box.setAttribute('aria-live', 'polite');
+    box.innerHTML = '<p class="vl-break-msg" id="vlBreakMsg"></p><p class="fine-print vl-disclaimer" id="vlBreakDisclaimer" data-i18n="vl_disclaimer"></p>'
+      + '<button class="ghost-btn vl-break-close" id="vlBreakClose" data-i18n="vl_break_dismiss"></button>';
+    box.querySelector('#vlBreakClose').addEventListener('click', vlDismissBreak);
+  }
+  const msg = box.querySelector('#vlBreakMsg'), disc = box.querySelector('#vlBreakDisclaimer');
+  msg.dataset.i18n = 'vl_break_'+level; msg.textContent = t(msg.dataset.i18n);
+  disc.textContent = t('vl_disclaimer'); disc.style.display = disclaimer ? '' : 'none';
+  box.querySelector('#vlBreakClose').textContent = t('vl_break_dismiss');
+  box.classList.toggle('over', level>=100);
+  box.dataset.level = String(level);
+  vlBreakShown = {day, level};
+  vlPlaceBreak(box);
+  box.style.display = '';
+}
+function vlPlaceBreak(box = document.getElementById('vlBreak')){ // a new banner isn't in the page yet: passed in
+  const panel = document.querySelector('section.panel.active');
+  if(!box || !panel || panel.contains(box)) return;
+  const hero = panel.querySelector(':scope > .journey-hero'); // under the feature's title, above its controls
+  if(hero) hero.after(box); else panel.prepend(box);
+}
+function vlDismissBreak(){
+  const b = vlBreakShown; if(!b) return;
+  const st = vlBreakState(b.day);
+  if(!st.dismissed.includes(b.level)) st.dismissed.push(b.level);
+  vlBreakSave(b.day, st);
+  vlHideBreak();
+}
+function vlHideBreak(){
+  const box = document.getElementById('vlBreak'); if(box) box.style.display = 'none';
+  vlBreakShown = null;
 }
 
 /* ---------------- Vocal Load Dosimetry: features on the shared mic (phase 3b) ---------------- */

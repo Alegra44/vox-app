@@ -97,6 +97,23 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
 - The reading bands (HNR 20 / 12 dB; brightness 13 / 9 dB per octave) are rough guides for this tool, not norms measured
   on real voices; nothing has been measured on a real singer yet.
 
+## Vocal Load Dosimetry — decisions
+
+- **The daily budget counts active singing time, not wall-clock practice time.** DECIDED, CLOSED (2026-09-27, final).
+  The budget is 6800 load-seconds (`DAILY_BUDGET` in `deploy/vocal-load.js`): about 52.5 minutes of active singing
+  at mid-range with 3 dB of dynamics. Rests, count-ins and time spent listening don't count. The question of whether
+  "45–60 min" meant active or wall-clock time (with about ⅓ rests, 45 min of practice reads as about 57%) is settled
+  as active time. Don't raise it as open again.
+- **Break suggestions** (phase 3c): a banner at 80% and at 100% of the budget. It appears in the panel of whichever
+  feature is feeding the load at the moment today's total crosses the threshold, and never blocks anything. Each
+  threshold can be dismissed once per day. Dismissals are kept per browser, per user and per UTC day, so a new browser
+  shows a threshold again. The first banner shown on a day carries the disclaimer, which also sits under the Home
+  card's gauge.
+- **Known, accepted limitation: break-banner dismissals are per browser.** They are kept in the browser's local
+  storage (per user and per UTC day), not on the account. Someone who dismisses the 80% or 100% banner on one device or
+  browser will see it again on another the same day, once singing there crosses that threshold. This is not a bug, and
+  it is not planned to change. Making dismissals follow the account would need a server-side store.
+
 ## Known issues (app-wide)
 
 - **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
