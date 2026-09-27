@@ -2147,6 +2147,7 @@
             <div class="ex-result" id="bossTrainResult" style="display:none;margin-top:14px;">
               <div class="ex-accuracy" id="bossTrainAccVal">—</div>
             </div>
+            <div class="vl-gauge" id="vlGaugeBossTrain" data-vl-sidecar style="display:none;"></div>
           </div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
             <button class="solid-btn teal" id="bossRematchBtn" data-i18n="boss_rematch_btn">🐉 Rematch the boss</button>
@@ -2267,6 +2268,7 @@
         <div class="btn-row" style="justify-content:center;">
           <button class="mic-btn" id="riftStartBtn"><span class="dot-icon"></span><span id="riftStartLabel" data-i18n="rift_start_label">Enter the Rift (Pro)</span></button>
         </div>
+        <div class="vl-gauge" id="vlGaugeRift" data-vl-sidecar style="display:none;"></div>
 
         <div class="ex-result" id="riftResultCard" style="display:none;text-align:center;margin-top:20px;">
           <div class="ex-accuracy" id="riftResultAvg">—</div>
@@ -3169,6 +3171,7 @@
       <div class="step-label" id="eveStepLabel">Step 1 — Hear</div>
       <div class="chord-label-display" id="eveStepNote" style="margin-top:10px;">—</div>
       <p class="desc" id="eveStepStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeEve" data-vl-sidecar style="display:none;"></div>
     </div>
 
     <div class="key-card" id="eveResultCard" style="display:none;text-align:center;">
@@ -3196,6 +3199,7 @@
       <div class="step-label" id="fiveStepLabel">Round 1 of 5 — Original key</div>
       <div class="chord-label-display" id="fiveStepNote" style="margin-top:10px;">—</div>
       <p class="desc" id="fiveStepStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeFive" data-vl-sidecar style="display:none;"></div>
     </div>
     <div class="key-card" id="fiveResultCard" style="display:none;">
       <div class="step-label" style="text-align:center;" data-i18n="fiveways_results_label">Real results across all 5</div>
@@ -3220,6 +3224,7 @@
       <div class="step-label" id="oneTakeStepLabel">Listen once</div>
       <div class="chord-label-display" id="oneTakeNote" style="margin-top:10px;">—</div>
       <p class="desc" id="oneTakeStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeOneTake" data-vl-sidecar style="display:none;"></div>
     </div>
 
     <div class="key-card" id="oneTakeResultCard" role="status" aria-live="polite" style="display:none;">
@@ -3282,6 +3287,7 @@
       <div class="step-label" data-i18n="hearmistake_reproduce_label">Now reproduce the correct version</div>
       <div class="chord-label-display" id="hmSingNote" style="margin-top:10px;">—</div>
       <p class="desc" id="hmSingStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeHm" data-vl-sidecar style="display:none;"></div>
     </div>
     <div class="key-card" id="hmResultCard" style="display:none;text-align:center;">
       <div class="step-label" id="hmResultTitle">—</div>
@@ -3356,6 +3362,7 @@
       <p class="desc" id="pdCurrentCue" style="margin:10px 0;font-style:italic;color:var(--brass);"></p>
       <div class="chord-label-display" id="pdCurrentNote" style="margin-top:10px;">—</div>
       <div class="progress-bar-thin" style="margin-top:16px;"><div class="fill" id="pdProgressFill" style="width:0%;"></div></div>
+      <div class="vl-gauge" id="vlGaugePd" data-vl-sidecar style="display:none;"></div>
     </div>
 
     <div class="key-card" id="pdResultCard" role="status" aria-live="polite" style="display:none;">
@@ -3426,6 +3433,7 @@
       <div class="step-label" id="emoRunnerLabel">Take 1 — Tender</div>
       <div class="chord-label-display" id="emoRunnerNote" style="margin-top:10px;">—</div>
       <p class="desc" id="emoRunnerStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeEmo" data-vl-sidecar style="display:none;"></div>
     </div>
 
     <div class="key-card" id="emoResultCard" role="status" aria-live="polite" style="display:none;">
@@ -3794,6 +3802,7 @@
       <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
       <button class="mic-btn" id="cbStartBtn"><span class="dot-icon"></span><span id="cbStartLabel">Start</span></button>
       <p class="fine-print" id="cbStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeCb" data-vl-sidecar style="display:none;"></div>
       <div id="cbResults" style="display:none;margin-top:12px;"></div>
     </div>
 
@@ -3803,6 +3812,7 @@
       <p class="fine-print" id="cxBest" style="margin-bottom:14px;"></p>
       <button class="mic-btn" id="cxStartBtn"><span class="dot-icon"></span><span id="cxStartLabel">Start</span></button>
       <p class="fine-print" id="cxStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeCx" data-vl-sidecar style="display:none;"></div>
       <div id="cxResults" style="display:none;margin-top:12px;"></div>
     </div>
 
@@ -3817,6 +3827,7 @@
       <p class="desc" id="tkRungDesc" style="margin:4px 0 12px;"></p>
       <button class="mic-btn" id="tkStartBtn"><span class="dot-icon"></span><span id="tkStartLabel">Start</span></button>
       <p class="fine-print" id="tkStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeTk" data-vl-sidecar style="display:none;"></div>
       <div id="tkResults" style="display:none;margin-top:12px;"></div>
       <p class="fine-print" style="margin-top:10px;" data-i18n="ch_storage_note">Boss, Chaos and Ladder progress is saved on this device only.</p>
     </div>
@@ -3831,6 +3842,7 @@
       <p class="fine-print" style="margin-bottom:14px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
       <button class="mic-btn" id="ttStartBtn"><span class="dot-icon"></span><span id="ttStartLabel">Start</span></button>
       <p class="fine-print" id="ttStatus" style="margin-top:10px;"></p>
+      <div class="vl-gauge" id="vlGaugeTt" data-vl-sidecar style="display:none;"></div>
       <div id="ttResults" style="display:none;margin-top:12px;"></div>
     </div>
   </section>
@@ -13259,6 +13271,7 @@ async function startTimingTrainer(){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   timingTrainer.stopTicker = await startAudioTicker(timingTrainerTick);
+  vlSidecar(()=>timingTrainer.active);
 }
 
 function finishTimingTrainer(){
@@ -13719,6 +13732,7 @@ async function startChallenge(kind){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   challenge.raf = requestAnimationFrame(chTick);
+  vlSidecar(()=>challenge.active);
 }
 
 function chTick(){
@@ -16705,6 +16719,7 @@ document.getElementById('bossTrainListenBtn').addEventListener('click', async ()
   if(window._bossTrainTargetMidi===undefined) return;
   const btn=document.getElementById('bossTrainListenBtn');
   btn.disabled=true; btn.textContent=t('action_listening');
+  vlSidecar(()=>btn.disabled);
   const res = await captureAccuracyForTarget(window._bossTrainTargetMidi, 1600, {accuracyMultiplier:0.6});
   btn.disabled=false; btn.textContent=t('boss_listen_score_btn');
   document.getElementById('bossTrainResult').style.display='block';
@@ -18648,6 +18663,7 @@ document.getElementById('riftStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('riftStartBtn').classList.add('listening');
   riftTimerTick();
   riftRunNextRound();
+  vlSidecar(()=>riftActive);
 });
 
 function riftTimerTick(){
@@ -19087,6 +19103,7 @@ document.getElementById('eveStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('evePreCard').style.display='none';
   document.getElementById('eveResultCard').style.display='none';
   document.getElementById('eveRunnerCard').style.display='block';
+  vlSidecar(()=>eveActive);
   runEveLoop();
 });
 
@@ -19303,6 +19320,7 @@ document.getElementById('fiveStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('fivePreCard').style.display='none';
   document.getElementById('fiveResultCard').style.display='none';
   document.getElementById('fiveRunnerCard').style.display='block';
+  vlSidecar(()=>fiveActive);
   runFiveLoop();
 });
 
@@ -19391,6 +19409,7 @@ document.getElementById('oneTakeStartBtn')?.addEventListener('click', async ()=>
   oneTakeActive = true;
   document.getElementById('oneTakePreCard').style.display = 'none';
   document.getElementById('oneTakeRunnerCard').style.display = 'block';
+  vlSidecar(()=>oneTakeActive);
   runOneTake();
 });
 
@@ -19516,7 +19535,7 @@ document.getElementById('puzzleNextBtn')?.addEventListener('click', ()=>{
 });
 
 /* ---------------- Can You Hear Your Mistake (real A/B pitch comparison + real sing-back) ---------------- */
-let hmCorrectLabel = null, hmTargetMidi = null, hmOffsetCents = null;
+let hmCorrectLabel = null, hmTargetMidi = null, hmOffsetCents = null, hmSinging = false;
 
 function generateHmRound(){
   const {lowMidi, highMidi} = registerRangeBounds();
@@ -19560,7 +19579,10 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
     document.getElementById('hmSingCard').style.display = 'block';
     document.getElementById('hmSingNote').textContent = noteNameFromMidi(hmTargetMidi);
     document.getElementById('hmSingStatus').textContent = 'Listening…';
+    hmSinging = true;
+    vlSidecar(()=>hmSinging);
     const result = await captureAccuracyForTarget(hmTargetMidi, 1600, {});
+    hmSinging = false;
     document.getElementById('hmSingCard').style.display = 'none';
     document.getElementById('hmResultCard').style.display = 'block';
     document.getElementById('hmResultTitle').textContent = 'Correct pick!';
@@ -19669,6 +19691,7 @@ document.getElementById('emoStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('emoPreCard').style.display = 'none';
   document.getElementById('emoResultCard').style.display = 'none';
   document.getElementById('emoRunnerCard').style.display = 'block';
+  vlSidecar(()=>emoActive);
 
   await runEmoRound(emoFirstIntent, 1);
   if(!emoActive) return;
@@ -19785,6 +19808,7 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('pdResultCard').style.display='none';
   document.getElementById('pdRunnerCard').style.display='block';
   pdLoop();
+  vlSidecar(()=>pdActive);
 });
 
 function pdFinalizeNote(idx){

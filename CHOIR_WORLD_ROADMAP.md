@@ -151,6 +151,14 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   line was captured, so there is no record of which check failed or why. The next two production runs of the same
   group passed 60/60, the second with its full log saved. Logged as a single flake with no diagnostic record. If a
   run of this group fails again, save the whole log and start from the ✗ line.
+- **Entrance & Cutoff Trainer: a false entrance on its first tick** (pre-existing, not fixed; found 2026-09-27 while
+  checking Vocal Load batch 3b, not caused by it). The trainer starts out assuming silence (`wasVoiced = false`), so if
+  the singer is already making sound when it starts, its first tick reads as a note start. That start comes before the
+  song, so it never claims a note, but depending on setup timing it can land inside the bleed-detection window (up to
+  80 ms after a count-in click) and add a bleed hit. The "speakers leaking into the mic" warning needs 2 hits, so a
+  single one is harmless. Seen with a steady test tone: the first tick fell between −3.405 s and −3.331 s, with the
+  first click at −3.333 s, and 2 of 10 runs counted it as bleed. The Vocal Load sidecar starts after the trainer's
+  ticker, so it can't affect this.
 - **Register Coach reads vibrato as "pushing chest"** (live bug, found 2026-09-24; root cause found 2026-09-25; **fixed
   in 1932924, live 2026-09-25 as dpl_9RMYqhcfT9a7XSrZtJRG7sUymvwY** — see the fix below). A 330 Hz head-voice tone scoring 34 straight scores 64–69 with 6 Hz ±25 / ±50 ct, and up to
   98% of its frames cross the 62 "pushing chest" line; a straight 49 reads 85–89. That resets the bridge streak and
