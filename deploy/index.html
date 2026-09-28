@@ -13266,7 +13266,11 @@ document.getElementById('acappellaBtn').addEventListener('click', ()=>{ if(!harm
 // (Entrance) or ends (Cutoff) from songTimeline().
 const TIMING_ONTIME_MS = 40;
 const timingTrainer = {mode:'entrance', active:false, targets:[], results:[], wasVoiced:false, clicks:[], bleedHits:0,
-  window:0, total:0, lastIdx:-2, stopTicker:null};
+  window:0, total:0, lastIdx:-2, stopTicker:null, armed:false, silentSince:null};
+// Edges only count once the trainer has heard this much unbroken silence. A note already sounding when it starts has
+// no start we heard: without this its first tick read as an entrance (and could land on a count-in click as "bleed"),
+// and its end as a cutoff.
+const TT_ARM_SILENCE_S = 0.05;
 
 // The full 2048-sample RMS only drops below threshold up to ~43 ms after a real release, so locate the
 // edge inside the analyser window in 64-sample hops (~1.3 ms) and report seconds before "now".
@@ -13317,7 +13321,13 @@ function timingTrainerTick(){
   const songT = audioCtx.currentTime - choirStartCtxTime;
   analyser.getFloatTimeDomainData(dataArray);
   const isVoiced = computeRMS(dataArray) > ONSET_RMS_THRESHOLD;
-  const rising = isVoiced && !timingTrainer.wasVoiced, falling = !isVoiced && timingTrainer.wasVoiced;
+  if(!timingTrainer.armed){
+    if(isVoiced) timingTrainer.silentSince = null;
+    else if(timingTrainer.silentSince===null) timingTrainer.silentSince = songT;
+    if(timingTrainer.silentSince!==null && songT - timingTrainer.silentSince >= TT_ARM_SILENCE_S) timingTrainer.armed = true;
+  }
+  const rising = timingTrainer.armed && isVoiced && !timingTrainer.wasVoiced;
+  const falling = timingTrainer.armed && !isVoiced && timingTrainer.wasVoiced;
   timingTrainer.wasVoiced = isVoiced;
   // The whole-window RMS only confirms a release as it's about to scroll out of the window, so while
   // still "voiced" keep noting where any trailing silence begins and use that once the release confirms.
@@ -13365,7 +13375,7 @@ async function startTimingTrainer(){
   const tl = songTimeline();
   const notes = tl.parts[partRehearsal.part];
   Object.assign(timingTrainer, {
-    active:true, wasVoiced:false, pendingRelease:null, bleedHits:0, lastIdx:-2,
+    active:true, wasVoiced:false, pendingRelease:null, bleedHits:0, lastIdx:-2, armed:false, silentSince:null,
     targets: notes.map(nt=>timingTrainer.mode==='entrance' ? nt.start : nt.end),
     results: notes.map(()=>({claimed:false})),
     window: tl.chordDur*0.5, total: tl.total,

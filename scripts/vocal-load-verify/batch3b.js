@@ -25,9 +25,10 @@ const chRun = kind => `(() => { const r = challenge.lastRun['${kind}']; return r
 
 const FEATURES = [
   { key: 'tt', label: 'Entrance & Cutoff Trainer, entrances, Lead (runs to the end of the song)', kind: 'sidecar', ...rehearsal, startBtn: 'ttStartBtn', gauge: 'vlGaugeTt',
-    // counts the loudness edges (note starts/stops) the trainer sees after its first tick. The trainer starts from
-    // silence, so its first tick on the already-sounding tone is always a "start": that one is not counted (whether it
-    // lands inside the 80 ms bleed window after the first click depends on setup timing, not on the load feed)
+    // counts the loudness edges (note starts/stops) the trainer sees after its first tick. Its first tick on the
+    // already-sounding tone flips wasVoiced from its reset value, so that change is not counted. (Since 2026-09-28 the
+    // trainer doesn't count edges at all until it has heard 50 ms of silence, which a steady tone never gives it; see
+    // scripts/tt-verify/firsttick.js.)
     prep: rehearsal.lead + ` document.querySelector('#ttModeRow [data-tt-mode="entrance"]').click();
       if (!window.__ttTick) window.__ttTick = timingTrainerTick;
       window.__ttEdges = { ticks: 0, later: 0 };

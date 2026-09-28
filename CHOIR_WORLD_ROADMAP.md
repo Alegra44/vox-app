@@ -188,8 +188,14 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   group passed 60/60, the second with its full log saved. Logged as a single flake with no diagnostic record. If a
   run of this group fails again, save the whole log and start from the ✗ line. Likely explanation, found
   later: the test mic dropping out under memory pressure (see "Testing infrastructure notes" below).
-- **Entrance & Cutoff Trainer: a false entrance on its first tick** (pre-existing, not fixed; found 2026-09-27 while
-  checking Vocal Load batch 3b, not caused by it). The trainer starts out assuming silence (`wasVoiced = false`), so if
+- **Entrance & Cutoff Trainer: a false entrance on its first tick** (FIXED and deployed 2026-09-28; found 2026-09-27 while checking
+  Vocal Load batch 3b, not caused by it). Fix: the trainer doesn't count any edge until it has heard 50 ms of unbroken
+  silence (`TT_ARM_SILENCE_S`). A note already sounding when it starts is ignored: neither its unheard "start" nor its
+  end counts. The control run found a second symptom of the same cause: in Cutoff mode, the end of that note counted
+  as a cutoff (−0.948 s). Bleed from the very first click can fall inside the 50 ms before arming. The other three
+  clicks still count, and the warning needs 2 hits. Check: `scripts/tt-verify/firsttick.js` (real account, an
+  oscillator scheduled on the song clock; locally 15/15, production 17/17 after the deploy (dpl_9ehp1UD); the old code fails 11: a false entrance at −3.41 to −3.44 s
+  in 10/10 runs, plus the false cutoff). Original report: The trainer starts out assuming silence (`wasVoiced = false`), so if
   the singer is already making sound when it starts, its first tick reads as a note start. That start comes before the
   song, so it never claims a note, but depending on setup timing it can land inside the bleed-detection window (up to
   80 ms after a count-in click) and add a bleed hit. The "speakers leaking into the mic" warning needs 2 hits, so a
