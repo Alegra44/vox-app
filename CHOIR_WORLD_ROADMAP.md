@@ -246,6 +246,19 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
       process the mic differently.
   - Check with `scripts/vq-verify/rcmodel.js` (no browser), `rcmic.js` (per mic setting), `rcfix.js` (the proposal),
     `regcoach.js` / `regcoach2.js` (first findings).
+- **A signed-in user could set their own plan, or restart their trial** (FIXED and live 2026-09-28, migrations 0006 +
+  0007; found in the pre-Stripe billing review). The "users update own row" policy let a user write any column of their
+  own row straight through PostgREST with their own JWT, skipping the api function's allow-list. A trigger now rejects
+  any change made as authenticated/anon to `subscription_plan`, `stripe_customer_id`, `payment_failed_at` or
+  `trial_start_date`. The Stripe webhook (service_role), `handle_new_user()` (grants the trial on signup) and migrations
+  still write them. Check: `scripts/billing-verify/protected-columns.js` (a real account on the linked project).
+  When Stripe is wired, `billing.ts`'s checkout route must save `stripe_customer_id` with `serviceClient()`: the user
+  client's write is now rejected, and that route ignores the error.
+- **`users.email` and `users.created_at` are still user-writable** (open, not blocking; found 2026-09-28 with the item
+  above). The same policy lets a user change them on their own row directly. Nothing gates access on either, so it
+  isn't a free-access hole. But `email` here can drift from the login email in `auth.users`, which is what Stripe
+  customers and support would go by. Fix: add them to the same trigger. `email` could be kept in sync from
+  `auth.users` by a security definer trigger instead.
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
 

@@ -1,4 +1,4 @@
-// Billing columns are server-only (supabase/migrations/0006_protect_billing_columns.sql), checked against the linked
+// Billing columns and trial_start_date are server-only (supabase/migrations/0006 and 0007), checked against the linked
 // project directly: a real throwaway account signs up through Supabase Auth and writes its own public.users row
 // straight through PostgREST with its own JWT and the page's publishable key, as anyone could from the browser console,
 // not through the api function. What the row really holds is read back with the CLI (postgres), not trusted from the
@@ -9,8 +9,10 @@
 //      time and all together; a whole-row write that sends the billing columns at their current values goes through
 //   S  the server still writes them (service_role, the webhook's role; and postgres), and once it has, the user can't
 //      clear them
-//   API PATCH /api/me still saves an allowed column and still drops subscription_plan
-// Before 0006 is applied, the P and S "user can't" checks fail: that run is the control.
+//   T  trial_start_date: signup grants it (today, server date); the user can't move it forward, back, reset it to today
+//      after the server moved it, or clear it; the server can still change it
+//   API PATCH /api/me still saves an allowed column and still drops subscription_plan and trial_start_date
+// Before 0006 is applied, the P and S "user can't" checks fail; before 0007, the T ones: those runs are the controls.
 // The test account is deleted however the run ends (testAccounts.js).
 // Usage: node scripts/billing-verify/protected-columns.js
 const { track, db, cleanup } = require('../choir-verify/testAccounts');
@@ -30,7 +32,7 @@ async function rest(method, query, body, prefer = 'return=representation') {
 }
 const patchOwn = body => rest('PATCH', `?id=eq.${uid}`, body);
 // the row as the database holds it
-const COLS = 'subscription_plan, stripe_customer_id, payment_failed_at, name, exercise_level, genre, onboarding_singer_type, onboarding_priority, onboarding_goals, day1_start_date, day1_goal, day1_snapshot, language';
+const COLS = 'subscription_plan, stripe_customer_id, payment_failed_at, trial_start_date::text as trial_start_date, name, exercise_level, genre, onboarding_singer_type, onboarding_priority, onboarding_goals, day1_start_date, day1_goal, day1_snapshot, language';
 const row = () => db(`select ${COLS} from public.users where id = '${uid}'`)[0];
 const billing = r => JSON.stringify([r.subscription_plan, r.stripe_customer_id, r.payment_failed_at]);
 const brief = res => `HTTP ${res.status}${res.status >= 300 ? ': ' + String((res.json && res.json.message) || res.text).slice(0, 70) : ''}`;
@@ -99,12 +101,33 @@ async function expectRejected(label, body, rowBefore, via = patchOwn) {
     res = await patchOwn(whole2); r = row();
     check('whole-row write with the server-set values unchanged', res.status === 200 && r.genre === 'rock' && r.subscription_plan === 'choir', `${brief(res)}; billing ${billing(r)}`);
 
+    console.log('\n-- T: trial_start_date');
+    const today = db(`select current_date::text as d`)[0].d;
+    const shift = days => db(`select (current_date + ${days})::text as d`)[0].d;
+    const granted = db(`select trial_start_date::text as d from public.users where id = '${uid}'`)[0].d;
+    check('signup granted the trial today (server date)', granted === today, `trial_start_date ${granted}, server today ${today}`);
+    await expectRejected('user moves it forward 30 days', { trial_start_date: shift(30) }, row());
+    await expectRejected('user moves it back 100 days', { trial_start_date: shift(-100) }, row());
+    await expectRejected('user clears it', { trial_start_date: null }, row());
+    err = null;
+    try { db(`begin; set local role service_role; update public.users set trial_start_date = current_date - 25 where id = '${uid}'; commit;`); } catch (e) { err = String(e.stdout || e.message).slice(0, 120); }
+    r = row();
+    check('server (service_role) moves it 25 days back: trial over', !err && r.trial_start_date === shift(-25), err || r.trial_start_date);
+    await expectRejected('user resets it to today (a fresh 21 days)', { trial_start_date: today }, row());
+    await expectRejected('user resets it next to an allowed column', { genre: 'folk', trial_start_date: today }, row());
+    const whole3 = (await rest('GET', `?id=eq.${uid}&select=*`, undefined, 'return=representation')).json[0];
+    whole3.genre = 'blues';
+    res = await patchOwn(whole3); r = row();
+    check('whole-row write with trial_start_date unchanged', res.status === 200 && r.genre === 'blues' && r.trial_start_date === shift(-25), `${brief(res)}; trial ${r.trial_start_date}`);
+
     console.log('\n-- API: PATCH /api/me');
     const api = body => fetch(`${SUPABASE_URL}/functions/v1/api/me`, { method: 'PATCH', headers: { apikey: KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
     let ar = await api({ name: 'Via API' }); r = row();
     check('an allowed column saves', ar.status === 200 && r.name === 'Via API', `HTTP ${ar.status}`);
     ar = await api({ subscription_plan: 'yearly' }); r = row();
     check('subscription_plan alone is dropped (400, no patchable fields), plan kept', ar.status === 400 && r.subscription_plan === 'choir', `HTTP ${ar.status}; plan ${r.subscription_plan}`);
+    ar = await api({ trial_start_date: today }); r = row();
+    check('trial_start_date alone is dropped (400), trial kept', ar.status === 400 && r.trial_start_date === shift(-25), `HTTP ${ar.status}; trial ${r.trial_start_date}`);
   } catch (e) {
     check('run finished', false, String(e && e.message || e).slice(0, 160));
   } finally {
