@@ -260,7 +260,7 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   customers and support would go by. Fix: add them to the same trigger. `email` could be kept in sync from
   `auth.users` by a security definer trigger instead.
 
-- **Pitch graders marked centred vibrato as off-pitch** (FIXED 2026-09-30; found in the noise / vibrato scope study).
+- **Pitch graders marked centred vibrato as off-pitch** (FIXED and live 2026-09-30, 18d3cc6, dpl_FbeuU2HWAkSxEjQ1soh8eEQye97p; found in the noise / vibrato scope study).
   Every grader built on `100 − mean|cents|×mult` scored the vibrato's swing as error, and so did Stay in Key's per-frame
   window. A shared helper, placed after `autoCorrelate` in deploy/index.html, now handles it: `vibratoGate` (4–8 Hz, ±8–160 ct, periodic),
   `vibratoTolerantCents` (a note's centre over whole periods) and `makeVibratoTolerantLive` (the same thing, live). It's wired
@@ -271,6 +271,10 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   `scripts/vq-verify/vibfix.js`, which puts real VocalSet singing through the real UI. Result: 104/108. The 4 accepted fails:
   V1 Pitch Match pro 66 → 76 and V1 RTF In tune 22 → 61% (V1's detector drops out on about 20% of frames); N2 / N4 RTF Steady
   0 → 10% / 15% on wobbly notes without vibrato. That breaks the rise ≤5 check but stays within the ≤25% limit.
+  Checked on production (`VF_URL=<url> vibfix.js`, a throwaway account, deleted after): 68/71. Vibrato V2–V6 score within
+  0–5 of straight notes on every grader. Wobbly N1 / N2 / N4 read RTF Steady 21 / 21 / 8% and In tune ≤9%. The 3 fails are the
+  2 accepted V1 ones and W4 flutter in Drills at 89 against a ≥10-below-straight line, which is unchanged from before the fix (88–89).
+  livevq.js, live9.js and reload.js (30/30) also pass on production.
   - **Follow-ups (open, not blocking):**
     - [ ] **Tuner stability meter reads wobble as steady.** It has the same cause RTF's Steady had: the Tuner's
       `stabilityBuffer` takes the live helper's centre, and the 800 ms gate also passes irregular ±20–25 ct jitter as
