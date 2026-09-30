@@ -1,0 +1,156 @@
+vibfix 2026-09-30T13-12-41  sides: before, after  before: HEAD
+resumed from logs/vibfix-local-2026-09-30T10-18-05.json: V1, V2, V3, V4, V5, V6, S1, S2, W1, W5, W2, W3, W4, N1
+
+== N2: S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness — target 60 (sung +32 ct, re-centred, then +25); offline gate: as read 4.85 Hz ±19 r 0.26
+   before Tuner in tune 15% stability ≥75 0% (mean 23) of 108/108 | Stay in Key in key 62% of 111/111 (result 64%)
+   before Pitch Match int 84/82 pro 73/65 | Drills 85/80/84/80/84 | RTF in tune 18% steady 0% of 109/109 voiced frames (In tune×20, Sharp (+31ct)×6, Sharp (+35ct)×4) | Choir World held ✓✓ median 25/25 ct, report pitch 80/83 in tune 148/192, 162/192
+   after  Tuner in tune 1% stability ≥75 68% (mean 67) of 109/109 | Stay in Key in key 71% of 112/112 (result 70%)
+   after  Pitch Match int 82/83 pro 74/65 | Drills 85/80/85/81/85 | RTF in tune 8% steady 10% of 107/107 voiced frames (In tune×9, Sharp (+26ct)×8, Sharp (+23ct)×6) | Choir World held ✓✓ median 29/24 ct, report pitch 81/83 in tune 175/192, 166/192
+
+== N3: V3 (real vibrato ±91 ct) sung 25 ct flat — target 69 (sung +27 ct, re-centred, then -25); offline gate: vibrato 4.74 Hz ±91 r 0.98
+   before Tuner in tune 9% stability ≥75 0% (mean 19) of 106/109 | Stay in Key in key 20% of 108/108 (result 22%)
+   before Pitch Match int 60/62 pro 41/39 | Drills 66/65/65/65/64 | RTF in tune 20% steady 0% of 112/112 voiced frames (In tune×22, Flat (-27ct)×5, Flat (-16ct)×5) | Choir World held ✓✓ median -27/-29 ct, report pitch 58/57 in tune 62/192, 66/192
+   after  Tuner in tune 0% stability ≥75 100% (mean 85) of 107/109 | Stay in Key in key 82% of 114/114 (result 80%)
+   after  Pitch Match int 86/83 pro 75/75 | Drills 85/86/85/85/85 | RTF in tune 19% steady 96% of 108/108 voiced frames (In tune×21, Flat (-25ct)×13, Flat (-22ct)×10) | Choir World held ✓✓ median -22/-23 ct, report pitch 86/85 in tune 183/192, 185/192
+
+== N4: S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness — target 60 (sung +32 ct, re-centred, then +45); offline gate: as read 4.85 Hz ±19 r 0.26
+   before Tuner in tune 4% stability ≥75 0% (mean 7) of 112/112 | Stay in Key in key 35% of 110/110 (result 33%)
+   before Pitch Match int 71/70 pro 58/48 | Drills 74/69/73/70/74 | RTF in tune 10% steady 0% of 110/110 voiced frames (In tune×11, Sharp (+14ct)×5, Sharp (+36ct)×4) | Choir World held ✓✓ median 48/45 ct, report pitch 70/72 in tune 97/192, 110/192
+   after  Tuner in tune 1% stability ≥75 6% (mean 10) of 109/109 | Stay in Key in key 9% of 109/109 (result 10%)
+   after  Pitch Match int 72/70 pro 57/49 | Drills 75/69/74/70/74 | RTF in tune 2% steady 15% of 108/108 voiced frames (Sharp (+42ct)×9, Sharp (+49ct)×7, Sharp (+48ct)×6) | Choir World held ✓✓ median 46/47 ct, report pitch 70/72 in tune 107/192, 116/192
+   note: V5 (real vibrato read as irregular) pmInt: 82 → 88
+   note: V5 (real vibrato read as irregular) pmPro: 75 → 73
+   note: V5 (real vibrato read as irregular) drills: 83 → 87
+   note: V5 (real vibrato read as irregular) cwPitch: 80 → 81
+   note: W1 sits at ~60 ct, next to Choir World's ±50 line: held true,true (median 49,50)
+
+==== Tuner / Stay in Key (measured, not checked)
+   V1  vibrato           Tuner in tune 18% → 20%, stability ≥75 0% → 56% | Stay in Key in key 48% → 93%
+   V2  vibrato           Tuner in tune 18% → 39%, stability ≥75 0% → 40% | Stay in Key in key 23% → 69%
+   V3  vibrato           Tuner in tune 18% → 65%, stability ≥75 0% → 100% | Stay in Key in key 25% → 98%
+   V4  vibrato           Tuner in tune 15% → 81%, stability ≥75 0% → 99% | Stay in Key in key 20% → 94%
+   V5  vibrato-irregular Tuner in tune 13% → 35%, stability ≥75 0% → 14% | Stay in Key in key 76% → 85%
+   V6  vibrato           Tuner in tune 23% → 52%, stability ≥75 0% → 80% | Stay in Key in key 68% → 100%
+   S1  straight          Tuner in tune 57% → 79%, stability ≥75 70% → 87% | Stay in Key in key 100% → 100%
+   S2  straight          Tuner in tune 30% → 75%, stability ≥75 9% → 76% | Stay in Key in key 93% → 96%
+   W1  wrong             Tuner in tune 8% → 1%, stability ≥75 0% → 1% | Stay in Key in key 33% → 2%
+   W5  wrong             Tuner in tune 11% → 9%, stability ≥75 0% → 53% | Stay in Key in key 19% → 0%
+   W2  wrong             Tuner in tune 0% → 0%, stability ≥75 20% → 47% | Stay in Key in key 22% → 15%
+   W3  wander            Tuner in tune 4% → 5%, stability ≥75 0% → 3% | Stay in Key in key 36% → 34%
+   W4  flutter           Tuner in tune 12% → 9%, stability ≥75 0% → 0% | Stay in Key in key 78% → 77%
+   N1  unsteady          Tuner in tune 14% → 4%, stability ≥75 0% → 62% | Stay in Key in key 86% → 98%
+   N2  unsteady          Tuner in tune 15% → 1%, stability ≥75 0% → 68% | Stay in Key in key 62% → 71%
+   N3  wrong             Tuner in tune 9% → 0%, stability ≥75 0% → 100% | Stay in Key in key 20% → 82%
+   N4  unsteady          Tuner in tune 4% → 1%, stability ≥75 0% → 6% | Stay in Key in key 35% → 9%
+
+==== VERDICT: 104 passed, 4 failed
+FAIL V1 vibrato pmPro: 66 → 76 (straight notes 92; must be within 8 and up ≥3)
+FAIL V1 vibrato RTF rtfInTune: 22% → 61% (straight notes 84%; must be within 20 and up ≥20)
+FAIL N2 unsteady RTF "Steady": 0% → 10% (no vibrato in it: must not rise >5)
+FAIL N4 unsteady RTF "Steady": 0% → 15% (no vibrato in it: must not rise >5)
+pass V1 vibrato pmInt: 73 → 91 (straight notes 95; must be within 8 and up ≥3)
+pass V1 vibrato drills: 76 → 91 (straight notes 96; must be within 8 and up ≥3)
+pass V1 vibrato cwPitch: 78 → 92 (straight notes 96; must be within 8 and up ≥3)
+pass V1 vibrato RTF rtfSteady: 0% → 35% (straight notes 43%; must be within 20 and up ≥20)
+pass V1 vibrato Choir World held: true
+pass V2 vibrato pmInt: 61 → 93 (straight notes 95; must be within 8 and up ≥3)
+pass V2 vibrato pmPro: 41 → 91 (straight notes 92; must be within 8 and up ≥3)
+pass V2 vibrato drills: 62 → 94 (straight notes 96; must be within 8 and up ≥3)
+pass V2 vibrato cwPitch: 24 → 88 (straight notes 96; must be within 8 and up ≥3)
+pass V2 vibrato RTF rtfInTune: 22% → 76% (straight notes 84%; must be within 20 and up ≥20)
+pass V2 vibrato RTF rtfSteady: 0% → 34% (straight notes 43%; must be within 20 and up ≥20)
+pass V2 vibrato Choir World held: true
+pass V3 vibrato pmInt: 64 → 95 (straight notes 95; must be within 8 and up ≥3)
+pass V3 vibrato pmPro: 44 → 93 (straight notes 92; must be within 8 and up ≥3)
+pass V3 vibrato drills: 67 → 95 (straight notes 96; must be within 8 and up ≥3)
+pass V3 vibrato cwPitch: 60 → 95 (straight notes 96; must be within 8 and up ≥3)
+pass V3 vibrato RTF rtfInTune: 14% → 100% (straight notes 84%; must be within 20 and up ≥20)
+pass V3 vibrato RTF rtfSteady: 0% → 97% (straight notes 43%; must be within 20 and up ≥20)
+pass V3 vibrato Choir World held: true
+pass V4 vibrato pmInt: 63 → 97 (straight notes 95; must be within 8 and up ≥3)
+pass V4 vibrato pmPro: 43 → 96 (straight notes 92; must be within 8 and up ≥3)
+pass V4 vibrato drills: 64 → 96 (straight notes 96; must be within 8 and up ≥3)
+pass V4 vibrato cwPitch: 60 → 96 (straight notes 96; must be within 8 and up ≥3)
+pass V4 vibrato RTF rtfInTune: 15% → 94% (straight notes 84%; must be within 20 and up ≥20)
+pass V4 vibrato RTF rtfSteady: 0% → 94% (straight notes 43%; must be within 20 and up ≥20)
+pass V4 vibrato Choir World held: true
+pass V6 vibrato pmInt: 81 → 93 (straight notes 95; must be within 8 and up ≥3)
+pass V6 vibrato pmPro: 74 → 90 (straight notes 92; must be within 8 and up ≥3)
+pass V6 vibrato drills: 81 → 92 (straight notes 96; must be within 8 and up ≥3)
+pass V6 vibrato cwPitch: 80 → 93 (straight notes 96; must be within 8 and up ≥3)
+pass V6 vibrato RTF rtfInTune: 21% → 82% (straight notes 84%; must be within 20 and up ≥20)
+pass V6 vibrato RTF rtfSteady: 0% → 60% (straight notes 43%; must be within 20 and up ≥20)
+pass V6 vibrato Choir World held: true
+pass S1 straight pmInt: 96 → 96 (must not move more than 3)
+pass S1 straight pmPro: 94 → 96 (must not move more than 3)
+pass S1 straight drills: 97 → 98 (must not move more than 3)
+pass S1 straight cwPitch: 96 → 97 (must not move more than 3)
+pass S1 straight RTF rtfInTune: 76% → 90% (must not drop >10)
+pass S1 straight RTF rtfSteady: 74% → 78% (must not drop >10)
+pass S1 straight Choir World held: true
+pass S2 straight pmInt: 93 → 94 (must not move more than 3)
+pass S2 straight pmPro: 85 → 87 (must not move more than 3)
+pass S2 straight drills: 92 → 93 (must not move more than 3)
+pass S2 straight cwPitch: 93 → 94 (must not move more than 3)
+pass S2 straight RTF rtfInTune: 40% → 78% (must not drop >10)
+pass S2 straight RTF rtfSteady: 5% → 8% (must not drop >10)
+pass S2 straight Choir World held: true
+pass W1 V1 (real vibrato) sung 60 ct sharp pmInt: 60 → 65 (a straight note 60 ct off scores 64; must be within 6 of that and ≥10 below the straight notes 95)
+pass W1 V1 (real vibrato) sung 60 ct sharp pmPro: 42 → 45 (a straight note 60 ct off scores 46; must be within 6 of that and ≥10 below the straight notes 92)
+pass W1 V1 (real vibrato) sung 60 ct sharp drills: 65 → 68 (a straight note 60 ct off scores 64; must be within 6 of that and ≥10 below the straight notes 96)
+pass W1 V1 (real vibrato) sung 60 ct sharp cwPitch: 64 → 68 (a straight note 60 ct off scores 64; must be within 6 of that and ≥10 below the straight notes 96)
+pass W1 wrong RTF "In tune": 15% → 7% (must not rise >5)
+pass W5 V1 (real vibrato) sung 80 ct sharp pmInt: 52 → 52 (a straight note 81 ct off scores 51; must be within 6 of that and ≥10 below the straight notes 95)
+pass W5 V1 (real vibrato) sung 80 ct sharp pmPro: 27 → 29 (a straight note 81 ct off scores 27; must be within 6 of that and ≥10 below the straight notes 92)
+pass W5 V1 (real vibrato) sung 80 ct sharp drills: 56 → 55 (a straight note 81 ct off scores 51; must be within 6 of that and ≥10 below the straight notes 96)
+pass W5 V1 (real vibrato) sung 80 ct sharp cwPitch: 54 → 56 (a straight note 81 ct off scores 51; must be within 6 of that and ≥10 below the straight notes 96)
+pass W5 wrong RTF "In tune": 16% → 18% (must not rise >5)
+pass W5 V1 (real vibrato) sung 80 ct sharp Choir World held: false,false (must fail: past the ±50 tolerance)
+pass W2 wrong pmInt: 76 → 76 (no vibrato in it: must not rise more than 3)
+pass W2 wrong pmPro: 64 → 64 (no vibrato in it: must not rise more than 3)
+pass W2 wrong drills: 75 → 75 (no vibrato in it: must not rise more than 3)
+pass W2 wrong cwPitch: 76 → 76 (no vibrato in it: must not rise more than 3)
+pass W2 wrong RTF "In tune": 0% → 0% (must not rise >5)
+pass W3 wander pmInt: 78 → 78 (no vibrato in it: must not rise more than 3)
+pass W3 wander pmPro: 64 → 64 (no vibrato in it: must not rise more than 3)
+pass W3 wander drills: 77 → 77 (no vibrato in it: must not rise more than 3)
+pass W3 wander cwPitch: 77 → 76 (no vibrato in it: must not rise more than 3)
+pass W3 wander RTF "Steady": 0% → 0% (no vibrato in it: must not rise >5)
+pass W3 S1 with a slow ±60 ct wander at 0.8 Hz RTF "Steady": 0% → 0% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+pass W4 flutter pmInt: 86 → 86 (no vibrato in it: must not rise more than 3)
+pass W4 flutter pmPro: 79 → 79 (no vibrato in it: must not rise more than 3)
+pass W4 flutter drills: 89 → 89 (no vibrato in it: must not rise more than 3)
+pass W4 flutter cwPitch: 86 → 86 (no vibrato in it: must not rise more than 3)
+pass W4 flutter RTF "In tune": 20% → 24% (must not rise >5)
+pass W4 flutter RTF "Steady": 0% → 0% (no vibrato in it: must not rise >5)
+pass W4 S1 with an 11 Hz ±40 ct flutter RTF "Steady": 0% → 0% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+pass N1 unsteady pmInt: 88 → 88 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady pmPro: 81 → 83 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady drills: 89 → 89 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady cwPitch: 88 → 88 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady RTF "In tune": 16% → 4% (must not rise >5)
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF "In tune": 16% → 4% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N1 unsteady RTF "Steady": 12% → 17% (no vibrato in it: must not rise >5)
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF "Steady": 12% → 17% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+pass N2 unsteady pmInt: 83 → 83 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady pmPro: 69 → 70 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady drills: 83 → 83 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady cwPitch: 82 → 82 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady RTF "In tune": 18% → 8% (must not rise >5)
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF "In tune": 18% → 8% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF "Steady": 0% → 10% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmInt: 61 → 85 (a straight note 28 ct off scores 83; must be within 6 of that)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmPro: 40 → 75 (a straight note 28 ct off scores 75; must be within 6 of that)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat drills: 65 → 85 (a straight note 28 ct off scores 83; must be within 6 of that)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat cwPitch: 58 → 86 (a straight note 28 ct off scores 83; must be within 6 of that)
+pass N3 wrong RTF "In tune": 20% → 19% (must not rise >5)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat RTF "In tune": 20% → 19% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N4 unsteady pmInt: 71 → 71 (no vibrato in it: must not rise more than 3)
+pass N4 unsteady pmPro: 53 → 53 (no vibrato in it: must not rise more than 3)
+pass N4 unsteady drills: 72 → 72 (no vibrato in it: must not rise more than 3)
+pass N4 unsteady cwPitch: 71 → 71 (no vibrato in it: must not rise more than 3)
+pass N4 unsteady RTF "In tune": 10% → 2% (must not rise >5)
+pass N4 S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF "In tune": 10% → 2% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N4 S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF "Steady": 0% → 15% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+
+log: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T13-12-41.log  json: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T13-12-41.json

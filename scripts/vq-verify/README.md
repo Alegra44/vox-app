@@ -22,6 +22,12 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 | `rcfix.js` | The proposed Register Coach fix, test-only: a second unprocessed spectrum stream next to the shared mic, power-averaged, vs today |
 | `regcoach2.js` | Register Coach vibrato bias by cause: today's score vs unsmoothed, and power-weighted with and without smoothing (test-only; app unchanged) |
 | `shotlang.js <wav>` | Screenshots of the result rows in each language |
+| `noisy2.py <out.wav> <json>` | `noisy.py` plus the noises testers report (one talker nearby, a TV: speech over a music bed, passing traffic) and a cents offset for deliberately wrong reference tones |
+| `xscope.js vibrato\|noise\|phantom` | Noise / vibrato scope study (2026-09-30): every pitch grader's verdict on the same frames, shared processed mic vs the register input; grades as the running build does (`XS_HTML=<file>` serves another build). `analyze.js` / `pivot.js` print its tables (`%TEMP%/vq-verify/xscope/`) |
+| `vibtol.js` | The shared vibrato-tolerance helper (`vibratoGate` / `vibratoTolerantCents` / `makeVibratoTolerantLive`) in isolation: vibrato at 4–8 Hz up to ±150 ct tolerated; flutter, too-wide swings, slow wobble, wander, drift and wrong notes scored as read |
+| `realvib.js [dir] [--json out]` | Real singing (VocalSet, CC BY 4.0) through the helper offline: each sustained note's gate reading and its score before / after / centre-only |
+| `realstim.py <out.wav> <json>` | One real sung note, re-centred (plus an optional offset, wander or flutter) and looped forward/backward as a mic stimulus |
+| `vibfix.js [ids]` | The helper with real singing through the real UI: Pitch Match, Register Drills, Real-Time Feedback and Choir World's capture/verdict/report (plus Tuner and Stay in Key, measured only), before vs after or on `VF_URL` with a throwaway account; wobbly notes without vibrato (N1, N2, N4, W3, W4) must not read RTF "Steady"; logs to `logs/` |
 
 ## How each metric is computed
 

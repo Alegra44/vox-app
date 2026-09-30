@@ -260,6 +260,24 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   customers and support would go by. Fix: add them to the same trigger. `email` could be kept in sync from
   `auth.users` by a security definer trigger instead.
 
+- **Pitch graders marked centred vibrato as off-pitch** (FIXED 2026-09-30; found in the noise / vibrato scope study).
+  Every grader built on `100 − mean|cents|×mult` scored the vibrato's swing as error, and so did Stay in Key's per-frame
+  window. A shared helper, placed after `autoCorrelate` in deploy/index.html, now handles it: `vibratoGate` (4–8 Hz, ±8–160 ct, periodic),
+  `vibratoTolerantCents` (a note's centre over whole periods) and `makeVibratoTolerantLive` (the same thing, live). It's wired
+  into `captureAccuracyForTarget`, Stay in Key, Karaoke, Boss, Harmony Arena / Memory, Performance Director, Mirror Echo,
+  One Take, Emotional, Drills, Real-Time Feedback and the Performance Report. RTF's "In tune" window gets a vibrato-only
+  allowance (`vibratoCentreSlack`). RTF "Steady" uses the centre only when `live.vibratoSure` is set (±20 ct or more,
+  and read as vibrato at a steady rate for 333 ms), so irregular wobble isn't smoothed into "Steady". Check:
+  `scripts/vq-verify/vibfix.js`, which puts real VocalSet singing through the real UI. Result: 104/108. The 4 accepted fails:
+  V1 Pitch Match pro 66 → 76 and V1 RTF In tune 22 → 61% (V1's detector drops out on about 20% of frames); N2 / N4 RTF Steady
+  0 → 10% / 15% on wobbly notes without vibrato. That breaks the rise ≤5 check but stays within the ≤25% limit.
+  - **Follow-ups (open, not blocking):**
+    - [ ] **Tuner stability meter reads wobble as steady.** It has the same cause RTF's Steady had: the Tuner's
+      `stabilityBuffer` takes the live helper's centre, and the 800 ms gate also passes irregular ±20–25 ct jitter as
+      vibrato, which the box-mean then smooths. In vibfix.js (measured, not checked), stability ≥75 went from 0% to as much as
+      68% of frames on wobbly stimuli without vibrato (N1: 0 → 62%). Likely fix: feed it the reading as is unless
+      `vibratoSure`, as RTF's Steady buffer does.
+
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
 
 ## Testing infrastructure notes

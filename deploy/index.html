@@ -4549,10 +4549,147 @@ function autoCorrelate(buf, sampleRate){
   return sampleRate/T0;
 }
 
+// Vibrato tolerance, shared by every pitch-accuracy grader. Natural vibrato (a periodic swing at 4–8 Hz, up to ±150 ct)
+// is a trained-voice trait, not a pitch error: graders that averaged |cents| per frame scored a perfectly centred ±50 ct
+// vibrato like a straight note 35 ct sharp, and per-frame "in tune" checks failed it half the time. A run of pitch
+// readings {t (ms), c (cents)} counts as vibrato only when its modulation (the pitch minus its own slow trend) repeats
+// with one period in that band: the autocorrelation's first strong peak (≥ 90% of the highest between 50 and 333 ms,
+// so a 12 Hz flutter can't pass for 6 Hz at twice its period) must be at 125–250 ms and reach VIB_TOL.minPeriodicity,
+// and the swing must be no wider than VIB_TOL.maxCents. Then the reading is the note's centre line, the average over
+// exactly one detected period, which removes the vibrato and nothing slower: a wrong note or a wandering pitch still
+// counts in full. Anything else (faster flutter, wide or irregular excursions) is scored frame by frame, as before.
+const VIB_TOL = {minHz:4, maxHz:8, minCents:8, maxCents:160, minPeriodicity:0.4, dtMs:1000/240, trendMs:333, liveMs:800, livePeriods:2, liveHoldMs:400, liveResumeMs:500, rateJitter:0.15, maxSlack:12, sureCents:20, sureRateMs:333, sureRateTol:0.15}; // maxCents: ±150 plus the estimate's error
+function vibratoResample(pts){ // uniform grid (dtMs, finer than the ~60 readings/s so a period between two frames still lands on a lag) by linear interpolation
+  const dt = VIB_TOL.dtMs, t0 = pts[0].t, n = Math.floor((pts[pts.length-1].t - t0)/dt) + 1, x = new Float64Array(n);
+  for(let k=0, j=0; k<n; k++){
+    const t = t0 + k*dt;
+    while(j<pts.length-2 && pts[j+1].t < t) j++;
+    const a = pts[j], b = pts[j+1] || a, span = b.t - a.t;
+    x[k] = span>0 ? a.c + (b.c - a.c)*Math.min(1, Math.max(0, (t - a.t)/span)) : a.c;
+  }
+  return x;
+}
+// Average of x over [s, s+len) in grid units, fractional ends weighted (one exact period removes a periodic swing).
+function vibratoBoxMean(x, s, len){
+  let sum = 0, w = 0;
+  for(let k=Math.floor(s); k<Math.ceil(s+len) && k<x.length; k++){
+    if(k<0) continue;
+    const wk = Math.min(k+1, s+len) - Math.max(k, s);
+    if(wk>0){ sum += x[k]*wk; w += wk; }
+  }
+  return w>0 ? sum/w : x[Math.max(0, Math.min(x.length-1, Math.round(s)))];
+}
+// {vibrato, periodMs, rateHz, depth, periodicity, x (the resampled readings)} for readings sorted by time.
+function vibratoGate(pts){
+  const out = {vibrato:false};
+  if(pts.length < 12) return out;
+  // Readings more than 3 semitones from the note's median are detector slips (octave or fifth errors), not vibrato; one
+  // such spike would swamp the periodicity. They're left out of the gate (and scored as read by the callers).
+  const med = [...pts].map(p=>p.c).sort((a,b)=>a-b)[pts.length>>1];
+  if(pts.some(p=>Math.abs(p.c-med) > 300)){ pts = pts.filter(p=>Math.abs(p.c-med) <= 300); out.kept = pts; if(pts.length < 12) return out; }
+  const x = vibratoResample(pts), n = x.length, dt = VIB_TOL.dtMs;
+  out.x = x;
+  const half = VIB_TOL.trendMs/dt/2, hp = new Float64Array(n);
+  for(let k=0;k<n;k++){ const s = Math.max(0, k-half), e = Math.min(n, k+half); hp[k] = x[k] - vibratoBoxMean(x, s, e-s); }
+  // Periodicity is measured on the modulation with one-off jumps (a reading either side of a dropout) capped at 3× its
+  // robust spread, so a single glitch can't hide an otherwise regular vibrato.
+  const sig = 1.4826*[...hp].map(Math.abs).sort((p,q)=>p-q)[n>>1] || 1, hc = hp.map(v=>Math.max(-3*sig, Math.min(3*sig, v)));
+  // The period is twice the lag of the first deep trough of the autocorrelation (searched from 25 ms, so a 12 Hz flutter
+  // shows its own 42 ms trough rather than passing for 6 Hz). Periodicity is (r(P) − r(P/2))/2: 1 for a pure swing, about
+  // 0 for noise. Real vibrato wanders a little in rate from cycle to cycle, which decays r(P) but keeps r(P/2) strongly
+  // negative, so the two together read a real singer's vibrato as periodic where r(P) alone did not.
+  const lo = Math.max(2, Math.floor(25/dt)), hi = Math.min(Math.ceil(333/dt), n-4);
+  if(hi <= lo+1) return out;
+  const r = new Float64Array(hi+2);
+  for(let L=lo-1; L<=hi+1; L++){
+    let xy = 0, xx = 0, yy = 0;
+    for(let k=0;k+L<n;k++){ xy += hc[k]*hc[k+L]; xx += hc[k]*hc[k]; yy += hc[k+L]*hc[k+L]; }
+    r[L] = xx>0 && yy>0 ? xy/Math.sqrt(xx*yy) : 0;
+  }
+  let deepest = 0; for(let L=lo; L<=hi; L++) deepest = Math.min(deepest, r[L]);
+  let T0 = -1;
+  for(let L=lo; L<=hi; L++) if(r[L]<=r[L-1] && r[L]<=r[L+1] && r[L]<=0.8*deepest){ T0 = L; break; }
+  if(T0<0 || deepest>=0) return out;
+  const a = (r[T0-1] + r[T0+1] - 2*r[T0])/2, b = (r[T0+1] - r[T0-1])/2, Tf = a>0 ? T0 - b/(2*a) : T0, Lf = 2*Tf;
+  const rAt = L=>{ const k = Math.floor(L), f = L-k; return r[k]*(1-f) + r[k+1]*f; };
+  const periodicity = Lf <= hi ? (rAt(Lf) - rAt(Tf))/2 : 0; // a period past 333 ms is far below the band anyway
+  let v = 0; for(let k=0;k<n;k++) v += hp[k]*hp[k];
+  const rateHz = 1000/(Lf*dt), win = 2048/((typeof audioCtx!=='undefined' && audioCtx && audioCtx.sampleRate) || 48000);
+  const xs = Math.PI*rateHz*win, shrink = Math.max(0.5, Math.sin(xs)/xs); // each reading averages the pitch over one detector window
+  const xt = Math.PI*rateHz*VIB_TOL.trendMs/1000, trendGain = 1 - Math.sin(xt)/xt; // taking out the trend lifts a 4–5 Hz swing up to 22%
+  Object.assign(out, {periodMs:Lf*dt, rateHz, periodicity, depth:Math.sqrt(2*v/n)/shrink/trendGain});
+  out.vibrato = rateHz>=VIB_TOL.minHz && rateHz<=VIB_TOL.maxHz && periodicity>=VIB_TOL.minPeriodicity
+    && out.depth>=VIB_TOL.minCents && out.depth<=VIB_TOL.maxCents && n*dt >= 2*out.periodMs; // under ±8 ct: straight (as the Vibrato Analyzer reads it)
+  return out;
+}
+// One note's readings → the cents to score, one per reading: the centre line when the note carries vibrato, else as read.
+// In a vibrato note a detector slip (a reading 3+ semitones off the note's median: the detector jumping a fourth or an
+// octave at a deep trough, often for a few hundred ms) is scored as the centre line at that moment, not as read: one
+// such burst otherwise outweighed the whole note in a mean-|cents| score. Without vibrato every reading stays as read.
+function vibratoTolerantCents(pts){
+  const g = vibratoGate(pts);
+  if(!g.vibrato) return pts.map(p=>p.c);
+  const kept = g.kept || pts, x = g.x, P = g.periodMs/VIB_TOL.dtMs, t0 = kept[0].t, centre = new Float64Array(x.length);
+  for(let k=0;k<x.length;k++) centre[k] = vibratoBoxMean(x, Math.max(0, Math.min(x.length-P, k-P/2)), P);
+  return pts.map(p=>{
+    const u = Math.max(0, (p.t-t0)/VIB_TOL.dtMs), k = Math.floor(u), f = u-k; return k+1<centre.length ? centre[k]*(1-f)+centre[k+1]*f : centre[centre.length-1];
+  });
+}
+// Live form for per-frame readouts: pass the reading (or null when there's no pitch); returns what to show and judge now.
+// While the recent readings carry vibrato that's the average over the last two detected periods (one period of a real
+// voice's vibrato, which drifts in rate and shape from cycle to cycle, still left the readout flickering), and the
+// vibrato reading holds for liveHoldMs after the last detection, so a frame or two below the gate doesn't flash back to
+// the raw swing. Otherwise it's the reading itself. A silence longer than 200 ms starts a new note; if that note starts
+// within liveResumeMs of the last vibrato detection (the detector losing a breathy or deep trough, not a new phrase),
+// the vibrato reading carries on as soon as the new note spans one period, instead of showing the raw swing for the two
+// periods the gate needs. Only the new note's own readings are averaged, so a different note still reads as itself.
+// The returned function's .vibratoDepth is the swing (± cents) behind the value it last returned when that value was a
+// vibrato centre, else 0, so a readout can allow for what averaging leaves of the swing (vibratoCentreSlack).
+// .vibratoSure is true when that centre also comes from a vibrato the gate is sure of: at least ±sureCents, and read as
+// vibrato on every reading of the last sureRateMs at a rate within sureRateTol of the current one. In 800 ms the gate alone also passes an irregular
+// ±20–25 ct wobble (it looks like a shallow vibrato for a cycle or two, then drifts in rate), so a readout that says
+// "Steady" uses the centre only when it's sure, else the reading as is.
+function makeVibratoTolerantLive(){
+  const buf = [], rates = []; let holdUntil = -Infinity, periodMs = 0, lastVib = -Infinity, depth = 0, sureUntil = -Infinity, lastSure = -Infinity;
+  const live = (t, c)=>{
+    live.vibratoDepth = 0; live.vibratoSure = false;
+    const gap = buf.length && t - buf[buf.length-1].t > 200;
+    if(c===null || c===undefined || !isFinite(c)){ if(gap){ buf.length = 0; rates.length = 0; holdUntil = sureUntil = -Infinity; } return null; }
+    if(gap){
+      buf.length = 0; rates.length = 0;
+      holdUntil = t - lastVib <= VIB_TOL.liveResumeMs ? t + VIB_TOL.livePeriods*periodMs + VIB_TOL.liveHoldMs : -Infinity;
+      sureUntil = t - lastSure <= VIB_TOL.liveResumeMs ? holdUntil : -Infinity;
+    }
+    buf.push({t, c});
+    while(buf.length && t - buf[0].t > VIB_TOL.liveMs) buf.shift();
+    const g = vibratoGate(buf);
+    if(g.vibrato){ periodMs = g.periodMs; depth = g.depth; holdUntil = Math.max(holdUntil, t + VIB_TOL.liveHoldMs); lastVib = t; }
+    rates.push({t, rateHz: g.vibrato ? g.rateHz : 0});
+    while(rates.length > 1 && t - rates[1].t >= VIB_TOL.sureRateMs) rates.shift();
+    if(g.vibrato && g.depth >= VIB_TOL.sureCents && t - rates[0].t >= VIB_TOL.sureRateMs
+      && rates.every(r => r.rateHz && Math.abs(r.rateHz/g.rateHz - 1) <= VIB_TOL.sureRateTol)){ sureUntil = Math.max(sureUntil, t + VIB_TOL.liveHoldMs); lastSure = t; }
+    if(t > holdUntil || (g.kept && !g.kept.includes(buf[buf.length-1]))) return c;
+    const x = g.x || (buf.length > 1 ? vibratoResample(buf) : null), P = periodMs/VIB_TOL.dtMs;
+    if(!x || x.length < P) return c; // not yet one period of the resumed note
+    const len = Math.min(Math.floor(x.length/P), VIB_TOL.livePeriods)*P; // whole periods only: a part period is biased by the swing
+    live.vibratoDepth = depth; live.vibratoSure = t <= sureUntil;
+    return vibratoBoxMean(x, x.length - len, len);
+  };
+  live.vibratoDepth = 0; live.vibratoSure = false;
+  return live;
+}
+// How far a vibrato centre can sit from the true centre from the averaging alone: a box over whole periods cancels a
+// swing only when the period is exact, and leaves about depth × the period error. A singer's vibrato rate varies by
+// roughly VIB_TOL.rateJitter from cycle to cycle, so a per-frame "in tune" check allows that much of the note's own
+// swing on top of its usual window, at most maxSlack (a ±150 ct swing would otherwise allow ±22 ct: a sharp note in
+// a wide vibrato must still read sharp). 0 for a note not recognised as vibrato: its window is unchanged.
+function vibratoCentreSlack(depth){ return depth>0 ? Math.min(VIB_TOL.maxSlack, VIB_TOL.rateJitter*depth) : 0; }
+
 let audioCtx, analyser, micStream, dataArray, rafId;
 let mode = null; // 'tuner' | 'rangeLow' | 'rangeHigh'
 let stabilityBuffer = [];
 let tunerSessionStartTime = null, vocalHealthWarningShown = false;
+let tunerVib = makeVibratoTolerantLive();
 let liveFreq = null;
 
 async function initAudio(){
@@ -4589,7 +4726,10 @@ function loop(){
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   liveFreq = freq>0 ? freq : null;
 
-  if(mode==='tuner') updateTunerUI(freq);
+  if(mode==='tuner'){ // natural vibrato shows as the note's centre, not as a wobble or a missed lock
+    const held = tunerVib(performance.now(), freq>0 ? 6900+1200*Math.log2(freq/440) : null);
+    updateTunerUI(freq>0 ? 440*Math.pow(2, (held-6900)/1200) : freq);
+  }
   if(mode==='rangeLow') updateRangeLiveUI(freq, 'lowLiveNote');
   if(mode==='rangeHigh') updateRangeLiveUI(freq, 'highLiveNote');
 
@@ -11927,6 +12067,7 @@ let stayKeyStartTime = 0;
 let stayKeyRafId = null;
 let stayKeyInKeyFrames = 0;
 let stayKeyTotalFrames = 0;
+let stayKeyVib = makeVibratoTolerantLive(); // each frame is judged with natural vibrato taken out
 
 async function startStayInKey(){
   if(!requireProFeature('Stay in Key')) return;
@@ -11938,6 +12079,7 @@ async function startStayInKey(){
   stayKeyStartTime = performance.now();
   stayKeyInKeyFrames = 0;
   stayKeyTotalFrames = 0;
+  stayKeyVib = makeVibratoTolerantLive();
   document.getElementById('stayKeyResult').style.display='none';
   document.getElementById('stayKeyStartLabel').textContent = t('action_stop');
   document.getElementById('stayKeyStartBtn').classList.add('listening');
@@ -11956,10 +12098,11 @@ function stayKeyLoop(){
 
   analyser.getFloatTimeDomainData(dataArray);
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const heldCents = stayKeyVib(elapsed, freq>0 ? 6900+1200*Math.log2(freq/440) : null); // the pitch as judged, in cents above C-1
   const statusEl = document.getElementById('stayKeyStatus');
   const ring = document.getElementById('stayKeyRingFill');
   if(freq>0){
-    const nearest = nearestChordToneCents(freq, idx);
+    const nearest = nearestChordToneCents(440*Math.pow(2, (heldCents-6900)/1200), idx);
     stayKeyTotalFrames++;
     if(nearest && Math.abs(nearest.cents) <= 35){
       stayKeyInKeyFrames++;
@@ -12047,7 +12190,7 @@ function emotionLoop(){
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   if(freq>0){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
-    if(cents!==null && Math.abs(cents)<300) emotionCentsSamples.push(Math.abs(cents));
+    if(cents!==null && Math.abs(cents)<300) emotionCentsSamples.push({t:elapsed, c:cents, idx});
     emotionRmsSamples.push(rms);
   }
   emotionRafId = requestAnimationFrame(emotionLoop);
@@ -12063,7 +12206,11 @@ function finishEmotionalSinging(){
 
   let pitchAcc = null, expressionScore = null;
   if(emotionCentsSamples.length>10){
-    const avgAbs = emotionCentsSamples.reduce((a,b)=>a+b,0)/emotionCentsSamples.length;
+    // natural vibrato isn't a pitch error: each note's readings go through vibratoTolerantCents on their own
+    const byNote = {};
+    emotionCentsSamples.forEach(s=>{ (byNote[s.idx] = byNote[s.idx] || []).push(s); });
+    const abs = Object.values(byNote).flatMap(pts=>vibratoTolerantCents(pts).map(Math.abs));
+    const avgAbs = abs.reduce((a,b)=>a+b,0)/abs.length;
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   if(emotionRmsSamples.length>10){
@@ -12242,7 +12389,7 @@ function finalizeKaraokeNote(idx){
   const chordDurMs = songChordDurMs();
   let pitchAcc = 0;
   if(karaokeCentsBuf.length>0){
-    const avgAbs = karaokeCentsBuf.reduce((a,b)=>a+Math.abs(b),0)/karaokeCentsBuf.length;
+    const avgAbs = vibratoTolerantCents(karaokeCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/karaokeCentsBuf.length;
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   let timingScore = 0;
@@ -12278,7 +12425,7 @@ function karaokeLoop(){
   const cursor = document.getElementById('karaokeLiveCursor');
   if(freq>0){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
-    if(cents!==null && Math.abs(cents)<300) karaokeCentsBuf.push(cents);
+    if(cents!==null && Math.abs(cents)<300) karaokeCentsBuf.push({t:elapsedMs, c:cents});
     if(karaokeFirstVoicedOffset===null) karaokeFirstVoicedOffset = elapsedMs - idx*songChordDurMs();
 
     if(cursor){
@@ -12375,6 +12522,7 @@ document.getElementById('karaokeStartBtn').addEventListener('click', ()=>{
 let lfActive = false;
 let lfRafId = null;
 let lfCentsBuffer = [];
+let lfVib = makeVibratoTolerantLive(); // "In tune" and "Steady" are judged with natural vibrato taken out (Steady: only when sure)
 let lfRmsBuffer = [];
 
 function setChecklistRow(prefix, state, text){
@@ -12397,6 +12545,7 @@ async function startLiveFeedback(){
   lfActive = true;
   lfCentsBuffer = [];
   lfRmsBuffer = [];
+  lfVib = makeVibratoTolerantLive();
   document.getElementById('liveFeedbackStartLabel').textContent = 'Stop';
   document.getElementById('liveFeedbackStartBtn').classList.add('listening');
   recordActivity();
@@ -12415,14 +12564,16 @@ function lfLoop(){
   const fr = readRegisterFrame(), freq = fr.freq;
   vlFeed(freq, fr.raw);
   const rms = fr.raw ? computeRMS(fr.raw) : 0;
+  const heldCents = lfVib(performance.now(), freq>0 ? 6900+1200*Math.log2(freq/440) : null);
 
   if(freq>0){
-    const note = freqToNote(freq);
+    const note = freqToNote(440*Math.pow(2, (heldCents-6900)/1200));
+    const inTune = Math.abs(note.cents) <= 8 + vibratoCentreSlack(lfVib.vibratoDepth); // a vibrato note: its centre, allowing for the averaging's leftover
 
-    setChecklistRow('Pitch', Math.abs(note.cents)<=8 ? 'good':'warn',
-      Math.abs(note.cents)<=8 ? 'In tune' : `${note.cents>0?'Sharp':'Flat'} (${note.cents>0?'+':''}${note.cents}ct)`);
+    setChecklistRow('Pitch', inTune ? 'good':'warn',
+      inTune ? 'In tune' : `${note.cents>0?'Sharp':'Flat'} (${note.cents>0?'+':''}${note.cents}ct)`);
 
-    lfCentsBuffer.push(note.cents);
+    lfCentsBuffer.push(lfVib.vibratoSure ? note.cents : freqToNote(freq).cents); // "Steady" forgives only a vibrato the gate is sure of
     if(lfCentsBuffer.length>30) lfCentsBuffer.shift();
     if(lfCentsBuffer.length>5){
       const mean = lfCentsBuffer.reduce((a,b)=>a+b,0)/lfCentsBuffer.length;
@@ -13640,9 +13791,14 @@ function hmMedian(arr){
   return a.length%2 ? a[m] : (a[m-1]+a[m])/2;
 }
 // One note's verdict from the pitch frames collected while it sounded (also used by the Phase 5 challenges).
-function judgeHeldNote(midi, cents){
+// The note's readings as judged: natural vibrato taken out (vibratoTolerantCents; times in seconds, as captureNoteFrame keeps them).
+function heldNoteCents(cents, times){
+  if(!times || times.length!==cents.length) return cents;
+  return vibratoTolerantCents(cents.map((c,k)=>({t:times[k]*1000, c})));
+}
+function judgeHeldNote(midi, cents, times){
   if(cents.length<HM_MIN_FRAMES) return {midi, heard:false, frames:cents.length};
-  const med = Math.round(hmMedian(cents));
+  const med = Math.round(hmMedian(heldNoteCents(cents, times)));
   return {midi, heard:true, frames:cents.length, cents:med, held:Math.abs(med)<=HM_TOL_CENTS};
 }
 function finishHarmonyMemory(completed){
@@ -13656,7 +13812,7 @@ function finishHarmonyMemory(completed){
   renderRehearsalLevels();
   if(completed){
     const {runStage:stage, song, part, notes, cents} = harmonyMemory;
-    const results = notes.map((nt,i)=>judgeHeldNote(nt.midi, cents[i]));
+    const results = notes.map((nt,i)=>judgeHeldNote(nt.midi, cents[i], harmonyMemory.times[i]));
     const held = results.filter(r=>r.held).length;
     const score = Math.round(held/notes.length*100);
     const passed = score>=HM_PASS_PCT;
@@ -13862,7 +14018,7 @@ function chTick(){
   if(idx>=0) captureNoteFrame(challenge, idx, notes[idx], songT);
   while(challenge.judged<notes.length && songT>notes[challenge.judged].end){
     const i = challenge.judged++;
-    const r = challenge.results[i] = judgeHeldNote(notes[i].midi, challenge.cents[i]);
+    const r = challenge.results[i] = judgeHeldNote(notes[i].midi, challenge.cents[i], challenge.times[i]);
     if(r.held) challenge.held++; else challenge.misses++;
   }
   if(kind==='boss' && challenge.misses>=challenge.lives){ finishChallenge(true); return; } // the boss wins early
@@ -14390,11 +14546,12 @@ function prNoteStats(run, i){
   const nt = run.notes[i], r = run.results[i];
   const cents = (run.cents && run.cents[i]) || [], times = (run.times && run.times[i]) || [];
   const entry = run.firstVoiced ? run.firstVoiced[i] : null, len = nt.end - nt.start;
-  return {nt, r, cents, times, entry, len,
+  const judged = heldNoteCents(cents, times); // natural vibrato taken out, as the verdict was judged
+  return {nt, r, cents, times, judged, entry, len,
     // Performance Director's per-note pitch formula, on the same frames the verdict was judged from
-    pitchAcc: r.heard ? Math.max(0, Math.round(100 - prAvg(cents.map(Math.abs))*0.6)) : null,
+    pitchAcc: r.heard ? Math.max(0, Math.round(100 - prAvg(judged.map(Math.abs))*0.6)) : null,
     onTime: entry===null ? null : entry < len*PR_ONTIME_FRACTION,
-    inTune: cents.filter(c=>Math.abs(c)<=HM_TOL_CENTS).length};
+    inTune: judged.filter(c=>Math.abs(c)<=HM_TOL_CENTS).length};
 }
 function computePerfReport(run){
   const stats = run.notes.map((_,i)=>prNoteStats(run, i));
@@ -14503,7 +14660,8 @@ function whyPlotSvg(s){
   g += `<text x="${W-R}" y="${H-5}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">${fmtNum(s.len, 2)} s</text>`;
   if(s.entry!==null) g += `<line x1="${x(s.entry)}" x2="${x(s.entry)}" y1="${T}" y2="${H-B}" stroke="var(--brass)" stroke-dasharray="2 2"/>`;
   s.cents.forEach((c,k)=>{
-    g += `<circle cx="${x(s.times[k]).toFixed(1)}" cy="${y(c).toFixed(1)}" r="2.2" fill="var(${Math.abs(c)<=HM_TOL_CENTS ? '--teal' : '--coral'})"/>`;
+    // each dot sits where the mic heard it; its colour is the verdict on that moment (natural vibrato taken out)
+    g += `<circle cx="${x(s.times[k]).toFixed(1)}" cy="${y(c).toFixed(1)}" r="2.2" fill="var(${Math.abs(s.judged[k])<=HM_TOL_CENTS ? '--teal' : '--coral'})"/>`;
   });
   return `<svg viewBox="0 0 ${W} ${H}" aria-hidden="true">${g}</svg>`;
 }
@@ -15212,6 +15370,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
       } else {
         const confidence = computeCaptureConfidence(samples.length, totalFrames);
         if(samples.length===0){ resolve({accuracy:0, heard:false, confidence}); return; }
+        vibratoTolerantCents(samples.map(s=>({t:s.t, c:s.cents}))).forEach((c,i)=>{ samples[i].cents = c; }); // natural vibrato isn't a pitch error
         const scoreFrom = list => Math.max(0, Math.round(100 - (list.reduce((a,b)=>a+Math.abs(b.cents),0)/list.length)*mult));
         const result = {accuracy: scoreFrom(samples), heard:true, confidence};
         if(opts.splitAttackLanding){
@@ -16627,11 +16786,14 @@ function bossFinalizeNote(idx){
   if(idx<0) return;
   const boss = BOSS_TYPES[selectedBossType];
   const diff = BOSS_DIFFICULTY[selectedBossDifficulty];
-  let relevantBuf = bossCentsBuf;
+  let relevantPts = bossCentsBuf;
   if(boss.key==='agility'){
     // only the first ~45% of captured samples count — no time to correct mid-note
-    relevantBuf = bossCentsBuf.slice(0, Math.max(1, Math.ceil(bossCentsBuf.length*0.45)));
+    relevantPts = bossCentsBuf.slice(0, Math.max(1, Math.ceil(bossCentsBuf.length*0.45)));
   }
+  // Pitch is judged with natural vibrato taken out (vibratoTolerantCents); the Tremor Serpent's own oscillation measure
+  // below keeps the readings as sung, since the swing itself is what that boss scores.
+  const relevantBuf = vibratoTolerantCents(relevantPts), sungBuf = relevantPts.map(p=>p.c);
   let pitchAcc=0;
   if(relevantBuf.length>0){
     const avgAbs=relevantBuf.reduce((a,b)=>a+Math.abs(b),0)/relevantBuf.length;
@@ -16670,15 +16832,15 @@ function bossFinalizeNote(idx){
       const tempoPenalty = Math.min(40, Math.round(latenessRatio*100));
       pitchAcc = Math.max(0, pitchAcc-tempoPenalty);
     }
-    if(boss.key==='tremor' && relevantBuf.length>6){
+    if(boss.key==='tremor' && sungBuf.length>6){
       // Tremor Serpent: real oscillation-rate math (same zero-crossing concept as the Resonance Visualizer) —
       // rewards a controlled middle band, penalizes both robotic-flat AND wildly-wobbly extremes
-      const mean = relevantBuf.reduce((a,b)=>a+b,0)/relevantBuf.length;
+      const mean = sungBuf.reduce((a,b)=>a+b,0)/sungBuf.length;
       let crossings=0;
-      for(let i=1;i<relevantBuf.length;i++){
-        if((relevantBuf[i-1]-mean)*(relevantBuf[i]-mean) < 0) crossings++;
+      for(let i=1;i<sungBuf.length;i++){
+        if((sungBuf[i-1]-mean)*(sungBuf[i]-mean) < 0) crossings++;
       }
-      const oscillationRate = crossings/relevantBuf.length;
+      const oscillationRate = crossings/sungBuf.length;
       // sweet spot is genuine controlled vibrato — too low (flat) or too high (wild) both cost you
       const distFromSweetSpot = Math.abs(oscillationRate-0.22);
       const tremorPenalty = Math.min(35, Math.round(distFromSweetSpot*160));
@@ -16731,7 +16893,7 @@ function bossLoop(){
   if(freq>0){
     if(bossNoteOnsetTime===null) bossNoteOnsetTime=performance.now();
     const cents=centsFromTarget(freq, targetMidi);
-    if(cents!==null && Math.abs(cents)<300) bossCentsBuf.push(cents);
+    if(cents!==null && Math.abs(cents)<300) bossCentsBuf.push({t:elapsedMs, c:cents});
     bossRmsBuf.push(computeRMS(buf));
     if(chestScore!==null) bossChestBuf.push(chestScore);
   }
@@ -17062,7 +17224,9 @@ async function startHarmonyArena(){
 }
 function harmonyFinalizeNote(idx){
   if(harmonyNoteBuf.length===0){ harmonyNoteResults[idx] = null; return; }
-  const avgAbs = harmonyNoteBuf.reduce((a,b)=>a+b,0)/harmonyNoteBuf.length;
+  const abs = vibratoTolerantCents(harmonyNoteBuf).map(Math.abs); // natural vibrato isn't a pitch error
+  harmonyCentsSamples.push(...abs); // the whole-piece pitch score gathers each note's readings as judged
+  const avgAbs = abs.reduce((a,b)=>a+b,0)/abs.length;
   harmonyNoteResults[idx] = Math.max(0, Math.round(100-avgAbs*0.6));
 }
 function harmonyLoop(){
@@ -17102,8 +17266,7 @@ function harmonyLoop(){
     harmonyHeardFrames++;
     const cents=centsFromTarget(freq, targetMidi);
     if(cents!==null && Math.abs(cents)<300){
-      harmonyCentsSamples.push(Math.abs(cents));
-      harmonyNoteBuf.push(Math.abs(cents));
+      harmonyNoteBuf.push({t:elapsedMs, c:cents});
       if(ribbon){
         // Real Stem-Pull ribbon: signed deviation drives both vertical offset and skew — direction matters here, unlike the scoring average above
         const clamped = Math.max(-50, Math.min(50, cents));
@@ -17122,6 +17285,10 @@ function harmonyLoop(){
   harmonyRafId=requestAnimationFrame(harmonyLoop);
 }
 function finishHarmonyArena(){
+  // Stopped mid-note: that note's readings still count toward the pitch score (as they did when each frame was added
+  // live), without giving the unfinished note a result of its own.
+  if(harmonyCurrentIdx>=0 && harmonyNoteResults[harmonyCurrentIdx]===undefined && harmonyNoteBuf.length)
+    harmonyCentsSamples.push(...vibratoTolerantCents(harmonyNoteBuf).map(Math.abs));
   harmonyActive=false;
   cancelAnimationFrame(harmonyRafId);
   stopChoirOscillatorsOnly();
@@ -18687,12 +18854,12 @@ function finishMirrorEcho(){
   drawMirrorComparison();
 
   let totalCentsAbs=0, count=0;
+  const byNote = [[],[],[],[]];
   mirrorUserTrace.forEach(p=>{
     const noteIdx = Math.min(3, Math.floor(p.t/MIRROR_NOTE_MS));
-    const targetMidi = mirrorPhrase[noteIdx];
-    totalCentsAbs += Math.abs((p.midi-targetMidi)*100);
-    count++;
+    byNote[noteIdx].push({t:p.t, c:(p.midi-mirrorPhrase[noteIdx])*100});
   });
+  byNote.forEach(pts=>vibratoTolerantCents(pts).forEach(c=>{ totalCentsAbs += Math.abs(c); count++; })); // natural vibrato isn't a pitch error
   const avgCents = count>0 ? totalCentsAbs/count : 999;
   const accuracy = count>0 ? Math.max(0, Math.round(100-avgCents*0.6)) : 0;
 
@@ -19570,7 +19737,7 @@ async function runOneTake(){
       if(freq>0){
         if(onsetTime===null) onsetTime = t;
         const cents = centsFromTarget(freq, targetMidi);
-        if(cents!==null && Math.abs(cents)<300) samples.push(cents);
+        if(cents!==null && Math.abs(cents)<300) samples.push({t, c:cents});
       }
       if(t < ONE_TAKE_DURATION_MS){
         requestAnimationFrame(frame);
@@ -19583,10 +19750,11 @@ async function runOneTake(){
 
   let pitch=0, stability=0, timing=0;
   if(samples.length>0){
-    const avgAbs = samples.reduce((a,b)=>a+Math.abs(b),0)/samples.length;
+    const cents = vibratoTolerantCents(samples); // natural vibrato is neither a pitch error nor instability
+    const avgAbs = cents.reduce((a,b)=>a+Math.abs(b),0)/cents.length;
     pitch = Math.max(0, Math.round(100-avgAbs*0.6));
-    const mean = samples.reduce((a,b)=>a+b,0)/samples.length;
-    const variance = samples.reduce((a,b)=>a+(b-mean)*(b-mean),0)/samples.length;
+    const mean = cents.reduce((a,b)=>a+b,0)/cents.length;
+    const variance = cents.reduce((a,b)=>a+(b-mean)*(b-mean),0)/cents.length;
     stability = Math.max(0, Math.round(100-Math.sqrt(variance)*3));
   }
   if(onsetTime!==null){
@@ -19852,7 +20020,7 @@ async function runEmoRound(intentKey, roundNum){
       if(rms>0.008) rmsSamples.push(rms);
       if(freq>0){
         const cents = centsFromTarget(freq, emoTargetMidi);
-        if(cents!==null && Math.abs(cents)<400) centsSamples.push(cents);
+        if(cents!==null && Math.abs(cents)<400) centsSamples.push({t:performance.now()-start, c:cents});
       }
       const t = performance.now()-start;
       if(t < EMO_CAPTURE_MS) requestAnimationFrame(frame); else resolve();
@@ -19866,8 +20034,9 @@ async function runEmoRound(intentKey, roundNum){
     dynamicRange = Math.max(...rmsSamples) - Math.min(...rmsSamples);
   }
   if(centsSamples.length>3){
-    const mean = centsSamples.reduce((a,b)=>a+b,0)/centsSamples.length;
-    const variance = centsSamples.reduce((a,b)=>a+(b-mean)*(b-mean),0)/centsSamples.length;
+    const cents = vibratoTolerantCents(centsSamples); // natural vibrato isn't instability
+    const mean = cents.reduce((a,b)=>a+b,0)/cents.length;
+    const variance = cents.reduce((a,b)=>a+(b-mean)*(b-mean),0)/cents.length;
     stability = Math.max(0, 100-Math.sqrt(variance)*3);
   }
   emoResults.push({intent:intentKey, dynamicRange, avgLoudness, stability, heard: rmsSamples.length>0});
@@ -19947,7 +20116,7 @@ function pdFinalizeNote(idx){
   const chordDurMs = songChordDurMs();
   let pitchAcc = 0;
   if(pdCentsBuf.length>0){
-    const avgAbs = pdCentsBuf.reduce((a,b)=>a+Math.abs(b),0)/pdCentsBuf.length;
+    const avgAbs = vibratoTolerantCents(pdCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/pdCentsBuf.length;
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   let timingScore = 0;
@@ -19992,7 +20161,7 @@ function pdLoop(){
       pdFirstVoicedOffset = elapsedMs - idx*chordDurMs;
     }
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
-    if(cents!==null && Math.abs(cents)<300) pdCentsBuf.push(cents);
+    if(cents!==null && Math.abs(cents)<300) pdCentsBuf.push({t:elapsedMs, c:cents});
   }
 
   requestAnimationFrame(pdLoop);
@@ -20101,7 +20270,7 @@ async function runDrillSequence(){
         vlFeed(freq, fr.raw);
         if(freq>0){
           const cents = centsFromTarget(freq, targetMidi);
-          if(cents!==null && Math.abs(cents)<300) centsBuf.push(cents);
+          if(cents!==null && Math.abs(cents)<300) centsBuf.push({t:performance.now()-start, c:cents});
           if(fr.chest!==null) chestBuf.push(fr.chest);
         }
         const t = performance.now()-start;
@@ -20112,7 +20281,7 @@ async function runDrillSequence(){
 
     let pitchAcc=0, avgChest=null, registerMatch=false;
     if(centsBuf.length>0){
-      const avgAbs = centsBuf.reduce((a,b)=>a+Math.abs(b),0)/centsBuf.length;
+      const avgAbs = vibratoTolerantCents(centsBuf).reduce((a,b)=>a+Math.abs(b),0)/centsBuf.length; // natural vibrato isn't a pitch error
       pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
     }
     if(chestBuf.length>0){
