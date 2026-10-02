@@ -17,6 +17,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 
 ## Working rules
 
+- **Regression checks compare current master against the new branch on this Mac, in the same run.** The Windows
+  numbers (vibfix 104/108, noisegate 146/160, prod 68/71) are reference only. See the roadmap's testing notes.
 - Build one item at a time, verify it on production, report back, and wait for a go-ahead before starting the next.
   "Scope" means report only, with no app changes.
 - Production deploys need the user's explicit approval. Run from `deploy/`:
@@ -44,13 +46,12 @@ Decisions already made by the user:
 - Option B is answered. Option C (telling speech from singing) stays parked; don't build it.
 - The RTF shared-mic artifact leak is logged in the roadmap and tied to item 3 below.
 
-Remaining steps, in order:
-1. Run `node scripts/vq-verify/vibfix.js` locally, alone, with plenty of free memory. The last vibfix attempt
-   (`vibfix-local-2026-10-01T11-06-38.log`) crashed with `VOICE_MIN_HZ is not defined`. The `realvib.js` change on
-   this branch fixes that, but the fixed version has **not been run yet**. Compare with the accepted baseline:
-   104 pass / 4 fail locally, 68/71 on prod.
-2. If clean, merge `wip/noise-gate` into master. The commit is already split cleanly: code, scripts, logs, roadmap.
-3. Deploy (with approval), then on prod run `NG_URL=<prod> node scripts/vq-verify/noisegate.js` and
+Status (2026-10-02, on the Mac):
+1. Done: vibfix run locally with the `realvib.js` fix. Like-for-like (`VF_BEFORE=d7a5691`): 103/108, the 4 accepted
+   fails plus N1 RTF Steady 9 → 23%, accepted as the fifth (the gate's own effect on it is +1). Details and the
+   same-run comparison against `dccc80b` are in the roadmap's noise-gate entry.
+2. Done: merged into master (fce3993).
+3. Deploy (approved), then on prod run `NG_URL=<prod> node scripts/vq-verify/noisegate.js` and
    `VF_URL=<prod> node scripts/vq-verify/vibfix.js`, one at a time, with full logs and accounts cleaned up.
 4. Report A and B together.
 5. Then the user picks the next item: **item 3** (per-feature single-stream mic migration) or **item 4** (Glider

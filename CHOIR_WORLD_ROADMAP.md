@@ -304,12 +304,29 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
     Range test, and about 1.4 kHz would leave a quarter of the artifacts. The real fix is one stream per feature, so
     re-run `noisegate.js` (pink, traffic, rumble: RTF heard ≤5%) when that migration lands.
   - Not built: telling speech from singing (option C in the scope study), parked for a later product decision.
+  - **Merged to master 2026-10-02 (fce3993), after vibfix on the Mac** (Node 22.23.3, Python 3.12.15; logs
+    `vibfix-local-2026-10-02T10-31-59` and `…T11-23-17`):
+    - Same run, `VF_BEFORE=dccc80b` (live vibrato fix, no gate) vs the gate: every checked score within 5 points (one
+      larger move, an improvement: V5 Choir World pitch 80 → 88); voiced frames down by at most 5. Verdict 76/32: all
+      32 are "must rise from before" checks, which can't pass when both sides have the vibrato fix.
+    - Like-for-like, `VF_BEFORE=d7a5691` (before the vibrato fix) vs the gate: 103/108. The 4 accepted fails as before
+      (V1 Pitch Match pro 65 → 76, V1 RTF In tune 24 → 60%, N2 / N4 RTF Steady 0 → 10% / 15%) plus a fifth, **accepted
+      2026-10-02: N1 RTF Steady 9 → 23%** (must not rise more than 5; it stays under the 25% limit). The gate's own
+      effect on it is +1 (21 → 22% in the same run); the rise against the Windows baseline (12 → 17%) comes from the
+      machine.
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
 
 ## Testing infrastructure notes
 
 These are about the test setup, not the app.
+
+- **Regression checks compare current master against the new branch on this Mac, in the same run** (rule from
+  2026-10-02, when the project moved from Windows to a Mac). E.g. `VF_BEFORE=<master> vibfix.js` with the branch checked
+  out, or `NG_BEFORE=<master> noisegate.js`; other scripts likewise through their own before-side. Numbers measured on the Windows machine (e.g.
+  vibfix 104/108 and noisegate 146/160) are reference only: on the Mac the same code reads somewhat differently (RTF
+  samples about 116 voiced frames per 6 s against 107, and RTF / Tuner percentages move by up to ±10 between
+  machines). Mac reference numbers from 2026-10-02 are in the noise-gate entry above.
 
 - **The synthetic mic can drop to exact zero under memory pressure** (found 2026-09-27, Vocal Load batch 3b). The
   verify scripts feed Chromium a WAV file as its microphone (`--use-file-for-fake-audio-capture`). With about 390 MB of
