@@ -4516,6 +4516,13 @@ function freqToNote(freq){
 }
 
 // Autocorrelation pitch detector (ACF2+ style)
+// Loudness alone used to decide that someone was singing, so any sound over the level floor got a "pitch": hiss,
+// traffic, a fan or mains hum scored as held notes with nobody singing. Two more checks now apply to every pitch reader:
+// the frame must repeat at the detected period (clarity: the normalized autocorrelation at that lag, 1 for a perfectly
+// periodic frame, near 0 for noise; voices, breathy and soft singing included, read 0.9+, broadband noise mostly under
+// 0.6), and the pitch must be above VOICE_MIN_HZ, below any sung note (a bass's low C is 65 Hz), so 50 / 60 Hz hum is
+// dropped. A voice speaking nearby is periodic too and still passes; telling speech from singing isn't done here.
+const VOICE_MIN_CLARITY = 0.6, VOICE_MIN_HZ = 63;
 function autoCorrelate(buf, sampleRate){
   const SIZE = buf.length;
   let rms = 0;
@@ -4546,7 +4553,12 @@ function autoCorrelate(buf, sampleRate){
   const a = (x1+x3-2*x2)/2;
   const b = (x3-x1)/2;
   if(a) T0 = T0 - b/(2*a);
-  return sampleRate/T0;
+  const freq = sampleRate/T0;
+  if(!(freq >= VOICE_MIN_HZ)) return -1;
+  const lag = Math.round(T0); let ac = 0, m = 0;
+  for(let j=0;j+lag<SIZE;j++){ ac += buf[j]*buf[j+lag]; m += buf[j]*buf[j] + buf[j+lag]*buf[j+lag]; }
+  if(!(m > 0) || 2*ac/m < VOICE_MIN_CLARITY) return -1; // not periodic: noise, not a voice
+  return freq;
 }
 
 // Vibrato tolerance, shared by every pitch-accuracy grader. Natural vibrato (a periodic swing at 4–8 Hz, up to ±150 ct)

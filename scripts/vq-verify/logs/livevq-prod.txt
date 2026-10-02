@@ -1,0 +1,22 @@
+account voxcoach-vq-1790786412470@example.com | tier trial
+
+== Vibrato Analyzer (injected 6 Hz ±50 ct, 330 Hz tone)
+panel: panel-vibrato
+during: "Listening…"
+shown: {"rate":"6 Hz","depth":"51 ct","consistency":"95%","feedback":"6 Hz is within the commonly-cited natural range."}
+getUserMedia calls: [{"asked":{"echoCancellation":false,"noiseSuppression":false,"autoGainControl":false},"got":{"echoCancellation":false,"noiseSuppression":false,"autoGainControl":false},"track":"ended"}]
+
+== Voice Quality, same signal (clean tone, harmonics 1, ½, ⅓, ¼ → centroid 633 Hz)
+panel: panel-voicequality
+shown: Measured on E4 (330 Hz), 4.0 s of steady voice. | VIBRATO 6.0 Hz · ±50 ct Within the commonly cited natural range (about 5–6.5 Hz). | BREATHINESS (HNR) 43.4 dB Clear tone: the harmonics stand well above the noise between them. | BRIGHTNESS 483 Hz · 1.46× pitch Brighter, more forward tone: strong upper harmonics.
+getUserMedia calls: [{"asked":{"echoCancellation":false,"noiseSuppression":false,"autoGainControl":false},"got":{"echoCancellation":false,"noiseSuppression":false,"autoGainControl":false},"track":"ended"}]
+
+== Voice Quality, breathiness (injected HNR 15 dB, no vibrato)
+panel: panel-voicequality
+shown: Measured on A3 (220 Hz), 4.0 s of steady voice. | VIBRATO — No regular vibrato: a straight tone. That's a choice, not a fault. | BREATHINESS (HNR) 15.0 dB Some air in the tone. Possible contributors: a soft or airy onset, a relaxed breathy style, or mic and room noise. | BRIGHTNESS 442 Hz · 2.01× pitch Brighter, more forward tone: strong upper harmonics.
+[fr] VIBRATO — Pas de vibrato régulier : un son droit. C’est un choix, pas un défaut. | SOUFFLE (HNR) 15,0 dB Un peu d’air dans le son. Causes possibles : une attaque douce ou soufflée, un style détendu et soufflé, ou le bruit du micro et de la pièce. | BRILLANCE 442 Hz · 2,01× la hauteur Son plus brillant et projeté : harmoniques aiguës marquées.
+[es] VIBRATO — Sin vibrato regular: un tono recto. Es una elección, no un fallo. | AIRE EN LA VOZ (HNR) 15,0 dB Algo de aire en el tono. Posibles factores: un ataque suave o aireado, un estilo relajado y aireado, o el ruido del micrófono y de la sala. | BRILLO 442 Hz · 2,01× la altura Tono más brillante y proyectado: armónicos agudos marcados.
+[tr] VIBRATO — Düzenli vibrato yok: düz bir ses. Bu bir tercih, hata değil. | NEFESLILIK (HNR) 15,0 dB Seste biraz hava var. Olası etkenler: yumuşak ya da havalı bir başlangıç, rahat ve nefesli bir üslup ya da mikrofon ve oda gürültüsü. | PARLAKLIK 442 Hz · perdenin 2,01 katı Daha parlak, öne çıkan ses: güçlü üst harmonikler.
+getUserMedia calls: [{"asked":{"echoCancellation":false,"noiseSuppression":false,"autoGainControl":false},"got":{"echoCancellation":false,"noiseSuppression":false,"autoGainControl":false},"track":"ended"}]
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vq-1790786412470@example.com

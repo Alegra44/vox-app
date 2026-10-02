@@ -1,0 +1,22 @@
+vibfix 2026-09-30T10-12-56  sides: before, after  before: HEAD
+
+== N1: S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness — target 69 (sung -14 ct, re-centred, then -20); offline gate: as read 5.31 Hz ±9 r 0.39
+   before Tuner in tune 20% stability ≥75 0% (mean 50) of 106/106 | Stay in Key in key 90% of 105/105 (result 86%)
+   before Pitch Match int 86/88 pro 80/81 | Drills 89/89/88/89/89 | RTF in tune 17% steady 11% of 106/106 voiced frames (In tune×18, Flat (-25ct)×5, Flat (-18ct)×4) | Choir World held ✓✓ median -19/-21 ct, report pitch 87/87 in tune 182/192, 186/192
+   after  Tuner in tune 6% stability ≥75 55% (mean 73) of 107/107 | Stay in Key in key 97% of 107/107 (result 97%)
+   after  Pitch Match int 89/86 pro 83/82 | Drills 90/90/88/89/89 | RTF in tune 5% steady 23% of 106/106 voiced frames (Flat (-16ct)×13, Flat (-17ct)×11, Flat (-21ct)×11) | Choir World held ✓✓ median -18/-20 ct, report pitch 89/88 in tune 192/192, 187/192
+
+==== Tuner / Stay in Key (measured, not checked)
+   N1  unsteady          Tuner in tune 20% → 6%, stability ≥75 0% → 55% | Stay in Key in key 90% → 97%
+
+==== VERDICT: 7 passed, 1 failed
+FAIL N1 unsteady RTF "Steady": 11% → 23% (no vibrato in it: must not rise >5)
+pass N1 unsteady pmInt: 87 → 88 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady pmPro: 81 → 83 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady drills: 89 → 89 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady cwPitch: 87 → 89 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady RTF "In tune": 17% → 5% (must not rise >5)
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF "In tune": 17% → 5% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF "Steady": 11% → 23% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+
+log: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T10-12-56.log  json: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T10-12-56.json

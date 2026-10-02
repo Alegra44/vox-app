@@ -1,0 +1,30 @@
+vibfix 2026-10-01T11-06-38  sides: before, after  before: HEAD
+ERROR Error: Command failed: node C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\realvib.js C:\Users\ALEGRA~1\AppData\Local\Temp\vq-verify\vocalset --json C:\Users\ALEGRA~1\AppData\Local\Temp\vq-verify\vibfix\rv.json
+<anonymous_script>:34
+  if(!(freq >= VOICE_MIN_HZ)) return -1;
+               ^
+
+ReferenceError: VOICE_MIN_HZ is not defined
+    at Object.autoCorrelate (eval at <anonymous> (C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\realvib.js:11:11), <anonymous>:34:16)
+    at frames (C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\realvib.js:24:86)
+    at Object.<anonymous> (C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\realvib.js:47:14)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:170:5)
+
+Node.js v22.15.1
+
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:882:11)
+    at execFileSync (node:child_process:918:15)
+    at C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\vibfix.js:208:3
+    at Object.<anonymous> (C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\vibfix.js:282:3)
+    at Module._compile (node:internal/modules/cjs/loader:1730:14)
+    at Object..js (node:internal/modules/cjs/loader:1895:10)
+    at Module.load (node:internal/modules/cjs/loader:1465:32)
+    at Function._load (node:internal/modules/cjs/loader:1282:12)

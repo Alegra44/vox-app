@@ -1,0 +1,89 @@
+vibfix 2026-09-30T08-26-47  sides: before, after  before: HEAD
+resumed from scripts/vq-verify/logs/vibfix-local-2026-09-30T07-14-28.json: V1, V2, V3, V4, V5, V6, S1, S2, W1, W5, W2, W3
+
+== W4: S1 with an 11 Hz ±40 ct flutter — target 69 (sung -14 ct, re-centred); offline gate: as read 5.31 Hz ±9 r 0.39
+   before Pitch Match int 86/86 pro 79/79 | Drills 89/88/89/89/89 | RTF in tune 21% steady 0% (In tune×22, Flat (-19ct)×5, Sharp (+20ct)×5) | Choir World held ✓✓ median 4/7 ct, report pitch 86/85 in tune 192/192, 190/192
+   after  Pitch Match int 84/85 pro 80/79 | Drills 88/88/89/89/89 | RTF in tune 19% steady 0% (In tune×21, Sharp (+20ct)×7, Flat (-24ct)×4) | Choir World held ✓✓ median 5/3 ct, report pitch 86/86 in tune 192/192, 185/185
+   note: V5 (real vibrato read as irregular) pmInt: 81 → 82
+   note: V5 (real vibrato read as irregular) pmPro: 74 → 74
+   note: V5 (real vibrato read as irregular) drills: 83 → 85
+   note: V5 (real vibrato read as irregular) cwPitch: 82 → 82
+   note: W1 sits at ~60 ct, next to Choir World's ±50 line: held false,true (median 52,50)
+
+==== VERDICT: 67 passed, 7 failed
+FAIL V1 vibrato pmPro: 66 → 76 (straight notes 93; must be within 8 and up ≥3)
+FAIL V1 vibrato RTF rtfInTune: 13% → 16% (straight notes 81%; must be within 20 and up ≥20)
+FAIL V1 vibrato RTF rtfSteady: 0% → 34% (straight notes 82%; must be within 20 and up ≥20)
+FAIL V2 vibrato cwPitch: 45 → 76 (straight notes 96; must be within 8 and up ≥3)
+FAIL V2 vibrato RTF rtfInTune: 12% → 51% (straight notes 81%; must be within 20 and up ≥20)
+FAIL V2 vibrato RTF rtfSteady: 0% → 36% (straight notes 82%; must be within 20 and up ≥20)
+FAIL V6 vibrato RTF rtfInTune: 18% → 51% (straight notes 81%; must be within 20 and up ≥20)
+pass V1 vibrato pmInt: 73 → 91 (straight notes 95; must be within 8 and up ≥3)
+pass V1 vibrato drills: 76 → 91 (straight notes 96; must be within 8 and up ≥3)
+pass V1 vibrato cwPitch: 79 → 92 (straight notes 96; must be within 8 and up ≥3)
+pass V1 vibrato Choir World held: true
+pass V2 vibrato pmInt: 60 → 93 (straight notes 95; must be within 8 and up ≥3)
+pass V2 vibrato pmPro: 43 → 91 (straight notes 93; must be within 8 and up ≥3)
+pass V2 vibrato drills: 63 → 94 (straight notes 96; must be within 8 and up ≥3)
+pass V2 vibrato Choir World held: true
+pass V3 vibrato pmInt: 64 → 95 (straight notes 95; must be within 8 and up ≥3)
+pass V3 vibrato pmPro: 43 → 92 (straight notes 93; must be within 8 and up ≥3)
+pass V3 vibrato drills: 67 → 95 (straight notes 96; must be within 8 and up ≥3)
+pass V3 vibrato cwPitch: 62 → 93 (straight notes 96; must be within 8 and up ≥3)
+pass V3 vibrato RTF rtfInTune: 13% → 74% (straight notes 81%; must be within 20 and up ≥20)
+pass V3 vibrato RTF rtfSteady: 0% → 100% (straight notes 82%; must be within 20 and up ≥20)
+pass V3 vibrato Choir World held: true
+pass V4 vibrato pmInt: 63 → 96 (straight notes 95; must be within 8 and up ≥3)
+pass V4 vibrato pmPro: 44 → 94 (straight notes 93; must be within 8 and up ≥3)
+pass V4 vibrato drills: 65 → 95 (straight notes 96; must be within 8 and up ≥3)
+pass V4 vibrato cwPitch: 59 → 93 (straight notes 96; must be within 8 and up ≥3)
+pass V4 vibrato RTF rtfInTune: 15% → 83% (straight notes 81%; must be within 20 and up ≥20)
+pass V4 vibrato RTF rtfSteady: 0% → 100% (straight notes 82%; must be within 20 and up ≥20)
+pass V4 vibrato Choir World held: true
+pass V6 vibrato pmInt: 81 → 93 (straight notes 95; must be within 8 and up ≥3)
+pass V6 vibrato pmPro: 73 → 91 (straight notes 93; must be within 8 and up ≥3)
+pass V6 vibrato drills: 81 → 92 (straight notes 96; must be within 8 and up ≥3)
+pass V6 vibrato cwPitch: 81 → 93 (straight notes 96; must be within 8 and up ≥3)
+pass V6 vibrato RTF rtfSteady: 0% → 68% (straight notes 82%; must be within 20 and up ≥20)
+pass V6 vibrato Choir World held: true
+pass S1 straight pmInt: 96 → 96 (must not move more than 3)
+pass S1 straight pmPro: 95 → 97 (must not move more than 3)
+pass S1 straight drills: 96 → 98 (must not move more than 3)
+pass S1 straight cwPitch: 96 → 98 (must not move more than 3)
+pass S1 straight RTF rtfInTune: 72% → 85% (must not drop >10)
+pass S1 straight RTF rtfSteady: 75% → 95% (must not drop >10)
+pass S1 straight Choir World held: true
+pass S2 straight pmInt: 93 → 94 (must not move more than 3)
+pass S2 straight pmPro: 85 → 88 (must not move more than 3)
+pass S2 straight drills: 92 → 93 (must not move more than 3)
+pass S2 straight cwPitch: 93 → 94 (must not move more than 3)
+pass S2 straight RTF rtfInTune: 40% → 77% (must not drop >10)
+pass S2 straight RTF rtfSteady: 8% → 68% (must not drop >10)
+pass S2 straight Choir World held: true
+pass W1 V1 (real vibrato) sung 60 ct sharp pmInt: 59 → 64 (a straight note 60 ct off scores 64; must be within 6 of that and ≥10 below the straight notes 95)
+pass W1 V1 (real vibrato) sung 60 ct sharp pmPro: 42 → 46 (a straight note 60 ct off scores 46; must be within 6 of that and ≥10 below the straight notes 93)
+pass W1 V1 (real vibrato) sung 60 ct sharp drills: 65 → 68 (a straight note 60 ct off scores 64; must be within 6 of that and ≥10 below the straight notes 96)
+pass W1 V1 (real vibrato) sung 60 ct sharp cwPitch: 63 → 67 (a straight note 60 ct off scores 64; must be within 6 of that and ≥10 below the straight notes 96)
+pass W1 wrong RTF "In tune": 11% → 2% (must not rise >5)
+pass W5 V1 (real vibrato) sung 80 ct sharp pmInt: 52 → 52 (a straight note 82 ct off scores 51; must be within 6 of that and ≥10 below the straight notes 95)
+pass W5 V1 (real vibrato) sung 80 ct sharp pmPro: 27 → 28 (a straight note 82 ct off scores 26; must be within 6 of that and ≥10 below the straight notes 93)
+pass W5 V1 (real vibrato) sung 80 ct sharp drills: 56 → 56 (a straight note 82 ct off scores 51; must be within 6 of that and ≥10 below the straight notes 96)
+pass W5 V1 (real vibrato) sung 80 ct sharp cwPitch: 53 → 55 (a straight note 82 ct off scores 51; must be within 6 of that and ≥10 below the straight notes 96)
+pass W5 wrong RTF "In tune": 23% → 9% (must not rise >5)
+pass W5 V1 (real vibrato) sung 80 ct sharp Choir World held: false,false (must fail: past the ±50 tolerance)
+pass W2 wrong pmInt: 76 → 76 (no vibrato in it: must not rise more than 3)
+pass W2 wrong pmPro: 64 → 64 (no vibrato in it: must not rise more than 3)
+pass W2 wrong drills: 75 → 75 (no vibrato in it: must not rise more than 3)
+pass W2 wrong cwPitch: 75 → 76 (no vibrato in it: must not rise more than 3)
+pass W2 wrong RTF "In tune": 0% → 0% (must not rise >5)
+pass W3 wander pmInt: 78 → 78 (no vibrato in it: must not rise more than 3)
+pass W3 wander pmPro: 64 → 64 (no vibrato in it: must not rise more than 3)
+pass W3 wander drills: 77 → 77 (no vibrato in it: must not rise more than 3)
+pass W3 wander cwPitch: 76 → 76 (no vibrato in it: must not rise more than 3)
+pass W4 flutter pmInt: 86 → 85 (no vibrato in it: must not rise more than 3)
+pass W4 flutter pmPro: 79 → 80 (no vibrato in it: must not rise more than 3)
+pass W4 flutter drills: 89 → 89 (no vibrato in it: must not rise more than 3)
+pass W4 flutter cwPitch: 86 → 86 (no vibrato in it: must not rise more than 3)
+pass W4 flutter RTF "In tune": 21% → 19% (must not rise >5)
+
+log: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T08-26-47.log  json: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T08-26-47.json

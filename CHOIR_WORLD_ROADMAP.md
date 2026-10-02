@@ -282,6 +282,29 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
       68% of frames on wobbly stimuli without vibrato (N1: 0 → 62%). Likely fix: feed it the reading as is unless
       `vibratoSure`, as RTF's Steady buffer does.
 
+- **Noise with nobody singing was heard and scored as singing** (fix A, 2026-10-01; found in the noise / vibrato scope study).
+  The only voicing check was `autoCorrelate`'s level floor (rms ≥ 0.008), so hiss, traffic, a fan or mains hum got a
+  pitch. Every pitch reader now goes through two more checks in `autoCorrelate`. The frame must repeat at the detected
+  period: `VOICE_MIN_CLARITY` 0.6, the normalized autocorrelation at that lag. The pitch must be at least `VOICE_MIN_HZ`
+  63 Hz, which drops 50 / 60 Hz hum. Check: `scripts/vq-verify/noisegate.js` (real UI, before / after, or `NG_URL` on a
+  deployed page). Stimuli come from `gatestim.py`: synthetic noise, real speech (LibriVox) and real TV (archive.org)
+  at 10 dB under the singing, VocalSet singing, and the two mixed. Local result: 146/160.
+  - White noise alone: heard on 0% of frames in every exercise (was 74–100%). Pink, traffic and rumble: about 0% on the
+    shared mic (Tuner, Stay in Key, Choir World).
+  - Real speech and TV alone are heard less often (e.g. Choir World 40 → 20%). Breathy and pp singing keep 94–100%.
+  - Accepted fails (2026-10-01): Choir World held one phantom note on real speech (Holmes) and on real TV (Bonanza b),
+    up from 0. Babble and speech are periodic, which is the known hard case. Small losses for singing over noise:
+    talker mix CW 92 → 82%, breathy + white RTF 100 → 94%, pp-92 RTF 12 → 10%.
+  - **Open: RTF still hears broadband noise while the shared mic is also open; re-test with the per-feature
+    single-stream migration (item 3).** In noisegate, RTF heard pink 59%, traffic 78% and rumble 7% (was 100%). With
+    RTF's register input open alone, the same noise is heard on 0% of frames (offline frames and an isolated RTF run).
+    When initAudio's processed stream (echo cancellation + noise suppression) is open at the same time, the register
+    input carries processing artifacts at 1.1–1.6 kHz. Those are periodic enough to pass the clarity check and sit under
+    its 1.5 kHz low-pass. An upper pitch limit was turned down: about 1.1 kHz would cut sung notes above C#6 in the
+    Range test, and about 1.4 kHz would leave a quarter of the artifacts. The real fix is one stream per feature, so
+    re-run `noisegate.js` (pink, traffic, rumble: RTF heard ≤5%) when that migration lands.
+  - Not built: telling speech from singing (option C in the scope study), parked for a later product decision.
+
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
 
 ## Testing infrastructure notes
