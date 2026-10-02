@@ -1,4 +1,8 @@
-# House Lights: the VoxCoach design system (v1)
+# House Lights: the VoxCoach design system (v1.1)
+
+v1.1 (2026-10-02) records five decisions checked against the app: the legacy tab bar stays (it is the
+router), the `singingSession` lighting hook, System / Light / Dark themes, the protected script hooks, and
+the Turkish `lang` fix.
 
 This folder is the source of truth for the VoxCoach redesign.
 
@@ -25,7 +29,8 @@ The app has two lighting states:
 - **House lights down** (`data-house="down"`): singing. A dark stage in every theme. Live
   instruments, Choir World rehearsal, Studio/performance, Vocal World games.
 
-Starting the microphone dims the house. Stopping brings the lights up on the full result.
+Starting to sing dims the house. Stopping brings the lights up on the full result. (The shared mic stays
+open once granted, so the trigger is the singing session, not the mic itself: see §9.)
 
 ## 2. Five rules
 
@@ -105,7 +110,10 @@ to recreate (with `vc-` or area prefixes), not as a library.
 
 ## 6. Navigation
 
-- Tabs stay: Home, **Coach** (was Train), Songs, World, You. Keep `data-shell` values and routing.
+- Tabs stay: Home, **Coach** (was Train), Songs, World, You. Keep `data-shell` values and routing
+  (`data-shell="train"` stays). Restyle the existing tab bar (`.shell-bottomnav`, `.snb-item`) and add
+  `hl-tabbar` / `hl-tab` alongside the old classes. **No new `<nav>` element anywhere.** No verify script
+  matches the visible "Train" label today (checked 2026-10-02); grep `scripts/` again before the rename.
 - Header: wordmark + avatar initial only. Streak and level move into Home. Signed out: "Sign in".
 - Songs: Choir World first ("continue your rehearsal"), then the solo song tools.
 - Choir World song page: a sub-navigation (Rehearse · Song Lab · Trainers · Your Choir · Passport)
@@ -113,8 +121,9 @@ to recreate (with `vc-` or area prefixes), not as a library.
 - Every result ends with one "Next" action chosen from existing signals, plus "Sing it again".
 - Group overlaps without removing anything: the five progress screens under You; Smart Warmup
   and the pre-session warm-up become one warm-up (decide the merge in that phase, ask first).
-- The hidden legacy tab bar (`nav.tabs.legacy-tabs`): check whether any verify script clicks it
-  before removing it.
+- **The hidden legacy tab bar (`nav.tabs.legacy-tabs`) stays. Never remove it.** It is the router:
+  `enterPanel()` opens a panel by clicking `.legacy-tabs button[data-panel=…]`, so every
+  `data-enter-panel` button depends on it. No verify script clicks it directly.
 
 ## 7. Copy
 
@@ -129,8 +138,13 @@ to recreate (with `vc-` or area prefixes), not as a library.
 
 ## 8. Decisions already made
 
-- Theme choice stays as System / Light / Dark. Cyberpunk, Aurora and Velvet Opera are retired;
-  users on them move to Dark. (`data-theme` keeps working; map old values.)
+- **Themes become System / Light / Dark** (today the app has `default`, `cyberpunk`, `aurora` and
+  `velvetopera`, and no light theme). Use the existing `data-theme` on `<html>`: `light`, `dark`, or
+  absent = System (follows `prefers-color-scheme`). Mapping of stored `localStorage.theme` values:
+  `default` → System; `cyberpunk`, `aurora`, `velvetopera` → Dark. New users get System.
+- **Turkish uppercase (phase 1):** set `document.documentElement.lang` to the active language on load
+  and on every language change, so CSS-uppercased labels use the right rules. Verify that Turkish
+  uppercase labels show İ, and mark the roadmap's "Page `lang` stays `en`" entry fixed once it's live.
 - Part colours: Alto sand → rose, Bass red → moss. Red means a missed note or recording only.
 - Tuner lock: the target fills with the voice colour (`--hl-lock`) instead of turning teal.
 - Phase 1 remaps the legacy variables (`--bg`, `--surface`, `--surface-raised`, `--hairline`,
@@ -145,10 +159,38 @@ to recreate (with `vc-` or area prefixes), not as a library.
   mirrored, as now.
 - **Never change or remove an element ID, `data-i18n` key, `data-panel`, `data-shell` or
   `data-enter-panel` value.** The verify scripts depend on them. Add wrappers and classes instead.
+- **Protected script hooks.** The verify scripts also depend on these classes and visible strings
+  (found by scanning `scripts/` on 2026-10-02). Restyle the existing elements and add `hl-` classes
+  alongside the old ones; never remove or rename these:
+  - Classes: `.snb-item[data-shell]`, `.shell-bottomnav`, `.panel.active`, `.vl-gauge-val`,
+    `.vl-gauge-fill`, `.vl-disclaimer`, `.rh-level-name`, `.rh-level-pct`, `.arcade-game-card`, `.vq-row`,
+    `.record-row`, `.record-val`, `.step-label`, `.yc-row`, `.pr-report`, `.why-detail`, `.hub-category-card`,
+    `.cw-hub-feature`, `.cw-lock-only`, `.achievement-card`, `.app-toast`, `.toast`, `.fine-print`,
+    `.scale-dot`, `.j-title`, `.j-sub`, `.active`.
+  - Visible strings (English): "In tune" and "Listening…" (Real-Time Feedback pitch row, Tuner `#centsDisplay`), "In key" (Stay in
+    Key), "Steady" (RTF breath row), "Pushing" (RTF register row), "Head" / "Mixed" / "Chest"
+    (resonance), "Speaker bleed detected" (`#ttResults`), "Fits comfortably in your captured range" /
+    "Outside part of your captured range" (Song Difficulty), "Recording" (recorder button while
+    recording), and the "Songs" tab label (matched as `.shell-nav button, nav button` with that text).
+  - Attribute values read by scripts: `data-rd-part`, `data-boss-type`, `data-boss-difficulty`,
+    `data-glider-mode`, `data-glider-difficulty`, `data-game`, `data-hm-stage`, `data-hm-guess`,
+    `data-profile-lang`.
+- **Before any copy change, grep `scripts/` for the old string.** If a script matches it, change the
+  script and the copy in the same commit and say so in the phase report.
 - Move inline `style=""` attributes into classes as each screen is rebuilt (750 today).
-- Lighting hook: set `document.body.dataset.house = 'down'` when a singing session opens the mic
-  and `'up'` when it stops, through one shared place (the common mic start/stop), with the
-  dimmer from `.hl-dimmer`. Recording features follow the same hook.
+- **Lighting hook (phase 2): `singingSession(isActive)`.** There is no common mic start/stop to hang
+  it on: `initAudio()` opens the shared `micStream` once and never closes it, and the register input
+  and Voice Quality capture open their own streams. Instead:
+  - `singingSession(isActive)` calls `vlSidecar(isActive)` unchanged, plus a separate house-lights
+    watcher using the same `isActive` predicate. The watcher runs even when `vlSidecar` returns early
+    (signed out, `VL_SIDECAR_BLOCKED` browsers).
+  - Replace the 33 `vlSidecar(...)` call sites with `singingSession(...)`, and add direct calls for
+    the singing features that don't use `vlSidecar`: Register Coach, Voice Quality, Studio, Your Choir
+    recording, part rehearsal and the Vocal World games.
+  - The watcher sets `document.body.dataset.house = 'down'` while `isActive()` is true, and `'up'`
+    only after it has been false for 600 ms (with the dimmer from `.hl-dimmer`).
+  - `stopAllActiveSessions()` also brings the lights up.
+  - The pre-session warm-up overlay's lighting is decided when the `warmup` branch is merged.
 - No new dependencies. Fonts come from Google Fonts as today.
 - Keep performance: the voice line already draws per frame; don't add continuous animations on
   paper screens; pause anything that animates when it's off screen.
@@ -162,8 +204,9 @@ time. Phases start only after `wip/noise-gate` and `warmup` are merged into mast
 
 1. **Foundation:** fonts, `house-lights.css`, icon sprite, legacy variable remap, header, tab
    bar (icons, "Coach" label, playhead), developer note removed, emoji replaced in the shell and
-   tab bar, theme choice reduced to System / Light / Dark.
-2. **Lighting:** the shared `data-house` hook, dimmer, the singing layout and the results layout
+   tab bar, theme choice reduced to System / Light / Dark (with the §8 mapping), `<html lang>` set
+   from the active language.
+2. **Lighting:** `singingSession` and the `data-house` watcher (§9), dimmer, the singing layout and the results layout
    as reusable patterns, applied first to the Tuner and Pitch Match only.
 3. **Home and the Coach tab.**
 4. **Vocal Coach tools**, one group at a time, onto the singing and results layouts.
