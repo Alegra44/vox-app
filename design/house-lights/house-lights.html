@@ -1,0 +1,817 @@
+<title>House Lights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Spectral:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="house-lights.css">
+<style>
+/* Page layout: a reading column for the rules, a wide gallery for the screens. Everything else comes from house-lights.css. */
+body{ margin:0; background:var(--hl-bg); color:var(--hl-ink); font-family:var(--hl-font); padding-inline:16px; padding-block:40px 96px; }
+.ds-wrap{ max-width:1200px; margin:0 auto; }
+.ds-col{ max-width:720px; }
+.ds-section{ margin-top:88px; }
+.ds-section > header{ max-width:720px; margin-bottom:28px; display:grid; gap:10px; }
+.ds-h2{ font-size:30px; font-stretch:110%; font-weight:650; letter-spacing:-0.015em; line-height:1.1; margin:0; text-wrap:balance; }
+.ds-lead{ font-size:17px; line-height:1.55; color:var(--hl-ink-2); margin:0; max-width:64ch; }
+p{ margin:0; }
+
+/* hero */
+.ds-hero{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:56px; align-items:center; }
+.ds-title{ font-size:clamp(52px,10vw,96px); font-stretch:118%; font-weight:720; letter-spacing:-0.035em; line-height:.92; margin:10px 0 18px; }
+.ds-statement{ font-size:19px; line-height:1.5; max-width:34em; margin:0 0 22px; }
+.ds-states{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--hl-rule); border:1px solid var(--hl-rule); max-width:520px; }
+.ds-state{ padding:14px 16px; display:grid; gap:6px; }
+.ds-state p{ font-size:14px; color:var(--hl-ink-2); }
+.ds-state strong{ font-size:16px; color:var(--hl-ink); font-weight:650; }
+.ds-tools{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:22px; }
+.ds-demo-wrap{ display:grid; justify-items:center; gap:12px; }
+.ds-demo-wrap > .hl-meta{ text-align:center; max-width:300px; }
+@media (max-width: 900px){ .ds-hero{ grid-template-columns:1fr; } }
+
+/* phone mockups */
+.ds-phone{ width:min(360px,100%); height:760px; border-radius:28px; overflow:hidden; position:relative; display:flex; flex-direction:column; border:1px solid var(--hl-rule-strong); background:var(--hl-bg); color:var(--hl-ink); font-family:var(--hl-font); font-size:16px; line-height:1.5; text-align:left; }
+.ds-phone[data-house="down"]{ border-color:#22252c; }
+.ds-gallery{ display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%,300px), 360px)); justify-content:center; gap:48px 32px; }
+.ds-shot{ margin:0; display:grid; gap:14px; justify-items:center; }
+.ds-shot figcaption{ width:min(360px,100%); display:grid; gap:4px; }
+.ds-shot-name{ font-size:18px; font-weight:650; }
+.ds-shot-light{ font-size:12px; font-stretch:82%; font-weight:650; text-transform:uppercase; letter-spacing:.09em; color:var(--hl-ink-3); }
+.ds-order{ margin:6px 0 0; padding-left:20px; font-size:14px; color:var(--hl-ink-2); display:grid; gap:3px; }
+.ds-order li::marker{ font-weight:700; color:var(--hl-ink); }
+.ds-sample{ font-size:12px; font-stretch:82%; font-weight:650; text-transform:uppercase; letter-spacing:.09em; color:var(--hl-miss); }
+
+/* demo layering */
+.ds-demo .ds-layer{ position:absolute; inset:0; display:flex; flex-direction:column; }
+.ds-demo .ds-layer[hidden]{ display:none !important; }
+.ds-dim{ position:absolute; inset:0; background:#000; opacity:0; pointer-events:none; transition:opacity 320ms var(--hl-ease-house); }
+.ds-dim.is-on{ opacity:1; }
+
+/* ===== mockup screen styles (these become per-area CSS in the app) ===== */
+.m-screen{ flex:1; min-height:0; overflow:hidden; padding:12px 20px 0; display:flex; flex-direction:column; gap:16px; }
+.m-top{ display:flex; align-items:center; justify-content:space-between; min-height:40px; }
+.m-brand{ display:flex; align-items:center; gap:8px; }
+.m-mark{ width:25px; height:18px; fill:none; stroke:var(--hl-voice); stroke-linecap:round; stroke-linejoin:round; }
+.m-word{ font-weight:760; font-stretch:114%; font-size:16px; letter-spacing:-0.01em; }
+.m-avatar{ width:32px; height:32px; border-radius:50%; border:1px solid var(--hl-rule-strong); background:var(--hl-raised); font:inherit; font-size:13px; font-weight:700; color:var(--hl-ink); }
+.m-greet{ display:flex; flex-direction:column; gap:8px; }
+.m-h1{ font-size:30px; }
+.m-h1--tight{ font-size:28px; }
+.m-h2{ font-size:22px; }
+.m-today{ padding:16px; display:flex; flex-direction:column; gap:8px; border:1px solid var(--hl-rule); }
+.m-today .hl-btn{ margin-top:6px; }
+.m-today--s{ gap:6px; padding:14px 16px; }
+.m-staff{ width:100%; height:auto; margin:4px 0 2px; }
+.m-staff-lines line{ stroke:var(--hl-rule-strong); stroke-width:1; }
+.m-notes rect{ fill:var(--part); }
+.m-playhead-ink{ stroke:var(--hl-ink); stroke-width:1.5; }
+.m-week{ display:flex; flex-direction:column; gap:10px; }
+.m-stats{ display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); }
+.m-stats .hl-stat + .hl-stat{ padding-left:12px; border-left:1px solid var(--hl-rule); }
+.m-rowtext{ display:flex; flex-direction:column; min-width:0; }
+.m-group{ margin-bottom:-12px; }
+.m-last{ font-weight:650; color:var(--hl-ink); font-variant-numeric:tabular-nums; }
+.m-alltools{ margin:-6px 0 0; }
+.m-tooltop{ display:grid; grid-template-columns:44px minmax(0,1fr) 44px; align-items:center; min-height:44px; text-align:center; }
+.m-iconbtn{ width:44px; height:44px; display:grid; place-items:center; background:none; border:0; color:var(--hl-ink-2); cursor:pointer; padding:0; }
+.m-sp{ flex:1; }
+
+.m-live{ gap:6px; }
+.m-target{ text-align:center; display:flex; flex-direction:column; align-items:center; gap:0; margin-top:4px; }
+.m-targetnote{ font-size:84px; font-weight:240; margin:2px 0; }
+.m-lane{ width:100%; height:auto; }
+.m-grid{ stroke:var(--hl-rule-strong); stroke-width:1; stroke-dasharray:2 4; }
+.m-axis{ font-family:var(--hl-font); font-size:11px; font-stretch:82%; font-weight:650; fill:var(--hl-ink-3); letter-spacing:.04em; }
+.m-band{ fill:var(--hl-ink); opacity:.07; transition:opacity var(--hl-d2), fill var(--hl-d2); }
+.m-lane.is-locked .m-band{ fill:var(--hl-lock); opacity:.28; }
+.m-tline{ stroke:var(--hl-ink); stroke-width:1.5; opacity:.75; }
+.m-voice{ fill:none; stroke:var(--hl-voice); stroke-width:3; stroke-linecap:round; stroke-linejoin:round; filter:var(--hl-glow); }
+.m-voice-dot{ fill:var(--hl-voice); filter:var(--hl-glow); }
+.m-cents{ display:flex; flex-direction:column; align-items:center; gap:2px; }
+.m-cents-svg{ width:100%; height:auto; }
+.m-tick{ stroke:var(--hl-ink-3); stroke-width:1; }
+.m-tick--big{ stroke:var(--hl-ink-2); stroke-width:1.5; }
+.m-needle{ stroke:var(--hl-voice); stroke-width:3; stroke-linecap:round; filter:var(--hl-glow); }
+.m-centsread{ display:flex; align-items:baseline; gap:8px; margin:0; }
+.m-centsread .hl-metric{ color:var(--hl-voice); min-width:2.2ch; text-align:right; }
+.m-livefoot{ margin-top:auto; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding-bottom:26px; }
+
+.m-score{ display:flex; align-items:flex-end; gap:14px; margin-top:2px; }
+.m-score .hl-h3{ margin-bottom:2px; }
+.m-trace{ width:100%; height:auto; }
+.m-band-paper{ fill:var(--hl-voice-soft); }
+.m-target-ink{ stroke:var(--hl-ink); stroke-width:1.5; }
+.m-voice-paper{ fill:none; stroke:var(--hl-voice); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; }
+.m-missbar{ fill:var(--hl-miss); }
+.m-axis-miss{ fill:var(--hl-miss); }
+.m-dims{ margin:-6px 0 0; border-top:1px solid var(--hl-rule); }
+.m-dims div{ display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--hl-rule); font-size:15px; }
+.m-dims dt{ color:var(--hl-ink-2); }
+.m-dims dd{ margin:0; font-weight:620; font-stretch:108%; }
+.m-next{ display:flex; flex-direction:column; gap:10px; }
+.m-next .hl-btn--quiet{ margin-top:-8px; }
+
+.m-reh{ gap:10px; }
+.m-marks{ display:flex; align-items:center; gap:6px; }
+.m-marks .hl-mark{ color:var(--hl-ink-2); border-color:var(--hl-rule-strong); }
+.m-marks .hl-mark[aria-current="true"]{ background:var(--hl-ink); color:var(--hl-bg); border-color:var(--hl-ink); }
+.m-lanes{ width:100%; height:auto; }
+.m-lane-notes rect{ fill:var(--part); opacity:.36; }
+.m-lane-notes.is-mine rect{ opacity:1; }
+.m-lane-label{ fill:var(--hl-ink-3); }
+.m-lane-label.is-mine{ fill:var(--hl-ink); }
+.m-playhead{ stroke:var(--hl-ink); stroke-width:1.5; opacity:.85; }
+.m-guide{ display:flex; flex-direction:column; gap:0; }
+.m-detents{ display:flex; justify-content:space-between; font-size:12px; font-stretch:78%; font-weight:600; color:var(--hl-ink-3); letter-spacing:.02em; }
+.m-transportrow{ display:flex; align-items:center; justify-content:center; gap:22px; margin-top:auto; }
+.m-trainers{ margin-bottom:14px; }
+
+.m-subnav{ display:flex; gap:18px; overflow-x:auto; border-bottom:1px solid var(--hl-rule); scrollbar-width:none; margin:-6px -20px 0; padding:0 20px; }
+.m-subnav::-webkit-scrollbar{ display:none; }
+.m-subnav button{ flex:none; background:none; border:0; padding:10px 0; font:inherit; font-size:14px; font-weight:620; color:var(--hl-ink-3); border-bottom:2px solid transparent; margin-bottom:-1px; cursor:pointer; }
+.m-subnav button[aria-selected="true"]{ color:var(--hl-ink); border-bottom-color:var(--hl-ink); }
+.m-scorehead{ display:flex; flex-wrap:wrap; row-gap:4px; margin:-8px 0 0; font-size:14px; color:var(--hl-ink-2); }
+.m-scorehead span + span::before{ content:""; display:inline-block; width:1px; height:12px; background:var(--hl-rule-strong); margin:0 10px; vertical-align:-1px; }
+.m-dna{ margin:-6px 0 0; display:grid; gap:7px; }
+.m-dna div{ display:grid; grid-template-columns:minmax(0,1fr) 110px; align-items:center; gap:12px; }
+.m-dna dt{ font-size:14px; font-weight:620; }
+.m-dna dt span{ font-weight:400; color:var(--hl-ink-3); }
+.m-dna dd{ margin:0; height:4px; background:var(--hl-sunk); border-radius:1px; }
+.m-dna dd i{ display:block; height:100%; width:var(--val); background:var(--hl-ink); border-radius:1px; }
+.m-xray{ border-radius:var(--hl-r2); padding:12px 12px 8px; display:flex; flex-direction:column; gap:6px; }
+.m-xray .hl-meta::first-letter{ color:var(--hl-miss); }
+.m-xray-svg{ width:100%; height:auto; }
+.m-xray-svg g rect{ fill:var(--part); }
+.m-xsec{ stroke:var(--hl-rule-strong); stroke-width:1; }
+.m-xlabel{ font-family:var(--hl-font); font-size:11px; font-weight:800; fill:var(--hl-ink-2); }
+.m-xmiss{ fill:var(--hl-miss); }
+.m-xsel{ stroke:var(--hl-ink); stroke-width:1.5; }
+.m-scope{ display:flex; flex-direction:column; gap:4px; }
+.m-scopetable{ width:100%; border-collapse:collapse; font-size:14px; }
+.m-scopetable th{ text-align:left; font-size:12px; font-stretch:82%; font-weight:650; text-transform:uppercase; letter-spacing:.09em; color:var(--hl-ink-3); padding:6px 0; border-bottom:1px solid var(--hl-rule); }
+.m-scopetable td{ padding:6px 0; border-bottom:1px solid var(--hl-rule); }
+.m-scopetable td:first-child{ display:flex; align-items:center; gap:8px; }
+
+.m-perf{ padding-bottom:26px; background:radial-gradient(110% 55% at 50% 40%, rgba(255,255,255,.06), transparent 62%), var(--hl-bg); }
+.m-tally{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:760; letter-spacing:.08em; color:var(--hl-miss); }
+.m-tally i{ width:8px; height:8px; border-radius:50%; background:var(--hl-miss); animation:m-tally 1.6s ease-in-out infinite; }
+@keyframes m-tally{ 50%{ opacity:.3; } }
+.m-perfcenter{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+.m-timecode{ font-size:64px; font-weight:200; }
+.m-perfmeter{ display:flex; flex-direction:column; gap:8px; }
+.m-perffoot{ display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; margin-top:18px; }
+
+.m-range{ width:100%; height:auto; margin-top:-2px; }
+.m-grid-paper{ stroke:var(--hl-rule); stroke-width:1; }
+.m-rangeband{ fill:var(--hl-voice-soft); }
+.m-rangeedge{ fill:none; stroke:var(--hl-voice); stroke-width:2; stroke-linejoin:round; stroke-linecap:round; }
+.m-milestone{ fill:var(--hl-bg); stroke:var(--hl-voice); stroke-width:2; }
+.m-axis-ink{ fill:var(--hl-ink-2); font-size:12px; }
+.m-strengths{ margin:-4px 0 0; border-top:1px solid var(--hl-rule); }
+.m-strengths div{ display:grid; grid-template-columns:minmax(0,1fr) auto 56px; gap:10px; padding:8px 0; border-bottom:1px solid var(--hl-rule); font-size:15px; }
+.m-strengths dt{ color:var(--hl-ink-2); }
+.m-strengths dd{ margin:0; text-align:right; font-weight:620; }
+.m-compare{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.m-compare .hl-btn{ min-height:44px; padding:0 12px; }
+
+/* ===== documentation blocks ===== */
+.ds-principles{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,320px),1fr)); gap:0 40px; counter-reset:p; }
+.ds-principles li{ counter-increment:p; padding:20px 0; border-top:1px solid var(--hl-rule); display:grid; gap:8px; }
+.ds-principles li::before{ content:counter(p); font-size:13px; font-weight:700; font-stretch:82%; color:var(--hl-ink-3); }
+.ds-principles strong{ font-size:19px; font-weight:650; line-height:1.3; }
+.ds-principles p{ color:var(--hl-ink-2); font-size:15.5px; line-height:1.55; max-width:52ch; }
+
+.ds-table-scroll{ overflow-x:auto; border-top:1px solid var(--hl-rule-strong); }
+.ds-table{ width:100%; border-collapse:collapse; font-size:14.5px; line-height:1.45; min-width:720px; }
+.ds-table th{ text-align:left; font-size:12px; font-stretch:82%; font-weight:650; text-transform:uppercase; letter-spacing:.09em; color:var(--hl-ink-3); padding:10px 14px 10px 0; border-bottom:1px solid var(--hl-rule); vertical-align:bottom; }
+.ds-table td{ padding:11px 14px 11px 0; border-bottom:1px solid var(--hl-rule); vertical-align:top; }
+.ds-table td:first-child{ font-weight:620; white-space:nowrap; }
+.ds-table .is-old{ color:var(--hl-ink-3); text-decoration:line-through; text-decoration-color:var(--hl-miss); text-decoration-thickness:1px; }
+
+.ds-swatches{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,300px),1fr)); gap:28px 40px; }
+.ds-swatchset h3{ font-size:17px; font-weight:650; margin:0 0 4px; }
+.ds-swatchset > p{ font-size:14px; color:var(--hl-ink-3); margin-bottom:10px; }
+.ds-sw{ display:grid; grid-template-columns:28px minmax(0,1fr) auto; gap:12px; align-items:center; padding:7px 0; border-bottom:1px solid var(--hl-rule); font-size:14px; }
+.ds-sw i{ width:28px; height:28px; border-radius:2px; box-shadow:inset 0 0 0 1px rgba(127,127,127,.25); }
+.ds-sw code{ font-family:var(--hl-font); font-stretch:85%; font-size:13px; color:var(--hl-ink-3); font-variant-numeric:tabular-nums; }
+.ds-sw span b{ font-weight:620; }
+.ds-sw span em{ font-style:normal; color:var(--hl-ink-3); }
+
+.ds-type{ display:grid; gap:0; }
+.ds-type > div{ display:grid; grid-template-columns:150px minmax(0,1fr); gap:20px; align-items:baseline; padding:16px 0; border-bottom:1px solid var(--hl-rule); }
+.ds-type > div > span:first-child{ font-size:12px; font-stretch:82%; font-weight:650; text-transform:uppercase; letter-spacing:.09em; color:var(--hl-ink-3); }
+@media (max-width:560px){ .ds-type > div{ grid-template-columns:1fr; gap:6px; } }
+
+.ds-icons{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fill, minmax(92px,1fr)); border-top:1px solid var(--hl-rule); border-left:1px solid var(--hl-rule); }
+.ds-icons li{ display:grid; justify-items:center; gap:8px; padding:18px 6px 12px; border-right:1px solid var(--hl-rule); border-bottom:1px solid var(--hl-rule); font-size:12px; color:var(--hl-ink-3); }
+
+.ds-comp{ display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%,330px),1fr)); gap:0 48px; }
+.ds-comp > div{ padding:22px 0; border-top:1px solid var(--hl-rule); display:grid; gap:14px; align-content:start; }
+.ds-comp h3{ font-size:16px; font-weight:650; margin:0; }
+.ds-comp .ds-note{ font-size:14px; color:var(--hl-ink-3); line-height:1.5; }
+.ds-flex{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
+.ds-strip{ display:grid; grid-template-columns:auto 60px minmax(0,1fr) auto auto; gap:12px; align-items:center; padding:10px 0; border-bottom:1px solid var(--hl-rule); }
+.ds-strip .hl-meter{ grid-column:2 / -1; }
+.ds-comp > .ds-stage{ padding:22px 20px; border-top:0; border-radius:var(--hl-r2); }
+.ds-list{ margin:0; padding-left:20px; display:grid; gap:10px; font-size:16px; line-height:1.55; max-width:68ch; }
+.ds-list li::marker{ color:var(--hl-ink-3); }
+.ds-list strong{ font-weight:650; }
+code{ font-family:ui-monospace, Menlo, monospace; font-size:.86em; background:var(--hl-sunk); padding:1px 5px; border-radius:2px; }
+</style>
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <!-- VoxCoach House Lights icons. 24px grid, 1.6 stroke, round caps. Filled glyphs (play, pause, stop, record) set fill in the symbol. -->
+  <symbol id="hl-mark" viewBox="0 0 28 20"><path d="M1.5 15.5c3 0 3.6-11 6.8-11 3 0 2.8 8.6 5.6 8.6 2.2 0 2.5-3.6 4.6-3.6h8" fill="none" stroke-width="2.4"/></symbol>
+
+  <!-- navigation -->
+  <symbol id="hl-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="hl-coach" viewBox="0 0 24 24"><path d="M8.5 3v7.5a3.5 3.5 0 0 0 7 0V3"/><path d="M12 14v7"/><path d="M9.5 21h5"/></symbol>
+  <symbol id="hl-songs" viewBox="0 0 24 24"><path d="M9.5 17.5V5.5l10-2.2v11.4"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="17" cy="14.7" r="2.5"/></symbol>
+  <symbol id="hl-world" viewBox="0 0 24 24"><path d="M3 6.5 9 4.5l6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.5v13M15 6.5v13"/></symbol>
+  <symbol id="hl-you" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0"/></symbol>
+  <symbol id="hl-choir" viewBox="0 0 24 24"><circle cx="6" cy="9.5" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="18" cy="9.5" r="2"/><path d="M2.6 18.5a3.4 3.4 0 0 1 6.8 0"/><path d="M8.6 16a3.4 3.4 0 0 1 6.8 0"/><path d="M14.6 18.5a3.4 3.4 0 0 1 6.8 0"/></symbol>
+
+  <!-- transport (filled) -->
+  <symbol id="hl-play" viewBox="0 0 24 24"><path d="M8 5.2v13.6L18.6 12z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-pause" viewBox="0 0 24 24"><rect x="6.8" y="5" width="3.6" height="14" rx=".8" fill="currentColor" stroke="none"/><rect x="13.6" y="5" width="3.6" height="14" rx=".8" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="1.4" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-record" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-loop" viewBox="0 0 24 24"><path d="M17 7H8a4 4 0 0 0-4 4v1"/><path d="m14 4 3 3-3 3"/><path d="M7 17h9a4 4 0 0 0 4-4v-1"/><path d="m10 20-3-3 3-3"/></symbol>
+
+  <!-- voice and practice -->
+  <symbol id="hl-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21"/></symbol>
+  <symbol id="hl-breath" viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3"/><path d="M3 13h15a3 3 0 1 1-3 3"/><path d="M3 17h6"/></symbol>
+  <symbol id="hl-vibrato" viewBox="0 0 24 24"><path d="M2 12c1.7-4.6 3.3-4.6 5 0s3.3 4.6 5 0 3.3-4.6 5 0 3.3 4.6 5 0"/></symbol>
+  <symbol id="hl-range" viewBox="0 0 24 24"><path d="M12 3.5v17"/><path d="m8 7.5 4-4 4 4"/><path d="m8 16.5 4 4 4-4"/></symbol>
+  <symbol id="hl-keys" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M9 13v6M15 13v6"/><rect x="7.6" y="5" width="2.8" height="8" fill="currentColor" stroke="none"/><rect x="13.6" y="5" width="2.8" height="8" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-ear" viewBox="0 0 24 24"><path d="M7 9a5 5 0 0 1 10 0c0 3.2-3 4-3 7a3 3 0 0 1-6 0"/><path d="M10 10a2 2 0 0 1 4 0c0 1.5-1.5 2-1.5 3.5"/></symbol>
+  <symbol id="hl-metronome" viewBox="0 0 24 24"><path d="M9 3h6l4 18H5z"/><path d="m12 15 5-9"/><path d="M7 17.5h10"/></symbol>
+  <symbol id="hl-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></symbol>
+  <symbol id="hl-steps" viewBox="0 0 24 24"><path d="M4 19h4v-4h4v-4h4V7h4"/></symbol>
+  <symbol id="hl-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-5 3 10 2-5h7"/></symbol>
+
+  <!-- songs and analysis -->
+  <symbol id="hl-score" viewBox="0 0 24 24"><path d="M3 6h18M3 9.5h18M3 13h18M3 16.5h18"/><circle cx="9" cy="16.5" r="2.1" fill="currentColor" stroke="none"/><path d="M11 16.3V4.5"/></symbol>
+  <symbol id="hl-xray" viewBox="0 0 24 24"><path d="M3 6h7M13 6h8M3 10h4M10 10h11M3 14h10M16 14h5M3 18h6M12 18h9"/></symbol>
+  <symbol id="hl-zoom" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15.2 15.2 5.3 5.3"/><path d="M8 10.5h5M10.5 8v5"/></symbol>
+
+  <!-- progress and identity -->
+  <symbol id="hl-chart" viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M7 16.5v-4M12 16.5v-8M17 16.5v-6"/></symbol>
+  <symbol id="hl-medal" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="5.5"/><path d="m8.5 3 3.5 6 3.5-6"/></symbol>
+  <symbol id="hl-flame" viewBox="0 0 24 24"><path d="M12 3c1 4 5.5 5.5 5.5 10.5a5.5 5.5 0 0 1-11 0c0-2.4 1.3-4 2.8-5 .2 1.9 1 3 2.1 3.3C10.8 9.2 11 6 12 3z"/></symbol>
+  <symbol id="hl-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/></symbol>
+  <symbol id="hl-passport" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5"/><circle cx="12" cy="10" r="3"/><path d="M9 16h6"/></symbol>
+  <symbol id="hl-group" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19.5a6 6 0 0 1 12 0"/><path d="M16 5.3a3 3 0 0 1 0 5.4"/><path d="M18 14.6a5.6 5.6 0 0 1 3 4.9"/></symbol>
+
+  <!-- interface -->
+  <symbol id="hl-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 11v5.2"/><path d="M12 7.7v.1"/></symbol>
+  <symbol id="hl-chev" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></symbol>
+  <symbol id="hl-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="hl-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="hl-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+</svg>
+
+
+<div class="ds-wrap">
+
+<header class="ds-hero">
+  <div>
+    <p class="hl-label">VoxCoach design system · v1</p>
+    <h1 class="ds-title">House Lights</h1>
+    <p class="ds-statement">VoxCoach works in two lighting states. With the house lights up, you plan, read and review on paper, laid out like a score. When you start to sing, the lights go down: the stage goes dark and the brightest thing left is your voice.</p>
+    <div class="ds-states">
+      <div class="ds-state" data-house="up"><strong>House lights up</strong><p>Home, Song Lab, results, progress, profile. Ruled paper, ink type, full detail.</p></div>
+      <div class="ds-state" data-house="down"><strong>House lights down</strong><p>Singing, rehearsal, performance, games. A dark stage, only what helps you sing.</p></div>
+    </div>
+    <div class="ds-tools">
+      <div class="hl-seg" role="group" aria-label="Preview theme">
+        <button type="button" data-theme-set="system" aria-selected="true">System</button>
+        <button type="button" data-theme-set="light" aria-selected="false">Light</button>
+        <button type="button" data-theme-set="dark" aria-selected="false">Dark</button>
+      </div>
+      <span class="hl-meta">Dark changes the paper to dusk. The stage stays dark in every theme.</span>
+    </div>
+  </div>
+  <div class="ds-demo-wrap">
+    <div class="ds-phone ds-demo" aria-live="polite"><div class="ds-layer" data-house="up" data-layer="up">
+<div class="m-screen">
+  <div class="m-top"><span class="m-brand"><svg class="m-mark" viewBox="0 0 28 20" aria-hidden="true"><use href="#hl-mark"/></svg><span class="m-word">VoxCoach</span></span><button class="m-avatar" aria-label="Your profile">J</button></div>
+  <div class="m-greet">
+    <p class="hl-label">Thursday · Day 12 of 21</p>
+    <h3 class="hl-h1 m-h1">Good evening, Jordan</h3>
+    <p class="hl-coach">Your alto held through bar 12 yesterday. Tonight, seven minutes on the entrance at bar 9.</p>
+  </div>
+  <section class="m-today hl-raised" aria-label="Tonight's session">
+    <div class="hl-spread"><p class="hl-label">Tonight · 7 min</p><span class="hl-mark" aria-label="Section B">B</span></div>
+    <h4 class="hl-h2 m-h2">Alto entrance, bar 9</h4>
+    <p class="hl-meta">Demo Hymn · I Am the Alto · Ensemble level</p>
+    <svg class="m-staff" viewBox="0 0 296 52" role="img" aria-label="Your alto line for bars 9 to 12"><g class="m-staff-lines"><line x1="0" x2="296" y1="10" y2="10"/><line x1="0" x2="296" y1="18" y2="18"/><line x1="0" x2="296" y1="26" y2="26"/><line x1="0" x2="296" y1="34" y2="34"/><line x1="0" x2="296" y1="42" y2="42"/><line x1="88" x2="88" y1="10" y2="42"/><line x1="188" x2="188" y1="10" y2="42"/></g><g data-part="alto" class="m-notes"><rect x="6" y="27" width="30" height="6" rx="3"/><rect x="40" y="23" width="22" height="6" rx="3"/><rect x="66" y="19" width="22" height="6" rx="3"/><rect x="92" y="23" width="40" height="6" rx="3"/><rect x="140" y="27" width="22" height="6" rx="3"/><rect x="166" y="31" width="22" height="6" rx="3"/><rect x="192" y="27" width="46" height="6" rx="3"/><rect x="244" y="23" width="40" height="6" rx="3"/></g><line class="m-playhead-ink" x1="40" x2="40" y1="4" y2="48"/></svg>
+    <button class="hl-btn hl-btn--sing hl-btn--block" data-demo="down"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-play"/></svg>Start rehearsal</button>
+  </section>
+  <section class="m-week" aria-label="This week">
+    <p class="hl-label">This week</p>
+    <div class="m-stats">
+      <div class="hl-stat"><span class="hl-meta">Range</span><span class="hl-stat-value">G3–D5</span><span class="hl-stat-change hl-delta-up">+1 semitone</span></div>
+      <div class="hl-stat"><span class="hl-meta">Pitch</span><span class="hl-stat-value">84</span><span class="hl-stat-change hl-delta-up">+6</span></div>
+      <div class="hl-stat"><span class="hl-meta">Practised</span><span class="hl-stat-value">5/7</span><span class="hl-stat-change hl-meta">days</span></div>
+    </div>
+  </section>
+  <ul class="hl-list m-continue" aria-label="Pick up where you left off">
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-steps"/></svg><span class="m-rowtext"><span class="hl-item-title">Interval Match</span><span class="hl-item-meta">Intermediate · last score 78</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg><span class="m-rowtext"><span class="hl-item-title">Vocal World</span><span class="hl-item-meta">Pitch Highway · level 4</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+  </ul>
+</div>
+<nav class="hl-tabbar" aria-label="Main"><button class="hl-tab" aria-current="page"><svg class="hl-icon" aria-hidden="true"><use href="#hl-home"/></svg><span>Home</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg><span>Coach</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg><span>Songs</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg><span>World</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span>You</span></button></nav></div><div class="ds-layer" data-house="down" data-layer="down" hidden>
+<div class="m-screen m-reh">
+  <div class="m-tooltop"><button class="m-iconbtn" aria-label="Close"><svg class="hl-icon" aria-hidden="true"><use href="#hl-close"/></svg></button><p class="hl-label">Demo Hymn · Alto</p><button class="m-iconbtn" aria-label="More"><svg class="hl-icon" aria-hidden="true"><use href="#hl-headphones"/></svg></button></div>
+  <div class="m-marks"><span class="hl-mark">A</span><span class="hl-mark" aria-current="true">B</span><span class="hl-mark">C</span><span class="m-sp"></span><span class="hl-meta hl-tabular">Bar 9 of 16</span></div>
+  <svg class="m-lanes" viewBox="0 0 320 244" role="img" aria-label="Five choir parts on a timeline. Your alto line is bold, the others faint, and your voice follows the alto notes up to the playhead."><g data-part="sop" class="m-lane-notes"><rect x="0" y="31.5" width="36" height="5" rx="2.5"/><rect x="44" y="28.5" width="32" height="5" rx="2.5"/><rect x="84" y="31.5" width="56" height="5" rx="2.5"/><rect x="150" y="34.5" width="36" height="5" rx="2.5"/><rect x="196" y="31.5" width="46" height="5" rx="2.5"/><rect x="252" y="28.5" width="64" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="27" text-anchor="end">S</text><g data-part="lead" class="m-lane-notes"><rect x="0" y="67.5" width="56" height="5" rx="2.5"/><rect x="64" y="70.5" width="36" height="5" rx="2.5"/><rect x="110" y="67.5" width="46" height="5" rx="2.5"/><rect x="166" y="64.5" width="40" height="5" rx="2.5"/><rect x="214" y="67.5" width="46" height="5" rx="2.5"/><rect x="270" y="70.5" width="46" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="63" text-anchor="end">L</text><g data-part="alto" class="m-lane-notes is-mine"><rect x="0" y="122.0" width="42" height="12" rx="6.0"/><rect x="50" y="108.0" width="32" height="12" rx="6.0"/><rect x="90" y="115.0" width="26" height="12" rx="6.0"/><rect x="124" y="129.0" width="54" height="12" rx="6.0"/><rect x="186" y="122.0" width="26" height="12" rx="6.0"/><rect x="220" y="115.0" width="40" height="12" rx="6.0"/><rect x="268" y="122.0" width="48" height="12" rx="6.0"/></g><text class="m-axis m-lane-label is-mine" x="320" y="118" text-anchor="end">A · you</text><g data-part="ten" class="m-lane-notes"><rect x="0" y="187.5" width="54" height="5" rx="2.5"/><rect x="62" y="190.5" width="42" height="5" rx="2.5"/><rect x="112" y="187.5" width="56" height="5" rx="2.5"/><rect x="176" y="184.5" width="36" height="5" rx="2.5"/><rect x="220" y="187.5" width="96" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="183" text-anchor="end">T</text><g data-part="bass" class="m-lane-notes"><rect x="0" y="223.5" width="76" height="5" rx="2.5"/><rect x="84" y="226.5" width="66" height="5" rx="2.5"/><rect x="158" y="223.5" width="76" height="5" rx="2.5"/><rect x="242" y="220.5" width="74" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="219" text-anchor="end">B</text><path class="m-voice" d="M0 129 C12 128 26 127 40 128 S52 116 60 115 S80 120 90 121 S110 122 122 134 S128 136 132 136"/><line class="m-playhead" x1="132" x2="132" y1="14" y2="240"/></svg>
+  <div class="m-guide">
+    <div class="hl-spread"><p class="hl-label">Guide</p><p class="hl-meta hl-tabular">50% · Ensemble</p></div>
+    <input class="hl-fader" type="range" min="0" max="4" step="1" value="2" data-part="alto" style="--val:50%" aria-label="Rehearsal level: Ensemble, guide at 50%">
+    <div class="m-detents" aria-hidden="true"><span>Learn</span><span>Guided</span><span>Ensemble</span><span>Indep.</span><span>Perform</span></div>
+  </div>
+  <div class="m-transportrow">
+    <button class="hl-key" data-key="loop" aria-pressed="true">Loop B</button>
+    <button class="hl-transport hl-transport--primary" aria-label="Pause" data-demo="up"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pause"/></svg></button>
+    <button class="hl-key" data-key="acappella" aria-pressed="false">A cappella</button>
+  </div>
+  <button class="hl-btn hl-btn--quiet hl-btn--block m-trainers">6 trainers for this song<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></button>
+</div></div><div class="ds-dim" aria-hidden="true"></div></div>
+    <p class="hl-meta">Press <strong>Start rehearsal</strong>, then pause. That's the change every singing screen makes.</p>
+  </div>
+</header>
+
+<section class="ds-section" aria-labelledby="screens">
+  <header>
+    <h2 class="ds-h2" id="screens">Eight screens, eight personalities, one product</h2>
+    <p class="ds-lead">Each screen answers the brief's test under its name: what you notice first, second, and what waits until you ask. Every feature shown exists in the app today.</p>
+    <p class="ds-sample">Example data: names, scores and dates are illustrations</p>
+  </header>
+  <div class="ds-gallery"><figure class="ds-shot"><div class="ds-phone" data-house="up" data-screen="home">
+<div class="m-screen">
+  <div class="m-top"><span class="m-brand"><svg class="m-mark" viewBox="0 0 28 20" aria-hidden="true"><use href="#hl-mark"/></svg><span class="m-word">VoxCoach</span></span><button class="m-avatar" aria-label="Your profile">J</button></div>
+  <div class="m-greet">
+    <p class="hl-label">Thursday · Day 12 of 21</p>
+    <h3 class="hl-h1 m-h1">Good evening, Jordan</h3>
+    <p class="hl-coach">Your alto held through bar 12 yesterday. Tonight, seven minutes on the entrance at bar 9.</p>
+  </div>
+  <section class="m-today hl-raised" aria-label="Tonight's session">
+    <div class="hl-spread"><p class="hl-label">Tonight · 7 min</p><span class="hl-mark" aria-label="Section B">B</span></div>
+    <h4 class="hl-h2 m-h2">Alto entrance, bar 9</h4>
+    <p class="hl-meta">Demo Hymn · I Am the Alto · Ensemble level</p>
+    <svg class="m-staff" viewBox="0 0 296 52" role="img" aria-label="Your alto line for bars 9 to 12"><g class="m-staff-lines"><line x1="0" x2="296" y1="10" y2="10"/><line x1="0" x2="296" y1="18" y2="18"/><line x1="0" x2="296" y1="26" y2="26"/><line x1="0" x2="296" y1="34" y2="34"/><line x1="0" x2="296" y1="42" y2="42"/><line x1="88" x2="88" y1="10" y2="42"/><line x1="188" x2="188" y1="10" y2="42"/></g><g data-part="alto" class="m-notes"><rect x="6" y="27" width="30" height="6" rx="3"/><rect x="40" y="23" width="22" height="6" rx="3"/><rect x="66" y="19" width="22" height="6" rx="3"/><rect x="92" y="23" width="40" height="6" rx="3"/><rect x="140" y="27" width="22" height="6" rx="3"/><rect x="166" y="31" width="22" height="6" rx="3"/><rect x="192" y="27" width="46" height="6" rx="3"/><rect x="244" y="23" width="40" height="6" rx="3"/></g><line class="m-playhead-ink" x1="40" x2="40" y1="4" y2="48"/></svg>
+    <button class="hl-btn hl-btn--sing hl-btn--block" data-demo="down"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-play"/></svg>Start rehearsal</button>
+  </section>
+  <section class="m-week" aria-label="This week">
+    <p class="hl-label">This week</p>
+    <div class="m-stats">
+      <div class="hl-stat"><span class="hl-meta">Range</span><span class="hl-stat-value">G3–D5</span><span class="hl-stat-change hl-delta-up">+1 semitone</span></div>
+      <div class="hl-stat"><span class="hl-meta">Pitch</span><span class="hl-stat-value">84</span><span class="hl-stat-change hl-delta-up">+6</span></div>
+      <div class="hl-stat"><span class="hl-meta">Practised</span><span class="hl-stat-value">5/7</span><span class="hl-stat-change hl-meta">days</span></div>
+    </div>
+  </section>
+  <ul class="hl-list m-continue" aria-label="Pick up where you left off">
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-steps"/></svg><span class="m-rowtext"><span class="hl-item-title">Interval Match</span><span class="hl-item-meta">Intermediate · last score 78</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg><span class="m-rowtext"><span class="hl-item-title">Vocal World</span><span class="hl-item-meta">Pitch Highway · level 4</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+  </ul>
+</div>
+<nav class="hl-tabbar" aria-label="Main"><button class="hl-tab" aria-current="page"><svg class="hl-icon" aria-hidden="true"><use href="#hl-home"/></svg><span>Home</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg><span>Coach</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg><span>Songs</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg><span>World</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span>You</span></button></nav></div><figcaption><span class="ds-shot-name">Home</span><span class="ds-shot-light">House up · calm</span><ol class="ds-order"><li>Tonight's one session and its start button.</li><li>This week's three numbers, then what you were working on.</li><li>Everything else lives in the tabs.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="up" data-screen="coach">
+<div class="m-screen">
+  <div class="m-top"><span class="m-brand"><svg class="m-mark" viewBox="0 0 28 20" aria-hidden="true"><use href="#hl-mark"/></svg><span class="m-word">VoxCoach</span></span><button class="m-avatar" aria-label="Your profile">J</button></div>
+  <h3 class="hl-h1 m-h1 m-h1--tight">Coach</h3>
+  <section class="m-today hl-raised m-today--s" aria-label="Today's focus">
+    <p class="hl-label">Today's focus · 12 min</p>
+    <h4 class="hl-h3">Intervals, then range</h4>
+    <p class="hl-meta">Picked from your Skill Profile. Your weakest area gets the most time.</p>
+    <button class="hl-btn hl-btn--sing hl-btn--block"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-play"/></svg>Start today's set</button>
+  </section>
+  <p class="hl-label m-group">Pitch</p>
+  <ul class="hl-list">
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg><span class="m-rowtext"><span class="hl-item-title">Tuner</span><span class="hl-item-meta">Find any note, live</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-steps"/></svg><span class="m-rowtext"><span class="hl-item-title">Daily Exercises</span><span class="hl-item-meta">Pitch, Interval, Scale Run</span></span><span class="hl-item-end"><span class="m-last">78</span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-keys"/></svg><span class="m-rowtext"><span class="hl-item-title">Key Trainer</span><span class="hl-item-meta">Your key and transposition</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+  </ul>
+  <p class="hl-label m-group">Range and register</p>
+  <ul class="hl-list">
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-range"/></svg><span class="m-rowtext"><span class="hl-item-title">Range Finder</span><span class="hl-item-meta">Saved range G3–D5</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+    <li><button class="hl-item"><svg class="hl-icon" aria-hidden="true"><use href="#hl-vibrato"/></svg><span class="m-rowtext"><span class="hl-item-title">Register Coach</span><span class="hl-item-meta">Chest, mix and head voice</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>
+  </ul>
+  <p class="m-alltools"><button class="hl-btn hl-btn--quiet">All 23 tools<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></button></p>
+</div>
+<nav class="hl-tabbar" aria-label="Main"><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-home"/></svg><span>Home</span></button><button class="hl-tab" aria-current="page"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg><span>Coach</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg><span>Songs</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg><span>World</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span>You</span></button></nav></div><figcaption><span class="ds-shot-name">Coach</span><span class="ds-shot-light">House up · ordered</span><ol class="ds-order"><li>Today's focus, picked by the existing Skill Profile.</li><li>The tools, grouped, each with your last result.</li><li>All 23 tools stay one tap away.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="down" data-screen="live">
+<div class="m-screen m-live">
+  <div class="m-tooltop"><button class="m-iconbtn" aria-label="Close"><svg class="hl-icon" aria-hidden="true"><use href="#hl-close"/></svg></button><p class="hl-label">Pitch Match · Intermediate</p><button class="m-iconbtn" aria-label="More"><svg class="hl-icon" aria-hidden="true"><use href="#hl-info"/></svg></button></div>
+  <div class="m-target"><p class="hl-label">Sing</p><p class="hl-display hl-note m-targetnote">A3</p><p class="hl-meta hl-tabular">220.0 Hz</p></div>
+  <svg class="m-lane" viewBox="0 0 320 260" role="img" aria-label="Live pitch lane: your voice approaching the target A3"><line class="m-grid" x1="34" x2="320" y1="70" y2="70"/><text class="m-axis" x="0" y="74">B3</text><line class="m-grid" x1="34" x2="320" y1="140" y2="140"/><text class="m-axis" x="0" y="144">A3</text><line class="m-grid" x1="34" x2="320" y1="210" y2="210"/><text class="m-axis" x="0" y="214">G3</text><rect class="m-band" x="34" y="128" width="286" height="24"/><line class="m-tline" x1="34" x2="320" y1="140" y2="140"/><path class="m-voice" data-live="path" d="M34 196 C60 196 74 182 96 166 S130 133 152 139 S186 152 206 146 S246 142 266 147 S296 148 312 147"/><circle class="m-voice-dot" data-live="dot" cx="312" cy="147" r="5"/></svg>
+  <div class="m-cents"><svg class="m-cents-svg" viewBox="0 0 320 44" role="img" aria-label="Cents meter, 8 cents flat"><line class="m-tick m-tick--big" x1="20" x2="20" y1="8" y2="24"/><line class="m-tick" x1="48" x2="48" y1="12" y2="24"/><line class="m-tick" x1="76" x2="76" y1="12" y2="24"/><line class="m-tick" x1="104" x2="104" y1="12" y2="24"/><line class="m-tick" x1="132" x2="132" y1="12" y2="24"/><line class="m-tick m-tick--big" x1="160" x2="160" y1="8" y2="24"/><line class="m-tick" x1="188" x2="188" y1="12" y2="24"/><line class="m-tick" x1="216" x2="216" y1="12" y2="24"/><line class="m-tick" x1="244" x2="244" y1="12" y2="24"/><line class="m-tick" x1="272" x2="272" y1="12" y2="24"/><line class="m-tick m-tick--big" x1="300" x2="300" y1="8" y2="24"/><text class="m-axis" x="20" y="40" text-anchor="middle">−50</text><text class="m-axis" x="160" y="40" text-anchor="middle">0</text><text class="m-axis" x="300" y="40" text-anchor="middle">+50</text><line class="m-needle" data-live="needle" x1="137.6" x2="137.6" y1="2" y2="28"/></svg><p class="m-centsread"><span class="hl-metric hl-tabular" data-live="cents">−8</span><span class="hl-meta" data-live="word">cents · a little flat</span></p></div>
+  <div class="m-livefoot"><span class="hl-meta hl-tabular">0:07 / 0:12</span><button class="hl-transport" aria-label="Stop"><svg class="hl-icon" aria-hidden="true"><use href="#hl-stop"/></svg></button><span class="m-sp"></span></div>
+</div></div><figcaption><span class="ds-shot-name">Coach, while singing</span><span class="ds-shot-light">House down · nothing extra</span><ol class="ds-order"><li>The target note and your voice line approaching it.</li><li>How far off you are, in cents.</li><li>Scores, history and explanations wait until you stop.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="up" data-screen="result">
+<div class="m-screen">
+  <div class="m-tooltop"><button class="m-iconbtn" aria-label="Close"><svg class="hl-icon" aria-hidden="true"><use href="#hl-close"/></svg></button><p class="hl-label">Pitch Match · Take 3</p><button class="m-iconbtn" aria-label="More"><svg class="hl-icon" aria-hidden="true"><use href="#hl-info"/></svg></button></div>
+  <div class="m-score"><span class="hl-metric-l">86</span><div><p class="hl-h3">Pitch accuracy</p><p class="hl-stat-change hl-delta-up">+4 on your last take</p></div></div>
+  <svg class="m-trace" viewBox="0 0 312 132" role="img" aria-label="Your take against the target: on pitch until 8 seconds, then drifting flat"><rect class="m-band-paper" x="10" y="48" width="292" height="24"/><line class="m-target-ink" x1="10" x2="302" y1="60" y2="60"/><path class="m-voice-paper" d="M10 104 C22 104 26 66 36 60 S60 57 90 59 S150 61 180 58 S210 62 226 66 S258 80 280 84 S296 86 302 86"/><rect class="m-missbar" x="226" y="112" width="76" height="4" rx="1"/><text class="m-axis" x="10" y="128">0 s</text><text class="m-axis" x="156" y="128" text-anchor="middle">6 s</text><text class="m-axis" x="302" y="128" text-anchor="end">12 s</text><text class="m-axis m-axis-miss" x="264" y="106" text-anchor="middle">flat</text></svg>
+  <dl class="m-dims">
+    <div><dt>Stability</dt><dd class="hl-tabular">74</dd></div>
+    <div><dt>Time to the note</dt><dd class="hl-tabular">0.4 s</dd></div>
+    <div><dt>Held within ±25 cents</dt><dd class="hl-tabular">8.6 of 12 s</dd></div>
+  </dl>
+  <section class="m-next" aria-label="What to work on next">
+    <p class="hl-label">What to work on next</p>
+    <p class="hl-coach">You find the note fast, then drift flat once your breath runs low. A 12-second hold builds the support.</p>
+    <button class="hl-btn hl-btn--ink hl-btn--block">Next: breath hold, 12 s<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></button>
+    <button class="hl-btn hl-btn--quiet hl-btn--block">Sing it again</button>
+  </section>
+  <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg>How this is measured</summary><p>Accuracy is 100 minus 0.6 × your average distance from the target, in cents. Expression isn't scored: there's no reliable way to measure it.</p></details>
+</div></div><figcaption><span class="ds-shot-name">Coach, after singing</span><span class="ds-shot-light">House up · full feedback</span><ol class="ds-order"><li>The one number that matters, then what happened in the take.</li><li>What to work on next, with a button that goes there.</li><li>How it's measured, folded away.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="down" data-screen="rehearsal">
+<div class="m-screen m-reh">
+  <div class="m-tooltop"><button class="m-iconbtn" aria-label="Close"><svg class="hl-icon" aria-hidden="true"><use href="#hl-close"/></svg></button><p class="hl-label">Demo Hymn · Alto</p><button class="m-iconbtn" aria-label="More"><svg class="hl-icon" aria-hidden="true"><use href="#hl-headphones"/></svg></button></div>
+  <div class="m-marks"><span class="hl-mark">A</span><span class="hl-mark" aria-current="true">B</span><span class="hl-mark">C</span><span class="m-sp"></span><span class="hl-meta hl-tabular">Bar 9 of 16</span></div>
+  <svg class="m-lanes" viewBox="0 0 320 244" role="img" aria-label="Five choir parts on a timeline. Your alto line is bold, the others faint, and your voice follows the alto notes up to the playhead."><g data-part="sop" class="m-lane-notes"><rect x="0" y="31.5" width="36" height="5" rx="2.5"/><rect x="44" y="28.5" width="32" height="5" rx="2.5"/><rect x="84" y="31.5" width="56" height="5" rx="2.5"/><rect x="150" y="34.5" width="36" height="5" rx="2.5"/><rect x="196" y="31.5" width="46" height="5" rx="2.5"/><rect x="252" y="28.5" width="64" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="27" text-anchor="end">S</text><g data-part="lead" class="m-lane-notes"><rect x="0" y="67.5" width="56" height="5" rx="2.5"/><rect x="64" y="70.5" width="36" height="5" rx="2.5"/><rect x="110" y="67.5" width="46" height="5" rx="2.5"/><rect x="166" y="64.5" width="40" height="5" rx="2.5"/><rect x="214" y="67.5" width="46" height="5" rx="2.5"/><rect x="270" y="70.5" width="46" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="63" text-anchor="end">L</text><g data-part="alto" class="m-lane-notes is-mine"><rect x="0" y="122.0" width="42" height="12" rx="6.0"/><rect x="50" y="108.0" width="32" height="12" rx="6.0"/><rect x="90" y="115.0" width="26" height="12" rx="6.0"/><rect x="124" y="129.0" width="54" height="12" rx="6.0"/><rect x="186" y="122.0" width="26" height="12" rx="6.0"/><rect x="220" y="115.0" width="40" height="12" rx="6.0"/><rect x="268" y="122.0" width="48" height="12" rx="6.0"/></g><text class="m-axis m-lane-label is-mine" x="320" y="118" text-anchor="end">A · you</text><g data-part="ten" class="m-lane-notes"><rect x="0" y="187.5" width="54" height="5" rx="2.5"/><rect x="62" y="190.5" width="42" height="5" rx="2.5"/><rect x="112" y="187.5" width="56" height="5" rx="2.5"/><rect x="176" y="184.5" width="36" height="5" rx="2.5"/><rect x="220" y="187.5" width="96" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="183" text-anchor="end">T</text><g data-part="bass" class="m-lane-notes"><rect x="0" y="223.5" width="76" height="5" rx="2.5"/><rect x="84" y="226.5" width="66" height="5" rx="2.5"/><rect x="158" y="223.5" width="76" height="5" rx="2.5"/><rect x="242" y="220.5" width="74" height="5" rx="2.5"/></g><text class="m-axis m-lane-label" x="320" y="219" text-anchor="end">B</text><path class="m-voice" d="M0 129 C12 128 26 127 40 128 S52 116 60 115 S80 120 90 121 S110 122 122 134 S128 136 132 136"/><line class="m-playhead" x1="132" x2="132" y1="14" y2="240"/></svg>
+  <div class="m-guide">
+    <div class="hl-spread"><p class="hl-label">Guide</p><p class="hl-meta hl-tabular">50% · Ensemble</p></div>
+    <input class="hl-fader" type="range" min="0" max="4" step="1" value="2" data-part="alto" style="--val:50%" aria-label="Rehearsal level: Ensemble, guide at 50%">
+    <div class="m-detents" aria-hidden="true"><span>Learn</span><span>Guided</span><span>Ensemble</span><span>Indep.</span><span>Perform</span></div>
+  </div>
+  <div class="m-transportrow">
+    <button class="hl-key" data-key="loop" aria-pressed="true">Loop B</button>
+    <button class="hl-transport hl-transport--primary" aria-label="Pause" data-demo="up"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pause"/></svg></button>
+    <button class="hl-key" data-key="acappella" aria-pressed="false">A cappella</button>
+  </div>
+  <button class="hl-btn hl-btn--quiet hl-btn--block m-trainers">6 trainers for this song<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></button>
+</div></div><figcaption><span class="ds-shot-name">Choir World rehearsal</span><span class="ds-shot-light">House down · immersive</span><ol class="ds-order"><li>Your part, bold, with your voice on it.</li><li>The other four parts and where you are in the song.</li><li>The six trainers sit behind one button.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="up" data-screen="songlab">
+<div class="m-screen">
+  <div class="m-tooltop"><button class="m-iconbtn" aria-label="Close"><svg class="hl-icon" aria-hidden="true"><use href="#hl-chev"/></svg></button><p class="hl-label">Choir World</p><button class="m-iconbtn" aria-label="More"><svg class="hl-icon" aria-hidden="true"><use href="#hl-info"/></svg></button></div>
+  <div class="m-subnav" role="tablist" aria-label="Choir World"><button role="tab">Rehearse</button><button role="tab" aria-selected="true">Song Lab</button><button role="tab">Trainers</button><button role="tab">Your Choir</button><button role="tab">Passport</button></div>
+  <h3 class="hl-h1 m-h1 m-h1--tight">Autumn Requiem</h3>
+  <p class="m-scorehead"><span>A minor</span><span>12 chords</span><span>Professional</span><span>Wide leaps</span></p>
+  <p class="hl-label m-group">Song DNA</p>
+  <dl class="m-dna">
+    <div><dt>Pitch <span>range demand</span></dt><dd><i style="--val:78%"></i></dd></div>
+    <div><dt>Agility <span>jump demand</span></dt><dd><i style="--val:86%"></i></dd></div>
+    <div><dt>Breath <span>pace demand</span></dt><dd><i style="--val:52%"></i></dd></div>
+    <div><dt>Register <span>passaggio crossing</span></dt><dd><i style="--val:64%"></i></dd></div>
+  </dl>
+  <div class="m-xray" data-house="down">
+    <div class="hl-spread"><p class="hl-label">Sonic X-Ray</p><p class="hl-meta">▲ difficult moment</p></div>
+    <svg class="m-xray-svg" viewBox="0 0 310 132" role="img" aria-label="Sonic X-Ray: five part lanes across sections A to D, with three difficult moments marked"><line class="m-xsec" x1="4" x2="4" y1="10" y2="122"/><text class="m-xlabel" x="9" y="20">A</text><line class="m-xsec" x1="80" x2="80" y1="10" y2="122"/><text class="m-xlabel" x="85" y="20">B</text><line class="m-xsec" x1="160" x2="160" y1="10" y2="122"/><text class="m-xlabel" x="165" y="20">C</text><line class="m-xsec" x1="232" x2="232" y1="10" y2="122"/><text class="m-xlabel" x="237" y="20">D</text><g data-part="sop"><rect x="4" y="26.5" width="16" height="4" rx="1"/><rect x="22" y="25" width="22" height="4" rx="1"/><rect x="46" y="31" width="8" height="4" rx="1"/><rect x="56" y="28" width="8" height="4" rx="1"/><rect x="66" y="25" width="28" height="4" rx="1"/><rect x="96" y="26.5" width="28" height="4" rx="1"/><rect x="126" y="25" width="8" height="4" rx="1"/><rect x="136" y="29.5" width="22" height="4" rx="1"/><rect x="160" y="26.5" width="8" height="4" rx="1"/><rect x="170" y="31" width="8" height="4" rx="1"/><rect x="180" y="25" width="22" height="4" rx="1"/><rect x="204" y="25" width="28" height="4" rx="1"/><rect x="234" y="31" width="12" height="4" rx="1"/><rect x="248" y="31" width="8" height="4" rx="1"/><rect x="258" y="29.5" width="28" height="4" rx="1"/><rect x="288" y="26.5" width="8" height="4" rx="1"/><rect x="298" y="31" width="6" height="4" rx="1"/></g><g data-part="lead"><rect x="4" y="48" width="12" height="4" rx="1"/><rect x="18" y="46.5" width="22" height="4" rx="1"/><rect x="42" y="45" width="28" height="4" rx="1"/><rect x="72" y="48" width="28" height="4" rx="1"/><rect x="102" y="46.5" width="28" height="4" rx="1"/><rect x="132" y="51" width="8" height="4" rx="1"/><rect x="142" y="46.5" width="28" height="4" rx="1"/><rect x="172" y="45" width="16" height="4" rx="1"/><rect x="190" y="45" width="28" height="4" rx="1"/><rect x="220" y="45" width="28" height="4" rx="1"/><rect x="250" y="46.5" width="28" height="4" rx="1"/><rect x="280" y="51" width="22" height="4" rx="1"/></g><g data-part="alto"><rect x="4" y="68" width="22" height="4" rx="1"/><rect x="28" y="71" width="22" height="4" rx="1"/><rect x="52" y="68" width="22" height="4" rx="1"/><rect x="76" y="66.5" width="16" height="4" rx="1"/><rect x="94" y="66.5" width="12" height="4" rx="1"/><rect x="108" y="71" width="8" height="4" rx="1"/><rect x="118" y="71" width="16" height="4" rx="1"/><rect x="136" y="68" width="22" height="4" rx="1"/><rect x="160" y="68" width="22" height="4" rx="1"/><rect x="184" y="65" width="28" height="4" rx="1"/><rect x="214" y="71" width="8" height="4" rx="1"/><rect x="224" y="66.5" width="22" height="4" rx="1"/><rect x="248" y="66.5" width="16" height="4" rx="1"/><rect x="266" y="69.5" width="22" height="4" rx="1"/><rect x="290" y="65" width="8" height="4" rx="1"/></g><g data-part="ten"><rect x="4" y="91" width="28" height="4" rx="1"/><rect x="34" y="88" width="16" height="4" rx="1"/><rect x="52" y="91" width="16" height="4" rx="1"/><rect x="70" y="91" width="22" height="4" rx="1"/><rect x="94" y="85" width="22" height="4" rx="1"/><rect x="118" y="88" width="8" height="4" rx="1"/><rect x="128" y="85" width="22" height="4" rx="1"/><rect x="152" y="88" width="8" height="4" rx="1"/><rect x="162" y="89.5" width="28" height="4" rx="1"/><rect x="192" y="89.5" width="16" height="4" rx="1"/><rect x="210" y="85" width="16" height="4" rx="1"/><rect x="228" y="88" width="22" height="4" rx="1"/><rect x="252" y="91" width="12" height="4" rx="1"/><rect x="266" y="89.5" width="8" height="4" rx="1"/><rect x="276" y="86.5" width="8" height="4" rx="1"/><rect x="286" y="86.5" width="16" height="4" rx="1"/></g><g data-part="bass"><rect x="4" y="109.5" width="12" height="4" rx="1"/><rect x="18" y="109.5" width="22" height="4" rx="1"/><rect x="42" y="106.5" width="8" height="4" rx="1"/><rect x="52" y="109.5" width="22" height="4" rx="1"/><rect x="76" y="108" width="28" height="4" rx="1"/><rect x="106" y="109.5" width="12" height="4" rx="1"/><rect x="120" y="108" width="28" height="4" rx="1"/><rect x="150" y="108" width="22" height="4" rx="1"/><rect x="174" y="106.5" width="22" height="4" rx="1"/><rect x="198" y="105" width="12" height="4" rx="1"/><rect x="212" y="106.5" width="12" height="4" rx="1"/><rect x="226" y="106.5" width="12" height="4" rx="1"/><rect x="240" y="109.5" width="8" height="4" rx="1"/><rect x="250" y="106.5" width="28" height="4" rx="1"/><rect x="280" y="108" width="16" height="4" rx="1"/><rect x="298" y="106.5" width="6" height="4" rx="1"/></g><path class="m-xmiss" d="M114 124 L122 124 L118 117 Z"/><path class="m-xmiss" d="M200 124 L208 124 L204 117 Z"/><path class="m-xmiss" d="M264 124 L272 124 L268 117 Z"/><line class="m-xsel" x1="204" x2="204" y1="10" y2="124"/></svg>
+  </div>
+  <div class="m-scope">
+    <div class="hl-spread"><p class="hl-label">Music Microscope · bar 14</p><p class="hl-meta">A minor</p></div>
+    <table class="m-scopetable">
+      <thead><tr><th>Part</th><th>Note</th><th>vs Lead</th></tr></thead>
+      <tbody>
+        <tr data-part="sop"><td><span class="hl-part-dot"></span>Soprano</td><td class="hl-note">E5</td><td>5th above</td></tr>
+        <tr data-part="lead"><td><span class="hl-part-dot"></span>Lead</td><td class="hl-note">A4</td><td>—</td></tr>
+        <tr data-part="alto"><td><span class="hl-part-dot"></span>Alto</td><td class="hl-note">C5</td><td>minor 3rd above</td></tr>
+        <tr data-part="ten"><td><span class="hl-part-dot"></span>Tenor</td><td class="hl-note">E4</td><td>4th below</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></div><figcaption><span class="ds-shot-name">Song Lab</span><span class="ds-shot-light">House up, with an X-ray lightbox</span><ol class="ds-order"><li>The song's score header and its Song DNA.</li><li>The Sonic X-Ray, where the hard moments are.</li><li>The Microscope opens on whatever you tap.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="down" data-screen="perform">
+<div class="m-screen m-perf">
+  <div class="hl-spread"><p class="hl-label">Studio · Take 3</p><span class="m-tally"><i></i>REC</span></div>
+  <div class="m-perfcenter">
+    <p class="hl-display hl-tabular m-timecode">01:24.6</p>
+    <p class="hl-meta">Autumn Requiem · Alto</p>
+  </div>
+  <div class="m-perfmeter"><p class="hl-label">Input</p><div class="hl-meter" style="--val:62%"><i></i></div></div>
+  <div class="m-perffoot"><button class="hl-transport hl-transport--rec" aria-label="Stop recording"><svg class="hl-icon" aria-hidden="true"><use href="#hl-stop"/></svg></button><p class="hl-meta">No scores while you sing. The report opens when you stop.</p></div>
+</div></div><figcaption><span class="ds-shot-name">Performance</span><span class="ds-shot-light">House down · cinematic</span><ol class="ds-order"><li>The take timecode and the red tally.</li><li>Your input level.</li><li>No scores at all until the take ends.</li></ol></figcaption></figure><figure class="ds-shot"><div class="ds-phone" data-house="up" data-screen="progress">
+<div class="m-screen">
+  <div class="m-top"><span class="m-brand"><svg class="m-mark" viewBox="0 0 28 20" aria-hidden="true"><use href="#hl-mark"/></svg><span class="m-word">VoxCoach</span></span><button class="m-avatar" aria-label="Your profile">J</button></div>
+  <p class="hl-label">Your voice · Day 12 of 21</p>
+  <h3 class="hl-h1 m-h1">Your range is opening up</h3>
+  <p class="hl-coach">Your top note rose from B4 to D5 since Day 1. The low end held at G3.</p>
+  <svg class="m-range" viewBox="0 0 312 192" role="img" aria-label="Range over 12 days: the top note rises from B4 to D5, the bottom stays near G3"><line class="m-grid-paper" x1="34" x2="304" y1="168.0" y2="168.0"/><text class="m-axis" x="0" y="172.0">C3</text><line class="m-grid-paper" x1="34" x2="304" y1="100.8" y2="100.8"/><text class="m-axis" x="0" y="104.8">C4</text><line class="m-grid-paper" x1="34" x2="304" y1="33.6" y2="33.6"/><text class="m-axis" x="0" y="37.6">C5</text><polygon class="m-rangeband" points="34.0,39.2 58.5,39.2 83.0,33.6 107.5,39.2 132.0,33.6 156.5,33.6 181.0,28.0 205.5,33.6 230.0,22.4 254.5,28.0 279.0,22.4 303.5,22.4 303.5,128.8 279.0,134.4 254.5,128.8 230.0,128.8 205.5,128.8 181.0,128.8 156.5,123.2 132.0,128.8 107.5,128.8 83.0,123.2 58.5,123.2 34.0,117.6"/><polyline class="m-rangeedge" points="34.0,39.2 58.5,39.2 83.0,33.6 107.5,39.2 132.0,33.6 156.5,33.6 181.0,28.0 205.5,33.6 230.0,22.4 254.5,28.0 279.0,22.4 303.5,22.4"/><polyline class="m-rangeedge" points="34.0,117.6 58.5,123.2 83.0,123.2 107.5,128.8 132.0,128.8 156.5,123.2 181.0,128.8 205.5,128.8 230.0,128.8 254.5,128.8 279.0,134.4 303.5,128.8"/><circle class="m-milestone" cx="230.0" cy="22.4" r="4.5"/><text class="m-axis m-axis-ink" x="222.0" y="12.399999999999999" text-anchor="end">Day 9 · first clean D5</text><text class="m-axis" x="30.0" y="186" text-anchor="start">Day 1</text><text class="m-axis" x="156.5" y="186" text-anchor="middle">6</text><text class="m-axis" x="303.5" y="186" text-anchor="middle">12</text></svg>
+  <dl class="m-strengths">
+    <div><dt>Pitch accuracy</dt><dd class="hl-tabular">84</dd><dd class="hl-delta-up hl-tabular">+6</dd></div>
+    <div><dt>Stability</dt><dd class="hl-tabular">71</dd><dd class="hl-delta-up hl-tabular">+3</dd></div>
+    <div><dt>Agility</dt><dd class="hl-tabular">58</dd><dd class="hl-delta-up hl-tabular">+9</dd></div>
+    <div><dt>Breath hold</dt><dd class="hl-tabular">14.2 s</dd><dd class="hl-delta-up hl-tabular">+2.1 s</dd></div>
+  </dl>
+  <div class="m-compare"><button class="hl-btn"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-play"/></svg>Day 1</button><button class="hl-btn"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-play"/></svg>Today</button></div>
+</div>
+<nav class="hl-tabbar" aria-label="Main"><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-home"/></svg><span>Home</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg><span>Coach</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg><span>Songs</span></button><button class="hl-tab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg><span>World</span></button><button class="hl-tab" aria-current="page"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span>You</span></button></nav></div><figcaption><span class="ds-shot-name">Progress</span><span class="ds-shot-light">House up · reflective</span><ol class="ds-order"><li>Your range widening day by day.</li><li>The four skills that moved.</li><li>Day 1 against today, to hear it.</li></ol></figcaption></figure></div>
+</section>
+
+<section class="ds-section" aria-labelledby="principles">
+  <header><h2 class="ds-h2" id="principles">Five rules</h2></header>
+  <ol class="ds-principles">
+    <li><strong>Your voice is the brightest thing on screen.</strong><p>Ultramarine belongs to the singer: the live pitch line, your range, your takes, and the button that starts you singing. Nothing else uses it, so wherever it appears, it's you.</p></li>
+    <li><strong>Lights down to sing, lights up to learn.</strong><p>Starting the mic dims the house. While you sing you see the target, your line and how far off you are. When you stop, the lights come up on the full report and one clear next step.</p></li>
+    <li><strong>Paper is ruled, not boxed.</strong><p>Information sits on hairline rules, like staff lines. A screen gets at most one raised block: the thing to do now. That replaces the 26 card styles the app uses today.</p></li>
+    <li><strong>The coach has its own voice.</strong><p>When VoxCoach speaks to you, it uses an italic serif, in one or two specific sentences about notes, bars and seconds. Measurements use the sans. Advice and data never look alike.</p></li>
+    <li><strong>Measured, or not shown.</strong><p>Every number comes from something the app really measured, as it does today. How it was measured is explained once, in a folded note under the result, instead of in every paragraph.</p></li>
+  </ol>
+</section>
+
+<section class="ds-section" aria-labelledby="areas">
+  <header>
+    <h2 class="ds-h2" id="areas">Each area's personality</h2>
+    <p class="ds-lead">Same tokens, same type, same controls. What changes is lighting, density and motion.</p>
+  </header>
+  <div class="ds-table-scroll"><table class="ds-table">
+    <thead><tr><th>Area</th><th>Lighting</th><th>Density</th><th>Motion</th><th>Signature</th></tr></thead>
+    <tbody>
+      <tr><td>Home</td><td>Up</td><td>Calm: one raised block</td><td>None at rest</td><td>The coach's sentence and tonight's session</td></tr>
+      <tr><td>Coach, singing</td><td>Down</td><td>Minimum</td><td>Voice line at frame rate</td><td>Pitch lane and cents meter</td></tr>
+      <tr><td>Coach, results</td><td>Up</td><td>Full</td><td>The take's chart draws once</td><td>"What to work on next"</td></tr>
+      <tr><td>Choir World rehearsal</td><td>Down</td><td>Five lanes, yours bold</td><td>Playhead moves with the music</td><td>Part colours and the guide fader</td></tr>
+      <tr><td>Song Lab</td><td>Up</td><td>Technical</td><td>None</td><td>Score header and rehearsal marks</td></tr>
+      <tr><td>Sonic X-Ray</td><td>A dark lightbox on paper</td><td>Dense</td><td>Scrub and zoom</td><td>Part lanes with difficult moments marked</td></tr>
+      <tr><td>Music Microscope</td><td>Up</td><td>Dense table</td><td>None</td><td>Every part at one moment, intervals against the Lead</td></tr>
+      <tr><td>Performance, Studio</td><td>Down, darkest</td><td>Almost nothing</td><td>Tally light only</td><td>Timecode and the red tally</td></tr>
+      <tr><td>Vocal World games</td><td>Down, saturated</td><td>Energetic</td><td>Most motion in the app, always tied to your voice</td><td>Game colours and gold rewards</td></tr>
+      <tr><td>Progress</td><td>Up</td><td>Reflective</td><td>Range band grows on first view</td><td>Range over time, Day 1 against today</td></tr>
+      <tr><td>Profile, Vocal Passport</td><td>Up</td><td>Personal</td><td>None</td><td>Your range and strengths as one portrait</td></tr>
+      <tr><td>Plans, account</td><td>Up</td><td>Plain</td><td>None</td><td>Clear terms: what you used, what's next</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="ds-section" aria-labelledby="colour">
+  <header>
+    <h2 class="ds-h2" id="colour">Colour</h2>
+    <p class="ds-lead">Colour carries meaning, so there's very little of it. Ink and paper do almost everything. One colour is you, five are the choir parts, and three report what happened.</p>
+  </header>
+  <div class="ds-swatches">
+    <div class="ds-swatchset"><h3>Paper</h3><p>House up, light theme</p>
+      <div class="ds-sw"><i style="background:#F2F3EF"></i><span><b>bg</b> <em>paper</em></span><code>#F2F3EF</code></div>
+      <div class="ds-sw"><i style="background:#FFFFFF"></i><span><b>raised</b> <em>the one block</em></span><code>#FFFFFF</code></div>
+      <div class="ds-sw"><i style="background:#D6D9D2"></i><span><b>rule</b> <em>staff hairline</em></span><code>#D6D9D2</code></div>
+      <div class="ds-sw"><i style="background:#111316"></i><span><b>ink</b> <em>16.7:1</em></span><code>#111316</code></div>
+      <div class="ds-sw"><i style="background:#454A52"></i><span><b>ink-2</b> <em>8.0:1</em></span><code>#454A52</code></div>
+      <div class="ds-sw"><i style="background:#646A73"></i><span><b>ink-3</b> <em>4.9:1</em></span><code>#646A73</code></div>
+    </div>
+    <div class="ds-swatchset"><h3>Dusk</h3><p>House up, dark theme</p>
+      <div class="ds-sw"><i style="background:#16181C"></i><span><b>bg</b> <em>dusk</em></span><code>#16181C</code></div>
+      <div class="ds-sw"><i style="background:#1E2126"></i><span><b>raised</b></span><code>#1E2126</code></div>
+      <div class="ds-sw"><i style="background:#2B2F36"></i><span><b>rule</b></span><code>#2B2F36</code></div>
+      <div class="ds-sw"><i style="background:#ECEDEF"></i><span><b>ink</b> <em>15.2:1</em></span><code>#ECEDEF</code></div>
+      <div class="ds-sw"><i style="background:#B4B8BF"></i><span><b>ink-2</b> <em>8.9:1</em></span><code>#B4B8BF</code></div>
+      <div class="ds-sw"><i style="background:#8C929B"></i><span><b>ink-3</b> <em>5.7:1</em></span><code>#8C929B</code></div>
+    </div>
+    <div class="ds-swatchset"><h3>Stage</h3><p>House down, every theme</p>
+      <div class="ds-sw"><i style="background:#060708"></i><span><b>bg</b> <em>stage</em></span><code>#060708</code></div>
+      <div class="ds-sw"><i style="background:#101216"></i><span><b>raised</b></span><code>#101216</code></div>
+      <div class="ds-sw"><i style="background:#1D2026"></i><span><b>rule</b></span><code>#1D2026</code></div>
+      <div class="ds-sw"><i style="background:#F1F2F4"></i><span><b>ink</b> <em>18.0:1</em></span><code>#F1F2F4</code></div>
+      <div class="ds-sw"><i style="background:#A9AEB7"></i><span><b>ink-2</b> <em>9.0:1</em></span><code>#A9AEB7</code></div>
+      <div class="ds-sw"><i style="background:#80868F"></i><span><b>ink-3</b> <em>5.5:1</em></span><code>#80868F</code></div>
+    </div>
+    <div class="ds-swatchset"><h3>Your voice</h3><p>Paper value, then stage value</p>
+      <div class="ds-sw"><i style="background:#2633D9"></i><span><b>voice</b> <em>live line, range, sing button · 7.4:1</em></span><code>#2633D9</code></div>
+      <div class="ds-sw"><i style="background:#7F8CFF"></i><span><b>voice</b> <em>on stage, with a soft glow · 6.8:1</em></span><code>#7F8CFF</code></div>
+      <div class="ds-sw"><i style="background:#DFE2FF"></i><span><b>voice-soft</b> <em>range band, tolerance band</em></span><code>#DFE2FF</code></div>
+      <div class="ds-sw"><i style="background:#2633D9;opacity:.6"></i><span><b>lock</b> <em>on the note: your colour, filled in</em></span><code>= voice</code></div>
+    </div>
+    <div class="ds-swatchset"><h3>Choir parts</h3><p>Paper value, then stage value</p>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#6C3FD1 50%,#B193FF 50%)"></i><span><b>Soprano</b> <em>violet</em></span><code>#6C3FD1 · #B193FF</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#9A5800 50%,#FFB347 50%)"></i><span><b>Lead</b> <em>amber</em></span><code>#9A5800 · #FFB347</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#B0306E 50%,#FF7DB8 50%)"></i><span><b>Alto</b> <em>rose, was sand</em></span><code>#B0306E · #FF7DB8</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#0A747B 50%,#3FD0D6 50%)"></i><span><b>Tenor</b> <em>teal</em></span><code>#0A747B · #3FD0D6</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#5B7314 50%,#B6D35A 50%)"></i><span><b>Bass</b> <em>moss, was red</em></span><code>#5B7314 · #B6D35A</code></div>
+    </div>
+    <div class="ds-swatchset"><h3>What happened</h3><p>Paper value, then stage value</p>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#C2381F 50%,#FF6A4D 50%)"></i><span><b>miss</b> <em>missed note, recording tally</em></span><code>#C2381F · #FF6A4D</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#9A6200 50%,#F0B44A 50%)"></i><span><b>warn</b> <em>close, check this</em></span><code>#9A6200 · #F0B44A</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#1F7A45 50%,#5BC98A 50%)"></i><span><b>ok</b> <em>done, improved</em></span><code>#1F7A45 · #5BC98A</code></div>
+      <div class="ds-sw"><i style="background:linear-gradient(90deg,#B07A00 50%,#FFC23D 50%)"></i><span><b>game-gold</b> <em>rewards, games only</em></span><code>#B07A00 · #FFC23D</code></div>
+    </div>
+  </div>
+</section>
+
+<section class="ds-section" aria-labelledby="type">
+  <header>
+    <h2 class="ds-h2" id="type">Type</h2>
+    <p class="ds-lead">One family, Archivo, set in three widths: wide for titles and numbers, normal for reading, condensed for console labels. Spectral italic is the coach's voice and nothing else. Ten sizes replace the 34 in the app now.</p>
+  </header>
+  <div class="ds-type">
+    <div><span>Display · 56</span><span class="hl-display">01:24.6</span></div>
+    <div><span>Metric · 72</span><span class="hl-metric-l">86</span></div>
+    <div><span>Page title · 34</span><span class="hl-h1">Good evening, Jordan</span></div>
+    <div><span>Section · 24</span><span class="hl-h2">Alto entrance, bar 9</span></div>
+    <div><span>Row title · 18</span><span class="hl-h3">Interval Match</span></div>
+    <div><span>Body · 16</span><span class="hl-body">Your guide part plays at half volume. Your voice sits as an equal partner with it.</span></div>
+    <div><span>Small · 14</span><span class="hl-small">Demo Hymn · I Am the Alto · Ensemble level</span></div>
+    <div><span>Label · 12</span><span class="hl-label">Tonight · 7 min</span></div>
+    <div><span>Coach · 19</span><span class="hl-coach">You find the note fast, then drift flat once your breath runs low.</span></div>
+    <div><span>Note names</span><span class="hl-note" style="font-size:28px">A3 · F♯4 · B♭2</span></div>
+  </div>
+</section>
+
+<section class="ds-section" aria-labelledby="icons">
+  <header>
+    <h2 class="ds-h2" id="icons">Icons</h2>
+    <p class="ds-lead">One drawn set replaces the 97 emoji: a 24-pixel grid, 1.6-pixel strokes, round ends. They follow the theme because they use the text colour. Emoji stay only where people type them.</p>
+  </header>
+  <ul class="ds-icons"><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-home"/></svg><span>home</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-coach"/></svg><span>coach</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-songs"/></svg><span>songs</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-world"/></svg><span>world</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-you"/></svg><span>you</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-choir"/></svg><span>choir</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-play"/></svg><span>play</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-pause"/></svg><span>pause</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-stop"/></svg><span>stop</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-record"/></svg><span>record</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-loop"/></svg><span>loop</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-mic"/></svg><span>mic</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-breath"/></svg><span>breath</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-vibrato"/></svg><span>vibrato</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-range"/></svg><span>range</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-keys"/></svg><span>keys</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-ear"/></svg><span>ear</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-metronome"/></svg><span>metronome</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-headphones"/></svg><span>headphones</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-steps"/></svg><span>steps</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-pulse"/></svg><span>pulse</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-score"/></svg><span>score</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-xray"/></svg><span>xray</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-zoom"/></svg><span>zoom</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-chart"/></svg><span>chart</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-medal"/></svg><span>medal</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-flame"/></svg><span>flame</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-calendar"/></svg><span>calendar</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-passport"/></svg><span>passport</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-group"/></svg><span>group</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-info"/></svg><span>info</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-chev"/></svg><span>chev</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-close"/></svg><span>close</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-check"/></svg><span>check</span></li><li><svg class="hl-icon hl-icon--l" aria-hidden="true"><use href="#hl-lock"/></svg><span>lock</span></li></ul>
+</section>
+
+<section class="ds-section" aria-labelledby="controls">
+  <header>
+    <h2 class="ds-h2" id="controls">Controls and states</h2>
+    <p class="ds-lead">Audio controls look like hardware, not forms. Every state that can happen (loading, empty, error) has a designed version.</p>
+  </header>
+  <div class="ds-comp">
+    <div><h3>Buttons</h3>
+      <div class="ds-flex"><button class="hl-btn hl-btn--sing"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-mic"/></svg>Start singing</button><button class="hl-btn hl-btn--ink">Continue</button><button class="hl-btn">Change song</button><button class="hl-btn hl-btn--quiet">Not now</button></div>
+      <p class="ds-note">Blue only on the button that starts your voice. Ink for any other main action. One main action per screen.</p></div>
+    <div class="ds-stage" data-house="down"><h3>Transport</h3>
+      <div class="ds-flex"><button class="hl-transport hl-transport--primary" aria-label="Play"><svg class="hl-icon" aria-hidden="true"><use href="#hl-play"/></svg></button><button class="hl-transport" aria-label="Pause"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pause"/></svg></button><button class="hl-transport hl-transport--rec" aria-label="Record"><svg class="hl-icon" aria-hidden="true"><use href="#hl-record"/></svg></button><button class="hl-transport hl-transport--s" aria-label="Stop"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-stop"/></svg></button></div>
+      <p class="ds-note">Round, outlined, 64 pixels. The filled one is what happens next.</p></div>
+    <div><h3>Console keys</h3>
+      <div class="ds-flex"><button class="hl-key" aria-pressed="true">Solo</button><button class="hl-key" data-key="mute" aria-pressed="true">Mute</button><button class="hl-key" data-key="loop" aria-pressed="false">Loop</button><button class="hl-key" data-key="acappella" aria-pressed="true">A cappella</button></div>
+      <p class="ds-note">The LED lights when the key is on: amber for solo, red for mute, your colour for loop and a cappella.</p></div>
+    <div><h3>Channel strip</h3>
+      <div>
+        <div class="ds-strip" data-part="alto"><span class="hl-part-dot"></span><strong>Alto</strong><input class="hl-fader" type="range" min="0" max="100" value="72" style="--val:72%" aria-label="Alto volume"><button class="hl-key" aria-pressed="false">S</button><button class="hl-key" data-key="mute" aria-pressed="false">M</button></div>
+        <div class="ds-strip" data-part="ten"><span class="hl-part-dot"></span><strong>Tenor</strong><input class="hl-fader" type="range" min="0" max="100" value="48" style="--val:48%" aria-label="Tenor volume"><button class="hl-key" aria-pressed="true">S</button><button class="hl-key" data-key="mute" aria-pressed="false">M</button></div>
+      </div>
+      <p class="ds-note">The choir mixer as a mixing desk: part colour, fader, solo, mute. Replaces the browser sliders.</p></div>
+    <div><h3>Selection</h3>
+      <div class="hl-seg" role="group" aria-label="Level"><button aria-selected="false">Beginner</button><button aria-selected="true">Intermediate</button><button aria-selected="false">Professional</button></div>
+      <div class="ds-flex"><span class="hl-chip" aria-pressed="true" data-part="sop"><span class="hl-part-dot"></span>Soprano</span><span class="hl-chip" data-part="alto"><span class="hl-part-dot"></span>Alto</span><span class="hl-chip">Wide leaps</span></div>
+      <p class="ds-note">Segments switch a view. Chips filter. Neither is used for actions.</p></div>
+    <div><h3>Rehearsal marks</h3>
+      <div class="ds-flex"><span class="hl-mark">A</span><span class="hl-mark" aria-current="true">B</span><span class="hl-mark">C</span><span class="hl-mark">D</span></div>
+      <p class="ds-note">Boxed letters, as in a printed score. Only for real song sections, never as decoration.</p></div>
+    <div><h3>Loading</h3>
+      <ol class="hl-steps"><li data-state="done">Microphone ready</li><li data-state="done">Headphones on</li><li data-state="active">Loading the five parts</li><li>Count-in</li></ol>
+      <p class="ds-note">Say what's happening, step by step. No spinner without words.</p></div>
+    <div><h3>Empty</h3>
+      <div class="hl-empty"><h4 class="hl-h3">No takes yet</h4><p class="hl-small">Record your alto line once and Your Choir plays it back with the other parts.</p><div><button class="hl-btn hl-btn--sing"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-record"/></svg>Record a take</button></div></div></div>
+    <div><h3>Error</h3>
+      <div class="hl-error"><h4 class="hl-h3">The microphone stopped responding</h4><p class="hl-small">Check that no other app is using it, then try again.</p><div><button class="hl-btn hl-btn--ink">Try again</button></div><details><summary>Technical details</summary>NotReadableError: could not start audio source</details></div></div>
+    <div><h3>How this is measured</h3>
+      <details class="hl-measure" open><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg>How this is measured</summary><p>Each note counts when the middle of your pitch readings is within ±25 cents of the target. Expression isn't scored: there's no reliable way to measure it.</p></details>
+      <p class="ds-note">The honesty rule, said once and folded away. Replaces the "real", "honest" and PRD text across the app.</p></div>
+  </div>
+</section>
+
+<section class="ds-section" aria-labelledby="nav">
+  <header>
+    <h2 class="ds-h2" id="nav">Navigation</h2>
+    <p class="ds-lead">The five tabs stay. Inside them, beginners see one next step and everyone can still reach all 46 screens.</p>
+  </header>
+  <ul class="ds-list">
+    <li><strong>Tabs:</strong> Home, Coach, Songs, World, You. "Train" becomes "Coach". The active tab shows a short playhead line in your colour.</li>
+    <li><strong>Header:</strong> the wordmark and your initial. The streak and level move into Home, so signed-out visitors no longer see a zero streak. Signed out, the header shows "Sign in".</li>
+    <li><strong>Coach tab:</strong> today's focus first, from the Skill Profile the app already keeps. Then the 23 tools as seven named groups of rows, each with your last result. Nothing is removed.</li>
+    <li><strong>Songs tab:</strong> Choir World first, with "continue your rehearsal". Then Karaoke, Studio, AI Duet, Performance Director and Stay in Key.</li>
+    <li><strong>Choir World:</strong> one song page with five views: Rehearse, Song Lab, Trainers, Your Choir, Passport. These are the existing sections regrouped, with every element ID kept.</li>
+    <li><strong>No dead ends:</strong> every result screen ends with one "Next" action chosen from what the app already knows, plus "Sing it again".</li>
+    <li><strong>Overlaps grouped, not cut:</strong> the five progress screens sit under You as one place. Smart Warmup and the new pre-session warm-up become one warm-up.</li>
+  </ul>
+</section>
+
+<section class="ds-section" aria-labelledby="motion">
+  <header>
+    <h2 class="ds-h2" id="motion">Motion</h2>
+    <p class="ds-lead">Motion shows cause and effect, and never plays for decoration. Paper screens are still at rest.</p>
+  </header>
+  <div class="ds-table-scroll"><table class="ds-table">
+    <thead><tr><th>Moment</th><th>What moves</th><th>Timing</th><th>With reduced motion</th></tr></thead>
+    <tbody>
+      <tr><td>Lights down / up</td><td>A black dimmer fades in, the screen changes, the dimmer fades out</td><td>640 ms in total</td><td>Instant change</td></tr>
+      <tr><td>Your voice</td><td>The pitch line, drawn every frame, no easing: it is the signal</td><td>Frame rate</td><td>Unchanged: it's information</td></tr>
+      <tr><td>On the note</td><td>The target band fills with your colour while you hold it</td><td>200 ms</td><td>Colour change only</td></tr>
+      <tr><td>Results</td><td>The take's chart draws once as the lights come up</td><td>600 ms</td><td>Shown complete</td></tr>
+      <tr><td>Press</td><td>Buttons and keys dip slightly</td><td>120 ms</td><td>None</td></tr>
+      <tr><td>Sheets</td><td>Slide up from the bottom</td><td>320 ms</td><td>Fade</td></tr>
+      <tr><td>Recording</td><td>The tally light pulses</td><td>1.6 s cycle</td><td>Steady light</td></tr>
+      <tr><td>Never</td><td>Bouncing, particles, floating shapes, counting-up numbers, idle loops on paper</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section class="ds-section" aria-labelledby="copy">
+  <header>
+    <h2 class="ds-h2" id="copy">The coach's voice</h2>
+    <p class="ds-lead">Rewritten from the app's own strings. Say what to do, in plain words, with real notes and numbers. Every change goes into English, Spanish, French and Turkish.</p>
+  </header>
+  <div class="ds-table-scroll"><table class="ds-table">
+    <thead><tr><th>Where</th><th>Now</th><th>House Lights</th></tr></thead>
+    <tbody>
+      <tr><td>Train hub</td><td class="is-old">Pick a category — each one is a real tool, not a demo.</td><td>Choose what to work on.</td></tr>
+      <tr><td>Vocal World</td><td class="is-old">Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines…</td><td>Four places to play. New ones open as your level rises.</td></tr>
+      <tr><td>Rehearsal</td><td class="is-old">Live guide gain — read from the real audio GainNode</td><td>Guide 50%</td></tr>
+      <tr><td>Karaoke</td><td class="is-old">Expression and pronunciation stay honestly unscored; no reliable signal…</td><td>In "How this is measured": Pitch and timing are scored. Expression isn't, because there's no reliable way to measure it.</td></tr>
+      <tr><td>Register Bridge</td><td class="is-old">…a rule-based approximation, not a trained model (see PRD §3.2 / §12).</td><td>Move from chest to head voice without a break.</td></tr>
+      <tr><td>Every screen</td><td class="is-old">Autocorrelation-based pitch detection running client-side. Home / Train / Songs / World / You is the new SIGNAL shell…</td><td>Removed.</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="ds-list" style="margin-top:24px">
+    <li>Coach lines are one or two sentences: what happened, then what to do. They use real bars, notes and seconds.</li>
+    <li>Never in user text: "real", "really", "genuinely", "honest", "not a demo", "PRD", "§", engine or API names.</li>
+    <li>Explanations of method live only in "How this is measured".</li>
+  </ul>
+</section>
+
+<section class="ds-section" aria-labelledby="decisions">
+  <header>
+    <h2 class="ds-h2" id="decisions">Decisions I've made</h2>
+    <p class="ds-lead">You gave me creative authority, so these are made. Each one is easy to reverse if you disagree.</p>
+  </header>
+  <ul class="ds-list">
+    <li><strong>Themes:</strong> theme choice stays, as System, Light and Dark. Cyberpunk, Aurora and Velvet Opera are retired, because one product can't have four identities. Anyone using one of them moves to Dark.</li>
+    <li><strong>Fonts:</strong> Fraunces, Inter and Space Mono are replaced by Archivo and Spectral italic, loaded from Google Fonts as now.</li>
+    <li><strong>Part colours:</strong> Alto moves from sand to rose, and Bass from red to moss. Red now only means a missed note or recording.</li>
+    <li><strong>Tuner lock:</strong> locking onto the note fills the target with your colour, instead of turning teal. Teal is now the tenor's colour.</li>
+    <li><strong>Old colour names:</strong> the app's current colour variables point at House Lights values from the first day, so screens not yet rebuilt still look like the same product.</li>
+    <li><strong>Brief features that don't exist:</strong> Instrument Lab, AI Conductor and analysing an uploaded song are not designed here. They'd be new features, to decide separately.</li>
+  </ul>
+</section>
+
+<section class="ds-section" aria-labelledby="order">
+  <header>
+    <h2 class="ds-h2" id="order">Build order</h2>
+    <p class="ds-lead">In the brief's priority order, one phase at a time. Each phase passes every existing test script and gets your approval before it deploys. Building starts after the noise gate and the warm-up are merged.</p>
+  </header>
+  <ol class="ds-list">
+    <li><strong>Foundation.</strong> Fonts, tokens, icons, header and tabs, old colour names remapped, developer text removed, theme choice.</li>
+    <li><strong>The lighting change.</strong> One hook on the shared microphone start and stop, the dimmer, and the singing and results layouts.</li>
+    <li><strong>Home and the Coach tab.</strong></li>
+    <li><strong>Vocal Coach tools,</strong> one at a time, onto the singing and results layouts.</li>
+    <li><strong>Choir World:</strong> the song page, rehearsal stage, Song Lab, X-Ray, Microscope, mixer.</li>
+    <li><strong>Performance:</strong> Studio as the stage, and the Performance Report.</li>
+    <li><strong>Progress and identity:</strong> You, Journey, Dashboard, Records, both Passports, Voice Health, Profile.</li>
+    <li><strong>Vocal World games.</strong></li>
+    <li><strong>Everything else:</strong> onboarding, sign-up, Plans, Teacher, Feedback, and the remaining text in four languages.</li>
+    <li><strong>Final pass:</strong> motion, tablet and desktop layouts, accessibility, screenshots of every screen in both themes, and the full test run on production.</li>
+  </ol>
+</section>
+
+</div>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* theme preview */
+  document.querySelectorAll('[data-theme-set]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var v = b.getAttribute('data-theme-set');
+      if (v === 'system') root.removeAttribute('data-theme'); else root.setAttribute('data-theme', v);
+      document.querySelectorAll('[data-theme-set]').forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+    });
+  });
+
+  /* house lights demo */
+  var demo = document.querySelector('.ds-demo');
+  if (demo){
+    var dim = demo.querySelector('.ds-dim');
+    var busy = false;
+    demo.addEventListener('click', function(e){
+      var t = e.target.closest('[data-demo]');
+      if (!t || busy) return;
+      var to = t.getAttribute('data-demo');
+      var swap = function(){
+        demo.querySelectorAll('.ds-layer').forEach(function(l){ l.hidden = l.getAttribute('data-layer') !== to; });
+      };
+      if (reduce){ swap(); return; }
+      busy = true;
+      dim.classList.add('is-on');
+      setTimeout(function(){ swap(); dim.classList.remove('is-on'); setTimeout(function(){ busy = false; }, 340); }, 330);
+    });
+  }
+
+  /* simulated voice in the singing screen: illustration only */
+  var live = document.querySelector('.ds-gallery [data-screen="live"]');
+  if (!live || reduce) return;
+  var path = live.querySelector('[data-live="path"]'), dot = live.querySelector('[data-live="dot"]');
+  var needle = live.querySelector('[data-live="needle"]'), cents = live.querySelector('[data-live="cents"]'), word = live.querySelector('[data-live="word"]');
+  var lane = live.querySelector('.m-lane');
+  var N = 56, x0 = 34, x1 = 312, pts = [];
+  var c = -70, v = 0, t = 0, attempt = 0, onFor = 0;
+  for (var i = 0; i < N; i++) pts.push(196);
+  var visible = true, last = 0;
+  if ('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){ visible = es[0].isIntersecting; }).observe(live);
+  }
+  function step(now){
+    requestAnimationFrame(step);
+    if (!visible || now - last < 33) return;
+    var dt = Math.min(0.06, (now - last) / 1000); last = now; t += dt; attempt += dt;
+    if (attempt > 7){ attempt = 0; c = -60 - Math.random() * 30; v = 0; }
+    var goal = attempt < 4.5 ? -4 : -4 - (attempt - 4.5) * 7;      /* holds, then drifts flat */
+    v += ((goal - c) * 6 - v * 3.2) * dt;
+    c += v * dt + Math.sin(t * 34) * 0.6 + (Math.random() - 0.5) * 1.2;
+    var y = Math.max(64, Math.min(232, 140 - c * 0.7));
+    pts.push(y); pts.shift();
+    var d = '', sx = (x1 - x0) / (N - 1);
+    for (var k = 0; k < N; k++) d += (k ? ' L' : 'M') + (x0 + k * sx).toFixed(1) + ' ' + pts[k].toFixed(1);
+    path.setAttribute('d', d);
+    dot.setAttribute('cy', y.toFixed(1));
+    var nx = Math.max(20, Math.min(300, 160 + c * 2.8)).toFixed(1);
+    needle.setAttribute('x1', nx); needle.setAttribute('x2', nx);
+    var r = Math.round(c);
+    cents.textContent = (r > 0 ? '+' : r < 0 ? '−' : '') + Math.abs(r);
+    var held = Math.abs(c) <= 10;
+    onFor = held ? onFor + dt : 0;
+    word.textContent = held ? 'cents · on the note' : (c < 0 ? 'cents · flat' : 'cents · sharp');
+    lane.classList.toggle('is-locked', onFor > 0.4);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
