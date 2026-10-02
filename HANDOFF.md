@@ -13,7 +13,7 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`).
-`deploy/index.html` is the canonical client. `voxcoach-prototype.html` mirrors it (see BACKEND.md).
+`deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
 

@@ -4,7 +4,7 @@ The full phased plan for the Choir World upgrade of the Choir Workspace. One pha
 verified on the live site with real measurements (actual GainNode values, hand-checked timings), and
 reported back before the next phase starts. Production deploys need explicit approval.
 
-`deploy/index.html` is the canonical client; `voxcoach-prototype.html` mirrors it (see BACKEND.md).
+`deploy/index.html` is the only client (the `voxcoach-prototype.html` mirror was deleted on 2026-10-02; see BACKEND.md).
 
 | Phase | Status | Scope |
 |---|---|---|

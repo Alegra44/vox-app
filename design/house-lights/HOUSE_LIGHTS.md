@@ -155,8 +155,8 @@ to recreate (with `vc-` or area prefixes), not as a library.
 ## 9. Implementation rules
 
 - `deploy/index.html` stays one file. Add `house-lights.css` as a clearly marked block in the
-  existing `<style>`, and the icon sprite right after `<body>`. Keep `voxcoach-prototype.html`
-  mirrored, as now.
+  existing `<style>`, and the icon sprite right after `<body>`. It is the only client (the old
+  `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 - **Never change or remove an element ID, `data-i18n` key, `data-panel`, `data-shell` or
   `data-enter-panel` value.** The verify scripts depend on them. Add wrappers and classes instead.
 - **Protected script hooks.** The verify scripts also depend on these classes and visible strings

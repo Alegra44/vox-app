@@ -17,17 +17,10 @@ file Vercel actually serves at `deploy-alegra1122.vercel.app` (deployed via
 project via `deploy/.vercel/project.json`) — edit it directly for any client
 fix, then redeploy from `deploy/`.
 
-`voxcoach-prototype.html` at the repo root is kept only as a byte-for-byte
-mirror of `deploy/index.html` for anyone browsing the repo root without
-digging into `deploy/`. It is **not** read by anything at runtime and is not
-a separate copy to maintain — it drifted out of sync for a while (commits
-`37171cc`/`87dfb49`/`94677e8` only touched `deploy/index.html`) before being
-resynced on 2026-09-18. Going forward: make every client change in
-`deploy/index.html`, then overwrite `voxcoach-prototype.html` with it (`cp
-deploy/index.html voxcoach-prototype.html`) in the same commit so the two
-never diverge again. Any `voxcoach-prototype.html ~L####` line reference
-below is equally valid against `deploy/index.html` at the same line number,
-since the two files are identical.
+`deploy/index.html` is the only client. The old root mirror `voxcoach-prototype.html` was deleted on
+2026-10-02: nothing read it at runtime, and it had drifted again (it lacked everything since `00249ec`). Any
+`~L####` line reference below dates from September 2026 and is approximate; search `deploy/index.html` for the
+named function or key instead.
 
 ## What's here
 
@@ -161,7 +154,7 @@ own API):
 
 The `xp` delta (+6, not +10) is correct, not a bug: `recordSkillScore()`
 only pays the flat +5 "first data point" bonus once per category
-(`voxcoach-prototype.html` ~L6850); a repeat 100% with no improvement over
+(`deploy/index.html` ~L6850); a repeat 100% with no improvement over
 the prior average earns `recordActivity()`'s flat +5 plus a +1 "genuine
 attempt" consolation (~L6858) = 6. A UI-only check wouldn't have distinguished
 "saved correctly" from "looks right because the client already knew the
@@ -184,7 +177,7 @@ runs.
 ### Achievements and XP (2026-09-16)
 
 Achievements are **not** a separate unlocked/awarded record — `ACHIEVEMENTS`
-(`voxcoach-prototype.html` ~L7352) is a client-side array of `{id, name,
+(`deploy/index.html` ~L7352) is a client-side array of `{id, name,
 check()}`, where `check()` reads live off fields already in the `progress`
 object (`pitchScores`, `streak`, `usedKeyRecommendation`, etc.). An
 achievement is "unlocked" purely by those underlying fields crossing a
@@ -208,7 +201,7 @@ Match test above:
   confirmed still locked for this account beforehand. Triggered it for real:
   Train → Key Trainer → Find My Key → filled the (pre-populated) song/voice
   range fields → clicked "Recommend a key". That handler
-  (`voxcoach-prototype.html` ~L4531) sets `progress.usedKeyRecommendation =
+  (`deploy/index.html` ~L4531) sets `progress.usedKeyRecommendation =
   true` and calls `saveProgress()`. Confirmed in the UI: Profile →
   Achievements grid — "First Key Change" rendered with the `unlocked` class
   (screenshotted, teal-bordered, alongside the two achievements the Pitch
@@ -232,7 +225,7 @@ triggered and DB-checked yet.
 
 - `teacherRoster`/`teacherAssignments`/`day1AudioClip`/`todayAudioClip` are
   still client-only fields (see `loadProfile()` in
-  `voxcoach-prototype.html`) — not backed by the `teacher_*` tables or
+  `deploy/index.html`) — not backed by the `teacher_*` tables or
   `voice_clips` storage yet, despite those tables existing in the schema.
 - Billing (§6) needs a real Stripe test-mode setup — not scripted, not
   verified live.
