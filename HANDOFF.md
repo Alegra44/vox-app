@@ -8,8 +8,8 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 | Branch | What it is | Status |
 |---|---|---|
-| `master` | Everything that is live, through `dccc80b` (vibrato fix, dpl_FbeuU2H) | Matches production |
-| `wip/noise-gate` | Fix A, the singing-detection gate, plus its test scripts and logs | WIP. Not deployed, not merged |
+| `master` | Everything that is live, through the noise gate (dpl_AzAW5Fn, 2026-10-02) | Matches production |
+| `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`).
@@ -32,9 +32,22 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 - About 35 headless sessions in about 10 minutes triggers Vercel's automatic IP challenge (403). Pace prod runs
   (`REG_PACE_MS`, `VF_PACE_MS`).
 
+## Order of work (set by the user, 2026-10-02)
+
+1. Pre-session warm-up, phases 1–2 (`warmup`, below). Now.
+2. The four tester-review bugs. (Not written down in the repo yet: get the list from the user.)
+3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`).
+4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
+   on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
+5. Redesign phase 4 onwards. **Item 4** (Glider octave crash) comes after item 3.
+
+Idea for redesign phase 1 (don't change it before then): `onSignedIn` loads `/me` and then `/me/progress` one after
+the other, so a returning user waits for both (2.7–3.9 s on production, `pageload.js`). Check whether `/me/progress`
+depends on the `/me` response; if not, load them in parallel.
+
 ## In flight
 
-### 1. Noise gate, fix A (`wip/noise-gate`)
+### 1. Noise gate, fix A (`wip/noise-gate`): CLOSED 2026-10-02
 
 What it does: `autoCorrelate` in `deploy/index.html` now rejects a frame unless it is periodic at the detected lag
 (`VOICE_MIN_CLARITY` 0.6) and the pitch is at least 63 Hz (`VOICE_MIN_HZ`, which drops mains hum). Before, any sound
@@ -54,8 +67,7 @@ Status (2026-10-02, on the Mac):
 3. Done: live 2026-10-02 as dpl_AzAW5FnTiAxntvcNmeRXcFNKD27D. Production noisegate 12/20 (accepted RTF leak),
    production vibfix 68/71 (unchanged). The RTF soft-singing gap is the signed-in state, not the gate (rtfsoft.js).
 4. Done: reported.
-5. Then the user picks the next item: **item 3** (per-feature single-stream mic migration) or **item 4** (Glider
-   octave crash). Don't scope either until told.
+5. Closed by the user. Next items: see "Order of work" above.
 
 ### 2. Pre-session warm-up, phases 1–2 (`warmup`)
 

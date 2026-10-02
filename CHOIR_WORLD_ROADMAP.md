@@ -333,7 +333,9 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
       Signed in on all three sides (`scripts/vq-verify/rtfsoft.js`, 3 runs each): pp-92 0 / 0 / 0%, pp-646 63 / 63.3 /
       63.3%, breathy-5 84.7 / 84.7 / 84.7%, breathy-3002 89.7 / 89.7 / 89.7% for `b37cd57` / the gate / production. Gate
       effect ≤ 0.3 points, and local signed in reproduces production. Why signing in costs RTF soft-singing frames is
-      open and goes with item 3 (one stream per feature).
+      open and goes with item 3 (one stream per feature). **This raises item 3's priority** (user, 2026-10-02): it
+      now comes before redesign phase 4 (see HANDOFF.md, "Order of work").
+  - Closed 2026-10-02.
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
 
