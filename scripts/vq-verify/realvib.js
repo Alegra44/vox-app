@@ -8,7 +8,8 @@ const fs = require('fs'), path = require('path'), os = require('os');
 const DIR = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : path.join(os.tmpdir(), 'vq-verify', 'vocalset');
 const html = fs.readFileSync(path.resolve(__dirname, '../../deploy/index.html'), 'utf8');
 const grab = (from, fn) => { const a = html.indexOf(from), z = html.indexOf(fn, a), m = /\r?\n}\r?\n/.exec(html.slice(z)); return html.slice(a, z + m.index + m[0].length); };
-const H = new Function(grab('function autoCorrelate', 'function autoCorrelate') + grab('const VIB_TOL', 'function makeVibratoTolerantLive')
+// the voicing gate's constants sit just above autoCorrelate (since the singing-detection gate); older pages have none
+const H = new Function(grab(html.includes('const VOICE_MIN_CLARITY') ? 'const VOICE_MIN_CLARITY' : 'function autoCorrelate', 'function autoCorrelate') + grab('const VIB_TOL', 'function makeVibratoTolerantLive')
   + '\nreturn {autoCorrelate, vibratoGate, vibratoTolerantCents, makeVibratoTolerantLive, VIB_TOL};')();
 
 function readWav(f) {

@@ -1,0 +1,36 @@
+vibfix 2026-09-30T09-05-27  sides: before, after  before: HEAD
+
+== V6: vibrato-2961@630 centred — target 49 (sung -27 ct, re-centred); offline gate: vibrato 5.28 Hz ±52 r 0.55
+   before Pitch Match int 79/82 pro 68/75 | Drills 80/84/81/82/79 | RTF in tune 16% steady 0% of 111/111 voiced frames (In tune×18, Flat (-18ct)×5, Flat (-28ct)×4) | Choir World held ✓✓ median -4/-6 ct, report pitch 82/82 in tune 169/192, 165/192
+   after  Pitch Match int 94/92 pro 90/91 | Drills 91/94/92/93/91 | RTF in tune 83% steady 68% of 111/111 voiced frames (In tune×92, Flat (-18ct)×4, Sharp (+18ct)×4) | Choir World held ✓✓ median -2/1 ct, report pitch 93/94 in tune 192/192, 189/192
+
+== N1: S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness — target 69 (sung -14 ct, re-centred, then -20); offline gate: as read 5.31 Hz ±9 r 0.39
+   before Pitch Match int 88/87 pro 80/82 | Drills 89/89/88/89/89 | RTF in tune 15% steady 9% of 111/111 voiced frames (In tune×17, Flat (-18ct)×5, Flat (-13ct)×5) | Choir World held ✓✓ median -18/-21 ct, report pitch 88/87 in tune 189/192, 191/192
+   after  Pitch Match int 89/87 pro 82/83 | Drills 89/90/88/89/89 | RTF in tune 4% steady 75% of 111/111 voiced frames (Flat (-16ct)×18, Flat (-18ct)×10, Flat (-15ct)×10) | Choir World held ✓✓ median -18/-21 ct, report pitch 88/89 in tune 189/192, 192/192
+
+== N3: V3 (real vibrato ±91 ct) sung 25 ct flat — target 69 (sung +27 ct, re-centred, then -25); offline gate: vibrato 4.74 Hz ±91 r 0.98
+   before Pitch Match int 61/62 pro 42/40 | Drills 66/65/65/65/65 | RTF in tune 15% steady 0% of 111/111 voiced frames (In tune×17, Sharp (+18ct)×4, Sharp (+12ct)×3) | Choir World held ✓✓ median -30/-29 ct, report pitch 56/60 in tune 67/192, 67/192
+   after  Pitch Match int 85/82 pro 72/75 | Drills 85/85/85/85/85 | RTF in tune 17% steady 100% of 112/112 voiced frames (In tune×19, Flat (-26ct)×15, Flat (-23ct)×12) | Choir World held ✓✓ median -23/-22 ct, report pitch 84/85 in tune 176/192, 178/192
+
+==== VERDICT: 19 passed, 0 failed
+pass V6 vibrato pmInt: 81 → 93 (straight notes null; must be within 8 and up ≥3)
+pass V6 vibrato pmPro: 72 → 91 (straight notes null; must be within 8 and up ≥3)
+pass V6 vibrato drills: 81 → 92 (straight notes null; must be within 8 and up ≥3)
+pass V6 vibrato cwPitch: 82 → 94 (straight notes null; must be within 8 and up ≥3)
+pass V6 vibrato RTF rtfInTune: 16% → 83% (straight notes null%; must be within 20 and up ≥20)
+pass V6 vibrato RTF rtfSteady: 0% → 68% (straight notes null%; must be within 20 and up ≥20)
+pass V6 vibrato Choir World held: true
+pass N1 unsteady pmInt: 88 → 88 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady pmPro: 81 → 83 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady drills: 89 → 89 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady cwPitch: 88 → 89 (no vibrato in it: must not rise more than 3)
+pass N1 unsteady RTF "In tune": 15% → 4% (must not rise >5)
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF "In tune": 15% → 4% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmInt: 62 → 84 (a straight note 29 ct off scores 83; must be within 6 of that)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmPro: 41 → 74 (a straight note 29 ct off scores 74; must be within 6 of that)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat drills: 65 → 85 (a straight note 29 ct off scores 83; must be within 6 of that)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat cwPitch: 58 → 85 (a straight note 29 ct off scores 83; must be within 6 of that)
+pass N3 wrong RTF "In tune": 15% → 17% (must not rise >5)
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat RTF "In tune": 15% → 17% (off pitch past the window: must read in tune ≤25% of voiced frames)
+
+log: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T09-05-27.log  json: C:\Users\Alegra Kunda\OneDrive\Documents\voxcoach-app\scripts\vq-verify\logs\vibfix-local-2026-09-30T09-05-27.json
