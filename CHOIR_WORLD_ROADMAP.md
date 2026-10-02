@@ -314,6 +314,26 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
       2026-10-02: N1 RTF Steady 9 → 23%** (must not rise more than 5; it stays under the 25% limit). The gate's own
       effect on it is +1 (21 → 22% in the same run); the rise against the Windows baseline (12 → 17%) comes from the
       machine.
+    - N1 spread (3 runs of N1 alone, `VF_BEFORE=dccc80b` vs the gate, same run): RTF Steady 21 / 23 / 21% without the
+      gate, 22 / 22 / 22% with it. The live vibrato fix's Steady rule sits 2–4 points under its 25% limit on N1.
+  - **Live 2026-10-02 (dpl_AzAW5FnTiAxntvcNmeRXcFNKD27D)**; the live page is byte-identical to the merge.
+    - Local noisegate on the Mac (`NG_BEFORE=b37cd57`, same run): 150/160. The 10 fails are the accepted classes: RTF on
+      pink and rumble, the Choir World phantom note on real speech (now Alice rather than Holmes / Bonanza b; the real
+      recordings were re-cut on the Mac), breathy + white RTF 100 → 94%, and the talker mix (CW 92 → 83%, Stay in Key
+      76 → 70%). Traffic passed on the Mac (RTF 0%).
+    - Production noisegate: 12/20 (prod mode has only the 20 noise-alone checks). The 8 fails are RTF on pink (67%),
+      traffic (50%) and rumble (15%): the accepted shared-mic leak. Tuner, Stay in Key, Choir World, Pitch Match and
+      Drills match the local after-side within about ±3 on all 24 stimuli.
+    - Production vibfix: 68/71, the same 71 checks with the same pass/fail as before the gate (V1 Pitch Match pro 76,
+      V1 RTF In tune 59%, W4 flutter in Drills 89).
+    - **RTF hears soft singing less when the page is signed in; the gate isn't the cause.** Production RTF read soft
+      singing lower than the local runs (pp-92 0 vs 11%, pp-646 63 vs 80%, breathy-5 85 vs 97%). The local runs were
+      signed out, so `vlSidecar` / `vlFeed` returned early; production was signed in (sidecar during Pitch Match, Vocal
+      Load fed during Drills and RTF), with the same two streams open during RTF in both (shared mic and register input).
+      Signed in on all three sides (`scripts/vq-verify/rtfsoft.js`, 3 runs each): pp-92 0 / 0 / 0%, pp-646 63 / 63.3 /
+      63.3%, breathy-5 84.7 / 84.7 / 84.7%, breathy-3002 89.7 / 89.7 / 89.7% for `b37cd57` / the gate / production. Gate
+      effect ≤ 0.3 points, and local signed in reproduces production. Why signing in costs RTF soft-singing frames is
+      open and goes with item 3 (one stream per feature).
 
 Verification scripts for these phases live in `scripts/choir-verify/` (see its README).
 
@@ -328,6 +348,13 @@ These are about the test setup, not the app.
   samples about 116 voiced frames per 6 s against 107, and RTF / Tuner percentages move by up to ±10 between
   machines). Mac reference numbers from 2026-10-02 are in the noise-gate entry above.
 
+- **Signed-in page load: no real-user problem found** (2026-10-02). noisegate's and rtfsoft's harnesses wait for
+  `profile` and `progress` after loading the page with a saved session, and that wait timed out 3 times in about 110
+  loads (twice at 20 s on production, once at 60 s locally). `scripts/vq-verify/pageload.js` (20 fresh production
+  loads with a saved session, no mic) found nothing: ready in 2.7–3.9 s (median 3.3 s), none over 20 s, `/me/progress`
+  1.0–1.7 s (median 1.2 s), `/me` 1.2–1.9 s, no 401 / 403 / 429. `onSignedIn` loads `/me` and then `/me/progress` one
+  after the other, so the wait is about their sum. The harness timeouts are unexplained; if they come back, run
+  pageload.js with the mic flags and look at the stuck load's requests. Resume the run with `NG_RESUME` / `VF_RESUME`.
 - **The synthetic mic can drop to exact zero under memory pressure** (found 2026-09-27, Vocal Load batch 3b). The
   verify scripts feed Chromium a WAV file as its microphone (`--use-file-for-fake-audio-capture`). With about 390 MB of
   7.9 GB RAM free (90% committed), that capture went to exact-zero silence for 0.05–0.6 s at a time, several times a

@@ -51,9 +51,9 @@ Status (2026-10-02, on the Mac):
    fails plus N1 RTF Steady 9 → 23%, accepted as the fifth (the gate's own effect on it is +1). Details and the
    same-run comparison against `dccc80b` are in the roadmap's noise-gate entry.
 2. Done: merged into master (fce3993).
-3. Deploy (approved), then on prod run `NG_URL=<prod> node scripts/vq-verify/noisegate.js` and
-   `VF_URL=<prod> node scripts/vq-verify/vibfix.js`, one at a time, with full logs and accounts cleaned up.
-4. Report A and B together.
+3. Done: live 2026-10-02 as dpl_AzAW5FnTiAxntvcNmeRXcFNKD27D. Production noisegate 12/20 (accepted RTF leak),
+   production vibfix 68/71 (unchanged). The RTF soft-singing gap is the signed-in state, not the gate (rtfsoft.js).
+4. Done: reported.
 5. Then the user picks the next item: **item 3** (per-feature single-stream mic migration) or **item 4** (Glider
    octave crash). Don't scope either until told.
 
