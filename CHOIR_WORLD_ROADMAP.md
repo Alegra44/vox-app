@@ -114,6 +114,22 @@ Method and injected-vs-measured results: `scripts/vq-verify/README.md`.
   browser will see it again on another the same day, once singing there crosses that threshold. This is not a bug, and
   it is not planned to change. Making dismissals follow the account would need a server-side store.
 
+## Pre-session warm-up (phases 1–2, live 2026-10-03, dpl_hkE5jNste3QiwT28KTYppF1kKdaJ)
+
+A once-a-day overlay before the first mic session (per account and UTC day): four sung exercises traced on the mic with
+Glider's own tracking, a song warm-up on Karaoke's roll, Skip / Escape. Feeds Vocal Load through `vlSidecar`. No test
+switch in the app; the verify scripts skip it through `scripts/warmup-verify/noWarmup.js`. Checks: `entries.js` 52/52,
+`tracking.js` 29/29 (local, production backend); master vs the branch on the Mac, same run: pilot, batch1–3c, Rift ×3
+and vibfix unchanged.
+
+Follow-ups (logged 2026-10-03, not fixed):
+- [ ] **A Vocal Load break banner can sit behind the warm-up overlay.** The banner goes into the active panel, under the
+  modal. Rare: it needs a user who already sang a lot that day (e.g. on another device) and then starts the warm-up.
+  Fix with the redesign's phase 2 layering (`HOUSE_LIGHTS.md`).
+- [ ] **Smart Warmup awards XP without using the mic; the new sung warm-up awards none.** "Mark warmup done" adds to
+  `warmupsCompleted` and records activity / XP; the pre-session warm-up stores only a per-day key in the browser.
+  Settle it when the two become one warm-up in the redesign.
+
 ## Known issues (app-wide)
 
 - **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
