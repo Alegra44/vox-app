@@ -906,6 +906,27 @@
     overflow:hidden;padding:0;margin-bottom:18px;
   }
   .karaoke-roll{width:100%;display:block;height:160px;}
+  /* ---- PRE-SESSION WARM-UP ---- */
+  .wu-overlay{z-index:120;}
+  .wu-card{max-width:560px;max-height:calc(100vh - 40px);overflow-y:auto;}
+  .wu-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .wu-top .trial-modal-title{margin-top:0;}
+  .wu-top .ghost-btn{flex:none;}
+  .wu-tabs{margin-bottom:12px;}
+  .wu-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+  .wu-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--hairline);
+    border-radius:12px;padding:10px 12px;color:var(--cream);font:inherit;cursor:pointer;}
+  .wu-item:hover{border-color:var(--brass-dim);}
+  .wu-item.running{border-color:var(--teal);}
+  .wu-emoji{font-size:22px;flex:none;}
+  .wu-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
+  .wu-text b{font-weight:600;font-size:14px;}
+  .wu-text small{color:var(--muted);font-size:12.5px;line-height:1.35;}
+  .wu-go{flex:none;font-family:'Space Mono',monospace;font-size:12px;color:var(--brass);}
+  .wu-item.done .wu-go{color:var(--teal);}
+  .wu-stage{margin-bottom:10px;}
+  .wu-status{color:var(--muted);font-size:13px;min-height:1.2em;margin:4px 0 10px;}
+  @media (max-width:480px){ .wu-card{padding:22px 16px;} }
   .karaoke-playhead-label{
     position:absolute;left:16.67%;top:4px;transform:translateX(-50%);
     font-family:'Space Mono',monospace;font-size:10px;color:var(--brass);
@@ -4269,6 +4290,25 @@
     </div>
   </div>
 
+  <div class="modal-overlay wu-overlay" id="warmupOverlay" role="dialog" aria-modal="true" aria-labelledby="warmupTitle" style="display:none;">
+    <div class="modal-card wu-card">
+      <div class="wu-top">
+        <h2 class="trial-modal-title" id="warmupTitle" data-i18n="wu_title">Warm up first?</h2>
+        <button class="ghost-btn" id="warmupSkipBtn" data-i18n="wu_skip">Skip warm-up</button>
+      </div>
+      <p class="trial-modal-sub" data-i18n="wu_sub">A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.</p>
+      <div class="btn-row wu-tabs">
+        <button class="ex-type-btn active" data-wu-mode="exercises" aria-pressed="true" data-i18n="wu_mode_exercises">Crazy exercises</button>
+        <button class="ex-type-btn" data-wu-mode="song" aria-pressed="false" data-i18n="wu_mode_song">Song warm-up</button>
+      </div>
+      <div class="wu-list" id="warmupList"></div>
+      <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
+      <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
+      <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
+      <div class="btn-row"><button class="solid-btn teal" id="warmupContinueBtn" style="display:none;flex:1;justify-content:center;" data-i18n="wu_continue">Start my session</button></div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="checkoutModalOverlay" role="dialog" aria-modal="true" aria-labelledby="checkoutPlanName" style="display:none;">
     <div class="modal-card">
       <div class="step-label">Demo checkout — no real payment</div>
@@ -4704,7 +4744,8 @@ let tunerSessionStartTime = null, vocalHealthWarningShown = false;
 let tunerVib = makeVibratoTolerantLive();
 let liveFreq = null;
 
-async function initAudio(){
+async function initAudio(opts){
+  if(!(opts && opts.noWarmup)) await warmupGate(); // the warm-up's own exercises pass noWarmup
   if(audioCtx && analyser) return true;
   try{
     if(!micStream){
@@ -6244,6 +6285,28 @@ const TRANSLATIONS = {
     vl_break_80:"You've reached 80% of today's vocal load budget. This is a good moment for a break: rest your voice for a while and drink some water.",
     vl_break_100:"You've reached 100% of today's vocal load budget. Consider resting your voice for the rest of the day, or keeping your singing light.",
     vl_break_dismiss:'Dismiss',
+    wu_title:"Warm up first?",
+    wu_sub:"A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.",
+    wu_skip:"Skip warm-up",
+    wu_continue:"Start my session",
+    wu_mode_exercises:"Crazy exercises",
+    wu_mode_song:"Song warm-up",
+    wu_ex_trill:"Lip trills",
+    wu_ex_trill_how:"Loose lips, blow a “brrr” and ride the little waves.",
+    wu_ex_siren:"Sirens",
+    wu_ex_siren_how:"Slide on “woo” from low to high and back, like a siren.",
+    wu_ex_glide:"Sustained glides",
+    wu_ex_glide_how:"One long, slow slide up and down on “ah”. Keep the sound going.",
+    wu_ex_hum:"Humming",
+    wu_ex_hum_how:"Lips closed, hum “mmm” on one comfy note and feel the buzz.",
+    wu_start:"Start",
+    wu_stop:"Stop",
+    wu_done_mark:"✓ Done",
+    wu_sing_hint:"Sing to start",
+    wu_follow:"Follow the dotted line. No score, just warming up.",
+    wu_song_follow:"Sing the melody along with the backing chords.",
+    wu_after:"Nice! Try another, or start your session.",
+    wu_mic_needed:"The warm-up needs your microphone. Allow it and try again, or skip.",
     rift_avg_p1:'Avg:', rift_closed:'Rift closed', rift_missed:'Missed', rift_no_pitch_heard:'No clear pitch heard',
     rift_rounds_completed:'rounds completed', rift_rounds_p1:'Rounds:', rift_start_label:'Enter the Rift (Pro)', rift_time_p1:'Time:',
     rift_type_interval:'Interval Jump', rift_type_quick:'Quick Catch', rift_type_sustain:'Sustain Hold',
@@ -7580,6 +7643,28 @@ const TRANSLATIONS = {
     vl_break_80:'Vous avez atteint 80 % du budget de charge vocale du jour. C’est un bon moment pour faire une pause : reposez votre voix un moment et buvez un peu d’eau.',
     vl_break_100:'Vous avez atteint 100 % du budget de charge vocale du jour. Pensez à reposer votre voix pour le reste de la journée, ou à chanter légèrement.',
     vl_break_dismiss:'Fermer',
+    wu_title:"Un échauffement d’abord ?",
+    wu_sub:"Une ou deux minutes de chant facile avant de vous entraîner. Faites un exercice, plusieurs, ou passez directement à votre séance.",
+    wu_skip:"Passer l’échauffement",
+    wu_continue:"Commencer ma séance",
+    wu_mode_exercises:"Exercices fous",
+    wu_mode_song:"Échauffement en chanson",
+    wu_ex_trill:"Trilles de lèvres",
+    wu_ex_trill_how:"Lèvres détendues, soufflez un « brrr » et suivez les petites vagues.",
+    wu_ex_siren:"Sirènes",
+    wu_ex_siren_how:"Glissez sur « ouh » du grave à l’aigu et retour, comme une sirène.",
+    wu_ex_glide:"Glissés tenus",
+    wu_ex_glide_how:"Un long glissé lent vers le haut puis vers le bas sur « a ». Ne coupez pas le son.",
+    wu_ex_hum:"Fredonnement",
+    wu_ex_hum_how:"Lèvres fermées, fredonnez « mmm » sur une note confortable et sentez la vibration.",
+    wu_start:"Commencer",
+    wu_stop:"Arrêter",
+    wu_done_mark:"✓ Fait",
+    wu_sing_hint:"Chantez pour commencer",
+    wu_follow:"Suivez la ligne pointillée. Pas de score, juste un échauffement.",
+    wu_song_follow:"Chantez la mélodie avec les accords d’accompagnement.",
+    wu_after:"Bien joué ! Essayez-en un autre, ou commencez votre séance.",
+    wu_mic_needed:"L’échauffement a besoin de votre micro. Autorisez-le et réessayez, ou passez.",
     rift_avg_p1:'Moy. :', rift_closed:'Faille fermée', rift_missed:'Manqué', rift_no_pitch_heard:'Aucune hauteur claire détectée',
     rift_rounds_completed:'manches terminées', rift_rounds_p1:'Manches :', rift_start_label:'Entrer dans la Faille (Pro)', rift_time_p1:'Temps :',
     rift_type_interval:"Saut d'intervalle", rift_type_quick:'Prise rapide', rift_type_sustain:'Tenue soutenue',
@@ -8916,6 +9001,28 @@ const TRANSLATIONS = {
     vl_break_80:'Has llegado al 80 % del presupuesto de carga vocal de hoy. Es un buen momento para hacer una pausa: descansa la voz un rato y bebe un poco de agua.',
     vl_break_100:'Has llegado al 100 % del presupuesto de carga vocal de hoy. Considera descansar la voz el resto del día o cantar de forma ligera.',
     vl_break_dismiss:'Cerrar',
+    wu_title:"¿Calentamos primero?",
+    wu_sub:"Uno o dos minutos de canto suave antes de practicar. Haz un ejercicio, varios, o ve directo a tu sesión.",
+    wu_skip:"Saltar calentamiento",
+    wu_continue:"Empezar mi sesión",
+    wu_mode_exercises:"Ejercicios locos",
+    wu_mode_song:"Calentamiento con canción",
+    wu_ex_trill:"Vibración de labios",
+    wu_ex_trill_how:"Labios sueltos, sopla un “brrr” y sigue las olitas.",
+    wu_ex_siren:"Sirenas",
+    wu_ex_siren_how:"Desliza en “uu” de grave a agudo y de vuelta, como una sirena.",
+    wu_ex_glide:"Deslizamientos sostenidos",
+    wu_ex_glide_how:"Un deslizamiento largo y lento arriba y abajo en “a”. No cortes el sonido.",
+    wu_ex_hum:"Tarareo",
+    wu_ex_hum_how:"Labios cerrados, tararea “mmm” en una nota cómoda y siente la vibración.",
+    wu_start:"Empezar",
+    wu_stop:"Parar",
+    wu_done_mark:"✓ Hecho",
+    wu_sing_hint:"Canta para empezar",
+    wu_follow:"Sigue la línea punteada. Sin puntuación, solo calentamiento.",
+    wu_song_follow:"Canta la melodía con los acordes de acompañamiento.",
+    wu_after:"¡Bien! Prueba otro o empieza tu sesión.",
+    wu_mic_needed:"El calentamiento necesita tu micrófono. Permítelo e inténtalo de nuevo, o sáltalo.",
     rift_avg_p1:'Prom.:', rift_closed:'Grieta cerrada', rift_missed:'Fallado', rift_no_pitch_heard:'No se detectó una nota clara',
     rift_rounds_completed:'rondas completadas', rift_rounds_p1:'Rondas:', rift_start_label:'Entrar en la Grieta (Pro)', rift_time_p1:'Tiempo:',
     rift_type_interval:'Salto de intervalo', rift_type_quick:'Captura rápida', rift_type_sustain:'Sostenido',
@@ -10252,6 +10359,28 @@ const TRANSLATIONS = {
     vl_break_80:'Bugünkü ses yükü bütçenizin %80’ine ulaştınız. Mola vermek için iyi bir an: sesinizi bir süre dinlendirin ve biraz su için.',
     vl_break_100:'Bugünkü ses yükü bütçenizin %100’üne ulaştınız. Günün geri kalanında sesinizi dinlendirmeyi ya da hafif şarkı söylemeyi düşünün.',
     vl_break_dismiss:'Kapat',
+    wu_title:"Önce ısınalım mı?",
+    wu_sub:"Çalışmadan önce bir iki dakika rahat şarkı söyleyin. Bir egzersiz ya da birkaç tane yapın veya doğrudan seansınıza geçin.",
+    wu_skip:"Isınmayı atla",
+    wu_continue:"Seansımı başlat",
+    wu_mode_exercises:"Çılgın egzersizler",
+    wu_mode_song:"Şarkıyla ısınma",
+    wu_ex_trill:"Dudak titreşimi",
+    wu_ex_trill_how:"Dudaklar gevşek, “brrr” diye üfleyin ve küçük dalgaları izleyin.",
+    wu_ex_siren:"Sirenler",
+    wu_ex_siren_how:"“Uu” sesiyle pestten tize ve geri kayın, siren gibi.",
+    wu_ex_glide:"Uzun kaydırmalar",
+    wu_ex_glide_how:"“A” sesiyle uzun ve yavaş bir yukarı-aşağı kayış. Sesi kesmeyin.",
+    wu_ex_hum:"Mırıldanma",
+    wu_ex_hum_how:"Dudaklar kapalı, rahat bir notada “mmm” diye mırıldanın ve titreşimi hissedin.",
+    wu_start:"Başla",
+    wu_stop:"Durdur",
+    wu_done_mark:"✓ Tamam",
+    wu_sing_hint:"Başlamak için söyleyin",
+    wu_follow:"Noktalı çizgiyi izleyin. Puan yok, sadece ısınma.",
+    wu_song_follow:"Eşlik akorlarıyla birlikte melodiyi söyleyin.",
+    wu_after:"Güzel! Başka birini deneyin ya da seansınızı başlatın.",
+    wu_mic_needed:"Isınma için mikrofonunuz gerekiyor. İzin verip tekrar deneyin ya da atlayın.",
     rift_avg_p1:'Ort.:', rift_closed:'Yarık kapandı', rift_missed:'Kaçırıldı', rift_no_pitch_heard:'Net bir perde algılanmadı',
     rift_rounds_completed:'tur tamamlandı', rift_rounds_p1:'Tur:', rift_start_label:'Yarığa gir (Pro)', rift_time_p1:'Süre:',
     rift_type_interval:'Aralık Sıçraması', rift_type_quick:'Hızlı Yakalama', rift_type_sustain:'Uzun Tutuş',
@@ -11146,6 +11275,7 @@ function midiToY(midi, lowMidi, highMidi, topY, bottomY){
 const REG_FFT = 2048, REG_SMOOTH = 0.8, REG_IDLE_MS = 3000;
 let regIn = null, regOpening = null;
 async function openRegisterInput({quiet=false}={}){ // quiet: no toast if it fails (a feature's own mic is already open)
+  if(!quiet) await warmupGate(); // quiet is the sidecar, which only runs next to a session that already passed it
   await initAudioOnly();
   if(regIn) return true;
   if(!regOpening) regOpening = (async ()=>{
@@ -11862,6 +11992,7 @@ function vqBrightBounds(f0){
 }
 // ms: hold length; active: stops the capture early when it turns false; spectrum: false skips HNR and centroid.
 async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={}){
+  await warmupGate();
   await initAudioOnly();
   const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
   const src = audioCtx.createMediaStreamSource(stream), an = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser();
@@ -12348,26 +12479,30 @@ document.getElementById('genreApplyBtn').addEventListener('click', async ()=>{
 const KARAOKE_PX_PER_SEC = 40;
 const KARAOKE_PLAYHEAD_X = 100;
 let karaokeMinMidi = 0, karaokeMaxMidi = 100;
-function buildKaraokeRoll(){
-  const svg = document.getElementById('karaokeRollSvg');
-  if(!svg) return;
+// The roll's element ids; the warm-up's song mode builds the same roll into its own svg.
+const KARAOKE_ROLL = {svg:'karaokeRollSvg', group:'karaokeNotesGroup', cursor:'karaokeLiveCursor', rect:'karaoke-note-rect'};
+function karaokeRollY(midi, minMidi, maxMidi){ return 140 - ((midi-minMidi)/(maxMidi-minMidi))*120; }
+function buildKaraokeRoll(ids=KARAOKE_ROLL){ // returns the roll's {minMidi, maxMidi}
+  const svg = document.getElementById(ids.svg);
+  if(!svg) return null;
   const notes = SONG.parts.Lead.notes;
   const chordDurSec = songChordDurMs()/1000;
   const minMidi = Math.min(...notes)-3, maxMidi = Math.max(...notes)+3;
-  karaokeMinMidi = minMidi; karaokeMaxMidi = maxMidi;
-  const midiToY = m => 140 - ((m-minMidi)/(maxMidi-minMidi))*120;
+  if(ids===KARAOKE_ROLL){ karaokeMinMidi = minMidi; karaokeMaxMidi = maxMidi; }
+  const midiToY = m => karaokeRollY(m, minMidi, maxMidi);
   let rects = '';
   notes.forEach((midi,i)=>{
     const x = KARAOKE_PLAYHEAD_X + i*chordDurSec*KARAOKE_PX_PER_SEC;
     const w = chordDurSec*KARAOKE_PX_PER_SEC*0.88;
     const y = midiToY(midi)-9;
-    rects += `<rect class="karaoke-note-rect" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:var(--surface-raised);stroke:var(--hairline);stroke-width:1;"/>`;
+    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:var(--surface-raised);stroke:var(--hairline);stroke-width:1;"/>`;
   });
   svg.innerHTML = `
     <line x1="${KARAOKE_PLAYHEAD_X}" y1="0" x2="${KARAOKE_PLAYHEAD_X}" y2="160" style="stroke:var(--brass);stroke-width:2;"/>
-    <g id="karaokeNotesGroup">${rects}</g>
-    <circle id="karaokeLiveCursor" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--teal)" stroke="var(--cream)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px rgba(79,214,196,1));transition:cy .06s linear;"/>
+    <g id="${ids.group}">${rects}</g>
+    <circle id="${ids.cursor}" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--teal)" stroke="var(--cream)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px rgba(79,214,196,1));transition:cy .06s linear;"/>
   `;
+  return {minMidi, maxMidi};
 }
 
 let karaokeActive = false;
@@ -12442,7 +12577,7 @@ function karaokeLoop(){
 
     if(cursor){
       const liveMidi = 69+12*Math.log2(freq/440);
-      const y = 140 - ((liveMidi-karaokeMinMidi)/(karaokeMaxMidi-karaokeMinMidi))*120;
+      const y = karaokeRollY(liveMidi, karaokeMinMidi, karaokeMaxMidi);
       cursor.setAttribute('cy', y.toFixed(1));
       cursor.style.display = 'block';
       cursor.setAttribute('fill', (cents!==null && Math.abs(cents)<=25) ? 'var(--teal)' : 'var(--coral)');
@@ -15900,6 +16035,7 @@ function renderWarmupContext(){
 document.getElementById('warmupCompleteBtn').addEventListener('click', async ()=>{
   if(!profile){ requireSignIn('Smart Warmup'); return; }
   progress.warmupsCompleted = (progress.warmupsCompleted||0)+1;
+  wuMarkPassed('done'); // warmed up today: the pre-session warm-up isn't offered again today
   await saveProgress();
   await recordActivity();
   renderWarmupContext();
@@ -16601,6 +16737,12 @@ function gliderGapAtWorldX(wx){
   const last = gliderPoints[gliderPoints.length-1] || {gapY:160, gapH:150};
   return {gapY:last.gapY, gapH:last.gapH};
 }
+// One frame of Glider's tracking: ease a quarter of the way to the sung pitch's height, or fall 3.2 px with no pitch
+// (desiredY null). The warm-up's exercise trace uses the same step, so both follow a voice identically.
+function glideFollow(y, desiredY, H){
+  y = desiredY!==null ? y + (desiredY-y)*0.25 : y + 3.2;
+  return Math.max(6, Math.min(H-6, y));
+}
 function gliderPitchToY(freq, H){
   if(!(freq>0)) return null; // autoCorrelate returns -1 for "no pitch": null makes the glider fall ("go quiet to fall")
   const midi = 69+12*Math.log2(freq/440);
@@ -16641,9 +16783,7 @@ function gliderLoop(){
   if(desiredY!==null) gliderTookOff = true;
   // Before the first sung note the glider waits in the lead-in gap: no gravity, no scrolling, no score, no crash.
   if(gliderTookOff){
-    if(desiredY!==null){ gliderY += (desiredY-gliderY)*0.25; }
-    else { gliderY += 3.2; }
-    gliderY = Math.max(6, Math.min(H-6, gliderY));
+    gliderY = glideFollow(gliderY, desiredY, H);
     gliderScroll += gliderScrollSpeedVal;
     gliderScoreVal = Math.floor(gliderScroll/10);
     gliderEnsurePoints(gliderScroll+W);
@@ -16726,6 +16866,213 @@ function finishGlider(){
 function stopGlider(){ if(gliderActive){ gliderActive=false; cancelAnimationFrame(gliderRafId); } }
 document.getElementById('gliderStartBtn').addEventListener('click', ()=>{
   if(gliderActive) finishGlider(); else startGlider();
+});
+
+/* ---------------- Pre-session warm-up ----------------
+   Before the first practice session of the day (per account and UTC day, like the break banner's dismissal), a session
+   waits on warmupGate(). The shared mic openers call it (initAudio, openRegisterInput, vqCapture), so every solo feature
+   and Choir World reaches it without wiring of its own, after its own plan/sign-in checks. One tap skips it; a done or
+   skipped warm-up is not offered again that day. Exercises follow the voice with Glider's own tracking (autoCorrelate →
+   gliderPitchToY → glideFollow on the shared mic) and draw it as a live trace against a guide, with no score. The song
+   mode is Karaoke's roll, timing and backing pad on any song in SONGS. Each exercise and song feeds Vocal Load like any
+   other solo feature (vlSidecar). The verification scripts skip it from the outside (scripts/warmup-verify/noWarmup.js);
+   the app has no test switch. */
+// The canvas is Glider's size (600 × 320): glideFollow's fall and edge margin are in pixels, so the dot moves exactly as the glider.
+const WU_EX_SEC = 20, WU_PX_PER_SEC = 60, WU_NOW_X = 90;
+// guide(p, t): the dotted line's pitch (MIDI) t seconds in; p(f) is the note at fraction f of the singer's range.
+const WU_EXERCISES = [
+  {id:'trill', emoji:'💋', guide:(p,t)=>p(0.35) + 2*Math.sin(2*Math.PI*t/3)},
+  {id:'siren', emoji:'🚨', guide:(p,t)=>p(0.5 - 0.4*Math.cos(2*Math.PI*t/5))},
+  {id:'glide', emoji:'🪁', guide:(p,t)=>{ const ph = (t/8)%1; return p(0.25 + 0.35*(ph<0.5 ? ph*2 : 2-ph*2)); }},
+  {id:'hum',   emoji:'🐝', guide:(p,t)=>p(0.35)},
+];
+const WU_ROLL = {svg:'warmupRollSvg', group:'warmupNotesGroup', cursor:'warmupLiveCursor', rect:'wu-note-rect'};
+let wuPending = null, wuResolve = null, wuPassedKey = null, wuMode = 'exercises', wuRun = null, wuGen = 0, wuDone = new Set();
+
+function wuKey(){ return 'warmup:'+(profile && (profile.id || profile.email) || '')+':'+todayStr(); }
+function wuPassed(){
+  if(wuPassedKey===wuKey()) return true;
+  try{ return !!localStorage.getItem(wuKey()); }catch(e){ return false; }
+}
+function warmupGate(){
+  if(wuPending) return wuPending;
+  if(wuPassed()) return Promise.resolve();
+  wuPending = new Promise(res=>{ wuResolve = res; });
+  wuOpen();
+  return wuPending;
+}
+function wuOpen(){
+  wuDone = new Set();
+  wuMode = 'exercises';
+  document.getElementById('warmupStatus').textContent = '';
+  wuRender();
+  document.getElementById('warmupOverlay').style.display = 'flex';
+  document.addEventListener('keydown', wuKeydown);
+  document.getElementById('warmupSkipBtn').focus();
+}
+function wuKeydown(e){ if(e.key==='Escape') wuFinish('skipped'); }
+function wuMarkPassed(how){ // how: 'skipped' | 'done'
+  wuPassedKey = wuKey();
+  try{ localStorage.setItem(wuPassedKey, how); }catch(e){}
+}
+function wuFinish(how){
+  wuStop();
+  wuMarkPassed(how);
+  document.getElementById('warmupOverlay').style.display = 'none';
+  document.removeEventListener('keydown', wuKeydown);
+  const r = wuResolve; wuResolve = null; wuPending = null;
+  if(r) r();
+}
+function wuRender(){
+  document.querySelectorAll('#warmupOverlay [data-wu-mode]').forEach(b=>{
+    const on = b.dataset.wuMode===wuMode; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on?'true':'false');
+  });
+  const running = wuRun && (wuRun.kind==='ex' ? wuRun.ex.id : 'song:'+wuRun.id);
+  const item = (key, emoji, name, how)=>{
+    const state = running===key ? 'running' : (wuDone.has(key) ? 'done' : '');
+    const go = state==='running' ? t('wu_stop') : (state==='done' ? t('wu_done_mark') : t('wu_start'));
+    return `<button class="wu-item ${state}" data-wu-item="${key}"><span class="wu-emoji">${emoji}</span><span class="wu-text"><b>${name}</b><small>${how}</small></span><span class="wu-go">${go}</span></button>`;
+  };
+  document.getElementById('warmupList').innerHTML = wuMode==='exercises'
+    ? WU_EXERCISES.map(ex=>item(ex.id, ex.emoji, t('wu_ex_'+ex.id), t('wu_ex_'+ex.id+'_how'))).join('')
+    : Object.keys(SONGS).map(id=>{
+        const s = SONGS[id], sec = Math.round((60/s.tempo)*s.beatsPerChord*s.parts.Lead.notes.length);
+        return item('song:'+id, '🎵', s.name, `${s.key} · ${s.difficulty} · ${sec} s`);
+      }).join('');
+  document.getElementById('warmupStage').style.display = wuRun && wuRun.kind==='ex' ? 'block' : 'none';
+  document.getElementById('warmupRollWrap').style.display = wuRun && wuRun.kind==='song' ? 'block' : 'none';
+  document.getElementById('warmupContinueBtn').style.display = wuDone.size ? 'flex' : 'none';
+}
+function wuStatus(key){ document.getElementById('warmupStatus').textContent = key ? t(key) : ''; }
+
+// Stops whatever is running; completed marks it done. Always puts Karaoke's SONG back.
+function wuEndRun(completed){
+  const run = wuRun;
+  if(!run) return;
+  wuRun = null;
+  cancelAnimationFrame(run.raf);
+  if(run.kind==='song'){ stopBackingPad(); SONG = run.savedSong; }
+  if(completed){ wuDone.add(run.kind==='ex' ? run.ex.id : 'song:'+run.id); wuStatus('wu_after'); }
+  else wuStatus('');
+  wuRender();
+}
+function wuStop(){ wuGen++; wuEndRun(false); }
+
+async function wuStartExercise(id){
+  wuStop();
+  const gen = wuGen;
+  const ok = await initAudio({noWarmup:true});
+  if(gen!==wuGen || !wuResolve) return; // skipped or switched while the mic was opening
+  if(!ok || !analyser){ wuStatus('wu_mic_needed'); return; }
+  await initAudioOnly(); // resume a suspended context
+  if(gen!==wuGen) return;
+  const ex = WU_EXERCISES.find(e=>e.id===id), H = document.getElementById('warmupCanvas').height;
+  const {lowMidi, highMidi} = registerRangeBounds();
+  const p = f=>lowMidi + f*(highMidi-lowMidi);
+  // before the first sung note the dot waits on the guide's start, as the glider waits in its first gap
+  const run = wuRun = {kind:'ex', ex, p, started:false, t0:0, y:gliderMidiToY(ex.guide(p,0), H), trail:[], raf:0};
+  wuStatus('wu_follow');
+  wuRender();
+  wuExLoop(run);
+  vlSidecar(()=>wuRun===run); // warming up is singing: it counts toward today's vocal load
+}
+function wuExLoop(run){
+  if(wuRun!==run) return;
+  const canvas = document.getElementById('warmupCanvas'), ctx = canvas.getContext('2d'), W = canvas.width, H = canvas.height;
+  analyser.getFloatTimeDomainData(dataArray);
+  const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const desiredY = gliderPitchToY(freq, H), now = performance.now();
+  if(desiredY!==null && !run.started){ run.started = true; run.t0 = now; }
+  const tSec = run.started ? (now-run.t0)/1000 : 0;
+  if(run.started){
+    run.y = glideFollow(run.y, desiredY, H);
+    run.trail.push({t:tSec, y:run.y, voiced:desiredY!==null});
+    while(run.trail.length && run.trail[0].t < tSec - WU_NOW_X/WU_PX_PER_SEC - 0.5) run.trail.shift();
+  }
+  const xAt = ts=>WU_NOW_X + (ts-tSec)*WU_PX_PER_SEC;
+  ctx.fillStyle = '#0a0908'; ctx.fillRect(0,0,W,H);
+  // the guide, from the left edge to the right edge
+  ctx.strokeStyle = '#e8a33d'; ctx.globalAlpha = 0.55; ctx.lineWidth = 3; ctx.setLineDash([4,7]);
+  ctx.beginPath();
+  for(let x=0; x<=W; x+=4){ const gy = gliderMidiToY(run.ex.guide(run.p, tSec + (x-WU_NOW_X)/WU_PX_PER_SEC), H); x ? ctx.lineTo(x, gy) : ctx.moveTo(x, gy); }
+  ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+  // the voice: only where a pitch was heard (the dot still falls through silence, as the glider does)
+  ctx.strokeStyle = '#4fd6c4'; ctx.lineWidth = 3; ctx.beginPath();
+  for(let i=1;i<run.trail.length;i++){
+    const a = run.trail[i-1], b = run.trail[i];
+    if(a.voiced && b.voiced){ ctx.moveTo(xAt(a.t), a.y); ctx.lineTo(xAt(b.t), b.y); }
+  }
+  ctx.stroke();
+  ctx.fillStyle = '#f1ead9'; ctx.beginPath(); ctx.arc(WU_NOW_X, run.y, 8, 0, Math.PI*2); ctx.fill();
+  ctx.font = '600 16px system-ui, sans-serif'; ctx.textBaseline = 'middle';
+  if(!run.started){ ctx.textAlign = 'center'; ctx.fillText(t('wu_sing_hint'), W/2, 24); }
+  ctx.textAlign = 'right'; ctx.fillStyle = '#e8a33d'; ctx.fillText(Math.max(0, Math.ceil(WU_EX_SEC - tSec))+' s', W-12, 24);
+  ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+  if(tSec >= WU_EX_SEC){ wuEndRun(true); return; }
+  run.raf = requestAnimationFrame(()=>wuExLoop(run));
+}
+
+async function wuStartSong(id){
+  wuStop();
+  const gen = wuGen;
+  const ok = await initAudio({noWarmup:true});
+  if(gen!==wuGen || !wuResolve) return;
+  if(!ok || !analyser){ wuStatus('wu_mic_needed'); return; }
+  await initAudioOnly(); // context running: playBackingPad below then schedules without a real wait
+  if(gen!==wuGen || !SONGS[id]) return;
+  const run = {kind:'song', id, savedSong:SONG, idx:-1, raf:0};
+  SONG = SONGS[id]; // Karaoke's timing and pad read SONG; wuEndRun puts the session's song back
+  wuRun = run;
+  wuRender(); // shows the roll
+  const range = buildKaraokeRoll(WU_ROLL);
+  run.minMidi = range.minMidi; run.maxMidi = range.maxMidi;
+  await playBackingPad(false);
+  if(wuRun!==run){ stopBackingPad(); return; }
+  run.t0 = performance.now();
+  wuStatus('wu_song_follow');
+  wuSongLoop(run);
+  vlSidecar(()=>wuRun===run);
+}
+function wuSongLoop(run){
+  if(wuRun!==run) return;
+  const elapsedMs = performance.now()-run.t0;
+  if(elapsedMs >= songTotalDurMs()){ wuEndRun(true); return; }
+  const idx = songIndexAtElapsed(elapsedMs);
+  if(idx!==run.idx){ // mark the note being sung
+    const prev = document.querySelector(`.${WU_ROLL.rect}[data-idx="${run.idx}"]`), cur = document.querySelector(`.${WU_ROLL.rect}[data-idx="${idx}"]`);
+    if(prev) prev.style.stroke = 'var(--hairline)';
+    if(cur) cur.style.stroke = 'var(--brass)';
+    run.idx = idx;
+  }
+  analyser.getFloatTimeDomainData(dataArray);
+  const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const cursor = document.getElementById(WU_ROLL.cursor);
+  if(freq>0 && cursor){
+    const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
+    const liveMidi = 69+12*Math.log2(freq/440);
+    cursor.setAttribute('cy', karaokeRollY(liveMidi, run.minMidi, run.maxMidi).toFixed(1));
+    cursor.style.display = 'block';
+    cursor.setAttribute('fill', (cents!==null && Math.abs(cents)<=25) ? 'var(--teal)' : 'var(--coral)');
+  } else if(cursor){
+    cursor.style.display = 'none';
+  }
+  const group = document.getElementById(WU_ROLL.group);
+  if(group) group.setAttribute('transform', `translate(${-(elapsedMs/1000)*KARAOKE_PX_PER_SEC},0)`);
+  run.raf = requestAnimationFrame(()=>wuSongLoop(run));
+}
+
+document.getElementById('warmupSkipBtn').addEventListener('click', ()=>wuFinish('skipped'));
+document.getElementById('warmupContinueBtn').addEventListener('click', ()=>wuFinish('done'));
+document.querySelectorAll('#warmupOverlay [data-wu-mode]').forEach(b=>b.addEventListener('click', ()=>{
+  if(wuMode===b.dataset.wuMode) return;
+  wuStop(); wuStatus(''); wuMode = b.dataset.wuMode; wuRender();
+}));
+document.getElementById('warmupList').addEventListener('click', e=>{
+  const b = e.target.closest('[data-wu-item]');
+  if(!b) return;
+  const key = b.dataset.wuItem, running = wuRun && (wuRun.kind==='ex' ? wuRun.ex.id : 'song:'+wuRun.id);
+  if(running===key){ wuStop(); return; }
+  if(key.startsWith('song:')) wuStartSong(key.slice(5)); else wuStartExercise(key);
 });
 
 /* ---------------- Game 2: Karaoke Boss Battle (Pro) ---------------- */
