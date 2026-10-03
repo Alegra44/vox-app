@@ -10,6 +10,7 @@
 // Real speech and TV are reported, not checked (a speaking voice is periodic: this gate isn't meant to remove it).
 // Usage: [NG_URL=<url>] [NG_PACE_MS=45000] [NG_RESUME=logs/<earlier>.json] node scripts/vq-verify/noisegate.js [stimulus names, comma-separated]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(os.tmpdir(), 'vq-verify', 'gate');

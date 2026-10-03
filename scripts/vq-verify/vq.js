@@ -4,6 +4,7 @@
 // next to the measured ones. No server needed: deploy/index.html is served on localhost by request interception.
 // Usage: node scripts/vq-verify/vq.js [vibrato|hnr|centroid|ui|vibui|all] [captures per signal, default 2]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os');
 const ROOT = path.resolve(__dirname, '../..');

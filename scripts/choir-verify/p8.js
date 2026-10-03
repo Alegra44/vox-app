@@ -7,6 +7,7 @@
 // Usage: node scripts/choir-verify/p8.js <accounts.json> [tiers comma-separated|all] [url] [langs]
 //   accounts.json: {"monthly": {"email", "password"}, ...}; the tier "signedout" needs no account.
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const accounts = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));

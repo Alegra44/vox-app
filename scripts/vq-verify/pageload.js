@@ -4,6 +4,7 @@
 // duration (auth, /me for the profile, /me/progress, ...) and every 401 / 403 / 429 (or other 4xx/5xx) response. Nothing is fixed.
 // Usage: [PL_URL=<url>] [PL_LOADS=20] [PL_PACE_MS=30000] [PL_TIMEOUT_MS=60000] node scripts/vq-verify/pageload.js
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const path = require('path'), fs = require('fs');
 const { track } = require('../choir-verify/testAccounts');
 const URL_ = process.env.PL_URL || 'https://deploy-alegra1122.vercel.app', LOADS = +(process.env.PL_LOADS || 20);

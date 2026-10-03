@@ -2,6 +2,7 @@
 // known offsets from the real targets; the measured offsets should match to within a few ms.
 // Usage: node scripts/choir-verify/timing.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const OFFSETS_MS = [0, 60, -50, 20, -120, 100, 0, 35];

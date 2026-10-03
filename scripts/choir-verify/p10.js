@@ -10,6 +10,7 @@
 //    browser by wavcheck.py. A second export with Bass muted and Alto at 50% on the mixer (real clicks) must match.
 // Usage: node scripts/choir-verify/p10.js [delta|export|all] [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), fs = require('fs');
 const { track, db } = require('./testAccounts');

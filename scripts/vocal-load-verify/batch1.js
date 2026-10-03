@@ -10,6 +10,7 @@
 // user agent no second stream is opened, no load is stored and the gauges of these features stay hidden.
 // Usage: node scripts/vocal-load-verify/batch1.js [url]   (no url: deploy/ served locally, against the production backend)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db, cleanup, sweep } = require('../choir-verify/testAccounts');

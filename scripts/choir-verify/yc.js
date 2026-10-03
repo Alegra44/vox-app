@@ -2,6 +2,7 @@
 // MediaRecorder genuinely records it), singing each part's real notes on the song clock.
 // Usage: node scripts/choir-verify/yc.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const SHOTS = require('os').tmpdir() + '/';

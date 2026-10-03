@@ -1,6 +1,7 @@
 // Phase 5 checks: Choir Bosses, Chaos Mode, Tempo/Key Ladder.
 // Usage: node scripts/choir-verify/p5.js [fx|score|i18n|all] [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const which = process.argv[2] || 'all';
 const url = process.argv[3] || 'http://localhost:8765/';

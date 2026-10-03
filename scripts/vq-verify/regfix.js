@@ -12,6 +12,7 @@
 //   noise     room noise (pink, HVAC rumble, babble, white) at 20 and 10 dB SNR under a head and a chest tone
 // Usage: [REG_URL=<deployed url>] node scripts/vq-verify/regfix.js [steady|bug|bridge|drills|boss|feedback|levels|noise|all]   (REG_BLOCK_CDN=1: block the Supabase CDN, to check that a failed page load stops the run)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..');

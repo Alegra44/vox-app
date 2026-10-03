@@ -4,6 +4,7 @@
 // setting delivered: harmonic levels (dB re the fundamental, averaged over frames) and the floor between harmonics.
 // Usage: node scripts/vq-verify/rcmic.js
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });

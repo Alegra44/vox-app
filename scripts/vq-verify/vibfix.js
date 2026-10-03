@@ -14,6 +14,7 @@
 // slow ±60 ct wander, an 11 Hz ±40 ct flutter. Full log and JSON go to scripts/vq-verify/logs/.
 // Usage: [VF_URL=<url>] [VF_PACE_MS=45000] [VF_RESUME=logs/<earlier>.json] node scripts/vq-verify/vibfix.js [stimulus ids, comma-separated]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(os.tmpdir(), 'vq-verify', 'vibfix'), VS = path.join(os.tmpdir(), 'vq-verify', 'vocalset');

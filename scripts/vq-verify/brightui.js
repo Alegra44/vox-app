@@ -7,6 +7,7 @@
 // deleted at exit (testAccounts.js).
 // Usage: node scripts/vq-verify/brightui.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const url = process.argv[2];

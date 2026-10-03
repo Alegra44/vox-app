@@ -16,6 +16,7 @@
 // Usage: node scripts/vocal-load-verify/batchN.js [url]   (no url: deploy/ served locally, against the production backend)
 // VLB_ONLY=a,b runs only those features (debugging).
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db, cleanup } = require('../choir-verify/testAccounts');

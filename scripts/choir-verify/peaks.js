@@ -4,6 +4,7 @@
 // Usage: node scripts/choir-verify/peaks.js [url] [scenario,...]
 //   scenarios: hymn, requiem, hymnmax, chaos, drowner, pad4, pad5 (default: all)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const only = process.argv[3] ? process.argv[3].split(',') : null;

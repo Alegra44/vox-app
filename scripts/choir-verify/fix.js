@@ -1,5 +1,6 @@
 // Verifies: playback end follows the audio clock; loop restart; result colours. Usage: node fix.js <url>
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {

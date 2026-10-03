@@ -10,6 +10,7 @@
 //   proposed  the same from an unsmoothed analyser, with the smoothing done on power per bin (same 0.8 per frame)
 // Usage: node scripts/vq-verify/rcfix.js
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });

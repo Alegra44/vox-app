@@ -6,6 +6,7 @@
 // before the account is deleted at exit.
 // Usage: node scripts/choir-verify/p7signed.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const { track, db } = require('./testAccounts'); // deletes the account this run creates when it exits

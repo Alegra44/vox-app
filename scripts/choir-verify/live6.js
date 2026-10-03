@@ -2,6 +2,7 @@
 // language picker: record Alto and Bass with a test tone as the mic, play the 2-part stack, and measure
 // per-part pitch / fader gain / RMS and the stacked output peak exactly as yc.js does locally.
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), crypto = require('crypto');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';

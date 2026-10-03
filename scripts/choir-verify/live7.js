@@ -6,6 +6,7 @@
 // deleted at exit.
 // Usage: node scripts/choir-verify/live7.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), path = require('path');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';

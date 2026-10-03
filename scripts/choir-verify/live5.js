@@ -1,6 +1,7 @@
 // Live click-through on production for Phase 5: fight the Drowner (with a true-peak tap on the choir
 // output), switch to French, check the boss names, then run one Chaos Mode session and read its results.
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), crypto = require('crypto');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';

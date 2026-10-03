@@ -1,5 +1,6 @@
 // Stage 6 (From memory) with a French switch mid-run. Usage: node s6fr.js <url>
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {

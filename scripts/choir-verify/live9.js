@@ -4,6 +4,7 @@
 // was sent and returned, to show the toast does not wait for the save. The account is deleted at exit.
 // Usage: node scripts/choir-verify/live9.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), path = require('path');
 const { track, db } = require('./testAccounts');
 const sleep = ms => new Promise(r => setTimeout(r, ms));

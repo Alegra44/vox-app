@@ -8,6 +8,7 @@
 // shared mic and the register input are in the same state; only RTF is measured (6 s, % of 50 ms samples voiced / in tune).
 // Usage: [RS_REPS=3] [RS_PACE_MS=45000] node scripts/vq-verify/rtfsoft.js [stimuli, comma-separated]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track } = require('../choir-verify/testAccounts');

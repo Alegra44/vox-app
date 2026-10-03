@@ -4,6 +4,7 @@
 // readRegisterFrame), then graded with the app's own functions and thresholds on those same frames.
 // Usage: node scripts/vq-verify/xscope.js vibrato|noise|phantom [out.json]   (default out: %TEMP%/vq-verify/xscope/xscope-<mode>.json; KINDS / SNRS env narrow the noise run)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..');

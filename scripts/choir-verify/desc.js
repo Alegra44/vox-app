@@ -1,4 +1,5 @@
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage();
   await p.addInitScript(() => localStorage.setItem('language', 'en'));

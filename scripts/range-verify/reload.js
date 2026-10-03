@@ -10,6 +10,7 @@
 // The test account is deleted however the run ends (testAccounts.js).
 // Usage: node scripts/range-verify/reload.js [url]   (no url: deploy/ served locally, production backend)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db, cleanup } = require('../choir-verify/testAccounts');

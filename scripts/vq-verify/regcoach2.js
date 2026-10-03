@@ -8,6 +8,7 @@
 //   pow s0    the same with no smoothing
 // Usage: node scripts/vq-verify/regcoach2.js
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os');
 const TMP = path.join(os.tmpdir(), 'vq-verify');

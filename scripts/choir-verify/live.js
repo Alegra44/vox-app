@@ -1,5 +1,6 @@
 // Live click-through on production: Harmony Memory stage 1 + Breath Map, via real mouse clicks.
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), crypto = require('crypto');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const URL = 'https://deploy-alegra1122.vercel.app/';

@@ -3,6 +3,7 @@
 // paywall text. Flags a space before a full stop, and whether the trial-ended Choir World sentence names the plan.
 // Usage: node scripts/choir-verify/paywall.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {

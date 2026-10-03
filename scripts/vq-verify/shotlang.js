@@ -1,5 +1,6 @@
 // Screenshot of the Voice Quality result rows in each language at desktop width (after one real capture).
 const { chromium } = require('playwright'); const path = require('path'), os = require('os');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 (async () => {
   const b = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${path.resolve(process.argv[2])}`] });
   const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });

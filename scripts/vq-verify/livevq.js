@@ -4,6 +4,7 @@
 // note. Every getUserMedia call the page makes is logged with its constraints and the track's settings.
 // Usage: node scripts/vq-verify/livevq.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track } = require('../choir-verify/testAccounts');

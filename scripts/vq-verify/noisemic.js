@@ -5,6 +5,7 @@
 // adapts), then N captures.
 // Usage: node noisemic.js [captures=3]    Writes WAVs to %TEMP%/vq-verify.
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const N = +(process.argv[2] || 3), TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });

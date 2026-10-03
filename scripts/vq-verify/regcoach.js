@@ -5,6 +5,7 @@
 // 50 Bridge lane, 62 "pushing chest") and one clearly above; each played straight and with 6 Hz ±25/±50/±100 ct.
 // Usage: node scripts/vq-verify/regcoach.js
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });

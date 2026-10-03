@@ -5,6 +5,7 @@
 // is hidden when signed out.
 // Usage: node scripts/vocal-load-verify/pilot.js [url]   (no url: deploy/ served locally, against the production backend)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db } = require('../choir-verify/testAccounts');

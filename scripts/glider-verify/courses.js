@@ -13,6 +13,7 @@
 // A fresh page per course type (memory). GLIDER_MODES=highway,melody limits the course types.
 // Usage: node scripts/glider-verify/courses.js [url]   (no url: deploy/ served locally)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const path = require('path');
 const URL_ = process.argv[2], LOCAL = 'http://localhost:8765/', DEPLOY = path.resolve(__dirname, '../../deploy');
 let pass = 0, fail = 0;

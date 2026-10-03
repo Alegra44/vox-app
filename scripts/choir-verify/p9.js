@@ -14,6 +14,7 @@
 // deleted when the script exits (testAccounts.js), pass or fail.
 // Usage: node scripts/choir-verify/p9.js [url]
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { track, db } = require('./testAccounts'); // deletes the accounts this run creates when it exits
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';

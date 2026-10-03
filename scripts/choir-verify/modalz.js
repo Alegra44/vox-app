@@ -4,6 +4,7 @@
 // the toggle's centre, clicks the toggle and the submit button for real (no force), and waits for sign-in.
 // Usage: node scripts/choir-verify/modalz.js [url] [email password]  (no credentials: signs up a new account)
 const { chromium } = require('playwright');
+require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 let [email, password] = process.argv.slice(3);
