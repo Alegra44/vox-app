@@ -12,7 +12,10 @@
 // Hugging Face mirror Bill13579/vocalset-mirror, in %TEMP%/vq-verify/vocalset with manifest.json), each centred on its
 // semitone and looped forward/backward (realstim.py). Plus real notes made deliberately wrong: shifted +60 / +40 ct, a
 // slow ±60 ct wander, an 11 Hz ±40 ct flutter. Full log and JSON go to scripts/vq-verify/logs/.
-// Usage: [VF_URL=<url>] [VF_PACE_MS=45000] [VF_RESUME=logs/<earlier>.json] node scripts/vq-verify/vibfix.js [stimulus ids, comma-separated]
+// VF_MODE=regress (local only): a master-vs-branch regression run, for changes that aren't the vibrato fix. Both sides
+// already have the fix, so every "must rise" check becomes "must not move": |change| ≤ 3 on a per-note grader, ≤ 5 on an
+// RTF reading. Without it, the checks prove the vibrato fix itself (run against d7a5691, the last commit before it).
+// Usage: [VF_URL=<url>] [VF_MODE=regress] [VF_PACE_MS=45000] [VF_RESUME=logs/<earlier>.json] node scripts/vq-verify/vibfix.js [stimulus ids, comma-separated]
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
@@ -21,6 +24,8 @@ const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(os.tmpdir(), 'vq-
 fs.mkdirSync(TMP, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.VF_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
+const REGRESS = !PROD && process.env.VF_MODE === 'regress';
+if (process.env.VF_MODE && process.env.VF_MODE !== 'regress') throw new Error(`VF_MODE=${process.env.VF_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `vibfix-${PROD ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
@@ -210,7 +215,7 @@ const brief = o => ({ pmInt: avg(o.pitch.intermediate), pmPro: avg(o.pitch.profe
 
 (async () => {
   const only = process.argv[2] ? process.argv[2].split(',') : Object.keys(STIM);
-  log(`vibfix ${stamp}  sides: ${SIDES.join(', ')}${PROD ? '  url: ' + PROD : '  before: ' + (process.env.VF_BEFORE || 'HEAD')}`);
+  log(`vibfix ${stamp}  sides: ${SIDES.join(', ')}${PROD ? '  url: ' + PROD : '  before: ' + (process.env.VF_BEFORE || 'HEAD')}${REGRESS ? '  mode: regress (rises become "must not move")' : ''}`);
   execFileSync('node', [path.join(__dirname, 'realvib.js'), VS, '--json', path.join(TMP, 'rv.json')]);
   // VF_RESUME=<earlier .json of the same code>: keep its finished stimuli, run only the rest
   const rows = process.env.VF_RESUME ? JSON.parse(fs.readFileSync(process.env.VF_RESUME)).filter(r => only.includes(r.id) && SIDES.every(w => r.res[w])) : [];
@@ -254,7 +259,7 @@ const brief = o => ({ pmInt: avg(o.pitch.intermediate), pmPro: avg(o.pitch.profe
     const offset = PROD ? null : Math.abs(avg(r.res.before.choir.map(c => c.cents)));
     for (const k of ['pmInt', 'pmPro', 'drills', 'cwPitch']) {
       const a = val(r, A, k), b = PROD ? null : val(r, 'before', k), sr = ref(k);
-      if (r.kind === 'vibrato') check(a >= sr - 8 && (PROD || a >= b + 3), `${r.id} vibrato ${k}: ${PROD ? '' : b + ' → '}${a} (straight notes ${sr}; must be within 8${PROD ? '' : ' and up ≥3'})`);
+      if (r.kind === 'vibrato') check(a >= sr - 8 && (PROD || (REGRESS ? Math.abs(a - b) <= 3 : a >= b + 3)), `${r.id} vibrato ${k}: ${PROD ? '' : b + ' → '}${a} (straight notes ${sr}; must be within 8${PROD ? '' : REGRESS ? ' and not move more than 3' : ' and up ≥3'})`);
       if (r.kind === 'straight' && !PROD) check(Math.abs(a - b) <= 3, `${r.id} straight ${k}: ${b} → ${a} (must not move more than 3)`);
       if (r.kind === 'wrong' && hasVib && !PROD) { const e = Math.max(0, Math.round(100 - offset * MULT[k])); check(Math.abs(a - e) <= 6 && (offset < 40 || a <= sr - 10), `${r.id} ${r.label} ${k}: ${b} → ${a} (a straight note ${offset} ct off scores ${e}; must be within 6 of that${offset < 40 ? '' : ` and ≥10 below the straight notes ${sr}`})`); }
       if (['wrong', 'wander', 'flutter', 'unsteady'].includes(r.kind) && !hasVib && !PROD) check(a <= b + 3, `${r.id} ${r.kind} ${k}: ${b} → ${a} (no vibrato in it: must not rise more than 3)`);
@@ -263,7 +268,7 @@ const brief = o => ({ pmInt: avg(o.pitch.intermediate), pmPro: avg(o.pitch.profe
     }
     for (const k of ['rtfInTune', 'rtfSteady']) {
       const a = val(r, A, k), b = PROD ? null : val(r, 'before', k), sr = ref(k);
-      if (r.kind === 'vibrato') check(a >= sr - 20 && (PROD || a >= b + 20), `${r.id} vibrato RTF ${k}: ${PROD ? '' : b + '% → '}${a}% (straight notes ${sr}%; must be within 20${PROD ? '' : ' and up ≥20'})`);
+      if (r.kind === 'vibrato') check(a >= sr - 20 && (PROD || (REGRESS ? Math.abs(a - b) <= 5 : a >= b + 20)), `${r.id} vibrato RTF ${k}: ${PROD ? '' : b + '% → '}${a}% (straight notes ${sr}%; must be within 20${PROD ? '' : REGRESS ? ' and not move more than 5' : ' and up ≥20'})`);
       if (r.kind === 'straight' && !PROD) check(a >= b - 10, `${r.id} straight RTF ${k}: ${b}% → ${a}% (must not drop >10)`);
       if (['wrong', 'flutter', 'unsteady'].includes(r.kind) && k === 'rtfInTune' && !PROD) check(a <= b + 5, `${r.id} ${r.kind} RTF "In tune": ${b}% → ${a}% (must not rise >5)`);
       if (['wander', 'flutter', 'unsteady'].includes(r.kind) && k === 'rtfSteady') {
