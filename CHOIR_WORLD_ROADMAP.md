@@ -130,6 +130,20 @@ Follow-ups (logged 2026-10-03, not fixed):
   `warmupsCompleted` and records activity / XP; the pre-session warm-up stores only a per-day key in the browser.
   Settle it when the two become one warm-up in the redesign.
 
+## Practice fixes (b) + (c): listening window and shared note picker (branch `fix/practice`, not yet deployed)
+
+(c) `df2dfc4`: one shared note picker across the singer's range, never the same note twice in a row (`picker.js` 93/93).
+(b) `29b274c`: Pitch Match and Interval Match play the reference, then a cue, then listen from the first voiced frame;
+the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`listenwin.js` 27/27). They ship together.
+
+- **Pitch Match Professional reads 4–5 higher on vibfix's W2 (a real note 40 ct sharp): expected, not leniency**
+  (2026-10-05). Master 60/61, the branch 65/66 over three runs, past vibfix's "no vibrato: must not rise more than 3",
+  which therefore doesn't apply to this change. `pmframes.js`: on both versions every take's score is exactly
+  100 − mean|c| × 0.9 of the frames it scored. A steady sine 40 ct sharp scores 62 on both, at every level and take (the
+  detector reads it at +42.4 ct; 100 − 40 × 0.9 = 64 for a true 40). W2 is a real voice that wanders ±10 ct around +40,
+  and the two versions score different 1.6 s stretches of it (master from the click, the branch about 1.7 s later):
+  mean |c| 44 against 38–39. The looped stimulus has no onset, so it isn't master scoring onset frames.
+
 ## Known issues (app-wide)
 
 - **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
@@ -365,6 +379,10 @@ These are about the test setup, not the app.
   vibfix 104/108 and noisegate 146/160) are reference only: on the Mac the same code reads somewhat differently (RTF
   samples about 116 voiced frames per 6 s against 107, and RTF / Tuner percentages move by up to ±10 between
   machines). Mac reference numbers from 2026-10-02 are in the noise-gate entry above.
+  For a change that isn't the vibrato fix, run vibfix with `VF_MODE=regress` (from 2026-10-05): both sides already have
+  the fix, so its "must rise" checks become "must not move" (±3 per-note, ±5 RTF). The plain mode proves the fix itself
+  against `d7a5691`. When a feature's own length changes, hold each take to the same length on both sides (vibfix and
+  noisegate hold every Pitch Match take to 8 s), or the features after it hear a different stretch of the stimulus.
 
 - **Signed-in page load: no real-user problem found** (2026-10-02). noisegate's and rtfsoft's harnesses wait for
   `profile` and `progress` after loading the page with a saved session, and that wait timed out 3 times in about 110
