@@ -99,6 +99,9 @@ async function runAll(page, target) {
     const btn = document.getElementById('pitchListenBtn'); btn.click();
     await new Promise(r => setTimeout(r, 100));
     const t0 = performance.now(); while (btn.disabled && performance.now() - t0 < 8000) await new Promise(r => setTimeout(r, 50));
+    // every take lasts 8 s on both sides, so the features after it hear the same stretch of the stimulus recording
+    // (Pitch Match's own length differs between versions: 1.6 s before, reference + cue + a 2–3 s window after)
+    while (performance.now() - t0 < 8000) await new Promise(r => setTimeout(r, 50));
     // nothing heard: the page shows 0% with the "didn't hear you" feedback and records no score
     if (document.getElementById('pitchFeedback').textContent === accuracyFeedback(0, false)) return null;
     const v = parseInt(document.getElementById('pitchAccuracyVal').textContent, 10); return Number.isNaN(v) ? null : v;

@@ -1,0 +1,46 @@
+== local deploy/ (production backend)
+
+   signed up voxcoach-rng-1791116786641@example.com
+-- a new account with no saved range
+  ✓ no saved range in the DB                                                 [null,null]
+  ✓ A2–C5 (45–72)                                                            {"lowMidi":45,"highMidi":72}
+  ✓ after a reload: still A2–C5                                              {"lowMidi":45,"highMidi":72}
+  ✓ page errors                                                              none
+
+-- the Range Finder, sung
+  ✓ captured D3 and G5                                                       [50,79]
+  ✓ saved to the account (user_progress)                                     [50,79]
+  ✓ same page: the capture is used                                           {"lowMidi":50,"highMidi":79}
+  ✓ page errors                                                              none
+
+-- after a reload (no Range Finder run on this page)
+  ✓ lowNote/highNote are null; progress has the saved range                  {"lowNote":null,"highNote":null,"lo":50,"hi":79}
+  ✓ registerRangeBounds: the saved range                                     {"lowMidi":50,"highMidi":79}
+  ✓ level is beginner (the windows below assume it)                          beginner
+  ✓ Pitch Match startup target in the saved range's window 52–77             76 "E5"
+  ✓ Interval startup root and target inside 52–77                            65→69
+  ✓ Scale Run startup root: the whole 1-5 pattern inside 52–77               63 "D#4 — 1-2-3-4-5-4-3-2-1 pattern"
+  ✓ Pitch Match window = 52–77 (A2–C5 would give 47–70)                      52–77
+  ✓ Interval: lowest root 52, highest target 77 (A2–C5 caps at 70)           root 52, top 77
+  ✓ Scale Run roots 52–70: the pattern fits the saved range, not A2–C5       52–70
+  ✓ Glider: D3 at the bottom, G5 at the top, C5 below the top                [320,0,77,320]
+  ✓ Song Difficulty judges the song against the saved range                  outside
+  ✓ Register Coach: range 50–79, passaggio G4 (67), not C♯4 (61)             {"lo":50,"hi":79,"pass":67,"zone":134.13793103448276}
+  ✓ Register Coach: chest zone starts at the passaggio line                  134.1 vs 134.1
+  ✓ page errors                                                              none
+
+-- things that depend on a Range Finder run this page
+  ✓ Restart (clears the capture): the saved range, not A2–C5                 {"lowMidi":50,"highMidi":79}
+  ✓ Key Trainer "use captured range" still needs a capture on this page      
+  ✓ a wider saved range (40–84, set in the DB) is used after a reload        {"lowMidi":40,"highMidi":84}
+  ✓ a fresh capture on this page still wins over it                          {"lowMidi":50,"highMidi":79}
+  ✓ the saved range only widens: still 40–84                                 [40,84]
+  ✓ page errors                                                              none
+
+-- signed out
+  ✓ A2–C5                                                                    {"lowMidi":45,"highMidi":72}
+  ✓ page errors                                                              none
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-rng-1791116786641@example.com
+
+30 passed, 0 failed

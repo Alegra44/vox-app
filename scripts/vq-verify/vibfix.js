@@ -132,7 +132,11 @@ async function runAll(page, target) {
       const btn = document.getElementById('pitchListenBtn'); btn.click();
       await new Promise(r => setTimeout(r, 100));
       const t0 = performance.now(); while (btn.disabled && performance.now() - t0 < 8000) await new Promise(r => setTimeout(r, 50));
-      return parseInt(document.getElementById('pitchAccuracyVal').textContent, 10);
+      const v = parseInt(document.getElementById('pitchAccuracyVal').textContent, 10);
+      // every take lasts 8 s on both sides, so the features after it hear the same stretch of the stimulus (Pitch Match's
+      // own length differs between versions)
+      while (performance.now() - t0 < 8000) await new Promise(r => setTimeout(r, 50));
+      return v;
     }, { level, target }));
   }
   // Register Drills: the real Start button; every note's target is the sung note (range set so the chest zone starts on it)
