@@ -1,0 +1,43 @@
+== local deploy/ + production backend
+   mic: 261.63 Hz (MIDI 60)
+   signed up voxcoach-vlh-1791013127005@example.com
+  ✓ sidecar allowed in this browser (desktop Chromium)                 
+
+-- The Vocal Rift (seeded rounds, runs the full 60 s)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 0
+  ✓ feature result identical with the load feed live                   off [{"type":"Pitch","target":48,"acc":99},{"type":"Quick Catch","target":65,"acc":null},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Pitch","target":50,"acc":0},{"type":"Interval Jump","target":52,"acc":null},{"type":"Pitch","target":56,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Quick Catch","target":65,"acc":null},{"type":"Quick Catch","target":57,"acc":null},{"type":"Interval Jump","target":59,"acc":39},{"type":"Quick Catch","target":66,"acc":null},{"type":"Pitch","target":59,"acc":39},{"type":"Interval Jump","target":52,"acc":null},{"type":"Interval Jump","target":56,"acc":null},{"type":"Quick Catch","target":68,"acc":null},{"type":"Pitch","target":71,"acc":39},{"type":"Quick Catch","target":62,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Sustain Hold","target":64,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":47,"acc":39},{"type":"Pitch","target":50,"acc":0},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":48,"acc":99}] | on [{"type":"Pitch","target":48,"acc":99},{"type":"Quick Catch","target":65,"acc":null},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Pitch","target":50,"acc":0},{"type":"Interval Jump","target":52,"acc":null},{"type":"Pitch","target":56,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Quick Catch","target":65,"acc":null},{"type":"Quick Catch","target":57,"acc":null},{"type":"Interval Jump","target":59,"acc":39},{"type":"Quick Catch","target":66,"acc":null},{"type":"Pitch","target":59,"acc":39},{"type":"Interval Jump","target":52,"acc":null},{"type":"Interval Jump","target":56,"acc":null},{"type":"Quick Catch","target":68,"acc":null},{"type":"Pitch","target":71,"acc":39},{"type":"Quick Catch","target":62,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Sustain Hold","target":64,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":47,"acc":39},{"type":"Pitch","target":50,"acc":0},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":48,"acc":99}]
+  ✓ both live at once: the feature's own mic + the register input      opened this run [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}}]
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns true agc true ec true muted false | off: ns true agc true ec true
+  ✓ feature's own analyser hears the same tone                         on 261.9 Hz rms 0.0295 | off 261.7 Hz rms 0.0294
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":59.947,"ended":true,"load":115.467403263067,"median_rms":0.270602072405248,"p5_midi":60.0024264915407,"p95_midi":60.0028578234061}]
+  ✓ active seconds ≈ time the feature listened (60.11 s, −1.8/+0.3)    59.947 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 115.4674 vs hand 115.4535
+  ✓ pitch stored ≈ 60                                                  p5 60.002, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 0.0835% vs before 0.0000%
+  ✓ gauge = today's stored total / 6800                                "1.7% of daily budget" pct 1.698050 vs 1.698050
+  ✓ page errors                                                        none
+
+-- reload: every gauge resumes today's total from the server
+  ✓ rift: same total after reload, not 0                               "1.7% of daily budget"
+  ✓ coach: same total after reload, not 0                              "1.7% of daily budget"
+  ✓ daily table = sum of every session                                 [{"day":"2026-10-03","total_load":115.467403263067}] vs 115.4674
+
+-- all four languages (switched with the Profile language buttons)
+  ✓ fr: all 2 gauges' label and value in fr                            "Charge vocale du jour" "1,7 % du budget quotidien"
+  ✓ es: all 2 gauges' label and value in es                            "Carga vocal de hoy" "1,7 % del presupuesto diario"
+  ✓ tr: all 2 gauges' label and value in tr                            "Bugünkü ses yükü" "Günlük bütçe: %1,7"
+  ✓ en: all 2 gauges' label and value in en                            "Vocal load today" "1.7% of daily budget"
+  ✓ page errors                                                        none
+
+-- Safari user agent: sidecar features open no second stream, store nothing, hide their gauge
+  ✓ sidecar blocked for this user agent                                
+  ✓ sidecar features' gauges hidden, register-input features' still shown ok
+
+-- signed out
+  ✓ every gauge hidden when signed out                                 all hidden
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlh-1791013127005@example.com
+
+26 passed, 0 failed

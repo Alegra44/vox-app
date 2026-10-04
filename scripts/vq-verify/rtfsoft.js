@@ -72,10 +72,11 @@ async function measure(file, side) {
         const t0 = performance.now(); while (btn.disabled && performance.now() - t0 < 8000) await new Promise(r => setTimeout(r, 50));
       }
       const rnd = Math.random; Math.random = () => 0; // Register Drills, 5 notes (register input + vlFeed)
+      if (typeof pickNote === 'function') { window.__pick = window.__pick || pickNote; pickNote = (k, lo, hi) => k === 'drill' ? lo : __pick(k, lo, hi); } // every drill note on the sung one (the picker never repeats a note)
       lowNote = freqToNote(noteToFreq(target)); highNote = freqToNote(noteToFreq(target + 24)); drillMode = 'chest';
       document.getElementById('drillStartBtn').click();
       let t1 = performance.now(); while (!(drillResults.length === DRILL_NOTE_COUNT && !drillActive) && performance.now() - t1 < 40000) await new Promise(r => setTimeout(r, 100));
-      Math.random = rnd;
+      Math.random = rnd; if (window.__pick) pickNote = __pick;
       const regOpen = !!regIn, vlOn = typeof vlRun !== 'undefined';
       document.getElementById('liveFeedbackStartBtn').click(); // RTF, sampled as noisegate.js samples it
       await new Promise(r => setTimeout(r, 1000));

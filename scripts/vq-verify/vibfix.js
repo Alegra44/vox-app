@@ -138,10 +138,11 @@ async function runAll(page, target) {
   // Register Drills: the real Start button; every note's target is the sung note (range set so the chest zone starts on it)
   out.drills = await page.evaluate(async target => {
     const rnd = Math.random; Math.random = () => 0;
+    if (typeof pickNote === 'function') { window.__pick = window.__pick || pickNote; pickNote = (k, lo, hi) => k === 'drill' ? lo : __pick(k, lo, hi); } // every drill note on the sung one (the picker never repeats a note)
     lowNote = freqToNote(noteToFreq(target)); highNote = freqToNote(noteToFreq(target + 24)); drillMode = 'chest';
     document.getElementById('drillStartBtn').click();
     const t0 = performance.now(); while (!(drillResults.length === DRILL_NOTE_COUNT && !drillActive) && performance.now() - t0 < 40000) await new Promise(r => setTimeout(r, 100));
-    Math.random = rnd;
+    Math.random = rnd; if (window.__pick) pickNote = __pick;
     return drillResults.map(r => ({ midi: r.midi, pitchAcc: r.heard ? r.pitchAcc : null }));
   }, target);
   // Real-Time Feedback: the real Start button; the Pitch and Stability rows' states every 50 ms for 6 s after a 1 s settle

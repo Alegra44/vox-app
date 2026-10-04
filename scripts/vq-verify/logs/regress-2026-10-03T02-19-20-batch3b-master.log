@@ -1,0 +1,74 @@
+== local deploy/ + production backend
+   mic: 261.63 Hz (MIDI 60)
+   signed up voxcoach-vlh-1790993960312@example.com
+  ✓ sidecar allowed in this browser (desktop Chromium)                 
+
+-- Entrance & Cutoff Trainer, entrances, Lead (runs to the end of the song)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 0
+  ✓ feature result identical with the load feed live                   off {"ticks":true,"laterEdges":0,"claimed":"00000000"} | on {"ticks":true,"laterEdges":0,"claimed":"00000000"}
+  ✓ both live at once: the feature's own mic + the register input      opened this run [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}}]
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns true agc true ec true muted false | off: ns true agc true ec true
+  ✓ feature's own analyser hears the same tone                         on 262.2 Hz rms 0.0296 | off 261.7 Hz rms 0.0294
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.628,"ended":true,"load":58.99188217283,"median_rms":0.270579665328713,"p5_midi":60.0024203720846,"p95_midi":60.0028598684705}]
+  ✓ active seconds ≈ time the feature listened (30.70 s, −1.8/+0.3)    30.628 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.9919 vs hand 58.9873
+  ✓ pitch stored ≈ 60                                                  p5 60.002, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 0.0834% vs before 0.0000%
+  ✓ gauge = today's stored total / 6800                                "0.9% of daily budget" pct 0.867528 vs 0.867528
+
+-- Choir Bosses, the first boss, Lead (runs to the end or the boss wins)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0.9% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 1
+  ✓ feature result identical with the load feed live                   off {"held":"10111101","score":75,"passed":true,"stoppedAt":null} | on {"held":"10111101","score":75,"passed":true,"stoppedAt":null}
+  ✓ both live at once: the feature's own mic + the register input      opened this run [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}}]
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns true agc true ec true muted false | off: ns true agc true ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.0294 | off 261.8 Hz rms 0.0295
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.332,"ended":true,"load":58.4228991658997,"median_rms":0.270592317274413,"p5_midi":60.0024060112274,"p95_midi":60.0029549414554}]
+  ✓ active seconds ≈ time the feature listened (30.39 s, −1.8/+0.3)    30.332 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.4229 vs hand 58.4172
+  ✓ pitch stored ≈ 60                                                  p5 60.002, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 0.9515% vs before 0.8675%
+  ✓ gauge = today's stored total / 6800                                "1.7% of daily budget" pct 1.726688 vs 1.726688
+
+-- Chaos Mode, Lead (seeded plan, runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "1.7% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 2
+  ✓ feature result identical with the load feed live                   off {"held":"10111101","score":75,"passed":true,"stoppedAt":null} | on {"held":"10111101","score":75,"passed":true,"stoppedAt":null}
+  ✓ both live at once: the feature's own mic + the register input      opened this run [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}}]
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns true agc true ec true muted false | off: ns true agc true ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.0294 | off 262.3 Hz rms 0.0299
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.354,"ended":true,"load":58.4640134473895,"median_rms":0.270580617406464,"p5_midi":60.0024020868832,"p95_midi":60.0029826437677}]
+  ✓ active seconds ≈ time the feature listened (30.41 s, −1.8/+0.3)    30.354 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.4640 vs hand 58.4596
+  ✓ pitch stored ≈ 60                                                  p5 60.002, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 1.8109% vs before 1.7267%
+  ✓ gauge = today's stored total / 6800                                "2.6% of daily budget" pct 2.586453 vs 2.586453
+
+-- Tempo/Key Ladder, rung 1 up, Lead (runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "2.6% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 3
+  ✓ feature result identical with the load feed live                   off {"held":"10111101","score":75,"passed":true,"stoppedAt":null} | on {"held":"10111101","score":75,"passed":true,"stoppedAt":null}
+  ✓ both live at once: the feature's own mic + the register input      opened this run [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}}]
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns true agc true ec true muted false | off: ns true agc true ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.0295 | off 261.8 Hz rms 0.0295
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.337,"ended":true,"load":58.4322806621659,"median_rms":0.270585956000208,"p5_midi":60.0024519747258,"p95_midi":60.0028570984092}]
+  ✓ active seconds ≈ time the feature listened (30.41 s, −1.8/+0.3)    30.337 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.4323 vs hand 58.4268
+  ✓ pitch stored ≈ 60                                                  p5 60.002, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 2.6706% vs before 2.5865%
+  ✓ gauge = today's stored total / 6800                                "3.4% of daily budget" pct 3.445751 vs 3.445751
+
+-- The Vocal Rift (seeded rounds, runs the full 60 s)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "3.4% of daily budget"
+  ✗ rift: ran to the end                                               Command failed: npx supabase db query --linked "select id from auth.users where email = 'voxcoach-vlh-1790993960312@example.com'"
+
+[cleanup] FAILED (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlh-1790993960312@example.com') and email like 'voxcoach-%@example.com' returning email"); the watchdog retries when this process exits: voxcoach-vlh-1790993960312@example.com
+Error: Supabase client missing (CDN script failed to load)
+    at openPage (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/32901931-49bd-4481-9ca8-4e75d93cdaeb/scratchpad/master-wt/scripts/vocal-load-verify/harness.js:58:112)
+    at async run (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/32901931-49bd-4481-9ca8-4e75d93cdaeb/scratchpad/master-wt/scripts/vocal-load-verify/harness.js:208:112)

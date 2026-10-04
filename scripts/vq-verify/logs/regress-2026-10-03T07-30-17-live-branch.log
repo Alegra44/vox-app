@@ -1,0 +1,15 @@
+signed up voxcoach-vl-1791021536909@example.com
+  ✓ checkpoint 100 s / 150                                       200 {"user_id":"6bc09fa4-c221-4d10-8d68-7297a8471f29","session_id":"0ab8c8d0-2461-47d3-90a6-64
+  ✓ checkpoint 160 s / 240                                       200
+  ✓ stale checkpoint (120 s) is a no-op                          200 stored 160
+  ✓ median RMS 1.5 rejected by the database                      400 new row for relation "vocal_load_sessions" violates check constraint "vls_median_rms"
+  ✓ 1000 active s in a 5-minute-old session rejected (limit 900) 400 vocal load: more active seconds than time since the session started
+  ✓ malformed session id rejected by the route                   400 session id must be a uuid
+  ✓ state: 1 baseline session (160 s), today 240                 200 {"dayLoad":240,"sessions":[{"p5Midi":50,"p95Midi":60,"medianRms":0.05,"activeSeconds":160}]}
+  ✓ daily table (read straight, own JWT): today 240              200 [{"day":"2026-10-03","total_load":240}]
+  ✓ writing the daily table straight is refused (RLS)            403 new row violates row-level security policy for table "vocal_load_daily"
+  ✓ no sign-in: 401                                              401
+
+10 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vl-1791021536909@example.com

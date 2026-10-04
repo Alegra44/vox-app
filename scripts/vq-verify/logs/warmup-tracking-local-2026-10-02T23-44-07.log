@@ -1,0 +1,43 @@
+warm-up tracking · local deploy/ against the production backend
+
+-- A. exercise tracking = Glider tracking, frame by frame
+   signed up voxcoach-wu-1790984652006@example.com
+  ✓ both canvases 320 px high                                              glider 320 · warm-up 320
+  ✓ all 518 frames: warm-up height === Glider height                       518 identical
+  ✓ starts on the same frame (the first sung note)                         glider took off at 40, warm-up started at 40
+  ✓ before the first note: no movement (no fall, no NaN)                   124.85689297085628 … 124.85689297085628
+  ✓ a gap: falls 3.2 px a frame                                            3.2, 3.2, 3.2, 3.2, 3.2, 3.2
+  ✓ no NaN / Infinity at any frame (NaN, 0, Infinity, -1 readings)         0 bad
+  ✓ always inside the canvas (6 … H−6)                                     min 6.00 max 314.00
+  ✓ a long silence ends on the floor (H−6)                                 314
+  ✓ Glider unchanged by the refactor: every frame === master's Glider      518 identical
+  ✓ Karaoke roll markup unchanged (every song)                             same, same
+
+-- B. the four exercises on the real mic (C4)
+  ✓ trill: starts on the voice, dot on C4 (±3 px), trace drawn, runs 20 s, ✓ Done y 142.0 vs 142.2 · voiced 100% · dot px 241,234,217 · during "Stop" · after "✓ Done", continue flex, "Nice! Try another, or start your session."
+  ✓ siren: starts on the voice, dot on C4 (±3 px), trace drawn, runs 20 s, ✓ Done y 142.0 vs 142.2 · voiced 100% · dot px 241,234,217 · during "Stop" · after "✓ Done", continue flex, "Nice! Try another, or start your session."
+  ✓ glide: starts on the voice, dot on C4 (±3 px), trace drawn, runs 20 s, ✓ Done y 142.0 vs 142.2 · voiced 100% · dot px 241,234,217 · during "Stop" · after "✓ Done", continue flex, "Nice! Try another, or start your session."
+  ✓ hum  : starts on the voice, dot on C4 (±3 px), trace drawn, runs 20 s, ✓ Done y 142.0 vs 142.2 · voiced 100% · dot px 241,234,217 · during "Stop" · after "✓ Done", continue flex, "Nice! Try another, or start your session."
+  ✓ several done, then "Start my session": the waiting session goes, stored "done" for today {"waiting":true,"go":true,"overlay":"none","stored":"done"}
+
+-- C. song warm-up, every song in the library
+  ✓ song list = the library (2 songs)                                      song:hymn Demo Hymn | song:ballad Autumn Requiem
+  ✓ hymn: roll has every note (8), pad plays all 4 backing parts (32 notes) rects 8 · pad 32
+  ✓ hymn: every note — roll on that note, cursor on its height (±2), teal  1:100%/0.1 2:100%/0.1 3:100%/0.1 4:100%/0.1 5:100%/0.1 6:100%/0.1 7:100%/0.1 8:100%/0.1
+  ✓ hymn: ends on time, marked done, pad stopped, session's song restored  ended true · last sample 26664 of 26667 ms · pad 0 · restored true · SONG swapped while running true
+  ✓ ballad: roll has every note (12), pad plays all 4 backing parts (48 notes) rects 12 · pad 48
+  ✓ ballad: every note — roll on that note, cursor on its height (±2), teal 1:100%/0.1 2:100%/0.1 3:100%/0.0 4:100%/0.1 5:100%/0.1 6:100%/0.0 7:100%/0.0 8:100%/0.0 9:100%/0.1 10:100%/0.0 11:100%/0.1 12:100%/0.0
+  ✓ ballad: ends on time, marked done, pad stopped, session's song restored ended true · last sample 34282 of 34286 ms · pad 0 · restored true · SONG swapped while running true
+  ✓ hymn +100 ct: roll has every note (8), pad plays all 4 backing parts (32 notes) rects 8 · pad 32
+  ✓ hymn +100 ct: every note — roll on that note, cursor on its height (±2), coral 1:0%/0.1 2:0%/0.1 3:0%/0.1 4:0%/0.1 5:0%/0.1 6:0%/0.1 7:0%/0.1 8:0%/0.1
+  ✓ hymn +100 ct: ends on time, marked done, pad stopped, session's song restored ended true · last sample 26660 of 26667 ms · pad 0 · restored true · SONG swapped while running true
+  ✓ Karaoke's own roll untouched by the warm-up's                          
+
+-- D. skipping mid-way
+  ✓ skip mid-song: pad stopped, song restored, gate released, closed       {"mid":{"song":true,"pad":32},"afterSong":{"run":false,"pad":0,"song":true,"pending":false,"overlay":"none"}}
+  ✓ skip mid-exercise: stopped, gate released, stored "skipped"            {"run":false,"pending":false,"stored":"skipped"}
+  ✓ no page errors                                                         
+
+==== warm-up tracking: 29 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-wu-1790984652006@example.com
