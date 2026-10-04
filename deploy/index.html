@@ -6583,6 +6583,9 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"No Day 1 baseline was recorded (the 21-Day Journey assessment wasn't completed), so there's no before/after to show — your saved progress is still intact.",
     voicehealth_nodata_tooltip:'no data',
     exfeedback_nopitch:"Didn't catch a clear pitch — try again a little louder or closer to the mic.",
+    ex_listen_ref:"Listen…",
+    ex_sing_now:"Sing now!",
+    ex_noheard_retry:"I didn't hear you, try again.",
     ex_sing_again:"Sing it again",
     exfeedback_excellent:'Right on it.', exfeedback_close:'Close — nice control.', exfeedback_nearby:'In the neighborhood, but drifting.',
     exfeedback_offtarget:'Off target — try matching the tone before you start singing.',
@@ -7942,6 +7945,9 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"Aucune référence du jour 1 n'a été enregistrée (l'évaluation du parcours de 21 jours n'a pas été terminée), donc il n'y a pas d'avant/après à afficher — votre progression enregistrée est toujours intacte.",
     voicehealth_nodata_tooltip:'aucune donnée',
     exfeedback_nopitch:"Aucune hauteur claire détectée — réessayez un peu plus fort ou plus près du micro.",
+    ex_listen_ref:"Écoutez…",
+    ex_sing_now:"Chantez !",
+    ex_noheard_retry:"Je ne vous ai pas entendu, réessayez.",
     ex_sing_again:"Rechanter",
     exfeedback_excellent:'En plein dedans.', exfeedback_close:'Proche — bon contrôle.', exfeedback_nearby:'Dans les environs, mais ça dérive.',
     exfeedback_offtarget:'Hors cible — essayez de caler le ton avant de commencer à chanter.',
@@ -9301,6 +9307,9 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"No se registró una línea base del día 1 (no se completó la evaluación del recorrido de 21 días), por lo que no hay un antes/después que mostrar — tu progreso guardado sigue intacto.",
     voicehealth_nodata_tooltip:'sin datos',
     exfeedback_nopitch:"No se detectó una afinación clara — inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
+    ex_listen_ref:"Escucha…",
+    ex_sing_now:"¡Canta ahora!",
+    ex_noheard_retry:"No te he oído, inténtalo de nuevo.",
     ex_sing_again:"Cantar de nuevo",
     exfeedback_excellent:'Justo en el blanco.', exfeedback_close:'Cerca — buen control.', exfeedback_nearby:'Por ahí cerca, pero se desvía.',
     exfeedback_offtarget:'Fuera de objetivo — intenta igualar el tono antes de empezar a cantar.',
@@ -10660,6 +10669,9 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"1. Gün temel ölçümü kaydedilmedi (21 Günlük Yolculuk değerlendirmesi tamamlanmadı), bu yüzden gösterilecek bir öncesi/sonrası yok — kayıtlı ilerlemeniz hâlâ korunuyor.",
     voicehealth_nodata_tooltip:'veri yok',
     exfeedback_nopitch:"Net bir perde yakalanamadı — biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
+    ex_listen_ref:"Dinleyin…",
+    ex_sing_now:"Şimdi söyleyin!",
+    ex_noheard_retry:"Sizi duyamadım, tekrar deneyin.",
     ex_sing_again:"Tekrar söyle",
     exfeedback_excellent:'Tam isabet.', exfeedback_close:'Yakın — iyi kontrol.', exfeedback_nearby:'Yakınında ama kayıyor.',
     exfeedback_offtarget:'Hedefin dışında — şarkı söylemeye başlamadan önce tonu yakalamayı deneyin.',
@@ -15503,21 +15515,32 @@ function centsFromTarget(freq, targetMidi){
 }
 
 /* opts: {accuracyMultiplier, splitAttackLanding, showCentsDetail} */
+// opts.waitForVoiceMs: the window opens at the first voiced frame instead of at once (no voice by then: {noVoice:true}),
+// and opts.graceMs of it (the onset and its settling) isn't scored. Without them: the window starts at once, as before.
 async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
   await initAudio();
-  const mult = opts.accuracyMultiplier ?? 0.6;
+  const mult = opts.accuracyMultiplier ?? 0.6, grace = opts.graceMs || 0;
   const samples = [];
   let totalFrames = 0;
   const start = performance.now();
+  let voiceAt = opts.waitForVoiceMs ? null : 0;
   return new Promise(resolve=>{
     function frame(){
-      totalFrames++;
       analyser.getFloatTimeDomainData(dataArray);
       const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
-      const t = performance.now()-start;
-      if(freq>0){
-        const cents = centsFromTarget(freq, targetMidi);
-        if(cents!==null && Math.abs(cents) < 300) samples.push({t, cents});
+      const now = performance.now()-start;
+      if(voiceAt===null){
+        if(freq>0) voiceAt = now;
+        else if(now >= opts.waitForVoiceMs){ resolve({accuracy:0, heard:false, noVoice:true, confidence:computeCaptureConfidence(0, 1)}); return; }
+        else { requestAnimationFrame(frame); return; }
+      }
+      const t = now-voiceAt; // time since the window opened
+      if(t >= grace){
+        totalFrames++;
+        if(freq>0){
+          const cents = centsFromTarget(freq, targetMidi);
+          if(cents!==null && Math.abs(cents) < 300) samples.push({t, cents});
+        }
       }
       if(t < durationMs){
         requestAnimationFrame(frame);
@@ -15528,7 +15551,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
         const scoreFrom = list => Math.max(0, Math.round(100 - (list.reduce((a,b)=>a+Math.abs(b.cents),0)/list.length)*mult));
         const result = {accuracy: scoreFrom(samples), heard:true, confidence};
         if(opts.splitAttackLanding){
-          const half = durationMs/2;
+          const half = grace + (durationMs-grace)/2; // the scored part of the window, split in two
           const attackList = samples.filter(s=>s.t<half);
           const landingList = samples.filter(s=>s.t>=half);
           result.attackAcc = attackList.length ? scoreFrom(attackList) : null;
@@ -15640,6 +15663,21 @@ function dailyNote(key, lo, hi){
   return lo + (h % (hi-lo+1));
 }
 
+// Pitch Match and Interval Match: the reference plays, then a cue, then the window opens at the first voiced frame;
+// its first LISTEN_GRACE_MS (the onset settling) isn't scored. No voice within LISTEN_WAIT_MS: not an attempt.
+const LISTEN_WINDOW_MS = {beginner:3000, intermediate:2500, professional:2000};
+const LISTEN_GRACE_MS = 400, LISTEN_WAIT_MS = 5000;
+async function referenceThenCue(playReference, refMs, btn){
+  btn.textContent = t('ex_listen_ref');
+  playReference();
+  await new Promise(r=>setTimeout(r, refMs));
+  playTone(1320, 0.12, 0, 0.12); // the cue: a short high tick (playTone's shortest clean length), over before listening starts
+  btn.textContent = t('ex_sing_now');
+  await new Promise(r=>setTimeout(r, 200));
+}
+function listenOpts(cfg, extra={}){
+  return {accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, waitForVoiceMs:LISTEN_WAIT_MS, graceMs:LISTEN_GRACE_MS, ...extra};
+}
 function showAgain(id, label){ const b = document.getElementById(id); b.textContent = `${t('ex_sing_again')} (${label})`; b.style.display = ''; }
 
 function setExerciseLevel(level){
@@ -15721,14 +15759,24 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   if(blockExercise()) return;
   const cfg = levelCfg(), target = pitchTargetMidi;
   const btn = document.getElementById('pitchListenBtn');
-  btn.disabled = true; btn.textContent=t('action_listening');
+  btn.disabled = true;
   document.getElementById('pitchAgainBtn').style.display='none';
-  vlSidecar(()=>btn.disabled);
-  const res = await captureAccuracyForTarget(target, 1600, {
-    accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, showCentsDetail:cfg.showCentsDetail
-  });
+  if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  await referenceThenCue(()=>playTone(noteToFreq(target), 0.9), 1050, btn);
+  btn.textContent=t('action_listening');
+  let listening = true;
+  vlSidecar(()=>listening);
+  const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg, {showCentsDetail:cfg.showCentsDetail}));
+  listening = false;
   btn.disabled = false; btn.textContent=t('action_listenscore');
   document.getElementById('pitchResult').style.display='block';
+  if(res.noVoice){ // nothing sung: not an attempt, not a zero, same note
+    document.getElementById('pitchAccuracyVal').textContent = '—';
+    document.getElementById('pitchAccuracyVal').className = 'ex-accuracy';
+    document.getElementById('pitchFeedback').textContent = t('ex_noheard_retry');
+    ['pitchSubScores','pitchCentsDetail','pitchConfidenceBadge'].forEach(id=>{ const e = document.getElementById(id); if(e) e.style.display='none'; });
+    return;
+  }
   const accEl = document.getElementById('pitchAccuracyVal');
   accEl.textContent = res.accuracy+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(res.accuracy);
@@ -15787,14 +15835,24 @@ document.getElementById('intervalListenBtn').addEventListener('click', async ()=
   if(blockExercise()) return;
   const cfg = levelCfg(), root = intervalRootMidi, def = intervalDef, target = intervalTargetMidi;
   const btn = document.getElementById('intervalListenBtn');
-  btn.disabled = true; btn.textContent=t('action_listening');
+  btn.disabled = true;
   document.getElementById('intervalAgainBtn').style.display='none';
-  vlSidecar(()=>btn.disabled);
-  const res = await captureAccuracyForTarget(target, 1600, {
-    accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding
-  });
+  if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  await referenceThenCue(()=>{ playTone(noteToFreq(root), 0.55, 0); playTone(noteToFreq(target), 0.55, 0.65); }, 1350, btn);
+  btn.textContent=t('action_listening');
+  let listening = true;
+  vlSidecar(()=>listening);
+  const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg));
+  listening = false;
   btn.disabled = false; btn.textContent=t('action_listenscore');
   document.getElementById('intervalResult').style.display='block';
+  if(res.noVoice){
+    document.getElementById('intervalAccuracyVal').textContent = '—';
+    document.getElementById('intervalAccuracyVal').className = 'ex-accuracy';
+    document.getElementById('intervalFeedback').textContent = t('ex_noheard_retry');
+    document.getElementById('intervalSubScores').style.display='none';
+    return;
+  }
   const accEl = document.getElementById('intervalAccuracyVal');
   accEl.textContent = res.accuracy+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(res.accuracy);
