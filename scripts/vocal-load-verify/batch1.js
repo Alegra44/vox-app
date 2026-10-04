@@ -103,6 +103,9 @@ const warm = page => page.evaluate(async () => {
   st.getTracks().forEach(t => t.stop()); await ac.close(); window.__gum = []; return heard;
 });
 const ACTIVE = { pitch: '!!document.getElementById("pitchListenBtn").disabled', staykey: 'stayKeyActive', karaoke: 'karaokeActive', hmem: 'harmonyMemory.active', glider: 'gliderActive', boss: 'bossActive' };
+// When the feature starts listening, if that's later than ACTIVE: Pitch Match plays its reference and a cue first, and the
+// load feed starts with the "Listening…" label (on master too, where it shows at once)
+const LISTENING = { pitch: 'document.getElementById("pitchListenBtn").textContent === t("action_listening")' };
 const START = { pitch: '#pitchListenBtn', staykey: '#stayKeyStartBtn', karaoke: '#karaokeStartBtn', hmem: '#hmemStartBtn', glider: '#gliderStartBtn', boss: '#bossStartBtn' };
 // The feature's own outcome, read from its own state and result display.
 const RESULT = {
@@ -159,6 +162,7 @@ async function runOnce(page, f, { live, target }) {
   const t0 = Date.now();
   await page.locator(START[f]).click();
   await page.waitForFunction(ACTIVE[f], null, { timeout: 10000 });
+  if (LISTENING[f]) await page.waitForFunction(LISTENING[f], null, { timeout: 10000, polling: 20 });
   const tStart = Date.now();
   // Mid-run: the feature's own mic, and what streams are open.
   await sleep({ pitch: 900 }[f] || 5000);
