@@ -1,0 +1,142 @@
+
+== 1. Per-second load_rate and cumulative load, baseline A (RMS 0.05, C3–C5, passaggio 62.4)
+  ✓ s1   rms 0.05   pitch 55.2   load_rate expected      1.5 got      1.5   cumulative expected      1.5 got      1.5   lr 1, pr 7.2/14.4 = 0.5 → 1 × 1.5
+  ✓ s2   rms 0.1    pitch 55.2   load_rate expected        3 got        3   cumulative expected      4.5 got      4.5   lr 2, pr 0.5 → 2 × 1.5
+  ✓ s3   rms 0.025  pitch 62.4   load_rate expected        2 got        2   cumulative expected      6.5 got      6.5   lr 0.5 → floored to 1, pr 1 (at the passaggio) → 1 × 2
+  ✓ s4   rms 0.003  pitch none   load_rate expected        0 got no block   cumulative expected      6.5 got      6.5   silence: below the floor max(0.008, 0.1 × 0.05) = 0.008
+  ✓ s5   rms 0.004  pitch none   load_rate expected        0 got no block   cumulative expected      6.5 got      6.5   unpitched and quiet
+  ✓ s6   rms 0.075  pitch 72     load_rate expected        4 got        4   cumulative expected     10.5 got     10.5   lr 1.5, pr 24/14.4 = 1.6667 → 1.5 × 8/3
+  ✓ s7   rms 0.05   pitch 40     load_rate expected        1 got        1   cumulative expected     11.5 got     11.5   below the range: pr floored to 0 → 1 × 1
+  ✓ s8   rms 0.2    pitch 69.6   load_rate expected       10 got       10   cumulative expected     21.5 got     21.5   lr 4, pr 21.6/14.4 = 1.5 → 4 × 2.5
+  ✓ s9   rms 0.006  pitch 60     load_rate expected        0 got no block   cumulative expected     21.5 got     21.5   pitched but under the 0.008 floor
+  ✓ s10  rms 0.009  pitch 48     load_rate expected        1 got        1   cumulative expected     22.5 got     22.5   just over the floor; lr 0.18 → 1, pr 0
+  ✓   blocks = active seconds                    expected            7   got            7
+  ✓ active seconds (s1–3, 6–8, 10)               expected            7   got            7
+  ✓ session load                                 expected         22.5   got         22.5
+  ✓ % of daily budget: 22.5 / 6800 × 100         expected     0.330882   got     0.330882
+
+== 2. The silence floor follows the baseline: baseline RMS 0.2 → floor max(0.008, 0.02) = 0.02
+  ✓ s1   rms 0.015  pitch 62.4   load_rate expected        0 got no block   cumulative expected        0 got        0   pitched, but under 0.02: not singing for this singer
+  ✓ s2   rms 0.025  pitch 62.4   load_rate expected        2 got        2   cumulative expected        2 got        2   over the floor; lr 0.125 → 1, pr 1
+  ✓ s3   rms 0.0201 pitch 48     load_rate expected        1 got        1   cumulative expected        3 got        3   just over the floor; pr 0
+  ✓   blocks = active seconds                    expected            2   got            2
+
+== 3. Frame-level integration and block aggregation (60 frames/s)
+  ✓ rate 4 for 1.5 s: load                       expected            6   got            6
+  ✓ rate 4 for 3 s: load                         expected           12   got           12
+  ✓ then a 5 s frame gap, counted as 0.1 s at rate 2 expected         12.2   got         12.2
+  ✓ active seconds                               expected          3.1   got          3.1
+  ✓ mixed second: block load_rate                expected     2.884441   got     2.884441
+
+== 4. Pitch dropouts: held for 0.25 s at singing level (frames of 1/16 s, all RMS 0.05 at 62.4 → rate 2)
+  ✓ 8 pitched + 4 held (of 6 unpitched): active s expected         0.75   got         0.75
+  ✓   load = 0.75 × 2                            expected          1.5   got          1.5
+  ✓ held but quiet (0.004) is not active: active s expected         1.25   got         1.25
+  ✓ held at singing level: active s              expected       1.3125   got       1.3125
+  ✓   load = 1.3125 × 2                          expected        2.625   got        2.625
+
+== 5. New user: no history → A2–C5 (passaggio 45 + 0.6 × 27 = 61.2), 30 s calibration at loudness_ratio 1
+  ✓ baseline RMS                                 expected            —   got            —
+  ✓ range source                                 expected      default   got      default
+  ✓ passaggio                                    expected         61.2   got         61.2
+  ✓ s1   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected        2 got        2   calibrating: lr 1, pr 1 → 2
+  ✓ s2   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected        4 got        4
+  ✓ s3   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected        6 got        6
+  ✓ s4   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected        8 got        8
+  ✓ s5   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected       10 got       10
+  ✓ s6   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected       12 got       12
+  ✓ s7   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected       14 got       14
+  ✓ s8   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected       16 got       16
+  ✓ s9   rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected       18 got       18
+  ✓ s10  rms 0.03   pitch 61.2   load_rate expected        2 got        2   cumulative expected       20 got       20
+  ✓ s11  rms 0.004  pitch 61.2   load_rate expected        0 got no block   cumulative expected       20 got       20   silence doesn't count toward calibration
+  ✓ s12  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       22 got       22
+  ✓ s13  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       24 got       24
+  ✓ s14  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       26 got       26
+  ✓ s15  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       28 got       28
+  ✓ s16  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       30 got       30
+  ✓ s17  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       32 got       32
+  ✓ s18  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       34 got       34
+  ✓ s19  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       36 got       36
+  ✓ s20  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       38 got       38
+  ✓ s21  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       40 got       40
+  ✓ s22  rms 0.05   pitch 61.2   load_rate expected        2 got        2   cumulative expected       42 got       42
+  ✓ s23  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       44 got       44
+  ✓ s24  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       46 got       46
+  ✓ s25  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       48 got       48
+  ✓ s26  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       50 got       50
+  ✓ s27  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       52 got       52
+  ✓ s28  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       54 got       54
+  ✓ s29  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       56 got       56
+  ✓ s30  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       58 got       58
+  ✓ s31  rms 0.08   pitch 61.2   load_rate expected        2 got        2   cumulative expected       60 got       60   30th active second: baseline = median 0.05
+  ✓ s32  rms 0.1    pitch 61.2   load_rate expected        4 got        4   cumulative expected       64 got       64   lr 0.1/0.05 = 2, pr 1
+  ✓ s33  rms 0.05   pitch 45     load_rate expected        1 got        1   cumulative expected       65 got       65   bottom of the range: pr 0
+  ✓ s34  rms 0.075  pitch 72     load_rate expected        4 got        4   cumulative expected       69 got       69   lr 1.5, pr 27/16.2 = 1.6667 → 1.5 × 8/3
+  ✓ s35  rms 0.006  pitch 61.2   load_rate expected        0 got no block   cumulative expected       69 got       69   floor now max(0.008, 0.005) = 0.008
+  ✓   blocks = active seconds                    expected           33   got           33
+  ✓ baseline RMS after calibration               expected         0.05   got         0.05
+  ✓ active seconds                               expected           33   got           33
+  ✓ session load                                 expected           69   got           69
+  ✓ % of budget: 69 / 6800 × 100                 expected     1.014706   got     1.014706
+  ✓ summary median RMS                           expected         0.05   got         0.05
+  ✓ summary 5th percentile pitch                 expected         61.2   got         61.2
+  ✓ summary 95th percentile pitch                expected         61.2   got         61.2
+
+== 6. Rolling baseline from session summaries (oldest first)
+  ✓ a. 7 sessions: sessions used                 expected            5   got            5
+  ✓    RMS = median of the last 5 qualifying     expected         0.05   got         0.05
+  ✓    range source (sessions win over Range Finder) expected     sessions   got     sessions
+  ✓    low = min p5                              expected           47   got           47
+  ✓    high = max p95                            expected           71   got           71
+  ✓    passaggio                                 expected         61.4   got         61.4
+  ✓ b. 2 sessions + Range Finder: RMS            expected        0.055   got        0.055
+  ✓    range source                              expected  rangeFinder   got  rangeFinder
+  ✓    passaggio                                 expected         62.8   got         62.8
+  ✓ c. narrow sessions: RMS                      expected         0.04   got         0.04
+  ✓    range source                              expected      default   got      default
+  ✓    passaggio                                 expected         61.2   got         61.2
+  ✓ d. narrow Range Finder only: range source    expected      default   got      default
+  ✓    RMS (none: calibrate)                     expected            —   got            —
+
+== 7. Daily budget (6800 load-seconds), steady reference: RMS at the baseline, mid-range pitch 60 → pr 12/14.4, rate 11/6
+  ✓ 30 min: load = 1800 × 11/6                   expected         3300   got         3300
+  ✓ 30 min: % = 3300 / 6800                      expected    48.529412   got    48.529412
+  ✓ 60 min: load = 3600 × 11/6                   expected         6600   got         6600
+  ✓ 60 min: % = 6600 / 6800                      expected    97.058824   got    97.058824
+  ✓ prior 3500 + 30 min: % of the day            expected          100   got          100
+
+== 8. "Typical" singing, simulated (seeded): each sung second has a level 3 dB s.d. around the baseline and a pitch
+   uniform in the middle 60% of the range (52.8–67.2); expected values from the budget's derivation, not per step:
+   E[lr] = 0.5 + e^(σ²/2)·Φ(σ), σ = 0.345388 → 1.174133; E[1 + pr] = 1 + 12/14.4 = 1.833333; E[rate] = 2.152577
+  ✓ 52.5 min continuous: load ≈ 3150 × 2.152577  expected      6780.62   got  6815.424693
+  ✓    % of budget ≈ 6780.62 / 6800              expected       99.715   got   100.226834
+  ✓    summary median RMS ≈ baseline             expected         0.05   got      0.04975
+  ✓    summary p5 pitch ≈ 52.8 + 0.05 × 14.4     expected        53.52   got    53.477005
+  ✓    summary p95 pitch ≈ 52.8 + 0.95 × 14.4    expected        66.48   got    66.616372
+  ✓ 45 min wall clock, ⅓ rests: active seconds   expected         1800   got         1800
+  ✓    load ≈ 1800 × 2.152577                    expected      3874.64   got    3891.5044
+  ✓    % of budget ≈ 3874.64 / 6800              expected        56.98   got    57.228006
+
+== 9. Pitch-detector slips (octave / fifth errors), baseline A. A real note at C3+2 = 50: pr 2/14.4 = 0.138889, rate 1.138889
+  ✓ a. 5 frames an octave up: rate (not 1.208333) expected     1.138889   got     1.138889
+  ✓    still 1 s of singing (held, not dropped)  expected            1   got            1
+  ✓ b. 5 frames an octave down: rate (not 1.069444) expected     1.138889   got     1.138889
+  ✓ c. 5 frames a fifth up (7 st): rate          expected     1.138889   got     1.138889
+  ✓ d. 9 frames (0.15 s) an octave up: rate      expected     1.138889   got     1.138889
+  ✓ e. 10 frames an octave up (the limit): kept  expected     1.277778   got     1.277778
+  ✓ f. real leap 50 → 62: first second           expected     1.138889   got     1.138889
+  ✓    second second (no frames lost to the check) expected     1.972222   got     1.972222
+  ✓    total                                     expected     3.111111   got     3.111111
+
+== 10. Loudness cap: loudness_ratio ≤ 4 (+12.0 dB), baseline A, pitch 55.2 (1 + pr = 1.5)
+  ✓ s1   rms 0.7    pitch 55.2   load_rate expected        6 got        6   cumulative expected        6 got        6   clipped buffer: 0.7/0.05 = 14 → capped at 4 → 4 × 1.5 (uncapped 21)
+  ✓ s2   rms 0.05   pitch 55.2   load_rate expected      1.5 got      1.5   cumulative expected      7.5 got      7.5   back to normal: lr 1
+  ✓ s3   rms 0.19   pitch 55.2   load_rate expected      5.7 got      5.7   cumulative expected     13.2 got     13.2   under the cap: 3.8 × 1.5
+  ✓   blocks = active seconds                    expected            3   got            3
+  ✓ bump mid-note: rate (uncapped 9.592962)      expected            6   got            6
+  ✓ s1   rms 0.003  pitch none   load_rate expected        0 got no block   cumulative expected        0 got        0   silence
+  ✓ s2   rms 1      pitch none   load_rate expected        0 got no block   cumulative expected        0 got        0   a bump / cough with nothing sung before it: unpitched, nothing to hold → not singing
+  ✓   blocks = active seconds                    expected            0   got            0
+
+118 passed, 0 failed

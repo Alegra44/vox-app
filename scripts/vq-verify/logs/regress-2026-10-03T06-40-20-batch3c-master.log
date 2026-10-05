@@ -1,0 +1,7 @@
+[reap] FAILED for run 62375 (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlh-1791010892067@example.com') and email like 'voxcoach-%@example.com' returning email"): voxcoach-vlh-1791010892067@example.com
+== local deploy/ + production backend
+  ✗ ran to the end                                                           Supabase client missing (CDN script failed to load)
+
+[cleanup] FAILED (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlc-1791011625896@example.com') and email like 'voxcoach-%@example.com' returning email"); the watchdog retries when this process exits: voxcoach-vlc-1791011625896@example.com
+
+0 passed, 1 failed

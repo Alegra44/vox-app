@@ -1,0 +1,16 @@
+[reap] FAILED for run 56190 (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlh-1790993960312@example.com') and email like 'voxcoach-%@example.com' returning email"): voxcoach-vlh-1790993960312@example.com
+== local deploy/ + production backend
+   mic: 261.63 Hz (MIDI 60)
+
+[cleanup] FAILED (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlh-1790994525988@example.com') and email like 'voxcoach-%@example.com' returning email"); the watchdog retries when this process exits: voxcoach-vlh-1790994525988@example.com
+page.goto: Timeout 30000ms exceeded.
+Call log:
+[2m  - navigating to "http://localhost:8765/", waiting until "load"[22m
+
+    at openPage (/Users/alegramusenge/Documents/voxcoach-app/scripts/vocal-load-verify/harness.js:57:27)
+    at async run (/Users/alegramusenge/Documents/voxcoach-app/scripts/vocal-load-verify/harness.js:205:33) {
+  log: [
+    '  - navigating to "http://localhost:8765/", waiting until "load"'
+  ],
+  name: 'TimeoutError'
+}

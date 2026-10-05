@@ -2609,6 +2609,7 @@
             <button class="solid-btn" id="pitchPlayBtn" data-i18n="ex_play_target_btn">Play target</button>
             <button class="solid-btn teal" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="pitchNextBtn" data-i18n="ex_new_note_btn">New note</button>
+            <button class="ghost-btn" id="pitchAgainBtn" style="display:none;"></button>
           </div>
           <div class="vl-gauge" id="vlGaugePitch" data-vl-sidecar style="display:none;"></div>
           <div class="ex-result" id="pitchResult" role="status" aria-live="polite" style="display:none;">
@@ -2634,6 +2635,7 @@
             <button class="solid-btn" id="intervalPlayBtn" data-i18n="ex_play_root_interval_btn">Play root + interval</button>
             <button class="solid-btn teal" id="intervalListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="intervalNextBtn" data-i18n="ex_new_interval_btn">New interval</button>
+            <button class="ghost-btn" id="intervalAgainBtn" style="display:none;"></button>
           </div>
           <div class="vl-gauge" id="vlGaugeInterval" data-vl-sidecar style="display:none;"></div>
           <div class="ex-result" id="intervalResult" style="display:none;">
@@ -2669,6 +2671,7 @@
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
             <button class="solid-btn teal" id="scaleStartBtn">Start scale run</button>
             <button class="ghost-btn" id="scaleNextBtn" data-i18n="ex_new_root_btn">New root</button>
+            <button class="ghost-btn" id="scaleAgainBtn" style="display:none;"></button>
           </div>
           <div class="vl-gauge" id="vlGaugeScale" data-vl-sidecar style="display:none;"></div>
           <div class="scale-dots" id="scaleDots"></div>
@@ -6580,6 +6583,10 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"No Day 1 baseline was recorded (the 21-Day Journey assessment wasn't completed), so there's no before/after to show — your saved progress is still intact.",
     voicehealth_nodata_tooltip:'no data',
     exfeedback_nopitch:"Didn't catch a clear pitch — try again a little louder or closer to the mic.",
+    ex_listen_ref:"Listen…",
+    ex_sing_now:"Sing now!",
+    ex_noheard_retry:"I didn't hear you, try again.",
+    ex_sing_again:"Sing it again",
     exfeedback_excellent:'Right on it.', exfeedback_close:'Close — nice control.', exfeedback_nearby:'In the neighborhood, but drifting.',
     exfeedback_offtarget:'Off target — try matching the tone before you start singing.',
     home_signedout_eyebrow:'Welcome', home_signedout_title:"Create a free account to get today's real mission",
@@ -7938,6 +7945,10 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"Aucune référence du jour 1 n'a été enregistrée (l'évaluation du parcours de 21 jours n'a pas été terminée), donc il n'y a pas d'avant/après à afficher — votre progression enregistrée est toujours intacte.",
     voicehealth_nodata_tooltip:'aucune donnée',
     exfeedback_nopitch:"Aucune hauteur claire détectée — réessayez un peu plus fort ou plus près du micro.",
+    ex_listen_ref:"Écoutez…",
+    ex_sing_now:"Chantez !",
+    ex_noheard_retry:"Je ne vous ai pas entendu, réessayez.",
+    ex_sing_again:"Rechanter",
     exfeedback_excellent:'En plein dedans.', exfeedback_close:'Proche — bon contrôle.', exfeedback_nearby:'Dans les environs, mais ça dérive.',
     exfeedback_offtarget:'Hors cible — essayez de caler le ton avant de commencer à chanter.',
     home_signedout_eyebrow:'Bienvenue', home_signedout_title:"Créez un compte gratuit pour obtenir la vraie mission du jour",
@@ -9296,6 +9307,10 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"No se registró una línea base del día 1 (no se completó la evaluación del recorrido de 21 días), por lo que no hay un antes/después que mostrar — tu progreso guardado sigue intacto.",
     voicehealth_nodata_tooltip:'sin datos',
     exfeedback_nopitch:"No se detectó una afinación clara — inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
+    ex_listen_ref:"Escucha…",
+    ex_sing_now:"¡Canta ahora!",
+    ex_noheard_retry:"No te he oído, inténtalo de nuevo.",
+    ex_sing_again:"Cantar de nuevo",
     exfeedback_excellent:'Justo en el blanco.', exfeedback_close:'Cerca — buen control.', exfeedback_nearby:'Por ahí cerca, pero se desvía.',
     exfeedback_offtarget:'Fuera de objetivo — intenta igualar el tono antes de empezar a cantar.',
     home_signedout_eyebrow:'Bienvenido', home_signedout_title:"Crea una cuenta gratis para obtener la misión real de hoy",
@@ -10654,6 +10669,10 @@ const TRANSLATIONS = {
     trialcompare_nobaseline:"1. Gün temel ölçümü kaydedilmedi (21 Günlük Yolculuk değerlendirmesi tamamlanmadı), bu yüzden gösterilecek bir öncesi/sonrası yok — kayıtlı ilerlemeniz hâlâ korunuyor.",
     voicehealth_nodata_tooltip:'veri yok',
     exfeedback_nopitch:"Net bir perde yakalanamadı — biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
+    ex_listen_ref:"Dinleyin…",
+    ex_sing_now:"Şimdi söyleyin!",
+    ex_noheard_retry:"Sizi duyamadım, tekrar deneyin.",
+    ex_sing_again:"Tekrar söyle",
     exfeedback_excellent:'Tam isabet.', exfeedback_close:'Yakın — iyi kontrol.', exfeedback_nearby:'Yakınında ama kayıyor.',
     exfeedback_offtarget:'Hedefin dışında — şarkı söylemeye başlamadan önce tonu yakalamayı deneyin.',
     home_signedout_eyebrow:'Hoş geldiniz', home_signedout_title:"Bugünün gerçek görevini almak için ücretsiz hesap oluşturun",
@@ -15496,21 +15515,32 @@ function centsFromTarget(freq, targetMidi){
 }
 
 /* opts: {accuracyMultiplier, splitAttackLanding, showCentsDetail} */
+// opts.waitForVoiceMs: the window opens at the first voiced frame instead of at once (no voice by then: {noVoice:true}),
+// and opts.graceMs of it (the onset and its settling) isn't scored. Without them: the window starts at once, as before.
 async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
   await initAudio();
-  const mult = opts.accuracyMultiplier ?? 0.6;
+  const mult = opts.accuracyMultiplier ?? 0.6, grace = opts.graceMs || 0;
   const samples = [];
   let totalFrames = 0;
   const start = performance.now();
+  let voiceAt = opts.waitForVoiceMs ? null : 0;
   return new Promise(resolve=>{
     function frame(){
-      totalFrames++;
       analyser.getFloatTimeDomainData(dataArray);
       const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
-      const t = performance.now()-start;
-      if(freq>0){
-        const cents = centsFromTarget(freq, targetMidi);
-        if(cents!==null && Math.abs(cents) < 300) samples.push({t, cents});
+      const now = performance.now()-start;
+      if(voiceAt===null){
+        if(freq>0) voiceAt = now;
+        else if(now >= opts.waitForVoiceMs){ resolve({accuracy:0, heard:false, noVoice:true, confidence:computeCaptureConfidence(0, 1)}); return; }
+        else { requestAnimationFrame(frame); return; }
+      }
+      const t = now-voiceAt; // time since the window opened
+      if(t >= grace){
+        totalFrames++;
+        if(freq>0){
+          const cents = centsFromTarget(freq, targetMidi);
+          if(cents!==null && Math.abs(cents) < 300) samples.push({t, cents});
+        }
       }
       if(t < durationMs){
         requestAnimationFrame(frame);
@@ -15521,7 +15551,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
         const scoreFrom = list => Math.max(0, Math.round(100 - (list.reduce((a,b)=>a+Math.abs(b.cents),0)/list.length)*mult));
         const result = {accuracy: scoreFrom(samples), heard:true, confidence};
         if(opts.splitAttackLanding){
-          const half = durationMs/2;
+          const half = grace + (durationMs-grace)/2; // the scored part of the window, split in two
           const attackList = samples.filter(s=>s.t<half);
           const landingList = samples.filter(s=>s.t>=half);
           result.attackAcc = attackList.length ? scoreFrom(attackList) : null;
@@ -15551,7 +15581,7 @@ function accuracyFeedback(acc, heard){
 const LEVEL_CONFIG = {
   beginner: {
     get label(){return t('skill_level_beginner');},
-    pitchRangeFraction:0.45,
+    pitchRangeFraction:0.85, // display only (Difficulty Engine): the picker keeps beginners 2 semitones inside each end
     accuracyMultiplier:0.45,
     splitAttackLanding:false,
     showCentsDetail:false,
@@ -15562,7 +15592,7 @@ const LEVEL_CONFIG = {
   },
   intermediate: {
     get label(){return t('skill_level_intermediate');},
-    pitchRangeFraction:0.85,
+    pitchRangeFraction:1.0, // display only: intermediate and professional use the whole range
     accuracyMultiplier:0.6,
     splitAttackLanding:true,
     showCentsDetail:false,
@@ -15590,6 +15620,65 @@ const TIME_BUDGET = {
 };
 
 function levelCfg(){ return LEVEL_CONFIG[exerciseLevel]; }
+
+/* ---- Shared note picker: Pitch Match, Interval Match, Scale Run, Register Drills, Sing It 5 Ways, Emotion Mode, One Take ----
+   Every note comes from the singer's range through registerRangeBounds() (this page's Range Finder capture, then the saved
+   range, then A2–C5). Beginners stay PICK_BEGINNER_MARGIN semitones inside each end; intermediate and professional use the
+   whole range. A pick never repeats the previous pick for the same exercise (unless only one note fits). */
+const PICK_BEGINNER_MARGIN = 2;
+const notePickLast = {};
+// The notes a pick may land on: the range, less `margin` at each end, less `above` at the top (a scale's or an
+// interval's top note must fit too). A range too small for the margin keeps at least the middle notes.
+function practiceBounds(margin=0, above=0){
+  const {lowMidi, highMidi} = registerRangeBounds();
+  let lo = lowMidi, hi = highMidi - above;
+  const m = Math.max(0, Math.min(margin, Math.floor((hi-lo)/2) - 1));
+  lo += m; hi -= m;
+  if(hi < lo) hi = lo; // doesn't fit at all: the lowest start, as close as the range allows
+  return {lo, hi};
+}
+function levelMargin(){ return exerciseLevel==='beginner' ? PICK_BEGINNER_MARGIN : 0; }
+// A comfortable note: the lower middle of the range (25–65 % of the way up), for exercises that hold one note a while.
+// below / above: semitones the exercise also sings under / over the note, which must stay in the range.
+function comfortBounds(below=0, above=0){
+  const {lowMidi, highMidi} = registerRangeBounds(), span = highMidi-lowMidi;
+  const floor = lowMidi+below, ceil = Math.max(floor, highMidi-above);
+  const lo = Math.min(ceil, Math.max(floor, lowMidi + Math.round(span*0.25)));
+  const hi = Math.max(lo, Math.min(ceil, lowMidi + Math.round(span*0.65)));
+  return {lo, hi};
+}
+// Uniform over lo..hi, never the previous pick for this key.
+function pickNote(key, lo, hi){
+  const prev = notePickLast[key], skip = prev>=lo && prev<=hi && hi>lo;
+  let m = lo + Math.floor(Math.random()*(hi-lo+1 - (skip?1:0)));
+  if(skip && m>=prev) m++;
+  notePickLast[key] = m;
+  return m;
+}
+// The same note all day for this account (One Take): a hash of the account and the UTC day.
+function dailyNote(key, lo, hi){
+  const str = key+':'+((profile && (profile.id||profile.email)) || '')+':'+todayStr();
+  let h = 2166136261;
+  for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+  return lo + (h % (hi-lo+1));
+}
+
+// Pitch Match and Interval Match: the reference plays, then a cue, then the window opens at the first voiced frame;
+// its first LISTEN_GRACE_MS (the onset settling) isn't scored. No voice within LISTEN_WAIT_MS: not an attempt.
+const LISTEN_WINDOW_MS = {beginner:3000, intermediate:2500, professional:2000};
+const LISTEN_GRACE_MS = 400, LISTEN_WAIT_MS = 5000;
+async function referenceThenCue(playReference, refMs, btn){
+  btn.textContent = t('ex_listen_ref');
+  playReference();
+  await new Promise(r=>setTimeout(r, refMs));
+  playTone(1320, 0.12, 0, 0.12); // the cue: a short high tick (playTone's shortest clean length), over before listening starts
+  btn.textContent = t('ex_sing_now');
+  await new Promise(r=>setTimeout(r, 200));
+}
+function listenOpts(cfg, extra={}){
+  return {accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, waitForVoiceMs:LISTEN_WAIT_MS, graceMs:LISTEN_GRACE_MS, ...extra};
+}
+function showAgain(id, label){ const b = document.getElementById(id); b.textContent = `${t('ex_sing_again')} (${label})`; b.style.display = ''; }
 
 function setExerciseLevel(level){
   exerciseLevel = level;
@@ -15648,32 +15737,46 @@ function blockExercise(){
 
 /* ---- Pitch Match ---- */
 let pitchTargetMidi = 64;
-function newPitchTarget(){
-  const {lowMidi, highMidi} = registerRangeBounds();
-  const frac = levelCfg().pitchRangeFraction;
-  const span = Math.max(1, Math.round((highMidi-lowMidi)*frac));
-  const mid = (lowMidi+highMidi)/2;
-  const spanLow = Math.max(lowMidi, Math.round(mid - span/2));
-  const spanHigh = Math.min(highMidi, spanLow+span);
-  pitchTargetMidi = spanLow + Math.floor(Math.random()*Math.max(1,(spanHigh-spanLow)));
+function newPitchTarget(keepResult){
+  const {lo, hi} = practiceBounds(levelMargin());
+  pitchTargetMidi = pickNote('pitch', lo, hi);
   document.getElementById('pitchTargetNote').textContent = noteNameFromMidi(pitchTargetMidi);
+  if(keepResult===true) return; // after an attempt: its result stays up, the next note is ready
+  document.getElementById('pitchAgainBtn').style.display='none';
   document.getElementById('pitchResult').style.display='none';
   document.getElementById('pitchSubScores').style.display='none';
   document.getElementById('pitchCentsDetail').style.display='none';
 }
 document.getElementById('pitchPlayBtn').addEventListener('click', ()=>playTone(noteToFreq(pitchTargetMidi), 0.9));
-document.getElementById('pitchNextBtn').addEventListener('click', newPitchTarget);
+document.getElementById('pitchNextBtn').addEventListener('click', ()=>newPitchTarget());
+let pitchAgainMidi = null;
+document.getElementById('pitchAgainBtn').addEventListener('click', ()=>{
+  pitchTargetMidi = pitchAgainMidi; // the same note again; the next pick still avoids it
+  document.getElementById('pitchTargetNote').textContent = noteNameFromMidi(pitchTargetMidi);
+  document.getElementById('pitchListenBtn').click();
+});
 document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   if(blockExercise()) return;
-  const cfg = levelCfg();
+  const cfg = levelCfg(), target = pitchTargetMidi;
   const btn = document.getElementById('pitchListenBtn');
-  btn.disabled = true; btn.textContent=t('action_listening');
-  vlSidecar(()=>btn.disabled);
-  const res = await captureAccuracyForTarget(pitchTargetMidi, 1600, {
-    accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, showCentsDetail:cfg.showCentsDetail
-  });
+  btn.disabled = true;
+  document.getElementById('pitchAgainBtn').style.display='none';
+  if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  await referenceThenCue(()=>playTone(noteToFreq(target), 0.9), 1050, btn);
+  btn.textContent=t('action_listening');
+  let listening = true;
+  vlSidecar(()=>listening);
+  const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg, {showCentsDetail:cfg.showCentsDetail}));
+  listening = false;
   btn.disabled = false; btn.textContent=t('action_listenscore');
   document.getElementById('pitchResult').style.display='block';
+  if(res.noVoice){ // nothing sung: not an attempt, not a zero, same note
+    document.getElementById('pitchAccuracyVal').textContent = '—';
+    document.getElementById('pitchAccuracyVal').className = 'ex-accuracy';
+    document.getElementById('pitchFeedback').textContent = t('ex_noheard_retry');
+    ['pitchSubScores','pitchCentsDetail','pitchConfidenceBadge'].forEach(id=>{ const e = document.getElementById(id); if(e) e.style.display='none'; });
+    return;
+  }
   const accEl = document.getElementById('pitchAccuracyVal');
   accEl.textContent = res.accuracy+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(res.accuracy);
@@ -15692,19 +15795,27 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   renderConfidenceBadge('pitchConfidenceBadge', res.confidence);
   if(res.heard){ recordSkillScore('pitch', res.accuracy); recordWeeklyLog('pitch', res.accuracy); }
   await registerExerciseCompletion();
+  pitchAgainMidi = target; // a new note for the next attempt; "Sing it again" keeps this one
+  newPitchTarget(true);
+  showAgain('pitchAgainBtn', noteNameFromMidi(target));
 });
 
 /* ---- Interval Match ---- */
 let intervalRootMidi = 60, intervalDef = {name:'Major 3rd',semi:4}, intervalTargetMidi = 64;
-function newIntervalTarget(){
-  const {lowMidi, highMidi} = registerRangeBounds();
-  const set = levelCfg().intervals;
+function newIntervalTarget(keepResult){
+  const {lowMidi, highMidi} = registerRangeBounds(), prev = notePickLast.intervalRoot;
+  const all = levelCfg().intervals, fits = all.filter(iv=>iv.semi <= highMidi-lowMidi);
+  // intervals that leave a root other than the last one (a narrow range can fit a big interval on one root only)
+  const fresh = fits.filter(iv=>{ const {lo, hi} = practiceBounds(levelMargin(), iv.semi); return hi>lo || lo!==prev; });
+  const set = fresh.length ? fresh : fits.length ? fits : [all.reduce((a,b)=>a.semi<=b.semi?a:b)];
   intervalDef = set[Math.floor(Math.random()*set.length)];
-  const maxRoot = highMidi - intervalDef.semi;
-  intervalRootMidi = Math.max(lowMidi, Math.min(maxRoot, lowMidi + Math.floor(Math.random()*Math.max(1,(maxRoot-lowMidi)))));
+  const {lo, hi} = practiceBounds(levelMargin(), intervalDef.semi); // the root, with room for the interval above it
+  intervalRootMidi = pickNote('intervalRoot', lo, hi);
   intervalTargetMidi = intervalRootMidi + intervalDef.semi;
   document.getElementById('intervalTargetLabel').textContent = intervalDef.name;
   document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(intervalRootMidi);
+  if(keepResult===true) return;
+  document.getElementById('intervalAgainBtn').style.display='none';
   document.getElementById('intervalResult').style.display='none';
   document.getElementById('intervalSubScores').style.display='none';
 }
@@ -15712,18 +15823,36 @@ document.getElementById('intervalPlayBtn').addEventListener('click', ()=>{
   playTone(noteToFreq(intervalRootMidi), 0.55, 0);
   playTone(noteToFreq(intervalTargetMidi), 0.55, 0.65);
 });
-document.getElementById('intervalNextBtn').addEventListener('click', newIntervalTarget);
+document.getElementById('intervalNextBtn').addEventListener('click', ()=>newIntervalTarget());
+let intervalAgain = null;
+document.getElementById('intervalAgainBtn').addEventListener('click', ()=>{
+  ({root:intervalRootMidi, def:intervalDef} = intervalAgain); intervalTargetMidi = intervalRootMidi + intervalDef.semi;
+  document.getElementById('intervalTargetLabel').textContent = intervalDef.name;
+  document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(intervalRootMidi);
+  document.getElementById('intervalListenBtn').click();
+});
 document.getElementById('intervalListenBtn').addEventListener('click', async ()=>{
   if(blockExercise()) return;
-  const cfg = levelCfg();
+  const cfg = levelCfg(), root = intervalRootMidi, def = intervalDef, target = intervalTargetMidi;
   const btn = document.getElementById('intervalListenBtn');
-  btn.disabled = true; btn.textContent=t('action_listening');
-  vlSidecar(()=>btn.disabled);
-  const res = await captureAccuracyForTarget(intervalTargetMidi, 1600, {
-    accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding
-  });
+  btn.disabled = true;
+  document.getElementById('intervalAgainBtn').style.display='none';
+  if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  await referenceThenCue(()=>{ playTone(noteToFreq(root), 0.55, 0); playTone(noteToFreq(target), 0.55, 0.65); }, 1350, btn);
+  btn.textContent=t('action_listening');
+  let listening = true;
+  vlSidecar(()=>listening);
+  const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg));
+  listening = false;
   btn.disabled = false; btn.textContent=t('action_listenscore');
   document.getElementById('intervalResult').style.display='block';
+  if(res.noVoice){
+    document.getElementById('intervalAccuracyVal').textContent = '—';
+    document.getElementById('intervalAccuracyVal').className = 'ex-accuracy';
+    document.getElementById('intervalFeedback').textContent = t('ex_noheard_retry');
+    document.getElementById('intervalSubScores').style.display='none';
+    return;
+  }
   const accEl = document.getElementById('intervalAccuracyVal');
   accEl.textContent = res.accuracy+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(res.accuracy);
@@ -15736,6 +15865,9 @@ document.getElementById('intervalListenBtn').addEventListener('click', async ()=
   } else { subRow.style.display='none'; }
   if(res.heard){ recordSkillScore('pitch', res.accuracy); recordWeeklyLog('pitch', res.accuracy); }
   await registerExerciseCompletion();
+  intervalAgain = {root, def};
+  newIntervalTarget(true);
+  showAgain('intervalAgainBtn', `${noteNameFromMidi(root)} → ${def.name}`);
 });
 
 /* ---- Scale Run ---- */
@@ -15754,14 +15886,16 @@ function currentScaleSteps(){
   return SCALE_PATTERNS[cfg.scaleType];
 }
 let scaleRootMidi = 60;
-function newScaleRoot(){
-  const {lowMidi, highMidi} = registerRangeBounds();
-  scaleRootMidi = Math.max(lowMidi, Math.min(highMidi-12, lowMidi));
+function newScaleRoot(keepResult){
   const steps = currentScaleSteps();
+  const {lo, hi} = practiceBounds(levelMargin(), Math.max(...steps)); // the whole pattern fits above the root
+  scaleRootMidi = pickNote('scaleRoot', lo, hi);
   const label = levelCfg().scaleType==='selectable' ? document.getElementById('scaleTypeSel').selectedOptions[0].textContent
               : levelCfg().scaleType==='proArpeggio' ? 'arpeggio run'
               : '1-2-3-4-5-4-3-2-1 pattern';
   document.getElementById('scaleTargetNote').textContent = noteNameFromMidi(scaleRootMidi)+' — '+label;
+  if(keepResult===true) return;
+  document.getElementById('scaleAgainBtn').style.display='none';
   document.getElementById('scaleResult').style.display='none';
   renderScaleDots(-1, [], steps.length);
 }
@@ -15777,13 +15911,21 @@ function renderScaleDots(currentIdx, results, total){
   }
   wrap.innerHTML = html;
 }
-document.getElementById('scaleNextBtn').addEventListener('click', newScaleRoot);
+document.getElementById('scaleNextBtn').addEventListener('click', ()=>newScaleRoot());
+let scaleAgainRoot = null;
+document.getElementById('scaleAgainBtn').addEventListener('click', ()=>{
+  scaleRootMidi = scaleAgainRoot;
+  const t0 = document.getElementById('scaleTargetNote').textContent;
+  document.getElementById('scaleTargetNote').textContent = noteNameFromMidi(scaleRootMidi) + t0.slice(t0.indexOf(' — '));
+  document.getElementById('scaleStartBtn').click();
+});
 document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   if(blockExercise()) return;
-  const cfg = levelCfg();
+  const cfg = levelCfg(), root = scaleRootMidi;
   const steps = currentScaleSteps();
   const btn = document.getElementById('scaleStartBtn');
   btn.disabled = true;
+  document.getElementById('scaleAgainBtn').style.display='none';
   vlSidecar(()=>btn.disabled);
   document.getElementById('scaleResult').style.display='none';
   const results = [];
@@ -15806,6 +15948,9 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   recordSkillScore('agility', avg);
   recordWeeklyLog('agility', avg);
   await registerExerciseCompletion();
+  scaleAgainRoot = root; // a new root for the next run; "Sing it again" keeps this one
+  newScaleRoot(true);
+  showAgain('scaleAgainBtn', noteNameFromMidi(root));
 });
 
 /* ---------------- Vocal Skill Profile ---------------- */
@@ -19972,8 +20117,8 @@ document.getElementById('fiveStartBtn')?.addEventListener('click', async ()=>{
   await initAudio();
   fiveActive = true;
   fiveResults = [];
-  const {lowMidi, highMidi} = registerRangeBounds();
-  fiveBaseMidi = Math.max(lowMidi+1, Math.min(highMidi-1, lowMidi + Math.round((highMidi-lowMidi)*0.4)));
+  const {lo, hi} = comfortBounds(1, 1); // the rounds also sing a semitone either side
+  fiveBaseMidi = pickNote('five', lo, hi);
   document.getElementById('fivePreCard').style.display='none';
   document.getElementById('fiveResultCard').style.display='none';
   document.getElementById('fiveRunnerCard').style.display='block';
@@ -20071,8 +20216,8 @@ document.getElementById('oneTakeStartBtn')?.addEventListener('click', async ()=>
 });
 
 async function runOneTake(){
-  const {lowMidi, highMidi} = registerRangeBounds();
-  const targetMidi = lowMidi + Math.floor((highMidi-lowMidi)*0.45);
+  const {lo, hi} = comfortBounds();
+  const targetMidi = dailyNote('onetake', lo, hi); // the same note all day: a take is compared with today's other takes
 
   document.getElementById('oneTakeStepLabel').textContent = 'Listen once';
   document.getElementById('oneTakeNote').textContent = noteNameFromMidi(targetMidi);
@@ -20340,8 +20485,8 @@ document.getElementById('emoStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Emotion Mode')) return;
   await initAudio();
   emoActive = true;
-  const {lowMidi, highMidi} = registerRangeBounds();
-  emoTargetMidi = lowMidi + Math.round((highMidi-lowMidi)*0.45);
+  const {lo, hi} = comfortBounds();
+  emoTargetMidi = pickNote('emo', lo, hi);
   const others = Object.keys(EMOTION_LABELS).filter(k=>k!==emoFirstIntent);
   emoSecondIntent = others[Math.floor(Math.random()*others.length)];
   emoResults = [];
@@ -20610,7 +20755,7 @@ async function runDrillSequence(){
 
   for(let i=0;i<DRILL_NOTE_COUNT;i++){
     if(!drillActive) return;
-    const targetMidi = zoneLow + Math.floor(Math.random()*Math.max(1,(zoneHigh-zoneLow+1)));
+    const targetMidi = pickNote('drill', zoneLow, zoneHigh);
     document.getElementById('drillStepLabel').textContent = `${t('drill_note_label')} ${i+1} ${t('word_of')} ${DRILL_NOTE_COUNT}`;
     document.getElementById('drillNote').textContent = noteNameFromMidi(targetMidi);
     document.getElementById('drillStatus').textContent = t('action_listen');

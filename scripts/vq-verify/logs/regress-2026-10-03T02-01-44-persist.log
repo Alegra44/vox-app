@@ -1,0 +1,118 @@
+0005_vocal_load.sql applied to a local PGlite database (PostgreSQL 18.3 (PGlite 0.5.8))
+
+== Day 1, 2026-09-21 (UTC)
+  ✓ S1 baseline RMS (none: calibrates)                         expected           null   got           null
+  ✓ S1 range source                                            expected        default   got        default
+  ✓ S1 writes: every 60 s of singing, then the end             expected minute@60s, minute@120s, end@120s   got minute@60s, minute@120s, end@120s
+  ✓ day 1 total = 157.037037                                   expected     157.037037   got     157.037037
+  ✓   daily table, 2026-09-21                                  expected     157.037037   got     157.037037
+  ✓ stored baseline sessions: S1 (120 s, RMS 0.04, pitch 50–50) expected [{"p5Midi":50,"p95Midi":50,"medianRms":0.04,"activeSeconds":120}]   got [{"p5Midi":50,"p95Midi":50,"medianRms":0.04,"activeSeconds":120}]
+  ✓ S2 baseline RMS = S1 median                                expected           0.04   got           0.04
+  ✓ S2 prior load today                                        expected     157.037037   got     157.037037
+  ✓ S2 writes: under a minute, one write at the end            expected        end@45s   got        end@45s
+  ✓ day 1 total = 157.037037 + 146.666667                      expected     303.703704   got     303.703704
+  ✓   daily table, 2026-09-21                                  expected     303.703704   got     303.703704
+  ✓ baseline still S1 only (S2 < 60 s)                         expected              1   got              1
+
+== Day 2, 2026-09-22
+  ✓ S3 prior load today (new day starts at 0)                  expected              0   got              0
+  ✓ S3 writes                                                  expected minute@60s, minute@120s, minute@180s, minute@240s, minute@300s, end@300s   got minute@60s, minute@120s, minute@180s, minute@240s, minute@300s, end@300s
+  ✓ day 2 total = 814.814815                                   expected     814.814815   got     814.814815
+  ✓   daily table, 2026-09-22                                  expected     814.814815   got     814.814815
+  ✓ day 1 total unchanged                                      expected     303.703704   got     303.703704
+  ✓ S4 baseline RMS = median(0.04, 0.05)                       expected          0.045   got          0.045
+  ✓ S4 first checkpoint lands after midnight                   expected 2026-09-23T00:00:00.000Z   got 2026-09-23T00:00:00.000Z
+  ✓ day 2 total = 814.814815 + 348.148148                      expected    1162.962963   got    1162.962963
+  ✓ day 3 total before any day-3 session                       expected              0   got              0
+  ✓   daily table: S4 on 2026-09-22                            expected    1162.962963   got    1162.962963
+  ✓   daily table: no 2026-09-23 row yet                       expected           null   got           null
+
+== Day 3, 2026-09-23
+  ✓ S5 baseline RMS = median(0.04, 0.05, 0.05)                 expected           0.05   got           0.05
+  ✓ S5 range from sessions: low                                expected             50   got             50
+  ✓ S5 range from sessions: high                               expected             64   got             64
+  ✓ S5 passaggio = 50 + 0.6 × 14                               expected           58.4   got           58.4
+  ✓ S5 writes: a pause checkpoint, then the end                expected pause@40s, end@90s   got pause@40s, end@90s
+  ✓ S5 stored at the pause: active seconds                     expected             40   got             40
+  ✓ S5 stored at the pause: load 40 × 1.6                      expected             64   got             64
+  ✓ day 3 total = 144                                          expected            144   got            144
+  ✓   daily table, 2026-09-23                                  expected            144   got            144
+  ✓ S6 baseline RMS = median(0.04, 0.05, 0.05, 0.08)           expected           0.05   got           0.05
+  ✓ S6 writes before the crash                                 expected minute@60s, minute@120s   got minute@60s, minute@120s
+  ✓ S6 stored: 120 s, load 240, not ended                      expected [120,240,false]   got [120,240,false]
+  ✓ day 3 total = 144 + 240                                    expected            384   got            384
+  ✓   daily table: the crashed session counts to its last checkpoint expected            384   got            384
+  ✓ S7 writes: minutes, then on page hide                      expected minute@60s, minute@120s, hidden@150s   got minute@60s, minute@120s, hidden@150s
+  ✓ S7 hide write sent with keepalive                          expected           true   got           true
+  ✓ day 3 total = 144 + 240 + 300                              expected            684   got            684
+  ✓   daily table, 2026-09-23                                  expected            684   got            684
+
+== Day 4, 2026-09-24
+  ✓ S8 baseline from the last 5 (S3–S7): RMS                   expected           0.05   got           0.05
+  ✓ S8 passaggio                                               expected           58.4   got           58.4
+  ✓ day 4 total = 60 × 3.5                                     expected            210   got            210
+  ✓ rows kept: S4 (day 2), S5–S7 (day 3), S8                   expected ["2026-09-22:180","2026-09-23:90","2026-09-23:120","2026-09-23:150","2026-09-24:60"]   got ["2026-09-22:180","2026-09-23:90","2026-09-23:120","2026-09-23:150","2026-09-24:60"]
+  ✓ stored baseline: last 5 qualifying, oldest first (median RMS) expected [0.05,0.08,0.05,0.05,0.05]   got [0.05,0.08,0.05,0.05,0.05]
+  ✓ day 3 total kept (yesterday)                               expected            684   got            684
+  ✓ day 2 total after pruning: S4 only (S3 pruned by design)   expected     348.148148   got     348.148148
+  ✓ daily table survives pruning: 2026-09-21 (S1, S2 rows gone) expected     303.703704   got     303.703704
+  ✓ daily table survives pruning: 2026-09-22 (S3 row gone)     expected    1162.962963   got    1162.962963
+  ✓ daily table: 2026-09-23                                    expected            684   got            684
+  ✓ daily table: 2026-09-24                                    expected            210   got            210
+
+== Row-level security: user B
+  ✓ B's state on A's busiest day                               expected {"sessions":[],"dayLoad":0}   got {"sessions":[],"dayLoad":0}
+  ✓ B sees rows                                                expected              0   got              0
+  ✓ B inserts a row owned by A                                 rejected: new row violates row-level security policy for table "vocal_load_sessions"
+  ✓ B's update and delete touch none of A's rows               expected [{"session_id":"10000000-0000-4000-8000-000000000004","day":"2026-09-22","active_seconds":180,"load":348.14814814814883,"median_rms":0.04999999999999998,"p5_midi":56.99999999999998,"p95_midi":56.99999999999998,"ended":true},{"session_id":"10000000-0000-4000-8000-000000000005","day":"2026-09-23","active_seconds":90,"load":143.99999999999977,"median_rms":0.07999999999999992,"p5_midi":49.99999999999997,"p95_midi":49.99999999999997,"ended":true},{"session_id":"10000000-0000-4000-8000-000000000006","day":"2026-09-23","active_seconds":120,"load":240.00000000000006,"median_rms":0.04999999999999998,"p5_midi":58.39999999999999,"p95_midi":58.39999999999999,"ended":false},{"session_id":"10000000-0000-4000-8000-000000000007","day":"2026-09-23","active_seconds":150,"load":300.00000000000006,"median_rms":0.04999999999999998,"p5_midi":58.39999999999999,"p95_midi":58.39999999999999,"ended":false},{"session_id":"10000000-0000-4000-8000-000000000008","day":"2026-09-24","active_seconds":60,"load":209.99999999999872,"median_rms":0.04999999999999998,"p5_midi":70.99999999999983,"p95_midi":70.99999999999983,"ended":true}]   got [{"session_id":"10000000-0000-4000-8000-000000000004","day":"2026-09-22","active_seconds":180,"load":348.14814814814883,"median_rms":0.04999999999999998,"p5_midi":56.99999999999998,"p95_midi":56.99999999999998,"ended":true},{"session_id":"10000000-0000-4000-8000-000000000005","day":"2026-09-23","active_seconds":90,"load":143.99999999999977,"median_rms":0.07999999999999992,"p5_midi":49.99999999999997,"p95_midi":49.99999999999997,"ended":true},{"session_id":"10000000-0000-4000-8000-000000000006","day":"2026-09-23","active_seconds":120,"load":240.00000000000006,"median_rms":0.04999999999999998,"p5_midi":58.39999999999999,"p95_midi":58.39999999999999,"ended":false},{"session_id":"10000000-0000-4000-8000-000000000007","day":"2026-09-23","active_seconds":150,"load":300.00000000000006,"median_rms":0.04999999999999998,"p5_midi":58.39999999999999,"p95_midi":58.39999999999999,"ended":false},{"session_id":"10000000-0000-4000-8000-000000000008","day":"2026-09-24","active_seconds":60,"load":209.99999999999872,"median_rms":0.04999999999999998,"p5_midi":70.99999999999983,"p95_midi":70.99999999999983,"ended":true}]
+  ✓ B reads A's daily totals                                   expected              0   got              0
+  ✓ A writes a daily total directly (read-only)                rejected: new row violates row-level security policy for table "vocal_load_daily"
+  ✓ A's direct update/delete of daily totals changes nothing   expected            684   got            684
+
+== Bounds: impossible values rejected by the database (and flagged by the client first)
+  ✓ a sane checkpoint: client finds no problem                 expected             []   got             []
+  ✓ client flags: median RMS 1.5 (over full scale)             expected           true   got           true
+  ✓ database rejects: median RMS 1.5 (over full scale)         rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_median_rms"
+  ✓ client flags: median RMS 0.001 (under what the engine counts) expected           true   got           true
+  ✓ database rejects: median RMS 0.001 (under what the engine counts) rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_median_rms"
+  ✓ client flags: pitch 20 (under 50 Hz)                       expected           true   got           true
+  ✓ database rejects: pitch 20 (under 50 Hz)                   rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_pitch"
+  ✓ client flags: pitch 95 (over 1500 Hz)                      expected           true   got           true
+  ✓ database rejects: pitch 95 (over 1500 Hz)                  rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_pitch"
+  ✓ client flags: p5 67 above p95 60                           expected           true   got           true
+  ✓ database rejects: p5 67 above p95 60                       rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_pitch"
+  ✓ client flags: load 50 for 100 s (rate under 1)             expected           true   got           true
+  ✓ database rejects: load 50 for 100 s (rate under 1)         rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_load_bounds"
+  ✓ client flags: load 4000 for 100 s (rate over 37.1)         expected           true   got           true
+  ✓ database rejects: load 4000 for 100 s (rate over 37.1)     rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_load_bounds"
+  ✓ client flags: singing with no summary                      expected           true   got           true
+  ✓ database rejects: singing with no summary                  rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_summary_present"
+  ✓ client flags: 5000 active s, started 1 h ago               expected           true   got           true
+  ✓ database rejects: 5000 active s, started 1 h ago           rejected: vocal load: more active seconds than time since the session started
+  ✓ client flags: 9 h of active singing                        expected           true   got           true
+  ✓ database rejects: 9 h of active singing                    rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_active_seconds"
+  ✓ client flags: started 1 h in the future                    expected           true   got           true
+  ✓ database rejects: started 1 h in the future                rejected: vocal load: session starts in the future
+  ✓ client flags: started 3 days ago                           expected           true   got           true
+  ✓ database rejects: started 3 days ago                       rejected: vocal load: session started too long ago
+  ✓ client flags: day isn't the start's UTC date               expected           true   got           true
+  ✓ database rejects: day isn't the start's UTC date           rejected: new row for relation "vocal_load_sessions" violates check constraint "vls_day_is_utc_start_date"
+
+== Checkpoints only move forward (and so does the day total)
+  ✓ rejected checkpoints above added nothing to 2026-09-24     expected            210   got            210
+  ✓ a new session at 100 s / 150: day total 210 + 150          expected            360   got            360
+  ✓ a year kept: 2025-09-24 (365 days back) stays              expected             22   got             22
+  ✓ a year kept: 2025-09-23 (366 days back) is gone            expected           null   got           null
+  ✓ the same checkpoint again adds nothing                     expected            360   got            360
+  ✓ a stale checkpoint (80 s after 100 s) is a no-op: stored   expected      [100,150]   got      [100,150]
+  ✓   and adds nothing to the day                              expected            360   got            360
+  ✓ writing it straight to the table is rejected               rejected: vocal load: a checkpoint can't go backwards
+  ✓ the end checkpoint (110 s, ended)                          expected [110,165,true]   got [110,165,true]
+  ✓   day total rises by the difference, 165 - 150             expected            375   got            375
+  ✓ a late checkpoint after the end is a no-op                 expected [110,165,true]   got [110,165,true]
+  ✓   and adds nothing to the day                              expected            375   got            375
+  ✓ changing an ended session directly is rejected             rejected: vocal load: session already ended
+  ✓ moving a session's day is rejected                         rejected: vocal load: a session's day and start can't change
+  ✓ rejected direct edits added nothing to the day             expected            375   got            375
+
+101 passed, 0 failed

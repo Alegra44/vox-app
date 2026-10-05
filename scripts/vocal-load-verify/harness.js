@@ -117,6 +117,7 @@ async function runOnce(page, F, { live }) {
   if (!await warm(page)) throw new Error('fake mic silent');
   if (F.start) await F.start(page); else await page.locator(startSel(F)).click();
   await page.waitForFunction(F.active, null, { timeout: 15000 });
+  if (F.listening) await page.waitForFunction(F.listening, null, { timeout: 15000, polling: 20 }); // listening starts later than active
   const tStart = Date.now();
   await sleep(F.mid || 3000);
   const mid = await page.evaluate(() => {

@@ -72,17 +72,14 @@ async function rangeFinder(page) {
 // Each exercise's target at a given Math.random value (restored afterwards), through the app's own functions.
 const targets = (page, rnd) => page.evaluate(rnd => {
   const orig = Math.random; Math.random = () => rnd;
+  if (typeof notePickLast === 'object') for (const k in notePickLast) delete notePickLast[k]; // no "not the last note" skip: the edges
   try {
     newPitchTarget(); newIntervalTarget(); newScaleRoot();
     return { pitch: pitchTargetMidi, root: intervalRootMidi, iv: intervalTargetMidi, scale: scaleRootMidi };
   } finally { Math.random = orig; }
 }, rnd);
-// The same formulas, worked out here for a range and the beginner level (pitchRangeFraction 0.45).
-function expectPitchWindow(lo, hi, frac = 0.45) {
-  const span = Math.max(1, Math.round((hi - lo) * frac)), mid = (lo + hi) / 2;
-  const sLo = Math.max(lo, Math.round(mid - span / 2)), sHi = Math.min(hi, sLo + span);
-  return [sLo, sLo + Math.max(1, sHi - sLo) - 1]; // inclusive
-}
+// The picker's rule, worked out here for a range and the beginner level: 2 semitones inside each end.
+function expectPitchWindow(lo, hi) { return [lo + 2, hi - 2]; }
 
 (async () => {
   const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${WAV}`] });
@@ -121,13 +118,13 @@ function expectPitchWindow(lo, hi, frac = 0.45) {
     const win = expectPitchWindow(LO, HI);
     check('level is beginner (the windows below assume it)', start.level === 'beginner', start.level);
     check(`Pitch Match startup target in the saved range's window ${win.join('–')}`, start.pitch >= win[0] && start.pitch <= win[1] && start.pitchTxt === start.pitchName, `${start.pitch} "${start.pitchTxt}"`);
-    check('Interval startup target inside 50–79', start.root >= LO && start.iv <= HI, `${start.root}→${start.iv}`);
-    check('Scale Run startup root = the saved low note (D3)', start.scale === LO && start.scaleTxt.startsWith('D3'), `${start.scale} "${start.scaleTxt}"`);
+    check(`Interval startup root and target inside ${LO + 2}–${HI - 2}`, start.root >= LO + 2 && start.iv <= HI - 2, `${start.root}→${start.iv}`);
+    check(`Scale Run startup root: the whole 1-5 pattern inside ${LO + 2}–${HI - 2}`, start.scale >= LO + 2 && start.scale + 7 <= HI - 2 && start.scaleTxt.startsWith(start.scaleName), `${start.scale} "${start.scaleTxt}"`);
     const t0 = await targets(page, 0), t1 = await targets(page, 0.9999);
     const oldWin = expectPitchWindow(45, 72);
     check(`Pitch Match window = ${win.join('–')} (A2–C5 would give ${oldWin.join('–')})`, t0.pitch === win[0] && t1.pitch === win[1], `${t0.pitch}–${t1.pitch}`);
-    check('Interval: lowest root D3 (50), highest target 78 (A2–C5 caps at 71)', t0.root === LO && t1.iv === HI - 1, `root ${t0.root}, top ${t1.iv}`);
-    check('Scale Run root D3 (50), not A2 (45)', t0.scale === LO && t1.scale === LO, `${t0.scale}`);
+    check(`Interval: lowest root ${LO + 2}, highest target ${HI - 2} (A2–C5 caps at 70)`, t0.root === LO + 2 && t1.iv === HI - 2, `root ${t0.root}, top ${t1.iv}`);
+    check(`Scale Run roots ${LO + 2}–${HI - 2 - 7}: the pattern fits the saved range, not A2–C5`, t0.scale === LO + 2 && t1.scale === HI - 2 - 7, `${t0.scale}–${t1.scale}`);
     const gl = await page.evaluate(() => [gliderMidiToY(50, 320), gliderMidiToY(79, 320), gliderMidiToY(72, 320), gliderMidiToY(45, 320)]);
     check('Glider: D3 at the bottom, G5 at the top, C5 below the top', gl[0] === 320 && gl[1] === 0 && gl[2] > 0 && gl[3] === 320, JSON.stringify(gl.map(v => Math.round(v))));
     const sd = await page.evaluate(() => { const n = Object.values(SONG.parts).flatMap(p => p.notes); return { txt: document.getElementById('songDifficultyBox').textContent, fits: Math.min(...n) >= 50 && Math.max(...n) <= 79 }; });

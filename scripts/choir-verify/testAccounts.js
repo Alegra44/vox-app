@@ -12,7 +12,7 @@
 //      removes it once the accounts are gone. Every script, when it loads this file, deletes the accounts listed in
 //      any ledger whose process is no longer running, so even if the watchdog was killed with its parent, the next
 //      verification run of any script cleans up.
-const { execSync, spawn } = require('child_process');
+const { execSync, execFileSync, spawn } = require('child_process');
 const fs = require('fs'), os = require('os'), path = require('path');
 
 const TEST_EMAIL = /^voxcoach-[a-z0-9-]+@example\.com$/;
@@ -21,12 +21,32 @@ const LOG = path.join(DIR, 'watchdog.log');
 
 // The CLI logs in with a temporary role whose password each query resets, so two queries at once (two scripts running,
 // or a watchdog next to a run) can fail with "password authentication failed for user cli_login_postgres": retried.
+// A query that hangs (one sat for 31 hours on 2026-10-03/04, at full CPU) is killed after DB_TIMEOUT_MS and tried once
+// more. The platform's CLI binary is run directly when it can be found, so the kill reaches the process doing the work;
+// through npx, a kill of npx could leave the binary running.
+const DB_TIMEOUT_MS = 60000;
+const SUPABASE_BIN = (() => {
+  const os_ = { win32: 'windows' }[process.platform] || process.platform, ext = process.platform === 'win32' ? '.exe' : '';
+  for (const suffix of [`${os_}-${process.arch}`, `${os_}-${process.arch}-musl`]) {
+    try { return path.join(path.dirname(require.resolve(`@supabase/cli-${suffix}/package.json`)), 'bin', 'supabase' + ext); } catch {}
+  }
+  return null;
+})();
+function query(sql) {
+  const opts = { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: DB_TIMEOUT_MS, killSignal: 'SIGKILL', windowsHide: true };
+  return SUPABASE_BIN ? execFileSync(SUPABASE_BIN, ['db', 'query', '--linked', sql], opts)
+    : execSync(`npx supabase db query --linked "${sql.replace(/"/g, '\\"')}"`, opts);
+}
 function db(sql) {
-  for (let i = 0; ; i++) {
+  for (let i = 0, timeouts = 0; ; i++) {
     try {
-      const out = execSync(`npx supabase db query --linked "${sql.replace(/"/g, '\\"')}"`, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+      const out = query(sql);
       return JSON.parse(out.slice(out.indexOf('{'))).rows;
     } catch (e) {
+      if (e.code === 'ETIMEDOUT' || e.signal === 'SIGKILL') {
+        if (++timeouts > 1) throw new Error(`supabase db query timed out twice (${DB_TIMEOUT_MS / 1000} s each): ${sql.slice(0, 80)}`);
+        continue;
+      }
       if (i >= 4 || !/cli_login_postgres|28P01/.test(String(e.stdout || e.message))) throw e;
       Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 3000 + 2000 * i);
     }

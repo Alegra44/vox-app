@@ -1,0 +1,48 @@
+vibfix 2026-10-04T18-06-06  sides: before, after  before: master
+
+== S2: straight-286@630 centred — target 60 (sung +32 ct, re-centred); offline gate: as read 4.85 Hz ±19 r 0.26
+   before Tuner in tune 72% stability ≥75 68% (mean 78) of 113/113 | Stay in Key in key 96% of 113/113 (result 95%)
+   before Pitch Match int 91/97 pro 82/95 | Drills 96/90/97/87/97 | RTF in tune 80% steady 9% of 112/112 voiced frames (In tune×90, Sharp (+19ct)×3, Flat (-11ct)×2) | Choir World held ✓✓ median 1/1 ct, report pitch 97/90 in tune 192/192, 183/192
+   after  Tuner in tune 74% stability ≥75 73% (mean 78) of 113/113 | Stay in Key in key 98% of 112/112 (result 95%)
+   after  Pitch Match int 97/88 pro 95/83 | Drills 96/90/97/88/95 | RTF in tune 75% steady 5% of 112/112 voiced frames (In tune×84, Sharp (+10ct)×2, Sharp (+18ct)×2) | Choir World held ✓✓ median 1/1 ct, report pitch 97/90 in tune 192/192, 185/192
+
+== W2: S1 (real straight) sung 40 ct sharp — target 69 (sung -14 ct, re-centred, then +40); offline gate: as read 5.31 Hz ±9 r 0.39
+   before Tuner in tune 0% stability ≥75 49% (mean 58) of 113/113 | Stay in Key in key 14% of 111/111 (result 15%)
+   before Pitch Match int 75/77 pro 61/61 | Drills 75/75/75/75/75 | RTF in tune 0% steady 24% of 112/112 voiced frames (Sharp (+42ct)×18, Sharp (+43ct)×14, Sharp (+41ct)×12) | Choir World held ✓✓ median 41/40 ct, report pitch 76/76 in tune 170/192, 170/192
+   after  Tuner in tune 0% stability ≥75 45% (mean 54) of 112/112 | Stay in Key in key 19% of 112/112 (result 17%)
+   after  Pitch Match int 76/74 pro 65/66 | Drills 75/75/75/75/75 | RTF in tune 0% steady 21% of 112/112 voiced frames (Sharp (+42ct)×24, Sharp (+43ct)×13, Sharp (+40ct)×10) | Choir World held ✓✓ median 40/41 ct, report pitch 75/75 in tune 156/192, 186/192
+
+== N2: S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness — target 60 (sung +32 ct, re-centred, then +25); offline gate: as read 4.85 Hz ±19 r 0.26
+   before Tuner in tune 6% stability ≥75 30% (mean 45) of 114/114 | Stay in Key in key 74% of 113/113 (result 72%)
+   before Pitch Match int 84/85 pro 64/76 | Drills 85/80/85/81/85 | RTF in tune 7% steady 10% of 113/113 voiced frames (In tune×8, Sharp (+28ct)×6, Sharp (+31ct)×5) | Choir World held ✓✓ median 23/27 ct, report pitch 82/81 in tune 155/192, 158/192
+   after  Tuner in tune 8% stability ≥75 32% (mean 47) of 114/114 | Stay in Key in key 69% of 112/112 (result 67%)
+   after  Pitch Match int 82/80 pro 73/66 | Drills 85/80/85/81/85 | RTF in tune 11% steady 10% of 112/112 voiced frames (In tune×12, Sharp (+21ct)×6, Sharp (+25ct)×6) | Choir World held ✓✓ median 23/27 ct, report pitch 83/81 in tune 159/192, 156/192
+
+==== Tuner / Stay in Key (measured, not checked)
+   S2  straight          Tuner in tune 72% → 74%, stability ≥75 68% → 73% | Stay in Key in key 96% → 98%
+   W2  wrong             Tuner in tune 0% → 0%, stability ≥75 49% → 45% | Stay in Key in key 14% → 19%
+   N2  unsteady          Tuner in tune 6% → 8%, stability ≥75 30% → 32% | Stay in Key in key 74% → 69%
+
+==== VERDICT: 19 passed, 1 failed
+FAIL W2 wrong pmPro: 61 → 66 (no vibrato in it: must not rise more than 3)
+pass S2 straight pmInt: 94 → 93 (must not move more than 3)
+pass S2 straight pmPro: 89 → 89 (must not move more than 3)
+pass S2 straight drills: 93 → 93 (must not move more than 3)
+pass S2 straight cwPitch: 94 → 94 (must not move more than 3)
+pass S2 straight RTF rtfInTune: 80% → 75% (must not drop >10)
+pass S2 straight RTF rtfSteady: 9% → 5% (must not drop >10)
+pass S2 straight Choir World held: true
+pass W2 wrong pmInt: 76 → 75 (no vibrato in it: must not rise more than 3)
+pass W2 wrong drills: 75 → 75 (no vibrato in it: must not rise more than 3)
+pass W2 wrong cwPitch: 76 → 75 (no vibrato in it: must not rise more than 3)
+pass W2 wrong RTF "In tune": 0% → 0% (must not rise >5)
+pass N2 unsteady pmInt: 85 → 81 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady pmPro: 70 → 70 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady drills: 83 → 83 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady cwPitch: 82 → 82 (no vibrato in it: must not rise more than 3)
+pass N2 unsteady RTF "In tune": 7% → 11% (must not rise >5)
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF "In tune": 7% → 11% (off pitch past the window: must read in tune ≤25% of voiced frames)
+pass N2 unsteady RTF "Steady": 10% → 10% (no vibrato in it: must not rise >5)
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF "Steady": 10% → 10% (wobbly, no vibrato: must read Steady on ≤25% of voiced frames)
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/vibfix-local-2026-10-04T18-06-06.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/vibfix-local-2026-10-04T18-06-06.json

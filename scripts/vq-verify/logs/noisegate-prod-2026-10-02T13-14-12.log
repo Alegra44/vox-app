@@ -1,0 +1,44 @@
+noisegate 2026-10-02T13-14-12  sides: prod  url: https://deploy-alegra1122.vercel.app  target MIDI 57
+resumed from scripts/vq-verify/logs/noisegate-prod-2026-10-02T13-06-11.json: noise-white-10, noise-pink-10, noise-traffic-10
+
+== noise-rumble-10 (broadband)
+   signed up voxcoach-noisegate-1790946852820@example.com on https://deploy-alegra1122.vercel.app
+   prod   Pitch Match —/— | Drills —/0/—/—/— | RTF heard 15% in tune 0% | Tuner heard 0% in tune 0% | Stay in Key heard 0% in key 0% | Choir World heard 0% of frames, held 0/2
+
+== noise-babble-10 (voices)
+   prod   Pitch Match 11/0 | Drills 52/0/—/—/0 | RTF heard 67% in tune 22% | Tuner heard 76% in tune 3% | Stay in Key heard 78% in key 0% | Choir World heard 72% of frames, held 1/2
+
+== noise-talker-10 (voices)
+   prod   Pitch Match 0/14 | Drills 0/6/0/0/47 | RTF heard 49% in tune 10% | Tuner heard 60% in tune 3% | Stay in Key heard 59% in key 0% | Choir World heard 53% of frames, held 0/2
+
+== noise-tv-10 (voices)
+   prod   Pitch Match 0/16 | Drills 0/7/0/0/51 | RTF heard 56% in tune 17% | Tuner heard 80% in tune 7% | Stay in Key heard 70% in key 0% | Choir World heard 63% of frames, held 1/2
+
+== noise-realspeech-alice-10 (real)
+   prod   Pitch Match 0/0 | Drills 20/6/19/7/12 | RTF heard 47% in tune 10% | Tuner heard 48% in tune 7% | Stay in Key heard 61% in key 4% | Choir World heard 55% of frames, held 0/2
+
+== noise-realspeech-holmes-10 (real)
+   prod   Pitch Match 21/0 | Drills 15/23/19/29/13 | RTF heard 58% in tune 8% | Tuner heard 44% in tune 2% | Stay in Key heard 65% in key 4% | Choir World heard 60% of frames, held 1/2
+
+== noise-realtv-bonanza-a-10 (real)
+   prod   Pitch Match 0/0 | Drills 64/66/37/46/43 | RTF heard 34% in tune 6% | Tuner heard 25% in tune 2% | Stay in Key heard 32% in key 4% | Choir World heard 44% of frames, held 0/2
+
+== noise-realtv-bonanza-b-10 (real)
+   prod   Pitch Match 0/17 | Drills 48/32/72/71/18 | RTF heard 35% in tune 3% | Tuner heard 35% in tune 3% | Stay in Key heard 21% in key 0% | Choir World heard 21% of frames, held 0/2
+
+== sing-breathy-5 (soft)
+   prod   Pitch Match 0/0 | Drills 0/0/0/0/0 | RTF heard 85% in tune 46% | Tuner heard 86% in tune 16% | Stay in Key heard 84% in key 0% | Choir World heard 90% of frames, held 0/2
+
+== sing-breathy-562 (soft)
+   prod   Pitch Match 0/0 | Drills 0/0/0/0/0 | RTF heard 97% in tune 9% | Tuner heard 92% in tune 6% | Stay in Key heard 89% in key 0% | Choir World heard 79% of frames, held 0/2
+
+== sing-breathy-1197 (soft)
+   prod   Pitch Match 0/0 | Drills 0/31/0/0/0 | RTF heard 87% in tune 18% | Tuner heard 94% in tune 19% | Stay in Key heard 74% in key 8% | Choir World heard 84% of frames, held 0/2
+
+== sing-breathy-1743 (soft)
+   prod   Pitch Match 0/0 | Drills 6/0/14/0/0 | RTF heard 96% in tune 23% | Tuner heard 56% in tune 3% | Stay in Key heard 100% in key 6% | Choir World heard 72% of frames, held 0/2
+
+== sing-breathy-2353 (soft)
+ERROR page.waitForFunction: Timeout 20000ms exceeded.
+    at withPage (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/noisegate.js:84:18)
+    at async /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/noisegate.js:171:26

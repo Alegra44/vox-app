@@ -1,0 +1,22 @@
+[reap] run 94722 died without cleaning up: deleted 1, 0 left of voxcoach-rng-1791111400043@example.com
+== local deploy/ (production backend)
+
+   signed up voxcoach-rng-1791115105412@example.com
+-- a new account with no saved range
+  ✓ no saved range in the DB                                                 [null,null]
+  ✓ A2–C5 (45–72)                                                            {"lowMidi":45,"highMidi":72}
+  ✓ after a reload: still A2–C5                                              {"lowMidi":45,"highMidi":72}
+  ✓ page errors                                                              none
+
+-- the Range Finder, sung
+  ✓ captured D3 and G5                                                       [50,79]
+  ✓ saved to the account (user_progress)                                     [50,79]
+  ✓ same page: the capture is used                                           {"lowMidi":50,"highMidi":79}
+  ✓ page errors                                                              none
+
+-- after a reload (no Range Finder run on this page)
+  ✗ ran to the end                                                           page.waitForFunction: Timeout 20000ms exceeded.
+
+[cleanup] FAILED (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-rng-1791115105412@example.com') and email like 'voxcoach-%@example.com' returning email"); the watchdog retries when this process exits: voxcoach-rng-1791115105412@example.com
+
+8 passed, 1 failed

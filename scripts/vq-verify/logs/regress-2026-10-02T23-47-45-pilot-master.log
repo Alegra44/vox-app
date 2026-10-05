@@ -1,0 +1,51 @@
+== local deploy/ + production backend
+   signed up voxcoach-vlp-1790984865799@example.com
+  ✓ Register Coach reached through the Train hub                   
+  ✓ gauge visible to a signed-in user, starts at 0 for a new account "Vocal load today" "0% of daily budget"
+
+-- session 1: 20 s through the mic button, then stop
+  ✓ stored: 1 session, ended                                       {"active_seconds":19.871,"ended":true,"load":34.5949414005474,"median_rms":0.267140334368041,"p5_midi":57.0033222490522,"p95_midi":57.0038356262913}
+  ✓ active seconds plausible for 20 s of tone (18.5–20.1)          19.871 s
+  ✓ stored load = active × 1.740741 (hand), within 0.5%            stored 34.5949 vs hand 34.5903
+  ✓ median RMS and pitch stored (pitch ≈ 57)                       rms 0.2671, p5 57.003, p95 57.004
+  ✓ gauge % = stored load / 6800 × 100                             page 0.508749 vs 0.508749
+  ✓ gauge shows it                                                 "0.5% of daily budget" (expected "0.5% of daily budget")
+  ✓ page errors                                                    none
+
+-- reload: resumes today's total from the server
+  ✓ after reload, before singing: same total, not 0                "0.5% of daily budget" pct 0.508749
+
+-- session 2: 15 s more
+  ✓ session 2 load = active × 1.740741 (hand), within 0.5%         14.805 s → stored 25.7748 vs hand 25.7717
+  ✓ gauge = (session 1 + session 2) / 6800                         "0.9% of daily budget" pct 0.887790 vs 0.887790
+  ✓ daily table = session 1 + session 2                            [{"day":"2026-10-02","total_load":60.3697189976133}]
+
+-- all four languages (switched with the Profile language buttons, gauge open)
+  ✓ fr: label                                                      "Charge vocale du jour"
+  ✓ fr: value re-rendered in the new language                      "0,9 % du budget quotidien"
+  ✓ fr: structure intact, aria text matches                        fill 0.9%
+  ✓ es: label                                                      "Carga vocal de hoy"
+  ✓ es: value re-rendered in the new language                      "0,9 % del presupuesto diario"
+  ✓ es: structure intact, aria text matches                        fill 0.9%
+  ✓ tr: label                                                      "Bugünkü ses yükü"
+  ✓ tr: value re-rendered in the new language                      "Günlük bütçe: %0,9"
+  ✓ tr: structure intact, aria text matches                        fill 0.9%
+  ✓ en: label                                                      "Vocal load today"
+  ✓ en: value re-rendered in the new language                      "0.9% of daily budget"
+  ✓ en: structure intact, aria text matches                        fill 0.9%
+  ✓ page errors                                                    none
+
+-- session 3: 8 s, then the page is left (navigation) without stopping
+  ✓ saved on leaving the page (keepalive): ~8 s, not ended         3 rows; 7.781 s, load 13.5474, ended false
+  ✓   its load = active × 1.740741                                 hand 13.5447
+
+-- not plan-gated: trial ended, no plan
+  ✓ isPaid() false, gauge still shows today (3 sessions)           paid false, "1.1% of daily budget"
+  ✓ the Coach itself still asks for a plan (no session started)    paywall shown true
+
+-- signed out
+  ✓ gauge hidden when signed out                                   visible false
+
+31 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlp-1790984865799@example.com

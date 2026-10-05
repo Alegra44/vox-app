@@ -1,0 +1,12 @@
+[reap] FAILED for run 56190 (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlh-1790993960312@example.com') and email like 'voxcoach-%@example.com' returning email"): voxcoach-vlh-1790993960312@example.com
+[reap] FAILED for run 56779 (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlh-1790994525988@example.com') and email like 'voxcoach-%@example.com' returning email"): voxcoach-vlh-1790994525988@example.com
+[reap] FAILED for run 56901 (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlc-1790994635034@example.com') and email like 'voxcoach-%@example.com' returning email"): voxcoach-vlc-1790994635034@example.com
+[reap] FAILED for run 57035 (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlc-1790994727708@example.com') and email like 'voxcoach-%@example.com' returning email"): voxcoach-vlc-1790994727708@example.com
+[sweep] FAILED (Command failed: npx supabase db query --linked "delete from auth.users where email like 'voxcoach-vlb-%@example.com' and created_at < now() - interval '1 hour' returning email"); leftover voxcoach-vlb-* accounts may remain
+== local deploy/ + production backend
+   mic: 261.63 Hz (MIDI 60)
+
+[cleanup] FAILED (Command failed: npx supabase db query --linked "delete from auth.users where email in ('voxcoach-vlb-1790994746074@example.com') and email like 'voxcoach-%@example.com' returning email"); the watchdog retries when this process exits: voxcoach-vlb-1790994746074@example.com
+Error: Supabase client missing (CDN script failed to load)
+    at openPage (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/32901931-49bd-4481-9ca8-4e75d93cdaeb/scratchpad/master-wt/scripts/vocal-load-verify/batch1.js:65:112)
+    at async /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/32901931-49bd-4481-9ca8-4e75d93cdaeb/scratchpad/master-wt/scripts/vocal-load-verify/batch1.js:232:33

@@ -27,7 +27,8 @@ AnalyserNode path. No server is needed: the scripts serve `deploy/index.html` on
 | `vibtol.js` | The shared vibrato-tolerance helper (`vibratoGate` / `vibratoTolerantCents` / `makeVibratoTolerantLive`) in isolation: vibrato at 4–8 Hz up to ±150 ct tolerated; flutter, too-wide swings, slow wobble, wander, drift and wrong notes scored as read |
 | `realvib.js [dir] [--json out]` | Real singing (VocalSet, CC BY 4.0) through the helper offline: each sustained note's gate reading and its score before / after / centre-only |
 | `realstim.py <out.wav> <json>` | One real sung note, re-centred (plus an optional offset, wander or flutter) and looped forward/backward as a mic stimulus |
-| `vibfix.js [ids]` | The helper with real singing through the real UI: Pitch Match, Register Drills, Real-Time Feedback and Choir World's capture/verdict/report (plus Tuner and Stay in Key, measured only), before vs after or on `VF_URL` with a throwaway account; wobbly notes without vibrato (N1, N2, N4, W3, W4) must not read RTF "Steady"; logs to `logs/` |
+| `vibfix.js [ids]` | The helper with real singing through the real UI: Pitch Match, Register Drills, Real-Time Feedback and Choir World's capture/verdict/report (plus Tuner and Stay in Key, measured only), before vs after or on `VF_URL` with a throwaway account; wobbly notes without vibrato (N1, N2, N4, W3, W4) must not read RTF "Steady"; logs to `logs/`. Master vs a branch: `VF_BEFORE=master VF_MODE=regress` (the vibrato checks' "must rise" becomes "must not move": ±3, ±5 on RTF); the plain mode proves the vibrato fix itself (`VF_BEFORE=d7a5691`) |
+| `pmframes.js [id] [target]` | Pitch Match's scored frames per take, before vs after, on one vibfix stimulus (count, cents, the first 400 ms, the score recomputed from them) |
 
 ## How each metric is computed
 

@@ -31,7 +31,7 @@ const FEATURES = [
     snap: () => ({ register: document.getElementById('resRegisterStat').textContent, steady: document.getElementById('resSteadyStat').textContent, osc: document.getElementById('resOscStat').textContent }),
     same: near(2, ['steady', 'osc']) },
   { key: 'drills', label: 'Register Drills (5 seeded notes)', kind: 'register', ...hub('train', 'registerdrills'), startBtn: 'drillStartBtn', gauge: 'vlGaugeDrill',
-    prep: "__seed(7); document.getElementById('drillResultCard').style.display='none'; document.getElementById('drillPreCard').style.display='block';",
+    prep: "if (typeof notePickLast === 'object') for (const k in notePickLast) delete notePickLast[k]; __seed(7); document.getElementById('drillResultCard').style.display='none'; document.getElementById('drillPreCard').style.display='block';",
     active: 'drillActive',
     // it reads the register input only in each note's 1.8 s capture window (not while the reference tone plays or in
     // the 0.4 s pause after): 5 × 1.8 = 9.0 s, plus the first frame of windows 2–5, whose gap the engine caps at 0.1 s

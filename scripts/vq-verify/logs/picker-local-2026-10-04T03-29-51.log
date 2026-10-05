@@ -1,0 +1,178 @@
+picker 2026-10-04T03-29-51  before: master  after: working tree
+
+==== no saved range (A2–C5)
+-- beginner
+   Pitch Match, after an attempt            before:  1 notes G#3–G#3, same as the last one 100.0%  |  after: 24 notes B2–A#4, same as the last one 0.0%
+  ✓ beginner · Pitch Match, after an attempt: never the same note twice in a row         0.0%
+   Pitch Match, after New note              before: 12 notes F3–E4, same as the last one 7.0%  |  after: 24 notes B2–A#4, same as the last one 0.0%
+  ✓ beginner · Pitch Match, after New note: never the same note twice in a row           0.0%
+   Interval Match root, after an attempt    before:  1 notes F3–F3, same as the last one 100.0%  |  after: 22 notes B2–G#4, same as the last one 0.0%
+  ✓ beginner · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 25 notes A2–A4, same as the last one 2.7%  |  after: 22 notes B2–G#4, same as the last one 0.0%
+  ✓ beginner · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes A2–A2, same as the last one 100.0%  |  after: 17 notes B2–D#4, same as the last one 0.0%
+  ✓ beginner · Scale Run root, after an attempt: never the same note twice in a row      0.0%
+   Scale Run root, after New root           before:  1 notes A2–A2, same as the last one 100.0%  |  after: 17 notes B2–D#4, same as the last one 0.0%
+  ✓ beginner · Scale Run root, after New root: never the same note twice in a row        0.0%
+  ✓ beginner · Pitch Match: every note B2–A#4 comes up, nothing outside                  B2–A#4, 24 of 24
+  ✓ beginner · Scale Run: the whole pattern fits in the range every time                 after 300/300 · before 300/300
+  ✓ beginner · Interval Match: root and target inside the range                          300/300
+-- intermediate
+   Pitch Match, after an attempt            before:  1 notes C#4–C#4, same as the last one 100.0%  |  after: 28 notes A2–C5, same as the last one 0.0%
+  ✓ intermediate · Pitch Match, after an attempt: never the same note twice in a row     0.0%
+   Pitch Match, after New note              before: 23 notes B2–A4, same as the last one 5.7%  |  after: 28 notes A2–C5, same as the last one 0.0%
+  ✓ intermediate · Pitch Match, after New note: never the same note twice in a row       0.0%
+   Interval Match root, after an attempt    before:  1 notes D3–D3, same as the last one 100.0%  |  after: 24 notes A2–G#4, same as the last one 0.0%
+  ✓ intermediate · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 24 notes A2–G#4, same as the last one 6.4%  |  after: 24 notes A2–A4, same as the last one 0.0%
+  ✓ intermediate · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes A2–A2, same as the last one 100.0%  |  after: 16 notes A2–C4, same as the last one 0.0%
+  ✓ intermediate · Scale Run root, after an attempt: never the same note twice in a row  0.0%
+   Scale Run root, after New root           before:  1 notes A2–A2, same as the last one 100.0%  |  after: 16 notes A2–C4, same as the last one 0.0%
+  ✓ intermediate · Scale Run root, after New root: never the same note twice in a row    0.0%
+  ✓ intermediate · Pitch Match: every note A2–C5 comes up, nothing outside               A2–C5, 28 of 28
+  ✓ intermediate · Scale Run: the whole pattern fits in the range every time             after 300/300 · before 300/300
+  ✓ intermediate · Interval Match: root and target inside the range                      300/300
+-- professional
+   Pitch Match, after an attempt            before:  1 notes F#3–F#3, same as the last one 100.0%  |  after: 28 notes A2–C5, same as the last one 0.0%
+  ✓ professional · Pitch Match, after an attempt: never the same note twice in a row     0.0%
+   Pitch Match, after New note              before: 27 notes A2–B4, same as the last one 7.4%  |  after: 28 notes A2–C5, same as the last one 0.0%
+  ✓ professional · Pitch Match, after New note: never the same note twice in a row       0.0%
+   Interval Match root, after an attempt    before:  1 notes A2–A2, same as the last one 100.0%  |  after: 26 notes A2–B4, same as the last one 0.0%
+  ✓ professional · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 25 notes A2–A4, same as the last one 5.0%  |  after: 27 notes A2–B4, same as the last one 0.0%
+  ✓ professional · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes A2–A2, same as the last one 100.0%  |  after: 16 notes A2–C4, same as the last one 0.0%
+  ✓ professional · Scale Run root, after an attempt: never the same note twice in a row  0.0%
+   Scale Run root, after New root           before:  1 notes A2–A2, same as the last one 100.0%  |  after: 16 notes A2–C4, same as the last one 0.0%
+  ✓ professional · Scale Run root, after New root: never the same note twice in a row    0.0%
+  ✓ professional · Pitch Match: every note A2–C5 comes up, nothing outside               A2–C5, 28 of 28
+  ✓ professional · Scale Run: the whole pattern fits in the range every time             after 300/300 · before 300/300
+  ✓ professional · Interval Match: root and target inside the range                      300/300
+-- Register Drills (chest), 12 drills × 5 notes   before: 10 notes A2–F#3, same as the last one 11.9%, 7 repeats inside drills  |  after: 10 notes A2–F#3, same as the last one 0.0%, 0
+  ✓ Register Drills: no note twice in a row (within and across drills)                   0 inside drills
+-- Sing It 5 Ways base note, 20 sessions   before:  1 notes G#3–G#3, same as the last one 100.0%  |  after: 11 notes E3–D4, same as the last one 0.0%
+  ✓ Sing It 5 Ways base note: varies between sessions, never the same twice in a row, inside 25–65 % of the range E3–D4 (comfortable E3–D#4)
+-- Emotion Mode note, 20 sessions   before:  1 notes A3–A3, same as the last one 100.0%  |  after: 11 notes E3–D#4, same as the last one 0.0%
+  ✓ Emotion Mode note: varies between sessions, never the same twice in a row, inside 25–65 % of the range E3–D#4 (comfortable E3–D#4)
+-- One Take   before: 1 day 1 note(s), 20 days 1 note(s) [A3]  |  after: 1 day 1, 20 days 11 [A3 C4 B3 F#3 F3 G#3 G3 D#4 E3 C#4 D4]
+  ✓ One Take: one note all day, and it changes from day to day                           1 day: B3 · 20 days: 11 different
+
+==== C3–G4
+-- beginner
+   Pitch Match, after an attempt            before:  1 notes C#4–C#4, same as the last one 100.0%  |  after: 16 notes D3–F4, same as the last one 0.0%
+  ✓ beginner · Pitch Match, after an attempt: never the same note twice in a row         0.0%
+   Pitch Match, after New note              before:  9 notes F3–C#4, same as the last one 12.4%  |  after: 16 notes D3–F4, same as the last one 0.0%
+  ✓ beginner · Pitch Match, after New note: never the same note twice in a row           0.0%
+   Interval Match root, after an attempt    before:  1 notes C3–C3, same as the last one 100.0%  |  after: 14 notes D3–D#4, same as the last one 0.0%
+  ✓ beginner · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 17 notes C3–E4, same as the last one 6.4%  |  after: 14 notes D3–D#4, same as the last one 0.0%
+  ✓ beginner · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes C3–C3, same as the last one 100.0%  |  after:  9 notes D3–A#3, same as the last one 0.0%
+  ✓ beginner · Scale Run root, after an attempt: never the same note twice in a row      0.0%
+   Scale Run root, after New root           before:  1 notes C3–C3, same as the last one 100.0%  |  after:  9 notes D3–A#3, same as the last one 0.0%
+  ✓ beginner · Scale Run root, after New root: never the same note twice in a row        0.0%
+  ✓ beginner · Pitch Match: every note D3–F4 comes up, nothing outside                   D3–F4, 16 of 16
+  ✓ beginner · Scale Run: the whole pattern fits in the range every time                 after 300/300 · before 300/300
+  ✓ beginner · Interval Match: root and target inside the range                          300/300
+-- intermediate
+   Pitch Match, after an attempt            before:  1 notes C#4–C#4, same as the last one 100.0%  |  after: 20 notes C3–G4, same as the last one 0.0%
+  ✓ intermediate · Pitch Match, after an attempt: never the same note twice in a row     0.0%
+   Pitch Match, after New note              before: 16 notes D3–F4, same as the last one 7.0%  |  after: 20 notes C3–G4, same as the last one 0.0%
+  ✓ intermediate · Pitch Match, after New note: never the same note twice in a row       0.0%
+   Interval Match root, after an attempt    before:  1 notes D#3–D#3, same as the last one 100.0%  |  after: 17 notes C3–E4, same as the last one 0.0%
+  ✓ intermediate · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 16 notes C3–D#4, same as the last one 6.7%  |  after: 17 notes C3–E4, same as the last one 0.0%
+  ✓ intermediate · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes C3–C3, same as the last one 100.0%  |  after:  8 notes C3–G3, same as the last one 0.0%
+  ✓ intermediate · Scale Run root, after an attempt: never the same note twice in a row  0.0%
+   Scale Run root, after New root           before:  1 notes C3–C3, same as the last one 100.0%  |  after:  8 notes C3–G3, same as the last one 0.0%
+  ✓ intermediate · Scale Run root, after New root: never the same note twice in a row    0.0%
+  ✓ intermediate · Pitch Match: every note C3–G4 comes up, nothing outside               C3–G4, 20 of 20
+  ✓ intermediate · Scale Run: the whole pattern fits in the range every time             after 300/300 · before 300/300
+  ✓ intermediate · Interval Match: root and target inside the range                      300/300
+-- professional
+   Pitch Match, after an attempt            before:  1 notes F4–F4, same as the last one 100.0%  |  after: 20 notes C3–G4, same as the last one 0.0%
+  ✓ professional · Pitch Match, after an attempt: never the same note twice in a row     0.0%
+   Pitch Match, after New note              before: 19 notes C3–F#4, same as the last one 3.0%  |  after: 20 notes C3–G4, same as the last one 0.0%
+  ✓ professional · Pitch Match, after New note: never the same note twice in a row       0.0%
+   Interval Match root, after an attempt    before:  1 notes G3–G3, same as the last one 100.0%  |  after: 18 notes C3–F#4, same as the last one 0.0%
+  ✓ professional · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 18 notes C3–F4, same as the last one 5.0%  |  after: 19 notes C3–F#4, same as the last one 0.0%
+  ✓ professional · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes C3–C3, same as the last one 100.0%  |  after:  8 notes C3–G3, same as the last one 0.0%
+  ✓ professional · Scale Run root, after an attempt: never the same note twice in a row  0.0%
+   Scale Run root, after New root           before:  1 notes C3–C3, same as the last one 100.0%  |  after:  8 notes C3–G3, same as the last one 0.0%
+  ✓ professional · Scale Run root, after New root: never the same note twice in a row    0.0%
+  ✓ professional · Pitch Match: every note C3–G4 comes up, nothing outside               C3–G4, 20 of 20
+  ✓ professional · Scale Run: the whole pattern fits in the range every time             after 300/300 · before 300/300
+  ✓ professional · Interval Match: root and target inside the range                      300/300
+-- Register Drills (chest), 12 drills × 5 notes   before:  7 notes C3–F#3, same as the last one 15.3%, 7 repeats inside drills  |  after:  7 notes C3–F#3, same as the last one 0.0%, 0
+  ✓ Register Drills: no note twice in a row (within and across drills)                   0 inside drills
+-- Sing It 5 Ways base note, 20 sessions   before:  1 notes G#3–G#3, same as the last one 100.0%  |  after:  7 notes F#3–C4, same as the last one 0.0%
+  ✓ Sing It 5 Ways base note: varies between sessions, never the same twice in a row, inside 25–65 % of the range F#3–C4 (comfortable F3–C4)
+-- Emotion Mode note, 20 sessions   before:  1 notes A3–A3, same as the last one 100.0%  |  after:  6 notes F3–C4, same as the last one 0.0%
+  ✓ Emotion Mode note: varies between sessions, never the same twice in a row, inside 25–65 % of the range F3–C4 (comfortable F3–C4)
+-- One Take   before: 1 day 1 note(s), 20 days 1 note(s) [G#3]  |  after: 1 day 1, 20 days 8 [F#3 F3 G#3 G3 A#3 A3 C4 B3]
+  ✓ One Take: one note all day, and it changes from day to day                           1 day: C4 · 20 days: 8 different
+
+==== narrow A3–A4
+-- beginner
+   Pitch Match, after an attempt            before:  1 notes D4–D4, same as the last one 100.0%  |  after:  9 notes B3–G4, same as the last one 0.0%
+  ✓ beginner · Pitch Match, after an attempt: never the same note twice in a row         0.0%
+   Pitch Match, after New note              before:  5 notes C#4–F4, same as the last one 24.1%  |  after:  9 notes B3–G4, same as the last one 0.0%
+  ✓ beginner · Pitch Match, after New note: never the same note twice in a row           0.0%
+   Interval Match root, after an attempt    before:  1 notes B3–B3, same as the last one 100.0%  |  after:  9 notes A3–F4, same as the last one 0.0%
+  ✓ beginner · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 10 notes A3–F#4, same as the last one 15.4%  |  after:  9 notes A3–F4, same as the last one 0.0%
+  ✓ beginner · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes A3–A3, same as the last one 100.0%  |  after:  4 notes A#3–C#4, same as the last one 0.0%
+  ✓ beginner · Scale Run root, after an attempt: never the same note twice in a row      0.0%
+   Scale Run root, after New root           before:  1 notes A3–A3, same as the last one 100.0%  |  after:  4 notes A#3–C#4, same as the last one 0.0%
+  ✓ beginner · Scale Run root, after New root: never the same note twice in a row        0.0%
+  ✓ beginner · Pitch Match: every note B3–G4 comes up, nothing outside                   B3–G4, 9 of 9
+  ✓ beginner · Scale Run: the whole pattern fits in the range every time                 after 300/300 · before 300/300
+  ✓ beginner · Interval Match: root and target inside the range                          300/300
+-- intermediate
+   Pitch Match, after an attempt            before:  1 notes F4–F4, same as the last one 100.0%  |  after: 13 notes A3–A4, same as the last one 0.0%
+  ✓ intermediate · Pitch Match, after an attempt: never the same note twice in a row     0.0%
+   Pitch Match, after New note              before: 10 notes A#3–G4, same as the last one 9.0%  |  after: 13 notes A3–A4, same as the last one 0.0%
+  ✓ intermediate · Pitch Match, after New note: never the same note twice in a row       0.0%
+   Interval Match root, after an attempt    before:  1 notes C4–C4, same as the last one 100.0%  |  after: 10 notes A3–F#4, same as the last one 0.0%
+  ✓ intermediate · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before:  9 notes A3–F4, same as the last one 19.4%  |  after: 10 notes A3–F#4, same as the last one 0.0%
+  ✓ intermediate · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes A3–A3, same as the last one 100.0%  |  after:  1 notes A3–A3, same as the last one 100.0%
+  ✓ intermediate · Scale Run root, after an attempt: never the same note twice in a row (only one root fits: allowed) 100.0%
+   Scale Run root, after New root           before:  1 notes A3–A3, same as the last one 100.0%  |  after:  1 notes A3–A3, same as the last one 100.0%
+  ✓ intermediate · Scale Run root, after New root: never the same note twice in a row (only one root fits: allowed) 100.0%
+  ✓ intermediate · Pitch Match: every note A3–A4 comes up, nothing outside               A3–A4, 13 of 13
+  ✓ intermediate · Scale Run: the whole pattern fits in the range every time             after 300/300 · before 300/300
+  ✓ intermediate · Interval Match: root and target inside the range                      300/300
+-- professional
+   Pitch Match, after an attempt            before:  1 notes E4–E4, same as the last one 100.0%  |  after: 13 notes A3–A4, same as the last one 0.0%
+  ✓ professional · Pitch Match, after an attempt: never the same note twice in a row     0.0%
+   Pitch Match, after New note              before: 12 notes A3–G#4, same as the last one 9.0%  |  after: 13 notes A3–A4, same as the last one 0.0%
+  ✓ professional · Pitch Match, after New note: never the same note twice in a row       0.0%
+   Interval Match root, after an attempt    before:  1 notes A3–A3, same as the last one 100.0%  |  after: 12 notes A3–G#4, same as the last one 0.0%
+  ✓ professional · Interval Match root, after an attempt: never the same note twice in a row 0.0%
+   Interval Match root, after New interval  before: 11 notes A3–G4, same as the last one 22.4%  |  after: 12 notes A3–G#4, same as the last one 0.0%
+  ✓ professional · Interval Match root, after New interval: never the same note twice in a row 0.0%
+   Scale Run root, after an attempt         before:  1 notes A3–A3, same as the last one 100.0%  |  after:  1 notes A3–A3, same as the last one 100.0%
+  ✓ professional · Scale Run root, after an attempt: never the same note twice in a row (only one root fits: allowed) 100.0%
+   Scale Run root, after New root           before:  1 notes A3–A3, same as the last one 100.0%  |  after:  1 notes A3–A3, same as the last one 100.0%
+  ✓ professional · Scale Run root, after New root: never the same note twice in a row (only one root fits: allowed) 100.0%
+  ✓ professional · Pitch Match: every note A3–A4 comes up, nothing outside               A3–A4, 13 of 13
+  ✓ professional · Scale Run: the whole pattern fits in the range every time             after 300/300 · before 300/300
+  ✓ professional · Interval Match: root and target inside the range                      300/300
+-- Register Drills (chest), 12 drills × 5 notes   before:  5 notes A3–C#4, same as the last one 20.3%, 10 repeats inside drills  |  after:  5 notes A3–C#4, same as the last one 0.0%, 0
+  ✓ Register Drills: no note twice in a row (within and across drills)                   0 inside drills
+-- Sing It 5 Ways base note, 20 sessions   before:  1 notes D4–D4, same as the last one 100.0%  |  after:  6 notes C4–F4, same as the last one 0.0%
+  ✓ Sing It 5 Ways base note: varies between sessions, never the same twice in a row, inside 25–65 % of the range C4–F4 (comfortable C4–F4)
+-- Emotion Mode note, 20 sessions   before:  1 notes D4–D4, same as the last one 100.0%  |  after:  6 notes C4–F4, same as the last one 0.0%
+  ✓ Emotion Mode note: varies between sessions, never the same twice in a row, inside 25–65 % of the range C4–F4 (comfortable C4–F4)
+-- One Take   before: 1 day 1 note(s), 20 days 1 note(s) [D4]  |  after: 1 day 1, 20 days 6 [F4 D4 C#4 E4 D#4 C4]
+  ✓ One Take: one note all day, and it changes from day to day                           1 day: C#4 · 20 days: 6 different
+
+==== VERDICT: 93 passed, 0 failed
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/picker-local-2026-10-04T03-29-51.log

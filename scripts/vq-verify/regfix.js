@@ -191,7 +191,7 @@ async function drills() {
     for (const which of SIDES) {
       const r = await withPage(file, which, async page => {
         await page.evaluate(m => {
-          Math.random = () => 0; lowNote = freqToNote(220); highNote = freqToNote(880); drillMode = m;
+          Math.random = () => 0; if (typeof pickNote === 'function') { window.__pick = window.__pick || pickNote; pickNote = (k, lo, hi) => k === 'drill' ? lo : __pick(k, lo, hi); }; lowNote = freqToNote(220); highNote = freqToNote(880); drillMode = m;
           document.getElementById('drillStartBtn').click();
         }, mode);
         await page.waitForFunction(() => !drillActive && drillResults.length === DRILL_NOTE_COUNT, null, { timeout: 60000 });

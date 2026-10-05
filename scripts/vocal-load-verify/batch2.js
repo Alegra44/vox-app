@@ -22,6 +22,8 @@ const FEATURES = [
   { key: 'interval', label: 'Interval Match: target C4, a pass', kind: 'sidecar', shell: 'train', enter: train('exercises'), startBtn: 'intervalListenBtn', gauge: 'vlGaugeInterval', tab: '[data-extype="interval"]',
     prep: 'intervalTargetMidi = 60',
     active: '!!document.getElementById("intervalListenBtn").disabled', mid: 900, shortCapture: true,
+    // the reference and a cue play first; the load feed starts with the "Listening…" label (on master too, at once)
+    listening: 'document.getElementById("intervalListenBtn").textContent === t("action_listening")',
     result: () => ({ acc: document.getElementById('intervalAccuracyVal').textContent, fb: document.getElementById('intervalFeedback').textContent }) },
   { key: 'scale', label: 'Scale Run from C4 (every note captured, runs to the end)', kind: 'sidecar', shell: 'train', enter: train('exercises'), startBtn: 'scaleStartBtn', gauge: 'vlGaugeScale', tab: '[data-extype="scale"]',
     prep: 'scaleRootMidi = 60',
