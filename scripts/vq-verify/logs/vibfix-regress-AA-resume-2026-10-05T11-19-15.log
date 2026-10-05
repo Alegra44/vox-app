@@ -1,0 +1,279 @@
+vibfix 2026-10-05T11-19-15  sides: before, after  before: master  mode: regress (rises become "must not move")
+resumed from scripts/vq-verify/logs/vibfix-local-2026-10-05T02-38-52.json: V1, V2, V3, V4, V5, V6, S1, S2
+
+== W1: V1 (real vibrato) sung 60 ct sharp — target 69 (sung -1 ct, re-centred, then +60); offline gate: vibrato 6.16 Hz ±66 r 0.83
+   before #1 Tuner in tune 2% stability ≥75 0% (mean 8) of 89/113 | Stay in Key in key 5% of 91/113 (result 6%)
+   before #1 Pitch Match int 65/69 pro 50/46 | Drills 59/69/67/73/68 | RTF in tune 7% steady 10% of 99/113 voiced frames (Listening…×14, In tune×7, Sharp (+37ct)×7) | Choir World held ✗✓ median 51/49 ct, report pitch 67/68 in tune 63/156, 82/153
+   after #1  Tuner in tune 0% stability ≥75 1% (mean 9) of 92/115 | Stay in Key in key 3% of 91/114 (result 4%)
+   after #1  Pitch Match int 66/69 pro 52/47 | Drills 61/68/68/73/68 | RTF in tune 6% steady 14% of 102/115 voiced frames (Listening…×13, In tune×6, Sharp (+47ct)×6) | Choir World held ✗✓ median 51/50 ct, report pitch 66/68 in tune 63/155, 80/151
+   before #2 Tuner in tune 3% stability ≥75 0% (mean 9) of 93/115 | Stay in Key in key 2% of 91/115 (result 5%)
+   before #2 Pitch Match int 68/69 pro 51/45 | Drills 59/68/68/72/70 | RTF in tune 7% steady 15% of 102/114 voiced frames (Listening…×12, Sharp (+45ct)×8, In tune×7) | Choir World held ✗✗ median 52/51 ct, report pitch 66/68 in tune 55/155, 76/155
+   after #2  Tuner in tune 3% stability ≥75 0% (mean 9) of 92/115 | Stay in Key in key 4% of 89/115 (result 6%)
+   after #2  Pitch Match int 66/69 pro 51/45 | Drills 59/68/68/73/69 | RTF in tune 5% steady 9% of 99/113 voiced frames (Listening…×14, Sharp (+47ct)×6, Sharp (+46ct)×6) | Choir World held ✗✗ median 51/51 ct, report pitch 67/67 in tune 61/156, 71/155
+   before #3 Tuner in tune 3% stability ≥75 1% (mean 11) of 92/115 | Stay in Key in key 1% of 90/114 (result 5%)
+   before #3 Pitch Match int 67/69 pro 51/45 | Drills 60/68/67/73/68 | RTF in tune 5% steady 8% of 101/115 voiced frames (Listening…×14, Sharp (+45ct)×6, Sharp (+38ct)×6) | Choir World held ✗✓ median 53/50 ct, report pitch 65/68 in tune 54/154, 75/155
+   after #3  Tuner in tune 1% stability ≥75 2% (mean 12) of 93/115 | Stay in Key in key 2% of 91/115 (result 5%)
+   after #3  Pitch Match int 67/69 pro 51/46 | Drills 59/68/67/73/69 | RTF in tune 6% steady 11% of 102/115 voiced frames (Listening…×13, Sharp (+49ct)×7, Sharp (+45ct)×7) | Choir World held ✗✓ median 53/49 ct, report pitch 66/68 in tune 67/156, 81/151
+
+== W5: V1 (real vibrato) sung 80 ct sharp — target 69 (sung -1 ct, re-centred, then +80); offline gate: vibrato 6.16 Hz ±66 r 0.83
+   before #1 Tuner in tune 7% stability ≥75 54% (mean 63) of 96/114 | Stay in Key in key 0% of 95/113 (result 3%)
+   before #1 Pitch Match int 55/56 pro 30/30 | Drills 48/58/56/59/60 | RTF in tune 17% steady 41% of 102/113 voiced frames (In tune×17, Listening…×11, Flat (-44ct)×8) | Choir World held ✗✗ median 71/73 ct, report pitch 55/54 in tune 9/154, 7/155
+   after #1  Tuner in tune 9% stability ≥75 50% (mean 63) of 95/114 | Stay in Key in key 0% of 95/113 (result 3%)
+   after #1  Pitch Match int 55/56 pro 31/31 | Drills 47/57/56/60/59 | RTF in tune 18% steady 39% of 102/112 voiced frames (In tune×18, Listening…×10, Flat (-33ct)×6) | Choir World held ✗✗ median 70/72 ct, report pitch 56/54 in tune 13/155, 6/155
+   before #2 Tuner in tune 7% stability ≥75 53% (mean 62) of 94/114 | Stay in Key in key 2% of 93/112 (result 3%)
+   before #2 Pitch Match int 55/57 pro 30/31 | Drills 47/57/56/59/60 | RTF in tune 17% steady 44% of 102/113 voiced frames (In tune×17, Listening…×11, Flat (-44ct)×7) | Choir World held ✗✗ median 74/72 ct, report pitch 54/54 in tune 4/153, 4/155
+   after #2  Tuner in tune 9% stability ≥75 55% (mean 63) of 96/115 | Stay in Key in key 2% of 95/113 (result 3%)
+   after #2  Pitch Match int 55/56 pro 32/31 | Drills 49/57/55/60/59 | RTF in tune 18% steady 42% of 103/113 voiced frames (In tune×19, Flat (-33ct)×10, Listening…×10) | Choir World held ✗✗ median 72/72 ct, report pitch 56/54 in tune 12/155, 7/156
+   before #3 Tuner in tune 7% stability ≥75 54% (mean 62) of 95/114 | Stay in Key in key 1% of 95/112 (result 3%)
+   before #3 Pitch Match int 55/56 pro 29/31 | Drills 49/56/55/59/60 | RTF in tune 22% steady 42% of 101/111 voiced frames (In tune×22, Flat (-34ct)×10, Listening…×10) | Choir World held ✗✗ median 73/72 ct, report pitch 54/54 in tune 8/153, 6/155
+   after #3  Tuner in tune 8% stability ≥75 53% (mean 63) of 97/116 | Stay in Key in key 1% of 97/115 (result 3%)
+   after #3  Pitch Match int 55/57 pro 30/30 | Drills 48/57/55/60/59 | RTF in tune 17% steady 43% of 104/115 voiced frames (In tune×18, Listening…×11, Flat (-34ct)×6) | Choir World held ✗✗ median 72/74 ct, report pitch 55/54 in tune 13/155, 5/155
+
+== W2: S1 (real straight) sung 40 ct sharp — target 69 (sung -14 ct, re-centred, then +40); offline gate: as read 5.31 Hz ±9 r 0.39
+   before #1 Tuner in tune 0% stability ≥75 48% (mean 56) of 114/114 | Stay in Key in key 15% of 115/115 (result 16%)
+   before #1 Pitch Match int 76/74 pro 65/65 | Drills 75/75/75/75/75 | RTF in tune 0% steady 25% of 114/114 voiced frames (Sharp (+42ct)×27, Sharp (+43ct)×14, Sharp (+41ct)×10) | Choir World held ✓✓ median 41/39 ct, report pitch 75/76 in tune 159/192, 161/192
+   after #1  Tuner in tune 0% stability ≥75 47% (mean 56) of 115/115 | Stay in Key in key 15% of 114/114 (result 16%)
+   after #1  Pitch Match int 76/74 pro 65/66 | Drills 75/75/75/75/75 | RTF in tune 0% steady 21% of 114/114 voiced frames (Sharp (+43ct)×19, Sharp (+42ct)×17, Sharp (+41ct)×11) | Choir World held ✓✓ median 41/40 ct, report pitch 76/76 in tune 168/192, 172/192
+   before #2 Tuner in tune 0% stability ≥75 55% (mean 62) of 114/114 | Stay in Key in key 17% of 115/115 (result 16%)
+   before #2 Pitch Match int 76/74 pro 64/65 | Drills 75/75/75/75/75 | RTF in tune 0% steady 24% of 114/114 voiced frames (Sharp (+42ct)×21, Sharp (+43ct)×17, Sharp (+39ct)×9) | Choir World held ✓✓ median 41/39 ct, report pitch 75/75 in tune 159/192, 160/192
+   after #2  Tuner in tune 0% stability ≥75 61% (mean 62) of 113/113 | Stay in Key in key 16% of 111/111 (result 15%)
+   after #2  Pitch Match int 76/74 pro 65/65 | Drills 75/75/75/75/75 | RTF in tune 0% steady 25% of 112/112 voiced frames (Sharp (+42ct)×21, Sharp (+43ct)×11, Sharp (+41ct)×10) | Choir World held ✓✓ median 41/39 ct, report pitch 75/75 in tune 160/192, 160/192
+   before #3 Tuner in tune 0% stability ≥75 45% (mean 55) of 112/112 | Stay in Key in key 16% of 112/112 (result 16%)
+   before #3 Pitch Match int 76/74 pro 65/65 | Drills 75/75/75/75/75 | RTF in tune 0% steady 22% of 112/112 voiced frames (Sharp (+42ct)×21, Sharp (+44ct)×14, Sharp (+43ct)×13) | Choir World held ✓✓ median 41/39 ct, report pitch 75/76 in tune 160/192, 163/192
+   after #3  Tuner in tune 0% stability ≥75 49% (mean 54) of 113/113 | Stay in Key in key 15% of 112/112 (result 16%)
+   after #3  Pitch Match int 76/74 pro 65/66 | Drills 75/75/75/75/75 | RTF in tune 0% steady 21% of 112/112 voiced frames (Sharp (+42ct)×22, Sharp (+43ct)×11, Sharp (+44ct)×11) | Choir World held ✓✓ median 41/40 ct, report pitch 75/75 in tune 159/192, 161/192
+
+== W3: S1 with a slow ±60 ct wander at 0.8 Hz — target 69 (sung -14 ct, re-centred); offline gate: as read 5.31 Hz ±9 r 0.39
+   before #1 Tuner in tune 6% stability ≥75 0% (mean 13) of 114/114 | Stay in Key in key 42% of 112/112 (result 42%)
+   before #1 Pitch Match int 77/78 pro 64/69 | Drills 77/76/77/78/76 | RTF in tune 8% steady 0% of 112/112 voiced frames (In tune×9, Sharp (+43ct)×5, Flat (-40ct)×4) | Choir World held ✓✓ median 5/9 ct, report pitch 76/77 in tune 115/192, 120/192
+   after #1  Tuner in tune 5% stability ≥75 0% (mean 11) of 114/114 | Stay in Key in key 44% of 113/113 (result 43%)
+   after #1  Pitch Match int 77/77 pro 63/69 | Drills 77/76/77/78/77 | RTF in tune 9% steady 0% of 112/112 voiced frames (In tune×10, Sharp (+46ct)×5, Flat (-45ct)×4) | Choir World held ✓✓ median 5/10 ct, report pitch 76/77 in tune 114/192, 123/192
+   before #2 Tuner in tune 7% stability ≥75 0% (mean 12) of 114/114 | Stay in Key in key 40% of 111/111 (result 41%)
+   before #2 Pitch Match int 77/77 pro 64/68 | Drills 77/76/77/78/77 | RTF in tune 7% steady 0% of 112/112 voiced frames (In tune×8, Sharp (+43ct)×5, Flat (-40ct)×4) | Choir World held ✓✓ median 11/5 ct, report pitch 76/77 in tune 116/192, 121/192
+   after #2  Tuner in tune 4% stability ≥75 0% (mean 9) of 114/114 | Stay in Key in key 41% of 113/113 (result 43%)
+   after #2  Pitch Match int 77/78 pro 63/69 | Drills 77/76/77/78/77 | RTF in tune 7% steady 0% of 113/113 voiced frames (In tune×8, Sharp (+44ct)×7, Flat (-39ct)×6) | Choir World held ✓✓ median 7/9 ct, report pitch 76/77 in tune 114/192, 125/192
+   before #3 Tuner in tune 5% stability ≥75 0% (mean 13) of 114/114 | Stay in Key in key 46% of 113/113 (result 45%)
+   before #3 Pitch Match int 77/77 pro 63/68 | Drills 77/76/77/78/77 | RTF in tune 10% steady 0% of 112/112 voiced frames (In tune×11, Flat (-45ct)×4, Sharp (+43ct)×4) | Choir World held ✓✓ median 6/8 ct, report pitch 76/77 in tune 118/192, 122/192
+   after #3  Tuner in tune 4% stability ≥75 0% (mean 12) of 113/113 | Stay in Key in key 41% of 111/111 (result 40%)
+   after #3  Pitch Match int 77/77 pro 63/68 | Drills 77/76/77/78/77 | RTF in tune 8% steady 0% of 112/112 voiced frames (In tune×9, Flat (-46ct)×4, Sharp (+43ct)×4) | Choir World held ✓✓ median 17/-6 ct, report pitch 76/77 in tune 119/192, 125/192
+
+== W4: S1 with an 11 Hz ±40 ct flutter — target 69 (sung -14 ct, re-centred); offline gate: as read 5.31 Hz ±9 r 0.39
+   before #1 Tuner in tune 9% stability ≥75 0% (mean 21) of 114/114 | Stay in Key in key 79% of 113/113 (result 81%)
+   before #1 Pitch Match int 86/86 pro 78/78 | Drills 88/88/89/89/89 | RTF in tune 21% steady 0% of 112/112 voiced frames (In tune×24, Flat (-14ct)×5, Flat (-18ct)×4) | Choir World held ✓✓ median 9/9 ct, report pitch 86/85 in tune 192/192, 190/192
+   after #1  Tuner in tune 10% stability ≥75 0% (mean 19) of 115/115 | Stay in Key in key 81% of 112/112 (result 81%)
+   after #1  Pitch Match int 86/87 pro 78/78 | Drills 89/89/88/89/90 | RTF in tune 21% steady 0% of 111/111 voiced frames (In tune×23, Flat (-17ct)×5, Sharp (+27ct)×4) | Choir World held ✓✓ median 8/9 ct, report pitch 86/86 in tune 192/192, 191/192
+   before #2 Tuner in tune 9% stability ≥75 0% (mean 21) of 114/114 | Stay in Key in key 79% of 113/113 (result 80%)
+   before #2 Pitch Match int 86/87 pro 79/79 | Drills 88/88/89/89/89 | RTF in tune 27% steady 0% of 112/112 voiced frames (In tune×30, Sharp (+19ct)×4, Sharp (+31ct)×4) | Choir World held ✓✓ median 7/9 ct, report pitch 86/85 in tune 192/192, 191/192
+   after #2  Tuner in tune 12% stability ≥75 0% (mean 21) of 114/114 | Stay in Key in key 73% of 113/113 (result 79%)
+   after #2  Pitch Match int 86/86 pro 79/79 | Drills 89/88/89/89/89 | RTF in tune 26% steady 0% of 114/114 voiced frames (In tune×30, Flat (-21ct)×6, Sharp (+20ct)×4) | Choir World held ✓✓ median 8/9 ct, report pitch 86/86 in tune 192/192, 191/192
+   before #3 Tuner in tune 12% stability ≥75 0% (mean 21) of 114/114 | Stay in Key in key 84% of 114/114 (result 80%)
+   before #3 Pitch Match int 86/86 pro 79/78 | Drills 89/89/89/89/89 | RTF in tune 17% steady 0% of 113/113 voiced frames (In tune×19, Flat (-9ct)×5, Flat (-21ct)×5) | Choir World held ✓✓ median 8/7 ct, report pitch 85/85 in tune 192/192, 191/192
+   after #3  Tuner in tune 14% stability ≥75 0% (mean 21) of 114/114 | Stay in Key in key 79% of 112/112 (result 81%)
+   after #3  Pitch Match int 86/87 pro 78/78 | Drills 88/89/89/89/89 | RTF in tune 17% steady 0% of 111/111 voiced frames (In tune×19, Sharp (+29ct)×4, Flat (-27ct)×4) | Choir World held ✓✓ median 7/8 ct, report pitch 86/85 in tune 192/192, 190/192
+
+== N1: S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness — target 69 (sung -14 ct, re-centred, then -20); offline gate: as read 5.31 Hz ±9 r 0.39
+   before #1 Tuner in tune 5% stability ≥75 44% (mean 72) of 114/114 | Stay in Key in key 100% of 113/113 (result 98%)
+   before #1 Pitch Match int 86/89 pro 80/84 | Drills 89/90/88/89/89 | RTF in tune 4% steady 22% of 113/113 voiced frames (Flat (-16ct)×18, Flat (-15ct)×10, Flat (-18ct)×10) | Choir World held ✓✓ median -17/-19 ct, report pitch 90/89 in tune 192/192, 192/192
+   after #1  Tuner in tune 7% stability ≥75 44% (mean 73) of 113/113 | Stay in Key in key 99% of 112/112 (result 98%)
+   after #1  Pitch Match int 86/89 pro 80/85 | Drills 89/90/88/89/89 | RTF in tune 4% steady 21% of 112/112 voiced frames (Flat (-16ct)×13, Flat (-15ct)×12, Flat (-21ct)×11) | Choir World held ✓✓ median -17/-19 ct, report pitch 90/89 in tune 192/192, 192/192
+   before #2 Tuner in tune 5% stability ≥75 42% (mean 73) of 114/114 | Stay in Key in key 99% of 112/112 (result 97%)
+   before #2 Pitch Match int 87/88 pro 80/84 | Drills 89/90/88/89/89 | RTF in tune 5% steady 23% of 112/112 voiced frames (Flat (-16ct)×14, Flat (-18ct)×13, Flat (-21ct)×11) | Choir World held ✓✓ median -18/-20 ct, report pitch 89/89 in tune 188/192, 192/192
+   after #2  Tuner in tune 4% stability ≥75 52% (mean 76) of 113/113 | Stay in Key in key 99% of 113/113 (result 97%)
+   after #2  Pitch Match int 86/89 pro 80/85 | Drills 89/90/88/89/89 | RTF in tune 2% steady 23% of 112/112 voiced frames (Flat (-16ct)×15, Flat (-18ct)×13, Flat (-21ct)×13) | Choir World held ✓✓ median -18/-19 ct, report pitch 89/89 in tune 188/192, 192/192
+   before #3 Tuner in tune 4% stability ≥75 68% (mean 80) of 113/113 | Stay in Key in key 99% of 112/112 (result 96%)
+   before #3 Pitch Match int 86/89 pro 80/86 | Drills 90/90/88/89/89 | RTF in tune 3% steady 22% of 111/111 voiced frames (Flat (-16ct)×15, Flat (-15ct)×11, Flat (-18ct)×10) | Choir World held ✓✓ median -18/-20 ct, report pitch 88/89 in tune 189/192, 192/192
+   after #3  Tuner in tune 6% stability ≥75 51% (mean 75) of 114/114 | Stay in Key in key 98% of 113/113 (result 96%)
+   after #3  Pitch Match int 87/89 pro 80/85 | Drills 90/90/88/89/89 | RTF in tune 5% steady 22% of 113/113 voiced frames (Flat (-16ct)×18, Flat (-17ct)×10, Flat (-19ct)×10) | Choir World held ✓✓ median -18/-21 ct, report pitch 88/89 in tune 189/192, 192/192
+
+== N2: S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness — target 60 (sung +32 ct, re-centred, then +25); offline gate: as read 4.85 Hz ±19 r 0.26
+   before #1 Tuner in tune 4% stability ≥75 31% (mean 49) of 113/113 | Stay in Key in key 71% of 113/113 (result 69%)
+   before #1 Pitch Match int 82/79 pro 73/65 | Drills 85/79/85/81/85 | RTF in tune 7% steady 10% of 112/112 voiced frames (In tune×8, Sharp (+21ct)×7, Sharp (+23ct)×5) | Choir World held ✓✓ median 22/27 ct, report pitch 83/81 in tune 159/192, 156/192
+   after #1  Tuner in tune 5% stability ≥75 32% (mean 49) of 114/114 | Stay in Key in key 71% of 113/113 (result 69%)
+   after #1  Pitch Match int 82/80 pro 72/65 | Drills 85/80/85/81/85 | RTF in tune 5% steady 11% of 112/112 voiced frames (Sharp (+21ct)×7, In tune×6, Sharp (+23ct)×6) | Choir World held ✓✓ median 23/28 ct, report pitch 82/81 in tune 159/192, 157/192
+   before #2 Tuner in tune 5% stability ≥75 31% (mean 48) of 113/113 | Stay in Key in key 68% of 113/113 (result 67%)
+   before #2 Pitch Match int 82/79 pro 73/65 | Drills 85/80/85/79/85 | RTF in tune 7% steady 12% of 112/112 voiced frames (In tune×8, Sharp (+28ct)×7, Sharp (+33ct)×7) | Choir World held ✓✓ median 22/28 ct, report pitch 83/81 in tune 161/192, 158/192
+   after #2  Tuner in tune 7% stability ≥75 32% (mean 48) of 114/114 | Stay in Key in key 71% of 113/113 (result 69%)
+   after #2  Pitch Match int 82/79 pro 73/65 | Drills 85/80/85/81/85 | RTF in tune 6% steady 12% of 112/112 voiced frames (Sharp (+24ct)×8, In tune×7, Sharp (+26ct)×6) | Choir World held ✓✓ median 22/27 ct, report pitch 83/81 in tune 161/192, 159/192
+   before #3 Tuner in tune 5% stability ≥75 32% (mean 47) of 113/113 | Stay in Key in key 71% of 112/112 (result 70%)
+   before #3 Pitch Match int 82/80 pro 72/66 | Drills 85/80/85/82/85 | RTF in tune 10% steady 11% of 112/112 voiced frames (In tune×11, Sharp (+26ct)×7, Sharp (+25ct)×6) | Choir World held ✓✓ median 23/27 ct, report pitch 82/81 in tune 159/192, 158/192
+   after #3  Tuner in tune 5% stability ≥75 32% (mean 47) of 113/113 | Stay in Key in key 70% of 113/113 (result 69%)
+   after #3  Pitch Match int 82/79 pro 73/66 | Drills 85/80/85/81/85 | RTF in tune 8% steady 10% of 112/112 voiced frames (In tune×9, Sharp (+27ct)×8, Sharp (+31ct)×6) | Choir World held ✓✓ median 22/28 ct, report pitch 83/81 in tune 159/192, 156/192
+
+== N3: V3 (real vibrato ±91 ct) sung 25 ct flat — target 69 (sung +27 ct, re-centred, then -25); offline gate: vibrato 4.74 Hz ±91 r 0.98
+   before #1 Tuner in tune 0% stability ≥75 100% (mean 85) of 108/113 | Stay in Key in key 83% of 113/113 (result 80%)
+   before #1 Pitch Match int 83/84 pro 75/76 | Drills 85/85/85/85/84 | RTF in tune 17% steady 96% of 112/112 voiced frames (In tune×19, Flat (-26ct)×13, Flat (-25ct)×11) | Choir World held ✓✓ median -23/-22 ct, report pitch 85/85 in tune 186/192, 179/192
+   after #1  Tuner in tune 0% stability ≥75 100% (mean 85) of 111/112 | Stay in Key in key 82% of 113/113 (result 80%)
+   after #1  Pitch Match int 84/84 pro 76/76 | Drills 85/85/85/85/84 | RTF in tune 19% steady 97% of 112/112 voiced frames (In tune×21, Flat (-26ct)×11, Flat (-21ct)×11) | Choir World held ✓✓ median -24/-24 ct, report pitch 85/85 in tune 185/192, 176/192
+   before #2 Tuner in tune 0% stability ≥75 100% (mean 85) of 111/113 | Stay in Key in key 83% of 113/113 (result 80%)
+   before #2 Pitch Match int 84/84 pro 75/75 | Drills 85/85/86/85/85 | RTF in tune 19% steady 96% of 112/112 voiced frames (In tune×21, Flat (-25ct)×10, Flat (-27ct)×10) | Choir World held ✓✓ median -22/-24 ct, report pitch 85/84 in tune 176/192, 179/192
+   after #2  Tuner in tune 0% stability ≥75 100% (mean 85) of 110/113 | Stay in Key in key 84% of 113/113 (result 81%)
+   after #2  Pitch Match int 83/85 pro 76/76 | Drills 85/85/85/85/85 | RTF in tune 20% steady 96% of 112/112 voiced frames (In tune×22, Flat (-25ct)×17, Flat (-22ct)×8) | Choir World held ✓✓ median -22/-24 ct, report pitch 86/84 in tune 185/192, 180/192
+   before #3 Tuner in tune 0% stability ≥75 100% (mean 85) of 110/112 | Stay in Key in key 82% of 113/113 (result 81%)
+   before #3 Pitch Match int 84/84 pro 76/75 | Drills 85/85/85/85/84 | RTF in tune 18% steady 96% of 112/112 voiced frames (In tune×20, Flat (-26ct)×13, Flat (-22ct)×12) | Choir World held ✓✓ median -23/-22 ct, report pitch 85/84 in tune 186/192, 179/192
+   after #3  Tuner in tune 0% stability ≥75 100% (mean 85) of 109/113 | Stay in Key in key 86% of 112/112 (result 81%)
+   after #3  Pitch Match int 83/84 pro 76/76 | Drills 85/85/85/85/84 | RTF in tune 19% steady 96% of 112/112 voiced frames (In tune×21, Flat (-26ct)×14, Flat (-25ct)×9) | Choir World held ✓✓ median -24/-22 ct, report pitch 85/85 in tune 185/192, 175/192
+
+== N4: S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness — target 60 (sung +32 ct, re-centred, then +45); offline gate: as read 4.85 Hz ±19 r 0.26
+   before #1 Tuner in tune 1% stability ≥75 15% (mean 21) of 114/114 | Stay in Key in key 7% of 112/112 (result 8%)
+   before #1 Pitch Match int 71/67 pro 59/50 | Drills 75/69/74/70/74 | RTF in tune 3% steady 15% of 112/112 voiced frames (Sharp (+42ct)×9, Sharp (+41ct)×7, Sharp (+45ct)×7) | Choir World held ✓✓ median 46/46 ct, report pitch 72/72 in tune 111/192, 117/192
+   after #1  Tuner in tune 2% stability ≥75 14% (mean 17) of 112/113 | Stay in Key in key 5% of 112/112 (result 8%)
+   after #1  Pitch Match int 71/67 pro 60/48 | Drills 75/69/74/70/74 | RTF in tune 3% steady 16% of 112/112 voiced frames (Sharp (+45ct)×7, Sharp (+44ct)×7, Flat (-49ct)×6) | Choir World held ✓✓ median 46/48 ct, report pitch 72/70 in tune 123/192, 102/192
+   before #2 Tuner in tune 2% stability ≥75 14% (mean 16) of 112/113 | Stay in Key in key 4% of 112/112 (result 8%)
+   before #2 Pitch Match int 71/67 pro 60/48 | Drills 75/69/74/70/74 | RTF in tune 3% steady 15% of 112/112 voiced frames (Sharp (+49ct)×8, Sharp (+44ct)×7, Sharp (+45ct)×6) | Choir World held ✓✓ median 45/48 ct, report pitch 72/70 in tune 123/192, 101/192
+   after #2  Tuner in tune 1% stability ≥75 15% (mean 19) of 112/113 | Stay in Key in key 9% of 112/112 (result 8%)
+   after #2  Pitch Match int 71/67 pro 59/48 | Drills 75/69/74/70/74 | RTF in tune 4% steady 14% of 113/113 voiced frames (Sharp (+43ct)×8, Sharp (+44ct)×8, Sharp (+47ct)×6) | Choir World held ✓✓ median 46/47 ct, report pitch 72/72 in tune 115/192, 117/192
+   before #3 Tuner in tune 1% stability ≥75 16% (mean 19) of 113/113 | Stay in Key in key 5% of 112/112 (result 7%)
+   before #3 Pitch Match int 71/67 pro 60/50 | Drills 75/69/74/70/74 | RTF in tune 4% steady 14% of 112/112 voiced frames (Sharp (+42ct)×10, Sharp (+48ct)×9, Sharp (+45ct)×6) | Choir World held ✓✓ median 46/48 ct, report pitch 72/71 in tune 126/192, 103/192
+   after #3  Tuner in tune 1% stability ≥75 14% (mean 20) of 113/113 | Stay in Key in key 6% of 112/112 (result 9%)
+   after #3  Pitch Match int 71/67 pro 59/49 | Drills 75/69/74/70/74 | RTF in tune 3% steady 9% of 112/112 voiced frames (Sharp (+45ct)×9, Sharp (+48ct)×7, Sharp (+43ct)×6) | Choir World held ✓✓ median 46/46 ct, report pitch 72/72 in tune 113/192, 118/192
+   note: V5 (real vibrato read as irregular) pmInt: 87 → 86
+   note: V5 (real vibrato read as irregular) pmPro: 83 → 84
+   note: V5 (real vibrato read as irregular) drills: 87 → 87
+   note: V5 (real vibrato read as irregular) cwPitch: 91 → 91
+
+==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)
+
+==== Fixed: fails on master and passes on the branch, or moves past the tolerance the right way
+
+==== Already failing: fails on master and on the branch (not caused by the branch)
+ALREADY V1 vibrato RTF rtfInTune: master 57/62/59% (median 59, spread 5) → branch 62/64/56% (median 62), change +3 (±5) · within 20 of the straight notes (84% / 84%), must not drop past the tolerance
+
+==== VERDICT (regress, 3 runs per side, medians): 0 regression(s), 0 fixed, 1 already failing, 136 passed
+pass V1 vibrato pmInt: master 92/92/91 (median 92, spread 1) → branch 92/92/92 (median 92), change 0 (±3) · within 8 of the straight notes (95 / 95), must not drop more than 3
+pass V1 vibrato pmPro: master 88/88/88 (median 88, spread 0) → branch 88/88/89 (median 88), change 0 (±3) · within 8 of the straight notes (93 / 93), must not drop more than 3
+pass V1 vibrato drills: master 91/91/91 (median 91, spread 0) → branch 91/91/91 (median 91), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V1 vibrato cwPitch: master 92/92/92 (median 92, spread 0) → branch 92/92/92 (median 92), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V1 vibrato RTF rtfSteady: master 34/32/37% (median 34, spread 5) → branch 37/38/37% (median 37), change +3 (±5) · within 20 of the straight notes (42% / 44%), must not drop past the tolerance
+pass V1 Tuner tunerInTune: master 23/16/18% (median 18, spread 7) → branch 19/20/21% (median 20), change +2 (±7) · must not drop past the tolerance
+pass V1 Tuner tunerStable: master 45/43/44% (median 44, spread 2) → branch 45/45/46% (median 45), change +1 (±5) · must not drop past the tolerance
+pass V1 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V2 vibrato pmInt: master 94/93/93 (median 93, spread 1) → branch 93/94/94 (median 94), change +1 (±3) · within 8 of the straight notes (95 / 95), must not drop more than 3
+pass V2 vibrato pmPro: master 91/90/91 (median 91, spread 1) → branch 91/90/90 (median 90), change -1 (±3) · within 8 of the straight notes (93 / 93), must not drop more than 3
+pass V2 vibrato drills: master 93/93/93 (median 93, spread 0) → branch 94/94/93 (median 94), change +1 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V2 vibrato cwPitch: master 93/94/94 (median 94, spread 1) → branch 94/93/93 (median 93), change -1 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V2 vibrato RTF rtfInTune: master 79/82/78% (median 79, spread 4) → branch 76/74/79% (median 76), change -3 (±5) · within 20 of the straight notes (84% / 84%), must not drop past the tolerance
+pass V2 vibrato RTF rtfSteady: master 39/40/37% (median 39, spread 3) → branch 35/37/36% (median 36), change -3 (±5) · within 20 of the straight notes (42% / 44%), must not drop past the tolerance
+pass V2 Tuner tunerInTune: master 35/39/31% (median 35, spread 8) → branch 42/44/35% (median 42), change +7 (±8) · must not drop past the tolerance
+pass V2 Tuner tunerStable: master 18/14/17% (median 17, spread 4) → branch 16/19/20% (median 19), change +2 (±5) · must not drop past the tolerance
+pass V2 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V3 vibrato pmInt: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (95 / 95), must not drop more than 3
+pass V3 vibrato pmPro: master 91/92/91 (median 91, spread 1) → branch 91/92/92 (median 92), change +1 (±3) · within 8 of the straight notes (93 / 93), must not drop more than 3
+pass V3 vibrato drills: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V3 vibrato cwPitch: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V3 vibrato RTF rtfInTune: master 100/100/100% (median 100, spread 0) → branch 100/100/100% (median 100), change 0 (±5) · within 20 of the straight notes (84% / 84%), must not drop past the tolerance
+pass V3 vibrato RTF rtfSteady: master 97/97/97% (median 97, spread 0) → branch 97/97/97% (median 97), change 0 (±5) · within 20 of the straight notes (42% / 44%), must not drop past the tolerance
+pass V3 Tuner tunerInTune: master 63/68/66% (median 66, spread 5) → branch 65/63/64% (median 64), change -2 (±5) · must not drop past the tolerance
+pass V3 Tuner tunerStable: master 100/100/100% (median 100, spread 0) → branch 100/100/100% (median 100), change 0 (±5) · must not drop past the tolerance
+pass V3 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V4 vibrato pmInt: master 95/96/96 (median 96, spread 1) → branch 95/96/96 (median 96), change 0 (±3) · within 8 of the straight notes (95 / 95), must not drop more than 3
+pass V4 vibrato pmPro: master 95/95/94 (median 95, spread 1) → branch 96/95/96 (median 96), change +1 (±3) · within 8 of the straight notes (93 / 93), must not drop more than 3
+pass V4 vibrato drills: master 96/95/96 (median 96, spread 1) → branch 96/96/96 (median 96), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V4 vibrato cwPitch: master 96/95/95 (median 95, spread 1) → branch 96/96/95 (median 96), change +1 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V4 vibrato RTF rtfInTune: master 95/95/97% (median 95, spread 2) → branch 96/94/98% (median 96), change +1 (±5) · within 20 of the straight notes (84% / 84%), must not drop past the tolerance
+pass V4 vibrato RTF rtfSteady: master 94/96/96% (median 96, spread 2) → branch 96/95/96% (median 96), change 0 (±5) · within 20 of the straight notes (42% / 44%), must not drop past the tolerance
+pass V4 Tuner tunerInTune: master 72/75/73% (median 73, spread 3) → branch 73/76/72% (median 73), change 0 (±5) · must not drop past the tolerance
+pass V4 Tuner tunerStable: master 94/96/97% (median 96, spread 3) → branch 99/99/100% (median 99), change +3 (±5) · must not drop past the tolerance
+pass V4 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V5 Tuner tunerInTune: master 32/28/34% (median 32, spread 6) → branch 34/30/29% (median 30), change -2 (±6) · must not drop past the tolerance
+pass V5 Tuner tunerStable: master 27/27/27% (median 27, spread 0) → branch 32/27/27% (median 27), change 0 (±5) · must not drop past the tolerance
+pass V6 vibrato pmInt: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · within 8 of the straight notes (95 / 95), must not drop more than 3
+pass V6 vibrato pmPro: master 89/89/89 (median 89, spread 0) → branch 89/89/89 (median 89), change 0 (±3) · within 8 of the straight notes (93 / 93), must not drop more than 3
+pass V6 vibrato drills: master 93/93/92 (median 93, spread 1) → branch 93/93/92 (median 93), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V6 vibrato cwPitch: master 94/93/93 (median 93, spread 1) → branch 93/93/93 (median 93), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V6 vibrato RTF rtfInTune: master 83/84/85% (median 84, spread 2) → branch 86/85/81% (median 85), change +1 (±5) · within 20 of the straight notes (84% / 84%), must not drop past the tolerance
+pass V6 vibrato RTF rtfSteady: master 72/66/63% (median 66, spread 9) → branch 73/60/71% (median 71), change +5 (±9) · within 20 of the straight notes (42% / 44%), must not drop past the tolerance
+pass V6 Tuner tunerInTune: master 50/50/46% (median 50, spread 4) → branch 45/45/47% (median 45), change -5 (±5) · must not drop past the tolerance
+pass V6 Tuner tunerStable: master 80/78/78% (median 78, spread 2) → branch 78/79/78% (median 78), change 0 (±5) · must not drop past the tolerance
+pass V6 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass S1 straight pmInt: master 97/97/97 (median 97, spread 0) → branch 97/97/97 (median 97), change 0 (±3) · must not drop more than 3
+pass S1 straight pmPro: master 96/97/97 (median 97, spread 1) → branch 94/96/96 (median 96), change -1 (±3) · must not drop more than 3
+pass S1 straight drills: master 98/98/98 (median 98, spread 0) → branch 98/98/98 (median 98), change 0 (±3) · must not drop more than 3
+pass S1 straight cwPitch: master 97/97/96 (median 97, spread 1) → branch 97/97/97 (median 97), change 0 (±3) · must not drop more than 3
+pass S1 straight RTF rtfInTune: master 86/88/88% (median 88, spread 2) → branch 88/89/88% (median 88), change 0 (±5) · must not drop past the tolerance
+pass S1 straight RTF rtfSteady: master 77/80/76% (median 77, spread 4) → branch 79/80/77% (median 79), change +2 (±5) · must not drop past the tolerance
+pass S1 Tuner tunerInTune: master 77/81/79% (median 79, spread 4) → branch 82/75/78% (median 78), change -1 (±5) · must not drop past the tolerance
+pass S1 Tuner tunerStable: master 82/83/83% (median 83, spread 1) → branch 78/82/81% (median 81), change -2 (±5) · must not drop past the tolerance
+pass S1 straight Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass S2 straight pmInt: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · must not drop more than 3
+pass S2 straight pmPro: master 89/89/89 (median 89, spread 0) → branch 88/89/89 (median 89), change 0 (±3) · must not drop more than 3
+pass S2 straight drills: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · must not drop more than 3
+pass S2 straight cwPitch: master 94/94/94 (median 94, spread 0) → branch 94/94/94 (median 94), change 0 (±3) · must not drop more than 3
+pass S2 straight RTF rtfInTune: master 80/81/79% (median 80, spread 2) → branch 80/79/85% (median 80), change 0 (±5) · must not drop past the tolerance
+pass S2 straight RTF rtfSteady: master 7/7/9% (median 7, spread 2) → branch 6/9/8% (median 8), change +1 (±5) · must not drop past the tolerance
+pass S2 Tuner tunerInTune: master 76/72/74% (median 74, spread 4) → branch 71/75/76% (median 75), change +1 (±5) · must not drop past the tolerance
+pass S2 Tuner tunerStable: master 73/77/74% (median 74, spread 4) → branch 71/72/67% (median 71), change -3 (±5) · must not drop past the tolerance
+pass S2 straight Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass W1 V1 (real vibrato) sung 60 ct sharp pmInt: master 67/69/68 (median 68, spread 2) → branch 68/68/68 (median 68) · a straight note 52 ct off scores 69: within 6 of that, and ≥10 below the straight notes
+pass W1 V1 (real vibrato) sung 60 ct sharp pmPro: master 48/48/48 (median 48, spread 0) → branch 50/48/49 (median 49) · a straight note 52 ct off scores 53: within 6 of that, and ≥10 below the straight notes
+pass W1 V1 (real vibrato) sung 60 ct sharp drills: master 67/67/67 (median 67, spread 0) → branch 68/67/67 (median 67) · a straight note 52 ct off scores 69: within 6 of that, and ≥10 below the straight notes
+pass W1 V1 (real vibrato) sung 60 ct sharp cwPitch: master 68/67/67 (median 67, spread 1) → branch 67/67/67 (median 67) · a straight note 52 ct off scores 69: within 6 of that, and ≥10 below the straight notes
+pass W1 wrong RTF rtfInTune: master 7/7/5% (median 7, spread 2) → branch 6/5/6% (median 6), change -1 (±5) · must not rise past the tolerance
+pass W1 Tuner tunerInTune: master 2/3/3% (median 3, spread 1) → branch 0/3/1% (median 1), change -2 (±5) · must not rise past the tolerance
+pass W1 Tuner tunerStable: master 0/0/1% (median 0, spread 1) → branch 1/0/2% (median 1), change +1 (±5) · must not drop past the tolerance
+pass W5 V1 (real vibrato) sung 80 ct sharp pmInt: master 56/56/56 (median 56, spread 0) → branch 56/56/56 (median 56) · a straight note 73 ct off scores 56: within 6 of that, and ≥10 below the straight notes
+pass W5 V1 (real vibrato) sung 80 ct sharp pmPro: master 30/31/30 (median 30, spread 1) → branch 31/32/30 (median 31) · a straight note 73 ct off scores 34: within 6 of that, and ≥10 below the straight notes
+pass W5 V1 (real vibrato) sung 80 ct sharp drills: master 56/56/56 (median 56, spread 0) → branch 56/56/56 (median 56) · a straight note 73 ct off scores 56: within 6 of that, and ≥10 below the straight notes
+pass W5 V1 (real vibrato) sung 80 ct sharp cwPitch: master 55/54/54 (median 54, spread 1) → branch 55/55/55 (median 55) · a straight note 73 ct off scores 56: within 6 of that, and ≥10 below the straight notes
+pass W5 wrong RTF rtfInTune: master 17/17/22% (median 17, spread 5) → branch 18/18/17% (median 18), change +1 (±5) · must not rise past the tolerance
+pass W5 Tuner tunerInTune: master 7/7/7% (median 7, spread 0) → branch 9/9/8% (median 9), change +2 (±5) · must not rise past the tolerance
+pass W5 Tuner tunerStable: master 54/53/54% (median 54, spread 1) → branch 50/55/53% (median 53), change -1 (±5) · must not drop past the tolerance
+pass W5 V1 (real vibrato) sung 80 ct sharp Choir World held: master ✗✗✗ → branch ✗✗✗ · must not be held (past ±50)
+pass W2 wrong pmInt: master 75/75/75 (median 75, spread 0) → branch 75/75/75 (median 75), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong pmPro: master 65/65/65 (median 65, spread 0) → branch 66/65/66 (median 66), change +1 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong drills: master 75/75/75 (median 75, spread 0) → branch 75/75/75 (median 75), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong cwPitch: master 76/75/76 (median 76, spread 1) → branch 76/75/75 (median 75), change -1 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong RTF rtfInTune: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · must not rise past the tolerance
+pass W2 Tuner tunerInTune: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · must not rise past the tolerance
+pass W2 Tuner tunerStable: master 48/55/45% (median 48, spread 10) → branch 47/61/49% (median 49), change +1 (±10) · must not drop past the tolerance
+pass W3 wander pmInt: master 78/77/77 (median 77, spread 1) → branch 77/78/77 (median 77), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W3 wander pmPro: master 67/66/66 (median 66, spread 1) → branch 66/66/66 (median 66), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W3 wander drills: master 77/77/77 (median 77, spread 0) → branch 77/77/77 (median 77), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W3 wander cwPitch: master 77/77/77 (median 77, spread 0) → branch 77/77/77 (median 77), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W3 S1 with a slow ±60 ct wander at 0.8 Hz RTF rtfSteady: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass W3 Tuner tunerInTune: master 6/7/5% (median 6, spread 2) → branch 5/4/4% (median 4), change -2 (±5) · must not rise past the tolerance
+pass W3 Tuner tunerStable: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · must not rise past the tolerance
+pass W4 flutter pmInt: master 86/87/86 (median 86, spread 1) → branch 87/86/87 (median 87), change +1 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter pmPro: master 78/79/79 (median 79, spread 1) → branch 78/79/78 (median 78), change -1 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter drills: master 89/89/89 (median 89, spread 0) → branch 89/89/89 (median 89), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter cwPitch: master 86/86/85 (median 86, spread 1) → branch 86/86/86 (median 86), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter RTF rtfInTune: master 21/27/17% (median 21, spread 10) → branch 21/26/17% (median 21), change 0 (±10) · must not rise past the tolerance
+pass W4 S1 with an 11 Hz ±40 ct flutter RTF rtfSteady: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass W4 Tuner tunerInTune: master 9/9/12% (median 9, spread 3) → branch 10/12/14% (median 12), change +3 (±5) · must not rise past the tolerance
+pass W4 Tuner tunerStable: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · must not rise past the tolerance
+pass N1 unsteady pmInt: master 88/88/88 (median 88, spread 0) → branch 88/88/88 (median 88), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady pmPro: master 82/82/83 (median 82, spread 1) → branch 83/83/83 (median 83), change +1 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady drills: master 89/89/89 (median 89, spread 0) → branch 89/89/89 (median 89), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady cwPitch: master 90/89/89 (median 89, spread 1) → branch 90/89/89 (median 89), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady RTF rtfInTune: master 4/5/3% (median 4, spread 2) → branch 4/2/5% (median 4), change 0 (±5) · must not rise past the tolerance
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF rtfInTune: master 4/5/3% (median 4, spread 2) → branch 4/2/5% (median 4) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF rtfSteady: master 22/23/22% (median 22, spread 1) → branch 21/23/22% (median 22), change 0 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass N1 Tuner tunerInTune: master 5/5/4% (median 5, spread 1) → branch 7/4/6% (median 6), change +1 (±5) · must not rise past the tolerance
+pass N1 Tuner tunerStable: master 44/42/68% (median 44, spread 26) → branch 44/52/51% (median 51), change +7 (±26) · must not rise past the tolerance
+pass N2 unsteady pmInt: master 81/81/81 (median 81, spread 0) → branch 81/81/81 (median 81), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady pmPro: master 69/69/69 (median 69, spread 0) → branch 69/69/70 (median 69), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady drills: master 83/83/83 (median 83, spread 0) → branch 83/83/83 (median 83), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady cwPitch: master 82/82/82 (median 82, spread 0) → branch 82/82/82 (median 82), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady RTF rtfInTune: master 7/7/10% (median 7, spread 3) → branch 5/6/8% (median 6), change -1 (±5) · must not rise past the tolerance
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfInTune: master 7/7/10% (median 7, spread 3) → branch 5/6/8% (median 6) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfSteady: master 10/12/11% (median 11, spread 2) → branch 11/12/10% (median 11), change 0 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass N2 Tuner tunerInTune: master 4/5/5% (median 5, spread 1) → branch 5/7/5% (median 5), change 0 (±5) · must not rise past the tolerance
+pass N2 Tuner tunerStable: master 31/31/32% (median 31, spread 1) → branch 32/32/32% (median 32), change +1 (±5) · must not rise past the tolerance
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmInt: master 84/84/84 (median 84, spread 0) → branch 84/84/84 (median 84) · a straight note 22 ct off scores 87: within 6 of that
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmPro: master 76/75/76 (median 76, spread 1) → branch 76/76/76 (median 76) · a straight note 22 ct off scores 80: within 6 of that
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat drills: master 85/85/85 (median 85, spread 0) → branch 85/85/85 (median 85) · a straight note 22 ct off scores 87: within 6 of that
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat cwPitch: master 85/85/85 (median 85, spread 0) → branch 85/85/85 (median 85) · a straight note 22 ct off scores 87: within 6 of that
+pass N3 wrong RTF rtfInTune: master 17/19/18% (median 18, spread 2) → branch 19/20/19% (median 19), change +1 (±5) · must not rise past the tolerance
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat RTF rtfInTune: master 17/19/18% (median 18, spread 2) → branch 19/20/19% (median 19) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N3 Tuner tunerInTune: master 0/0/0% (median 0, spread 0) → branch 0/0/0% (median 0), change 0 (±5) · must not rise past the tolerance
+pass N3 Tuner tunerStable: master 100/100/100% (median 100, spread 0) → branch 100/100/100% (median 100), change 0 (±5) · must not drop past the tolerance
+pass N4 unsteady pmInt: master 69/69/69 (median 69, spread 0) → branch 69/69/69 (median 69), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N4 unsteady pmPro: master 55/54/55 (median 55, spread 1) → branch 54/54/54 (median 54), change -1 (±3) · no vibrato in it: must not rise more than 3
+pass N4 unsteady drills: master 72/72/72 (median 72, spread 0) → branch 72/72/72 (median 72), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N4 unsteady cwPitch: master 72/71/72 (median 72, spread 1) → branch 71/72/72 (median 72), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N4 unsteady RTF rtfInTune: master 3/3/4% (median 3, spread 1) → branch 3/4/3% (median 3), change 0 (±5) · must not rise past the tolerance
+pass N4 S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfInTune: master 3/3/4% (median 3, spread 1) → branch 3/4/3% (median 3) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N4 S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfSteady: master 15/15/14% (median 15, spread 1) → branch 16/14/9% (median 14), change -1 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass N4 Tuner tunerInTune: master 1/2/1% (median 1, spread 1) → branch 2/1/1% (median 1), change 0 (±5) · must not rise past the tolerance
+pass N4 Tuner tunerStable: master 15/14/16% (median 15, spread 2) → branch 14/15/14% (median 14), change -1 (±5) · must not rise past the tolerance
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/vibfix-local-2026-10-05T11-19-15.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/vibfix-local-2026-10-05T11-19-15.json
