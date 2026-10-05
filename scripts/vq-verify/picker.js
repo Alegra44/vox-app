@@ -11,14 +11,15 @@
 // Checks (after): no immediate repeat anywhere a pick is made; every note of the allowed range comes up; beginners stay
 // 2 semitones inside each end, intermediate / professional reach both ends; Scale Run's pattern always fits; One Take is
 // one note per day; Five Ways / Emotion Mode vary between sessions within the comfortable 25–65 % of the range.
-// Usage: [PK_BEFORE=<ref>] node scripts/vq-verify/picker.js
+// PK_URL=<deployed url>: the same checks on that page alone (it takes the "after" side; there is no before side).
+// Usage: [PK_BEFORE=<ref>] [PK_URL=<url>] node scripts/vq-verify/picker.js
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), REF = process.env.PK_BEFORE || 'master';
+const ROOT = path.resolve(__dirname, '../..'), REF = process.env.PK_BEFORE || 'master', URL_ = process.env.PK_URL;
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
-const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `picker-local-${stamp}`);
+const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `picker-${URL_ ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
 const BEFORE = path.join(os.tmpdir(), 'vq-verify', 'picker-before.html'); fs.mkdirSync(path.dirname(BEFORE), { recursive: true });
@@ -40,7 +41,7 @@ async function sample(side, range) {
       return r.fulfill({ body, contentType: 'application/javascript' });
     });
     const page = await ctx.newPage();
-    await page.goto('http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
+    await page.goto(URL_ || 'http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
     return await page.evaluate(async ({ range, LEVELS }) => {
       requireProFeature = () => true; blockExercise = () => false;
       if (range) { lowNote = freqToNote(noteToFreq(range[0])); highNote = freqToNote(noteToFreq(range[1])); }
@@ -98,11 +99,12 @@ const stats = (a, lo, hi) => {
 const fmt = s => `${String(s.distinct).padStart(2)} notes ${name(s.min)}–${name(s.max)}, same as the last one ${s.repPct.toFixed(1)}%`;
 
 (async () => {
-  log(`picker ${stamp}  before: ${REF}  after: working tree`);
+  log(`picker ${stamp}  ${URL_ ? `url: ${URL_} (no before side: "before" columns repeat it)` : `before: ${REF}  after: working tree`}`);
   for (const [rn, range] of Object.entries(RANGES)) {
     log(`\n==== ${rn}`);
     const R = {};
-    for (const side of ['before', 'after']) R[side] = await sample(side, range);
+    for (const side of URL_ ? ['after'] : ['before', 'after']) R[side] = await sample(side, range);
+    if (URL_) R.before = R.after;
     const { lowMidi: lo, highMidi: hi } = R.after.bounds;
     for (const lvl of LEVELS) {
       log(`-- ${lvl}`);

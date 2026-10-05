@@ -6,14 +6,16 @@
 // Checks (after): at every delay and level the score is ≥ 90 (a held, in-tune note) and the attack half isn't
 // dragged down by the scoop (≥ 85); no voice → "I didn't hear you, try again", no score, no attempt counted, same note;
 // a scored attempt moves to a new note, and "Sing it again" sings the same one.
-// Usage: [LW_BEFORE=<ref>] node scripts/vq-verify/listenwin.js
+// LW_URL=<deployed url>: the same checks on that page alone (it takes the "after" side; there is no before side).
+// Usage: [LW_BEFORE=<ref>] [LW_URL=<url>] node scripts/vq-verify/listenwin.js
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), REF = process.env.LW_BEFORE || 'master';
+const ROOT = path.resolve(__dirname, '../..'), REF = process.env.LW_BEFORE || 'master', URL_ = process.env.LW_URL;
+const SIDES = URL_ ? ['after'] : ['before', 'after'];
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
-const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `listenwin-local-${stamp}`);
+const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `listenwin-${URL_ ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
 const BEFORE = path.join(os.tmpdir(), 'vq-verify', 'listenwin-before.html'); fs.mkdirSync(path.dirname(BEFORE), { recursive: true });
@@ -32,7 +34,7 @@ async function open(side) {
     return r.fulfill({ body, contentType: 'application/javascript' });
   });
   const page = await ctx.newPage();
-  await page.goto('http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
+  await page.goto(URL_ || 'http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
   await page.evaluate(async () => {
     requireProFeature = () => true; blockExercise = () => false;
     window.__attempts = 0; registerExerciseCompletion = async () => { window.__attempts++; };
@@ -78,10 +80,10 @@ async function attempt(page, which, level, delay, target) {
 }
 
 (async () => {
-  log(`listenwin ${stamp}  before: ${REF}  after: working tree`);
+  log(`listenwin ${stamp}  ${URL_ ? `url: ${URL_} (no before side)` : `before: ${REF}  after: working tree`}`);
   const DELAYS = [0.3, 0.6, 0.9, 1.2], LEVELS = ['beginner', 'intermediate', 'professional'], TARGET = 60;
   const R = {};
-  for (const side of ['before', 'after']) {
+  for (const side of SIDES) {
     const { b, page } = await open(side);
     try {
       R[side] = {};
@@ -107,15 +109,15 @@ async function attempt(page, which, level, delay, target) {
     log(`\n-- ${which === 'pitch' ? 'Pitch Match' : 'Interval Match'}: score (attack / landing), singer starting 0.3 … 1.2 s after the cue`);
     for (const level of LEVELS) {
       const row = side => DELAYS.map(d => { const r = R[side][`${which}|${level}|${d}`]; return `${d}s ${isNaN(r.acc) ? r.accText : r.acc}${level === 'beginner' || isNaN(r.attack) ? '' : ` (${r.attack}/${r.landing})`}`; }).join('  ');
-      log(`   ${level.padEnd(13)} before: ${row('before')}`);
-      log(`   ${''.padEnd(13)} after:  ${row('after')}`);
+      if (R.before) log(`   ${level.padEnd(13)} before: ${row('before')}`);
+      log(`   ${(R.before ? '' : level).padEnd(13)} ${URL_ ? 'prod: ' : 'after: '} ${row('after')}`);
       for (const d of DELAYS) {
         const r = R.after[`${which}|${level}|${d}`];
         check(`${which} ${level} ${d}s late: held note scores ≥ 90, attack ≥ 85 when split, counted once`, r.acc >= 90 && (level === 'beginner' || r.attack >= 85) && r.counted === 1, `${r.acc} (${r.attack}/${r.landing}) counted ${r.counted} · ${r.busyMs} ms`);
       }
     }
-    const nb = R.before.none[which], na = R.after.none[which];
-    log(`   nobody sings  before: "${nb.accText}" "${nb.fb}" counted ${nb.counted} · ${nb.busyMs} ms  |  after: "${na.accText}" "${na.fb}" counted ${na.counted} · ${na.busyMs} ms`);
+    const nb = R.before && R.before.none[which], na = R.after.none[which];
+    log(`   nobody sings  ${nb ? `before: "${nb.accText}" "${nb.fb}" counted ${nb.counted} · ${nb.busyMs} ms  |  ` : ''}after: "${na.accText}" "${na.fb}" counted ${na.counted} · ${na.busyMs} ms`);
     check(`${which}: nobody sings → "I didn't hear you, try again", no score, not counted, same note`, na.accText === '—' && na.fb === "I didn't hear you, try again." && na.counted === 0 && na.nextTarget === TARGET, `"${na.accText}" "${na.fb}" counted ${na.counted} next ${na.nextTarget}`);
   }
   const ag = R.after.again;

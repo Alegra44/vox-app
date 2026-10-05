@@ -130,7 +130,12 @@ Follow-ups (logged 2026-10-03, not fixed):
   `warmupsCompleted` and records activity / XP; the pre-session warm-up stores only a per-day key in the browser.
   Settle it when the two become one warm-up in the redesign.
 
-## Practice fixes (b) + (c): listening window and shared note picker (branch `fix/practice`, not yet deployed)
+## Practice fixes (b) + (c): listening window and shared note picker (live 2026-10-05, dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X)
+
+Merged as e01912b. Production (paced, the same checks as locally, accounts cleaned up): `listenwin.js` 27/27 (no voice:
+"I didn't hear you", not an attempt, same note; "Sing it again" keeps the note), `picker.js` 93/93 (no repeats, the
+whole range per level, One Take one note all day), batch1 112/112 and batch2 150/150 (Pitch Match and Interval Match
+log 2.95–2.97 s of active time on a 3.0–3.1 s listening window, the reference not counted). Same as local.
 
 (c) `df2dfc4`: one shared note picker across the singer's range, never the same note twice in a row (`picker.js` 93/93).
 (b) `29b274c`: Pitch Match and Interval Match play the reference, then a cue, then listen from the first voiced frame;

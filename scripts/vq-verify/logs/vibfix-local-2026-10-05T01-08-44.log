@@ -1,0 +1,153 @@
+vibfix 2026-10-05T01-08-44  sides: before, after  before: master  mode: regress (rises become "must not move")
+resumed from /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/98e5cb06-6aee-4b0e-b006-71ac8b925771/scratchpad/fake-regress.json: V1, V2, V3, V4, V5, V6, S1, S2, W1, W5, W2, W3, W4, N1, N2, N3, N4
+   note: V5 (real vibrato read as irregular) pmInt: 93 → 84
+   note: V5 (real vibrato read as irregular) pmPro: 89 → 84
+   note: V5 (real vibrato read as irregular) drills: 87 → 85
+   note: V5 (real vibrato read as irregular) cwPitch: 91 → 91
+
+==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)
+REGRESSION V4 Tuner tunerStable: master 99/101/102% (median 101, spread 3) → branch 95/93/101% (median 95), change -6 (±5) · must not drop past the tolerance
+REGRESSION V6 vibrato RTF rtfSteady: master 70/72/67% (median 70, spread 5) → branch 64/61/71% (median 64), change -6 (±5) · within 20 of the straight notes (41% / 43%), must not drop past the tolerance
+REGRESSION S1 Tuner tunerStable: master 91/95/93% (median 93, spread 4) → branch 89/87/83% (median 87), change -6 (±5) · must not drop past the tolerance
+REGRESSION W2 wrong pmPro: master 61/61/61 (median 61, spread 0) → branch 65/65/65 (median 65), change +4 (±3) · no vibrato in it: must not rise more than 3
+
+==== Fixed: fails on master and passes on the branch, or moves past the tolerance the right way
+FIXED V1 Tuner tunerInTune: master 13/9/11% (median 11, spread 4) → branch 20/19/21% (median 20), change +9 (±5) · must not drop past the tolerance
+FIXED V6 vibrato RTF rtfInTune: master 81/77/76% (median 77, spread 5) → branch 83/83/84% (median 83), change +6 (±5) · within 20 of the straight notes (82% / 85%), must not drop past the tolerance
+FIXED W1 V1 (real vibrato) sung 60 ct sharp pmInt: master 62/62/62 (median 62, spread 0) → branch 68/68/68 (median 68) · a straight note 52 ct off scores 69: within 6 of that, and ≥10 below the straight notes
+FIXED W2 Tuner tunerStable: master 47/44/39% (median 44, spread 8) → branch 57/60/50% (median 57), change +13 (±8) · must not drop past the tolerance
+FIXED N4 unsteady pmInt: master 74/74/74 (median 74, spread 0) → branch 69/69/69 (median 69), change -5 (±3) · no vibrato in it: must not rise more than 3
+FIXED N4 unsteady pmPro: master 59/59/59 (median 59, spread 0) → branch 55/55/55 (median 55), change -4 (±3) · no vibrato in it: must not rise more than 3
+
+==== Already failing: fails on master and on the branch (not caused by the branch)
+ALREADY V1 vibrato RTF rtfInTune: master 60/60/63% (median 60, spread 3) → branch 62/63/61% (median 62), change +2 (±5) · within 20 of the straight notes (82% / 85%), must not drop past the tolerance
+
+==== VERDICT (regress, 3 runs per side, medians): 4 regression(s), 6 fixed, 1 already failing, 126 passed
+pass V1 vibrato pmInt: master 90/90/90 (median 90, spread 0) → branch 92/92/92 (median 92), change +2 (±3) · within 8 of the straight notes (96 / 95), must not drop more than 3
+pass V1 vibrato pmPro: master 89/89/89 (median 89, spread 0) → branch 88/88/88 (median 88), change -1 (±3) · within 8 of the straight notes (92 / 92), must not drop more than 3
+pass V1 vibrato drills: master 91/91/91 (median 91, spread 0) → branch 91/91/91 (median 91), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V1 vibrato cwPitch: master 91/91/91 (median 91, spread 0) → branch 92/92/92 (median 92), change +1 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V1 vibrato RTF rtfSteady: master 31/29/38% (median 31, spread 9) → branch 31/27/34% (median 31), change 0 (±9) · within 20 of the straight notes (41% / 43%), must not drop past the tolerance
+pass V1 Tuner tunerStable: master 44/45/44% (median 44, spread 1) → branch 47/44/54% (median 47), change +3 (±5) · must not drop past the tolerance
+pass V1 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V2 vibrato pmInt: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · within 8 of the straight notes (96 / 95), must not drop more than 3
+pass V2 vibrato pmPro: master 90/90/90 (median 90, spread 0) → branch 91/91/91 (median 91), change +1 (±3) · within 8 of the straight notes (92 / 92), must not drop more than 3
+pass V2 vibrato drills: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V2 vibrato cwPitch: master 94/94/94 (median 94, spread 0) → branch 94/94/94 (median 94), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V2 vibrato RTF rtfInTune: master 76/75/72% (median 75, spread 4) → branch 76/74/78% (median 76), change +1 (±5) · within 20 of the straight notes (82% / 85%), must not drop past the tolerance
+pass V2 vibrato RTF rtfSteady: master 36/38/29% (median 36, spread 9) → branch 36/40/29% (median 36), change 0 (±9) · within 20 of the straight notes (41% / 43%), must not drop past the tolerance
+pass V2 Tuner tunerInTune: master 38/41/42% (median 41, spread 4) → branch 38/40/40% (median 40), change -1 (±5) · must not drop past the tolerance
+pass V2 Tuner tunerStable: master 22/24/19% (median 22, spread 5) → branch 16/18/22% (median 18), change -4 (±5) · must not drop past the tolerance
+pass V2 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V3 vibrato pmInt: master 94/94/94 (median 94, spread 0) → branch 95/95/95 (median 95), change +1 (±3) · within 8 of the straight notes (96 / 95), must not drop more than 3
+pass V3 vibrato pmPro: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · within 8 of the straight notes (92 / 92), must not drop more than 3
+pass V3 vibrato drills: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V3 vibrato cwPitch: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V3 vibrato RTF rtfInTune: master 100/98/100% (median 100, spread 2) → branch 100/104/107% (median 104), change +4 (±5) · within 20 of the straight notes (82% / 85%), must not drop past the tolerance
+pass V3 vibrato RTF rtfSteady: master 97/95/103% (median 97, spread 8) → branch 96/96/89% (median 96), change -1 (±8) · within 20 of the straight notes (41% / 43%), must not drop past the tolerance
+pass V3 Tuner tunerInTune: master 65/64/72% (median 65, spread 8) → branch 65/63/65% (median 65), change 0 (±8) · must not drop past the tolerance
+pass V3 Tuner tunerStable: master 100/97/93% (median 97, spread 7) → branch 100/97/98% (median 98), change +1 (±7) · must not drop past the tolerance
+pass V3 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V4 vibrato pmInt: master 96/96/96 (median 96, spread 0) → branch 95/95/95 (median 95), change -1 (±3) · within 8 of the straight notes (96 / 95), must not drop more than 3
+pass V4 vibrato pmPro: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (92 / 92), must not drop more than 3
+pass V4 vibrato drills: master 95/95/95 (median 95, spread 0) → branch 95/95/95 (median 95), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V4 vibrato cwPitch: master 96/96/96 (median 96, spread 0) → branch 96/96/96 (median 96), change 0 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V4 vibrato RTF rtfInTune: master 96/100/101% (median 100, spread 5) → branch 96/100/94% (median 96), change -4 (±5) · within 20 of the straight notes (82% / 85%), must not drop past the tolerance
+pass V4 vibrato RTF rtfSteady: master 95/91/89% (median 91, spread 6) → branch 93/96/93% (median 93), change +2 (±6) · within 20 of the straight notes (41% / 43%), must not drop past the tolerance
+pass V4 Tuner tunerInTune: master 74/76/66% (median 74, spread 10) → branch 73/71/74% (median 73), change -1 (±10) · must not drop past the tolerance
+pass V4 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass V5 Tuner tunerInTune: master 34/32/39% (median 34, spread 7) → branch 36/37/39% (median 37), change +3 (±7) · must not drop past the tolerance
+pass V5 Tuner tunerStable: master 32/29/25% (median 29, spread 7) → branch 30/33/24% (median 30), change +1 (±7) · must not drop past the tolerance
+pass V6 vibrato pmInt: master 93/93/93 (median 93, spread 0) → branch 92/92/92 (median 92), change -1 (±3) · within 8 of the straight notes (96 / 95), must not drop more than 3
+pass V6 vibrato pmPro: master 91/91/91 (median 91, spread 0) → branch 89/89/89 (median 89), change -2 (±3) · within 8 of the straight notes (92 / 92), must not drop more than 3
+pass V6 vibrato drills: master 92/92/92 (median 92, spread 0) → branch 93/93/93 (median 93), change +1 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V6 vibrato cwPitch: master 93/93/93 (median 93, spread 0) → branch 92/92/92 (median 92), change -1 (±3) · within 8 of the straight notes (96 / 96), must not drop more than 3
+pass V6 Tuner tunerInTune: master 45/49/51% (median 49, spread 6) → branch 49/50/50% (median 50), change +1 (±6) · must not drop past the tolerance
+pass V6 Tuner tunerStable: master 77/75/79% (median 77, spread 4) → branch 81/84/75% (median 81), change +4 (±5) · must not drop past the tolerance
+pass V6 vibrato Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass S1 straight pmInt: master 97/97/97 (median 97, spread 0) → branch 97/97/97 (median 97), change 0 (±3) · must not drop more than 3
+pass S1 straight pmPro: master 96/96/96 (median 96, spread 0) → branch 94/94/94 (median 94), change -2 (±3) · must not drop more than 3
+pass S1 straight drills: master 98/98/98 (median 98, spread 0) → branch 98/98/98 (median 98), change 0 (±3) · must not drop more than 3
+pass S1 straight cwPitch: master 97/97/97 (median 97, spread 0) → branch 97/97/97 (median 97), change 0 (±3) · must not drop more than 3
+pass S1 straight RTF rtfInTune: master 87/85/81% (median 85, spread 6) → branch 88/86/80% (median 86), change +1 (±6) · must not drop past the tolerance
+pass S1 straight RTF rtfSteady: master 78/78/73% (median 78, spread 5) → branch 77/77/83% (median 77), change -1 (±5) · must not drop past the tolerance
+pass S1 Tuner tunerInTune: master 77/77/74% (median 77, spread 3) → branch 76/75/75% (median 75), change -2 (±5) · must not drop past the tolerance
+pass S1 straight Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass S2 straight pmInt: master 94/94/94 (median 94, spread 0) → branch 93/93/93 (median 93), change -1 (±3) · must not drop more than 3
+pass S2 straight pmPro: master 88/88/88 (median 88, spread 0) → branch 89/89/89 (median 89), change +1 (±3) · must not drop more than 3
+pass S2 straight drills: master 93/93/93 (median 93, spread 0) → branch 93/93/93 (median 93), change 0 (±3) · must not drop more than 3
+pass S2 straight cwPitch: master 94/94/94 (median 94, spread 0) → branch 94/94/94 (median 94), change 0 (±3) · must not drop more than 3
+pass S2 straight RTF rtfInTune: master 81/78/77% (median 78, spread 4) → branch 83/84/79% (median 83), change +5 (±5) · must not drop past the tolerance
+pass S2 straight RTF rtfSteady: master 7/4/1% (median 4, spread 6) → branch 9/7/15% (median 9), change +5 (±6) · must not drop past the tolerance
+pass S2 Tuner tunerInTune: master 74/71/79% (median 74, spread 8) → branch 74/75/74% (median 74), change 0 (±8) · must not drop past the tolerance
+pass S2 Tuner tunerStable: master 75/74/74% (median 74, spread 1) → branch 70/73/70% (median 70), change -4 (±5) · must not drop past the tolerance
+pass S2 straight Choir World held: master ✓✓✓ → branch ✓✓✓ · must be held
+pass W1 V1 (real vibrato) sung 60 ct sharp pmPro: master 52/52/52 (median 52, spread 0) → branch 50/50/50 (median 50) · a straight note 52 ct off scores 53: within 6 of that, and ≥10 below the straight notes
+pass W1 V1 (real vibrato) sung 60 ct sharp drills: master 67/67/67 (median 67, spread 0) → branch 67/67/67 (median 67) · a straight note 52 ct off scores 69: within 6 of that, and ≥10 below the straight notes
+pass W1 V1 (real vibrato) sung 60 ct sharp cwPitch: master 67/67/67 (median 67, spread 0) → branch 67/67/67 (median 67) · a straight note 52 ct off scores 69: within 6 of that, and ≥10 below the straight notes
+pass W1 wrong RTF rtfInTune: master 5/9/8% (median 8, spread 4) → branch 9/6/8% (median 8), change 0 (±5) · must not rise past the tolerance
+pass W1 Tuner tunerInTune: master 3/3/11% (median 3, spread 8) → branch 2/3/8% (median 3), change 0 (±8) · must not rise past the tolerance
+pass W1 Tuner tunerStable: master 2/5/9% (median 5, spread 7) → branch 1/4/4% (median 4), change -1 (±7) · must not drop past the tolerance
+pass W5 V1 (real vibrato) sung 80 ct sharp pmInt: master 51/51/51 (median 51, spread 0) → branch 56/56/56 (median 56) · a straight note 72 ct off scores 57: within 6 of that, and ≥10 below the straight notes
+pass W5 V1 (real vibrato) sung 80 ct sharp pmPro: master 32/32/32 (median 32, spread 0) → branch 30/30/30 (median 30) · a straight note 72 ct off scores 35: within 6 of that, and ≥10 below the straight notes
+pass W5 V1 (real vibrato) sung 80 ct sharp drills: master 56/56/56 (median 56, spread 0) → branch 56/56/56 (median 56) · a straight note 72 ct off scores 57: within 6 of that, and ≥10 below the straight notes
+pass W5 V1 (real vibrato) sung 80 ct sharp cwPitch: master 55/55/55 (median 55, spread 0) → branch 55/55/55 (median 55) · a straight note 72 ct off scores 57: within 6 of that, and ≥10 below the straight notes
+pass W5 wrong RTF rtfInTune: master 19/22/22% (median 22, spread 3) → branch 20/20/15% (median 20), change -2 (±5) · must not rise past the tolerance
+pass W5 Tuner tunerInTune: master 12/12/15% (median 12, spread 3) → branch 8/8/5% (median 8), change -4 (±5) · must not rise past the tolerance
+pass W5 Tuner tunerStable: master 55/52/58% (median 55, spread 6) → branch 53/57/53% (median 53), change -2 (±6) · must not drop past the tolerance
+pass W5 V1 (real vibrato) sung 80 ct sharp Choir World held: master ✗✗✗ → branch ✗✗✗ · must not be held (past ±50)
+pass W2 wrong pmInt: master 76/76/76 (median 76, spread 0) → branch 75/75/75 (median 75), change -1 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong drills: master 75/75/75 (median 75, spread 0) → branch 75/75/75 (median 75), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong cwPitch: master 76/76/76 (median 76, spread 0) → branch 75/75/75 (median 75), change -1 (±3) · no vibrato in it: must not rise more than 3
+pass W2 wrong RTF rtfInTune: master 0/-1/2% (median 0, spread 3) → branch 0/1/3% (median 1), change +1 (±5) · must not rise past the tolerance
+pass W2 Tuner tunerInTune: master 0/4/-8% (median 0, spread 12) → branch 0/-2/-6% (median -2), change -2 (±12) · must not rise past the tolerance
+pass W3 wander pmInt: master 78/78/78 (median 78, spread 0) → branch 77/77/77 (median 77), change -1 (±3) · no vibrato in it: must not rise more than 3
+pass W3 wander pmPro: master 64/64/64 (median 64, spread 0) → branch 66/66/66 (median 66), change +2 (±3) · no vibrato in it: must not rise more than 3
+pass W3 wander drills: master 77/77/77 (median 77, spread 0) → branch 77/77/77 (median 77), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W3 wander cwPitch: master 77/77/77 (median 77, spread 0) → branch 77/77/77 (median 77), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W3 S1 with a slow ±60 ct wander at 0.8 Hz RTF rtfSteady: master 0/-1/-4% (median -1, spread 4) → branch 0/-4/5% (median 0), change +1 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass W3 Tuner tunerInTune: master 5/9/8% (median 8, spread 4) → branch 5/3/-1% (median 3), change -5 (±5) · must not rise past the tolerance
+pass W3 Tuner tunerStable: master 0/4/-3% (median 0, spread 7) → branch 0/4/-2% (median 0), change 0 (±7) · must not rise past the tolerance
+pass W4 flutter pmInt: master 86/86/86 (median 86, spread 0) → branch 87/87/87 (median 87), change +1 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter pmPro: master 79/79/79 (median 79, spread 0) → branch 79/79/79 (median 79), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter drills: master 88/88/88 (median 88, spread 0) → branch 89/89/89 (median 89), change +1 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter cwPitch: master 86/86/86 (median 86, spread 0) → branch 86/86/86 (median 86), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass W4 flutter RTF rtfInTune: master 17/21/13% (median 17, spread 8) → branch 21/17/24% (median 21), change +4 (±8) · must not rise past the tolerance
+pass W4 S1 with an 11 Hz ±40 ct flutter RTF rtfSteady: master 0/-2/2% (median 0, spread 4) → branch 0/1/-6% (median 0), change 0 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass W4 Tuner tunerInTune: master 10/8/13% (median 10, spread 5) → branch 15/13/19% (median 15), change +5 (±5) · must not rise past the tolerance
+pass W4 Tuner tunerStable: master 0/-3/5% (median 0, spread 8) → branch 0/-1/0% (median 0), change 0 (±8) · must not rise past the tolerance
+pass N1 unsteady pmInt: master 88/88/88 (median 88, spread 0) → branch 88/88/88 (median 88), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady pmPro: master 82/82/82 (median 82, spread 0) → branch 82/82/82 (median 82), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady drills: master 89/89/89 (median 89, spread 0) → branch 89/89/89 (median 89), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady cwPitch: master 89/89/89 (median 89, spread 0) → branch 89/89/89 (median 89), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N1 unsteady RTF rtfInTune: master 4/1/9% (median 4, spread 8) → branch 4/4/2% (median 4), change 0 (±8) · must not rise past the tolerance
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF rtfInTune: master 4/1/9% (median 4, spread 8) → branch 4/4/2% (median 4) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N1 S1 sung 20 ct flat, irregular ±12 ct (RMS) unsteadiness RTF rtfSteady: master 21/18/22% (median 21, spread 4) → branch 20/19/19% (median 19), change -2 (±5) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass N1 Tuner tunerInTune: master 7/7/11% (median 7, spread 4) → branch 5/3/5% (median 5), change -2 (±5) · must not rise past the tolerance
+pass N1 Tuner tunerStable: master 48/51/45% (median 48, spread 6) → branch 51/50/49% (median 50), change +2 (±6) · must not rise past the tolerance
+pass N2 unsteady pmInt: master 84/84/84 (median 84, spread 0) → branch 81/81/81 (median 81), change -3 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady pmPro: master 70/70/70 (median 70, spread 0) → branch 70/70/70 (median 70), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady drills: master 83/83/83 (median 83, spread 0) → branch 83/83/83 (median 83), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady cwPitch: master 82/82/82 (median 82, spread 0) → branch 82/82/82 (median 82), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N2 unsteady RTF rtfInTune: master 10/11/14% (median 11, spread 4) → branch 6/5/9% (median 6), change -5 (±5) · must not rise past the tolerance
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfInTune: master 10/11/14% (median 11, spread 4) → branch 6/5/9% (median 6) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N2 S2 sung 25 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfSteady: master 12/13/19% (median 13, spread 7) → branch 11/12/9% (median 11), change -2 (±7) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass N2 Tuner tunerInTune: master 6/6/5% (median 6, spread 1) → branch 5/9/6% (median 6), change 0 (±5) · must not rise past the tolerance
+pass N2 Tuner tunerStable: master 31/33/38% (median 33, spread 7) → branch 36/33/36% (median 36), change +3 (±7) · must not rise past the tolerance
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmInt: master 86/86/86 (median 86, spread 0) → branch 85/85/85 (median 85) · a straight note 23 ct off scores 86: within 6 of that
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat pmPro: master 77/77/77 (median 77, spread 0) → branch 76/76/76 (median 76) · a straight note 23 ct off scores 79: within 6 of that
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat drills: master 85/85/85 (median 85, spread 0) → branch 85/85/85 (median 85) · a straight note 23 ct off scores 86: within 6 of that
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat cwPitch: master 85/85/85 (median 85, spread 0) → branch 85/85/85 (median 85) · a straight note 23 ct off scores 86: within 6 of that
+pass N3 wrong RTF rtfInTune: master 18/18/14% (median 18, spread 4) → branch 19/21/27% (median 21), change +3 (±5) · must not rise past the tolerance
+pass N3 V3 (real vibrato ±91 ct) sung 25 ct flat RTF rtfInTune: master 18/18/14% (median 18, spread 4) → branch 19/21/27% (median 21) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N3 Tuner tunerInTune: master 0/-2/3% (median 0, spread 5) → branch 0/1/-4% (median 0), change 0 (±5) · must not rise past the tolerance
+pass N3 Tuner tunerStable: master 100/104/99% (median 100, spread 5) → branch 100/102/104% (median 102), change +2 (±5) · must not drop past the tolerance
+pass N4 unsteady drills: master 72/72/72 (median 72, spread 0) → branch 72/72/72 (median 72), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N4 unsteady cwPitch: master 72/72/72 (median 72, spread 0) → branch 72/72/72 (median 72), change 0 (±3) · no vibrato in it: must not rise more than 3
+pass N4 unsteady RTF rtfInTune: master 3/0/2% (median 2, spread 3) → branch 3/2/4% (median 3), change +1 (±5) · must not rise past the tolerance
+pass N4 S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfInTune: master 3/0/2% (median 2, spread 3) → branch 3/2/4% (median 3) · off pitch past the window: in tune on ≤25% of voiced frames
+pass N4 S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness RTF rtfSteady: master 10/13/2% (median 10, spread 11) → branch 15/16/11% (median 15), change +5 (±11) · wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance
+pass N4 Tuner tunerInTune: master 2/4/3% (median 3, spread 2) → branch 1/2/6% (median 2), change -1 (±5) · must not rise past the tolerance
+pass N4 Tuner tunerStable: master 14/16/14% (median 14, spread 2) → branch 14/16/12% (median 14), change 0 (±5) · must not rise past the tolerance
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/vibfix-local-2026-10-05T01-08-44.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/vibfix-local-2026-10-05T01-08-44.json
