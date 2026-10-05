@@ -145,6 +145,12 @@ to −10.6 (already at the anti-clipping ceiling).
 2. **Guide notes** (Choir World rehearsal and anything else that plays while the mic listens): raise them toward the
    tone level only as far as the speaker-bleed checks keep passing: the Entrance / Cutoff "Speaker bleed detected"
    check and the Choir World phantom-held-note checks. Report the level landed on and why.
+   **Decided 2026-10-05:** those checks can't measure it (their test mic is an oscillator; the speakers never reach
+   it, and the Entrance Trainer's bleed is simulated with 70 ms bursts). So a loopback check is built: the app's
+   real playback fed into its own mic path at a stated speaker-to-mic coupling (−20 dB typical laptop, −10 dB worst
+   case, no echo cancellation); with nobody singing, the Entrance Trainer bleed counter, Choir World's held-note
+   verdict and the guide-time pitch graders run; guides go to the highest level with 0 bleed hits and 0 phantom
+   notes at the worst case.
 3. **Backing and choir:** leave as they are.
 4. **No clipping anywhere:** combined peaks stay under the existing 0.95 ceiling, including when tones and backing
    overlap. `levels.js` must show 0 clipped samples in every exercise.
