@@ -4139,6 +4139,13 @@
           </button>
         </div>
 
+        <h2 id="playbackVolumeTitle" style="font-family:'Fraunces',serif;font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">🔊 Playback volume</h2>
+        <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_playback_sub">Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.</p>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <input type="range" id="playbackVolumeSlider" min="0" max="100" step="1" value="100" aria-labelledby="playbackVolumeTitle" style="flex:1;accent-color:var(--teal);">
+          <span id="playbackVolumeVal" style="font-family:'Space Mono',monospace;font-size:13px;min-width:44px;text-align:right;">100%</span>
+        </div>
+
         <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">💬 Feedback</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_feedback_sub">Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.</p>
         <button class="ghost-btn" data-enter-panel="feedback" style="width:100%;justify-content:center;" data-i18n="settings_feedback_btn">Give Feedback</button>
@@ -4757,6 +4764,7 @@ async function initAudio(opts){
     if(!audioCtx){
       audioCtx = new (window.AudioContext||window.webkitAudioContext)();
     }
+    await ensurePlaybackChain();
     const source = audioCtx.createMediaStreamSource(micStream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 2048;
@@ -5048,39 +5056,144 @@ document.getElementById('transDown').addEventListener('click', ()=>{ transposeSe
 [rootNoteSel, rootOctSel].forEach(el=>el.addEventListener('change', refreshRefLabel));
 refreshRefLabel();
 
-// simple oscillator tone with envelope, avoids clicks
-async function playTone(freq, duration=0.55, delay=0, vol=0.22){
-  await initAudioOnly();
+/* ---- Playback output: every sound the app plays meets on playbackIn (the Playback volume setting, 0–1, never
+   above 1), then a look-ahead peak limiter that holds the summed output at or below PLAYBACK_CEILING, then the
+   speakers. Below the ceiling the limiter passes the sound unchanged (2.6 ms later); it only acts when sounds stack
+   (a block chord, a tone over the backing pad or the choir). The mic and scoring never pass through it. ---- */
+const PLAYBACK_CEILING = 0.949; // just under the 0.95 the choir and backing trims aim for
+const PLAYBACK_VOLUME_KEY = 'playbackVolume';
+let playbackVolume = (()=>{ try{ const v = parseFloat(localStorage.getItem(PLAYBACK_VOLUME_KEY)); return v>=0 && v<=1 ? v : 1; }catch(e){ return 1; } })();
+let playbackIn = null, playbackOutNode = null, playbackChainReady = null;
+// The limiter: gain = a moving average (L samples) of the sliding minimum (L samples) of each sample's cap
+// (ceiling / |x|), applied to the input delayed by L−1 samples, so every output sample's gain is at most its own cap;
+// a 80 ms release on top lets the gain recover smoothly. Pure arithmetic per sample, no allocation.
+const PLAYBACK_LIMITER_SRC = `class PlaybackLimiter extends AudioWorkletProcessor{
+  constructor(o){ super(); const p = o.processorOptions || {};
+    this.L = p.lookahead || 128; this.ceil = p.ceiling || 0.949; this.rc = 1 - Math.exp(-1 / ((p.releaseSec || 0.08) * sampleRate));
+    this.c = new Float32Array(this.L).fill(1); this.cLow = 0; this.m = new Float32Array(this.L).fill(1); this.mLow = 0; this.i = 0;
+    this.D = this.L - 1; this.d = [new Float32Array(this.D), new Float32Array(this.D)]; this.di = 0; this.g = 1; }
+  process(inputs, outputs){
+    const inp = inputs[0] || [], out = outputs[0], L = this.L, n = out[0].length;
+    for(let k=0;k<n;k++){
+      let a = 0;
+      for(let ch=0;ch<out.length;ch++){ const src = inp[ch] || inp[0]; const x = src ? src[k] : 0; const v = x<0 ? -x : x; if(v>a) a = v; }
+      const i = this.i, cap = a>this.ceil ? this.ceil/a : 1;
+      if(this.c[i]<1) this.cLow--; this.c[i] = cap; if(cap<1) this.cLow++;
+      let mn = 1; if(this.cLow){ for(let j=0;j<L;j++) if(this.c[j]<mn) mn = this.c[j]; }
+      if(this.m[i]<1) this.mLow--; this.m[i] = mn; if(mn<1) this.mLow++;
+      let gb = 1; if(this.mLow){ let s = 0; for(let j=0;j<L;j++) s += this.m[j]; gb = s/L; }
+      const g = Math.min(gb, this.g + (1-this.g)*this.rc); this.g = g;
+      for(let ch=0;ch<out.length;ch++){
+        const src = inp[ch] || inp[0], x = src ? src[k] : 0, dl = this.d[ch];
+        const y = dl[this.di]; dl[this.di] = x; out[ch][k] = y*g;
+      }
+      this.i = (i+1)%L; this.di = (this.di+1)%this.D;
+    }
+    return true;
+  }
+}
+registerProcessor('playback-limiter', PlaybackLimiter);`;
+// Where every sound connects (synchronous, so nodes made outside an await still go through the volume).
+function playbackDest(){
+  if(!playbackIn){
+    playbackIn = audioCtx.createGain();
+    playbackIn.gain.value = playbackVolume;
+    playbackIn.connect(audioCtx.destination); playbackOutNode = playbackIn; // until the limiter is in
+    ensurePlaybackChain();
+  }
+  return playbackIn;
+}
+function ensurePlaybackChain(){
+  if(playbackChainReady) return playbackChainReady;
+  playbackChainReady = (async()=>{
+    playbackDest();
+    let lim = null;
+    try{
+      if(audioCtx.audioWorklet){
+        await audioCtx.audioWorklet.addModule(URL.createObjectURL(new Blob([PLAYBACK_LIMITER_SRC], {type:'application/javascript'})));
+        lim = new AudioWorkletNode(audioCtx, 'playback-limiter', {numberOfInputs:1, numberOfOutputs:1, outputChannelCount:[2], channelCount:2,
+          channelCountMode:'explicit', channelInterpretation:'speakers', processorOptions:{ceiling:PLAYBACK_CEILING, lookahead:128, releaseSec:0.08}});
+      }
+    }catch(e){ lim = null; }
+    if(!lim){ // no AudioWorklet: the browser's compressor as a near-limiter (no guarantee, but close)
+      lim = audioCtx.createDynamicsCompressor();
+      lim.threshold.value = -1; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.08;
+    }
+    playbackIn.disconnect(); playbackIn.connect(lim); lim.connect(audioCtx.destination); playbackOutNode = lim;
+  })();
+  return playbackChainReady;
+}
+// The Playback volume setting (Profile → Settings): all playback, including recorded clips (<audio>); never the mic.
+function setPlaybackVolume(v, save){
+  playbackVolume = Math.min(1, Math.max(0, Number(v) || 0));
+  if(playbackIn) playbackIn.gain.setTargetAtTime(playbackVolume, audioCtx.currentTime, 0.02);
+  document.querySelectorAll('audio, video').forEach(m=>{ m.volume = playbackVolume; });
+  const sl = document.getElementById('playbackVolumeSlider'), val = document.getElementById('playbackVolumeVal'), pct = Math.round(playbackVolume*100);
+  if(sl && +sl.value !== pct) sl.value = pct;
+  if(val) val.textContent = pct + '%';
+  if(save !== false){ try{ localStorage.setItem(PLAYBACK_VOLUME_KEY, String(playbackVolume)); }catch(e){ console.error('storage error', e); } }
+}
+document.addEventListener('play', e=>{ if(e.target instanceof HTMLMediaElement) e.target.volume = playbackVolume; }, true);
+
+// Tones. A reference (what to sing, played before the mic listens) has soft harmonics under a dominant fundamental,
+// so small speakers carry low notes, at about −12 dBFS RMS. A guide (plays while the mic listens) stays a plain sine at
+// 0.10 (−23.4 dBFS): the loopback bleed check (scripts/vq-verify/loopback.js, 2026-10-05) found phantom notes credited
+// with nobody singing already at this level, more with the harmonic timbre at the same level (3 vs 1 at −20 dB
+// coupling), and all 8 from −20 dBFS up. A plain sine at a given gain is also used for clicks and ticks.
+const TONE_HARMONICS = [0, 1, 0.25, 0.12, 0.05]; // fundamental, then 2nd–4th harmonics at −12, −18, −26 dB
+const TONE_REF_GAIN = 0.356;   // the harmonic wave's RMS (0.735) × 0.356 ≈ 0.26: −12.0 dBFS RMS over a tone with its ramps (levels.js)
+const TONE_GUIDE_GAIN = 0.10;  // a plain sine, −23.4 dBFS RMS: not raised (see above)
+let toneWave = null;
+function toneWaveform(){
+  if(!toneWave) toneWave = audioCtx.createPeriodicWave(new Float32Array(TONE_HARMONICS.length), new Float32Array(TONE_HARMONICS), {disableNormalization:true});
+  return toneWave;
+}
+function scheduleTone(freq, duration, delay, peak, harmonic){
   const t0 = audioCtx.currentTime + delay;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
-  osc.type = 'sine';
+  if(harmonic) osc.setPeriodicWave(toneWaveform()); else osc.type = 'sine';
   osc.frequency.setValueAtTime(freq, t0);
   gain.gain.setValueAtTime(0, t0);
-  gain.gain.linearRampToValueAtTime(vol, t0+0.03);
-  gain.gain.linearRampToValueAtTime(vol, t0+duration-0.08);
+  gain.gain.linearRampToValueAtTime(peak, t0+0.03);
+  gain.gain.linearRampToValueAtTime(peak, t0+duration-0.08);
   gain.gain.linearRampToValueAtTime(0, t0+duration);
-  osc.connect(gain).connect(audioCtx.destination);
+  osc.connect(gain).connect(playbackDest());
   osc.start(t0);
   osc.stop(t0+duration+0.02);
 }
+// a reference tone; with `vol`, a plain sine at that gain (clicks and ticks)
+async function playTone(freq, duration=0.55, delay=0, vol=null){
+  await initAudioOnly();
+  scheduleTone(freq, duration, delay, vol===null ? TONE_REF_GAIN : vol, vol===null);
+}
+async function playGuideTone(freq, duration=0.55, delay=0){
+  await initAudioOnly();
+  scheduleTone(freq, duration, delay, TONE_GUIDE_GAIN, false);
+}
+// a block chord: each note at 1/√n of the reference, so the chord sounds about as loud as one tone and its in-phase
+// peak stays under the ceiling without the limiter
+async function playChord(freqs, duration=0.55, delay=0){
+  await initAudioOnly();
+  freqs.forEach(f=>scheduleTone(f, duration, delay, TONE_REF_GAIN/Math.sqrt(freqs.length), true));
+}
 
-// glide tone (siren) — real frequency ramp for warmups, not a static note
+// glide tone (siren) — real frequency ramp for warmups, not a static note; a reference, same timbre and level
 async function playSiren(lowMidi, highMidi, totalDuration=3.0){
   await initAudioOnly();
   const t0 = audioCtx.currentTime + 0.05;
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
-  osc.type = 'sine';
+  osc.setPeriodicWave(toneWaveform());
   const lowFreq = noteToFreq(lowMidi), highFreq = noteToFreq(highMidi);
   osc.frequency.setValueAtTime(lowFreq, t0);
   osc.frequency.linearRampToValueAtTime(highFreq, t0+totalDuration/2);
   osc.frequency.linearRampToValueAtTime(lowFreq, t0+totalDuration);
   gain.gain.setValueAtTime(0, t0);
-  gain.gain.linearRampToValueAtTime(0.18, t0+0.08);
-  gain.gain.linearRampToValueAtTime(0.18, t0+totalDuration-0.15);
+  gain.gain.linearRampToValueAtTime(TONE_REF_GAIN, t0+0.08);
+  gain.gain.linearRampToValueAtTime(TONE_REF_GAIN, t0+totalDuration-0.15);
   gain.gain.linearRampToValueAtTime(0, t0+totalDuration);
-  osc.connect(gain).connect(audioCtx.destination);
+  osc.connect(gain).connect(playbackDest());
   osc.start(t0);
   osc.stop(t0+totalDuration+0.05);
 }
@@ -5093,6 +5206,7 @@ async function initAudioOnly(){
   if(audioCtx.state === 'suspended'){
     try{ await audioCtx.resume(); }catch(e){}
   }
+  await ensurePlaybackChain();
   return true;
 }
 
@@ -5273,6 +5387,7 @@ const TRANSLATIONS = {
     settings_feedback_title:'💬 Feedback', settings_feedback_sub:"Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.",
     settings_feedback_btn:'Give Feedback',
     settings_title:'Settings', settings_language_title:'🌐 Language',
+    settings_playback_title:'🔊 Playback volume', settings_playback_sub:'Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.',
     hub_you_profile_title:'🎤 Profile', hub_you_profile_desc:'Your singer identity in one place — level, range, strengths, achievements, records, all real.',
     hub_you_journey_title:'21-Day Journey', hub_you_journey_desc:'Baseline, goal, XP, achievements, Day 1 vs. today.',
     hub_you_dashboard_title:'Dashboard & Skill Profile', hub_you_dashboard_desc:"5 real scores, Today's Plan, Weekly Challenge, adaptive weighting.",
@@ -6635,6 +6750,7 @@ const TRANSLATIONS = {
     settings_feedback_title:'💬 Avis', settings_feedback_sub:"Des retours réels et précis — enregistrés pour qu'on puisse vraiment agir dessus, pas une boîte mail qui ne mène nulle part.",
     settings_feedback_btn:'Donner mon avis',
     settings_title:'Paramètres', settings_language_title:'🌐 Langue',
+    settings_playback_title:'🔊 Volume de lecture', settings_playback_sub:'Notes de référence, guides, accompagnement, chœur et enregistrements. Votre micro et vos scores ne sont pas concernés.',
     hub_you_profile_title:'🎤 Profil', hub_you_profile_desc:'Votre identité de chanteur en un seul endroit — niveau, tessiture, points forts, succès, records, tout est réel.',
     hub_you_journey_title:'Parcours de 21 jours', hub_you_journey_desc:"Référence de départ, objectif, XP, succès, Jour 1 vs aujourd'hui.",
     hub_you_dashboard_title:'Tableau de bord et Profil de compétences', hub_you_dashboard_desc:"5 scores réels, Plan du jour, Défi hebdomadaire, pondération adaptative.",
@@ -7997,6 +8113,7 @@ const TRANSLATIONS = {
     settings_feedback_title:'💬 Comentarios', settings_feedback_sub:'Comentarios reales y específicos — guardados para que realmente podamos actuar, no un buzón que no lleva a ninguna parte.',
     settings_feedback_btn:'Dar mi opinión',
     settings_title:'Configuración', settings_language_title:'🌐 Idioma',
+    settings_playback_title:'🔊 Volumen de reproducción', settings_playback_sub:'Notas de referencia, guías, acompañamiento, coro y grabaciones. Tu micrófono y tus puntuaciones no cambian.',
     hub_you_profile_title:'🎤 Perfil', hub_you_profile_desc:'Tu identidad de cantante en un solo lugar — nivel, rango, fortalezas, logros, récords, todo real.',
     hub_you_journey_title:'Recorrido de 21 días', hub_you_journey_desc:'Línea base, objetivo, XP, logros, Día 1 frente a hoy.',
     hub_you_dashboard_title:'Panel y Perfil de habilidades', hub_you_dashboard_desc:"5 puntuaciones reales, Plan de hoy, Desafío semanal, ponderación adaptativa.",
@@ -9359,6 +9476,7 @@ const TRANSLATIONS = {
     settings_feedback_title:'💬 Geri Bildirim', settings_feedback_sub:'Gerçek, somut geri bildirim — gerçekten üzerinde çalışabilmemiz için saklanır, hiçbir yere gitmeyen bir posta kutusu değil.',
     settings_feedback_btn:'Geri Bildirim Ver',
     settings_title:'Ayarlar', settings_language_title:'🌐 Dil',
+    settings_playback_title:'🔊 Çalma sesi', settings_playback_sub:'Referans notalar, kılavuzlar, eşlik, koro ve kayıtlar. Mikrofonunuz ve puanlarınız etkilenmez.',
     hub_you_profile_title:'🎤 Profil', hub_you_profile_desc:'Şarkıcı kimliğiniz tek bir yerde — seviye, ses aralığı, güçlü yönler, başarılar, rekorlar, hepsi gerçek.',
     hub_you_journey_title:'21 Günlük Yolculuk', hub_you_journey_desc:'Başlangıç, hedef, XP, başarılar, 1. Gün ile bugün karşılaştırması.',
     hub_you_dashboard_title:'Panel ve Yetenek Profili', hub_you_dashboard_desc:"5 gerçek puan, Bugünün Planı, Haftalık Meydan Okuma, uyarlanabilir ağırlıklandırma.",
@@ -12183,7 +12301,7 @@ function ensureBackingGain(){
   if(!backingGainNode){
     backingGainNode = audioCtx.createGain();
     backingGainNode.gain.value = 0.5;
-    backingGainNode.connect(audioCtx.destination);
+    backingGainNode.connect(playbackDest());
   }
 }
 function scheduleBackingNote(freq, startTime, duration){
@@ -12852,7 +12970,7 @@ function ensureChoirGainNodes(){
   if(!choirOutNode){
     choirOutNode = audioCtx.createGain();
     choirOutNode.gain.value = choirHeadroomTrim();
-    choirOutNode.connect(audioCtx.destination);
+    choirOutNode.connect(playbackDest());
   }
   Object.keys(SONG.parts).forEach(part=>{
     if(!choirGainNodes[part]){
@@ -13924,7 +14042,7 @@ async function startHarmonyMemory(){
   await playChoir({loop:false, leadIn:beat*4}); // applies this stage's computeEffectiveGain to every part
   const clicks = scheduleRehearsalCountIn();
   // Stage 6: your starting note sounds over the first three count-in beats, then nothing plays.
-  if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime), 0.2);
+  if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime)); // a reference: it ends a beat before singing starts
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   harmonyMemory.raf = requestAnimationFrame(hmTick);
@@ -14168,7 +14286,7 @@ async function startChallenge(kind){
   await playChoir({loop:false, leadIn:beat*4, fx: fxFn ? (p,i)=>fxFn(p,i,ctx) : undefined});
   const clicks = scheduleRehearsalCountIn();
   // The Silence: your starting note sounds over the first three count-in beats, then nothing plays.
-  if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime), 0.2);
+  if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime)); // a reference: it ends a beat before singing starts
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   challenge.raf = requestAnimationFrame(chTick);
@@ -17667,7 +17785,7 @@ function scheduleHarmonyDistraction(){
   const steps = Math.ceil(totalMs/stepMs)+1;
   for(let i=0;i<steps;i++){
     const midi = pattern[i%pattern.length];
-    playTone(noteToFreq(midi), 0.3, (i*stepMs)/1000, 0.10);
+    playGuideTone(noteToFreq(midi), 0.3, (i*stepMs)/1000);
   }
 }
 
@@ -17758,7 +17876,7 @@ function harmonyLoop(){
     harmonyCurrentIdx=idx; harmonyNoteBuf=[];
     if(harmonyPianoGuideOn){
       const guideDur = Math.max(0.15, (songChordDurMs()/1000)*0.75); // fits inside the real chord duration, no overlap
-      playTone(noteToFreq(targetMidi), guideDur, 0, 0.10); // quiet — a reference, not a duet partner
+      playGuideTone(noteToFreq(targetMidi), guideDur, 0); // a guide: quieter than a reference, not a duet partner
     }
   }
 
@@ -18493,11 +18611,11 @@ function newEarRound(){
 document.getElementById('earPlayBtn')?.addEventListener('click', ()=>{
   if(!earTargetName) return;
   if(earSubMode==='chord'){
-    earTargetSemis.forEach(semi=>playTone(noteToFreq(earRootMidi+semi), 0.85, 0)); // block chord — all tones together
+    playChord(earTargetSemis.map(semi=>noteToFreq(earRootMidi+semi)), 0.85, 0); // block chord — all tones together
   } else if(earSubMode==='progression'){
     earProgression.forEach((chord,i)=>{
       const rootMidi = earRootMidi + chord.deg;
-      CHORD_QUALITIES[chord.q].forEach(semi=>playTone(noteToFreq(rootMidi+semi), 0.8, i*0.95));
+      playChord(CHORD_QUALITIES[chord.q].map(semi=>noteToFreq(rootMidi+semi)), 0.8, i*0.95);
     });
   } else {
     playTone(noteToFreq(earRootMidi), 0.55, 0);
@@ -19014,7 +19132,7 @@ document.getElementById('customStartBtn')?.addEventListener('click', async ()=>{
     document.getElementById('customRunnerProgress').textContent = `Note ${i+1} of ${customSequence.length}`;
     document.getElementById('customRunnerTarget').textContent = noteNameFromMidi(targetMidi);
     document.getElementById('customRunnerStatus').textContent = 'Listening…';
-    playTone(noteToFreq(targetMidi), 0.5, 0, 0.16);
+    playTone(noteToFreq(targetMidi), 0.5, 0);
     await new Promise(r=>setTimeout(r, 550));
     const res = await captureAccuracyForTarget(targetMidi, durationMs, {});
     customResults.push({midi:targetMidi, accuracy:res.accuracy, heard:res.heard});
@@ -19324,7 +19442,7 @@ document.getElementById('mirrorPlayBtn')?.addEventListener('click', async ()=>{
   document.getElementById('mirrorStatus').textContent = 'Listen…';
   drawMirrorComparison();
   mirrorPhrase.forEach((midi,i)=>{
-    playTone(noteToFreq(midi), (MIRROR_NOTE_MS/1000)*0.85, i*(MIRROR_NOTE_MS/1000), 0.22);
+    playTone(noteToFreq(midi), (MIRROR_NOTE_MS/1000)*0.85, i*(MIRROR_NOTE_MS/1000));
   });
   setTimeout(()=>{
     document.getElementById('mirrorStatus').textContent = 'Your turn — echo what you heard';
@@ -19497,7 +19615,7 @@ async function riftRunNextRound(){
   document.getElementById('riftRoundTarget').textContent = noteNameFromMidi(targetMidi);
   document.getElementById('riftRoundStatus').textContent = t('action_listening');
 
-  playTone(noteToFreq(targetMidi), 0.35, 0, 0.18);
+  playTone(noteToFreq(targetMidi), 0.35, 0);
   await new Promise(r=>setTimeout(r, 450));
   if(!riftActive) return;
 
@@ -19916,7 +20034,7 @@ async function runEveLoop(){
   document.getElementById('eveStepLabel').textContent = 'Step 1 — Hear';
   document.getElementById('eveStepNote').textContent = '♪';
   document.getElementById('eveStepStatus').textContent = 'Listen closely…';
-  playTone(noteToFreq(eveFirstMidi), 0.9, 0, 0.22);
+  playTone(noteToFreq(eveFirstMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
   if(!eveActive) return;
 
@@ -19941,7 +20059,7 @@ async function runEveLoop(){
   document.getElementById('eveStepLabel').textContent = 'Step 4 — Hear again (harder)';
   document.getElementById('eveStepNote').textContent = '♪';
   document.getElementById('eveStepStatus').textContent = `A real ${iv.name} jump from the first note — listen once.`;
-  playTone(noteToFreq(eveSecondMidi), 0.9, 0, 0.22);
+  playTone(noteToFreq(eveSecondMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
   if(!eveActive) return;
 
@@ -20134,7 +20252,7 @@ async function runFiveLoop(){
     document.getElementById('fiveStepLabel').textContent = `${t('five_round_prefix')} ${i+1} ${t('five_round_of5')} — ${round.label}`;
     document.getElementById('fiveStepNote').textContent = noteNameFromMidi(targetMidi);
     document.getElementById('fiveStepStatus').textContent = round.instruction + ` — ${t('five_listenfirst')}`;
-    playTone(noteToFreq(targetMidi), 0.7, 0, 0.2);
+    playTone(noteToFreq(targetMidi), 0.7, 0);
     await new Promise(r=>setTimeout(r, 1000));
     document.getElementById('fiveStepStatus').textContent = t('action_listening');
     const result = await captureAccuracyForTarget(targetMidi, 1500, {});
@@ -20222,7 +20340,7 @@ async function runOneTake(){
   document.getElementById('oneTakeStepLabel').textContent = 'Listen once';
   document.getElementById('oneTakeNote').textContent = noteNameFromMidi(targetMidi);
   document.getElementById('oneTakeStatus').textContent = 'This plays once — no repeats.';
-  playTone(noteToFreq(targetMidi), 0.9, 0, 0.22);
+  playTone(noteToFreq(targetMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
 
   document.getElementById('oneTakeStepLabel').textContent = 'Recording your one take';
@@ -20300,7 +20418,7 @@ function generatePuzzle(){
 }
 function playPuzzleSequence(){
   for(let i=0;i<puzzleSequence.length;i++){
-    playTone(noteToFreq(puzzleSequence[i]), 0.55, i*0.65, 0.22);
+    playTone(noteToFreq(puzzleSequence[i]), 0.55, i*0.65);
   }
 }
 document.getElementById('puzzleStartBtn')?.addEventListener('click', async ()=>{
@@ -20351,8 +20469,8 @@ function playHmPair(){
   const wrongFreq = noteToFreq(hmTargetMidi) * Math.pow(2, hmOffsetCents/1200);
   const freqA = hmCorrectLabel==='A' ? correctFreq : wrongFreq;
   const freqB = hmCorrectLabel==='B' ? correctFreq : wrongFreq;
-  playTone(freqA, 0.7, 0, 0.22);
-  playTone(freqB, 0.7, 1.0, 0.22);
+  playTone(freqA, 0.7, 0);
+  playTone(freqB, 0.7, 1.0);
 }
 document.getElementById('hmStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature("Can You Hear Your Mistake?")) return;
@@ -20508,7 +20626,7 @@ async function runEmoRound(intentKey, roundNum){
   document.getElementById('emoRunnerNote').textContent = noteNameFromMidi(emoTargetMidi);
   const plain = EMOTION_LABELS[intentKey].replace(/^\S+\s/,'');
   document.getElementById('emoRunnerStatus').textContent = `Sing this note as ${plain} as you genuinely can.`;
-  playTone(noteToFreq(emoTargetMidi), 0.6, 0, 0.18);
+  playTone(noteToFreq(emoTargetMidi), 0.6, 0);
   await new Promise(r=>setTimeout(r, 900));
   document.getElementById('emoRunnerStatus').textContent = 'Recording…';
 
@@ -20759,7 +20877,7 @@ async function runDrillSequence(){
     document.getElementById('drillStepLabel').textContent = `${t('drill_note_label')} ${i+1} ${t('word_of')} ${DRILL_NOTE_COUNT}`;
     document.getElementById('drillNote').textContent = noteNameFromMidi(targetMidi);
     document.getElementById('drillStatus').textContent = t('action_listen');
-    playTone(noteToFreq(targetMidi), 0.6, 0, 0.2);
+    playTone(noteToFreq(targetMidi), 0.6, 0);
     await new Promise(r=>setTimeout(r, 800));
     if(!drillActive) return;
     document.getElementById('drillStatus').textContent = t('action_listening');
@@ -21019,6 +21137,8 @@ document.querySelectorAll('.theme-swatch-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{ setTheme(btn.dataset.themeChoice, true); });
 });
 initTheme();
+document.getElementById('playbackVolumeSlider')?.addEventListener('input', e=>setPlaybackVolume(e.target.value/100, true));
+setPlaybackVolume(playbackVolume, false); // the saved setting, shown on the slider
 
 /* ---------------- Real Feedback Form (submits to the Supabase 'feedback' table) ---------------- */
 let feedbackStarValue = 0;
