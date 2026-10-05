@@ -15,7 +15,7 @@
 // VF_MODE=regress (local only): a master-vs-branch regression run, for changes that aren't the vibrato fix. Both sides
 // already have the fix, so every "must rise" check becomes "must not move". Each side runs VF_RUNS times (default 3,
 // alternating sides) and the medians are compared: ±3 on a per-note grader; on the noisy readings (RTF In tune / Steady,
-// Tuner In tune / stability ≥75) the spread of master's own runs, no tighter than ±5. Every check is sorted into
+// Tuner In tune / stability ≥75) the spread of master's own runs, no tighter than ±5 and no looser than ±10. Every check is sorted into
 // Regression (passes on master, fails on the branch, or moves past tolerance the wrong way: blocks a deploy), Fixed
 // (fails on master, passes on the branch, or moves past tolerance the right way) and Already failing (fails on both).
 // Without it, the checks prove the vibrato fix itself (run against d7a5691, the last commit before it).
@@ -227,6 +227,9 @@ function regressVerdict(rows) {
   const vals = (r, side, k) => r.runs[side].map(x => x[k]);
   const med = (r, side, k) => median(vals(r, side, k));
   const spread = (r, k) => { const v = vals(r, 'before', k).filter(x => x != null); return v.length ? Math.max(...v) - Math.min(...v) : 0; };
+  // a noisy reading's tolerance: master's own spread, at least ±5, at most ±10 (one odd run among three, e.g. a Tuner
+  // stability of 68 among 42 / 44, would otherwise make the check meaningless; the medians already ignore that run)
+  const noisyTol = sp => Math.min(10, Math.max(5, sp));
   const sref = (side, k) => avg(rows.filter(r => r.kind === 'straight').map(r => med(r, side, k)));
   const add = (r, k, label, { ok, better, tol }, rule) => {
     let cls = 'pass';
@@ -248,7 +251,7 @@ function regressVerdict(rows) {
       if (r.kind === 'vibrato-irregular') log(`   note: ${r.id} (real vibrato read as irregular) ${k}: ${med(r, 'before', k)} → ${med(r, 'after', k)}`);
     }
     for (const k of ['rtfInTune', 'rtfSteady']) {
-      const a = v(k), sr = side => sref(side, k), tol = Math.max(5, spread(r, k));
+      const a = v(k), sr = side => sref(side, k), tol = noisyTol(spread(r, k));
       if (r.kind === 'vibrato') add(r, k, 'vibrato RTF', { ok: s => a(s) >= sr(s) - 20, better: 'higher', tol }, `within 20 of the straight notes (${sr('before')}% / ${sr('after')}%), must not drop past the tolerance`);
       if (r.kind === 'straight') add(r, k, 'straight RTF', { better: 'higher', tol }, 'must not drop past the tolerance');
       if (['wrong', 'flutter', 'unsteady'].includes(r.kind) && k === 'rtfInTune') add(r, k, `${r.kind} RTF`, { better: 'lower', tol }, 'must not rise past the tolerance');
@@ -258,8 +261,8 @@ function regressVerdict(rows) {
     // Tuner (measured only outside this mode): in tune and steady are good on a vibrato or straight note; a wrong note
     // shouldn't read in tune, and a wobbly one shouldn't read steady
     const wobbly = ['wander', 'flutter', 'unsteady'].includes(r.kind), good = ['vibrato', 'straight', 'vibrato-irregular'].includes(r.kind);
-    add(r, 'tunerInTune', 'Tuner', { better: good ? 'higher' : 'lower', tol: Math.max(5, spread(r, 'tunerInTune')) }, `must not ${good ? 'drop' : 'rise'} past the tolerance`);
-    add(r, 'tunerStable', 'Tuner', { better: wobbly ? 'lower' : 'higher', tol: Math.max(5, spread(r, 'tunerStable')) }, `must not ${wobbly ? 'rise' : 'drop'} past the tolerance`);
+    add(r, 'tunerInTune', 'Tuner', { better: good ? 'higher' : 'lower', tol: noisyTol(spread(r, 'tunerInTune')) }, `must not ${good ? 'drop' : 'rise'} past the tolerance`);
+    add(r, 'tunerStable', 'Tuner', { better: wobbly ? 'lower' : 'higher', tol: noisyTol(spread(r, 'tunerStable')) }, `must not ${wobbly ? 'rise' : 'drop'} past the tolerance`);
     // Choir World: held in most runs
     const held = side => r.runs[side].filter(x => x.cwHeld).length * 2 > r.runs[side].length;
     const heldStr = side => r.runs[side].map(x => x.cwHeld ? '✓' : '✗').join('');
