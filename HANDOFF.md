@@ -21,6 +21,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
   numbers (vibfix 104/108, noisegate 146/160, prod 68/71) are reference only. See the roadmap's testing notes.
 - Build one item at a time, verify it on production, report back, and wait for a go-ahead before starting the next.
   "Scope" means report only, with no app changes.
+- **Write every approved spec into the repo (`CHOIR_WORLD_ROADMAP.md` and this file) before building it** (user,
+  2026-10-05: the spec for (a) lived only in chat and was lost).
 - Production deploys need the user's explicit approval. Run from `deploy/`:
   `npx vercel@latest deploy --prod --yes --scope alegra1122` (without `--scope` the CLI answers "Not authorized").
   The user often runs this themselves.
@@ -35,7 +37,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 ## Order of work (set by the user, 2026-10-02)
 
 1. Pre-session warm-up, phases 1–2 (`warmup`, below). Now.
-2. The four tester-review bugs. (Not written down in the repo yet: get the list from the user.)
+2. The four tester-review fixes (a)–(d): (b) listening window and (c) shared note picker are live (2026-10-05,
+   dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X); (a) playback volume is next, then (d) level-up explanation. Specs below.
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`).
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
@@ -84,6 +87,42 @@ User's sequencing: don't start until fix A is merged and deployed. Then:
 3. Fix what comes up.
 4. Verify on production with throwaway accounts and full logs.
 5. **Report back before committing to master or deploying.** Phase 3+ stays deferred.
+
+### 3. Tester-review fixes (a) and (d): specs (also in `CHOIR_WORLD_ROADMAP.md`)
+
+#### (a) Playback volume (approved 2026-10-05; next)
+
+Measured with `levels.js` (ce0d435): reference tones −16.5 to −18 dBFS RMS, guide notes −23.4, backing and choir −9.6
+to −10.6 (already at the anti-clipping ceiling).
+1. **Reference tones** (Pitch Match, Interval Match, Key Trainer and every other exercise reference): raise to about
+   −12 dBFS RMS, using soft harmonics with the fundamental dominant, so small speakers carry low notes. Confirm that
+   `autoCorrelate` reads every tone at the right pitch, with no octave errors, across the whole note range.
+2. **Guide notes** (Choir World rehearsal and anything else that plays while the mic listens): raise them toward the
+   tone level only as far as the speaker-bleed checks keep passing: the Entrance / Cutoff "Speaker bleed detected"
+   check and the Choir World phantom-held-note checks. Report the level landed on and why.
+3. **Backing and choir:** leave as they are.
+4. **No clipping anywhere:** combined peaks stay under the existing 0.95 ceiling, including when tones and backing
+   overlap. `levels.js` must show 0 clipped samples in every exercise.
+5. **A playback volume control:** one master playback slider, 0–100%, default 100% = gain 1.0, never above 1.0. Saved
+   with the existing settings and applied to all playback (tones, guides, backing, choir, warm-up, karaoke, Studio
+   playback). It never touches the mic or scoring. It goes in the existing Profile settings; the redesign restyles it.
+6. **Measure** with `levels.js` before and after for every exercise (RMS, peak, clipped samples); the table goes in the
+   report.
+
+Regression: the same run against master, with vibfix regress mode, noisegate, batch1 / 2 / 3a / 3b / 3c, the choir
+bleed checks and the Entrance Trainer first-tick check. **Deploy is approved if there is no Regression-class
+failure.** Then on production: batch1, the bleed checks, and `levels.js` if it can run against a URL. Report after
+(a) is deployed and checked on production.
+
+#### (d) Level-up explanation (approved 2026-10-05; don't start until (a) is live)
+
+- At each level-up, store a snapshot of the existing counters on the server (e.g. a jsonb column on user progress),
+  so it follows the account. Only counters that already exist: sessions, new records, streak days, passed drills, and
+  anything similar.
+- At the next level-up, show the difference in one line, e.g. "You levelled up: 9 sessions, 2 new records and a 5-day
+  streak". For the first level-up after this ships, count from the start of the account.
+- The new text goes into all four languages.
+- **Report the migration and the API change to the user before applying the migration.**
 
 ## Waiting on the user (don't start without a go-ahead)
 

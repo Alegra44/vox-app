@@ -130,6 +130,45 @@ Follow-ups (logged 2026-10-03, not fixed):
   `warmupsCompleted` and records activity / XP; the pre-session warm-up stores only a per-day key in the browser.
   Settle it when the two become one warm-up in the redesign.
 
+## Tester-review fixes (a)–(d): specs
+
+(b) and (c) are live (next section). (a) and (d) were approved in chat on 2026-10-05 and are written here so they
+survive a session reset.
+
+### (a) Playback volume (approved 2026-10-05; next)
+
+Measured with `levels.js` (ce0d435): reference tones −16.5 to −18 dBFS RMS, guide notes −23.4, backing and choir −9.6
+to −10.6 (already at the anti-clipping ceiling).
+1. **Reference tones** (Pitch Match, Interval Match, Key Trainer and every other exercise reference): raise to about
+   −12 dBFS RMS, using soft harmonics with the fundamental dominant, so small speakers carry low notes. Confirm that
+   `autoCorrelate` reads every tone at the right pitch, with no octave errors, across the whole note range.
+2. **Guide notes** (Choir World rehearsal and anything else that plays while the mic listens): raise them toward the
+   tone level only as far as the speaker-bleed checks keep passing: the Entrance / Cutoff "Speaker bleed detected"
+   check and the Choir World phantom-held-note checks. Report the level landed on and why.
+3. **Backing and choir:** leave as they are.
+4. **No clipping anywhere:** combined peaks stay under the existing 0.95 ceiling, including when tones and backing
+   overlap. `levels.js` must show 0 clipped samples in every exercise.
+5. **A playback volume control:** one master playback slider, 0–100%, default 100% = gain 1.0, never above 1.0. Saved
+   with the existing settings and applied to all playback (tones, guides, backing, choir, warm-up, karaoke, Studio
+   playback). It never touches the mic or scoring. It goes in the existing Profile settings; the redesign restyles it.
+6. **Measure** with `levels.js` before and after for every exercise (RMS, peak, clipped samples); the table goes in the
+   report.
+
+Regression: the same run against master, with vibfix regress mode, noisegate, batch1 / 2 / 3a / 3b / 3c, the choir
+bleed checks and the Entrance Trainer first-tick check. **Deploy is approved if there is no Regression-class
+failure.** Then on production: batch1, the bleed checks, and `levels.js` if it can run against a URL. Report after
+(a) is deployed and checked on production.
+
+### (d) Level-up explanation (approved 2026-10-05; don't start until (a) is live)
+
+- At each level-up, store a snapshot of the existing counters on the server (e.g. a jsonb column on user progress),
+  so it follows the account. Only counters that already exist: sessions, new records, streak days, passed drills, and
+  anything similar.
+- At the next level-up, show the difference in one line, e.g. "You levelled up: 9 sessions, 2 new records and a 5-day
+  streak". For the first level-up after this ships, count from the start of the account.
+- The new text goes into all four languages.
+- **Report the migration and the API change to the user before applying the migration.**
+
 ## Practice fixes (b) + (c): listening window and shared note picker (live 2026-10-05, dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X)
 
 Merged as e01912b. Production (paced, the same checks as locally, accounts cleaned up): `listenwin.js` 27/27 (no voice:
