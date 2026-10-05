@@ -13,8 +13,12 @@
 // semitone and looped forward/backward (realstim.py). Plus real notes made deliberately wrong: shifted +60 / +40 ct, a
 // slow ±60 ct wander, an 11 Hz ±40 ct flutter. Full log and JSON go to scripts/vq-verify/logs/.
 // VF_MODE=regress (local only): a master-vs-branch regression run, for changes that aren't the vibrato fix. Both sides
-// already have the fix, so every "must rise" check becomes "must not move": |change| ≤ 3 on a per-note grader, ≤ 5 on an
-// RTF reading. Without it, the checks prove the vibrato fix itself (run against d7a5691, the last commit before it).
+// already have the fix, so every "must rise" check becomes "must not move". Each side runs VF_RUNS times (default 3,
+// alternating sides) and the medians are compared: ±3 on a per-note grader; on the noisy readings (RTF In tune / Steady,
+// Tuner In tune / stability ≥75) the spread of master's own runs, no tighter than ±5. Every check is sorted into
+// Regression (passes on master, fails on the branch, or moves past tolerance the wrong way: blocks a deploy), Fixed
+// (fails on master, passes on the branch, or moves past tolerance the right way) and Already failing (fails on both).
+// Without it, the checks prove the vibrato fix itself (run against d7a5691, the last commit before it).
 // Usage: [VF_URL=<url>] [VF_MODE=regress] [VF_PACE_MS=45000] [VF_RESUME=logs/<earlier>.json] node scripts/vq-verify/vibfix.js [stimulus ids, comma-separated]
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
@@ -24,7 +28,7 @@ const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(os.tmpdir(), 'vq-
 fs.mkdirSync(TMP, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.VF_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
-const REGRESS = !PROD && process.env.VF_MODE === 'regress';
+const REGRESS = !PROD && process.env.VF_MODE === 'regress', RUNS = REGRESS ? +(process.env.VF_RUNS || 3) : 1;
 if (process.env.VF_MODE && process.env.VF_MODE !== 'regress') throw new Error(`VF_MODE=${process.env.VF_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `vibfix-${PROD ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
@@ -212,29 +216,96 @@ async function runAll(page, target) {
 const avg = a => { a = a.filter(x => x != null && !Number.isNaN(x)); return a.length ? Math.round(a.reduce((s, x) => s + x, 0) / a.length) : null; };
 const brief = o => ({ pmInt: avg(o.pitch.intermediate), pmPro: avg(o.pitch.professional), drills: avg(o.drills.map(d => d.pitchAcc)), rtfInTune: o.rtf.inTune, rtfSteady: o.rtf.steady,
   cwHeld: o.choir.every(c => c.held), cwCents: o.choir.map(c => c.cents).join('/'), cwPitch: avg(o.choir.map(c => c.prPitch)) });
+// One run's readings, as regress mode compares them
+const readings = o => ({ ...brief(o), cwMedian: avg(o.choir.map(c => c.cents)), tunerInTune: o.tuner.inTune, tunerStable: o.tuner.stable });
+const median = a => { a = a.filter(x => x != null && !Number.isNaN(x)).sort((x, y) => x - y); if (!a.length) return null; const m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; };
+
+// VF_MODE=regress verdict: master ('before') against the branch ('after'), by the medians of RUNS runs per side. A check
+// has `ok` (judged on each side's median by itself) and/or `better` + `tol` (the branch's median against master's).
+function regressVerdict(rows) {
+  const C = { regression: [], fixed: [], already: [], pass: [] };
+  const vals = (r, side, k) => r.runs[side].map(x => x[k]);
+  const med = (r, side, k) => median(vals(r, side, k));
+  const spread = (r, k) => { const v = vals(r, 'before', k).filter(x => x != null); return v.length ? Math.max(...v) - Math.min(...v) : 0; };
+  const sref = (side, k) => avg(rows.filter(r => r.kind === 'straight').map(r => med(r, side, k)));
+  const add = (r, k, label, { ok, better, tol }, rule) => {
+    let cls = 'pass';
+    if (ok) { const m = ok('before'), b = ok('after'); cls = m && !b ? 'regression' : !m && !b ? 'already' : !m && b ? 'fixed' : 'pass'; }
+    const d = med(r, 'after', k) - med(r, 'before', k);
+    if (better && Math.abs(d) > tol) { if (better === 'higher' ? d < 0 : d > 0) cls = 'regression'; else if (cls === 'pass') cls = 'fixed'; }
+    const pct = /^(rtf|tuner)/.test(k) ? '%' : '';
+    C[cls].push(`${r.id} ${label} ${k}: master ${vals(r, 'before', k).join('/')}${pct} (median ${med(r, 'before', k)}, spread ${spread(r, k)}) → branch ${vals(r, 'after', k).join('/')}${pct} (median ${med(r, 'after', k)})${better ? `, change ${d > 0 ? '+' : ''}${d} (±${tol})` : ''} · ${rule}`);
+  };
+  const MULT = { pmInt: 0.6, pmPro: 0.9, drills: 0.6, cwPitch: 0.6 };
+  for (const r of rows) {
+    const hasVib = r.rv.gate, offset = Math.abs(med(r, 'before', 'cwMedian')), v = k => side => med(r, side, k);
+    for (const k of ['pmInt', 'pmPro', 'drills', 'cwPitch']) {
+      const a = v(k), sr = side => sref(side, k);
+      if (r.kind === 'vibrato') add(r, k, 'vibrato', { ok: s => a(s) >= sr(s) - 8, better: 'higher', tol: 3 }, `within 8 of the straight notes (${sr('before')} / ${sr('after')}), must not drop more than 3`);
+      if (r.kind === 'straight') add(r, k, 'straight', { better: 'higher', tol: 3 }, 'must not drop more than 3');
+      if (r.kind === 'wrong' && hasVib) { const e = Math.max(0, Math.round(100 - offset * MULT[k])); add(r, k, r.label, { ok: s => Math.abs(a(s) - e) <= 6 && (offset < 40 || a(s) <= sr(s) - 10) }, `a straight note ${offset} ct off scores ${e}: within 6 of that${offset < 40 ? '' : ', and ≥10 below the straight notes'}`); }
+      if (['wrong', 'wander', 'flutter', 'unsteady'].includes(r.kind) && !hasVib) add(r, k, r.kind, { better: 'lower', tol: 3 }, 'no vibrato in it: must not rise more than 3');
+      if (r.kind === 'vibrato-irregular') log(`   note: ${r.id} (real vibrato read as irregular) ${k}: ${med(r, 'before', k)} → ${med(r, 'after', k)}`);
+    }
+    for (const k of ['rtfInTune', 'rtfSteady']) {
+      const a = v(k), sr = side => sref(side, k), tol = Math.max(5, spread(r, k));
+      if (r.kind === 'vibrato') add(r, k, 'vibrato RTF', { ok: s => a(s) >= sr(s) - 20, better: 'higher', tol }, `within 20 of the straight notes (${sr('before')}% / ${sr('after')}%), must not drop past the tolerance`);
+      if (r.kind === 'straight') add(r, k, 'straight RTF', { better: 'higher', tol }, 'must not drop past the tolerance');
+      if (['wrong', 'flutter', 'unsteady'].includes(r.kind) && k === 'rtfInTune') add(r, k, `${r.kind} RTF`, { better: 'lower', tol }, 'must not rise past the tolerance');
+      if (['wander', 'flutter', 'unsteady'].includes(r.kind) && k === 'rtfSteady') add(r, k, `${r.label} RTF`, { ok: s => a(s) <= 25, better: 'lower', tol }, 'wobbly, no vibrato: Steady on ≤25% of voiced frames, must not rise past the tolerance');
+      if ((r.kind === 'unsteady' || (r.kind === 'wrong' && Math.abs(r.extra) <= 30)) && k === 'rtfInTune') add(r, k, `${r.label} RTF`, { ok: s => a(s) <= 25 }, 'off pitch past the window: in tune on ≤25% of voiced frames');
+    }
+    // Tuner (measured only outside this mode): in tune and steady are good on a vibrato or straight note; a wrong note
+    // shouldn't read in tune, and a wobbly one shouldn't read steady
+    const wobbly = ['wander', 'flutter', 'unsteady'].includes(r.kind), good = ['vibrato', 'straight', 'vibrato-irregular'].includes(r.kind);
+    add(r, 'tunerInTune', 'Tuner', { better: good ? 'higher' : 'lower', tol: Math.max(5, spread(r, 'tunerInTune')) }, `must not ${good ? 'drop' : 'rise'} past the tolerance`);
+    add(r, 'tunerStable', 'Tuner', { better: wobbly ? 'lower' : 'higher', tol: Math.max(5, spread(r, 'tunerStable')) }, `must not ${wobbly ? 'rise' : 'drop'} past the tolerance`);
+    // Choir World: held in most runs
+    const held = side => r.runs[side].filter(x => x.cwHeld).length * 2 > r.runs[side].length;
+    const heldStr = side => r.runs[side].map(x => x.cwHeld ? '✓' : '✗').join('');
+    if (r.kind === 'vibrato' || r.kind === 'straight') (held('before') && !held('after') ? C.regression : !held('before') && !held('after') ? C.already : !held('before') ? C.fixed : C.pass)
+      .push(`${r.id} ${r.kind} Choir World held: master ${heldStr('before')} → branch ${heldStr('after')} · must be held`);
+    if (r.kind === 'wrong' && r.extra >= 80) (!held('before') && held('after') ? C.regression : held('before') && held('after') ? C.already : held('before') ? C.fixed : C.pass)
+      .push(`${r.id} ${r.label} Choir World held: master ${heldStr('before')} → branch ${heldStr('after')} · must not be held (past ±50)`);
+  }
+  log(`\n==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)`);
+  C.regression.forEach(x => log('REGRESSION ' + x));
+  log(`\n==== Fixed: fails on master and passes on the branch, or moves past the tolerance the right way`);
+  C.fixed.forEach(x => log('FIXED ' + x));
+  log(`\n==== Already failing: fails on master and on the branch (not caused by the branch)`);
+  C.already.forEach(x => log('ALREADY ' + x));
+  log(`\n==== VERDICT (regress, ${RUNS} runs per side, medians): ${C.regression.length} regression(s), ${C.fixed.length} fixed, ${C.already.length} already failing, ${C.pass.length} passed`);
+  C.pass.forEach(x => log('pass ' + x));
+  log(`\nlog: ${LOG}.log  json: ${LOG}.json`);
+  logf.end();
+  process.exitCode = C.regression.length ? 1 : 0;
+}
 
 (async () => {
   const only = process.argv[2] ? process.argv[2].split(',') : Object.keys(STIM);
   log(`vibfix ${stamp}  sides: ${SIDES.join(', ')}${PROD ? '  url: ' + PROD : '  before: ' + (process.env.VF_BEFORE || 'HEAD')}${REGRESS ? '  mode: regress (rises become "must not move")' : ''}`);
   execFileSync('node', [path.join(__dirname, 'realvib.js'), VS, '--json', path.join(TMP, 'rv.json')]);
   // VF_RESUME=<earlier .json of the same code>: keep its finished stimuli, run only the rest
-  const rows = process.env.VF_RESUME ? JSON.parse(fs.readFileSync(process.env.VF_RESUME)).filter(r => only.includes(r.id) && SIDES.every(w => r.res[w])) : [];
+  const rows = process.env.VF_RESUME ? JSON.parse(fs.readFileSync(process.env.VF_RESUME)).filter(r => only.includes(r.id) && SIDES.every(w => r.res[w]) && (!REGRESS || r.runs)) : [];
   if (rows.length) log(`resumed from ${process.env.VF_RESUME}: ${rows.map(r => r.id).join(', ')}`);
   for (const id of only) {
     if (rows.some(r => r.id === id)) continue;
     const st = stimulus(id), s = STIM[id];
     log(`\n== ${id}: ${s.label} — target ${st.target} (sung ${st.rv.centre > 0 ? '+' : ''}${st.rv.centre} ct, re-centred${s.extra ? `, then ${s.extra > 0 ? '+' : ''}${s.extra}` : ''}); offline gate: ${st.rv.gate ? 'vibrato' : 'as read'} ${st.rv.rate ?? '—'} Hz ±${st.rv.depth ?? '—'} r ${st.rv.r ?? '—'}`);
-    const res = {};
-    for (const which of SIDES) {
-      res[which] = await withPage(st.file, which, page => runAll(page, st.target));
-      const b = brief(res[which]);
-      log(`   ${which.padEnd(6)} Tuner in tune ${res[which].tuner.inTune}% stability ≥75 ${res[which].tuner.stable}% (mean ${res[which].tuner.stabMean}) of ${res[which].tuner.voiced}/${res[which].tuner.n} | Stay in Key in key ${res[which].stayKey.inKey}% of ${res[which].stayKey.voiced}/${res[which].stayKey.n} (result ${res[which].stayKey.result})`);
-      log(`   ${which.padEnd(6)} Pitch Match int ${res[which].pitch.intermediate.join('/')} pro ${res[which].pitch.professional.join('/')} | Drills ${res[which].drills.map(d => d.pitchAcc ?? '—').join('/')} | RTF in tune ${b.rtfInTune}% steady ${b.rtfSteady}% of ${res[which].rtf.voiced}/${res[which].rtf.n} voiced frames (${res[which].rtf.top}) | Choir World held ${res[which].choir.map(c => c.held ? '✓' : '✗').join('')} median ${b.cwCents} ct, report pitch ${res[which].choir.map(c => c.prPitch).join('/')} in tune ${res[which].choir.map(c => c.inTune).join(', ')}`);
+    const res = {}, runs = Object.fromEntries(SIDES.map(w => [w, []]));
+    for (let k = 0; k < RUNS; k++) for (const which of SIDES) { // regress mode: the sides alternate, so drift reaches both alike
+      const o = await withPage(st.file, which, page => runAll(page, st.target));
+      if (k === 0) res[which] = o;
+      runs[which].push(readings(o));
+      const b = brief(o), tag = (which + (RUNS > 1 ? ` #${k + 1}` : '')).padEnd(RUNS > 1 ? 9 : 6);
+      log(`   ${tag} Tuner in tune ${o.tuner.inTune}% stability ≥75 ${o.tuner.stable}% (mean ${o.tuner.stabMean}) of ${o.tuner.voiced}/${o.tuner.n} | Stay in Key in key ${o.stayKey.inKey}% of ${o.stayKey.voiced}/${o.stayKey.n} (result ${o.stayKey.result})`);
+      log(`   ${tag} Pitch Match int ${o.pitch.intermediate.join('/')} pro ${o.pitch.professional.join('/')} | Drills ${o.drills.map(d => d.pitchAcc ?? '—').join('/')} | RTF in tune ${b.rtfInTune}% steady ${b.rtfSteady}% of ${o.rtf.voiced}/${o.rtf.n} voiced frames (${o.rtf.top}) | Choir World held ${o.choir.map(c => c.held ? '✓' : '✗').join('')} median ${b.cwCents} ct, report pitch ${o.choir.map(c => c.prPitch).join('/')} in tune ${o.choir.map(c => c.inTune).join(', ')}`);
     }
-    rows.push({ id, ...s, target: st.target, rv: st.rv, res });
+    rows.push({ id, ...s, target: st.target, rv: st.rv, res, ...(REGRESS ? { runs } : {}) });
     fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1));
   }
   // Verdicts
+  if (REGRESS) return regressVerdict(rows);
   const P = [], F = [];
   const check = (ok, s) => (ok ? P : F).push(s);
   const val = (r, side, k) => brief(r.res[side])[k];
