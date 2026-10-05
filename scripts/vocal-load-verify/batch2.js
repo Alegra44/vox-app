@@ -13,11 +13,16 @@ const near = (tol, keys) => (a, b) => keys.every(k => {
 
 const FEATURES = [
   { key: 'tuner', label: 'Tuner (listens until stopped: 7 s)', kind: 'sidecar', shell: 'train', enter: train('tuner'), startBtn: 'micBtn', gauge: 'vlGaugeTuner', safari: true,
-    active: "mode==='tuner'", stopAfter: 7000, stop: p => p.locator('#micBtn').click(),
-    snap: () => ({ pitch: document.getElementById('pitchStat').textContent, freq: parseFloat(document.getElementById('freqStat').textContent),
-      stability: Math.round(sessionStabilityReadings.reduce((a, b) => a + b, 0) / Math.max(1, sessionStabilityReadings.length)) }),
-    // the saved score (the session's stability average) exactly; the Pitch readout is one frame's 100 − |cents| × 2, and
-    // a steady tone's detected pitch wobbles by a cent between frames, so ±2 points; the frequency readout ±2 Hz
+    active: "mode==='tuner'", stopAfter: 6000, stop: p => p.locator('#micBtn').click(),
+    // the Pitch and frequency readouts over the last second (6–7 s, every 50 ms), as medians: the Pitch readout is one
+    // frame's 100 − |cents| × 2, and a steady tone's detected pitch wobbles by a cent or two between frames, so one frame
+    // alone read 96 vs 100 with the same stability (2026-10-04); the stability is the session's average at the stop
+    snap: async () => {
+      const p = [], f = [], med = a => a.sort((x, y) => x - y)[a.length >> 1];
+      for (let i = 0; i < 20; i++) { p.push(parseFloat(document.getElementById('pitchStat').textContent)); f.push(parseFloat(document.getElementById('freqStat').textContent)); await new Promise(r => setTimeout(r, 50)); }
+      return { pitch: med(p) + '%', freq: med(f), stability: Math.round(sessionStabilityReadings.reduce((a, b) => a + b, 0) / Math.max(1, sessionStabilityReadings.length)) };
+    },
+    // the saved score (the session's stability average) exactly; the median Pitch readout ±2 points; the frequency ±2 Hz
     same: (a, b) => a.stability === b.stability && Math.abs(parseFloat(a.pitch) - parseFloat(b.pitch)) <= 2 && Math.abs(a.freq - b.freq) <= 2 },
   { key: 'interval', label: 'Interval Match: target C4, a pass', kind: 'sidecar', shell: 'train', enter: train('exercises'), startBtn: 'intervalListenBtn', gauge: 'vlGaugeInterval', tab: '[data-extype="interval"]',
     prep: 'intervalTargetMidi = 60',
