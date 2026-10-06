@@ -1383,6 +1383,8 @@
   .levelup-num{font-family:'Fraunces',serif;font-weight:600;font-size:40px;color:var(--brass);}
   .levelup-title{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);margin-top:6px;}
   .levelup-sub{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-top:6px;}
+  .levelup-why{font-size:14px;line-height:1.45;color:var(--text);margin-top:12px;max-width:300px;}
+  .levelup-why:empty{display:none;}
   @media (prefers-reduced-motion: reduce){
     .levelup-overlay, .levelup-card{transition:none;}
   }
@@ -1416,6 +1418,7 @@
     </div>
     <div class="levelup-title" id="levelupTitle">Level Up!</div>
     <div class="levelup-sub" id="levelupSub">Pitch Apprentice</div>
+    <div class="levelup-why" id="levelupWhy"></div>
   </div>
 </div>
 
@@ -6447,7 +6450,7 @@ const TRANSLATIONS = {
     teacher_student_plural:'students', teacher_student_singular:'student', teacher_toast_needstudent:'Add at least one student to the roster first.',
     timeline_breakthrough_p1:'Breakthrough on', timeline_breakthrough_p2:'— was averaging', timeline_breakthrough_p3:'before',
     timeline_empty:'Nothing logged yet — your first real assessment, breakthrough, or level-up will start the story here.',
-    timeline_first_assessment:'First assessment — Day 1 baseline set', timeline_new_record_p1:'New record:', timeline_reached_level_p1:'Reached Level',
+    timeline_first_assessment:'First assessment — Day 1 baseline set', timeline_new_record_p1:'New record:', levelup_why:'You levelled up: {list}', levelup_and:'and', levelup_records_one:'{n} new record', levelup_records_other:'{n} new records', levelup_breakthroughs_one:'{n} breakthrough', levelup_breakthroughs_other:'{n} breakthroughs', levelup_boss_wins_one:'{n} Boss Battle won', levelup_boss_wins_other:'{n} Boss Battles won', levelup_curriculum_one:'{n} curriculum day', levelup_curriculum_other:'{n} curriculum days', levelup_sessions_one:'{n} session', levelup_sessions_other:'{n} sessions', levelup_warmups_one:'{n} warm-up', levelup_warmups_other:'{n} warm-ups', levelup_streak:'a {n}-day streak', timeline_reached_level_p1:'Reached Level',
     todaysplan_dayssince:'day(s) since your last session', todaysplan_finishchallenge:'Finish with the Weekly Challenge',
     todaysplan_goodhabit:'Good habit before anything else', todaysplan_lowestscore:'Your lowest Skill Profile score',
     todaysplan_nodata:'No Skill Profile data yet — this starts building it', todaysplan_practiceregister:'Practice Register Coach',
@@ -7810,7 +7813,7 @@ const TRANSLATIONS = {
     teacher_student_plural:'élèves', teacher_student_singular:'élève', teacher_toast_needstudent:"Ajoutez au moins un élève à la liste d'abord.",
     timeline_breakthrough_p1:'Percée sur', timeline_breakthrough_p2:'— la moyenne était de', timeline_breakthrough_p3:'avant',
     timeline_empty:"Rien à afficher pour le moment — votre première vraie évaluation, percée ou montée de niveau commencera l'histoire ici.",
-    timeline_first_assessment:'Première évaluation — référence du Jour 1 établie', timeline_new_record_p1:'Nouveau record :', timeline_reached_level_p1:'Niveau atteint',
+    timeline_first_assessment:'Première évaluation — référence du Jour 1 établie', timeline_new_record_p1:'Nouveau record :', levelup_why:'Niveau supérieur : {list}', levelup_and:'et', levelup_records_one:'{n} nouveau record', levelup_records_other:'{n} nouveaux records', levelup_breakthroughs_one:'{n} percée', levelup_breakthroughs_other:'{n} percées', levelup_boss_wins_one:'{n} combat de Boss remporté', levelup_boss_wins_other:'{n} combats de Boss remportés', levelup_curriculum_one:'{n} jour du programme', levelup_curriculum_other:'{n} jours du programme', levelup_sessions_one:'{n} séance', levelup_sessions_other:'{n} séances', levelup_warmups_one:'{n} échauffement', levelup_warmups_other:'{n} échauffements', levelup_streak:'une série de {n} jours', timeline_reached_level_p1:'Niveau atteint',
     todaysplan_dayssince:'jour(s) depuis votre dernière session', todaysplan_finishchallenge:'Terminez avec le Défi Hebdomadaire',
     todaysplan_goodhabit:'Bonne habitude avant tout le reste', todaysplan_lowestscore:'Votre score de Profil Vocal le plus bas',
     todaysplan_nodata:'Pas encore de données de Profil Vocal — cela commence à les construire', todaysplan_practiceregister:'Pratiquez le Coach de Registre',
@@ -9173,7 +9176,7 @@ const TRANSLATIONS = {
     teacher_student_plural:'estudiantes', teacher_student_singular:'estudiante', teacher_toast_needstudent:'Añade al menos un estudiante a la lista primero.',
     timeline_breakthrough_p1:'Avance en', timeline_breakthrough_p2:'— antes promediabas', timeline_breakthrough_p3:'antes',
     timeline_empty:'Nada registrado todavía — tu primera evaluación, avance o subida de nivel real empezará la historia aquí.',
-    timeline_first_assessment:'Primera evaluación — referencia del Día 1 establecida', timeline_new_record_p1:'Nuevo récord:', timeline_reached_level_p1:'Nivel alcanzado',
+    timeline_first_assessment:'Primera evaluación — referencia del Día 1 establecida', timeline_new_record_p1:'Nuevo récord:', levelup_why:'Subiste de nivel: {list}', levelup_and:'y', levelup_records_one:'{n} récord nuevo', levelup_records_other:'{n} récords nuevos', levelup_breakthroughs_one:'{n} avance', levelup_breakthroughs_other:'{n} avances', levelup_boss_wins_one:'{n} batalla de jefe ganada', levelup_boss_wins_other:'{n} batallas de jefe ganadas', levelup_curriculum_one:'{n} día del programa', levelup_curriculum_other:'{n} días del programa', levelup_sessions_one:'{n} sesión', levelup_sessions_other:'{n} sesiones', levelup_warmups_one:'{n} calentamiento', levelup_warmups_other:'{n} calentamientos', levelup_streak:'una racha de {n} días', timeline_reached_level_p1:'Nivel alcanzado',
     todaysplan_dayssince:'día(s) desde tu última sesión', todaysplan_finishchallenge:'Termina con el Reto Semanal',
     todaysplan_goodhabit:'Buen hábito antes que nada', todaysplan_lowestscore:'Tu puntuación más baja del Perfil Vocal',
     todaysplan_nodata:'Aún sin datos del Perfil Vocal — esto empieza a construirlos', todaysplan_practiceregister:'Practica el Entrenador de Registro',
@@ -10536,7 +10539,7 @@ const TRANSLATIONS = {
     teacher_student_plural:'öğrenci', teacher_student_singular:'öğrenci', teacher_toast_needstudent:'Önce listeye en az bir öğrenci ekleyin.',
     timeline_breakthrough_p1:'Atılım:', timeline_breakthrough_p2:'— önceki ortalama', timeline_breakthrough_p3:'idi',
     timeline_empty:'Henüz bir şey kaydedilmedi — ilk gerçek değerlendirmeniz, atılımınız ya da seviye atlamanız hikayeyi burada başlatacak.',
-    timeline_first_assessment:'İlk değerlendirme — 1. Gün referansı belirlendi', timeline_new_record_p1:'Yeni rekor:', timeline_reached_level_p1:'Ulaşılan Seviye',
+    timeline_first_assessment:'İlk değerlendirme — 1. Gün referansı belirlendi', timeline_new_record_p1:'Yeni rekor:', levelup_why:'Seviye atladın: {list}', levelup_and:'ve', levelup_records_one:'{n} yeni rekor', levelup_records_other:'{n} yeni rekor', levelup_breakthroughs_one:'{n} atılım', levelup_breakthroughs_other:'{n} atılım', levelup_boss_wins_one:'{n} Boss Savaşı kazanıldı', levelup_boss_wins_other:'{n} Boss Savaşı kazanıldı', levelup_curriculum_one:'{n} program günü', levelup_curriculum_other:'{n} program günü', levelup_sessions_one:'{n} seans', levelup_sessions_other:'{n} seans', levelup_warmups_one:'{n} ısınma', levelup_warmups_other:'{n} ısınma', levelup_streak:'{n} günlük seri', timeline_reached_level_p1:'Ulaşılan Seviye',
     todaysplan_dayssince:'gündür son oturumunuzdan beri', todaysplan_finishchallenge:'Haftalık Meydan Okuma ile bitirin',
     todaysplan_goodhabit:'Her şeyden önce iyi bir alışkanlık', todaysplan_lowestscore:'En düşük Perde Profili skorunuz',
     todaysplan_nodata:'Henüz Perde Profili verisi yok — bu, verileri oluşturmaya başlar', todaysplan_practiceregister:'Register Koçu ile pratik yapın',
@@ -10969,6 +10972,38 @@ async function loadProgress(){
   }catch(e){ console.error('progress load error', e); }
   progress = {highestMidi:null, lowestMidi:null, totalSessions:0, lastPracticeDate:null, streak:0, history:{}};
 }
+// (d) Level-up explanation: at each level-up, what happened since the last one, from counters that already exist on
+// the server, then a snapshot of them (user_progress.levelup_snapshot) for the next one. A null snapshot (the first
+// level-up after this shipped) counts from the start of the account.
+const LEVELUP_ITEMS = ['records', 'breakthroughs', 'boss_wins', 'curriculum_days', 'sessions', 'warmups']; // priority
+const LEVELUP_KEY = {records:'records', breakthroughs:'breakthroughs', boss_wins:'boss_wins', curriculum_days:'curriculum', sessions:'sessions', warmups:'warmups'};
+function levelupCounters(){
+  const p = progress || {};
+  return {
+    sessions: p.totalSessions||0,
+    records: (p.timelineEvents||[]).filter(e=>e && e.type==='record').length,
+    streak: p.streak||0,
+    breakthroughs: p.breakthroughCount||0,
+    warmups: p.warmupsCompleted||0,
+    boss_wins: typeof p.bossVictories==='number' ? p.bossVictories : 0,
+    curriculum_days: Object.values(p.curriculumDaysCompleted||{}).filter(Boolean).length,
+  };
+}
+// "A", "A and B", "A, B and C" in the page's language
+function levelupJoin(parts){
+  if(parts.length<2) return parts.join('');
+  return parts.slice(0,-1).join(', ') + ' ' + t('levelup_and') + ' ' + parts[parts.length-1];
+}
+// The one line: at most 3 non-zero items in priority order, plus the streak when it's 3 or more; '' when nothing
+function levelupWhyText(prev, now){
+  const parts = [];
+  for(const k of LEVELUP_ITEMS){
+    const n = Math.max(0, (now[k]||0) - ((prev && prev[k])||0));
+    if(n>0 && parts.length<3) parts.push(t(`levelup_${LEVELUP_KEY[k]}_${n===1?'one':'other'}`).replace('{n}', n));
+  }
+  if(now.streak>=3) parts.push(t('levelup_streak').replace('{n}', now.streak));
+  return parts.length ? t('levelup_why').replace('{list}', levelupJoin(parts)) : '';
+}
 let lastKnownLevel = null;
 async function saveProgress(){
   try{
@@ -10979,16 +11014,24 @@ async function saveProgress(){
     const {level, name} = levelForXp(progress.xp||0);
     const priorLevel = lastKnownLevel;
     lastKnownLevel = level;
-    if(priorLevel!==null && level>priorLevel) showLevelUp(level, name);
+    if(priorLevel!==null && level>priorLevel){
+      const now = levelupCounters(), why = levelupWhyText(progress.levelupSnapshot, now);
+      // the new snapshot goes in before anything else saves (showLevelUp's timeline event saves too), so no save in
+      // flight can carry the old one back
+      progress.levelupSnapshot = {level, at:new Date().toISOString(), ...now};
+      showLevelUp(level, name, why);
+      saveProgress();
+    }
   }
 }
-function showLevelUp(level, name){
+function showLevelUp(level, name, why){
   document.getElementById('levelupNum').textContent = level;
   document.getElementById('levelupSub').textContent = name;
+  document.getElementById('levelupWhy').textContent = why || '';
   const overlay = document.getElementById('levelupOverlay');
   overlay.classList.add('levelup-show');
   clearTimeout(window._levelupTimer);
-  window._levelupTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), 2400);
+  window._levelupTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), why ? 4500 : 2400); // time to read the line
   if(typeof logTimelineEvent==='function') logTimelineEvent('levelup', `${t('timeline_reached_level_p1')} ${level} — ${name}`);
 }
 document.getElementById('levelupOverlay')?.addEventListener('click', ()=>{
