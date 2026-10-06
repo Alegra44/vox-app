@@ -217,6 +217,59 @@ failure.** Then on production: batch1, the bleed checks, and `levels.js` if it c
 - The new text goes into all four languages.
 - **Report the migration and the API change to the user before applying the migration.**
 
+**Proposal (2026-10-06), awaiting the user's approval. Nothing applied.**
+
+*Counters in the snapshot* (all exist on the server today, in `user_progress`):
+
+| Key | From | Shown as |
+|---|---|---|
+| `sessions` | `total_sessions` | "9 sessions" (difference) |
+| `records` | `timeline_events` entries of type `record` (never trimmed) | "2 new records" (difference) |
+| `streak` | `streak` | "a 5-day streak" (current value, shown when ≥ 2) |
+| `breakthroughs` | `breakthrough_count` | "1 breakthrough" (difference) |
+| `warmups` | `warmups_completed` | "3 warm-ups" (difference) |
+| `boss_wins` | `boss_victories` (a number) | "1 Boss Battle won" (difference) |
+| `curriculum_days` | `curriculum_days_completed`, days marked done | "2 curriculum days" (difference) |
+| `level`, `at` | the level reached, ISO time | not shown |
+
+**Passed drills have no server counter**: Register Drills results aren't stored, and rehearsal passes are kept only
+in the browser (`rehearsalPasses`), so they can't follow the account. Left out; adding one would be a new counter.
+
+*Migration* (`supabase/migrations/0008_levelup_snapshot.sql`, written only after approval):
+```sql
+-- (d) Level-up explanation: the counters at the last level-up, so the next one can say what changed since.
+-- Null until the first level-up after (d) ships; that one counts from the start of the account (a null snapshot = all 0).
+alter table public.user_progress add column levelup_snapshot jsonb;
+comment on column public.user_progress.levelup_snapshot is
+  '{level, at, sessions, records, streak, breakthroughs, warmups, boss_wins, curriculum_days} at the last level-up (client-written)';
+```
+No new RLS: the row is already the user's own (like `xp`), and the snapshot only feeds a sentence the user sees.
+
+*API change*: add `"levelup_snapshot"` to `PROGRESS_PATCHABLE_COLUMNS` in `supabase/functions/_shared/patchableColumns.ts`,
+then redeploy the `api` function. `GET /me/progress` already returns every column. No new route.
+
+*Client*: in `saveProgress()`, when a level-up is detected: the difference between the counters now and
+`progress.levelupSnapshot` (or 0 when null) → the up to three largest non-zero items, plus the streak when ≥ 2 → one line
+under the level name in the level-up card (`#levelupWhy`); then `progress.levelupSnapshot = {level, at, …counters now}`
+and save. Nothing to show (all zero): no line.
+
+*Text, four languages* (`{list}` joined with ", " and the language's "and" before the last item):
+
+| Key | EN | FR | ES | TR |
+|---|---|---|---|---|
+| `levelup_why` | You levelled up: {list} | Niveau supérieur : {list} | Subiste de nivel: {list} | Seviye atladın: {list} |
+| `levelup_and` | and | et | y | ve |
+| `levelup_sessions` | {n} session / {n} sessions | {n} séance / {n} séances | {n} sesión / {n} sesiones | {n} seans |
+| `levelup_records` | {n} new record / {n} new records | {n} nouveau record / {n} nouveaux records | {n} récord nuevo / {n} récords nuevos | {n} yeni rekor |
+| `levelup_streak` | a {n}-day streak | une série de {n} jours | una racha de {n} días | {n} günlük seri |
+| `levelup_breakthroughs` | {n} breakthrough / {n} breakthroughs | {n} percée / {n} percées | {n} avance / {n} avances | {n} atılım |
+| `levelup_warmups` | {n} warm-up / {n} warm-ups | {n} échauffement / {n} échauffements | {n} calentamiento / {n} calentamientos | {n} ısınma |
+| `levelup_boss_wins` | {n} Boss Battle won / {n} Boss Battles won | {n} combat de Boss remporté / {n} combats de Boss remportés | {n} batalla de jefe ganada / {n} batallas de jefe ganadas | {n} Boss Savaşı kazanıldı |
+| `levelup_curriculum` | {n} curriculum day / {n} curriculum days | {n} jour du programme / {n} jours du programme | {n} día del programa / {n} días del programa | {n} program günü |
+
+Terms follow the app's existing ones (Percées / Avances / Atılımlar, Échauffement / Calentamiento / Isınma, Série,
+Boss Battles). Example: "You levelled up: 9 sessions, 2 new records and a 5-day streak."
+
 ## Practice fixes (b) + (c): listening window and shared note picker (live 2026-10-05, dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X)
 
 Merged as e01912b. Production (paced, the same checks as locally, accounts cleaned up): `listenwin.js` 27/27 (no voice:
