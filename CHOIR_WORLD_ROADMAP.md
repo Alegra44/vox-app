@@ -155,6 +155,13 @@ Known issues found by the loopback check (not caused by (a); open):
   choir); Harmony Memory stage 1 holds 3 of 8 notes (your part as the guide). Real devices with echo cancellation
   should fare better; untested there. Fix candidates: score only frames that differ from what is playing, or warn when
   the mic correlates with the output.
+- [ ] **Scale Run (Intermediate / Professional) scores its own reference tone.** Each step plays a 0.5 s reference, waits
+  `scaleGap` (450 / 280 ms) and starts listening, so the last 50 / 220 ms of the tone is in the capture. With nobody
+  singing, Professional shows 93–94% on master at −20 and −10 dB coupling; 96% with (a)'s louder reference (+2–3).
+  Fix candidate: start listening when the reference ends (gap measured from the tone's end). Not fixed: outside (a).
+
+**Live 2026-10-06 as dpl_5GhGgvgLAQCFZQXnmwdmAn8UcyKh** (merge e61dd49). Production, paced: `levels.js` 0 clipped, nothing
+over 0.95 (loudest 0.949); batch1 112/112; firsttick 15/15; `loopback.js` the same counts as the branch locally.
 
 
 Measured with `levels.js` (ce0d435): reference tones −16.5 to −18 dBFS RMS, guide notes −23.4, backing and choir −9.6

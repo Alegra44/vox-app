@@ -13,13 +13,14 @@
 // nobody singing. Before (LB_BEFORE, default master) at its own levels; after (the working tree) with the guide level
 // as built, then the harmonic tone swept from −23.4 to −12 dBFS RMS in place of playGuideTone, to find the highest
 // level with 0 phantom notes. (2026-10-05: none; even master's level has some, so guides stay master's sine.)
-// Usage: [LB_BEFORE=<ref>] [LB_ONLY=before|after] node scripts/vq-verify/loopback.js
+// LB_URL=<deployed url>: that page alone, as built (no sweep), signed out.
+// Usage: [LB_BEFORE=<ref>] [LB_ONLY=before|after] [LB_URL=<url>] node scripts/vq-verify/loopback.js
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup');
 const { execFileSync } = require('child_process');
 const path = require('path'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), REF = process.env.LB_BEFORE || 'master', LOGDIR = path.join(__dirname, 'logs');
-const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `loopback-local-${stamp}`);
+const ROOT = path.resolve(__dirname, '../..'), REF = process.env.LB_BEFORE || 'master', URL_ = process.env.LB_URL, LOGDIR = path.join(__dirname, 'logs');
+const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `loopback-${URL_ ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
 const COUPLINGS = [[-20, 0.1], [-10, 0.316]];
@@ -49,7 +50,7 @@ const INIT = () => {
 
 async function open(b, side, coupling) {
   const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } });
-  await ctx.route('http://localhost:8765/**', r => {
+  if (!URL_) await ctx.route('http://localhost:8765/**', r => {
     const p = new URL(r.request().url()).pathname.slice(1) || 'index.html', type = p.endsWith('.js') ? 'text/javascript' : 'text/html';
     if (side === 'before') return r.fulfill({ body: execFileSync('git', ['show', `${REF}:deploy/${p}`], { cwd: ROOT, maxBuffer: 1 << 28 }), contentType: type });
     r.fulfill({ path: path.join(ROOT, 'deploy', p), contentType: type });
@@ -57,7 +58,7 @@ async function open(b, side, coupling) {
   await ctx.addInitScript(INIT);
   const page = await ctx.newPage(), errors = [];
   page.on('pageerror', e => errors.push(String(e)));
-  await page.goto('http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
+  await page.goto(URL_ || 'http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) { await lang.click(); await page.waitForTimeout(200); }
   await page.evaluate(async c => {
     requireProFeature = () => true; blockExercise = () => false; requireChoirWorld = () => true;
@@ -117,9 +118,9 @@ async function memory(page, stage) {
 
 (async () => {
   const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
-  const only = process.env.LB_ONLY, R = { before: {}, after: {} };
-  log(`loopback ${stamp} · before: ${REF} · after: working tree · nobody singing · song: hymn, Harmony part Alto, rehearsal part Lead`);
-  for (const [cdb, c] of COUPLINGS) for (const side of ['before', 'after']) {
+  const only = URL_ ? 'prod' : process.env.LB_ONLY, R = { before: {}, after: {}, prod: {} };
+  log(`loopback ${stamp} · ${URL_ ? `url: ${URL_}` : `before: ${REF} · after: working tree`} · nobody singing · song: hymn, Harmony part Alto, rehearsal part Lead`);
+  for (const [cdb, c] of COUPLINGS) for (const side of URL_ ? ['prod'] : ['before', 'after']) {
     if (only && only !== side) continue;
     const { ctx, page, errors } = await open(b, side, c), out = R[side][cdb] = {};
     log(`\n== ${side}, coupling ${cdb} dB`);
@@ -127,6 +128,9 @@ async function memory(page, stage) {
     if (side === 'before') {
       show('Harmony, piano guide (master level)', out.guide = await harmony(page, { guide: true, distraction: false }));
       show('Harmony, distraction (master level)', out.distraction = await harmony(page, { guide: false, distraction: true }));
+    } else if (side === 'prod') {
+      show('Harmony, piano guide (as built)', out.guideBuilt = await harmony(page, { guide: true, distraction: false }));
+      show('Harmony, distraction (as built)', out.distractionBuilt = await harmony(page, { guide: false, distraction: true }));
     } else {
       show('Harmony, piano guide (as built)', out.guideBuilt = await harmony(page, { guide: true, distraction: false }));
       show('Harmony, distraction (as built)', out.distractionBuilt = await harmony(page, { guide: false, distraction: true }));
