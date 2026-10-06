@@ -8,11 +8,12 @@
 // shared mic and the register input are in the same state; only RTF is measured (6 s, % of 50 ms samples voiced / in tune).
 // Usage: [RS_REPS=3] [RS_PACE_MS=45000] node scripts/vq-verify/rtfsoft.js [stimuli, comma-separated]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track } = require('../choir-verify/testAccounts');
-const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(os.tmpdir(), 'vq-verify', 'gate');
+const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(TESTDATA, 'gate');
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.RS_URL || 'https://deploy-alegra1122.vercel.app', BEFORE_REF = process.env.RS_BEFORE || 'b37cd57';
 const REPS = +(process.env.RS_REPS || 3), PACE = +(process.env.RS_PACE_MS ?? 45000), TARGET = 57;
@@ -22,7 +23,7 @@ const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG =
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const BEFORE = path.join(os.tmpdir(), 'vq-verify', 'rtfsoft-before.html');
+const BEFORE = path.join(TESTDATA, 'rtfsoft-before.html');
 fs.writeFileSync(BEFORE, execFileSync('git', ['show', `${BEFORE_REF}:deploy/index.html`], { cwd: ROOT, maxBuffer: 1 << 28 }));
 const HTML = { before: BEFORE, after: path.join(ROOT, 'deploy/index.html') };
 const ACCT = Object.fromEntries(SIDES.map(s => [s, { email: track(`voxcoach-rtfsoft-${s}-${Date.now()}@example.com`), password: 'RS-' + Math.random().toString(36).slice(2) + '!x9', auth: null }]));

@@ -9,7 +9,7 @@
 //   Choir World      its capture and verdict code (captureNoteFrame → judgeHeldNote → Performance Report), one held
 //                    note of 3.3 s on the sung note (the song timing is the only part replaced)                  (shared mic)
 // The singing: sustained notes from VocalSet (Wilkins et al. 2018, CC BY 4.0, doi:10.5281/zenodo.1442513; clips from the
-// Hugging Face mirror Bill13579/vocalset-mirror, in %TEMP%/vq-verify/vocalset with manifest.json), each centred on its
+// Hugging Face mirror Bill13579/vocalset-mirror, in $VOXCOACH_TESTDATA (~/VoxCoachTestData)/vocalset with manifest.json), each centred on its
 // semitone and looped forward/backward (realstim.py). Plus real notes made deliberately wrong: shifted +60 / +40 ct, a
 // slow ±60 ct wander, an 11 Hz ±40 ct flutter. Full log and JSON go to scripts/vq-verify/logs/.
 // VF_MODE=regress (local only): a master-vs-branch regression run, for changes that aren't the vibrato fix. Both sides
@@ -21,10 +21,11 @@
 // Without it, the checks prove the vibrato fix itself (run against d7a5691, the last commit before it).
 // Usage: [VF_URL=<url>] [VF_MODE=regress] [VF_PACE_MS=45000] [VF_RESUME=logs/<earlier>.json] node scripts/vq-verify/vibfix.js [stimulus ids, comma-separated]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(os.tmpdir(), 'vq-verify', 'vibfix'), VS = path.join(os.tmpdir(), 'vq-verify', 'vocalset');
+const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(TESTDATA, 'vibfix'), VS = path.join(TESTDATA, 'vocalset');
 fs.mkdirSync(TMP, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.VF_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];

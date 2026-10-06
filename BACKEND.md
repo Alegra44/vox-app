@@ -13,7 +13,7 @@ what's actually been confirmed vs. just wired.
 
 **`deploy/index.html` is the one real source file for the client.** It's the
 file Vercel actually serves at `deploy-alegra1122.vercel.app` (deployed via
-`vercel deploy --prod` from inside `deploy/`, which is linked to the Vercel
+`npx vercel@62.2.0 deploy --prod --yes --scope alegra1122` from inside `deploy/`, CLI pinned: see HANDOFF.md; linked to the Vercel
 project via `deploy/.vercel/project.json`) — edit it directly for any client
 fix, then redeploy from `deploy/`.
 

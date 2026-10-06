@@ -6,10 +6,11 @@
 // showed, and 100 − mean|c| × multiplier recomputed from the logged frames.
 // Usage: node scripts/vq-verify/pmframes.js [stimulus id, default W2] [target midi, default from rv.json]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup');
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(os.tmpdir(), 'vq-verify', 'vibfix');
+const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(TESTDATA, 'vibfix');
 const LOGDIR = path.join(__dirname, 'logs'), stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const LOG = path.join(LOGDIR, `pmframes-local-${stamp}`), logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };

@@ -24,7 +24,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 - **Write every approved spec into the repo (`CHOIR_WORLD_ROADMAP.md` and this file) before building it** (user,
   2026-10-05: the spec for (a) lived only in chat and was lost).
 - Production deploys need the user's explicit approval. Run from `deploy/`:
-  `npx vercel@latest deploy --prod --yes --scope alegra1122` (without `--scope` the CLI answers "Not authorized").
+  `npx vercel@62.2.0 deploy --prod --yes --scope alegra1122` (without `--scope` the CLI answers "Not authorized").
+  The CLI is pinned to 62.2.0: on 2026-10-06, 62.4.0 answered "Not authorized" while logged in (`whoami` fine), and
+  62.2.0 deployed. Try newer versions again later and move the pin when one works.
   The user often runs this themselves.
 - Verification means real measurements (AudioParam values, per-frame pitch through the app's own code), never claims.
 - Every verify script that creates accounts wraps each address in `track()` from `scripts/choir-verify/testAccounts.js`.
@@ -43,6 +45,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`).
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
+   Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
+   issues (app-wide)"): with nobody singing, the app's own playback is credited (Entrance Trainer 8/8 entrances,
+   Harmony Arena 0–8/8 notes, Harmony Memory 3/8 held); echo cancellation on real devices untested.
 5. Redesign phase 4 onwards. **Item 4** (Glider octave crash) comes after item 3.
 
 Idea for redesign phase 1 (don't change it before then): `onSignedIn` loads `/me` and then `/me/progress` one after
@@ -185,11 +190,11 @@ billing columns server-only · vibrato tolerance in pitch graders.
    `python3 -m venv .venv && source .venv/bin/activate && pip install numpy imageio-ffmpeg`
    Activate the venv before running any vq-verify script.
 
-3. **Temp folder.** macOS clears `$TMPDIR` of files not used for a few days: on 2026-10-06 it deleted the VocalSet
-   clips and the noise-gate stimuli overnight. vibfix now reuses its built stimuli when the clips are gone; fetching
-   them again (step 7) brings everything back. Moving the test data to a folder outside `$TMPDIR` would stop this.
-   **Temp folder (as set up).** Node scripts use `os.tmpdir()/vq-verify` (`$TMPDIR` on macOS). `gatestim.py` uses
-   `$TEMP` or `/tmp`. Put `export TEMP="$TMPDIR"` in `~/.zshrc` so both use the same folder.
+3. **Test data folder.** Every verify script keeps its test data (recordings, built stimuli, scratch copies) in
+   `~/VoxCoachTestData`, or wherever `VOXCOACH_TESTDATA` points (`scripts/testdata.js`; `gatestim.py` reads the same
+   variable). Not `$TMPDIR`: macOS clears it of files not used for a few days, and on 2026-10-06 it deleted the
+   VocalSet clips and the noise stimuli overnight. Only the test-account ledgers stay in `$TMPDIR` (they're meant to be
+   short-lived).
 
 4. **Supabase CLI link.** Needed by `testAccounts.js` (`npx supabase db query --linked`), migrations and function
    deploys:
@@ -204,14 +209,12 @@ billing columns server-only · vibrato tolerance in pitch graders.
    `supabase/functions/.env` and fill it in. Real secrets live in Supabase (`npx supabase secrets list`). Stripe
    secrets aren't set yet.
 
-7. **Test recordings (VocalSet and the noise stimuli).** About 620 MB, all regenerable. Nothing is committed.
-   - VocalSet clips go in `$TMPDIR/vq-verify/vocalset`. They come from the Hugging Face mirror
-     `Bill13579/vocalset-mirror` (CC BY 4.0). The clip naming and labels are in the headers of `realvib.js` and
-     `gatestim.py`.
-   - vibfix stimuli (`vq-verify/vibfix/stim-*.wav`) are rebuilt by `vibfix.js` itself through `realstim.py`.
-   - Noise-gate stimuli (`vq-verify/gate/`) come from `python scripts/vq-verify/gatestim.py`, after vibfix has made
-     its stims. Its header lists the LibriVox and archive.org sources to download into `gate/src`.
-   - Copying the Windows `%TEMP%\vq-verify` folder over by USB or cloud saves the downloads.
+7. **Test recordings (VocalSet and the noise stimuli).** About 620 MB, all regenerable, nothing committed. With the
+   venv active: `python scripts/vq-verify/fetchdata.py` fetches the 18 VocalSet clips the scripts use (Hugging Face
+   mirror `Bill13579/vocalset-mirror`, CC BY 4.0, by row, label checked) and the public-domain sources of the noise
+   recordings (LibriVox, archive.org), cut with ffmpeg into `gate/real-*.wav`. Then `python
+   scripts/vq-verify/gatestim.py` builds noisegate's stimuli (it needs vibfix's `stim-S1.wav`: run vibfix once first);
+   vibfix builds its own.
 
 8. **Claude Code memory.** Claude's notes were stored on the Windows machine and won't come along. This file
    replaces them. On the Mac, ask Claude to read `HANDOFF.md` and `CHOIR_WORLD_ROADMAP.md` first.

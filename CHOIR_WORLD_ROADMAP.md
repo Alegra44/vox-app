@@ -150,11 +150,7 @@ analyser, one-off: 6 reruns identical), batch3a/3b/3c identical, noisegate 153/7
 0 → 1, which also flipped on 2026-10-04 with an unrelated branch), vibfix regress 0 regressions / 2 already failing.
 
 Known issues found by the loopback check (not caused by (a); open):
-- [ ] **Speaker bleed is credited as singing.** With nobody singing and the speakers reaching the mic (no echo
-  cancellation): Harmony Arena's piano guide lands 1–8 of 8 notes; the Entrance Trainer claims 8 of 8 entrances (the
-  choir); Harmony Memory stage 1 holds 3 of 8 notes (your part as the guide). Real devices with echo cancellation
-  should fare better; untested there. Fix candidates: score only frames that differ from what is playing, or warn when
-  the mic correlates with the output.
+- [ ] **Speaker bleed scores as singing**: now a scoped item under "Known issues (app-wide)", next to item 3.
 - [ ] **Scale Run (Intermediate / Professional) scores its own reference tone.** Each step plays a 0.5 s reference, waits
   `scaleGap` (450 / 280 ms) and starts listening, so the last 50 / 220 ms of the tone is in the capture. With nobody
   singing, Professional shows 93–94% on master at −20 and −10 dB coupling; 96% with (a)'s louder reference (+2–3).
@@ -221,6 +217,59 @@ failure.** Then on production: batch1, the bleed checks, and `levels.js` if it c
 - The new text goes into all four languages.
 - **Report the migration and the API change to the user before applying the migration.**
 
+**Proposal (2026-10-06), awaiting the user's approval. Nothing applied.**
+
+*Counters in the snapshot* (all exist on the server today, in `user_progress`):
+
+| Key | From | Shown as |
+|---|---|---|
+| `sessions` | `total_sessions` | "9 sessions" (difference) |
+| `records` | `timeline_events` entries of type `record` (never trimmed) | "2 new records" (difference) |
+| `streak` | `streak` | "a 5-day streak" (current value, shown when ≥ 2) |
+| `breakthroughs` | `breakthrough_count` | "1 breakthrough" (difference) |
+| `warmups` | `warmups_completed` | "3 warm-ups" (difference) |
+| `boss_wins` | `boss_victories` (a number) | "1 Boss Battle won" (difference) |
+| `curriculum_days` | `curriculum_days_completed`, days marked done | "2 curriculum days" (difference) |
+| `level`, `at` | the level reached, ISO time | not shown |
+
+**Passed drills have no server counter**: Register Drills results aren't stored, and rehearsal passes are kept only
+in the browser (`rehearsalPasses`), so they can't follow the account. Left out; adding one would be a new counter.
+
+*Migration* (`supabase/migrations/0008_levelup_snapshot.sql`, written only after approval):
+```sql
+-- (d) Level-up explanation: the counters at the last level-up, so the next one can say what changed since.
+-- Null until the first level-up after (d) ships; that one counts from the start of the account (a null snapshot = all 0).
+alter table public.user_progress add column levelup_snapshot jsonb;
+comment on column public.user_progress.levelup_snapshot is
+  '{level, at, sessions, records, streak, breakthroughs, warmups, boss_wins, curriculum_days} at the last level-up (client-written)';
+```
+No new RLS: the row is already the user's own (like `xp`), and the snapshot only feeds a sentence the user sees.
+
+*API change*: add `"levelup_snapshot"` to `PROGRESS_PATCHABLE_COLUMNS` in `supabase/functions/_shared/patchableColumns.ts`,
+then redeploy the `api` function. `GET /me/progress` already returns every column. No new route.
+
+*Client*: in `saveProgress()`, when a level-up is detected: the difference between the counters now and
+`progress.levelupSnapshot` (or 0 when null) → the up to three largest non-zero items, plus the streak when ≥ 2 → one line
+under the level name in the level-up card (`#levelupWhy`); then `progress.levelupSnapshot = {level, at, …counters now}`
+and save. Nothing to show (all zero): no line.
+
+*Text, four languages* (`{list}` joined with ", " and the language's "and" before the last item):
+
+| Key | EN | FR | ES | TR |
+|---|---|---|---|---|
+| `levelup_why` | You levelled up: {list} | Niveau supérieur : {list} | Subiste de nivel: {list} | Seviye atladın: {list} |
+| `levelup_and` | and | et | y | ve |
+| `levelup_sessions` | {n} session / {n} sessions | {n} séance / {n} séances | {n} sesión / {n} sesiones | {n} seans |
+| `levelup_records` | {n} new record / {n} new records | {n} nouveau record / {n} nouveaux records | {n} récord nuevo / {n} récords nuevos | {n} yeni rekor |
+| `levelup_streak` | a {n}-day streak | une série de {n} jours | una racha de {n} días | {n} günlük seri |
+| `levelup_breakthroughs` | {n} breakthrough / {n} breakthroughs | {n} percée / {n} percées | {n} avance / {n} avances | {n} atılım |
+| `levelup_warmups` | {n} warm-up / {n} warm-ups | {n} échauffement / {n} échauffements | {n} calentamiento / {n} calentamientos | {n} ısınma |
+| `levelup_boss_wins` | {n} Boss Battle won / {n} Boss Battles won | {n} combat de Boss remporté / {n} combats de Boss remportés | {n} batalla de jefe ganada / {n} batallas de jefe ganadas | {n} Boss Savaşı kazanıldı |
+| `levelup_curriculum` | {n} curriculum day / {n} curriculum days | {n} jour du programme / {n} jours du programme | {n} día del programa / {n} días del programa | {n} program günü |
+
+Terms follow the app's existing ones (Percées / Avances / Atılımlar, Échauffement / Calentamiento / Isınma, Série,
+Boss Battles). Example: "You levelled up: 9 sessions, 2 new records and a 5-day streak."
+
 ## Practice fixes (b) + (c): listening window and shared note picker (live 2026-10-05, dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X)
 
 Merged as e01912b. Production (paced, the same checks as locally, accounts cleaned up): `listenwin.js` 27/27 (no voice:
@@ -241,6 +290,20 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
   mean |c| 44 against 38–39. The looped stimulus has no onset, so it isn't master scoring onset frames.
 
 ## Known issues (app-wide)
+
+- [ ] **Speaker bleed scores as singing** (scoped, logged 2026-10-06; not fixed; sits next to item 3, one mic stream per
+  feature: HANDOFF.md, "Order of work"). Found by `scripts/vq-verify/loopback.js`, which feeds the app's own playback
+  back into its own mic with nobody singing, at a speaker-to-mic coupling of −20 dB (a laptop's own speakers and mic)
+  and −10 dB (worst case), with no echo cancellation. Production and local agree:
+  - **Entrance & Cutoff Trainer:** 8 of 8 entrances claimed (the choir's playback); at −10 dB also 4 count-in bleed
+    hits and the "Speaker bleed detected" warning.
+  - **Harmony Arena, piano guide on:** 0–8 of 8 notes landed (counted in Part Accuracy): 0–1 at −20 dB, 8 at −10 dB.
+    The guide plays your own part's note, so its bleed reads as in tune.
+  - **Harmony Memory stage 1:** 3 of 8 notes held (your part as the full guide).
+  - **Echo cancellation on real devices hasn't been tested.** The shared mic asks for it (it would remove much of
+    this); the register input doesn't. Measure on real laptops and phones before choosing a fix.
+  - Fix candidates (not chosen): score only frames that don't match what's playing; or warn when the mic correlates
+    with the output; or tie it to item 3's per-feature streams. Scale Run's case was fixed separately (2026-10-06).
 
 - **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
   (`text-transform: uppercase`) is then transformed with English rules, which is wrong in Turkish: `i`

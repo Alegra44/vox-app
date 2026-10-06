@@ -2,13 +2,14 @@
 // testAccounts.js), and a page on the deployed URL or on deploy/ served locally against the production backend.
 // Run from the main checkout (the Supabase CLI link lives there): node scripts/warmup-verify/<script>.js [url]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db } = require('../choir-verify/testAccounts');
 
 const URL_ = process.argv[2] && /^https?:/.test(process.argv[2]) ? process.argv[2] : null;
 const LOCAL = 'http://localhost:8765/', DEPLOY = process.env.WU_DEPLOY || path.resolve(__dirname, '../../deploy');
-const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let pass = 0, fail = 0;
 function check(label, ok, detail = '') { ok ? pass++ : fail++; console.log(`  ${ok ? '✓' : '✗'} ${label.padEnd(70)} ${detail}`); return ok; }

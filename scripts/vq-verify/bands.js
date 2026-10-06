@@ -3,10 +3,11 @@
 // own capture. Every tone should land on its side of the line.
 // Usage: node scripts/vq-verify/bands.js
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 
 async function measure(wav) {
   const b = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${wav}`] });

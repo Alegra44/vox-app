@@ -3,9 +3,10 @@
 // Each clip is read with the app's own autoCorrelate (2048 samples, 60 readings/s, as the analyser loop does), split
 // into sustained notes (≥ 700 ms whose 250 ms-smoothed pitch stays within ±50 ct of the note's median), and each note is
 // scored against its nearest semitone before (as read) and after (vibratoTolerantCents), with the gate's reading.
-// Usage: node scripts/vq-verify/realvib.js [dir=%TEMP%/vq-verify/vocalset] [--json out.json]
+// Usage: node scripts/vq-verify/realvib.js [dir=$VOXCOACH_TESTDATA (~/VoxCoachTestData)/vocalset] [--json out.json]
 const fs = require('fs'), path = require('path'), os = require('os');
-const DIR = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : path.join(os.tmpdir(), 'vq-verify', 'vocalset');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
+const DIR = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : path.join(TESTDATA, 'vocalset');
 const html = fs.readFileSync(path.resolve(__dirname, '../../deploy/index.html'), 'utf8');
 const grab = (from, fn) => { const a = html.indexOf(from), z = html.indexOf(fn, a), m = /\r?\n}\r?\n/.exec(html.slice(z)); return html.slice(a, z + m.index + m[0].length); };
 // the voicing gate's constants sit just above autoCorrelate (since the singing-detection gate); older pages have none

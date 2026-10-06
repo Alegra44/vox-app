@@ -1,4 +1,4 @@
-const XS = process.env.XS_DIR || require('path').join(require('os').tmpdir(), 'vq-verify', 'xscope');
+const XS = process.env.XS_DIR || require('path').join(require('../testdata').TESTDATA, 'xscope');
 // Tables from xscope-*.json. Usage: node analyze.js vibrato|noise|phantom
 const mode = process.argv[2] || 'vibrato';
 const rows = require(require('path').join(XS, `xscope-${mode}.json`));

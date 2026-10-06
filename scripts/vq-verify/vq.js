@@ -4,12 +4,13 @@
 // next to the measured ones. No server needed: deploy/index.html is served on localhost by request interception.
 // Usage: node scripts/vq-verify/vq.js [vibrato|hnr|centroid|ui|vibui|all] [captures per signal, default 2]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os');
 const ROOT = path.resolve(__dirname, '../..');
 const which = process.argv[2] || 'all', RUNS = +(process.argv[3] || 2);
-const TMP = path.join(os.tmpdir(), 'vq-verify'); require('fs').mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; require('fs').mkdirSync(TMP, { recursive: true });
 const SR = 48000, HNR_MAX = 5000, CENTROID_MAX = 6000;
 
 function gen(name, spec) {

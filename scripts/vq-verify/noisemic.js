@@ -3,12 +3,13 @@
 // (kept inline here as `legacy`), and the Analyzer as it is now (captureVibratoTrace: unprocessed + 1.5 kHz low-pass on the pitch). Each path gets its own browser context (so Chrome can't
 // share one audio source's processing between them), its stream runs 3 s before the first capture (noise suppression
 // adapts), then N captures.
-// Usage: node noisemic.js [captures=3]    Writes WAVs to %TEMP%/vq-verify.
+// Usage: node noisemic.js [captures=3]    Writes WAVs to $VOXCOACH_TESTDATA (~/VoxCoachTestData).
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const N = +(process.argv[2] || 3), TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const N = +(process.argv[2] || 3), TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const RATE = 6, CENTS = 50;
 const OFF = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
 

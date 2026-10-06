@@ -3,19 +3,28 @@
 // (the working tree), or on a deployed URL (NG_URL) signed in as one throwaway account deleted at exit (testAccounts.js).
 //   Pitch Match (Listen, Intermediate, 2 takes), Register Drills (5 notes), Real-Time Feedback (6 s), Tuner (6 s),
 //   Stay in Key (6 s), Choir World capture + verdict (2 × 3.3 s) — the same drivers as vibfix.js, target A3 (57).
-// Stimuli: %TEMP%/vq-verify/gate/*.wav from gatestim.py (see README). Noise alone is at the level it has 10 dB under a
+// Stimuli: $VOXCOACH_TESTDATA (~/VoxCoachTestData)/gate/*.wav from gatestim.py (see README). Noise alone is at the level it has 10 dB under a
 // typical sung note on this mic chain; real speech and TV are public-domain recordings (LibriVox, Bonanza PD episodes).
 // Checks: broadband noise and hum (no pitch in it) must be heard on ≤ 5% of frames and never held / scored; every noise
 // may only hold or improve on every feature; breathy and soft (pp) singing must keep ≥ 95% of the frames heard before.
 // Real speech and TV are reported, not checked (a speaking voice is periodic: this gate isn't meant to remove it).
-// Usage: [NG_URL=<url>] [NG_PACE_MS=45000] [NG_RESUME=logs/<earlier>.json] node scripts/vq-verify/noisegate.js [stimulus names, comma-separated]
+// NG_MODE=regress (local only): master vs a branch, like vibfix's: each side runs NG_RUNS times (default 3, alternating)
+// and medians are compared. Broadband noise keeps its absolute checks (heard on ≤ 5%, nothing scored or held) judged on
+// each side; noise alone must not get worse and soft singing must not lose frames past the tolerance (the spread of
+// master's own runs, ±5 to ±10 points; the Choir World held count by its median, so one flip in three doesn't count).
+// Every check is sorted into Regression (blocks a deploy), Fixed or Already failing.
+// Usage: [NG_URL=<url>] [NG_MODE=regress] [NG_PACE_MS=45000] [NG_RESUME=logs/<earlier>.json] node scripts/vq-verify/noisegate.js [stimulus names, comma-separated]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(os.tmpdir(), 'vq-verify', 'gate');
+const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(TESTDATA, 'gate');
+fs.mkdirSync(DIR, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.NG_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
+const REGRESS = !PROD && process.env.NG_MODE === 'regress', RUNS = REGRESS ? +(process.env.NG_RUNS || 3) : 1;
+if (process.env.NG_MODE && process.env.NG_MODE !== 'regress') throw new Error(`NG_MODE=${process.env.NG_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `noisegate-${PROD ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
@@ -161,24 +170,67 @@ const brief = o => ({
   cwFrames: Math.round(100 * o.choir.reduce((s, c) => s + c.frames, 0) / Math.max(1, o.choir.reduce((s, c) => s + c.of, 0))), cwHeld: o.choir.filter(c => c.held).length,
 });
 
+// NG_MODE=regress verdict: master ('before') against the branch ('after') by the medians of RUNS runs per side
+const median = a => { a = a.filter(x => x != null && !Number.isNaN(x)).sort((x, y) => x - y); if (!a.length) return null; const m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; };
+function regressVerdict(rows) {
+  const C = { regression: [], fixed: [], already: [], pass: [] };
+  const vals = (r, side, k) => r.runs[side].map(x => x[k]), med = (r, side, k) => median(vals(r, side, k));
+  const spread = (r, k) => { const v = vals(r, 'before', k).filter(x => x != null); return v.length ? Math.max(...v) - Math.min(...v) : 0; };
+  const tolOf = (r, k) => Math.min(10, Math.max(5, spread(r, k)));
+  // ok: judged on each side's medians; better + tol: the branch's median against master's
+  const add = (r, k, label, { ok, better, tol }, rule) => {
+    let cls = 'pass';
+    if (ok) { const m = ok('before'), b = ok('after'); cls = m && !b ? 'regression' : !m && !b ? 'already' : !m && b ? 'fixed' : 'pass'; }
+    const d = k ? med(r, 'after', k) - med(r, 'before', k) : 0;
+    if (better && Math.abs(d) > tol) { if (better === 'higher' ? d < 0 : d > 0) cls = 'regression'; else if (cls === 'pass') cls = 'fixed'; }
+    const shown = k ? ` master ${vals(r, 'before', k).join('/')} (median ${med(r, 'before', k)}, spread ${spread(r, k)}) → branch ${vals(r, 'after', k).join('/')} (median ${med(r, 'after', k)})${better ? `, change ${d > 0 ? '+' : ''}${d} (±${tol})` : ''}` : '';
+    C[cls].push(`${r.id} ${label}${shown} · ${rule}`);
+  };
+  const HEARD = ['rtfVoiced', 'tunerVoiced', 'skVoiced', 'cwFrames'], SCORE = ['rtfInTune', 'tunerInTune', 'skInKey'];
+  for (const r of rows) {
+    if (r.kind === 'broadband') {
+      for (const k of HEARD) add(r, k, k + ':', { ok: s => med(r, s, k) <= 5 }, 'no pitch in it: heard on ≤5% of frames');
+      const none = s => med(r, s, 'pmScored') === 0 && med(r, s, 'drillsHeard') === 0 && med(r, s, 'cwHeld') === 0;
+      add(r, null, `scores: Pitch Match scored ${vals(r, 'before', 'pmScored').join('/')} → ${vals(r, 'after', 'pmScored').join('/')}, Drills heard ${vals(r, 'before', 'drillsHeard').join('/')} → ${vals(r, 'after', 'drillsHeard').join('/')}, Choir held ${vals(r, 'before', 'cwHeld').join('/')} → ${vals(r, 'after', 'cwHeld').join('/')}`, { ok: none }, 'nothing may be scored or held (medians)');
+    }
+    if (r.kind !== 'soft') {
+      for (const k of [...HEARD, ...SCORE]) add(r, k, k + ':', { better: 'lower', tol: tolOf(r, k) }, 'noise alone: must not get worse past the tolerance');
+      add(r, 'cwHeld', 'Choir World held:', { better: 'lower', tol: 0 }, 'noise alone: the median held count must not rise');
+    } else for (const k of HEARD) add(r, k, k + ':', { better: 'higher', tol: tolOf(r, k) }, 'real singing: must not lose frames past the tolerance');
+  }
+  log(`\n==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)`);
+  C.regression.forEach(x => log('REGRESSION ' + x));
+  log(`\n==== Fixed: fails on master and passes on the branch, or moves past the tolerance the right way`);
+  C.fixed.forEach(x => log('FIXED ' + x));
+  log(`\n==== Already failing: fails on master and on the branch (not caused by the branch)`);
+  C.already.forEach(x => log('ALREADY ' + x));
+  log(`\n==== VERDICT (regress, ${RUNS} runs per side, medians): ${C.regression.length} regression(s), ${C.fixed.length} fixed, ${C.already.length} already failing, ${C.pass.length} passed`);
+  C.pass.forEach(x => log('pass ' + x));
+  log(`\nlog: ${LOG}.log  json: ${LOG}.json`);
+  logf.end();
+  process.exitCode = C.regression.length ? 1 : 0;
+}
+
 (async () => {
   const only = process.argv[2] ? process.argv[2].split(',') : Object.keys(STIM);
   log(`noisegate ${stamp}  sides: ${SIDES.join(', ')}${PROD ? '  url: ' + PROD : '  before: ' + (process.env.NG_BEFORE || 'HEAD')}  target MIDI ${TARGET}`);
   // NG_RESUME=<earlier .json of the same code>: keep its finished stimuli, run only the rest
-  const rows = process.env.NG_RESUME ? JSON.parse(fs.readFileSync(process.env.NG_RESUME)).filter(r => only.includes(r.id) && SIDES.every(w => r.res[w])) : [];
+  const rows = process.env.NG_RESUME ? JSON.parse(fs.readFileSync(process.env.NG_RESUME)).filter(r => only.includes(r.id) && SIDES.every(w => r.res[w]) && (!REGRESS || r.runs)) : [];
   if (rows.length) { log(`resumed from ${process.env.NG_RESUME}: ${rows.map(r => r.id).join(', ')}`); fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1)); }
   for (const id of only) {
     if (rows.some(r => r.id === id)) continue;
     const file = path.join(DIR, id + '.wav'); if (!fs.existsSync(file)) throw new Error(`missing ${file}: run gatestim.py`);
     log(`\n== ${id} (${STIM[id]})`);
-    const res = {};
-    for (const which of SIDES) {
-      res[which] = brief(await withPage(file, which, page => runAll(page, TARGET)));
-      const b = res[which];
-      log(`   ${which.padEnd(6)} Pitch Match ${b.pm} | Drills ${b.drills} | RTF heard ${b.rtfVoiced}% in tune ${b.rtfInTune}% | Tuner heard ${b.tunerVoiced}% in tune ${b.tunerInTune}% | Stay in Key heard ${b.skVoiced}% in key ${b.skInKey}% | Choir World heard ${b.cwFrames}% of frames, held ${b.cwHeld}/2`);
+    const res = {}, runs = Object.fromEntries(SIDES.map(w => [w, []]));
+    for (let k = 0; k < RUNS; k++) for (const which of SIDES) { // regress mode: the sides alternate, so drift reaches both alike
+      const b = brief(await withPage(file, which, page => runAll(page, TARGET)));
+      if (k === 0) res[which] = b;
+      runs[which].push(b);
+      log(`   ${(which + (RUNS > 1 ? ` #${k + 1}` : '')).padEnd(RUNS > 1 ? 9 : 6)} Pitch Match ${b.pm} | Drills ${b.drills} | RTF heard ${b.rtfVoiced}% in tune ${b.rtfInTune}% | Tuner heard ${b.tunerVoiced}% in tune ${b.tunerInTune}% | Stay in Key heard ${b.skVoiced}% in key ${b.skInKey}% | Choir World heard ${b.cwFrames}% of frames, held ${b.cwHeld}/2`);
     }
-    rows.push({ id, kind: STIM[id], res }); fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1));
+    rows.push({ id, kind: STIM[id], res, ...(REGRESS ? { runs } : {}) }); fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1));
   }
+  if (REGRESS) return regressVerdict(rows);
   const P = [], F = [], check = (ok, s) => (ok ? P : F).push(s), A = PROD ? 'prod' : 'after';
   const HEARD = ['rtfVoiced', 'tunerVoiced', 'skVoiced', 'cwFrames'], SCORE = ['rtfInTune', 'tunerInTune', 'skInKey'];
   for (const r of rows) {

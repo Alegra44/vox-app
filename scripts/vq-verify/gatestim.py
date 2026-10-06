@@ -1,6 +1,6 @@
-# Stimuli for noisegate.js ("is someone singing" gate), written to %TEMP%/vq-verify/gate. Usage: python gatestim.py
-# Needs: vibfix.js's stims (%TEMP%/vq-verify/vibfix/stim-*.wav, for the reference sung level), noisy2.py, and in
-# %TEMP%/vq-verify/vocalset the VocalSet clips breathy-<row>.wav / pp-<row>.wav (Hugging Face mirror
+# Stimuli for noisegate.js ("is someone singing" gate), written to $VOXCOACH_TESTDATA (~/VoxCoachTestData)/gate. Usage: python gatestim.py
+# Needs: vibfix.js's stims ($VOXCOACH_TESTDATA (~/VoxCoachTestData)/vibfix/stim-*.wav, for the reference sung level), noisy2.py, and in
+# $VOXCOACH_TESTDATA (~/VoxCoachTestData)/vocalset the VocalSet clips breathy-<row>.wav / pp-<row>.wav (Hugging Face mirror
 # Bill13579/vocalset-mirror, labels 1 = breathy, 8 = pp; CC BY 4.0), and in gate/ the public-domain recordings (downloaded
 # to gate/src) as 42 s, 48 kHz mono WAVs real-speech-alice / real-speech-holmes (LibriVox: alice_in_wonderland_librivox ch. 1 from 95 s,
 # adventures_holmes ch. 3 from 300 s) and real-tv-bonanza-a / -b (archive.org bonanzapd, s01e20 from 600 s / 1500 s),
@@ -11,7 +11,8 @@
 import json, os, subprocess, wave
 import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
-TMP = os.path.join(os.environ.get('TEMP', '/tmp'), 'vq-verify'); OUT = os.path.join(TMP, 'gate'); VS = os.path.join(TMP, 'vocalset')
+TMP = os.environ.get('VOXCOACH_TESTDATA') or os.path.join(os.path.expanduser('~'), 'VoxCoachTestData')  # scripts/testdata.js
+OUT = os.path.join(TMP, 'gate'); VS = os.path.join(TMP, 'vocalset')
 os.makedirs(OUT, exist_ok=True)
 def rd(p):
     w = wave.open(p); sr = w.getframerate(); x = np.frombuffer(w.readframes(w.getnframes()), dtype=np.int16).astype(float) / 32768
