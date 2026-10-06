@@ -14,7 +14,8 @@
 // as built, then the harmonic tone swept from −23.4 to −12 dBFS RMS in place of playGuideTone, to find the highest
 // level with 0 phantom notes. (2026-10-05: none; even master's level has some, so guides stay master's sine.)
 // LB_URL=<deployed url>: that page alone, as built (no sweep), signed out.
-// Usage: [LB_BEFORE=<ref>] [LB_ONLY=before|after] [LB_URL=<url>] node scripts/vq-verify/loopback.js
+// LB_SCEN=scale,harmony,tt,hm runs only those groups (default all).
+// Usage: [LB_BEFORE=<ref>] [LB_ONLY=before|after] [LB_URL=<url>] [LB_SCEN=…] node scripts/vq-verify/loopback.js
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup');
 const { execFileSync } = require('child_process');
@@ -85,15 +86,16 @@ async function harmony(page, { guide, distraction, gain }) {
 }
 // Scale Run, professional, nobody singing: it starts listening while its own reference tone is still sounding
 // (0.5 s tone, 280 ms gap), so a louder reference can be heard as the singer
-async function scaleRun(page) {
-  return page.evaluate(async () => {
-    setExerciseLevel('professional'); window.__steps = [];
+async function scaleRun(page, level) {
+  return page.evaluate(async level => {
+    setExerciseLevel(level); window.__steps = [];
     if (!window.__capWrapped) { const cap = captureAccuracyForTarget; window.__capWrapped = true; captureAccuracyForTarget = async (...a) => { const r = await cap(...a); __steps.push(r); return r; }; }
     const btn = document.getElementById('scaleStartBtn'); btn.click();
     await new Promise(r => setTimeout(r, 300));
     while (btn.disabled) await new Promise(r => setTimeout(r, 200));
-    return { steps: __steps.length, heard: __steps.filter(r => r.heard).length, scores: __steps.map(r => r.accuracy), shown: document.getElementById('scaleAccuracyVal').textContent };
-  });
+    return { steps: __steps.length, heard: __steps.filter(r => r.heard).length, scores: __steps.map(r => r.accuracy), shown: document.getElementById('scaleAccuracyVal').textContent,
+      feedback: document.getElementById('scaleFeedback')?.textContent || '' };
+  }, level);
 }
 async function entrance(page) {
   return page.evaluate(async () => {
@@ -124,8 +126,9 @@ async function memory(page, stage) {
     if (only && only !== side) continue;
     const { ctx, page, errors } = await open(b, side, c), out = R[side][cdb] = {};
     log(`\n== ${side}, coupling ${cdb} dB`);
+    const SC = process.env.LB_SCEN ? process.env.LB_SCEN.split(',') : ['harmony', 'scale', 'tt', 'hm'], want = k => SC.includes(k);
     const show = (k, r) => log(`   ${k.padEnd(44)} heard ${r.heard}/${r.total} frames · notes scored ${r.scored} · landed ${r.landed} · Timing ${r.timing} · Part ${r.part}`);
-    if (side === 'before') {
+    if (!want('harmony')) {} else if (side === 'before') {
       show('Harmony, piano guide (master level)', out.guide = await harmony(page, { guide: true, distraction: false }));
       show('Harmony, distraction (master level)', out.distraction = await harmony(page, { guide: false, distraction: true }));
     } else if (side === 'prod') {
@@ -140,12 +143,17 @@ async function memory(page, stage) {
         show(`Harmony, distraction at ${db} dBFS`, out.distraction[db] = await harmony(page, { guide: false, distraction: true, gain: guideGain(db) }));
       }
     }
-    show('Harmony, no guide (the choir only: baseline)', out.none = await harmony(page, { guide: false, distraction: false }));
-    out.scale = await scaleRun(page);
-    log(`   ${'Scale Run, professional'.padEnd(44)} steps heard ${out.scale.heard}/${out.scale.steps} · scores ${out.scale.scores.join('/')} · shown ${out.scale.shown}`);
-    out.tt = await entrance(page);
-    log(`   ${'Entrance Trainer'.padEnd(44)} bleed hits ${out.tt.bleed} · entrances ${out.tt.entrances}/${out.tt.n} · warning ${out.tt.warning}`);
-    for (const st of [0, 5]) {
+    if (want('harmony')) show('Harmony, no guide (the choir only: baseline)', out.none = await harmony(page, { guide: false, distraction: false }));
+    if (want('scale')) for (const lv of ['beginner', 'intermediate', 'professional']) {
+      const sr = out['scale_' + lv] = await scaleRun(page, lv);
+      if (lv === 'professional') out.scale = sr;
+      log(`   ${`Scale Run, ${lv}`.padEnd(44)} steps heard ${sr.heard}/${sr.steps} · scores ${sr.scores.join('/')} · shown ${sr.shown} · "${sr.feedback}"`);
+    }
+    if (want('tt')) {
+      out.tt = await entrance(page);
+      log(`   ${'Entrance Trainer'.padEnd(44)} bleed hits ${out.tt.bleed} · entrances ${out.tt.entrances}/${out.tt.n} · warning ${out.tt.warning}`);
+    }
+    if (want('hm')) for (const st of [0, 5]) {
       const m = out['hm' + st] = await memory(page, st);
       log(`   ${`Harmony Memory stage ${st + 1}`.padEnd(44)} held ${m.held}/${m.n} · frames with a pitch per note ${m.frames.join('/')}`);
     }
@@ -153,7 +161,7 @@ async function memory(page, stage) {
     await ctx.close();
   }
   fs.writeFileSync(LOG + '.json', JSON.stringify(R, null, 1));
-  if (!only) {
+  if (!only && !process.env.LB_SCEN) {
     // the highest guide level with no phantom note at the worst coupling (and none at the typical one)
     const ok = db => COUPLINGS.every(([cdb]) => R.after[cdb].guide[db].landed === 0 && R.after[cdb].distraction[db].landed === 0);
     const okLevels = GUIDE_DB.filter(ok), pick = okLevels.length ? Math.max(...okLevels) : null;

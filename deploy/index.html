@@ -5162,6 +5162,13 @@ function scheduleTone(freq, duration, delay, peak, harmonic){
   osc.start(t0);
   osc.stop(t0+duration+0.02);
 }
+// How long after a tone starts it has fully ended at the speaker: its length, the oscillator's stop (20 ms), the
+// output latency, and a short tail for the room. An exercise that listens after a reference waits at least this.
+const REFERENCE_TAIL_MS = 60;
+function referenceDoneMs(durationSec){
+  const out = audioCtx ? (audioCtx.outputLatency || audioCtx.baseLatency || 0) : 0;
+  return Math.round(durationSec*1000 + 20 + out*1000 + REFERENCE_TAIL_MS);
+}
 // a reference tone; with `vol`, a plain sine at that gain (clicks and ticks)
 async function playTone(freq, duration=0.55, delay=0, vol=null){
   await initAudioOnly();
@@ -16050,8 +16057,11 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   for(let i=0;i<steps.length;i++){
     const midi = scaleRootMidi + steps[i];
     renderScaleDots(i, results, steps.length);
-    playTone(noteToFreq(midi), Math.min(0.5, cfg.scaleNoteDuration/1000));
-    await new Promise(r=>setTimeout(r, cfg.scaleGap));
+    const refSec = Math.min(0.5, cfg.scaleNoteDuration/1000);
+    await playTone(noteToFreq(midi), refSec);
+    // listen only once the reference has ended at the speaker (scaleGap counted from its start used to cut into it:
+    // with nobody singing, Professional scored its own tone at 93–96%)
+    await new Promise(r=>setTimeout(r, Math.max(cfg.scaleGap, referenceDoneMs(refSec))));
     btn.textContent = `Listening (${i+1}/${steps.length})…`;
     const res = await captureAccuracyForTarget(midi, cfg.scaleNoteDuration, {accuracyMultiplier:cfg.accuracyMultiplier});
     results.push(res.accuracy);
