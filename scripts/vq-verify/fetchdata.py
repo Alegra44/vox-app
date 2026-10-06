@@ -7,7 +7,7 @@
 #   gate/real-*.wav: 42 s, 48 kHz mono, loudness-normalised cuts of public-domain recordings (LibriVox, archive.org),
 #     sources kept in gate/src. Needs ffmpeg: pip install imageio-ffmpeg (in the venv).
 # Usage: python scripts/vq-verify/fetchdata.py
-import json, os, subprocess, urllib.parse, urllib.request
+import json, os, subprocess, time, urllib.parse, urllib.request
 DATA = os.environ.get('VOXCOACH_TESTDATA') or os.path.join(os.path.expanduser('~'), 'VoxCoachTestData')
 VS, GATE = os.path.join(DATA, 'vocalset'), os.path.join(DATA, 'gate')
 SRC = os.path.join(GATE, 'src')
@@ -16,6 +16,12 @@ for d in (VS, SRC): os.makedirs(d, exist_ok=True)
 LABELS = {'breathy': 1, 'pp': 8, 'straight': 12, 'vibrato': 16}
 CLIPS = {'vibrato': [628, 3131, 1154, 772, 2417, 2961], 'straight': [625, 286],
          'breathy': [5, 562, 1197, 1743, 2353, 3002], 'pp': [92, 646, 1717, 2977]}
+def retry(f, what):  # the Hugging Face rows API answers 502 now and then
+    for k in range(6):
+        try: return f()
+        except Exception as e:
+            if k == 5: raise
+            print(f'  {what}: {e}; retrying in {5 * 2 ** k} s'); time.sleep(5 * 2 ** k)
 def get(url, out):
     tmp = out + '.part'
     with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'voxcoach-verify'}), timeout=300) as r, open(tmp, 'wb') as f:
@@ -29,9 +35,9 @@ for label, rows in CLIPS.items():
         out = os.path.join(VS, f'{label}-{i}.wav')
         if os.path.exists(out): continue
         q = urllib.parse.urlencode({'dataset': 'Bill13579/vocalset-mirror', 'config': 'default', 'split': 'train', 'offset': i, 'length': 1})
-        row = json.load(urllib.request.urlopen('https://datasets-server.huggingface.co/rows?' + q, timeout=60))['rows'][0]['row']
+        row = retry(lambda: json.load(urllib.request.urlopen('https://datasets-server.huggingface.co/rows?' + q, timeout=60))['rows'][0]['row'], f'row {i}')
         if row['label'] != LABELS[label]: raise SystemExit(f'row {i}: label {row["label"]}, expected {label} ({LABELS[label]})')
-        get(row['audio'][0]['src'], out); print('vocalset', out)
+        retry(lambda: get(row['audio'][0]['src'], out), f'{label}-{i}.wav'); print('vocalset', out)
 json.dump([{'file': f'{l}-{i}.wav', 'label': l} for l in ('vibrato', 'straight') for i in CLIPS[l]], open(os.path.join(VS, 'manifest.json'), 'w'), indent=1)
 
 AO = 'https://archive.org/download/'
@@ -45,7 +51,7 @@ for name, url, start in REAL:
     out = os.path.join(GATE, name + '.wav')
     if os.path.exists(out): continue
     src = os.path.join(SRC, urllib.parse.unquote(url.rsplit('/', 1)[1]))
-    if not os.path.exists(src): get(url, src); print('source', src)
+    if not os.path.exists(src): retry(lambda: get(url, src), src); print('source', src)
     subprocess.check_call([ff, '-y', '-loglevel', 'error', '-ss', str(start), '-t', '42', '-i', src, '-vn', '-ac', '1', '-ar', '48000',
                            '-af', 'loudnorm=I=-20:TP=-4', '-c:a', 'pcm_s16le', out]); print('cut', out)
 print('ok:', DATA)

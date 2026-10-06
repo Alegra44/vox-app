@@ -1,0 +1,27 @@
+noisegate 2026-10-06T19-08-33  sides: before, after  before: master  target MIDI 57
+
+== noise-realtv-bonanza-b-10 (real)
+   before #1 Pitch Match 6/0 | Drills —/40/26/51/74 | RTF heard 48% in tune 5% | Tuner heard 10% in tune 2% | Stay in Key heard 26% in key 3% | Choir World heard 42% of frames, held 0/2
+   after #1  Pitch Match 0/6 | Drills —/26/36/45/73 | RTF heard 48% in tune 5% | Tuner heard 8% in tune 2% | Stay in Key heard 31% in key 2% | Choir World heard 43% of frames, held 1/2
+   before #2 Pitch Match 0/0 | Drills —/33/4/44/68 | RTF heard 44% in tune 6% | Tuner heard 7% in tune 0% | Stay in Key heard 30% in key 2% | Choir World heard 42% of frames, held 0/2
+   after #2  Pitch Match 0/6 | Drills —/36/26/47/74 | RTF heard 43% in tune 12% | Tuner heard 9% in tune 3% | Stay in Key heard 27% in key 3% | Choir World heard 44% of frames, held 1/2
+   before #3 Pitch Match 0/10 | Drills —/34/0/47/67 | RTF heard 48% in tune 5% | Tuner heard 7% in tune 2% | Stay in Key heard 27% in key 3% | Choir World heard 43% of frames, held 1/2
+   after #3  Pitch Match 10/0 | Drills —/30/11/47/75 | RTF heard 47% in tune 8% | Tuner heard 10% in tune 1% | Stay in Key heard 26% in key 2% | Choir World heard 43% of frames, held 0/2
+
+==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)
+REGRESSION noise-realtv-bonanza-b-10 Choir World held: master 0/0/1 (median 0, spread 1) → branch 1/1/0 (median 1), change +1 (±0) · noise alone: the median held count must not rise
+
+==== Fixed: fails on master and passes on the branch, or moves past the tolerance the right way
+
+==== Already failing: fails on master and on the branch (not caused by the branch)
+
+==== VERDICT (regress, 3 runs per side, medians): 1 regression(s), 0 fixed, 0 already failing, 7 passed
+pass noise-realtv-bonanza-b-10 rtfVoiced: master 48/44/48 (median 48, spread 4) → branch 48/43/47 (median 47), change -1 (±5) · noise alone: must not get worse past the tolerance
+pass noise-realtv-bonanza-b-10 tunerVoiced: master 10/7/7 (median 7, spread 3) → branch 8/9/10 (median 9), change +2 (±5) · noise alone: must not get worse past the tolerance
+pass noise-realtv-bonanza-b-10 skVoiced: master 26/30/27 (median 27, spread 4) → branch 31/27/26 (median 27), change 0 (±5) · noise alone: must not get worse past the tolerance
+pass noise-realtv-bonanza-b-10 cwFrames: master 42/42/43 (median 42, spread 1) → branch 43/44/43 (median 43), change +1 (±5) · noise alone: must not get worse past the tolerance
+pass noise-realtv-bonanza-b-10 rtfInTune: master 5/6/5 (median 5, spread 1) → branch 5/12/8 (median 8), change +3 (±5) · noise alone: must not get worse past the tolerance
+pass noise-realtv-bonanza-b-10 tunerInTune: master 2/0/2 (median 2, spread 2) → branch 2/3/1 (median 2), change 0 (±5) · noise alone: must not get worse past the tolerance
+pass noise-realtv-bonanza-b-10 skInKey: master 3/2/3 (median 3, spread 1) → branch 2/3/2 (median 2), change -1 (±5) · noise alone: must not get worse past the tolerance
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/noisegate-local-2026-10-06T19-08-33.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/noisegate-local-2026-10-06T19-08-33.json

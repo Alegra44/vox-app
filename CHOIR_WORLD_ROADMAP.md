@@ -190,6 +190,13 @@ failure.** Then on production: batch1, the bleed checks, and `levels.js` if it c
 
 ### Next, approved 2026-10-06 (in this order; report after 1 is deployed, together with 2–4)
 
+**Status (2026-10-07).** 1: Scale Run live as dpl_EXzNjN56Cwy56P75YYLNcyJq9uGK (merge a06ed17); loopback, nobody singing:
+Intermediate 95–97% → 0%, Professional 97–98% → 0% (also on production); the C4 test singer scores 24% on master,
+branch and production alike; regression: no Regression-class failure. 2: done (merge 762ef35): `~/VoxCoachTestData`,
+`fetchdata.py` (VocalSet clips verified identical: rv.json rebuilt byte for byte), gate stimuli rebuilt, Vercel CLI
+pinned, noisegate regress mode (A/A on bonanza-b: 0 regressions; the held count uses master's own spread). 3: logged.
+4: proposal under (d) below, awaiting approval.
+
 1. **Scale Run listens only after its reference has fully ended** (all levels). Show it with `loopback.js` before and
    after: with nobody singing, the score drops to the "didn't hear you" result or close to 0; real singing scores as
    before. Regression: vibfix regress mode plus the batch suites, same run against master. **Deploy approved if no

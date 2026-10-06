@@ -11,7 +11,7 @@
 // NG_MODE=regress (local only): master vs a branch, like vibfix's: each side runs NG_RUNS times (default 3, alternating)
 // and medians are compared. Broadband noise keeps its absolute checks (heard on ≤ 5%, nothing scored or held) judged on
 // each side; noise alone must not get worse and soft singing must not lose frames past the tolerance (the spread of
-// master's own runs, ±5 to ±10 points; the Choir World held count by its median, so one flip in three doesn't count).
+// master's own runs, ±5 to ±10 points; the Choir World held count by its median, within master's own spread).
 // Every check is sorted into Regression (blocks a deploy), Fixed or Already failing.
 // Usage: [NG_URL=<url>] [NG_MODE=regress] [NG_PACE_MS=45000] [NG_RESUME=logs/<earlier>.json] node scripts/vq-verify/noisegate.js [stimulus names, comma-separated]
 const { chromium } = require('playwright');
@@ -195,7 +195,9 @@ function regressVerdict(rows) {
     }
     if (r.kind !== 'soft') {
       for (const k of [...HEARD, ...SCORE]) add(r, k, k + ':', { better: 'lower', tol: tolOf(r, k) }, 'noise alone: must not get worse past the tolerance');
-      add(r, 'cwHeld', 'Choir World held:', { better: 'lower', tol: 0 }, 'noise alone: the median held count must not rise');
+      // a held note under noise can flip between runs of the same code (bonanza-b, A/A: 0/0/1 vs 1/1/0): the median may
+      // rise by no more than master's own spread
+      add(r, 'cwHeld', 'Choir World held:', { better: 'lower', tol: spread(r, 'cwHeld') }, 'noise alone: the median held count must not rise past master\'s own spread');
     } else for (const k of HEARD) add(r, k, k + ':', { better: 'higher', tol: tolOf(r, k) }, 'real singing: must not lose frames past the tolerance');
   }
   log(`\n==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)`);
