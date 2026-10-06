@@ -150,11 +150,7 @@ analyser, one-off: 6 reruns identical), batch3a/3b/3c identical, noisegate 153/7
 0 → 1, which also flipped on 2026-10-04 with an unrelated branch), vibfix regress 0 regressions / 2 already failing.
 
 Known issues found by the loopback check (not caused by (a); open):
-- [ ] **Speaker bleed is credited as singing.** With nobody singing and the speakers reaching the mic (no echo
-  cancellation): Harmony Arena's piano guide lands 1–8 of 8 notes; the Entrance Trainer claims 8 of 8 entrances (the
-  choir); Harmony Memory stage 1 holds 3 of 8 notes (your part as the guide). Real devices with echo cancellation
-  should fare better; untested there. Fix candidates: score only frames that differ from what is playing, or warn when
-  the mic correlates with the output.
+- [ ] **Speaker bleed scores as singing**: now a scoped item under "Known issues (app-wide)", next to item 3.
 - [ ] **Scale Run (Intermediate / Professional) scores its own reference tone.** Each step plays a 0.5 s reference, waits
   `scaleGap` (450 / 280 ms) and starts listening, so the last 50 / 220 ms of the tone is in the capture. With nobody
   singing, Professional shows 93–94% on master at −20 and −10 dB coupling; 96% with (a)'s louder reference (+2–3).
@@ -241,6 +237,20 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
   mean |c| 44 against 38–39. The looped stimulus has no onset, so it isn't master scoring onset frames.
 
 ## Known issues (app-wide)
+
+- [ ] **Speaker bleed scores as singing** (scoped, logged 2026-10-06; not fixed; sits next to item 3, one mic stream per
+  feature: HANDOFF.md, "Order of work"). Found by `scripts/vq-verify/loopback.js`, which feeds the app's own playback
+  back into its own mic with nobody singing, at a speaker-to-mic coupling of −20 dB (a laptop's own speakers and mic)
+  and −10 dB (worst case), with no echo cancellation. Production and local agree:
+  - **Entrance & Cutoff Trainer:** 8 of 8 entrances claimed (the choir's playback); at −10 dB also 4 count-in bleed
+    hits and the "Speaker bleed detected" warning.
+  - **Harmony Arena, piano guide on:** 0–8 of 8 notes landed (counted in Part Accuracy): 0–1 at −20 dB, 8 at −10 dB.
+    The guide plays your own part's note, so its bleed reads as in tune.
+  - **Harmony Memory stage 1:** 3 of 8 notes held (your part as the full guide).
+  - **Echo cancellation on real devices hasn't been tested.** The shared mic asks for it (it would remove much of
+    this); the register input doesn't. Measure on real laptops and phones before choosing a fix.
+  - Fix candidates (not chosen): score only frames that don't match what's playing; or warn when the mic correlates
+    with the output; or tie it to item 3's per-feature streams. Scale Run's case was fixed separately (2026-10-06).
 
 - **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
   (`text-transform: uppercase`) is then transformed with English rules, which is wrong in Turkish: `i`

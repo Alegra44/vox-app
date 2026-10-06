@@ -45,6 +45,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`).
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
+   Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
+   issues (app-wide)"): with nobody singing, the app's own playback is credited (Entrance Trainer 8/8 entrances,
+   Harmony Arena 0–8/8 notes, Harmony Memory 3/8 held); echo cancellation on real devices untested.
 5. Redesign phase 4 onwards. **Item 4** (Glider octave crash) comes after item 3.
 
 Idea for redesign phase 1 (don't change it before then): `onSignedIn` loads `/me` and then `/me/progress` one after
