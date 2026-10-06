@@ -65,10 +65,14 @@ const STIM = {
   // a wobbly note centred just past Stay in Key's ±35 ct window: its wobble must not be averaged into "In key"
   N4: { ...NOTES.S2, kind: 'unsteady', extra: 45, jitter: [18, 3], label: 'S2 sung 45 ct sharp, irregular ±18 ct (RMS) unsteadiness' },
 };
+// The VocalSet clips live in the temp folder, which macOS clears now and then. Without them, the stimuli and rv.json
+// already built from them are reused (they're deterministic); with neither, the clips must be fetched again.
+const HAVE_VS = fs.existsSync(path.join(VS, 'manifest.json'));
 function stimulus(id) {
   const s = STIM[id], rv = JSON.parse(fs.readFileSync(path.join(TMP, 'rv.json'))).find(r => r.file === s.clip + '.wav' && r.t0 === s.t0);
   if (!rv) throw new Error(`note ${s.clip}@${s.t0} not found in realvib output`);
   const f = path.join(TMP, `stim-${id}.wav`);
+  if (!HAVE_VS) { if (!fs.existsSync(f)) throw new Error(`${f} missing and the VocalSet clips are gone from ${VS}: fetch them again (HANDOFF.md)`); return { file: f, target: rv.target, rv }; }
   execFileSync('python', [path.join(__dirname, 'realstim.py'), f, JSON.stringify({ clip: path.join(VS, s.clip + '.wav'), startMs: rv.t0 + 100, durMs: rv.dur,
     shiftCents: -rv.centre + (s.extra || 0), wanderCents: s.wander ? s.wander[0] : 0, wanderHz: s.wander ? s.wander[1] : 0,
     jitterCents: s.jitter ? s.jitter[0] : 0, jitterSeed: s.jitter ? s.jitter[1] : 1, seconds: 40 })]);
@@ -287,7 +291,9 @@ function regressVerdict(rows) {
 (async () => {
   const only = process.argv[2] ? process.argv[2].split(',') : Object.keys(STIM);
   log(`vibfix ${stamp}  sides: ${SIDES.join(', ')}${PROD ? '  url: ' + PROD : '  before: ' + (process.env.VF_BEFORE || 'HEAD')}${REGRESS ? '  mode: regress (rises become "must not move")' : ''}`);
-  execFileSync('node', [path.join(__dirname, 'realvib.js'), VS, '--json', path.join(TMP, 'rv.json')]);
+  if (HAVE_VS) execFileSync('node', [path.join(__dirname, 'realvib.js'), VS, '--json', path.join(TMP, 'rv.json')]);
+  else if (fs.existsSync(path.join(TMP, 'rv.json'))) log(`VocalSet clips missing from ${VS}: reusing rv.json and the stimuli already built`);
+  else throw new Error(`the VocalSet clips are gone from ${VS} and there is no rv.json: fetch them again (HANDOFF.md)`);
   // VF_RESUME=<earlier .json of the same code>: keep its finished stimuli, run only the rest
   const rows = process.env.VF_RESUME ? JSON.parse(fs.readFileSync(process.env.VF_RESUME)).filter(r => only.includes(r.id) && SIDES.every(w => r.res[w]) && (!REGRESS || r.runs)) : [];
   if (rows.length) log(`resumed from ${process.env.VF_RESUME}: ${rows.map(r => r.id).join(', ')}`);

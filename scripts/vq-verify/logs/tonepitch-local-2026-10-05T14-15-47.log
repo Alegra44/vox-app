@@ -1,0 +1,44 @@
+tonepitch 2026-10-05T14-15-47 · the page's reference and guide tones through autoCorrelate, MIDI 36–96
+
+-- reference, 44100 Hz: 61 notes · median error 12.19 ct at most · worst frame 12.68 ct (C#2)
+  ✓ reference 44100 Hz: every held frame of every note has a pitch         3721 frames
+  ✗ reference 44100 Hz: every frame within ±10 ct of the note              C2 12.6 ct, C#2 12.7 ct
+  ✓ reference 44100 Hz: no octave errors                                   0
+
+-- guide, 44100 Hz: 61 notes · median error 17.37 ct at most · worst frame 32.19 ct (C2)
+  ✓ guide 44100 Hz: every held frame of every note has a pitch             3721 frames
+  ✗ guide 44100 Hz: every frame within ±10 ct of the note                  C2 32.2 ct, C#2 24.5 ct, D2 20.5 ct, D#2 28.9 ct, E2 18.7 ct, F2 21.2 ct, F#2 18.3 ct, G2 17.3 ct, G#2 14.3 ct, A2 14.5 ct, A#2 12.0 ct, B2 15.8 ct, C3 12.4 ct, E3 10.6 ct
+  ✓ guide 44100 Hz: no octave errors                                       0
+
+-- master sine 0.22, 44100 Hz: 61 notes · median error 21.44 ct at most · worst frame 41.17 ct (C2)
+  ✓ master sine 0.22 44100 Hz: every held frame of every note has a pitch  3721 frames
+  ✗ master sine 0.22 44100 Hz: every frame within ±10 ct of the note       C2 41.2 ct, C#2 24.6 ct, D2 32.2 ct, D#2 32.1 ct, E2 23.7 ct, F2 26.4 ct, F#2 17.7 ct, G2 22.3 ct, G#2 17.0 ct, A2 19.3 ct, A#2 17.1 ct, B2 10.4 ct, C3 15.2 ct, C#3 13.8 ct, D3 10.8 ct, E3 10.6 ct, F3 10.7 ct
+  ✓ master sine 0.22 44100 Hz: no octave errors                            0
+
+-- master sine 0.10, 44100 Hz: 61 notes · median error 21.44 ct at most · worst frame 41.50 ct (C2)
+  ✓ master sine 0.10 44100 Hz: every held frame of every note has a pitch  3721 frames
+  ✗ master sine 0.10 44100 Hz: every frame within ±10 ct of the note       C2 41.5 ct, C#2 22.3 ct, D2 34.6 ct, D#2 28.6 ct, E2 23.7 ct, F2 27.5 ct, F#2 17.7 ct, G2 23.8 ct, G#2 17.0 ct, A2 18.7 ct, A#2 18.7 ct, B2 10.0 ct, C3 16.2 ct, C#3 15.7 ct, D3 10.8 ct, E3 10.3 ct, F3 10.9 ct, F#3 10.6 ct
+  ✓ master sine 0.10 44100 Hz: no octave errors                            0
+
+-- reference, 48000 Hz: 61 notes · median error 12.12 ct at most · worst frame 19.18 ct (C2)
+  ✓ reference 48000 Hz: every held frame of every note has a pitch         4087 frames
+  ✗ reference 48000 Hz: every frame within ±10 ct of the note              C2 19.2 ct, C#2 12.6 ct, D2 12.6 ct, D#2 12.3 ct
+  ✓ reference 48000 Hz: no octave errors                                   0
+
+-- guide, 48000 Hz: 61 notes · median error 19.21 ct at most · worst frame 37.76 ct (C2)
+  ✓ guide 48000 Hz: every held frame of every note has a pitch             4087 frames
+  ✗ guide 48000 Hz: every frame within ±10 ct of the note                  C2 37.8 ct, C#2 35.0 ct, D2 27.0 ct, D#2 24.2 ct, E2 23.9 ct, F2 29.6 ct, F#2 22.8 ct, G2 16.5 ct, G#2 14.6 ct, A2 21.1 ct, A#2 17.3 ct, B2 14.5 ct, C3 13.9 ct, C#3 12.7 ct, D3 12.0 ct, D#3 12.4 ct, E3 11.2 ct
+  ✓ guide 48000 Hz: no octave errors                                       0
+
+-- master sine 0.22, 48000 Hz: 61 notes · median error 22.93 ct at most · worst frame 41.19 ct (C#2)
+  ✓ master sine 0.22 48000 Hz: every held frame of every note has a pitch  4087 frames
+  ✗ master sine 0.22 48000 Hz: every frame within ±10 ct of the note       C2 33.1 ct, C#2 41.2 ct, D2 41.1 ct, D#2 28.4 ct, E2 32.1 ct, F2 19.0 ct, F#2 26.3 ct, G2 18.9 ct, G#2 22.3 ct, A2 16.2 ct, A#2 19.3 ct, B2 11.7 ct, C3 17.0 ct, C#3 15.2 ct, D#3 13.0 ct, E3 12.5 ct, F3 11.6 ct, F#3 10.7 ct
+  ✓ master sine 0.22 48000 Hz: no octave errors                            0
+
+-- master sine 0.10, 48000 Hz: 61 notes · median error 24.86 ct at most · worst frame 44.58 ct (C#2)
+  ✓ master sine 0.10 48000 Hz: every held frame of every note has a pitch  4087 frames
+  ✗ master sine 0.10 48000 Hz: every frame within ±10 ct of the note       C2 33.1 ct, C#2 44.6 ct, D2 32.7 ct, D#2 28.4 ct, E2 34.5 ct, F2 17.8 ct, F#2 29.4 ct, G2 18.9 ct, G#2 24.8 ct, A2 15.6 ct, A#2 22.1 ct, B2 11.7 ct, C3 17.7 ct, C#3 16.8 ct, D#3 12.7 ct, E3 14.4 ct, F3 13.3 ct, F#3 11.4 ct
+  ✓ master sine 0.10 48000 Hz: no octave errors                            0
+
+==== VERDICT: 16 passed, 8 failed
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/tonepitch-local-2026-10-05T14-15-47.log

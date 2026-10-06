@@ -165,7 +165,10 @@ billing columns server-only · vibrato tolerance in pitch graders.
    `python3 -m venv .venv && source .venv/bin/activate && pip install numpy imageio-ffmpeg`
    Activate the venv before running any vq-verify script.
 
-3. **Temp folder.** Node scripts use `os.tmpdir()/vq-verify` (`$TMPDIR` on macOS). `gatestim.py` uses
+3. **Temp folder.** macOS clears `$TMPDIR` of files not used for a few days: on 2026-10-06 it deleted the VocalSet
+   clips and the noise-gate stimuli overnight. vibfix now reuses its built stimuli when the clips are gone; fetching
+   them again (step 7) brings everything back. Moving the test data to a folder outside `$TMPDIR` would stop this.
+   **Temp folder (as set up).** Node scripts use `os.tmpdir()/vq-verify` (`$TMPDIR` on macOS). `gatestim.py` uses
    `$TEMP` or `/tmp`. Put `export TEMP="$TMPDIR"` in `~/.zshrc` so both use the same folder.
 
 4. **Supabase CLI link.** Needed by `testAccounts.js` (`npx supabase db query --linked`), migrations and function
