@@ -214,6 +214,27 @@ pinned, noisegate regress mode (A/A on bonanza-b: 0 regressions; the held count 
 4. **(d) as a proposal only:** the migration SQL, the API change, which existing counters go into the snapshot, and
    the four-language text. Nothing applied until the user approves.
 
+### Approved 2026-10-07 (in this order; report after (d) is live)
+
+1. **Custom exercise and Pitch Rift:** measure both with `loopback.js` (nobody singing). If either scores its own
+   reference, apply the shared wait-until-the-tone-ends function (`referenceDoneMs`). Same rules as Scale Run: real
+   singing unchanged; regress-mode vibfix and noisegate plus the batch suites, same run against master; **deploy
+   approved if no Regression-class failure**; then production loopback and batch1.
+2. **(d) level-up explanation: approved as proposed, with these refinements.**
+   - At most 3 non-zero items, in this priority: new records, breakthroughs, Boss Battle wins, curriculum days,
+     sessions, warm-ups. Add "and a N-day streak" when the streak is 3 or more. Never show a zero.
+   - Proper singular / plural and list joining in all four languages (Turkish doesn't pluralise after a number); the
+     app's existing English spelling. Tested with 1, 2 and 3 items in every language.
+   - Migration `supabase/migrations/0008_levelup_snapshot.sql`, committed. Release order: `db push`, then the `api`
+     function deploy with `levelup_snapshot` in `PROGRESS_PATCHABLE_COLUMNS`, then the client deploy.
+   - New check script: on a test account, cause two level-ups; the first shows counts since the account started, the
+     second only what happened since the first. The snapshot survives a reload and shows in a second browser context
+     (a second device); the text renders in all four languages.
+   - Regression: regress-mode vibfix and noisegate plus the batch suites, same run against master. **Deploy approved
+     if no Regression-class failure**, then a production check with test accounts cleaned up.
+   That completes the four tester bugs. Next: redesign phase 1, specified separately by the user; it changes how the
+   app looks, so **screenshots are reviewed by the user before anything deploys.**
+
 ### (d) Level-up explanation (approved 2026-10-05; don't start until (a) is live)
 
 - At each level-up, store a snapshot of the existing counters on the server (e.g. a jsonb column on user progress),
