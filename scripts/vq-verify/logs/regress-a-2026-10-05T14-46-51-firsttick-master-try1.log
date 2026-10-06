@@ -1,0 +1,31 @@
+== local deploy/ (production backend)
+
+   signed up voxcoach-ttf-1791213351157@example.com
+-- S1: silent at the start, then every note
+  ✓ one entrance per note, all claimed, none early, no bleed (8 notes)       edges [0.025,3.359,6.692,10.025,13.359,16.692,20.025,23.359], claimed 8/8, early [], bleed 0; first click -3.333, first tick ~-3.397
+
+-- S2: already singing at the start, stops 1 s before the downbeat, then every note
+  ✓ run 1: no entrance before the downbeat, all 8 claimed, no bleed          edges [0.02,3.353,6.687,10.02,13.353,16.687,20.02,23.353], claimed 8/8, bleed 0; first click -3.333
+  ✓ run 2: no entrance before the downbeat, all 8 claimed, no bleed          edges [0.02,3.353,6.687,10.02,13.353,16.687,20.02,23.353], claimed 8/8, bleed 0; first click -3.333
+  ✓ run 3: no entrance before the downbeat, all 8 claimed, no bleed          edges [0.02,3.353,6.687,10.02,13.353,16.687,20.02,23.353], claimed 8/8, bleed 0; first click -3.333
+  ✓ run 4: no entrance before the downbeat, all 8 claimed, no bleed          edges [0.02,3.353,6.687,10.02,13.353,16.687,20.02,23.353], claimed 8/8, bleed 0; first click -3.333
+  ✓ run 5: no entrance before the downbeat, all 8 claimed, no bleed          edges [0.02,3.353,6.687,10.02,13.353,16.687,20.02,23.353], claimed 8/8, bleed 0; first click -3.333
+
+-- S3: singing without a break, from before the start to the end
+  ✓ run 1: no entrances at all, nothing claimed, no bleed                    edges [], claimed 0, bleed 0
+  ✓ run 2: no entrances at all, nothing claimed, no bleed                    edges [], claimed 0, bleed 0
+  ✓ run 3: no entrances at all, nothing claimed, no bleed                    edges [], claimed 0, bleed 0
+  ✓ run 4: no entrances at all, nothing claimed, no bleed                    edges [], claimed 0, bleed 0
+  ✓ run 5: no entrances at all, nothing claimed, no bleed                    edges [], claimed 0, bleed 0
+
+-- S4: speaker bleed: a 70 ms burst on each count-in click, then every note
+  ✓ bleed hits ≥ 2 and the warning shown                                     bleed 4 of 4 clicks (clicks -3.333,-2.500,-1.667,-0.833; early edges [-3.308,-2.475,-1.641,-0.808])
+  ✓ every note still claimed                                                 8/8
+
+-- S5: Cutoff mode, already singing at the start, stops 1 s before the downbeat, then every note
+  ✓ no cutoff before the downbeat, all 8 note ends claimed                   cutoffs 8, early [], claimed 8/8
+  ✓ page errors                                                              none
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-ttf-1791213351157@example.com
+
+15 passed, 0 failed

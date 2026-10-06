@@ -135,7 +135,27 @@ Follow-ups (logged 2026-10-03, not fixed):
 (b) and (c) are live (next section). (a) and (d) were approved in chat on 2026-10-05 and are written here so they
 survive a session reset.
 
-### (a) Playback volume (approved 2026-10-05; next)
+### (a) Playback volume (approved 2026-10-05; built on `fix/volume`, deployed 2026-10-06, see below)
+
+**Result (2026-10-06).** One playback chain: every sound → `playbackIn` (the Playback volume setting) → a look-ahead
+limiter (AudioWorklet, 2.6 ms, ≤ 0.949) → speakers. References −12.0 dBFS RMS with soft harmonics (was −16.5 to −18);
+block chords at 1/√n per note; guides, clicks, backing and choir unchanged. `levels.js`: 0 clipped samples and nothing
+over 0.95 anywhere, including the three overlaps that clip on master (tone over backing 1.12, chord over backing 1.37,
+Harmony Memory note over the choir 1.08). `tonepitch.js`: every reference C2–C7 reads as the right note, no octave
+errors, no worse than master's sine. Guides stay at −23.4 dBFS, a plain sine: `loopback.js` (the app's playback fed
+back into its own mic, nobody singing) credits phantom notes at that level already (Harmony Arena piano guide: 1 of 8
+landed at −20 dB coupling, 8 of 8 at −10 dB), 3 with the harmonic timbre at the same level, 8 of 8 from −20 dBFS up.
+Regression, master vs branch, same run: firsttick 15/15 both, batch1 112/112 both, batch2 150 vs 149 (Interval Match
+analyser, one-off: 6 reruns identical), batch3a/3b/3c identical, noisegate 153/7 (6 fail on both, bonanza-b Choir held
+0 → 1, which also flipped on 2026-10-04 with an unrelated branch), vibfix regress 0 regressions / 2 already failing.
+
+Known issues found by the loopback check (not caused by (a); open):
+- [ ] **Speaker bleed is credited as singing.** With nobody singing and the speakers reaching the mic (no echo
+  cancellation): Harmony Arena's piano guide lands 1–8 of 8 notes; the Entrance Trainer claims 8 of 8 entrances (the
+  choir); Harmony Memory stage 1 holds 3 of 8 notes (your part as the guide). Real devices with echo cancellation
+  should fare better; untested there. Fix candidates: score only frames that differ from what is playing, or warn when
+  the mic correlates with the output.
+
 
 Measured with `levels.js` (ce0d435): reference tones −16.5 to −18 dBFS RMS, guide notes −23.4, backing and choir −9.6
 to −10.6 (already at the anti-clipping ceiling).
@@ -145,6 +165,12 @@ to −10.6 (already at the anti-clipping ceiling).
 2. **Guide notes** (Choir World rehearsal and anything else that plays while the mic listens): raise them toward the
    tone level only as far as the speaker-bleed checks keep passing: the Entrance / Cutoff "Speaker bleed detected"
    check and the Choir World phantom-held-note checks. Report the level landed on and why.
+   **Decided 2026-10-05:** those checks can't measure it (their test mic is an oscillator; the speakers never reach
+   it, and the Entrance Trainer's bleed is simulated with 70 ms bursts). So a loopback check is built: the app's
+   real playback fed into its own mic path at a stated speaker-to-mic coupling (−20 dB typical laptop, −10 dB worst
+   case, no echo cancellation); with nobody singing, the Entrance Trainer bleed counter, Choir World's held-note
+   verdict and the guide-time pitch graders run; guides go to the highest level with 0 bleed hits and 0 phantom
+   notes at the worst case.
 3. **Backing and choir:** leave as they are.
 4. **No clipping anywhere:** combined peaks stay under the existing 0.95 ceiling, including when tones and backing
    overlap. `levels.js` must show 0 clipped samples in every exercise.

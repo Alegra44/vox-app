@@ -1,0 +1,58 @@
+== local deploy/ + production backend
+   signed up voxcoach-vlc-1791221277127@example.com
+
+-- Home card, a new account
+  ✓ card shown, right after the Choir card                                   {"card":true,"afterChoir":true,"gauge":true}
+  ✓ gauge: label, today's total (0) in the gauges' format                    "Vocal load today" "0% of daily budget"
+  ✓ disclaimer under the gauge, in English                                   "This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional."
+
+-- 80%: Register Coach sings across it
+  ✓ Home card after a reload: the stored total                               "80% of daily budget" (79.800%)
+  ✓ no banner below 80% (nothing singing)                                    
+  ✓ banner up at the crossing: the poll before it was under 80%              before 79.999%, at 80.002%
+  ✓ in the Coach's panel, under its title                                    panel-register, under title true
+  ✓ 80% message, disclaimer (the day's first banner), Dismiss                "You've reached 80% of today's vocal load budget. This is a good moment for a break: rest your voice for a while and drink some water." | "This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional."
+  ✓ announced politely (role=status, aria-live=polite)                       
+  ✓ doesn't block: the Coach still listening, its button clickable           
+  ✓ fr: banner message, disclaimer and button                                "Vous avez atteint 80 % du budget de charge vocale du jour. C’est un bon moment pour faire une pause : reposez votre voix un moment et buvez un peu d’eau."
+  ✓ es: banner message, disclaimer and button                                "Has llegado al 80 % del presupuesto de carga vocal de hoy. Es un buen momento para hacer una pausa: descansa la voz un rato y bebe un poco de agua."
+  ✓ tr: banner message, disclaimer and button                                "Bugünkü ses yükü bütçenizin %80’ine ulaştınız. Mola vermek için iyi bir an: sesinizi bir süre dinlendirin ve biraz su için."
+  ✓ en: banner message, disclaimer and button                                "You've reached 80% of today's vocal load budget. This is a good moment for a break: rest your voice for a while and drink some water."
+  ✓ Dismiss hides it                                                         
+  ✓ dismissed: it stays away while the Coach keeps singing                   80.209%
+  ✓ dismissed: still away after a reload, singing again                      
+  ✓ page errors                                                              none
+
+-- 100%: the Tuner (shared mic) sings across it
+  ✓ banner up at the crossing: the poll before it was under 100%             before 99.997%, at 100.001% (seeded 99.800%)
+  ✓ in the Tuner's panel, under its title                                    panel-tuner
+  ✓ 100% message, no disclaimer (not the day's first banner)                 "You've reached 100% of today's vocal load budget. Consider resting your voice for the rest of the day, or keeping your singing light."
+  ✓ doesn't block: the Tuner still listening, its button clickable           
+  ✓ not dismissed: back after a reload, once singing                         {"up":true,"level":"100"}
+  ✓ dismissed: stays away while the Tuner keeps singing                      
+  ✓ dismissed: still away after a reload, singing again                      
+  ✓ page errors                                                              none
+
+-- reload: the Home card shows today's stored total, over 100%
+  ✓ Home card = today's stored total / 6800, marked over                     "100% of daily budget" (100.266%)
+  ✓ daily table = sum of today's sessions                                    6818.10261581703 vs 6818.1026
+  ✓ fr: Home card label, value and disclaimer                                "Charge vocale du jour" "100 % du budget quotidien"
+  ✓ es: Home card label, value and disclaimer                                "Carga vocal de hoy" "100 % del presupuesto diario"
+  ✓ tr: Home card label, value and disclaimer                                "Bugünkü ses yükü" "Günlük bütçe: %100"
+  ✓ en: Home card label, value and disclaimer                                "Vocal load today" "100% of daily budget"
+  ✓ page errors                                                              none
+
+-- Safari user agent (a fresh browser: no dismissals, no disclaimer shown yet)
+  ✓ sidecar blocked for this user agent                                      
+  ✓ Home card shown, with today's total                                      "100% of daily budget"
+  ✓ Tuner can't feed the load here: no banner                                
+  ✓ Register Coach feeds it: the 100% banner, with the disclaimer            {"up":true,"level":"100","disc":true}
+  ✓ page errors                                                              none
+
+-- signed out
+  ✓ no Home card, no banner                                                  
+  ✓ page errors                                                              none
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlc-1791221277127@example.com
+
+40 passed, 0 failed

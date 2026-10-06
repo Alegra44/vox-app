@@ -1,0 +1,42 @@
+== local deploy/ + production backend
+   mic: 261.63 Hz (MIDI 60)
+   signed up voxcoach-vlh-1791288925627@example.com
+  ✓ sidecar allowed in this browser (desktop Chromium)                 
+
+-- Interval Match: target C4, a pass
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 0
+  ✓ feature result identical with the load feed live                   off {"acc":"99%","fb":"Right on it."} | on {"acc":"99%","fb":"Right on it."}
+  ✓ both live at once: the feature's own mic + the register input      opened this run [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}}]
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns true agc true ec true muted false | off: ns true agc true ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.0294 | off 262.2 Hz rms 0.03
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":2.928,"ended":true,"load":5.63976757368409,"median_rms":0.270440007633411,"p5_midi":60.0024972751439,"p95_midi":60.0025986305239}]
+  ✓ active seconds ≈ time the feature listened (3.00 s, −1.8/+0.3)     2.928 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 5.6398 vs hand 5.6391
+  ✓ pitch stored ≈ 60                                                  p5 60.002, p95 60.003
+  ✓ gauge = today's stored total / 6800                                "0.1% of daily budget" pct 0.082938 vs 0.082938
+  ✓ page errors                                                        none
+
+-- reload: every gauge resumes today's total from the server
+  ✓ interval: same total after reload, not 0                           "0.1% of daily budget"
+  ✓ coach: same total after reload, not 0                              "0.1% of daily budget"
+  ✓ daily table = sum of every session                                 [{"day":"2026-10-06","total_load":5.63976757368409}] vs 5.6398
+
+-- all four languages (switched with the Profile language buttons)
+  ✓ fr: all 2 gauges' label and value in fr                            "Charge vocale du jour" "0,1 % du budget quotidien"
+  ✓ es: all 2 gauges' label and value in es                            "Carga vocal de hoy" "0,1 % del presupuesto diario"
+  ✓ tr: all 2 gauges' label and value in tr                            "Bugünkü ses yükü" "Günlük bütçe: %0,1"
+  ✓ en: all 2 gauges' label and value in en                            "Vocal load today" "0.1% of daily budget"
+  ✓ page errors                                                        none
+
+-- Safari user agent: sidecar features open no second stream, store nothing, hide their gauge
+  ✓ sidecar blocked for this user agent                                
+  ✓ sidecar features' gauges hidden, register-input features' still shown ok
+
+-- signed out
+  ✓ every gauge hidden when signed out                                 all hidden
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlh-1791288925627@example.com
+
+25 passed, 0 failed

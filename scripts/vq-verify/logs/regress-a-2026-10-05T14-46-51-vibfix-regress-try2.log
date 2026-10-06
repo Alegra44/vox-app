@@ -1,0 +1,57 @@
+vibfix 2026-10-06T11-14-29  sides: before, after  before: master  mode: regress (rises become "must not move")
+node:fs:560
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/vq-verify/vocalset/manifest.json'
+    at Object.openSync (node:fs:560:18)
+    at Object.readFileSync (node:fs:444:35)
+    at Object.<anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js:45:27)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/vq-verify/vocalset/manifest.json'
+}
+
+Node.js v22.23.3
+ERROR Error: Command failed: node /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/vq-verify/vocalset --json /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/vq-verify/vibfix/rv.json
+node:fs:560
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/vq-verify/vocalset/manifest.json'
+    at Object.openSync (node:fs:560:18)
+    at Object.readFileSync (node:fs:444:35)
+    at Object.<anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js:45:27)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/vq-verify/vocalset/manifest.json'
+}
+
+Node.js v22.23.3
+
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/vibfix.js:290:3
+    at Object.<anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/vibfix.js:367:3)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)

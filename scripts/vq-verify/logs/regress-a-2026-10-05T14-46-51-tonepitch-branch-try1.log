@@ -1,0 +1,48 @@
+tonepitch 2026-10-05T15-10-26 · the page's reference and guide tones through autoCorrelate, MIDI 36–96
+
+-- reference, 44100 Hz: 61 notes · median error 12.19 ct at most · worst frame 12.68 ct (C#2)
+  ✓ reference 44100 Hz: every held frame of every note has a pitch         3721 frames
+   notes past ±10 ct on some frame: C2 12.6, C#2 12.7
+  ✓ reference 44100 Hz: every frame reads as the right note (within ±50 ct) worst 12.7 ct
+  ✓ reference 44100 Hz: no octave errors                                   0
+  ✓ reference 44100 Hz: no note worse than master's sine (+2 ct)           61 notes
+
+-- guide, 44100 Hz: 61 notes · median error 21.44 ct at most · worst frame 41.50 ct (C2)
+  ✓ guide 44100 Hz: every held frame of every note has a pitch             3721 frames
+   notes past ±10 ct on some frame: C2 41.5, C#2 22.3, D2 34.6, D#2 28.6, E2 23.7, F2 27.5, F#2 17.7, G2 23.8, G#2 17.0, A2 18.7, A#2 18.7, B2 10.0, C3 16.2, C#3 15.7, D3 10.8, E3 10.3, F3 10.9, F#3 10.6
+  ✓ guide 44100 Hz: every frame reads as the right note (within ±50 ct)    worst 41.5 ct
+  ✓ guide 44100 Hz: no octave errors                                       0
+   guide vs master's 0.10 sine, notes > 2 ct worse (reported: the app never detects a guide, the singer hears it): none
+
+-- master sine 0.22, 44100 Hz: 61 notes · median error 21.44 ct at most · worst frame 41.17 ct (C2)
+  ✓ master sine 0.22 44100 Hz: every held frame of every note has a pitch  3721 frames
+   notes past ±10 ct on some frame: C2 41.2, C#2 24.6, D2 32.2, D#2 32.1, E2 23.7, F2 26.4, F#2 17.7, G2 22.3, G#2 17.0, A2 19.3, A#2 17.1, B2 10.4, C3 15.2, C#3 13.8, D3 10.8, E3 10.6, F3 10.7
+
+-- master sine 0.10, 44100 Hz: 61 notes · median error 21.44 ct at most · worst frame 41.50 ct (C2)
+  ✓ master sine 0.10 44100 Hz: every held frame of every note has a pitch  3721 frames
+   notes past ±10 ct on some frame: C2 41.5, C#2 22.3, D2 34.6, D#2 28.6, E2 23.7, F2 27.5, F#2 17.7, G2 23.8, G#2 17.0, A2 18.7, A#2 18.7, B2 10.0, C3 16.2, C#3 15.7, D3 10.8, E3 10.3, F3 10.9, F#3 10.6
+
+-- reference, 48000 Hz: 61 notes · median error 12.12 ct at most · worst frame 19.18 ct (C2)
+  ✓ reference 48000 Hz: every held frame of every note has a pitch         4087 frames
+   notes past ±10 ct on some frame: C2 19.2, C#2 12.6, D2 12.6, D#2 12.3
+  ✓ reference 48000 Hz: every frame reads as the right note (within ±50 ct) worst 19.2 ct
+  ✓ reference 48000 Hz: no octave errors                                   0
+  ✓ reference 48000 Hz: no note worse than master's sine (+2 ct)           61 notes
+
+-- guide, 48000 Hz: 61 notes · median error 24.86 ct at most · worst frame 44.58 ct (C#2)
+  ✓ guide 48000 Hz: every held frame of every note has a pitch             4087 frames
+   notes past ±10 ct on some frame: C2 33.1, C#2 44.6, D2 32.7, D#2 28.4, E2 34.5, F2 17.8, F#2 29.4, G2 18.9, G#2 24.8, A2 15.6, A#2 22.1, B2 11.7, C3 17.7, C#3 16.8, D#3 12.7, E3 14.4, F3 13.3, F#3 11.4
+  ✓ guide 48000 Hz: every frame reads as the right note (within ±50 ct)    worst 44.6 ct
+  ✓ guide 48000 Hz: no octave errors                                       0
+   guide vs master's 0.10 sine, notes > 2 ct worse (reported: the app never detects a guide, the singer hears it): none
+
+-- master sine 0.22, 48000 Hz: 61 notes · median error 22.93 ct at most · worst frame 41.19 ct (C#2)
+  ✓ master sine 0.22 48000 Hz: every held frame of every note has a pitch  4087 frames
+   notes past ±10 ct on some frame: C2 33.1, C#2 41.2, D2 41.1, D#2 28.4, E2 32.1, F2 19.0, F#2 26.3, G2 18.9, G#2 22.3, A2 16.2, A#2 19.3, B2 11.7, C3 17.0, C#3 15.2, D#3 13.0, E3 12.5, F3 11.6, F#3 10.7
+
+-- master sine 0.10, 48000 Hz: 61 notes · median error 24.86 ct at most · worst frame 44.58 ct (C#2)
+  ✓ master sine 0.10 48000 Hz: every held frame of every note has a pitch  4087 frames
+   notes past ±10 ct on some frame: C2 33.1, C#2 44.6, D2 32.7, D#2 28.4, E2 34.5, F2 17.8, F#2 29.4, G2 18.9, G#2 24.8, A2 15.6, A#2 22.1, B2 11.7, C3 17.7, C#3 16.8, D#3 12.7, E3 14.4, F3 13.3, F#3 11.4
+
+==== VERDICT: 18 passed, 0 failed
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/tonepitch-local-2026-10-05T15-10-26.log
