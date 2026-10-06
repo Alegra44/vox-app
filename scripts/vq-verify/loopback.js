@@ -14,7 +14,7 @@
 // as built, then the harmonic tone swept from −23.4 to −12 dBFS RMS in place of playGuideTone, to find the highest
 // level with 0 phantom notes. (2026-10-05: none; even master's level has some, so guides stay master's sine.)
 // LB_URL=<deployed url>: that page alone, as built (no sweep), signed out.
-// LB_SCEN=scale,harmony,tt,hm runs only those groups (default all).
+// LB_SCEN=scale,custom,rift,harmony,tt,hm runs only those groups (default all).
 // Usage: [LB_BEFORE=<ref>] [LB_ONLY=before|after] [LB_URL=<url>] [LB_SCEN=…] node scripts/vq-verify/loopback.js
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup');
@@ -97,6 +97,28 @@ async function scaleRun(page, level) {
       feedback: document.getElementById('scaleFeedback')?.textContent || '' };
   }, level);
 }
+// Custom exercise (its Start button, 5 notes) and Pitch Rift (its round function, ~12 s): each plays a reference and
+// starts listening a short gap after it
+async function custom(page) {
+  return page.evaluate(async () => {
+    window.__steps = [];
+    if (!window.__capWrapped) { const cap = captureAccuracyForTarget; window.__capWrapped = true; captureAccuracyForTarget = async (...a) => { const r = await cap(...a); __steps.push(r); return r; }; }
+    customSequence = [57, 59, 60, 62, 64];
+    document.getElementById('customResultCard').style.display = 'none';
+    document.getElementById('customStartBtn').click();
+    const t0 = performance.now(); while (document.getElementById('customResultCard').style.display !== 'block' && performance.now() - t0 < 60000) await new Promise(r => setTimeout(r, 200));
+    return { steps: __steps.length, heard: __steps.filter(r => r.heard).length, scores: __steps.map(r => r.accuracy), shown: document.getElementById('customResultAvg').textContent };
+  });
+}
+async function rift(page) {
+  return page.evaluate(async () => {
+    riftRounds = []; riftActive = true; riftStartTime = performance.now();
+    riftRunNextRound();
+    await new Promise(r => setTimeout(r, 12000));
+    riftActive = false; await new Promise(r => setTimeout(r, 2500));
+    return { steps: riftRounds.length, heard: riftRounds.filter(r => r.heard).length, scores: riftRounds.map(r => r.accuracy) };
+  });
+}
 async function entrance(page) {
   return page.evaluate(async () => {
     document.querySelector('#ttModeRow [data-tt-mode="entrance"]')?.click();
@@ -126,7 +148,7 @@ async function memory(page, stage) {
     if (only && only !== side) continue;
     const { ctx, page, errors } = await open(b, side, c), out = R[side][cdb] = {};
     log(`\n== ${side}, coupling ${cdb} dB`);
-    const SC = process.env.LB_SCEN ? process.env.LB_SCEN.split(',') : ['harmony', 'scale', 'tt', 'hm'], want = k => SC.includes(k);
+    const SC = process.env.LB_SCEN ? process.env.LB_SCEN.split(',') : ['harmony', 'scale', 'custom', 'rift', 'tt', 'hm'], want = k => SC.includes(k);
     const show = (k, r) => log(`   ${k.padEnd(44)} heard ${r.heard}/${r.total} frames · notes scored ${r.scored} · landed ${r.landed} · Timing ${r.timing} · Part ${r.part}`);
     if (!want('harmony')) {} else if (side === 'before') {
       show('Harmony, piano guide (master level)', out.guide = await harmony(page, { guide: true, distraction: false }));
@@ -149,6 +171,8 @@ async function memory(page, stage) {
       if (lv === 'professional') out.scale = sr;
       log(`   ${`Scale Run, ${lv}`.padEnd(44)} steps heard ${sr.heard}/${sr.steps} · scores ${sr.scores.join('/')} · shown ${sr.shown} · "${sr.feedback}"`);
     }
+    if (want('custom')) { const r = out.custom = await custom(page); log(`   ${'Custom exercise, 5 notes'.padEnd(44)} steps heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')} · shown ${r.shown}`); }
+    if (want('rift')) { const r = out.rift = await rift(page); log(`   ${'Pitch Rift, ~12 s of rounds'.padEnd(44)} rounds heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
     if (want('tt')) {
       out.tt = await entrance(page);
       log(`   ${'Entrance Trainer'.padEnd(44)} bleed hits ${out.tt.bleed} · entrances ${out.tt.entrances}/${out.tt.n} · warning ${out.tt.warning}`);
