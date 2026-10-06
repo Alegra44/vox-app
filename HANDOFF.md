@@ -38,7 +38,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 
 1. Pre-session warm-up, phases 1–2 (`warmup`, below). Now.
 2. The four tester-review fixes (a)–(d): (b) listening window and (c) shared note picker are live (2026-10-05,
-   dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X); (a) playback volume is next, then (d) level-up explanation. Specs below.
+   dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X); (a) playback volume is live (2026-10-06, dpl_5GhGgvgLAQCFZQXnmwdmAn8UcyKh, results
+   in the roadmap); (d) level-up explanation is next: report its migration and API change before applying. Specs below.
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`).
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
