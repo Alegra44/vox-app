@@ -121,6 +121,25 @@ bleed checks and the Entrance Trainer first-tick check. **Deploy is approved if 
 failure.** Then on production: batch1, the bleed checks, and `levels.js` if it can run against a URL. Report after
 (a) is deployed and checked on production.
 
+#### Next, approved 2026-10-06 (in this order; report after 1 is deployed, together with 2–4)
+
+1. **Scale Run listens only after its reference has fully ended** (all levels). Show it with `loopback.js` before and
+   after: with nobody singing, the score drops to the "didn't hear you" result or close to 0; real singing scores as
+   before. Regression: vibfix regress mode plus the batch suites, same run against master. **Deploy approved if no
+   Regression-class failure**, then a production check. Also list every other exercise that starts listening before its
+   reference ends; fix only Scale Run now.
+2. **Test setup (test-only).** All test data (VocalSet clips, noise recordings, built stimuli) moves out of `$TMPDIR`
+   to a persistent folder outside the repo (`~/VoxCoachTestData`, overridable by an environment variable); every
+   script and HANDOFF.md updated; the noise recordings downloaded again into it. The deploy command pins the Vercel CLI
+   to 62.2.0 (`npx vercel@62.2.0 …`; 62.4.0 answered "Not authorized" while logged in), with the reason in HANDOFF;
+   try newer versions later. noisegate gets the same regress mode as vibfix: Regression / Fixed / Already failing,
+   with medians over 3 runs for flaky readings (e.g. the Choir World held note under TV noise).
+3. **Log "Speaker bleed scores as singing"** in the roadmap as a scoped item next to item 3 (one mic stream per
+   feature), with the loopback numbers (nobody singing: Entrance Trainer 8/8 entrances, Harmony Arena 0–8/8 notes,
+   Harmony Memory 3/8 held); echo cancellation on real devices untested. Don't fix it yet.
+4. **(d) as a proposal only:** the migration SQL, the API change, which existing counters go into the snapshot, and
+   the four-language text. Nothing applied until the user approves.
+
 #### (d) Level-up explanation (approved 2026-10-05; don't start until (a) is live)
 
 - At each level-up, store a snapshot of the existing counters on the server (e.g. a jsonb column on user progress),
