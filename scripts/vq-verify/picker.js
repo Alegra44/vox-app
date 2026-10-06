@@ -14,6 +14,7 @@
 // PK_URL=<deployed url>: the same checks on that page alone (it takes the "after" side; there is no before side).
 // Usage: [PK_BEFORE=<ref>] [PK_URL=<url>] node scripts/vq-verify/picker.js
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
@@ -22,7 +23,7 @@ const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: t
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `picker-${URL_ ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
-const BEFORE = path.join(os.tmpdir(), 'vq-verify', 'picker-before.html'); fs.mkdirSync(path.dirname(BEFORE), { recursive: true });
+const BEFORE = path.join(TESTDATA, 'picker-before.html'); fs.mkdirSync(path.dirname(BEFORE), { recursive: true });
 fs.writeFileSync(BEFORE, execFileSync('git', ['show', `${REF}:deploy/index.html`], { cwd: ROOT, maxBuffer: 1 << 28 }));
 const HTML = { before: BEFORE, after: path.join(ROOT, 'deploy/index.html') };
 const RANGES = { 'no saved range (A2–C5)': null, 'C3–G4': [48, 67], 'narrow A3–A4': [57, 69] };

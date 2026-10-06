@@ -3,17 +3,18 @@
 // (the working tree), or on a deployed URL (NG_URL) signed in as one throwaway account deleted at exit (testAccounts.js).
 //   Pitch Match (Listen, Intermediate, 2 takes), Register Drills (5 notes), Real-Time Feedback (6 s), Tuner (6 s),
 //   Stay in Key (6 s), Choir World capture + verdict (2 × 3.3 s) — the same drivers as vibfix.js, target A3 (57).
-// Stimuli: %TEMP%/vq-verify/gate/*.wav from gatestim.py (see README). Noise alone is at the level it has 10 dB under a
+// Stimuli: $VOXCOACH_TESTDATA (~/VoxCoachTestData)/gate/*.wav from gatestim.py (see README). Noise alone is at the level it has 10 dB under a
 // typical sung note on this mic chain; real speech and TV are public-domain recordings (LibriVox, Bonanza PD episodes).
 // Checks: broadband noise and hum (no pitch in it) must be heard on ≤ 5% of frames and never held / scored; every noise
 // may only hold or improve on every feature; breathy and soft (pp) singing must keep ≥ 95% of the frames heard before.
 // Real speech and TV are reported, not checked (a speaking voice is periodic: this gate isn't meant to remove it).
 // Usage: [NG_URL=<url>] [NG_PACE_MS=45000] [NG_RESUME=logs/<earlier>.json] node scripts/vq-verify/noisegate.js [stimulus names, comma-separated]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(os.tmpdir(), 'vq-verify', 'gate');
+const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(TESTDATA, 'gate');
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.NG_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `noisegate-${PROD ? 'prod' : 'local'}-${stamp}`);

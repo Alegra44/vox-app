@@ -12,11 +12,12 @@
 //   noise     room noise (pink, HVAC rumble, babble, white) at 20 and 10 dB SNR under a head and a chest tone
 // Usage: [REG_URL=<deployed url>] node scripts/vq-verify/regfix.js [steady|bug|bridge|drills|boss|feedback|levels|noise|all]   (REG_BLOCK_CDN=1: block the Supabase CDN, to check that a failed page load stops the run)
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..');
-const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const BEFORE = path.join(TMP, 'index-before.html');
 fs.writeFileSync(BEFORE, execFileSync('git', ['show', `${process.env.REG_BEFORE || '8a87796'}:deploy/index.html`], { cwd: ROOT, maxBuffer: 1 << 28 }));
 const HTML = { before: BEFORE, after: path.join(ROOT, 'deploy/index.html') };

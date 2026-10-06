@@ -1,4 +1,4 @@
-const XS = process.env.XS_DIR || require('path').join(require('os').tmpdir(), 'vq-verify', 'xscope');
+const XS = process.env.XS_DIR || require('path').join(require('../testdata').TESTDATA, 'xscope');
 const rows=require(require('path').join(XS, 'xscope-vibrato.json')).filter(r=>r.path===(process.argv[2]||'shared'));
 const nn=a=>a.filter(x=>x!=null), mean=a=>{a=nn(a);return a.length?Math.round(a.reduce((s,x)=>s+x,0)/a.length):'—'}, rate=(a,f)=>{a=nn(a);return a.length?Math.round(100*a.filter(f).length/a.length):'—'}, k=(a,key)=>nn(a).map(x=>x[key]);
 const M=[

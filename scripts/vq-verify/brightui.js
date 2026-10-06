@@ -7,11 +7,12 @@
 // deleted at exit (testAccounts.js).
 // Usage: node scripts/vq-verify/brightui.js [url]
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const url = process.argv[2];
-const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let A = null;
 if (url) { const { track } = require('../choir-verify/testAccounts'); A = { email: track(`voxcoach-vqb-${Date.now()}@example.com`), password: 'VQ-' + Math.random().toString(36).slice(2) + '!x9' }; }

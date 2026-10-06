@@ -2,7 +2,8 @@
 // noise-*: % of frames a gate still passes, and phantom notes (≥300 ms runs of passed frames within ±50 ct of their median,
 // which Choir World / Pitch Match would score as a held note). sing-* / mix-*: % of today's voiced frames the gate keeps.
 const fs = require('fs'), path = require('path'), os = require('os');
-const F = JSON.parse(fs.readFileSync(path.join(os.tmpdir(), 'vq-verify', 'gate', 'frames.json')));
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
+const F = JSON.parse(fs.readFileSync(path.join(TESTDATA, 'gate', 'frames.json')));
 const cents = f => 1200 * Math.log2(f / 440);
 const med = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[s.length >> 1] : NaN; };
 // continuity: keep a voiced frame only when it sits in a run (gaps ≤ 60 ms, frame-to-frame jump ≤ JUMP ct) lasting ≥ D ms

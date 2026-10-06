@@ -9,6 +9,7 @@
 // LW_URL=<deployed url>: the same checks on that page alone (it takes the "after" side; there is no before side).
 // Usage: [LW_BEFORE=<ref>] [LW_URL=<url>] node scripts/vq-verify/listenwin.js
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
@@ -18,7 +19,7 @@ const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: t
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `listenwin-${URL_ ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
 const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
-const BEFORE = path.join(os.tmpdir(), 'vq-verify', 'listenwin-before.html'); fs.mkdirSync(path.dirname(BEFORE), { recursive: true });
+const BEFORE = path.join(TESTDATA, 'listenwin-before.html'); fs.mkdirSync(path.dirname(BEFORE), { recursive: true });
 fs.writeFileSync(BEFORE, execFileSync('git', ['show', `${REF}:deploy/index.html`], { cwd: ROOT, maxBuffer: 1 << 28 }));
 const HTML = { before: BEFORE, after: path.join(ROOT, 'deploy/index.html') };
 let pass = 0, fail = 0;

@@ -5,10 +5,11 @@
 // 50 Bridge lane, 62 "pushing chest") and one clearly above; each played straight and with 6 Hz ±25/±50/±100 ct.
 // Usage: node scripts/vq-verify/regcoach.js
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
-const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const magRatio = (s, K) => { let w = 0, a = 0; for (let k = 1; k <= K; k++) { const v = Math.pow(k, -s); w += k * v; a += v; } return w / a; };
 const slopeFor = (ratio, K) => { let lo = 0.01, hi = 6; for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (magRatio(m, K) > ratio) lo = m; else hi = m; } return (lo + hi) / 2; };
 const scoreOf = r => Math.max(0, Math.min(100, (r - 1.5) / 4 * 100));

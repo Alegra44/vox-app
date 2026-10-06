@@ -16,13 +16,14 @@
 // Usage: node scripts/vocal-load-verify/batchN.js [url]   (no url: deploy/ served locally, against the production backend)
 // VLB_ONLY=a,b runs only those features (debugging).
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db, cleanup } = require('../choir-verify/testAccounts');
 
 const URL_ = process.argv[2], LOCAL = 'http://localhost:8765/', DEPLOY = path.resolve(__dirname, '../../deploy');
-const TMP = path.join(os.tmpdir(), 'vq-verify'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const email = track(`voxcoach-vlh-${Date.now()}@example.com`), password = 'VH-' + Math.random().toString(36).slice(2) + '!x9';
 let pass = 0, fail = 0, auth = null;

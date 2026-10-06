@@ -1,10 +1,11 @@
 // Spectral centroid with and without vibrato on the same tone: the panel's value (power-weighted since 2026-09-24),
 // and the old magnitude-weighted one computed from the same spectra for comparison.
 const { chromium } = require('playwright'); const path = require('path'), os = require('os'); const { execFileSync } = require('child_process');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 (async () => {
   for (const [label, spec] of [['no vibrato', {}], ['6 Hz ±25 ct', { vibRate: 6, vibCents: 25 }], ['6 Hz ±50 ct', { vibRate: 6, vibCents: 50 }], ['6 Hz ±100 ct', { vibRate: 6, vibCents: 100 }]]) {
-    const f = path.join(os.tmpdir(), 'vq-verify', 'cv.wav');
+    const f = path.join(TESTDATA, 'cv.wav');
     execFileSync('python', [path.join(__dirname, 'gen.py'), f, JSON.stringify({ f0: 330, harmonics: [1, 0.5, 0.33, 0.25], ...spec })]);
     const b = await chromium.launch({ args: ['--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${f}`] });
     const ctx = await b.newContext({ permissions: ['microphone'] });

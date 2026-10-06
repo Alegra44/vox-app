@@ -2,13 +2,14 @@
 // shared processed mic vs the register-input pattern. Each WAV is Chromium's mic; frames are read through the app's own
 // mic paths (shared: initAudio + analyser + autoCorrelate, as every shared-mic feature does; register: openRegisterInput +
 // readRegisterFrame), then graded with the app's own functions and thresholds on those same frames.
-// Usage: node scripts/vq-verify/xscope.js vibrato|noise|phantom [out.json]   (default out: %TEMP%/vq-verify/xscope/xscope-<mode>.json; KINDS / SNRS env narrow the noise run)
+// Usage: node scripts/vq-verify/xscope.js vibrato|noise|phantom [out.json]   (default out: $VOXCOACH_TESTDATA (~/VoxCoachTestData)/xscope/xscope-<mode>.json; KINDS / SNRS env narrow the noise run)
 const { chromium } = require('playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..');
-const TMP = path.join(os.tmpdir(), 'vq-verify', 'xscope'); fs.mkdirSync(TMP, { recursive: true });
+const TMP = path.join(TESTDATA, 'xscope'); fs.mkdirSync(TMP, { recursive: true });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const TARGET = 57, F0 = 220; // A3
 

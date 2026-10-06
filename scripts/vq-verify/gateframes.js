@@ -1,9 +1,10 @@
 // "Is someone singing" scope: per-frame features on the app's own mic path (initAudio → analyser → autoCorrelate, or
-// openRegisterInput → readRegisterFrame) for each WAV in %TEMP%/vq-verify/gate. Scope only; the app is unchanged.
+// openRegisterInput → readRegisterFrame) for each WAV in $VOXCOACH_TESTDATA (~/VoxCoachTestData)/gate. Scope only; the app is unchanged.
 // Usage: node gate.js [filter substring] [paths: shared,register]
 const { chromium } = require('C:/Users/Alegra Kunda/OneDrive/Documents/voxcoach-app/node_modules/playwright');
+const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
 const path = require('path'), fs = require('fs'), os = require('os');
-const ROOT = 'C:/Users/Alegra Kunda/OneDrive/Documents/voxcoach-app', DIR = path.join(os.tmpdir(), 'vq-verify', 'gate');
+const ROOT = 'C:/Users/Alegra Kunda/OneDrive/Documents/voxcoach-app', DIR = path.join(TESTDATA, 'gate');
 const OUT = path.join(DIR, 'frames.json'), res = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT)) : {};
 const filt = process.argv[2] || '', paths = (process.argv[3] || 'shared').split(',');
 async function run(wav, pth) {
