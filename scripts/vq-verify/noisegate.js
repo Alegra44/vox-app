@@ -12,7 +12,8 @@
 // and medians are compared. Broadband noise keeps its absolute checks (heard on ≤ 5%, nothing scored or held) judged on
 // each side; noise alone must not get worse and soft singing must not lose frames past the tolerance (the spread of
 // master's own runs, ±5 to ±10 points; the Choir World held count by its median, within master's own spread).
-// Every check is sorted into Regression (blocks a deploy), Fixed or Already failing.
+// Every check is sorted into Regression (blocks a deploy), Fixed, Already failing, or Within noise (a pass/fail flip
+// smaller than the noise tolerance: not blocking).
 // Usage: [NG_URL=<url>] [NG_MODE=regress] [NG_PACE_MS=45000] [NG_RESUME=logs/<earlier>.json] node scripts/vq-verify/noisegate.js [stimulus names, comma-separated]
 const { chromium } = require('playwright');
 const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
@@ -173,17 +174,23 @@ const brief = o => ({
 // NG_MODE=regress verdict: master ('before') against the branch ('after') by the medians of RUNS runs per side
 const median = a => { a = a.filter(x => x != null && !Number.isNaN(x)).sort((x, y) => x - y); if (!a.length) return null; const m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; };
 function regressVerdict(rows) {
-  const C = { regression: [], fixed: [], already: [], pass: [] };
+  const C = { regression: [], fixed: [], already: [], noise: [], pass: [] };
   const vals = (r, side, k) => r.runs[side].map(x => x[k]), med = (r, side, k) => median(vals(r, side, k));
   const spread = (r, k) => { const v = vals(r, 'before', k).filter(x => x != null); return v.length ? Math.max(...v) - Math.min(...v) : 0; };
   const tolOf = (r, k) => Math.min(10, Math.max(5, spread(r, k)));
   // ok: judged on each side's medians; better + tol: the branch's median against master's
   const add = (r, k, label, { ok, better, tol }, rule) => {
     let cls = 'pass';
-    if (ok) { const m = ok('before'), b = ok('after'); cls = m && !b ? 'regression' : !m && !b ? 'already' : !m && b ? 'fixed' : 'pass'; }
     const d = k ? med(r, 'after', k) - med(r, 'before', k) : 0;
+    if (ok) {
+      const m = ok('before'), b = ok('after');
+      cls = m && !b ? 'regression' : !m && !b ? 'already' : !m && b ? 'fixed' : 'pass';
+      // a pass/fail flip on a reading that straddles the bar (rumble: 2–20% heard on identical code) counts only when the
+      // change also exceeds the noise tolerance; within it, it's reported as within noise (user, 2026-10-07)
+      if (k && (cls === 'regression' || cls === 'fixed') && Math.abs(d) <= tolOf(r, k)) cls = 'noise';
+    }
     if (better && Math.abs(d) > tol) { if (better === 'higher' ? d < 0 : d > 0) cls = 'regression'; else if (cls === 'pass') cls = 'fixed'; }
-    const shown = k ? ` master ${vals(r, 'before', k).join('/')} (median ${med(r, 'before', k)}, spread ${spread(r, k)}) → branch ${vals(r, 'after', k).join('/')} (median ${med(r, 'after', k)})${better ? `, change ${d > 0 ? '+' : ''}${d} (±${tol})` : ''}` : '';
+    const shown = k ? ` master ${vals(r, 'before', k).join('/')} (median ${med(r, 'before', k)}, spread ${spread(r, k)}) → branch ${vals(r, 'after', k).join('/')} (median ${med(r, 'after', k)}), change ${d > 0 ? '+' : ''}${d} (±${better ? tol : tolOf(r, k)})` : '';
     C[cls].push(`${r.id} ${label}${shown} · ${rule}`);
   };
   const HEARD = ['rtfVoiced', 'tunerVoiced', 'skVoiced', 'cwFrames'], SCORE = ['rtfInTune', 'tunerInTune', 'skInKey'];
@@ -206,7 +213,9 @@ function regressVerdict(rows) {
   C.fixed.forEach(x => log('FIXED ' + x));
   log(`\n==== Already failing: fails on master and on the branch (not caused by the branch)`);
   C.already.forEach(x => log('ALREADY ' + x));
-  log(`\n==== VERDICT (regress, ${RUNS} runs per side, medians): ${C.regression.length} regression(s), ${C.fixed.length} fixed, ${C.already.length} already failing, ${C.pass.length} passed`);
+  log(`\n==== Within noise: crosses a pass/fail bar, but by no more than master's own spread (±5 to ±10): not blocking`);
+  C.noise.forEach(x => log('NOISE ' + x));
+  log(`\n==== VERDICT (regress, ${RUNS} runs per side, medians): ${C.regression.length} regression(s), ${C.fixed.length} fixed, ${C.already.length} already failing, ${C.noise.length} within noise, ${C.pass.length} passed`);
   C.pass.forEach(x => log('pass ' + x));
   log(`\nlog: ${LOG}.log  json: ${LOG}.json`);
   logf.end();

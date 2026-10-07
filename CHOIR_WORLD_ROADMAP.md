@@ -232,6 +232,11 @@ pinned, noisegate regress mode (A/A on bonanza-b: 0 regressions; the held count 
      (a second device); the text renders in all four languages.
    - Regression: regress-mode vibfix and noisegate plus the batch suites, same run against master. **Deploy approved
      if no Regression-class failure**, then a production check with test accounts cleaned up.
+   **Decided 2026-10-07 (the user):** noisegate flagged one Regression in (d)'s run (rumble noise, RTF heard 4/8/4% on
+     master vs 9/12/5% on the branch, bar ≤5%; RTF untouched by (d); this reading ranges 2–20% on identical code).
+     Rerun rumble alone, 5 runs per side; if the branch isn't clearly worse, it counts as noise and the release goes
+     on. And noisegate's rule changes: a pass/fail flip is a Regression only when the change also exceeds the noise
+     tolerance; a flip within it is reported as "within noise", not blocking.
    That completes the four tester bugs. Next: redesign phase 1, specified separately by the user; it changes how the
    app looks, so **screenshots are reviewed by the user before anything deploys.**
 
