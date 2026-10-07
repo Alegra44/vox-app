@@ -25,8 +25,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
   2026-10-05: the spec for (a) lived only in chat and was lost).
 - Production deploys need the user's explicit approval. Run from `deploy/`:
   `npx vercel@62.2.0 deploy --prod --yes --scope alegra1122` (without `--scope` the CLI answers "Not authorized").
-  The CLI is pinned to 62.2.0: on 2026-10-06, 62.4.0 answered "Not authorized" while logged in (`whoami` fine), and
-  62.2.0 deployed. Try newer versions again later and move the pin when one works.
+  The CLI is pinned to 62.2.0 (deployed fine 2026-10-06/07). "Not authorized" while logged in (`whoami` fine) has come
+  from 62.4.0 and, once, from 62.2.0 too (2026-10-07): it's intermittent on Vercel's side, and the same command again
+  deployed. Retry once before suspecting the login; try newer CLI versions later.
   The user often runs this themselves.
 - Verification means real measurements (AudioParam values, per-frame pitch through the app's own code), never claims.
 - Every verify script that creates accounts wraps each address in `track()` from `scripts/choir-verify/testAccounts.js`.
