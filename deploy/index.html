@@ -19142,8 +19142,10 @@ document.getElementById('customStartBtn')?.addEventListener('click', async ()=>{
     document.getElementById('customRunnerProgress').textContent = `Note ${i+1} of ${customSequence.length}`;
     document.getElementById('customRunnerTarget').textContent = noteNameFromMidi(targetMidi);
     document.getElementById('customRunnerStatus').textContent = 'Listening…';
-    playTone(noteToFreq(targetMidi), 0.5, 0);
-    await new Promise(r=>setTimeout(r, 550));
+    await playTone(noteToFreq(targetMidi), 0.5, 0);
+    // listen only once the reference has ended at the speaker (550 ms from its start left ~30 ms, less the output
+    // latency: with nobody singing it scored its own tone, 3 of 5 notes at 91%)
+    await new Promise(r=>setTimeout(r, Math.max(550, referenceDoneMs(0.5))));
     const res = await captureAccuracyForTarget(targetMidi, durationMs, {});
     customResults.push({midi:targetMidi, accuracy:res.accuracy, heard:res.heard});
     document.getElementById('customRunnerStatus').textContent = res.heard ? `${res.accuracy}%` : 'No clear pitch heard';
