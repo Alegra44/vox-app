@@ -10,11 +10,12 @@ const { track, cleanup } = require('../choir-verify/testAccounts');
 const ROOT = path.resolve(__dirname, '../..'), DEPLOY = path.join(ROOT, 'deploy'), LOCAL = 'http://localhost:8765/';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// The build to serve: null = the working copy's deploy/, or a git ref whose deploy/index.html is written to a temp dir.
+// The build to serve: null = the working copy's deploy/, or a git ref whose deploy/ files are written to a temp dir.
 function buildDir(ref) {
   if (!ref) return DEPLOY;
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vc-design-'));
-  fs.writeFileSync(path.join(dir, 'index.html'), execFileSync('git', ['show', `${ref}:deploy/index.html`], { cwd: ROOT, maxBuffer: 64 << 20 }));
+  const files = execFileSync('git', ['ls-tree', '-r', '--name-only', ref, 'deploy/'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean);
+  for (const f of files) fs.writeFileSync(path.join(dir, path.basename(f)), execFileSync('git', ['show', `${ref}:${f}`], { cwd: ROOT, maxBuffer: 64 << 20 }));
   return dir;
 }
 
