@@ -110,7 +110,10 @@ async function levelUp(page, { sessions = 0, records = 0, breakthroughs = 0 }) {
       const want1 = await A.page.evaluate(c => levelupWhyText(null, c), l1.snap);
       check(`level-up 1 (${l1.from} → ${l1.to}) shown, counted from the start of the account`, l1.shown && l1.to === l1.from + 1 && l1.why === want1 && /2 new records/.test(l1.why) && /1 breakthrough/.test(l1.why),
         `"${l1.why}" (sessions ${l1.snap.sessions}, records ${l1.snap.records})`);
-      check('snapshot 1 = the counters at level-up 1', JSON.stringify({ ...l1.snap, level: undefined, at: undefined }) === JSON.stringify({ ...l1.counters }) && l1.snap.level === l1.to, JSON.stringify(l1.snap));
+      // key by key: once saved, the snapshot comes back from jsonb, which orders keys its own way
+      const keys1 = Object.keys(l1.counters), snapKeys1 = Object.keys(l1.snap).filter(k => k !== 'level' && k !== 'at');
+      check('snapshot 1 = the counters at level-up 1', snapKeys1.length === keys1.length && keys1.every(k => l1.snap[k] === l1.counters[k]) && l1.snap.level === l1.to,
+        `${JSON.stringify(l1.snap)} vs counters ${JSON.stringify(l1.counters)}`);
       // second level-up: only what happened since the first
       const l2 = await levelUp(A.page, { sessions: 1, records: 1 });
       check(`level-up 2 (${l2.from} → ${l2.to}): only what happened since level-up 1`, l2.shown && l2.why === 'You levelled up: 1 new record and 1 session', `"${l2.why}"`);

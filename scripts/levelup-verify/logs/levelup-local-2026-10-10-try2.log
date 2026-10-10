@@ -1,0 +1,55 @@
+== local deploy/ (production backend)
+
+-- text, four languages
+  ✓ en · 1 item                                                            "You levelled up: 1 new record"
+  ✓ en · 2 items                                                           "You levelled up: 2 new records and 9 sessions"
+  ✓ en · 3 items                                                           "You levelled up: 2 new records, 1 breakthrough and 3 Boss Battles won"
+  ✓ en · 5 non-zero: top 3 by priority                                     "You levelled up: 1 new record, 2 breakthroughs and 1 Boss Battle won"
+  ✓ en · 1 item + a 5-day streak                                           "You levelled up: 1 session and a 5-day streak"
+  ✓ en · streak 2: not shown                                               "You levelled up: 1 warm-up"
+  ✓ en · only a 3-day streak                                               "You levelled up: a 3-day streak"
+  ✓ en · nothing                                                           ""
+  ✓ en · rendered in the level-up card                                     "You levelled up: 2 new records, 1 breakthrough and 3 Boss Battles won"
+  ✓ fr · 1 item                                                            "Niveau supérieur : 1 nouveau record"
+  ✓ fr · 2 items                                                           "Niveau supérieur : 2 nouveaux records et 9 séances"
+  ✓ fr · 3 items                                                           "Niveau supérieur : 2 nouveaux records, 1 percée et 3 combats de Boss remportés"
+  ✓ fr · 5 non-zero: top 3 by priority                                     "Niveau supérieur : 1 nouveau record, 2 percées et 1 combat de Boss remporté"
+  ✓ fr · 1 item + a 5-day streak                                           "Niveau supérieur : 1 séance et une série de 5 jours"
+  ✓ fr · streak 2: not shown                                               "Niveau supérieur : 1 échauffement"
+  ✓ fr · only a 3-day streak                                               "Niveau supérieur : une série de 3 jours"
+  ✓ fr · nothing                                                           ""
+  ✓ fr · rendered in the level-up card                                     "Niveau supérieur : 2 nouveaux records, 1 percée et 3 combats de Boss remportés"
+  ✓ es · 1 item                                                            "Subiste de nivel: 1 récord nuevo"
+  ✓ es · 2 items                                                           "Subiste de nivel: 2 récords nuevos y 9 sesiones"
+  ✓ es · 3 items                                                           "Subiste de nivel: 2 récords nuevos, 1 avance y 3 batallas de jefe ganadas"
+  ✓ es · 5 non-zero: top 3 by priority                                     "Subiste de nivel: 1 récord nuevo, 2 avances y 1 batalla de jefe ganada"
+  ✓ es · 1 item + a 5-day streak                                           "Subiste de nivel: 1 sesión y una racha de 5 días"
+  ✓ es · streak 2: not shown                                               "Subiste de nivel: 1 calentamiento"
+  ✓ es · only a 3-day streak                                               "Subiste de nivel: una racha de 3 días"
+  ✓ es · nothing                                                           ""
+  ✓ es · rendered in the level-up card                                     "Subiste de nivel: 2 récords nuevos, 1 avance y 3 batallas de jefe ganadas"
+  ✓ tr · 1 item                                                            "Seviye atladın: 1 yeni rekor"
+  ✓ tr · 2 items                                                           "Seviye atladın: 2 yeni rekor ve 9 seans"
+  ✓ tr · 3 items                                                           "Seviye atladın: 2 yeni rekor, 1 atılım ve 3 Boss Savaşı kazanıldı"
+  ✓ tr · 5 non-zero: top 3 by priority                                     "Seviye atladın: 1 yeni rekor, 2 atılım ve 1 Boss Savaşı kazanıldı"
+  ✓ tr · 1 item + a 5-day streak                                           "Seviye atladın: 1 seans ve 5 günlük seri"
+  ✓ tr · streak 2: not shown                                               "Seviye atladın: 1 ısınma"
+  ✓ tr · only a 3-day streak                                               "Seviye atladın: 3 günlük seri"
+  ✓ tr · nothing                                                           ""
+  ✓ tr · rendered in the level-up card                                     "Seviye atladın: 2 yeni rekor, 1 atılım ve 3 Boss Savaşı kazanıldı"
+  ✓ page errors                                                            none
+
+-- account: two level-ups, reload, a second device
+   signed up voxcoach-lvl-1791652517778@example.com
+  ✓ a new account starts with no snapshot                                  null
+  ✓ level-up 1 (1 → 2) shown, counted from the start of the account        "You levelled up: 2 new records, 1 breakthrough and 3 sessions" (sessions 3, records 2)
+  ✓ snapshot 1 = the counters at level-up 1                                {"at":"2026-10-10T17:15:29.764Z","level":2,"streak":1,"records":2,"warmups":0,"sessions":3,"boss_wins":0,"breakthroughs":1,"curriculum_days":0} vs counters {"sessions":3,"records":2,"streak":1,"breakthroughs":1,"warmups":0,"boss_wins":0,"curriculum_days":0}
+  ✓ level-up 2 (2 → 3): only what happened since level-up 1                "You levelled up: 1 new record and 1 session"
+  ✓ the database holds snapshot 2                                          {"at":"2026-10-10T17:15:34.981Z","boss_wins":0,"breakthroughs":1,"curriculum_days":0,"level":3,"records":3,"sessions":4,"streak":1,"warmups":0}
+  ✓ after a reload: the same snapshot                                      {"at":"2026-10-10T17:15:34.981Z","level":3,"streak":1,"records":3,"warmups":0,"sessions":4,"boss_wins":0,"breakthroughs":1,"curriculum_days":0}
+  ✓ a second browser context (another device): the same snapshot           {"at":"2026-10-10T17:15:34.981Z","level":3,"streak":1,"records":3,"warmups":0,"sessions":4,"boss_wins":0,"breakthroughs":1,"curriculum_days":0}
+  ✓ page errors                                                            none
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-lvl-1791652517778@example.com
+
+45 passed, 0 failed
