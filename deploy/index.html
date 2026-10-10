@@ -1375,12 +1375,12 @@
     padding:0 16px;pointer-events:none;
   }
   .app-toast{
-    max-width:420px;width:100%;background:var(--surface-raised);border:1px solid var(--hairline);
-    border-left:3px solid var(--brass);border-radius:12px;padding:13px 16px;
-    font-size:13px;line-height:1.5;color:var(--cream);box-shadow:0 8px 24px rgba(0,0,0,0.4);
+    max-width:420px;width:100%;background:var(--hl-ink);color:var(--hl-bg);border:0;border-radius:var(--hl-r2);
+    padding:var(--hl-s3) var(--hl-s4);display:flex;align-items:flex-start;gap:var(--hl-s2);
+    font-family:var(--hl-font);font-size:var(--hl-t-small);line-height:1.45;box-shadow:0 8px 24px rgba(0,0,0,0.25);
     pointer-events:auto;animation:toastIn 0.25s ease-out;
   }
-  .app-toast.warn{border-left-color:var(--coral);}
+  .app-toast .hl-icon{margin-top:-1px;}
   @keyframes toastIn{ from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
   @media (prefers-reduced-motion: reduce){ .app-toast{animation:none;} }
 
@@ -1534,7 +1534,6 @@
   .ps-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);}
   .ps-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:19px;color:var(--cream);margin-top:3px;}
 
-  footer.note{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;line-height:1.6;}
 
   /* ---- SPLASH ---- */
   .splash-screen{
@@ -1545,12 +1544,8 @@
   .splash-screen.splash-hide{opacity:0;visibility:hidden;pointer-events:none;}
   .splash-ring{width:120px;height:120px;}
   #splashRingFill{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1);}
-  .splash-wordmark{
-    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);
-    display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .6s ease .3s;
-  }
+  .splash-wordmark{opacity:0;transition:opacity .6s ease .3s;}
   .splash-wordmark.splash-visible{opacity:1;}
-  .splash-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);}
   @media (prefers-reduced-motion: reduce){
     .splash-screen{transition:none;}
     #splashRingFill{transition:none;}
@@ -1691,9 +1686,7 @@
       stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="553"
       transform="rotate(-90 100 100)"/>
   </svg>
-  <div class="splash-wordmark" id="splashWordmark">
-    <span class="splash-dot"></span>VoxCoach
-  </div>
+  <div class="splash-wordmark vc-brand" id="splashWordmark"><svg class="vc-mark" viewBox="0 0 28 20" aria-hidden="true"><use href="#hl-mark"/></svg><span class="vc-word">VoxCoach</span></div>
 </div>
 
 <div class="app-toast-wrap" id="appToastWrap" role="status" aria-live="polite"></div>
@@ -1949,8 +1942,8 @@
   <!-- ============ TRAIN HUB ============ -->
   <section class="panel" id="panel-train-hub">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="hub_train_title">🎯 Train</div>
-      <div class="j-sub" data-i18n="hub_train_sub">Pick a category — each one is a real tool, not a demo.</div>
+      <div class="j-title" data-i18n="hub_train_title">Coach</div>
+      <div class="j-sub" data-i18n="hub_train_sub">Exercises and tools for pitch, range, breath and tone.</div>
     </div>
     <div class="hub-category-grid">
       <div class="hub-category-card">
@@ -2024,8 +2017,8 @@
   <!-- ============ SONGS HUB ============ -->
   <section class="panel" id="panel-songs-hub">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="hub_songs_title">🎵 Songs</div>
-      <div class="j-sub" data-i18n="hub_songs_sub">Practice a real song, pick a part, pick a mode.</div>
+      <div class="j-title" data-i18n="hub_songs_title">Songs</div>
+      <div class="j-sub" data-i18n="hub_songs_sub">Rehearse your choir part, or practice a song on your own.</div>
     </div>
     <div class="hub-category-card cw-hub-feature">
       <div class="hc-title"><span data-i18n="cw_label">🎼 Choir World</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
@@ -2079,8 +2072,8 @@
   <!-- ============ YOU HUB ============ -->
   <section class="panel" id="panel-you-hub">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="hub_you_title">📈 You</div>
-      <div class="j-sub" data-i18n="hub_you_sub">Your real profile, trends, and plan.</div>
+      <div class="j-title" data-i18n="hub_you_title">You</div>
+      <div class="j-sub" data-i18n="hub_you_sub">Your range, progress and plan.</div>
     </div>
     <div class="hub-category-grid">
       <div class="hub-category-card">
@@ -2263,7 +2256,7 @@
     <!-- HUB -->
     <div id="arcadeHub">
       <div class="journey-hero">
-        <div class="j-title" data-i18n="hub_world_title">🗺️ Vocal World</div>
+        <div class="j-title" data-i18n="hub_world_title">Vocal World</div>
         <div class="j-sub" data-i18n="hub_world_sub">Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines as the rest of the app; nothing here is a separate fake game bolted on.</div>
       </div>
       <div class="arcade-hub-grid">
@@ -4721,7 +4714,6 @@
     </div>
   </div>
 
-  <footer class="note">Autocorrelation-based pitch detection running client-side. Home / Train / Songs / World / You is the new SIGNAL shell — every tool underneath (tuner, exercises, Vocal World, dashboard, choir workspace, pricing) is the same real, functional prototype described in the PRD, just reorganized behind proper navigation.</footer>
 </div>
 
 <!-- SHARE: Range Reveal -->
@@ -5681,10 +5673,10 @@ const TRANSLATIONS = {
     ob_back_btn:'Back', ob_get_started_btn:'Get started', ob_start_assessment_btn:'Start my Day 1 assessment', ob_next_btn:'Next',
     lang_select_title:'Choose your language',
     lang_select_disclosure:"Honest about scope: the whole app — navigation, every tool, exercises, games, and account screens — is fully translated. The one deliberate exception is the 21-Day Journey's day-by-day curriculum text, which stays English-only for now.",
-    hub_train_title:'🎯 Train', hub_train_sub:'Pick a category — each one is a real tool, not a demo.',
-    hub_songs_title:'🎵 Songs', hub_songs_sub:'Practice a real song, pick a part, pick a mode.',
-    hub_you_title:'📈 You', hub_you_sub:'Your real profile, trends, and plan.',
-    hub_world_title:'🗺️ Vocal World',
+    hub_train_title:'Coach', hub_train_sub:'Exercises and tools for pitch, range, breath and tone.',
+    hub_songs_title:'Songs', hub_songs_sub:'Rehearse your choir part, or practice a song on your own.',
+    hub_you_title:'You', hub_you_sub:'Your range, progress and plan.',
+    hub_world_title:'Vocal World',
     hub_world_sub:"Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines as the rest of the app; nothing here is a separate fake game bolted on.",
     settings_theme_title:'🎨 Theme', settings_theme_sub:'Your current look stays the default — these are optional alternate looks, applied across the whole app.',
     theme_default:'Default', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Liquid Aurora', theme_velvetopera:'Velvet Opera',
@@ -7044,10 +7036,10 @@ const TRANSLATIONS = {
     ob_back_btn:'Retour', ob_get_started_btn:'Commencer', ob_start_assessment_btn:'Commencer mon évaluation du Jour 1', ob_next_btn:'Suivant',
     lang_select_title:'Choisissez votre langue',
     lang_select_disclosure:"En toute honnêteté sur la portée : toute l'application — navigation, chaque outil, exercices, jeux et écrans de compte — est entièrement traduite. La seule exception délibérée est le contenu jour par jour du Programme de 21 jours, qui reste en anglais pour l'instant.",
-    hub_train_title:'🎯 Entraîner', hub_train_sub:'Choisissez une catégorie — chacune est un vrai outil, pas une démo.',
-    hub_songs_title:'🎵 Chansons', hub_songs_sub:'Pratiquez une vraie chanson, choisissez une voix, choisissez un mode.',
-    hub_you_title:'📈 Vous', hub_you_sub:'Votre vrai profil, vos tendances et votre forfait.',
-    hub_world_title:'🗺️ Monde Vocal',
+    hub_train_title:'Coach', hub_train_sub:'Exercices et outils pour la justesse, la tessiture, le souffle et le timbre.',
+    hub_songs_title:'Chansons', hub_songs_sub:'Répétez votre voix du chœur, ou travaillez une chanson seul.',
+    hub_you_title:'Vous', hub_you_sub:'Votre tessiture, vos progrès et votre forfait.',
+    hub_world_title:'Monde Vocal',
     hub_world_sub:"Quatre lieux connectés, un monde persistant — débloqué à mesure que votre vrai Niveau augmente (même système XP/Niveau que le Parcours de 21 jours). Chaque mécanique ci-dessous réutilise les mêmes moteurs de détection que le reste de l'application ; rien ici n'est un faux jeu séparé ajouté après coup.",
     settings_theme_title:'🎨 Thème', settings_theme_sub:'Votre apparence actuelle reste celle par défaut — ce sont des styles alternatifs optionnels, appliqués à toute l\'application.',
     theme_default:'Par défaut', theme_cyberpunk:'Néon Cyberpunk', theme_aurora:'Aurore Liquide', theme_velvetopera:'Opéra Velours',
@@ -8407,10 +8399,10 @@ const TRANSLATIONS = {
     ob_back_btn:'Atrás', ob_get_started_btn:'Empezar', ob_start_assessment_btn:'Comenzar mi evaluación del Día 1', ob_next_btn:'Siguiente',
     lang_select_title:'Elige tu idioma',
     lang_select_disclosure:'Honestidad sobre el alcance: toda la app — navegación, cada herramienta, ejercicios, juegos y pantallas de cuenta — está totalmente traducida. La única excepción deliberada es el contenido día a día del Programa de 21 días, que por ahora sigue solo en inglés.',
-    hub_train_title:'🎯 Entrenar', hub_train_sub:'Elige una categoría — cada una es una herramienta real, no una demostración.',
-    hub_songs_title:'🎵 Canciones', hub_songs_sub:'Practica una canción real, elige una voz, elige un modo.',
-    hub_you_title:'📈 Tú', hub_you_sub:'Tu perfil real, tus tendencias y tu plan.',
-    hub_world_title:'🗺️ Mundo Vocal',
+    hub_train_title:'Coach', hub_train_sub:'Ejercicios y herramientas para afinación, rango, respiración y timbre.',
+    hub_songs_title:'Canciones', hub_songs_sub:'Ensaya tu voz del coro o practica una canción por tu cuenta.',
+    hub_you_title:'Tú', hub_you_sub:'Tu rango, tu progreso y tu plan.',
+    hub_world_title:'Mundo Vocal',
     hub_world_sub:'Cuatro ubicaciones conectadas, un mundo persistente — desbloqueado a medida que sube tu Nivel real (el mismo sistema de XP/Nivel que el Programa de 21 Días). Cada mecánica de abajo reutiliza los mismos motores de detección que el resto de la aplicación; nada aquí es un juego falso añadido por separado.',
     settings_theme_title:'🎨 Tema', settings_theme_sub:'Tu apariencia actual sigue siendo la predeterminada — estos son estilos alternativos opcionales, aplicados en toda la aplicación.',
     theme_default:'Predeterminado', theme_cyberpunk:'Neón Cyberpunk', theme_aurora:'Aurora Líquida', theme_velvetopera:'Ópera de Terciopelo',
@@ -9770,10 +9762,10 @@ const TRANSLATIONS = {
     ob_back_btn:'Geri', ob_get_started_btn:'Başla', ob_start_assessment_btn:'1. Gün değerlendirmemi başlat', ob_next_btn:'İleri',
     lang_select_title:'Dilinizi seçin',
     lang_select_disclosure:"Kapsam konusunda dürüstüz: uygulamanın tamamı — gezinme, her araç, egzersizler, oyunlar ve hesap ekranları — tamamen çevrildi. Tek bilinçli istisna, 21 Günlük Yolculuk'un gün gün müfredat metnidir; bu şimdilik yalnızca İngilizce kalıyor.",
-    hub_train_title:'🎯 Antrenman', hub_train_sub:'Bir kategori seçin — her biri gerçek bir araçtır, demo değil.',
-    hub_songs_title:'🎵 Şarkılar', hub_songs_sub:'Gerçek bir şarkı çalış, bir ses grubu seç, bir mod seç.',
-    hub_you_title:'📈 Sen', hub_you_sub:'Gerçek profilin, eğilimlerin ve planın.',
-    hub_world_title:'🗺️ Vokal Dünyası',
+    hub_train_title:'Koç', hub_train_sub:'Perde, ses aralığı, nefes ve tını için egzersizler ve araçlar.',
+    hub_songs_title:'Şarkılar', hub_songs_sub:'Koro partini çalış ya da bir şarkıyı tek başına çalış.',
+    hub_you_title:'Sen', hub_you_sub:'Ses aralığın, ilerlemen ve planın.',
+    hub_world_title:'Vokal Dünyası',
     hub_world_sub:'Dört bağlantılı konum, tek bir kalıcı dünya — gerçek Seviyeniz yükseldikçe açılır (21 Günlük Yolculuk ile aynı XP/Seviye sistemi). Aşağıdaki her mekanik, uygulamanın geri kalanıyla aynı algılama motorlarını kullanır; burada ayrı, sahte bir oyun eklenmiş değildir.',
     settings_theme_title:'🎨 Tema', settings_theme_sub:'Mevcut görünümünüz varsayılan olarak kalır — bunlar isteğe bağlı alternatif görünümlerdir ve tüm uygulamada uygulanır.',
     theme_default:'Varsayılan', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Sıvı Aurora', theme_velvetopera:'Kadife Opera',
@@ -21462,7 +21454,14 @@ function showToast(message, type){
   if(!wrap){ alert(message); return; }
   const el = document.createElement('div');
   el.className = 'app-toast' + (type==='warn' ? ' warn' : '');
-  el.textContent = message;
+  if(type==='warn'){ // a warning starts with the info icon
+    const NS = 'http://www.w3.org/2000/svg', svg = document.createElementNS(NS, 'svg'), use = document.createElementNS(NS, 'use');
+    svg.setAttribute('class', 'hl-icon hl-icon--s'); svg.setAttribute('aria-hidden', 'true');
+    use.setAttribute('href', '#hl-info'); svg.appendChild(use); el.appendChild(svg);
+  }
+  const text = document.createElement('span');
+  text.textContent = message;
+  el.appendChild(text);
   wrap.appendChild(el);
   setTimeout(()=>{
     el.style.transition = 'opacity 0.3s ease';
