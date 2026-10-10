@@ -11105,6 +11105,8 @@ function localeForLang(){
   return {en:'en-US', fr:'fr-FR', es:'es-ES', tr:'tr-TR'}[currentLanguage] || 'en-US';
 }
 function applyTranslations(){
+  // the page's language, so CSS uppercase follows its rules (Turkish i → İ); runs on load and on every switch
+  document.documentElement.lang = currentLanguage;
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll('[data-profile-lang]').forEach(btn=>{
     btn.classList.toggle('active', btn.dataset.profileLang===currentLanguage); btn.setAttribute('aria-pressed', btn.dataset.profileLang===currentLanguage?'true':'false');
