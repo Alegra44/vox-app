@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>/* the stored theme before first paint (no dark-to-light flash); initTheme() maps and saves it later */
+try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='velvetopera')t='dark';if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 <title>VoxCoach</title>
 <meta name="theme-color" content="#F2F3EF" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#16181C" media="(prefers-color-scheme: dark)">
@@ -943,15 +945,9 @@
   }
   .ex-type-btn.active{background:var(--surface-raised);color:var(--brass);border-color:var(--brass-dim);}
 
-  .theme-picker-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .theme-swatch-btn{
-    display:flex;flex-direction:column;align-items:center;gap:8px;
-    background:var(--surface);border:1px solid var(--hairline);border-radius:12px;
-    padding:14px 10px;cursor:pointer;font-family:var(--hl-font);font-size:12.5px;color:var(--muted);
-  }
-  .theme-swatch-btn.active{border-color:var(--brass);color:var(--cream);background:var(--surface-raised);}
-  .theme-swatch-dots{display:flex;gap:5px;}
-  .theme-swatch-dots span{width:16px;height:16px;border-radius:50%;border:1px solid var(--hl-rule-strong);}
+  /* theme: System / Light / Dark, an hl-seg */
+  .theme-picker-grid.hl-seg{display:flex;width:100%;max-width:360px;}
+  .theme-picker-grid .theme-swatch-btn{flex:1;}
 
   .feedback-field{margin-bottom:16px;}
   .feedback-label{display:block;font-size:13px;color:var(--cream);margin-bottom:6px;font-weight:600;}
@@ -4408,25 +4404,12 @@
         </div>
         <p class="fine-print" style="margin-top:10px;" data-i18n="lang_select_disclosure">Honest about scope: navigation, onboarding, shared buttons, and account screens are fully translated. Deep tool-specific content across this app's 41 screens is still English-only — real translation of that volume is a larger, ongoing effort, not something to fake with machine text.</p>
 
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_theme_title">🎨 Theme</h2>
-        <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_theme_sub">Your current look stays the default — these are optional alternate looks, applied across the whole app.</p>
-        <div class="theme-picker-grid" id="themePickerGrid">
-          <button class="theme-swatch-btn" data-theme-choice="default" aria-pressed="true">
-            <span class="theme-swatch-dots"><span style="background:#0e0d0b;"></span><span style="background:#e8a33d;"></span><span style="background:#4fd6c4;"></span></span>
-            <span data-i18n="theme_default">Default</span>
-          </button>
-          <button class="theme-swatch-btn" data-theme-choice="cyberpunk" aria-pressed="false">
-            <span class="theme-swatch-dots"><span style="background:#07040D;"></span><span style="background:#00F0FF;"></span><span style="background:#FF007A;"></span></span>
-            <span data-i18n="theme_cyberpunk">Cyberpunk Neon</span>
-          </button>
-          <button class="theme-swatch-btn" data-theme-choice="aurora" aria-pressed="false">
-            <span class="theme-swatch-dots"><span style="background:#020B10;"></span><span style="background:#00FF9D;"></span><span style="background:#00D2FF;"></span></span>
-            <span data-i18n="theme_aurora">Liquid Aurora</span>
-          </button>
-          <button class="theme-swatch-btn" data-theme-choice="velvetopera" aria-pressed="false">
-            <span class="theme-swatch-dots"><span style="background:#12071A;"></span><span style="background:#C77DFF;"></span><span style="background:#FF8FAB;"></span></span>
-            <span data-i18n="theme_velvetopera">Velvet Opera</span>
-          </button>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" id="themePickerTitle" data-i18n="settings_theme_title">Theme</h2>
+        <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_theme_sub">System follows your device's light or dark setting.</p>
+        <div class="theme-picker-grid hl-seg" id="themePickerGrid" role="group" aria-labelledby="themePickerTitle">
+          <button class="theme-swatch-btn" data-theme-choice="system" aria-pressed="true" data-i18n="theme_system">System</button>
+          <button class="theme-swatch-btn" data-theme-choice="light" aria-pressed="false" data-i18n="theme_light">Light</button>
+          <button class="theme-swatch-btn" data-theme-choice="dark" aria-pressed="false" data-i18n="theme_dark">Dark</button>
         </div>
 
         <h2 id="playbackVolumeTitle" style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">🔊 Playback volume</h2>
@@ -5678,8 +5661,8 @@ const TRANSLATIONS = {
     hub_you_title:'You', hub_you_sub:'Your range, progress and plan.',
     hub_world_title:'Vocal World',
     hub_world_sub:"Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines as the rest of the app; nothing here is a separate fake game bolted on.",
-    settings_theme_title:'🎨 Theme', settings_theme_sub:'Your current look stays the default — these are optional alternate looks, applied across the whole app.',
-    theme_default:'Default', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Liquid Aurora', theme_velvetopera:'Velvet Opera',
+    settings_theme_title:'Theme', settings_theme_sub:'System follows your device\'s light or dark setting.',
+    theme_default:'Default', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Liquid Aurora', theme_velvetopera:'Velvet Opera', theme_system:'System', theme_light:'Light', theme_dark:'Dark',
     settings_feedback_title:'💬 Feedback', settings_feedback_sub:"Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.",
     settings_feedback_btn:'Give Feedback',
     settings_title:'Settings', settings_language_title:'🌐 Language',
@@ -7041,8 +7024,8 @@ const TRANSLATIONS = {
     hub_you_title:'Vous', hub_you_sub:'Votre tessiture, vos progrès et votre forfait.',
     hub_world_title:'Monde Vocal',
     hub_world_sub:"Quatre lieux connectés, un monde persistant — débloqué à mesure que votre vrai Niveau augmente (même système XP/Niveau que le Parcours de 21 jours). Chaque mécanique ci-dessous réutilise les mêmes moteurs de détection que le reste de l'application ; rien ici n'est un faux jeu séparé ajouté après coup.",
-    settings_theme_title:'🎨 Thème', settings_theme_sub:'Votre apparence actuelle reste celle par défaut — ce sont des styles alternatifs optionnels, appliqués à toute l\'application.',
-    theme_default:'Par défaut', theme_cyberpunk:'Néon Cyberpunk', theme_aurora:'Aurore Liquide', theme_velvetopera:'Opéra Velours',
+    settings_theme_title:'Thème', settings_theme_sub:'Système suit le réglage clair ou sombre de votre appareil.',
+    theme_default:'Par défaut', theme_cyberpunk:'Néon Cyberpunk', theme_aurora:'Aurore Liquide', theme_velvetopera:'Opéra Velours', theme_system:'Système', theme_light:'Clair', theme_dark:'Sombre',
     settings_feedback_title:'💬 Avis', settings_feedback_sub:"Des retours réels et précis — enregistrés pour qu'on puisse vraiment agir dessus, pas une boîte mail qui ne mène nulle part.",
     settings_feedback_btn:'Donner mon avis',
     settings_title:'Paramètres', settings_language_title:'🌐 Langue',
@@ -8404,8 +8387,8 @@ const TRANSLATIONS = {
     hub_you_title:'Tú', hub_you_sub:'Tu rango, tu progreso y tu plan.',
     hub_world_title:'Mundo Vocal',
     hub_world_sub:'Cuatro ubicaciones conectadas, un mundo persistente — desbloqueado a medida que sube tu Nivel real (el mismo sistema de XP/Nivel que el Programa de 21 Días). Cada mecánica de abajo reutiliza los mismos motores de detección que el resto de la aplicación; nada aquí es un juego falso añadido por separado.',
-    settings_theme_title:'🎨 Tema', settings_theme_sub:'Tu apariencia actual sigue siendo la predeterminada — estos son estilos alternativos opcionales, aplicados en toda la aplicación.',
-    theme_default:'Predeterminado', theme_cyberpunk:'Neón Cyberpunk', theme_aurora:'Aurora Líquida', theme_velvetopera:'Ópera de Terciopelo',
+    settings_theme_title:'Tema', settings_theme_sub:'Sistema sigue el ajuste claro u oscuro de tu dispositivo.',
+    theme_default:'Predeterminado', theme_cyberpunk:'Neón Cyberpunk', theme_aurora:'Aurora Líquida', theme_velvetopera:'Ópera de Terciopelo', theme_system:'Sistema', theme_light:'Claro', theme_dark:'Oscuro',
     settings_feedback_title:'💬 Comentarios', settings_feedback_sub:'Comentarios reales y específicos — guardados para que realmente podamos actuar, no un buzón que no lleva a ninguna parte.',
     settings_feedback_btn:'Dar mi opinión',
     settings_title:'Configuración', settings_language_title:'🌐 Idioma',
@@ -9767,8 +9750,8 @@ const TRANSLATIONS = {
     hub_you_title:'Sen', hub_you_sub:'Ses aralığın, ilerlemen ve planın.',
     hub_world_title:'Vokal Dünyası',
     hub_world_sub:'Dört bağlantılı konum, tek bir kalıcı dünya — gerçek Seviyeniz yükseldikçe açılır (21 Günlük Yolculuk ile aynı XP/Seviye sistemi). Aşağıdaki her mekanik, uygulamanın geri kalanıyla aynı algılama motorlarını kullanır; burada ayrı, sahte bir oyun eklenmiş değildir.',
-    settings_theme_title:'🎨 Tema', settings_theme_sub:'Mevcut görünümünüz varsayılan olarak kalır — bunlar isteğe bağlı alternatif görünümlerdir ve tüm uygulamada uygulanır.',
-    theme_default:'Varsayılan', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Sıvı Aurora', theme_velvetopera:'Kadife Opera',
+    settings_theme_title:'Tema', settings_theme_sub:'Sistem, cihazının açık veya koyu ayarını izler.',
+    theme_default:'Varsayılan', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Sıvı Aurora', theme_velvetopera:'Kadife Opera', theme_system:'Sistem', theme_light:'Açık', theme_dark:'Koyu',
     settings_feedback_title:'💬 Geri Bildirim', settings_feedback_sub:'Gerçek, somut geri bildirim — gerçekten üzerinde çalışabilmemiz için saklanır, hiçbir yere gitmeyen bir posta kutusu değil.',
     settings_feedback_btn:'Geri Bildirim Ver',
     settings_title:'Ayarlar', settings_language_title:'🌐 Dil',
@@ -21471,14 +21454,22 @@ function showToast(message, type){
 }
 
 /* ---------------- Real Theme System (data-theme attribute, persisted, applied app-wide via CSS variables) ---------------- */
-let currentTheme = 'default';
+let currentTheme = 'system';
+// System (no data-theme: follows prefers-color-scheme), Light or Dark (data-theme on <html>).
 async function setTheme(themeKey, shouldSave){
+  if(themeKey!=='light' && themeKey!=='dark') themeKey = 'system';
   currentTheme = themeKey;
-  if(themeKey === 'default'){
+  if(themeKey === 'system'){
     document.documentElement.removeAttribute('data-theme');
   } else {
     document.documentElement.setAttribute('data-theme', themeKey);
   }
+  // The browser's theme-color follows an explicit choice (the page's own paper); System keeps the light/dark pair.
+  const paper = getComputedStyle(document.documentElement).getPropertyValue('--hl-bg').trim();
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m=>{
+    if(!m.dataset.systemContent) m.dataset.systemContent = m.getAttribute('content');
+    m.setAttribute('content', themeKey === 'system' ? m.dataset.systemContent : paper);
+  });
   document.querySelectorAll('.theme-swatch-btn').forEach(btn=>{
     const isSelected = btn.dataset.themeChoice === themeKey;
     btn.classList.toggle('active', isSelected);
@@ -21488,12 +21479,16 @@ async function setTheme(themeKey, shouldSave){
     try{ localStorage.setItem('theme', themeKey); }catch(e){ console.error('storage error', e); }
   }
 }
+// Stored values from before System / Light / Dark: default (or nothing) → System; the three old looks → Dark.
+// The mapped value is written back. (An older build reading "system" or "light" shows its default look.)
 async function initTheme(){
   let stored = null;
   try{
     stored = localStorage.getItem('theme');
   }catch(e){ stored = null; }
-  setTheme(stored || 'default', false);
+  const theme = (stored==='light' || stored==='dark') ? stored
+    : (stored==='cyberpunk' || stored==='aurora' || stored==='velvetopera') ? 'dark' : 'system';
+  setTheme(theme, theme !== stored);
 }
 document.querySelectorAll('.theme-swatch-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{ setTheme(btn.dataset.themeChoice, true); });
