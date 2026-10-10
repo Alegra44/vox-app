@@ -3,15 +3,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VoxCoach — Live Tuner</title>
+<title>VoxCoach</title>
+<meta name="theme-color" content="#F2F3EF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181C" media="(prefers-color-scheme: dark)">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,200..800&family=Spectral:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script src="vocal-load.js"></script>
 <script src="vocal-load-store.js"></script>
 <style>
+/* ===== HOUSE LIGHTS v1.2 BEGIN */
+/* =====================================================================
+   VoxCoach · House Lights design system · v1.2
+   ---------------------------------------------------------------------
+   Two lighting states:
+     data-house="up"    paper: planning, reading, analysis, progress
+     data-house="down"  stage: singing, rehearsal, performance, games
+   House-up follows the viewer's theme (light paper / dusk dark).
+   House-down is always the dark stage.
+   Rule: --hl-voice is reserved for the singer's own voice.
+   All classes are prefixed hl- so they never collide with legacy CSS.
+   ===================================================================== */
+
+/* ---------- 1. Tokens: type, space, shape, motion (theme-independent) */
+:root{
+  --hl-font: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --hl-font-voice: 'Spectral', Georgia, 'Times New Roman', serif;
+
+  /* type scale (px) — the only sizes in the system */
+  --hl-t-label: 12px;   /* console labels, uppercase */
+  --hl-t-small: 14px;   /* metadata, captions */
+  --hl-t-body: 16px;    /* body */
+  --hl-t-h3: 18px;      /* row and block titles */
+  --hl-t-h2: 24px;      /* section titles */
+  --hl-t-h1: 34px;      /* page titles */
+  --hl-t-display: 56px; /* stage numerals, performance */
+  --hl-t-coach: 19px;   /* the coach's voice */
+  --hl-t-metric: 32px;  /* numbers in reports */
+  --hl-t-metric-l: 72px;/* the one number that matters */
+
+  /* width axis (Archivo wdth) */
+  --hl-w-condensed: 82%;
+  --hl-w-normal: 100%;
+  --hl-w-wide: 112%;
+
+  /* space: 4px base */
+  --hl-s1: 4px;  --hl-s2: 8px;  --hl-s3: 12px; --hl-s4: 16px;
+  --hl-s5: 24px; --hl-s6: 32px; --hl-s7: 48px; --hl-s8: 64px;
+
+  /* shape: rules, not cards */
+  --hl-r1: 2px;   /* keys, chips, inputs */
+  --hl-r2: 6px;   /* buttons, panels */
+  --hl-r3: 14px;  /* sheets only */
+  --hl-hair: 1px;
+  --hl-touch: 44px;
+
+  /* motion */
+  --hl-ease: cubic-bezier(.2,.7,.2,1);
+  --hl-ease-house: cubic-bezier(.6,0,.3,1);
+  --hl-d1: 120ms;  /* press, toggle */
+  --hl-d2: 200ms;  /* state change */
+  --hl-d3: 320ms;  /* panels, sheets */
+  --hl-d-house: 640ms; /* lights up / down */
+}
+
+/* ---------- 2. Colour: house up, light (default)
+   data-house goes on <body> or a panel, never on <html>. */
+:root, [data-house="up"]{
+  --hl-bg: #F2F3EF;          /* paper */
+  --hl-raised: #FFFFFF;      /* the one raised layer: sheets, today block */
+  --hl-sunk: #E7E9E4;        /* wells, tracks */
+  --hl-rule: #D6D9D2;        /* staff-line hairline */
+  --hl-rule-strong: #B9BDB5;
+  --hl-ink: #111316;         /* primary text */
+  --hl-ink-2: #454A52;       /* secondary text */
+  --hl-ink-3: #616770;       /* muted text, still AA */
+  --hl-voice: #2633D9;       /* YOUR VOICE. Nothing else uses it. */
+  --hl-voice-soft: #DFE2FF;
+  --hl-on-voice: #FFFFFF;
+  --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */
+  --hl-miss: #BD361E;        /* missed note, recording tally */
+  --hl-warn: #905C00;
+  --hl-ok: #1E7542;          /* completion */
+  --hl-game-gold: #895F00;   /* rewards, games only */
+  /* choir parts */
+  --hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;
+  /* piano keys */
+  --hl-piano-white: #FFFFFF; --hl-piano-black: #111316;
+  --hl-shadow-sheet: 0 18px 48px rgba(17,19,22,.16);
+  --hl-glow: none;
+  color-scheme: light;
+}
+
+/* ---------- 3. Colour: house up, dark ("dusk") */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]), :root:not([data-theme="light"]) [data-house="up"]{
+    --hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3C414A;
+    --hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;
+    --hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;
+    --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
+    --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+    --hl-piano-white: #D9DBDF; --hl-piano-black: #060708;
+    --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"], :root[data-theme="dark"] [data-house="up"]{
+  --hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3C414A;
+  --hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;
+  --hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;
+  --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
+  --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+  --hl-piano-white: #D9DBDF; --hl-piano-black: #060708;
+  --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+
+/* ---------- 4. Colour: house down, the stage (any theme) */
+[data-house="down"]{
+  --hl-bg: #060708; --hl-raised: #101216; --hl-sunk: #000000; --hl-rule: #1D2026; --hl-rule-strong: #2C3038;
+  --hl-ink: #F1F2F4; --hl-ink-2: #A9AEB7; --hl-ink-3: #80868F;
+  --hl-voice: #7F8CFF; --hl-voice-soft: rgba(127,140,255,.16); --hl-on-voice: #05060F;
+  --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
+  --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+  --hl-piano-white: #C9CCD1; --hl-piano-black: #000000;
+  --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.6);
+  --hl-glow: drop-shadow(0 0 6px rgba(127,140,255,.55));
+  color-scheme: dark;
+}
+
+/* parts resolve to one --part variable for any component */
+[data-part="sop"]{--part: var(--hl-sop)} [data-part="lead"]{--part: var(--hl-lead)}
+[data-part="alto"]{--part: var(--hl-alto)} [data-part="ten"]{--part: var(--hl-ten)}
+[data-part="bass"]{--part: var(--hl-bass)}
+
+/* ---------- 5. Base */
+.hl-root{
+  font-family: var(--hl-font); font-size: var(--hl-t-body); line-height: 1.5;
+  color: var(--hl-ink); background: var(--hl-bg);
+  -webkit-font-smoothing: antialiased; font-kerning: normal;
+}
+[data-house]{ background: var(--hl-bg); color: var(--hl-ink); }
+.hl-tabular{ font-variant-numeric: tabular-nums; }
+
+/* ---------- 6. Type roles */
+.hl-display{ font-size: var(--hl-t-display); font-stretch: var(--hl-w-wide); font-weight: 300; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.hl-h1{ font-size: var(--hl-t-h1); font-stretch: var(--hl-w-wide); font-weight: 650; line-height: 1.08; letter-spacing: -0.015em; text-wrap: balance; margin: 0; }
+.hl-h2{ font-size: var(--hl-t-h2); font-stretch: 106%; font-weight: 620; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
+.hl-h3{ font-size: var(--hl-t-h3); font-weight: 600; line-height: 1.3; margin: 0; }
+.hl-body{ font-size: var(--hl-t-body); line-height: 1.5; }
+.hl-small{ font-size: var(--hl-t-small); line-height: 1.45; color: var(--hl-ink-2); }
+.hl-meta{ font-size: var(--hl-t-small); color: var(--hl-ink-3); }
+.hl-label{
+  font-size: var(--hl-t-label); font-stretch: var(--hl-w-condensed); font-weight: 650;
+  text-transform: uppercase; letter-spacing: .09em; line-height: 1.2; color: var(--hl-ink-3); margin: 0;
+}
+.hl-coach{ /* the coach speaking to you: italic serif, never data */
+  font-family: var(--hl-font-voice); font-style: italic; font-weight: 400;
+  font-size: var(--hl-t-coach); line-height: 1.42; color: var(--hl-ink); margin: 0; text-wrap: pretty;
+}
+.hl-metric{ font-size: var(--hl-t-metric); font-stretch: var(--hl-w-wide); font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.hl-metric-l{ font-size: var(--hl-t-metric-l); font-stretch: var(--hl-w-wide); font-weight: 300; line-height: .95; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.hl-note{ /* note names: A3, F#4 */ font-stretch: var(--hl-w-wide); font-weight: 600; font-variant-numeric: tabular-nums; }
+.hl-delta-up{ color: var(--hl-ok); } .hl-delta-down{ color: var(--hl-miss); }
+
+/* rehearsal mark: a boxed letter, only for real song sections */
+.hl-mark{
+  display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px;
+  border: 1.5px solid currentColor; border-radius: var(--hl-r1);
+  font-size: var(--hl-t-label); font-weight: 800; font-stretch: var(--hl-w-condensed); line-height: 1; color: var(--hl-ink);
+}
+.hl-mark[aria-current="true"]{ background: var(--hl-ink); color: var(--hl-bg); border-color: var(--hl-ink); }
+
+/* ---------- 7. Layout primitives */
+.hl-stack{ display: flex; flex-direction: column; gap: var(--gap, var(--hl-s4)); min-width: 0; }
+.hl-row{ display: flex; align-items: center; gap: var(--gap, var(--hl-s3)); min-width: 0; }
+.hl-spread{ display: flex; align-items: baseline; justify-content: space-between; gap: var(--hl-s3); min-width: 0; }
+.hl-rule{ border-top: var(--hl-hair) solid var(--hl-rule); }
+.hl-section{ padding-block: var(--hl-s5); border-top: var(--hl-hair) solid var(--hl-rule); }
+.hl-raised{ background: var(--hl-raised); border-radius: var(--hl-r2); }
+
+/* ---------- 8. Icons (SVG sprite, stroke = currentColor) */
+.hl-icon{ width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.hl-icon--s{ width: 18px; height: 18px; }
+.hl-icon--l{ width: 28px; height: 28px; }
+
+/* ---------- 9. Buttons */
+.hl-btn{
+  --btn-bg: transparent; --btn-fg: var(--hl-ink); --btn-bd: var(--hl-rule-strong);
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--hl-s2);
+  min-height: 48px; padding: 0 var(--hl-s5); border-radius: var(--hl-r2);
+  background: var(--btn-bg); color: var(--btn-fg); border: var(--hl-hair) solid var(--btn-bd);
+  font: inherit; font-size: var(--hl-t-body); font-weight: 620; letter-spacing: .005em; cursor: pointer;
+  transition: transform var(--hl-d1) var(--hl-ease), background-color var(--hl-d2) var(--hl-ease), opacity var(--hl-d2);
+  -webkit-tap-highlight-color: transparent;
+}
+.hl-btn:active{ transform: scale(.98); }
+.hl-btn:focus-visible, .hl-key:focus-visible, .hl-transport:focus-visible, .hl-seg button:focus-visible, .hl-item:focus-visible, .hl-tab:focus-visible{
+  outline: 2px solid var(--hl-voice); outline-offset: 2px;
+}
+.hl-btn[disabled]{ opacity: .45; cursor: not-allowed; }
+.hl-btn--sing{ --btn-bg: var(--hl-voice); --btn-fg: var(--hl-on-voice); --btn-bd: var(--hl-voice); }  /* starts your voice */
+.hl-btn--ink{ --btn-bg: var(--hl-ink); --btn-fg: var(--hl-bg); --btn-bd: var(--hl-ink); }             /* other primary actions */
+.hl-btn--quiet{ --btn-bd: transparent; padding: 0 var(--hl-s3); min-height: 44px; color: var(--hl-ink-2); }
+.hl-btn--block{ width: 100%; }
+
+/* ---------- 10. Audio controls: hardware, not forms */
+.hl-transport{
+  width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: transparent; color: var(--hl-ink); border: 1.5px solid var(--hl-ink); cursor: pointer;
+  transition: transform var(--hl-d1) var(--hl-ease), background-color var(--hl-d2);
+}
+.hl-transport:active{ transform: scale(.96); }
+.hl-transport--primary{ background: var(--hl-ink); color: var(--hl-bg); }
+.hl-transport--rec{ border-color: var(--hl-miss); color: var(--hl-miss); }
+.hl-transport--s{ width: 44px; height: 44px; border-width: var(--hl-hair); border-color: var(--hl-rule-strong); }
+.hl-transport .hl-icon{ stroke-width: 0; fill: currentColor; }
+
+/* console keys: Solo / Mute / A cappella / Loop, with a lit LED */
+.hl-key{
+  position: relative; display: inline-grid; place-items: center; min-width: 44px; height: 36px; padding: 0 10px;
+  border-radius: var(--hl-r1); border: var(--hl-hair) solid var(--hl-rule-strong); background: var(--hl-sunk);
+  color: var(--hl-ink-2); font: inherit; font-size: var(--hl-t-label); font-weight: 750; font-stretch: var(--hl-w-condensed); letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+}
+.hl-key::before{ content: ""; position: absolute; top: 5px; right: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--hl-rule-strong); }
+.hl-key[aria-pressed="true"]{ color: var(--hl-ink); border-color: var(--hl-ink-3); }
+.hl-key[aria-pressed="true"]::before{ background: var(--led, var(--hl-lead)); box-shadow: 0 0 6px var(--led, var(--hl-lead)); }
+.hl-key[data-key="mute"]{ --led: var(--hl-miss); }
+.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-voice); }
+
+/* fader: a real control on input[type=range] */
+.hl-fader{ -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; margin: 0; }
+.hl-fader::-webkit-slider-runnable-track{ height: 2px; background: linear-gradient(var(--part, var(--hl-ink)), var(--part, var(--hl-ink))) 0 0 / var(--val, 50%) 100% no-repeat, var(--hl-rule-strong); }
+.hl-fader::-moz-range-track{ height: 2px; background: var(--hl-rule-strong); }
+.hl-fader::-moz-range-progress{ height: 2px; background: var(--part, var(--hl-ink)); }
+.hl-fader::-webkit-slider-thumb{ -webkit-appearance: none; width: 14px; height: 24px; margin-top: -11px; border-radius: 2px; background: var(--hl-raised); border: 1.5px solid var(--hl-ink); box-shadow: inset 0 -9px 0 -8px var(--hl-ink), inset 0 9px 0 -8px var(--hl-ink); }
+.hl-fader::-moz-range-thumb{ width: 12px; height: 22px; border-radius: 2px; background: var(--hl-raised); border: 1.5px solid var(--hl-ink); }
+.hl-fader:focus-visible{ outline: 2px solid var(--hl-voice); outline-offset: 4px; }
+
+/* level meter (input or part) */
+.hl-meter{ height: 4px; background: var(--hl-sunk); border-radius: 1px; overflow: hidden; }
+.hl-meter > i{ display: block; height: 100%; width: var(--val, 0%); background: var(--part, var(--hl-ink-2)); transition: width 80ms linear; }
+
+/* ---------- 11. Selection */
+.hl-seg{ display: inline-flex; border: var(--hl-hair) solid var(--hl-rule-strong); border-radius: var(--hl-r2); padding: 2px; gap: 2px; }
+.hl-seg button{ min-height: var(--hl-touch); padding: 0 var(--hl-s3); border: 0; border-radius: 4px; background: transparent; color: var(--hl-ink-2); font: inherit; font-size: var(--hl-t-small); font-weight: 600; cursor: pointer; }
+.hl-seg button[aria-selected="true"], .hl-seg button[aria-pressed="true"]{ background: var(--hl-ink); color: var(--hl-bg); }
+.hl-chip{ position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 var(--hl-s3); border-radius: var(--hl-r1); border: var(--hl-hair) solid var(--hl-rule-strong); font-size: var(--hl-t-small); font-weight: 600; color: var(--hl-ink-2); background: transparent; }
+.hl-chip::after{ content: ""; position: absolute; inset: -6px 0; } /* a 44px hit area on the 32px chip */
+.hl-chip[aria-pressed="true"]{ border-color: var(--hl-ink); color: var(--hl-ink); }
+.hl-part-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--part); flex: none; }
+
+/* ---------- 12. Index rows (replace cards for lists of tools) */
+.hl-list{ list-style: none; margin: 0; padding: 0; }
+.hl-item{
+  display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: var(--hl-s3);
+  min-height: 60px; padding: var(--hl-s3) 0; border-bottom: var(--hl-hair) solid var(--hl-rule);
+  color: inherit; text-decoration: none; background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%; text-align: left; font: inherit; cursor: pointer;
+}
+.hl-item .hl-icon{ color: var(--hl-ink-2); }
+.hl-item-title{ font-weight: 600; font-size: var(--hl-t-body); }
+.hl-item-meta{ font-size: var(--hl-t-small); color: var(--hl-ink-3); font-variant-numeric: tabular-nums; }
+.hl-item-end{ display: flex; align-items: center; gap: var(--hl-s2); color: var(--hl-ink-3); font-size: var(--hl-t-small); font-variant-numeric: tabular-nums; }
+
+/* stat block: label over value over change */
+.hl-stat{ display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.hl-stat-value{ font-size: var(--hl-t-h2); font-stretch: var(--hl-w-wide); font-weight: 560; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.hl-stat-change{ font-size: var(--hl-t-small); font-variant-numeric: tabular-nums; }
+
+/* ---------- 13. Navigation */
+.hl-tabbar{
+  display: grid; grid-template-columns: repeat(5, 1fr); background: var(--hl-bg); border-top: var(--hl-hair) solid var(--hl-rule);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.hl-tab{
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 3px; min-height: 56px; padding-top: 9px;
+  background: none; border: 0; color: var(--hl-ink-3); font: inherit; font-size: var(--hl-t-label); font-weight: 600; letter-spacing: .02em; cursor: pointer;
+}
+.hl-tab[aria-current="page"]{ color: var(--hl-ink); }
+.hl-tab[aria-current="page"]::before{ /* a playhead marks where you are */
+  content: ""; position: absolute; top: -1px; left: 30%; right: 30%; height: 2px; background: var(--hl-voice);
+}
+
+/* ---------- 14. Feedback states */
+.hl-measure{ border-top: var(--hl-hair) solid var(--hl-rule); }
+.hl-measure > summary{ list-style: none; display: flex; align-items: center; gap: var(--hl-s2); min-height: 44px; font-size: var(--hl-t-small); color: var(--hl-ink-2); cursor: pointer; }
+.hl-measure > summary::-webkit-details-marker{ display: none; }
+.hl-measure > p{ font-size: var(--hl-t-small); color: var(--hl-ink-2); margin: 0 0 var(--hl-s4); max-width: 60ch; }
+
+.hl-empty{ display: grid; gap: var(--hl-s3); padding: var(--hl-s6) 0; }
+
+.hl-steps{ list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: var(--hl-t-body); }
+.hl-steps li{ display: grid; grid-template-columns: 18px 1fr; align-items: center; gap: 10px; color: var(--hl-ink-3); }
+.hl-steps li::before{ content: ""; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid currentColor; justify-self: center; }
+.hl-steps li[data-state="done"]{ color: var(--hl-ink-2); }
+.hl-steps li[data-state="done"]::before{ width: 12px; height: 7px; border-radius: 0; border: 0; border-left: 2px solid var(--hl-ok); border-bottom: 2px solid var(--hl-ok); transform: rotate(-45deg) translate(1px,-2px); }
+.hl-steps li[data-state="active"]{ color: var(--hl-ink); font-weight: 600; }
+.hl-steps li[data-state="active"]::before{ background: var(--hl-voice); border-color: var(--hl-voice); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
+
+.hl-error{ display: grid; gap: var(--hl-s3); padding: var(--hl-s5) 0; border-top: 2px solid var(--hl-miss); }
+.hl-error details{ font-size: var(--hl-t-small); color: var(--hl-ink-3); }
+
+@keyframes hl-pulse{ 0%,100%{ transform: scale(1); opacity: 1 } 50%{ transform: scale(.7); opacity: .6 } }
+
+/* ---------- 15. House lights transition (dimmer) */
+.hl-dimmer{ position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: 9999; transition: opacity calc(var(--hl-d-house) / 2) var(--hl-ease-house); }
+.hl-dimmer.is-on{ opacity: 1; }
+
+/* ---------- 16. Sheets */
+.hl-sheet{ background: var(--hl-raised); border-radius: var(--hl-r3) var(--hl-r3) 0 0; box-shadow: var(--hl-shadow-sheet); padding: var(--hl-s5) var(--hl-s4); }
+
+/* ---------- 17. Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hl-btn, .hl-transport, .hl-dimmer, .hl-meter > i{ transition: none; }
+  .hl-steps li[data-state="active"]::before{ animation: none; }
+}
+/* ===== HOUSE LIGHTS v1.2 END */
   :root{
     --bg:#0e0d0b;
     --surface:#17140f;
@@ -1391,6 +1700,57 @@
 </style>
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <!-- VoxCoach House Lights icons. 24px grid, 1.6 stroke, round caps. Filled glyphs (play, pause, stop, record) set fill in the symbol. -->
+  <symbol id="hl-mark" viewBox="0 0 28 20"><path d="M1.5 15.5c3 0 3.6-11 6.8-11 3 0 2.8 8.6 5.6 8.6 2.2 0 2.5-3.6 4.6-3.6h8" fill="none" stroke-width="2.4"/></symbol>
+
+  <!-- navigation -->
+  <symbol id="hl-home" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20H4z"/><path d="M10 20v-5h4v5"/></symbol>
+  <symbol id="hl-coach" viewBox="0 0 24 24"><path d="M8.5 3v7.5a3.5 3.5 0 0 0 7 0V3"/><path d="M12 14v7"/><path d="M9.5 21h5"/></symbol>
+  <symbol id="hl-songs" viewBox="0 0 24 24"><path d="M9.5 17.5V5.5l10-2.2v11.4"/><circle cx="7" cy="17.5" r="2.5"/><circle cx="17" cy="14.7" r="2.5"/></symbol>
+  <symbol id="hl-world" viewBox="0 0 24 24"><path d="M3 6.5 9 4.5l6 2 6-2v13l-6 2-6-2-6 2z"/><path d="M9 4.5v13M15 6.5v13"/></symbol>
+  <symbol id="hl-you" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.8 20.2a7.2 7.2 0 0 1 14.4 0"/></symbol>
+  <symbol id="hl-choir" viewBox="0 0 24 24"><circle cx="6" cy="9.5" r="2"/><circle cx="12" cy="7" r="2"/><circle cx="18" cy="9.5" r="2"/><path d="M2.6 18.5a3.4 3.4 0 0 1 6.8 0"/><path d="M8.6 16a3.4 3.4 0 0 1 6.8 0"/><path d="M14.6 18.5a3.4 3.4 0 0 1 6.8 0"/></symbol>
+
+  <!-- transport (filled) -->
+  <symbol id="hl-play" viewBox="0 0 24 24"><path d="M8 5.2v13.6L18.6 12z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-pause" viewBox="0 0 24 24"><rect x="6.8" y="5" width="3.6" height="14" rx=".8" fill="currentColor" stroke="none"/><rect x="13.6" y="5" width="3.6" height="14" rx=".8" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-stop" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="1.4" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-record" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-loop" viewBox="0 0 24 24"><path d="M17 7H8a4 4 0 0 0-4 4v1"/><path d="m14 4 3 3-3 3"/><path d="M7 17h9a4 4 0 0 0 4-4v-1"/><path d="m10 20-3-3 3-3"/></symbol>
+
+  <!-- voice and practice -->
+  <symbol id="hl-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0"/><path d="M12 17.5V21"/></symbol>
+  <symbol id="hl-breath" viewBox="0 0 24 24"><path d="M3 9h11a3 3 0 1 0-3-3"/><path d="M3 13h15a3 3 0 1 1-3 3"/><path d="M3 17h6"/></symbol>
+  <symbol id="hl-vibrato" viewBox="0 0 24 24"><path d="M2 12c1.7-4.6 3.3-4.6 5 0s3.3 4.6 5 0 3.3-4.6 5 0 3.3 4.6 5 0"/></symbol>
+  <symbol id="hl-range" viewBox="0 0 24 24"><path d="M12 3.5v17"/><path d="m8 7.5 4-4 4 4"/><path d="m8 16.5 4 4 4-4"/></symbol>
+  <symbol id="hl-keys" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M9 13v6M15 13v6"/><rect x="7.6" y="5" width="2.8" height="8" fill="currentColor" stroke="none"/><rect x="13.6" y="5" width="2.8" height="8" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="hl-ear" viewBox="0 0 24 24"><path d="M7 9a5 5 0 0 1 10 0c0 3.2-3 4-3 7a3 3 0 0 1-6 0"/><path d="M10 10a2 2 0 0 1 4 0c0 1.5-1.5 2-1.5 3.5"/></symbol>
+  <symbol id="hl-metronome" viewBox="0 0 24 24"><path d="M9 3h6l4 18H5z"/><path d="m12 15 5-9"/><path d="M7 17.5h10"/></symbol>
+  <symbol id="hl-headphones" viewBox="0 0 24 24"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></symbol>
+  <symbol id="hl-steps" viewBox="0 0 24 24"><path d="M4 19h4v-4h4v-4h4V7h4"/></symbol>
+  <symbol id="hl-pulse" viewBox="0 0 24 24"><path d="M3 12h4l2-5 3 10 2-5h7"/></symbol>
+
+  <!-- songs and analysis -->
+  <symbol id="hl-score" viewBox="0 0 24 24"><path d="M3 6h18M3 9.5h18M3 13h18M3 16.5h18"/><circle cx="9" cy="16.5" r="2.1" fill="currentColor" stroke="none"/><path d="M11 16.3V4.5"/></symbol>
+  <symbol id="hl-xray" viewBox="0 0 24 24"><path d="M3 6h7M13 6h8M3 10h4M10 10h11M3 14h10M16 14h5M3 18h6M12 18h9"/></symbol>
+  <symbol id="hl-zoom" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.2"/><path d="m15.2 15.2 5.3 5.3"/><path d="M8 10.5h5M10.5 8v5"/></symbol>
+
+  <!-- progress and identity -->
+  <symbol id="hl-chart" viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M7 16.5v-4M12 16.5v-8M17 16.5v-6"/></symbol>
+  <symbol id="hl-medal" viewBox="0 0 24 24"><circle cx="12" cy="14.5" r="5.5"/><path d="m8.5 3 3.5 6 3.5-6"/></symbol>
+  <symbol id="hl-flame" viewBox="0 0 24 24"><path d="M12 3c1 4 5.5 5.5 5.5 10.5a5.5 5.5 0 0 1-11 0c0-2.4 1.3-4 2.8-5 .2 1.9 1 3 2.1 3.3C10.8 9.2 11 6 12 3z"/></symbol>
+  <symbol id="hl-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/></symbol>
+  <symbol id="hl-passport" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5"/><circle cx="12" cy="10" r="3"/><path d="M9 16h6"/></symbol>
+  <symbol id="hl-group" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19.5a6 6 0 0 1 12 0"/><path d="M16 5.3a3 3 0 0 1 0 5.4"/><path d="M18 14.6a5.6 5.6 0 0 1 3 4.9"/></symbol>
+
+  <!-- interface -->
+  <symbol id="hl-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 11v5.2"/><path d="M12 7.7v.1"/></symbol>
+  <symbol id="hl-chev" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></symbol>
+  <symbol id="hl-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="hl-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="hl-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+</svg>
 <div class="splash-screen" id="splashScreen">
   <svg class="splash-ring" viewBox="0 0 200 200">
     <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="6"/>
