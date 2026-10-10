@@ -1,0 +1,22 @@
+  ✓ every id value in master still exists                              960 checked
+  ✓ every data-i18n value in master still exists                       748 checked
+  ✓ every data-i18n-placeholder value in master still exists           0 checked
+  ✓ every data-i18n-title value in master still exists                 0 checked
+  ✓ every data-i18n-aria value in master still exists                  0 checked
+  ✓ every data-i18n-html value in master still exists                  0 checked
+  ✓ every data-panel value in master still exists                      42 checked
+  ✓ every data-shell value in master still exists                      5 checked
+  ✓ every data-enter-panel value in master still exists                42 checked
+  ✓ protected classes (§9) still occur                                 27 checked
+  ✓ protected English strings (§9) still occur                         13 checked
+  ✓ protected attributes (§9) still occur                              9 checked
+  ✓ every TRANSLATIONS key exists in en, es, fr and tr                 1732 keys
+  ✓ no TRANSLATIONS key from master removed                            none removed
+  ✗ HOUSE LIGHTS v1.2 block = design/house-lights/house-lights.css     markers not found
+  ✓ legacy variables still defined                                     --bg --surface --surface-raised --hairline --cream --muted --brass --brass-dim --teal --coral
+  ✗ no Fraunces / Space Mono / Inter font names                        197 line(s): 9: Fraunces, Space+Mono, Inter | 89: Inter | 110: Fraunces | 119: Inter | 199: Fraunces | 205: Space Mono | 216: Inter | 233: Space Mono …
+  ✗ no emoji in the header, tab bar, renderAccountBar, updateShellTopbar header.shell-topbar line 1466: <span class="shell-streak" id="shellStreak">🔥 0</span> | nav.shell-bottomnav line 1831: <button class="snb-item active" data-shell="home" aria-current="page"> | nav.shell-bottomnav line 1832: <button class="snb-item" data-shell="train"><span class="snb-icon" ari | nav.shell-bottomnav line 1833: <button class="snb-item" data-shell="songs"><span class="snb-icon" ari | nav.shell-bottomnav line 1834: <button class="snb-item" data-shell="world"><span class="snb-icon" ari | nav.shell-bottomnav line 1835: <button class="snb-item" data-shell="you"><span class="snb-icon" aria- | renderAccountBar line 11125: <span class="streak">🔥 ${progress.streak||0}</span> | updateShellTopbar line 18219: if(!profile){ streakEl.textContent='🔥 0'; levelEl.textContent='Lv. 1' | updateShellTopbar line 18220: streakEl.textContent='🔥 '+(progress.streak||0);
+  ✗ no colour literals outside the exemptions                          161: 16 #0e0d0b | 17 #17140f | 18 #1e1a13 | 19 #33301f | 20 #f1ead9 | 21 #8a8272 | 22 #e8a33d | 23 #7a5a24 | 24 #4fd6c4 | 25 #e8735d …
+
+15 passed, 4 failed (base master)
+json: scripts/design-verify/logs/hooks-baseline-master.json
