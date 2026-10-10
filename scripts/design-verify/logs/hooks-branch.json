@@ -1,0 +1,940 @@
+{
+ "base": "master",
+ "at": "2026-10-10T22:05:28.220Z",
+ "passed": 19,
+ "failed": 0,
+ "results": [
+  {
+   "check": "every id value in master still exists",
+   "ok": true,
+   "detail": "960 checked"
+  },
+  {
+   "check": "every data-i18n value in master still exists",
+   "ok": true,
+   "detail": "748 checked"
+  },
+  {
+   "check": "every data-i18n-placeholder value in master still exists",
+   "ok": true,
+   "detail": "0 checked"
+  },
+  {
+   "check": "every data-i18n-title value in master still exists",
+   "ok": true,
+   "detail": "0 checked"
+  },
+  {
+   "check": "every data-i18n-aria value in master still exists",
+   "ok": true,
+   "detail": "0 checked"
+  },
+  {
+   "check": "every data-i18n-html value in master still exists",
+   "ok": true,
+   "detail": "0 checked"
+  },
+  {
+   "check": "every data-panel value in master still exists",
+   "ok": true,
+   "detail": "42 checked"
+  },
+  {
+   "check": "every data-shell value in master still exists",
+   "ok": true,
+   "detail": "5 checked"
+  },
+  {
+   "check": "every data-enter-panel value in master still exists",
+   "ok": true,
+   "detail": "42 checked"
+  },
+  {
+   "check": "protected classes (§9) still occur",
+   "ok": true,
+   "detail": "27 checked"
+  },
+  {
+   "check": "protected English strings (§9) still occur",
+   "ok": true,
+   "detail": "13 checked"
+  },
+  {
+   "check": "protected attributes (§9) still occur",
+   "ok": true,
+   "detail": "9 checked"
+  },
+  {
+   "check": "every TRANSLATIONS key exists in en, es, fr and tr",
+   "ok": true,
+   "detail": "1735 keys"
+  },
+  {
+   "check": "no TRANSLATIONS key from master removed",
+   "ok": true,
+   "detail": "none removed"
+  },
+  {
+   "check": "HOUSE LIGHTS v1.2 block = design/house-lights/house-lights.css",
+   "ok": true,
+   "detail": "19382 bytes"
+  },
+  {
+   "check": "legacy variables still defined",
+   "ok": true,
+   "detail": "--bg --surface --surface-raised --hairline --cream --muted --brass --brass-dim --teal --coral"
+  },
+  {
+   "check": "no Fraunces / Space Mono / Inter font names",
+   "ok": true,
+   "detail": "0"
+  },
+  {
+   "check": "no emoji in the header, tab bar, renderAccountBar, updateShellTopbar",
+   "ok": true,
+   "detail": "header.shell-topbar, nav.shell-bottomnav, renderAccountBar, updateShellTopbar"
+  },
+  {
+   "check": "no colour literals outside the exemptions",
+   "ok": true,
+   "detail": "136 exempt"
+  }
+ ],
+ "allowedRemovals": [
+  {
+   "hook": "data-i18n=\"theme_default\"",
+   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
+  },
+  {
+   "hook": "data-i18n=\"theme_cyberpunk\"",
+   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
+  },
+  {
+   "hook": "data-i18n=\"theme_aurora\"",
+   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
+  },
+  {
+   "hook": "data-i18n=\"theme_velvetopera\"",
+   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
+  }
+ ],
+ "literals": [],
+ "exemptLiterals": [
+  {
+   "line": 9,
+   "literal": "#F2F3EF",
+   "exempt": "theme-color meta tag",
+   "text": "<meta name=\"theme-color\" content=\"#F2F3EF\" media=\"(prefers-color-scheme: light)\">"
+  },
+  {
+   "line": 10,
+   "literal": "#16181C",
+   "exempt": "theme-color meta tag",
+   "text": "<meta name=\"theme-color\" content=\"#16181C\" media=\"(prefers-color-scheme: dark)\">"
+  },
+  {
+   "line": 77,
+   "literal": "#F2F3EF",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #F2F3EF;          /* paper */"
+  },
+  {
+   "line": 78,
+   "literal": "#FFFFFF",
+   "exempt": "House Lights block",
+   "text": "--hl-raised: #FFFFFF;      /* the one raised layer: sheets, today block */"
+  },
+  {
+   "line": 79,
+   "literal": "#E7E9E4",
+   "exempt": "House Lights block",
+   "text": "--hl-sunk: #E7E9E4;        /* wells, tracks */"
+  },
+  {
+   "line": 80,
+   "literal": "#D6D9D2",
+   "exempt": "House Lights block",
+   "text": "--hl-rule: #D6D9D2;        /* staff-line hairline */"
+  },
+  {
+   "line": 81,
+   "literal": "#B9BDB5",
+   "exempt": "House Lights block",
+   "text": "--hl-rule-strong: #B9BDB5;"
+  },
+  {
+   "line": 82,
+   "literal": "#111316",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #111316;         /* primary text */"
+  },
+  {
+   "line": 83,
+   "literal": "#454A52",
+   "exempt": "House Lights block",
+   "text": "--hl-ink-2: #454A52;       /* secondary text */"
+  },
+  {
+   "line": 84,
+   "literal": "#616770",
+   "exempt": "House Lights block",
+   "text": "--hl-ink-3: #616770;       /* muted text, still AA */"
+  },
+  {
+   "line": 85,
+   "literal": "#2633D9",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #2633D9;       /* YOUR VOICE. Nothing else uses it. */"
+  },
+  {
+   "line": 86,
+   "literal": "#DFE2FF",
+   "exempt": "House Lights block",
+   "text": "--hl-voice-soft: #DFE2FF;"
+  },
+  {
+   "line": 87,
+   "literal": "#FFFFFF",
+   "exempt": "House Lights block",
+   "text": "--hl-on-voice: #FFFFFF;"
+  },
+  {
+   "line": 89,
+   "literal": "#BD361E",
+   "exempt": "House Lights block",
+   "text": "--hl-miss: #BD361E;        /* missed note, recording tally */"
+  },
+  {
+   "line": 90,
+   "literal": "#905C00",
+   "exempt": "House Lights block",
+   "text": "--hl-warn: #905C00;"
+  },
+  {
+   "line": 91,
+   "literal": "#1E7542",
+   "exempt": "House Lights block",
+   "text": "--hl-ok: #1E7542;          /* completion */"
+  },
+  {
+   "line": 92,
+   "literal": "#895F00",
+   "exempt": "House Lights block",
+   "text": "--hl-game-gold: #895F00;   /* rewards, games only */"
+  },
+  {
+   "line": 94,
+   "literal": "#6C3FD1",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;"
+  },
+  {
+   "line": 94,
+   "literal": "#985700",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;"
+  },
+  {
+   "line": 94,
+   "literal": "#B0306E",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;"
+  },
+  {
+   "line": 94,
+   "literal": "#0A7279",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;"
+  },
+  {
+   "line": 94,
+   "literal": "#576E13",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;"
+  },
+  {
+   "line": 96,
+   "literal": "#FFFFFF",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #FFFFFF; --hl-piano-black: #111316;"
+  },
+  {
+   "line": 96,
+   "literal": "#111316",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #FFFFFF; --hl-piano-black: #111316;"
+  },
+  {
+   "line": 97,
+   "literal": "rgba(17,19,22,.16)",
+   "exempt": "House Lights block",
+   "text": "--hl-shadow-sheet: 0 18px 48px rgba(17,19,22,.16);"
+  },
+  {
+   "line": 105,
+   "literal": "#16181C",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 105,
+   "literal": "#1E2126",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 105,
+   "literal": "#111316",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 105,
+   "literal": "#2B2F36",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 105,
+   "literal": "#3C414A",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 106,
+   "literal": "#ECEDEF",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;"
+  },
+  {
+   "line": 106,
+   "literal": "#B4B8BF",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;"
+  },
+  {
+   "line": 106,
+   "literal": "#8C929B",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;"
+  },
+  {
+   "line": 107,
+   "literal": "#8A96FF",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;"
+  },
+  {
+   "line": 107,
+   "literal": "#232A5C",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;"
+  },
+  {
+   "line": 107,
+   "literal": "#0A0C1A",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;"
+  },
+  {
+   "line": 108,
+   "literal": "#FF7A5F",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 108,
+   "literal": "#F0B44A",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 108,
+   "literal": "#5BC98A",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 108,
+   "literal": "#FFC23D",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 109,
+   "literal": "#B193FF",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 109,
+   "literal": "#FFB347",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 109,
+   "literal": "#FF7DB8",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 109,
+   "literal": "#3FD0D6",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 109,
+   "literal": "#B6D35A",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 110,
+   "literal": "#D9DBDF",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #D9DBDF; --hl-piano-black: #060708;"
+  },
+  {
+   "line": 110,
+   "literal": "#060708",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #D9DBDF; --hl-piano-black: #060708;"
+  },
+  {
+   "line": 111,
+   "literal": "rgba(0,0,0,.5)",
+   "exempt": "House Lights block",
+   "text": "--hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);"
+  },
+  {
+   "line": 116,
+   "literal": "#16181C",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 116,
+   "literal": "#1E2126",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 116,
+   "literal": "#111316",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 116,
+   "literal": "#2B2F36",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 116,
+   "literal": "#3C414A",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #16181C; --hl-raised: #1E2126; --hl-sunk: #111316; --hl-rule: #2B2F36; --hl-rule-strong: #3"
+  },
+  {
+   "line": 117,
+   "literal": "#ECEDEF",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;"
+  },
+  {
+   "line": 117,
+   "literal": "#B4B8BF",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;"
+  },
+  {
+   "line": 117,
+   "literal": "#8C929B",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #ECEDEF; --hl-ink-2: #B4B8BF; --hl-ink-3: #8C929B;"
+  },
+  {
+   "line": 118,
+   "literal": "#8A96FF",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;"
+  },
+  {
+   "line": 118,
+   "literal": "#232A5C",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;"
+  },
+  {
+   "line": 118,
+   "literal": "#0A0C1A",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;"
+  },
+  {
+   "line": 119,
+   "literal": "#FF7A5F",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 119,
+   "literal": "#F0B44A",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 119,
+   "literal": "#5BC98A",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 119,
+   "literal": "#FFC23D",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-w"
+  },
+  {
+   "line": 120,
+   "literal": "#B193FF",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 120,
+   "literal": "#FFB347",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 120,
+   "literal": "#FF7DB8",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 120,
+   "literal": "#3FD0D6",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 120,
+   "literal": "#B6D35A",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 121,
+   "literal": "#D9DBDF",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #D9DBDF; --hl-piano-black: #060708;"
+  },
+  {
+   "line": 121,
+   "literal": "#060708",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #D9DBDF; --hl-piano-black: #060708;"
+  },
+  {
+   "line": 122,
+   "literal": "rgba(0,0,0,.5)",
+   "exempt": "House Lights block",
+   "text": "--hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);"
+  },
+  {
+   "line": 128,
+   "literal": "#060708",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #060708; --hl-raised: #101216; --hl-sunk: #000000; --hl-rule: #1D2026; --hl-rule-strong: #2"
+  },
+  {
+   "line": 128,
+   "literal": "#101216",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #060708; --hl-raised: #101216; --hl-sunk: #000000; --hl-rule: #1D2026; --hl-rule-strong: #2"
+  },
+  {
+   "line": 128,
+   "literal": "#000000",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #060708; --hl-raised: #101216; --hl-sunk: #000000; --hl-rule: #1D2026; --hl-rule-strong: #2"
+  },
+  {
+   "line": 128,
+   "literal": "#1D2026",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #060708; --hl-raised: #101216; --hl-sunk: #000000; --hl-rule: #1D2026; --hl-rule-strong: #2"
+  },
+  {
+   "line": 128,
+   "literal": "#2C3038",
+   "exempt": "House Lights block",
+   "text": "--hl-bg: #060708; --hl-raised: #101216; --hl-sunk: #000000; --hl-rule: #1D2026; --hl-rule-strong: #2"
+  },
+  {
+   "line": 129,
+   "literal": "#F1F2F4",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #F1F2F4; --hl-ink-2: #A9AEB7; --hl-ink-3: #80868F;"
+  },
+  {
+   "line": 129,
+   "literal": "#A9AEB7",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #F1F2F4; --hl-ink-2: #A9AEB7; --hl-ink-3: #80868F;"
+  },
+  {
+   "line": 129,
+   "literal": "#80868F",
+   "exempt": "House Lights block",
+   "text": "--hl-ink: #F1F2F4; --hl-ink-2: #A9AEB7; --hl-ink-3: #80868F;"
+  },
+  {
+   "line": 130,
+   "literal": "#7F8CFF",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #7F8CFF; --hl-voice-soft: rgba(127,140,255,.16); --hl-on-voice: #05060F;"
+  },
+  {
+   "line": 130,
+   "literal": "rgba(127,140,255,.16)",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #7F8CFF; --hl-voice-soft: rgba(127,140,255,.16); --hl-on-voice: #05060F;"
+  },
+  {
+   "line": 130,
+   "literal": "#05060F",
+   "exempt": "House Lights block",
+   "text": "--hl-voice: #7F8CFF; --hl-voice-soft: rgba(127,140,255,.16); --hl-on-voice: #05060F;"
+  },
+  {
+   "line": 131,
+   "literal": "#FF6A4D",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-w"
+  },
+  {
+   "line": 131,
+   "literal": "#F0B44A",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-w"
+  },
+  {
+   "line": 131,
+   "literal": "#5BC98A",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-w"
+  },
+  {
+   "line": 131,
+   "literal": "#FFC23D",
+   "exempt": "House Lights block",
+   "text": "--hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-w"
+  },
+  {
+   "line": 132,
+   "literal": "#B193FF",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 132,
+   "literal": "#FFB347",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 132,
+   "literal": "#FF7DB8",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 132,
+   "literal": "#3FD0D6",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 132,
+   "literal": "#B6D35A",
+   "exempt": "House Lights block",
+   "text": "--hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;"
+  },
+  {
+   "line": 133,
+   "literal": "#C9CCD1",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #C9CCD1; --hl-piano-black: #000000;"
+  },
+  {
+   "line": 133,
+   "literal": "#000000",
+   "exempt": "House Lights block",
+   "text": "--hl-piano-white: #C9CCD1; --hl-piano-black: #000000;"
+  },
+  {
+   "line": 134,
+   "literal": "rgba(0,0,0,.6)",
+   "exempt": "House Lights block",
+   "text": "--hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.6);"
+  },
+  {
+   "line": 135,
+   "literal": "rgba(127,140,255,.55)",
+   "exempt": "House Lights block",
+   "text": "--hl-glow: drop-shadow(0 0 6px rgba(127,140,255,.55));"
+  },
+  {
+   "line": 314,
+   "literal": "#000",
+   "exempt": "House Lights block",
+   "text": ".hl-dimmer{ position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: "
+  },
+  {
+   "line": 604,
+   "literal": "rgba(0,0,0,0.72)",
+   "exempt": "black shadow / backdrop",
+   "text": "position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(3px);"
+  },
+  {
+   "line": 668,
+   "literal": "rgba(0,0,0,0.82)",
+   "exempt": "black shadow / backdrop",
+   "text": "position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(4px);"
+  },
+  {
+   "line": 682,
+   "literal": "rgba(0,0,0,0.6)",
+   "exempt": "black shadow / backdrop",
+   "text": "box-shadow:0 30px 80px rgba(0,0,0,0.6);"
+  },
+  {
+   "line": 1381,
+   "literal": "rgba(0,0,0,0.25)",
+   "exempt": "black shadow / backdrop",
+   "text": "font-family:var(--hl-font);font-size:var(--hl-t-small);line-height:1.45;box-shadow:0 8px 24px rgba(0"
+  },
+  {
+   "line": 1563,
+   "literal": "rgba(0,0,0,0.35)",
+   "exempt": "black shadow / backdrop",
+   "text": "box-shadow:0 10px 28px rgba(0,0,0,0.35);"
+  },
+  {
+   "line": 1611,
+   "literal": "rgba(0,0,0,0.85)",
+   "exempt": "black shadow / backdrop",
+   "text": "position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);"
+  },
+  {
+   "line": 4338,
+   "literal": "rgba(0,0,0,0.4)",
+   "exempt": "black shadow / backdrop",
+   "text": "<canvas id=\"voiceCardCanvas\" width=\"600\" height=\"800\" role=\"img\" aria-label=\"Preview of your downloa"
+  },
+  {
+   "line": 17408,
+   "literal": "#0a0908",
+   "exempt": "gliderLoop",
+   "text": "ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);"
+  },
+  {
+   "line": 17409,
+   "literal": "#2a2419",
+   "exempt": "gliderLoop",
+   "text": "ctx.fillStyle='#2a2419';"
+  },
+  {
+   "line": 17420,
+   "literal": "#e8a33d",
+   "exempt": "gliderLoop",
+   "text": "ctx.fillStyle='#e8a33d';"
+  },
+  {
+   "line": 17429,
+   "literal": "#e8735d",
+   "exempt": "gliderLoop",
+   "text": "ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';"
+  },
+  {
+   "line": 17429,
+   "literal": "#f1ead9",
+   "exempt": "gliderLoop",
+   "text": "ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';"
+  },
+  {
+   "line": 17432,
+   "literal": "#f1ead9",
+   "exempt": "gliderLoop",
+   "text": "ctx.fillStyle='#f1ead9'; ctx.font='600 18px system-ui, sans-serif'; ctx.textAlign='center'; ctx.text"
+  },
+  {
+   "line": 17593,
+   "literal": "#0a0908",
+   "exempt": "wuExLoop",
+   "text": "ctx.fillStyle = '#0a0908'; ctx.fillRect(0,0,W,H);"
+  },
+  {
+   "line": 17595,
+   "literal": "#e8a33d",
+   "exempt": "wuExLoop",
+   "text": "ctx.strokeStyle = '#e8a33d'; ctx.globalAlpha = 0.55; ctx.lineWidth = 3; ctx.setLineDash([4,7]);"
+  },
+  {
+   "line": 17600,
+   "literal": "#4fd6c4",
+   "exempt": "wuExLoop",
+   "text": "ctx.strokeStyle = '#4fd6c4'; ctx.lineWidth = 3; ctx.beginPath();"
+  },
+  {
+   "line": 17606,
+   "literal": "#f1ead9",
+   "exempt": "wuExLoop",
+   "text": "ctx.fillStyle = '#f1ead9'; ctx.beginPath(); ctx.arc(WU_NOW_X, run.y, 8, 0, Math.PI*2); ctx.fill();"
+  },
+  {
+   "line": 17609,
+   "literal": "#e8a33d",
+   "exempt": "wuExLoop",
+   "text": "ctx.textAlign = 'right'; ctx.fillStyle = '#e8a33d'; ctx.fillText(Math.max(0, Math.ceil(WU_EX_SEC - t"
+  },
+  {
+   "line": 18036,
+   "literal": "#0a0908",
+   "exempt": "bridgeLoop",
+   "text": "ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);"
+  },
+  {
+   "line": 18037,
+   "literal": "#33301f",
+   "exempt": "bridgeLoop",
+   "text": "ctx.strokeStyle='#33301f'; ctx.lineWidth=1;"
+  },
+  {
+   "line": 18039,
+   "literal": "#8a8272",
+   "exempt": "bridgeLoop",
+   "text": "ctx.fillStyle='#8a8272'; ctx.font='11px monospace';"
+  },
+  {
+   "line": 18046,
+   "literal": "#e8a33d",
+   "exempt": "bridgeLoop",
+   "text": "ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';"
+  },
+  {
+   "line": 18046,
+   "literal": "#4fd6c4",
+   "exempt": "bridgeLoop",
+   "text": "ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';"
+  },
+  {
+   "line": 18050,
+   "literal": "#f1ead9",
+   "exempt": "bridgeLoop",
+   "text": "ctx.fillStyle='#f1ead9';"
+  },
+  {
+   "line": 19244,
+   "literal": "rgb(${c[0]},${c[1]},${c[2]})",
+   "exempt": "resonanceColorFor",
+   "text": "return `rgb(${c[0]},${c[1]},${c[2]})`;"
+  },
+  {
+   "line": 19272,
+   "literal": "rgb(90,84,70)",
+   "exempt": "drawResonanceFrame (argument: canvas colour)",
+   "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
+  },
+  {
+   "line": 19292,
+   "literal": "rgb(90,84,70)",
+   "exempt": "drawResonanceFrame (argument: canvas colour)",
+   "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
+  },
+  {
+   "line": 19333,
+   "literal": "rgb(90,84,70)",
+   "exempt": "drawResonanceFrame (argument: canvas colour)",
+   "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
+  },
+  {
+   "line": 19398,
+   "literal": "rgba(${r},${g},${b},${voiceAmbientAlpha.toFixed(3)",
+   "exempt": "tickVoiceAmbient",
+   "text": "layer.style.background = `radial-gradient(ellipse 70% 45% at 50% 0%, rgba(${r},${g},${b},${voiceAmbi"
+  },
+  {
+   "line": 20455,
+   "literal": "#0e0d0b",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#0e0d0b';"
+  },
+  {
+   "line": 20458,
+   "literal": "rgba(232,163,61,0.10)",
+   "exempt": "renderVoiceCard",
+   "text": "grad.addColorStop(0, 'rgba(232,163,61,0.10)');"
+  },
+  {
+   "line": 20459,
+   "literal": "rgba(79,214,196,0.06)",
+   "exempt": "renderVoiceCard",
+   "text": "grad.addColorStop(1, 'rgba(79,214,196,0.06)');"
+  },
+  {
+   "line": 20463,
+   "literal": "#e8a33d",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#e8a33d';"
+  },
+  {
+   "line": 20468,
+   "literal": "#f1ead9",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#f1ead9';"
+  },
+  {
+   "line": 20488,
+   "literal": "#a89f8f",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#a89f8f';"
+  },
+  {
+   "line": 20491,
+   "literal": "#4fd6c4",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';"
+  },
+  {
+   "line": 20491,
+   "literal": "#6b6355",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';"
+  },
+  {
+   "line": 20498,
+   "literal": "#e8735d",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#e8735d';"
+  },
+  {
+   "line": 20504,
+   "literal": "#f1ead9",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#f1ead9';"
+  },
+  {
+   "line": 20508,
+   "literal": "#6b6355",
+   "exempt": "renderVoiceCard",
+   "text": "ctx.fillStyle = '#6b6355';"
+  }
+ ]
+}
