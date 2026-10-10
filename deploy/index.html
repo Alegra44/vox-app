@@ -11445,8 +11445,7 @@ document.getElementById('authModeToggle').addEventListener('click', (e)=>{
 });
 
 async function onSignedIn(){
-  await loadProfile();
-  await loadProgress();
+  await Promise.all([loadProfile(), loadProgress()]); // independent: each its own getSession and a plain select
   if(typeof levelForXp==='function'){ lastKnownLevel = levelForXp(progress.xp||0).level; }
   if(typeof ensureSessionSnapshot==='function') ensureSessionSnapshot();
   closeAuthModal();
@@ -11606,8 +11605,7 @@ _origCaptureHigh.addEventListener('click', ()=>{
 // a fixed timer and briefly showing the signed-out home screen underneath
 // while session rehydration + the profile fetch are still in flight.
 let appInitPromise = (async function initAccountAndDashboard(){
-  await loadProfile();
-  await loadProgress();
+  await Promise.all([loadProfile(), loadProgress()]); // independent: each its own getSession and a plain select
   if(typeof ensureSessionSnapshot==='function') ensureSessionSnapshot();
   if(profile && typeof levelForXp==='function'){ lastKnownLevel = levelForXp(progress.xp||0).level; }
   renderAccountBar();
