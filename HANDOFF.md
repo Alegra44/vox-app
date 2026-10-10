@@ -169,6 +169,9 @@ failure.** Then on production: batch1, the bleed checks, and `levels.js` if it c
      Rerun rumble alone, 5 runs per side; if the branch isn't clearly worse, it counts as noise and the release goes
      on. And noisegate's rule changes: a pass/fail flip is a Regression only when the change also exceeds the noise
      tolerance; a flip within it is reported as "within noise", not blocking.
+     **Rumble rerun (2026-10-07, 5 runs per side):** RTF heard master 7/6/4/9/11% (median 7) → branch 4/7/5/6/3%
+     (median 5): not worse. Verdict 0 regressions, 1 within noise, 1 already failing (Drills heard on both sides).
+     Gate met; release started 2026-10-10.
    That completes the four tester bugs. Next: redesign phase 1, specified separately by the user; it changes how the
    app looks, so **screenshots are reviewed by the user before anything deploys.**
 
