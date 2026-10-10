@@ -1346,7 +1346,7 @@
   .skilltree-detail .std-text{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
 
   /* ============ SIGNAL SHELL ============ */
-  body{padding-bottom:78px;} /* room for fixed bottom nav */
+  body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
 
   /* header: the wordmark, and the avatar initial (signed in) or Sign in (signed out). Solid paper, one hairline. */
   .shell-topbar{
@@ -1370,7 +1370,7 @@
   .vc-signin{min-height:40px;padding:0 var(--hl-s2);color:var(--hl-ink);}
 
   .app-toast-wrap{
-    position:fixed;left:0;right:0;bottom:72px;z-index:500;
+    position:fixed;left:0;right:0;bottom:calc(57px + var(--hl-s4) + env(safe-area-inset-bottom,0px));z-index:500;
     display:flex;flex-direction:column;align-items:center;gap:8px;
     padding:0 16px;pointer-events:none;
   }
@@ -1384,34 +1384,19 @@
   @keyframes toastIn{ from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
   @media (prefers-reduced-motion: reduce){ .app-toast{animation:none;} }
 
-  .shell-bottomnav{
-    position:fixed;bottom:0;left:0;right:0;z-index:50;
-    display:flex;background:color-mix(in srgb, var(--hl-bg) 97%, transparent);backdrop-filter:blur(10px);
-    border-top:1px solid var(--hairline);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));
-  }
-  .snb-item{
-    flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
-    background:none;border:none;color:var(--muted);cursor:pointer;padding:8px 4px 6px;
-    font-family:var(--hl-font);position:relative;
-  }
-  .snb-icon{font-size:19px;filter:grayscale(1) opacity(0.6);transition:filter .15s ease;}
-  .snb-label{font-size:10px;font-weight:600;letter-spacing:0.02em;}
-  .snb-item.active{color:var(--brass);}
-  .snb-item.active .snb-icon{filter:none;}
-  .snb-item.active::before{
-    content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
-    width:4px;height:4px;border-radius:50%;background:var(--brass);box-shadow:0 0 6px var(--brass);
-  }
-
-  /* ---- RESPONSIVE: tablet/desktop — bottom nav becomes a floating centered dock, not an edge-to-edge stretch ---- */
-  @media (min-width:720px){
+  /* tab bar (.hl-tabbar / .hl-tab): under 960px a fixed bottom bar; 960px and up it sits in the header row */
+  .shell-bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:50;}
+  .snb-icon{display:grid;place-items:center;line-height:0;}
+  .snb-label{font-size:var(--hl-t-label);font-weight:600;line-height:1.2;letter-spacing:.02em;}
+  @media (min-width:960px){
+    body{padding-bottom:0;}
     .shell-bottomnav{
-      max-width:460px;left:50%;right:auto;transform:translateX(-50%);
-      bottom:22px;border:1px solid var(--hairline);border-top:1px solid var(--hairline);
-      border-radius:18px;box-shadow:0 16px 44px rgba(0,0,0,0.55);padding:8px 10px;
+      top:0;bottom:auto;left:50%;right:auto;transform:translateX(-50%);height:57px;
+      display:flex;gap:var(--hl-s1);background:transparent;border-top:0;padding:0;
     }
-    .snb-item{padding:8px 14px 6px;}
-    body{padding-bottom:96px;}
+    .shell-bottomnav .hl-tab{flex-direction:row;align-items:center;gap:var(--hl-s2);min-height:0;height:100%;padding:0 var(--hl-s4);}
+    .shell-bottomnav .hl-tab[aria-current="page"]::before{top:auto;bottom:0;left:var(--hl-s4);right:var(--hl-s4);}
+    .app-toast-wrap{bottom:24px;}
   }
 
   /* ---- HOME ---- */
@@ -2136,12 +2121,12 @@
     </div>
   </section>
 
-  <nav class="shell-bottomnav" aria-label="Main navigation">
-    <button class="snb-item active" data-shell="home" aria-current="page"><span class="snb-icon" aria-hidden="true">🏠</span><span class="snb-label" data-i18n="nav_home">Home</span></button>
-    <button class="snb-item" data-shell="train"><span class="snb-icon" aria-hidden="true">🎯</span><span class="snb-label" data-i18n="nav_train">Train</span></button>
-    <button class="snb-item" data-shell="songs"><span class="snb-icon" aria-hidden="true">🎵</span><span class="snb-label" data-i18n="nav_songs">Songs</span></button>
-    <button class="snb-item" data-shell="world"><span class="snb-icon" aria-hidden="true">🗺️</span><span class="snb-label" data-i18n="nav_world">World</span></button>
-    <button class="snb-item" data-shell="you"><span class="snb-icon" aria-hidden="true">📈</span><span class="snb-label" data-i18n="nav_you">You</span></button>
+  <nav class="shell-bottomnav hl-tabbar" aria-label="Main navigation">
+    <button class="snb-item hl-tab active" data-shell="home" aria-current="page"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-home"/></svg></span><span class="snb-label" data-i18n="nav_home">Home</span></button>
+    <button class="snb-item hl-tab" data-shell="train"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg></span><span class="snb-label" data-i18n="nav_train">Coach</span></button>
+    <button class="snb-item hl-tab" data-shell="songs"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg></span><span class="snb-label" data-i18n="nav_songs">Songs</span></button>
+    <button class="snb-item hl-tab" data-shell="world"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg></span><span class="snb-label" data-i18n="nav_world">World</span></button>
+    <button class="snb-item hl-tab" data-shell="you"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg></span><span class="snb-label" data-i18n="nav_you">You</span></button>
   </nav>
 
   <!-- 21-DAY JOURNEY PANEL -->
@@ -5673,7 +5658,7 @@ let profile = null;
 /* ---------------- Language selection (real i18n infrastructure, honest scope) ---------------- */
 const TRANSLATIONS = {
   en: {
-    nav_home:'Home', nav_train:'Train', nav_songs:'Songs', nav_world:'World', nav_you:'You',
+    nav_home:'Home', nav_train:'Coach', nav_songs:'Songs', nav_world:'World', nav_you:'You',
     auth_title:'Start your Vocal Journey', auth_sub:'Get full access to VoxCoach for 21 days.',
     auth_name_label:'Display name', auth_email_label:'Email',
     auth_create_btn:'Start my 21 days free', auth_cancel_btn:'Cancel',
@@ -7036,7 +7021,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Still your weakest',
   },
   fr: {
-    nav_home:'Accueil', nav_train:'Entraîner', nav_songs:'Chansons', nav_world:'Monde', nav_you:'Vous',
+    nav_home:'Accueil', nav_train:'Coach', nav_songs:'Chansons', nav_world:'Monde', nav_you:'Vous',
     auth_title:'Commencez votre parcours vocal', auth_sub:'Accédez à VoxCoach en totalité pendant 21 jours.',
     auth_name_label:"Nom d'affichage", auth_email_label:'E-mail',
     auth_create_btn:'Commencer mes 21 jours gratuits', auth_cancel_btn:'Annuler',
@@ -8399,7 +8384,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Toujours votre point faible',
   },
   es: {
-    nav_home:'Inicio', nav_train:'Entrenar', nav_songs:'Canciones', nav_world:'Mundo', nav_you:'Tú',
+    nav_home:'Inicio', nav_train:'Coach', nav_songs:'Canciones', nav_world:'Mundo', nav_you:'Tú',
     auth_title:'Comienza tu viaje vocal', auth_sub:'Obtén acceso completo a VoxCoach durante 21 días.',
     auth_name_label:'Nombre a mostrar', auth_email_label:'Correo electrónico',
     auth_create_btn:'Comenzar mis 21 días gratis', auth_cancel_btn:'Cancelar',
@@ -9762,7 +9747,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Sigue siendo tu punto débil',
   },
   tr: {
-    nav_home:'Ana Sayfa', nav_train:'Antrenman', nav_songs:'Şarkılar', nav_world:'Dünya', nav_you:'Sen',
+    nav_home:'Ana Sayfa', nav_train:'Koç', nav_songs:'Şarkılar', nav_world:'Dünya', nav_you:'Sen',
     auth_title:'Vokal Yolculuğuna Başla', auth_sub:"VoxCoach'a 21 gün boyunca tam erişim kazanın.",
     auth_name_label:'Görünen ad', auth_email_label:'E-posta',
     auth_create_btn:'21 ücretsiz günümü başlat', auth_cancel_btn:'İptal',
