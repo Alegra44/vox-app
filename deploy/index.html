@@ -340,7 +340,7 @@
     min-height:100vh;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 96px;position:relative;z-index:2;}
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px 96px;position:relative;z-index:2;}
 
   /* ---- VOICE-REACTIVE AMBIENT (scoped: only active while a mic-listening screen drives it) ---- */
   /* JS handles the smooth color/alpha easing directly (guaranteed reliable across browsers,
@@ -1348,24 +1348,26 @@
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:78px;} /* room for fixed bottom nav */
 
+  /* header: the wordmark, and the avatar initial (signed in) or Sign in (signed out). Solid paper, one hairline. */
   .shell-topbar{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 24px;position:sticky;top:0;z-index:40;
-    background:color-mix(in srgb, var(--hl-bg) 92%, transparent);backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--hairline);
+    display:flex;align-items:center;justify-content:space-between;gap:var(--hl-s3);
+    min-height:56px;padding:0 var(--hl-s4) 0 calc(var(--hl-s4) + env(safe-area-inset-left,0px));
+    position:sticky;top:0;z-index:40;margin-bottom:var(--hl-s5);
+    background:var(--hl-bg);border-bottom:var(--hl-hair) solid var(--hl-rule);
     width:100vw;margin-left:calc(50% - 50vw);
   }
-  .shell-brand{
-    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:19px;color:var(--cream);
-    display:flex;align-items:center;gap:8px;
+  .vc-brand{display:flex;align-items:center;gap:var(--hl-s2);color:var(--hl-ink);}
+  .vc-mark{width:25px;height:18px;fill:none;stroke:var(--hl-ink);stroke-linecap:round;stroke-linejoin:round;}
+  .vc-word{font-family:var(--hl-font);font-weight:760;font-stretch:114%;font-size:var(--hl-t-body);letter-spacing:-0.01em;line-height:1;}
+  .shell-topbar .account-bar{display:flex;align-items:center;}
+  .vc-avatar{
+    position:relative;width:32px;height:32px;border-radius:50%;border:var(--hl-hair) solid var(--hl-rule-strong);
+    background:var(--hl-raised);color:var(--hl-ink);font-family:var(--hl-font);font-size:var(--hl-t-small);font-weight:700;
+    display:grid;place-items:center;padding:0;cursor:pointer;
   }
-  .shell-brand .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);}
-  .shell-status{display:flex;align-items:center;gap:10px;}
-  .shell-streak,.shell-level{
-    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);
-    background:var(--surface);border:1px solid var(--hairline);border-radius:999px;padding:5px 11px;
-  }
-  .shell-level{color:var(--brass);border-color:var(--brass-dim);}
+  .vc-avatar::after{content:"";position:absolute;inset:-6px;} /* a 44px hit area on the 32px circle */
+  .vc-avatar:focus-visible{outline:2px solid var(--hl-voice);outline-offset:2px;}
+  .vc-signin{min-height:40px;padding:0 var(--hl-s2);color:var(--hl-ink);}
 
   .app-toast-wrap{
     position:fixed;left:0;right:0;bottom:72px;z-index:500;
@@ -1416,6 +1418,11 @@
   .home-greeting-row{margin-bottom:20px;}
   .home-greeting{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;color:var(--cream);}
   .home-streak-line{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:4px;}
+  /* streak and level, moved here from the header (signed in only) */
+  .home-stats-line{display:flex;align-items:center;gap:var(--hl-s2);margin-top:var(--hl-s1);font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
+  .home-stats-line .shell-streak{display:inline-flex;align-items:center;gap:var(--hl-s1);}
+  .home-stats-line .hl-icon{color:var(--hl-ink-2);}
+  .home-stats-line[hidden], .home-streak-line[hidden]{display:none;}
 
   .mission-card{
     display:flex;align-items:center;gap:24px;
@@ -1762,13 +1769,9 @@
 <div class="wrap">
 
   <header class="shell-topbar">
-    <div class="shell-brand"><span class="dot"></span>VoxCoach</div>
-    <div class="shell-status">
-      <span class="shell-streak" id="shellStreak">🔥 0</span>
-      <span class="shell-level" id="shellLevel">Lv. 1</span>
-      <div class="account-bar" id="accountBar">
-        <button class="ghost-btn" id="signInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
-      </div>
+    <div class="vc-brand"><svg class="vc-mark" viewBox="0 0 28 20" aria-hidden="true"><use href="#hl-mark"/></svg><span class="vc-word">VoxCoach</span></div>
+    <div class="account-bar" id="accountBar">
+      <button class="hl-btn hl-btn--quiet vc-signin" id="signInBtn" data-i18n="auth_signin_btn">Sign in</button>
     </div>
   </header>
 
@@ -1863,6 +1866,11 @@
     <div class="home-greeting-row">
       <div>
         <div class="home-greeting" id="homeGreeting">Good evening</div>
+        <div class="home-stats-line" id="homeStatsLine" hidden>
+          <span class="shell-streak" id="shellStreak"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-flame"/></svg><span class="shell-streak-n">0</span></span>
+          <span class="home-stats-sep" aria-hidden="true">·</span>
+          <span class="shell-level" id="shellLevel"><span data-i18n="journey_level_label">Level</span> <span class="shell-level-n">1</span></span>
+        </div>
         <div class="home-streak-line" id="homeStreakLine">Sign in to start tracking your streak</div>
       </div>
     </div>
@@ -11403,13 +11411,21 @@ async function recordRangeCapture(loMidi, hiMidi){
 }
 
 function renderAccountBar(){
+  // Built with createElement and textContent: the name is the user's own text, never markup.
   const bar = document.getElementById('accountBar');
+  bar.textContent = '';
   if(!profile){
-    bar.innerHTML = `<button class="ghost-btn" id="signInBtn" data-i18n="dashboard_create_account_btn">${t('dashboard_create_account_btn')}</button>`;
-    document.getElementById('signInBtn').addEventListener('click', openAuthModal);
+    const btn = document.createElement('button');
+    btn.className = 'hl-btn hl-btn--quiet vc-signin';
+    btn.id = 'signInBtn';
+    btn.dataset.i18n = 'auth_signin_btn';
+    btn.textContent = t('auth_signin_btn');
+    btn.addEventListener('click', ()=>{ openAuthModal(); setAuthMode('signin'); });
+    bar.appendChild(btn);
     return;
   }
-  const initial = profile.name.trim().charAt(0).toUpperCase() || '?';
+  const name = (profile.name||'').trim();
+  const initial = ([...name][0] || '?').toLocaleUpperCase(currentLanguage);
   let tier, tierLabel;
   if(hasActiveSubscription()){
     tier = profile.subscriptionPlan;
@@ -11421,13 +11437,15 @@ function renderAccountBar(){
     tier = 'expired';
     tierLabel = t('accountbar_trial_ended');
   }
-  bar.innerHTML = `
-    <div class="account-chip">
-      <span class="streak">🔥 ${progress.streak||0}</span>
-      <div class="avatar">${initial}</div>
-      <span class="name">${profile.name}</span>
-      <span class="tier-badge ${tier}">${tierLabel}</span>
-    </div>`;
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'vc-avatar';
+  btn.dataset.tier = tier;
+  btn.textContent = initial;
+  btn.setAttribute('aria-label', `${name} · ${tierLabel}`);
+  // the You tab's own routing (and its stopAllActiveSessions)
+  btn.addEventListener('click', ()=>document.querySelector('.snb-item[data-shell="you"]')?.click());
+  bar.appendChild(btn);
 }
 
 let authMode = 'signup';
@@ -18517,10 +18535,14 @@ function updateShellTopbar(){
   const streakEl=document.getElementById('shellStreak');
   const levelEl=document.getElementById('shellLevel');
   if(!streakEl||!levelEl) return;
-  if(!profile){ streakEl.textContent='🔥 0'; levelEl.textContent='Lv. 1'; return; }
-  streakEl.textContent='🔥 '+(progress.streak||0);
+  // On Home under the greeting: signed in, streak · Level N; signed out, the sign-in sentence instead (no zero streak)
+  const statsLine=document.getElementById('homeStatsLine'), signedOutLine=document.getElementById('homeStreakLine');
+  if(statsLine) statsLine.hidden = !profile;
+  if(signedOutLine) signedOutLine.hidden = !!profile;
+  if(!profile) return;
+  streakEl.querySelector('.shell-streak-n').textContent = progress.streak||0;
   const {level}=levelForXp(progress.xp||0);
-  levelEl.textContent='Lv. '+level;
+  levelEl.querySelector('.shell-level-n').textContent = level;
 }
 
 document.getElementById('homeSignInBtn')?.addEventListener('click', openAuthModal);
@@ -18531,7 +18553,7 @@ function renderHomeScreen(){
   const hour=new Date().getHours();
   const greetWord = hour<12 ? t('home_greeting_morning') : hour<18 ? t('home_greeting_afternoon') : t('home_greeting_evening');
   document.getElementById('homeGreeting').textContent = profile ? `${greetWord}, ${profile.name}` : greetWord;
-  document.getElementById('homeStreakLine').textContent = profile ? `🔥 ${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}` : t('home_signin_streak');
+  document.getElementById('homeStreakLine').textContent = profile ? `${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}` : t('home_signin_streak');
 
   renderHomeChoirCard();
   if(!profile){
