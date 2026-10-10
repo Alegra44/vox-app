@@ -357,7 +357,7 @@
   header.top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:40px;flex-wrap:wrap;gap:12px;}
   .brand{display:flex;align-items:baseline;gap:10px;}
   .brand .mark{
-    font-family:'Fraunces', serif; font-optical-sizing:auto; font-weight:600;
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide); font-optical-sizing:auto; font-weight:600;
     font-size:26px; letter-spacing:0.2px; color:var(--cream);
   }
   .brand .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);}
@@ -366,7 +366,7 @@
   nav.tabs{display:flex;flex-wrap:wrap;gap:2px;background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:4px;width:fit-content;margin-bottom:32px;}
   nav.tabs button{
     appearance:none;border:none;background:transparent;color:var(--muted);
-    font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
+    font-family:var(--hl-font);font-weight:600;font-size:13px;
     padding:9px 18px;border-radius:7px;cursor:pointer;letter-spacing:0.02em;
     transition:background .18s ease, color .18s ease;
   }
@@ -446,13 +446,13 @@
   }
 
   .note-display{
-    font-family:'Fraunces', serif; font-optical-sizing:auto; font-weight:600;
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide); font-optical-sizing:auto; font-weight:600;
     font-size:56px; line-height:1; color:var(--cream);
     letter-spacing:-1px;
   }
   .note-display .oct{font-size:24px;color:var(--muted);vertical-align:top;position:relative;top:8px;margin-left:3px;}
   .cents-display{
-    font-family:'Space Mono', monospace; font-size:13px; letter-spacing:0.04em;
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums; font-size:13px; letter-spacing:0.04em;
     color:var(--muted); margin-top:6px; height:20px;
   }
   .cents-display.flat{color:var(--coral);}
@@ -463,7 +463,7 @@
     display:flex;align-items:center;justify-content:center;gap:10px;
     margin:28px auto 4px; width:fit-content;
     background:var(--brass); color:var(--on-brass); border:none;
-    font-family:'Inter',sans-serif;font-weight:700;font-size:14px;
+    font-family:var(--hl-font);font-weight:700;font-size:14px;
     padding:13px 26px;border-radius:999px;cursor:pointer;
     box-shadow:0 8px 24px color-mix(in srgb, var(--brass) 25%, transparent);
     transition:transform .12s ease, box-shadow .12s ease;
@@ -480,7 +480,7 @@
     padding:10px 16px;min-width:96px;text-align:center;
   }
   .stat-chip .label{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);}
-  .stat-chip .val{font-family:'Space Mono',monospace;font-size:17px;color:var(--cream);margin-top:3px;}
+  .stat-chip .val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:17px;color:var(--cream);margin-top:3px;}
 
   .hint{text-align:center;color:var(--muted);font-size:13px;margin-top:20px;line-height:1.5;}
 
@@ -491,17 +491,17 @@
   }
   .range-step{text-align:center;}
   .range-step .step-label{font-size:12px;color:var(--brass);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;}
-  .range-step h2{font-family:'Fraunces',serif;font-weight:500;font-size:26px;margin:10px 0 4px;}
+  .range-step h2{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:26px;margin:10px 0 4px;}
   .range-step p{color:var(--muted);font-size:14px;max-width:420px;margin:0 auto 28px;}
 
   .range-note-live{
-    font-family:'Space Mono',monospace;font-size:44px;color:var(--cream);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:44px;color:var(--cream);
     background:var(--surface);border:1px solid var(--hairline);border-radius:14px;
     padding:22px;margin:0 auto 24px;max-width:280px;
   }
   .capture-btn{
     background:var(--teal);color:var(--on-teal);border:none;font-weight:700;font-size:14px;
-    padding:13px 30px;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;
+    padding:13px 30px;border-radius:999px;cursor:pointer;font-family:var(--hl-font);
   }
   .capture-btn:disabled{opacity:0.4;cursor:not-allowed;}
 
@@ -509,18 +509,18 @@
     text-align:center; padding:8px 0;
   }
   .result-card .voice-type{
-    font-family:'Fraunces',serif;font-weight:600;font-size:44px;color:var(--brass);margin-bottom:4px;
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:44px;color:var(--brass);margin-bottom:4px;
   }
   .result-card .range-span{
-    font-family:'Space Mono',monospace;font-size:20px;color:var(--cream);letter-spacing:0.05em;margin-bottom:24px;
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:20px;color:var(--cream);letter-spacing:0.05em;margin-bottom:24px;
   }
   .range-bar-wrap{max-width:440px;margin:0 auto 28px;}
   .range-bar{height:10px;border-radius:6px;background:var(--surface);border:1px solid var(--hairline);position:relative;overflow:hidden;}
   .range-bar .fill{position:absolute;top:0;bottom:0;background:linear-gradient(90deg, var(--teal), var(--brass));border-radius:6px;}
-  .range-bar-labels{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-top:6px;}
+  .range-bar-labels{display:flex;justify-content:space-between;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);margin-top:6px;}
 
   .share-note{color:var(--muted);font-size:13px;margin-top:8px;}
-  .restart-link{display:block;margin-top:18px;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;}
+  .restart-link{display:block;margin-top:18px;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:var(--hl-font);}
   .restart-link:hover{color:var(--cream);}
 
   /* ---- KEY TRAINER ---- */
@@ -531,7 +531,7 @@
   .key-section{margin-bottom:36px;}
   .key-section:last-child{margin-bottom:0;}
   .key-section .step-label{font-size:12px;color:var(--brass);text-transform:uppercase;letter-spacing:0.12em;font-weight:600;}
-  .key-section h2{font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:8px 0 4px;}
+  .key-section h2{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 4px;}
   .key-section p.desc{color:var(--muted);font-size:13.5px;max-width:480px;margin:0 0 20px;line-height:1.5;}
 
   .field-row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:16px;}
@@ -539,7 +539,7 @@
   .field label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
   .field select{
     background:var(--surface);border:1px solid var(--hairline);color:var(--cream);
-    font-family:'Space Mono',monospace;font-size:14px;padding:9px 10px;border-radius:8px;
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:14px;padding:9px 10px;border-radius:8px;
     appearance:none; cursor:pointer;
   }
   .field select:focus{outline:2px solid var(--brass-dim);outline-offset:1px;}
@@ -556,13 +556,13 @@
   .btn-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
   .ghost-btn{
     background:transparent;border:1px solid var(--hairline);color:var(--cream);
-    font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
+    font-family:var(--hl-font);font-weight:600;font-size:13px;
     padding:10px 18px;border-radius:999px;cursor:pointer;transition:border-color .15s ease, color .15s ease;
   }
   .ghost-btn:hover{border-color:var(--brass);color:var(--brass);}
   .solid-btn{
     background:var(--brass);color:var(--on-brass);border:none;font-weight:700;font-size:13px;
-    padding:10px 20px;border-radius:999px;cursor:pointer;font-family:'Inter',sans-serif;
+    padding:10px 20px;border-radius:999px;cursor:pointer;font-family:var(--hl-font);
   }
   .solid-btn.teal{background:var(--teal);color:var(--on-teal);}
   .fine-print{color:var(--muted);font-size:12px;margin-top:6px;}
@@ -574,14 +574,14 @@
     color:var(--cream);font-size:16px;cursor:pointer;line-height:1;
   }
   .transpose-stepper button:hover{border-color:var(--brass);color:var(--brass);}
-  .transpose-val{font-family:'Space Mono',monospace;font-size:16px;min-width:110px;text-align:center;}
+  .transpose-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:16px;min-width:110px;text-align:center;}
 
   .rec-result{
     background:var(--surface);border:1px solid var(--hairline);border-radius:14px;
     padding:22px 24px;margin-top:6px;
   }
-  .rec-result .headline{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--brass);margin-bottom:6px;}
-  .rec-result .sub{font-family:'Space Mono',monospace;font-size:13px;color:var(--cream);opacity:0.85;line-height:1.6;}
+  .rec-result .headline{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--brass);margin-bottom:6px;}
+  .rec-result .sub{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);opacity:0.85;line-height:1.6;}
   .rec-result .reasoning{color:var(--muted);font-size:12.5px;margin-top:10px;line-height:1.5;}
   .rec-result .btn-row{margin-top:16px;}
 
@@ -593,10 +593,10 @@
   }
   .account-chip .avatar{
     width:26px;height:26px;border-radius:50%;background:var(--brass);color:var(--on-brass);
-    display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;font-weight:700;
   }
   .account-chip .name{font-size:13px;font-weight:600;color:var(--cream);}
-  .account-chip .streak{font-family:'Space Mono',monospace;font-size:11px;color:var(--brass);padding-right:4px;}
+  .account-chip .streak{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--brass);padding-right:4px;}
 
   .modal-overlay{
     position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(3px);
@@ -620,7 +620,7 @@
   }
   .text-input{
     background:var(--surface);border:1px solid var(--hairline);color:var(--cream);
-    font-family:'Inter',sans-serif;font-size:14px;padding:10px 12px;border-radius:8px;width:100%;
+    font-family:var(--hl-font);font-size:14px;padding:10px 12px;border-radius:8px;width:100%;
   }
   .text-input:focus{outline:2px solid var(--brass-dim);outline-offset:1px;}
 
@@ -632,15 +632,15 @@
   .teacher-roster-avatar{
     width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--brass));
     display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    font-family:'Fraunces',serif;font-weight:600;font-size:13px;color:var(--on-teal);
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:13px;color:var(--on-teal);
   }
   .roster-name{font-size:13.5px;color:var(--cream);flex:1;}
   .roster-remove{background:none;border:none;color:var(--coral);font-size:11px;cursor:pointer;padding:4px 8px;}
   .assignment-card{border:1px solid var(--hairline);border-left:3px solid var(--teal);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:var(--surface);}
   .assignment-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
-  .assignment-title{font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--cream);}
+  .assignment-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:15px;color:var(--cream);}
   .assignment-title::before{content:"📋 ";}
-  .assignment-progress{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--brass);}
+  .assignment-progress{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--brass);}
   .assignment-note{font-size:12px;color:var(--muted);margin-bottom:10px;}
   .assignment-student-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;color:var(--cream);}
   .assignment-student-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--teal);}
@@ -652,14 +652,14 @@
     border:1px solid var(--hairline);border-radius:16px;padding:20px;
   }
   .dash-card .label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:8px;}
-  .dash-card .big-val{font-family:'Fraunces',serif;font-weight:600;font-size:28px;color:var(--cream);}
-  .dash-card .big-val .unit{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);font-weight:500;}
+  .dash-card .big-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:28px;color:var(--cream);}
+  .dash-card .big-val .unit{font-family:var(--hl-font);font-size:13px;color:var(--muted);font-weight:500;}
 
   .activity-chart{display:flex;align-items:flex-end;gap:6px;height:90px;}
   .activity-chart .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
   .activity-chart .bar{width:100%;max-width:22px;background:var(--hairline);border-radius:4px 4px 0 0;transition:height .2s ease;}
   .activity-chart .bar.active{background:linear-gradient(180deg, var(--brass), var(--brass-dim));}
-  .activity-chart .day-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);}
+  .activity-chart .day-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:9px;color:var(--muted);}
 
   /* ---- SHARE CARDS ---- */
   .share-overlay{
@@ -676,26 +676,26 @@
     border:1px solid var(--hairline);
     padding:30px 26px;
     display:flex;flex-direction:column;
-    font-family:'Inter',sans-serif;
+    font-family:var(--hl-font);
     box-shadow:0 30px 80px rgba(0,0,0,0.6);
   }
   .poster .p-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:0.16em;color:var(--brass);font-weight:700;}
-  .poster .p-title{font-family:'Fraunces',serif;font-weight:600;font-size:30px;line-height:1.08;color:var(--cream);margin:10px 0 0;}
+  .poster .p-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:30px;line-height:1.08;color:var(--cream);margin:10px 0 0;}
   .poster .p-sub{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.5;}
 
   .poster .p-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;}
-  .poster .p-hero .voice-word{font-family:'Fraunces',serif;font-weight:600;font-size:52px;color:var(--brass);line-height:1;}
-  .poster .p-hero .range-word{font-family:'Space Mono',monospace;font-size:20px;color:var(--cream);letter-spacing:0.04em;margin-top:6px;}
+  .poster .p-hero .voice-word{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:52px;color:var(--brass);line-height:1;}
+  .poster .p-hero .range-word{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:20px;color:var(--cream);letter-spacing:0.04em;margin-top:6px;}
   .poster .p-hero .range-bar-wrap{width:100%;max-width:230px;margin-top:18px;}
 
   .poster .p-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
   .poster .p-stat{background:color-mix(in srgb, var(--hl-ink) 3%, transparent);border:1px solid var(--hairline);border-radius:12px;padding:12px;}
   .poster .p-stat .p-stat-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
-  .poster .p-stat .p-stat-val{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream);margin-top:2px;}
+  .poster .p-stat .p-stat-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);margin-top:2px;}
 
   .poster .p-footer{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:20px;padding-top:16px;border-top:1px solid var(--hairline);}
   .poster .p-footer .dot{width:6px;height:6px;border-radius:50%;background:var(--teal);}
-  .poster .p-footer .wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:13px;color:var(--cream);letter-spacing:0.02em;}
+  .poster .p-footer .wordmark{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:13px;color:var(--cream);letter-spacing:0.02em;}
 
   .share-actions{display:flex;gap:10px;}
 
@@ -705,14 +705,14 @@
 
   .bridge-wrap{display:flex;flex-direction:column;align-items:center;}
   .bridge-svg{width:100%;max-width:200px;}
-  .bridge-zone-label{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;}
+  .bridge-zone-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;letter-spacing:0.06em;}
 
   .reg-readout{text-align:center;}
-  .reg-label{font-family:'Fraunces',serif;font-weight:600;font-size:34px;margin-bottom:6px;transition:color .15s ease;}
+  .reg-label{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:34px;margin-bottom:6px;transition:color .15s ease;}
   .reg-label.chest{color:var(--brass);}
   .reg-label.mixed{color:var(--hl-ink-2);}
   .reg-label.head{color:var(--teal);}
-  .reg-feedback{font-family:'Space Mono',monospace;font-size:13.5px;color:var(--muted);min-height:20px;}
+  .reg-feedback{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13.5px;color:var(--muted);min-height:20px;}
   .reg-feedback.warn{color:var(--coral);}
 
   .reg-stat-row{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
@@ -730,7 +730,7 @@
   .vl-break-close{margin-top:10px;}
 
   .beta-tag{
-    display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;
+    display:inline-block;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;letter-spacing:0.06em;
     color:var(--brass);border:1px solid var(--brass-dim);border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:middle;
   }
 
@@ -750,7 +750,7 @@
   .track-slider{width:100%;accent-color:var(--part-color, var(--brass));}
   .track-toggle{
     border:1px solid var(--hairline);background:var(--surface-raised);color:var(--muted);
-    font-family:'Inter',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.04em;
+    font-family:var(--hl-font);font-weight:700;font-size:11px;letter-spacing:0.04em;
     padding:7px 0;border-radius:8px;cursor:pointer;text-align:center;
   }
   .track-toggle.on-mute{background:var(--coral);color:var(--on-teal);border-color:var(--coral);}
@@ -764,7 +764,7 @@
   .practice-chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
   .practice-chip{
     border:1px solid var(--hairline);background:transparent;color:var(--cream);
-    font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;
+    font-family:var(--hl-font);font-weight:600;font-size:12.5px;
     padding:7px 14px;border-radius:999px;cursor:pointer;
   }
   .practice-chip:hover{border-color:var(--brass);color:var(--brass);}
@@ -776,19 +776,19 @@
   .rh-level{
     display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;
     border:1px solid var(--hairline);background:var(--surface);color:var(--cream);
-    font-family:'Inter',sans-serif;padding:10px 12px;border-radius:12px;cursor:pointer;
+    font-family:var(--hl-font);padding:10px 12px;border-radius:12px;cursor:pointer;
   }
   .rh-level:hover{border-color:var(--brass-dim);}
   .rh-level.passed{border-color:var(--brass-dim);}
   .rh-level.active{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset;}
-  .rh-level-num{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--muted);letter-spacing:0.06em;}
+  .rh-level-num{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;color:var(--muted);letter-spacing:0.06em;}
   .rh-level.active .rh-level-num{color:var(--brass);}
   .rh-level-name{font-weight:700;font-size:13px;}
-  .rh-level-pct{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+  .rh-level-pct{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);}
   .rh-level-bar{width:100%;height:4px;border-radius:2px;background:var(--hairline);overflow:hidden;}
   .rh-level-bar span{display:block;height:100%;background:var(--brass);}
   .rh-gain-readout{background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:12px 14px;margin-top:12px;}
-  .rh-gain-val{font-family:'Space Mono',monospace;font-size:20px;color:var(--cream);margin:4px 0 8px;}
+  .rh-gain-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:20px;color:var(--cream);margin:4px 0 8px;}
   .rh-gain-val small{font-size:12px;color:var(--muted);margin-left:8px;}
   .rh-roll-wrap{overflow-x:auto;border:1px solid var(--hairline);border-radius:12px;background:var(--surface);margin-top:10px;}
   .rh-roll-wrap svg{display:block;width:100%;}
@@ -797,11 +797,11 @@
     border:1px solid var(--hairline);border-left:3px solid var(--part-color, var(--brass));border-radius:10px;
     padding:6px 10px;background:var(--surface);min-width:92px;
   }
-  .rh-note b{display:block;font-family:'Space Mono',monospace;font-size:15px;color:var(--cream);}
+  .rh-note b{display:block;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:15px;color:var(--cream);}
   .rh-note span{font-size:11px;color:var(--muted);}
   .rh-note.current{background:var(--surface-raised);border-color:var(--part-color, var(--brass));}
   .rh-note{cursor:pointer;}
-  .rh-note .rh-note-iv{display:block;color:var(--teal);font-family:'Space Mono',monospace;font-size:10.5px;margin-top:2px;}
+  .rh-note .rh-note-iv{display:block;color:var(--teal);font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;margin-top:2px;}
 
   /* ---- A CAPPELLA + TIMING TRAINERS ---- */
   #panel-partrehearsal.acappella-on .rh-hide-ac{display:none !important;}
@@ -823,7 +823,7 @@
   .rd-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;}
   .rd-part{font-weight:600;}
   .rd-detail{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
-  .rd-status{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
+  .rd-status{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;letter-spacing:.06em;text-transform:uppercase;}
   .rd-status.learning{color:var(--muted);}
   .rd-status.developing{color:var(--brass);}
   .rd-status.ready{color:var(--teal);}
@@ -838,29 +838,29 @@
   .cb-emoji{font-size:22px;line-height:1;}
   .cb-arena{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:4px 0 14px;}
   .cb-arena .boss-name{margin-top:4px;}
-  .cx-event{font-family:'Space Mono',monospace;font-size:11px;color:var(--brass);}
+  .cx-event{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--brass);}
   .cx-event.calm{color:var(--muted);}
   .yc-row{align-items:center;gap:10px;flex-wrap:wrap;}
   .yc-actions{display:flex;gap:6px;flex-wrap:wrap;}
   .yc-actions .practice-chip{margin:0;}
-  .bm-live{font-family:'Space Mono',monospace;font-size:14px;color:var(--teal);margin:8px 0 2px;min-height:20px;}
+  .bm-live{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:14px;color:var(--teal);margin:8px 0 2px;min-height:20px;}
   .bm-live.now{color:var(--cream);}
 
   /* ---- SONG INTELLIGENCE: Harmony Vision, Sonic X-Ray, Music Microscope ---- */
   .hv-box{background:var(--surface);border:1px solid var(--hairline);border-left:3px solid var(--teal);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
-  .hv-label{font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:0.06em;color:var(--teal);}
-  .hv-main{font-family:'Fraunces',serif;font-size:20px;color:var(--cream);margin:4px 0 2px;}
+  .hv-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;letter-spacing:0.06em;color:var(--teal);}
+  .hv-main{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-size:20px;color:var(--cream);margin:4px 0 2px;}
   .hv-sub{font-size:12px;color:var(--muted);}
   .xray-svg{cursor:crosshair;}
   .xray-svg .xray-sec{cursor:pointer;}
   .xray-svg .xray-sec:hover rect{stroke:var(--brass);}
-  .mx-head{font-family:'Space Mono',monospace;font-size:13px;color:var(--cream);margin-bottom:8px;}
+  .mx-head{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);margin-bottom:8px;}
   .mx-zoom-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
   .mx-zoom-row .fine-print{margin:0 4px 0 0;}
   .mx-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px;}
   .mx-table th{text-align:left;font-weight:600;color:var(--muted);font-size:11px;padding:6px 8px;border-bottom:1px solid var(--hairline);}
   .mx-table td{padding:7px 8px;border-bottom:1px solid var(--hairline);color:var(--cream);vertical-align:top;}
-  .mx-table td.mono{font-family:'Space Mono',monospace;font-size:12px;}
+  .mx-table td.mono{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;}
   .mx-table-wrap{overflow-x:auto;}
   .mx-offsets{margin-top:10px;font-size:12.5px;color:var(--cream);background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:10px 12px;}
 
@@ -870,17 +870,17 @@
   .roster-row:last-child{border-bottom:none;}
   .roster-avatar{
     width:32px;height:32px;border-radius:50%;background:var(--surface);border:1px solid var(--hairline);
-    display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);flex-shrink:0;
   }
   .roster-info{flex:1;min-width:0;}
   .roster-name{font-size:13.5px;font-weight:600;}
   .roster-part{font-size:11.5px;color:var(--muted);}
   .roster-bar-wrap{width:110px;height:6px;background:var(--surface);border:1px solid var(--hairline);border-radius:4px;overflow:hidden;flex-shrink:0;}
   .roster-bar-fill{height:100%;background:linear-gradient(90deg,var(--brass-dim),var(--brass));}
-  .roster-pct{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);width:38px;text-align:right;flex-shrink:0;}
+  .roster-pct{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);width:38px;text-align:right;flex-shrink:0;}
 
   .mock-tag{
-    display:inline-block;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;
+    display:inline-block;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;letter-spacing:0.06em;
     color:var(--muted);border:1px solid var(--hairline);border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:middle;
   }
 
@@ -894,12 +894,12 @@
   .plan-card.highlight{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass) inset, 0 20px 50px color-mix(in srgb, var(--brass) 10%, transparent);}
   .plan-badge{
     position:absolute;top:-11px;right:20px;background:var(--brass);color:var(--on-brass);
-    font-family:'Inter',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:0.05em;
+    font-family:var(--hl-font);font-weight:700;font-size:10.5px;letter-spacing:0.05em;
     padding:4px 12px;border-radius:999px;
   }
-  .plan-name{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--cream);}
-  .plan-price{font-family:'Space Mono',monospace;font-size:26px;color:var(--cream);margin:8px 0 2px;}
-  .plan-price .per{font-size:12px;color:var(--muted);font-family:'Inter',sans-serif;}
+  .plan-name{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:20px;color:var(--cream);}
+  .plan-price{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:26px;color:var(--cream);margin:8px 0 2px;}
+  .plan-price .per{font-size:12px;color:var(--muted);font-family:var(--hl-font);}
   .plan-audience{font-size:12px;color:var(--muted);margin-bottom:16px;}
   .plan-features{list-style:none;padding:0;margin:0 0 20px;flex:1;}
   .plan-features li{font-size:12.5px;color:var(--cream);opacity:0.88;padding:5px 0;padding-left:16px;position:relative;}
@@ -908,7 +908,7 @@
   .plan-btn.current{background:var(--surface);color:var(--muted);border:1px solid var(--hairline);cursor:default;}
 
   .tier-badge{
-    font-family:'Space Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;
     padding:2px 8px;border-radius:999px;border:1px solid var(--hairline);color:var(--muted);
   }
   .tier-badge.pro{color:var(--brass);border-color:var(--brass-dim);}
@@ -938,7 +938,7 @@
   .ex-type-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
   .ex-type-btn{
     border:1px solid var(--hairline);background:var(--surface);color:var(--muted);
-    font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
+    font-family:var(--hl-font);font-weight:600;font-size:13px;
     padding:9px 16px;border-radius:999px;cursor:pointer;
   }
   .ex-type-btn.active{background:var(--surface-raised);color:var(--brass);border-color:var(--brass-dim);}
@@ -947,7 +947,7 @@
   .theme-swatch-btn{
     display:flex;flex-direction:column;align-items:center;gap:8px;
     background:var(--surface);border:1px solid var(--hairline);border-radius:12px;
-    padding:14px 10px;cursor:pointer;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--muted);
+    padding:14px 10px;cursor:pointer;font-family:var(--hl-font);font-size:12.5px;color:var(--muted);
   }
   .theme-swatch-btn.active{border-color:var(--brass);color:var(--cream);background:var(--surface-raised);}
   .theme-swatch-dots{display:flex;gap:5px;}
@@ -969,17 +969,17 @@
   .ex-target-card.mode-interval{border-top-color:var(--hl-sop);}
   .ex-target-card.mode-scale{border-top-color:var(--brass);}
   .interval-root-badge{
-    display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:12px;
+    display:inline-flex;align-items:center;gap:8px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;
     color:var(--muted);background:var(--surface-raised);border:1px solid var(--hairline);
     border-radius:20px;padding:5px 14px;margin-bottom:14px;
   }
   .interval-root-badge .root-note{color:var(--hl-sop);font-weight:700;}
   .interval-root-badge .arrow{color:var(--hairline);}
-  .ex-target-note{font-family:'Fraunces',serif;font-weight:600;font-size:40px;color:var(--cream);}
-  .ex-target-sub{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .ex-target-note{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:40px;color:var(--cream);}
+  .ex-target-sub{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:4px;}
 
   .ex-result{margin-top:20px;}
-  .ex-accuracy{font-family:'Fraunces',serif;font-weight:600;font-size:46px;}
+  .ex-accuracy{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:46px;}
   .ex-accuracy.good{color:var(--teal);}
   .ex-accuracy.mid{color:var(--brass);}
   .ex-accuracy.low{color:var(--coral);}
@@ -990,7 +990,7 @@
   .ear-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;max-width:440px;margin:0 auto;}
   .ear-choice-btn{
     border:1px solid var(--hairline);background:var(--surface);color:var(--cream);
-    font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;padding:12px 8px;border-radius:10px;cursor:pointer;
+    font-family:var(--hl-font);font-weight:600;font-size:12.5px;padding:12px 8px;border-radius:10px;cursor:pointer;
   }
   .ear-choice-btn:hover:not(:disabled){border-color:var(--brass);}
   .ear-choice-btn.correct{background:color-mix(in srgb, var(--teal) 18%, transparent);border-color:var(--teal);color:var(--teal);}
@@ -998,7 +998,7 @@
   .ear-choice-btn:disabled{cursor:default;opacity:0.85;}
   .scale-dot{
     width:34px;height:34px;border-radius:50%;border:1px solid var(--hairline);background:var(--surface-raised);
-    display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);
+    display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);
   }
   .scale-dot.current{border-color:var(--brass);color:var(--brass);}
   .scale-dot.done-good{background:color-mix(in srgb, var(--teal) 18%, transparent);border-color:var(--teal);color:var(--teal);}
@@ -1012,15 +1012,15 @@
   .level-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 16px;}
   .level-sub{font-size:10px;font-weight:500;opacity:0.7;text-transform:none;letter-spacing:0;}
   .time-budget-note{
-    font-family:'Space Mono',monospace;font-size:11.5px;color:var(--muted);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--muted);
     background:var(--surface);border:1px solid var(--hairline);border-radius:10px;
     padding:10px 14px;margin-top:12px;line-height:1.7;
   }
   .sub-score-row{display:flex;gap:12px;justify-content:center;margin-top:14px;}
   .sub-score{background:var(--surface-raised);border:1px solid var(--hairline);border-radius:10px;padding:8px 18px;text-align:center;}
   .sub-score-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
-  .sub-score-val{font-family:'Space Mono',monospace;font-size:15px;color:var(--cream);margin-top:2px;}
-  .cents-detail{font-family:'Space Mono',monospace;font-size:12px;color:var(--brass);margin-top:10px;}
+  .sub-score-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:15px;color:var(--cream);margin-top:2px;}
+  .cents-detail{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--brass);margin-top:10px;}
 
   /* ---- VOCAL SKILL PROFILE ---- */
   .skill-row{display:grid;grid-template-columns:100px 1fr 56px;align-items:center;gap:12px;margin-bottom:12px;}
@@ -1035,25 +1035,25 @@
   .skill-ring-svg{width:60px;height:60px;}
   .skill-ring-val{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:'Space Mono',monospace;font-size:13px;color:var(--cream);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);
   }
   .skill-ring-val.no-data{color:var(--muted);font-size:14px;}
   .skill-ring-label{font-size:10.5px;color:var(--muted);text-align:center;letter-spacing:0.01em;}
   .skill-bar-fill.no-data{background:repeating-linear-gradient(135deg, var(--hairline), var(--hairline) 4px, transparent 4px, transparent 8px); width:100% !important;}
-  .skill-val{font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);text-align:right;}
+  .skill-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);text-align:right;}
   .skill-val.has-data{color:var(--cream);}
 
   .skill-summary-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:18px;}
   .skill-summary-item{background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:12px 14px;}
   .skill-summary-item .label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
-  .skill-summary-item .val{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--cream);margin-top:3px;}
+  .skill-summary-item .val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:16px;color:var(--cream);margin-top:3px;}
 
   /* ---- BREATH TRAINER ---- */
   .breath-timer{
-    font-family:'Space Mono',monospace;font-size:54px;color:var(--cream);text-align:center;
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:54px;color:var(--cream);text-align:center;
     background:var(--surface);border:1px solid var(--hairline);border-radius:16px;padding:26px;margin-bottom:18px;
   }
-  .breath-timer .target-sub{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);margin-top:6px;}
+  .breath-timer .target-sub{font-family:var(--hl-font);font-size:12px;color:var(--muted);margin-top:6px;}
   .breath-meter-track{height:12px;border-radius:6px;background:var(--surface);border:1px solid var(--hairline);overflow:hidden;margin-top:6px;}
   .breath-meter-fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--brass));width:0%;transition:width .08s linear;}
 
@@ -1093,13 +1093,13 @@
   .health-trend-chart .h-bar{width:100%;max-width:16px;border-radius:3px 3px 0 0;background:var(--hairline);}
   .health-trend-chart .h-bar.has-data{background:linear-gradient(180deg,var(--teal),var(--brass-dim));}
   .health-trend-chart .h-bar.no-data{background:transparent;border:1px dashed var(--hairline);border-bottom:none;height:8px !important;}
-  .health-trend-chart .h-day-label{font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);}
+  .health-trend-chart .h-day-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:8px;color:var(--muted);}
 
   /* ---- WEEKLY CHALLENGE / TODAY'S PLAN ---- */
   .challenge-progress-track{height:10px;border-radius:6px;background:var(--surface);border:1px solid var(--hairline);overflow:hidden;margin-top:10px;}
   .challenge-progress-fill{height:100%;background:linear-gradient(90deg,var(--brass-dim),var(--brass));}
   .challenge-done-badge{
-    display:inline-block;background:var(--teal);color:var(--on-teal);font-family:'Inter',sans-serif;font-weight:700;
+    display:inline-block;background:var(--teal);color:var(--on-teal);font-family:var(--hl-font);font-weight:700;
     font-size:11px;padding:3px 10px;border-radius:999px;margin-left:8px;
   }
   .plan-step-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:12px 16px;margin-bottom:8px;}
@@ -1108,7 +1108,7 @@
 
   /* ---- STAY IN KEY / EMOTIONAL SINGING ---- */
   .chord-label-display{
-    font-family:'Fraunces',serif;font-weight:600;font-size:32px;color:var(--brass);text-align:center;
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:32px;color:var(--brass);text-align:center;
   }
 
   .harmony-ribbon-svg{width:100%;max-width:420px;display:block;margin:14px auto 0;}
@@ -1119,28 +1119,28 @@
     background:linear-gradient(90deg, var(--teal) 0%, var(--brass-dim) 50%, var(--brass) 100%);
     opacity:0.55;
   }
-  .range-preview-labels{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:20px;}
+  .range-preview-labels{display:flex;justify-content:space-between;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--muted);margin-bottom:20px;}
   .vlab-row{margin-bottom:22px;}
-  .vlab-row-label{font-family:'Fraunces',serif;font-weight:600;font-size:14px;color:var(--cream);}
-  .vlab-row-notes{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);font-weight:400;margin-left:6px;}
+  .vlab-row-label{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:14px;color:var(--cream);}
+  .vlab-row-notes{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);font-weight:400;margin-left:6px;}
   .vlab-row-sub{font-size:11px;color:var(--muted);margin:2px 0 8px;}
   .vlab-track{height:12px;border-radius:6px;background:var(--surface);border:1px solid var(--hairline);position:relative;overflow:hidden;}
   .vlab-fill{position:absolute;top:0;bottom:0;border-radius:6px;opacity:0.85;}
   .curriculum-detail-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--hairline);font-size:12.5px;}
-  .curriculum-detail-row .cd-label{flex-shrink:0;width:110px;color:var(--muted);font-family:'Space Mono',monospace;font-size:10.5px;text-transform:uppercase;padding-top:1px;}
+  .curriculum-detail-row .cd-label{flex-shrink:0;width:110px;color:var(--muted);font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;text-transform:uppercase;padding-top:1px;}
   .curriculum-detail-row span:last-child{color:var(--cream);line-height:1.5;}
   .curriculum-day-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;}
   .progress-bar-thin .fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--brass));width:0%;}
   .dual-score-row{display:flex;gap:14px;justify-content:center;margin-top:18px;}
   .dual-score{background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:16px 22px;text-align:center;}
   .dual-score .dual-label{font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
-  .dual-score .dual-val{font-family:'Fraunces',serif;font-weight:600;font-size:30px;margin-top:4px;}
+  .dual-score .dual-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:30px;margin-top:4px;}
 
   /* ---- GENRE COACH ---- */
   .genre-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px;}
   .genre-card{
     background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:14px 16px;cursor:pointer;
-    text-align:left;font-family:'Inter',sans-serif;color:var(--cream);
+    text-align:left;font-family:var(--hl-font);color:var(--cream);
   }
   .genre-card.active{border-color:var(--brass);background:var(--surface-raised);}
   .genre-card .g-name{font-weight:700;font-size:13.5px;}
@@ -1172,18 +1172,18 @@
   .wu-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
   .wu-text b{font-weight:600;font-size:14px;}
   .wu-text small{color:var(--muted);font-size:12.5px;line-height:1.35;}
-  .wu-go{flex:none;font-family:'Space Mono',monospace;font-size:12px;color:var(--brass);}
+  .wu-go{flex:none;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--brass);}
   .wu-item.done .wu-go{color:var(--teal);}
   .wu-stage{margin-bottom:10px;}
   .wu-status{color:var(--muted);font-size:13px;min-height:1.2em;margin:4px 0 10px;}
   @media (max-width:480px){ .wu-card{padding:22px 16px;} }
   .karaoke-playhead-label{
     position:absolute;left:16.67%;top:4px;transform:translateX(-50%);
-    font-family:'Space Mono',monospace;font-size:10px;color:var(--brass);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--brass);
   }
   .karaoke-live-line{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px;}
   .karaoke-note-chip{
-    font-family:'Space Mono',monospace;font-size:11px;padding:4px 10px;border-radius:999px;
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;padding:4px 10px;border-radius:999px;
     border:1px solid var(--hairline);color:var(--muted);
   }
   .karaoke-note-chip.good{border-color:var(--teal);color:var(--teal);}
@@ -1218,7 +1218,7 @@
     background:linear-gradient(135deg, color-mix(in srgb, var(--brass) 14%, transparent), color-mix(in srgb, var(--teal) 10%, transparent));
     border:1px solid var(--hairline);border-radius:16px;padding:24px 26px;margin-bottom:22px;
   }
-  .journey-hero .j-title{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--cream);}
+  .journey-hero .j-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;color:var(--cream);}
   .journey-hero .j-sub{color:var(--muted);font-size:13.5px;margin-top:6px;line-height:1.5;}
 
   .assess-step{
@@ -1235,7 +1235,7 @@
   .goal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:16px 0;}
   .goal-card{
     background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:14px 16px;
-    cursor:pointer;font-family:'Inter',sans-serif;color:var(--cream);font-size:13px;text-align:left;
+    cursor:pointer;font-family:var(--hl-font);color:var(--cream);font-size:13px;text-align:left;
   }
   .goal-card.selected{border-color:var(--brass);background:var(--surface-raised);}
 
@@ -1244,13 +1244,13 @@
     background:var(--surface-raised);border:1px solid var(--brass-dim);border-radius:14px;
     padding:18px 22px;margin-bottom:20px;
   }
-  .week-banner .wb-day{font-family:'Space Mono',monospace;font-size:12px;color:var(--brass);}
-  .week-banner .wb-theme{font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--cream);margin-top:2px;}
+  .week-banner .wb-day{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--brass);}
+  .week-banner .wb-theme{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:20px;color:var(--cream);margin-top:2px;}
   .week-progress-track{height:8px;border-radius:5px;background:var(--surface);border:1px solid var(--hairline);width:180px;overflow:hidden;}
   .week-progress-track .fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--brass));}
 
   .xp-level-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
-  .xp-card .big-val{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);}
+  .xp-card .big-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);}
 
   .achievement-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;}
   .achievement-card{
@@ -1263,22 +1263,22 @@
   .snapshot-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:6px;}
   .snapshot-compare .sc-col{text-align:center;}
   .snapshot-compare .sc-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);}
-  .snapshot-compare .sc-val{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream);margin-top:2px;}
+  .snapshot-compare .sc-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);margin-top:2px;}
   .snapshot-compare .sc-arrow{color:var(--brass);font-size:18px;}
   .snapshot-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--hairline);}
   .voice-compare-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   @media (max-width:480px){ .voice-compare-row{grid-template-columns:1fr;} }
   .voice-compare-card{background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:14px;}
-  .vc-label{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--brass);}
+  .vc-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;text-transform:uppercase;letter-spacing:0.08em;color:var(--brass);}
   .snapshot-row:last-child{border-bottom:none;}
-  .snapshot-delta{font-family:'Space Mono',monospace;font-size:13px;padding:2px 8px;border-radius:6px;}
+  .snapshot-delta{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;padding:2px 8px;border-radius:6px;}
   .snapshot-delta.up{color:var(--teal);background:color-mix(in srgb, var(--teal) 12%, transparent);}
   .snapshot-delta.flat{color:var(--muted);background:var(--surface);}
 
   /* ---- ADAPTIVE REWEIGHTING ---- */
   .reweight-card{background:var(--surface);border:1px solid var(--hairline);border-radius:14px;padding:18px 20px;margin-bottom:22px;}
   .reweight-bar{display:flex;height:26px;border-radius:8px;overflow:hidden;border:1px solid var(--hairline);}
-  .reweight-bar .rw-seg{display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:10.5px;color:var(--on-part);font-weight:700;transition:width .3s ease;}
+  .reweight-bar .rw-seg{display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;color:var(--on-part);font-weight:700;transition:width .3s ease;}
   .reweight-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;}
   .reweight-legend .rl-item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);}
   .reweight-legend .rl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
@@ -1289,29 +1289,29 @@
   .arcade-game-card{
     background:linear-gradient(180deg, var(--surface-raised) 0%, var(--surface) 100%);
     border:1px solid var(--hairline);border-radius:16px;padding:20px;cursor:pointer;text-align:left;
-    font-family:'Inter',sans-serif;color:var(--cream);transition:border-color .15s ease;
+    font-family:var(--hl-font);color:var(--cream);transition:border-color .15s ease;
   }
   .arcade-game-card:hover{border-color:var(--brass);}
   .arcade-game-card .ag-emoji{font-size:30px;}
-  .arcade-game-card .ag-title{font-family:'Fraunces',serif;font-weight:600;font-size:17px;margin-top:8px;}
+  .arcade-game-card .ag-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:17px;margin-top:8px;}
   .arcade-game-card .ag-desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
-  .arcade-game-card .ag-best{font-family:'Space Mono',monospace;font-size:11px;color:var(--brass);margin-top:10px;}
+  .arcade-game-card .ag-best{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--brass);margin-top:10px;}
 
   .arcade-canvas-wrap{background:var(--hl-sunk);border:1px solid var(--hairline);border-radius:14px;overflow:hidden;margin-bottom:16px;}
   .arcade-canvas-wrap canvas{width:100%;display:block;}
-  .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:'Space Mono',monospace;font-size:13px;color:var(--cream);}
+  .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);}
   .rift-round-card{
     background:var(--surface);border:1px solid var(--hairline);border-radius:14px;
     padding:24px 16px;text-align:center;margin:14px 0;min-height:130px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   }
-  .rift-round-type{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brass);}
+  .rift-round-type{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brass);}
   .arcade-overlay-msg{
     text-align:center;padding:30px 20px;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;margin-bottom:16px;
   }
-  .arcade-overlay-msg .om-title{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);}
+  .arcade-overlay-msg .om-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);}
   .arcade-overlay-msg .om-sub{color:var(--muted);font-size:13px;margin-top:8px;}
-  .arcade-back-link{color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;background:none;border:none;font-family:'Inter',sans-serif;margin-bottom:14px;}
+  .arcade-back-link{color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;background:none;border:none;font-family:var(--hl-font);margin-bottom:14px;}
 
   .boss-arena{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:18px;}
   .boss-side{text-align:center;}
@@ -1321,12 +1321,12 @@
   .boss-health-track .fill{height:100%;transition:width .2s ease;}
   .boss-health-track .fill.enemy{background:var(--hl-miss);}
   .boss-health-track .fill.player{background:var(--teal);}
-  .boss-name{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-top:8px;}
+  .boss-name{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);margin-top:8px;}
 
   .arcade-game-card.locked{opacity:0.5;cursor:default;}
   .arcade-game-card.locked:hover{border-color:var(--hairline);}
   .arcade-lock-badge{
-    display:inline-block;font-family:'Space Mono',monospace;font-size:10px;color:var(--coral);
+    display:inline-block;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--coral);
     border:1px solid var(--coral);border-radius:999px;padding:2px 8px;margin-top:8px;
   }
 
@@ -1336,13 +1336,13 @@
   .skilltree-svg .st-node-bg{fill:var(--surface);stroke:var(--hairline);stroke-width:1.5;}
   .skilltree-svg .st-node-bg.unlocked{fill:var(--surface-raised);stroke:var(--brass);}
   .skilltree-svg .st-node-bg.next{stroke:var(--teal);stroke-dasharray:3 3;}
-  .skilltree-svg .st-node-label{font-family:'Inter',sans-serif;font-size:10.5px;font-weight:700;fill:var(--muted);text-anchor:middle;}
+  .skilltree-svg .st-node-label{font-family:var(--hl-font);font-size:10.5px;font-weight:700;fill:var(--muted);text-anchor:middle;}
   .skilltree-svg .st-node-label.unlocked{fill:var(--cream);}
   .skilltree-svg .st-node-icon{font-size:16px;text-anchor:middle;}
   .skilltree-detail{
     background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:16px 20px;margin-top:16px;
   }
-  .skilltree-detail .std-title{font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--brass);}
+  .skilltree-detail .std-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:15px;color:var(--brass);}
   .skilltree-detail .std-text{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
 
   /* ============ SIGNAL SHELL ============ */
@@ -1356,13 +1356,13 @@
     width:100vw;margin-left:calc(50% - 50vw);
   }
   .shell-brand{
-    font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--cream);
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:19px;color:var(--cream);
     display:flex;align-items:center;gap:8px;
   }
   .shell-brand .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);}
   .shell-status{display:flex;align-items:center;gap:10px;}
   .shell-streak,.shell-level{
-    font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);
     background:var(--surface);border:1px solid var(--hairline);border-radius:999px;padding:5px 11px;
   }
   .shell-level{color:var(--brass);border-color:var(--brass-dim);}
@@ -1390,7 +1390,7 @@
   .snb-item{
     flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
     background:none;border:none;color:var(--muted);cursor:pointer;padding:8px 4px 6px;
-    font-family:'Inter',sans-serif;position:relative;
+    font-family:var(--hl-font);position:relative;
   }
   .snb-icon{font-size:19px;filter:grayscale(1) opacity(0.6);transition:filter .15s ease;}
   .snb-label{font-size:10px;font-weight:600;letter-spacing:0.02em;}
@@ -1414,8 +1414,8 @@
 
   /* ---- HOME ---- */
   .home-greeting-row{margin-bottom:20px;}
-  .home-greeting{font-family:'Fraunces',serif;font-weight:600;font-size:26px;color:var(--cream);}
-  .home-streak-line{font-family:'Space Mono',monospace;font-size:12.5px;color:var(--muted);margin-top:4px;}
+  .home-greeting{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;color:var(--cream);}
+  .home-streak-line{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:4px;}
 
   .mission-card{
     display:flex;align-items:center;gap:24px;
@@ -1426,19 +1426,19 @@
   .mission-ring{width:120px;height:120px;}
   .mission-ring-pct{
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);
   }
   .voice-hero-left{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;}
   .voice-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);font-weight:700;}
-  .voice-identity-line{font-family:'Fraunces',serif;font-weight:600;font-size:13.5px;color:var(--brass);margin-bottom:4px;text-align:center;}
+  .voice-identity-line{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:13.5px;color:var(--brass);margin-bottom:4px;text-align:center;}
   .voice-dual-stat-row{display:flex;gap:14px;margin-top:8px;}
   .voice-stat{text-align:center;}
   .vs-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);}
-  .vs-val{font-family:'Space Mono',monospace;font-size:15px;color:var(--coral);font-weight:700;margin-top:2px;}
+  .vs-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:15px;color:var(--coral);font-weight:700;margin-top:2px;}
   .vs-val.strong{color:var(--teal);}
   .mission-text{flex:1;min-width:200px;}
   .mission-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brass);font-weight:700;}
-  .mission-label{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream);margin:6px 0 8px;}
+  .mission-label{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);margin:6px 0 8px;}
   .mission-msg{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:16px;}
 
   .home-secondary-list{display:flex;flex-direction:column;gap:8px;}
@@ -1455,20 +1455,20 @@
     background:linear-gradient(180deg, var(--surface-raised) 0%, var(--surface) 100%);
     border:1px solid var(--hairline);border-radius:16px;padding:18px;
   }
-  .hc-title{font-family:'Fraunces',serif;font-weight:600;font-size:16px;color:var(--cream);}
+  .hc-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:16px;color:var(--cream);}
   .hc-desc{font-size:12px;color:var(--muted);margin:6px 0 14px;line-height:1.5;}
   .hc-btn-row{display:flex;gap:8px;flex-wrap:wrap;}
 
   /* ---- TRIAL MODAL ---- */
   .trial-modal-card{max-width:420px;text-align:center;}
   .trial-modal-emoji{font-size:36px;}
-  .trial-modal-title{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);margin:10px 0 4px;}
+  .trial-modal-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);margin:10px 0 4px;}
   .trial-modal-sub{color:var(--muted);font-size:13.5px;margin-bottom:16px;}
   .trial-checklist{list-style:none;padding:0;margin:0 0 18px;text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;}
   .trial-checklist li{font-size:12.5px;color:var(--cream);padding-left:20px;position:relative;}
   .trial-checklist li::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:700;}
   .trial-banner{background:linear-gradient(135deg, color-mix(in srgb, var(--brass) 16%, transparent), color-mix(in srgb, var(--teal) 10%, transparent));border:1px solid var(--brass-dim);border-radius:12px;padding:14px 16px;}
-  .trial-banner-title{font-family:'Fraunces',serif;font-weight:700;font-size:19px;color:var(--brass);letter-spacing:0.02em;}
+  .trial-banner-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:700;font-size:19px;color:var(--brass);letter-spacing:0.02em;}
   .trial-banner-sub{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.5;}
   .trial-modal-terms{font-size:10.5px;color:var(--muted);margin-top:14px;line-height:1.5;}
 
@@ -1481,7 +1481,7 @@
     display:flex;align-items:center;justify-content:center;font-size:24px;
   }
   .paywall-plan-chip{
-    display:inline-block;font-family:'Space Mono',monospace;font-size:12.5px;color:var(--brass);
+    display:inline-block;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--brass);
     background:var(--surface);border:1px solid var(--brass-dim);border-radius:999px;padding:7px 16px;margin-top:6px;
   }
 
@@ -1491,14 +1491,14 @@
   .onboarding-dots .ob-dot{width:6px;height:6px;border-radius:50%;background:var(--hairline);transition:background .2s ease, width .2s ease;}
   .onboarding-dots .ob-dot.done{background:var(--brass);}
   .onboarding-dots .ob-dot.current{background:var(--teal);width:16px;border-radius:3px;}
-  .ob-question{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream);margin:8px 0 18px;}
+  .ob-question{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);margin:8px 0 18px;}
   .onboarding-card .goal-grid{grid-template-columns:1fr 1fr;text-align:left;}
   .onboarding-card .goal-card{padding:14px 16px;font-size:13px;}
   .ob-plan-summary{background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:16px 18px;text-align:left;margin-top:12px;}
   .ob-plan-summary .obp-row{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--hairline);font-size:12.5px;}
   .ob-plan-summary .obp-row:last-child{border-bottom:none;}
   .ob-plan-summary .obp-label{color:var(--muted);}
-  .ob-plan-summary .obp-val{color:var(--cream);font-family:'Space Mono',monospace;text-align:right;}
+  .ob-plan-summary .obp-val{color:var(--cream);font-family:var(--hl-font);font-variant-numeric:tabular-nums;text-align:right;}
 
   /* ---- TRIAL STATUS BANNER (Pricing) ---- */
   .trial-status-banner{border-radius:12px;padding:14px 18px;margin-bottom:18px;font-size:13px;line-height:1.5;}
@@ -1516,12 +1516,12 @@
   .home-trial-track{height:6px;width:100px;border-radius:4px;background:var(--bg);border:1px solid var(--hairline);overflow:hidden;flex-shrink:0;}
   .home-trial-track .fill{height:100%;background:linear-gradient(90deg,var(--teal),var(--brass));}
 
-  .record-cat-head{font-family:'Fraunces',serif;font-weight:600;font-size:15px;color:var(--brass);margin-bottom:6px;}
+  .record-cat-head{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:15px;color:var(--brass);margin-bottom:6px;}
   .record-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 4px;border-bottom:1px solid var(--hairline);}
   .record-row:last-child{border-bottom:none;}
   .record-label{font-size:13px;color:var(--cream);}
-  .record-val{font-family:'Space Mono',monospace;font-size:14px;color:var(--brass);}
-  .record-val.untracked{color:var(--muted);font-size:11.5px;font-family:'Inter',sans-serif;}
+  .record-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:14px;color:var(--brass);}
+  .record-val.untracked{color:var(--muted);font-size:11.5px;font-family:var(--hl-font);}
 
   /* ---- PROFILE ---- */
   .profile-id-card{
@@ -1531,16 +1531,16 @@
   }
   .profile-avatar-big{
     width:64px;height:64px;border-radius:50%;background:var(--brass);color:var(--on-brass);
-    display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:600;font-size:26px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;flex-shrink:0;
   }
-  .profile-name-big{font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream);}
+  .profile-name-big{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);}
   .profile-identity-line{font-size:12.5px;color:var(--brass);margin-top:3px;font-weight:600;}
-  .profile-xp-line{font-family:'Space Mono',monospace;font-size:11.5px;color:var(--muted);margin-top:4px;}
-  .profile-range-line{font-family:'Space Mono',monospace;font-size:15px;color:var(--cream);}
+  .profile-xp-line{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--muted);margin-top:4px;}
+  .profile-range-line{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:15px;color:var(--cream);}
   .profile-stat-row{display:flex;gap:10px;flex-wrap:wrap;}
   .profile-stat{flex:1;min-width:100px;background:var(--surface);border:1px solid var(--hairline);border-radius:10px;padding:12px;text-align:center;}
   .ps-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);}
-  .ps-val{font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--cream);margin-top:3px;}
+  .ps-val{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:19px;color:var(--cream);margin-top:3px;}
 
   footer.note{text-align:center;color:var(--muted);font-size:12px;margin-top:40px;line-height:1.6;}
 
@@ -1554,7 +1554,7 @@
   .splash-ring{width:120px;height:120px;}
   #splashRingFill{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1);}
   .splash-wordmark{
-    font-family:'Fraunces',serif;font-weight:600;font-size:22px;color:var(--cream);
+    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);
     display:flex;align-items:center;gap:9px;opacity:0;transition:opacity .6s ease .3s;
   }
   .splash-wordmark.splash-visible{opacity:1;}
@@ -1608,7 +1608,7 @@
     box-shadow:0 0 0 1px var(--brass-dim) inset;
   }
   .mode-card-icon{font-size:24px;line-height:1;margin-bottom:4px;}
-  .mode-card-name{font-family:'Fraunces',serif;font-weight:600;font-size:13.5px;color:var(--cream);}
+  .mode-card-name{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:13.5px;color:var(--cream);}
   .mode-card.active .mode-card-name{color:var(--brass);}
   .mode-card-tag{font-size:10.5px;color:var(--muted);line-height:1.4;}
   .mode-card-recommend-badge{
@@ -1630,9 +1630,9 @@
   .levelup-ring-wrap{position:relative;width:150px;height:150px;margin:0 auto 12px;}
   .levelup-ring{width:150px;height:150px;filter:drop-shadow(0 0 26px color-mix(in srgb, var(--brass) 60%, transparent));}
   .levelup-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .levelup-num{font-family:'Fraunces',serif;font-weight:600;font-size:40px;color:var(--brass);}
-  .levelup-title{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--cream);margin-top:6px;}
-  .levelup-sub{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);margin-top:6px;}
+  .levelup-num{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:40px;color:var(--brass);}
+  .levelup-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);margin-top:6px;}
+  .levelup-sub{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;color:var(--muted);margin-top:6px;}
   .levelup-why{font-size:14px;line-height:1.45;color:var(--text);margin-top:12px;max-width:300px;}
   .levelup-why:empty{display:none;}
   @media (prefers-reduced-motion: reduce){
@@ -1870,7 +1870,7 @@
     <!-- Signed-out state -->
     <div class="key-card" id="homeSignedOutCard" style="display:none;">
       <div class="step-label" data-i18n="home_signedout_eyebrow">Welcome</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:8px 0 12px;" data-i18n="home_signedout_title">Create a free account to get today's real mission</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 12px;" data-i18n="home_signedout_title">Create a free account to get today's real mission</h2>
       <p class="desc" style="margin-bottom:18px;" data-i18n="home_signedout_desc">Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.</p>
       <button class="solid-btn teal" id="homeSignInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
     </div>
@@ -1884,7 +1884,7 @@
     <!-- Trial complete state -->
     <div class="key-card" id="homeTrialCompleteCard" style="display:none;">
       <div class="step-label" data-i18n="home_trialcomplete_eyebrow">Your 21-Day Journey is complete 🎤</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:22px;margin:8px 0 10px;" data-i18n="home_trialcomplete_title">You've built a foundation. Your next chapter is waiting.</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;margin:8px 0 10px;" data-i18n="home_trialcomplete_title">You've built a foundation. Your next chapter is waiting.</h2>
       <p class="desc" style="margin-bottom:16px;" data-i18n="home_trialcomplete_desc">Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.</p>
       <button class="solid-btn teal" id="homeChoosePlanBtn" data-i18n="home_trialcomplete_btn">Choose your plan</button>
     </div>
@@ -2147,7 +2147,7 @@
     <!-- DAY 1 ASSESSMENT (shown until complete) -->
     <div class="key-card" id="journeyAssessmentCard">
       <div class="step-label" data-i18n="journey_day1_label">Day 1 — Discover Your Voice</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 16px;" data-i18n="journey_day1_h2">Five quick real measurements, then a personal goal</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 16px;" data-i18n="journey_day1_h2">Five quick real measurements, then a personal goal</h2>
 
       <div class="assess-step" data-step="range">
         <div><div class="as-title" data-i18n="journey_step_range_title">Find your range</div><div class="as-sub" data-i18n="journey_step_range_sub">Range Finder — lowest and highest comfortable note</div></div>
@@ -2224,7 +2224,7 @@
 
       <div class="key-card" id="curriculumCard" style="margin-top:16px;">
         <div class="step-label" id="curriculumDayLabel">Today's Curriculum — Day 1</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:19px;margin:8px 0 4px;" id="curriculumObjective">—</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:19px;margin:8px 0 4px;" id="curriculumObjective">—</h2>
         <p class="desc" id="curriculumTheme" style="margin-bottom:14px;"></p>
         <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_sequence_label">Real sequence</span><span id="curriculumExercises"></span></div>
         <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_duration_label">Duration</span><span id="curriculumDuration"></span></div>
@@ -2247,13 +2247,13 @@
 
       <div class="key-card">
         <div class="step-label" data-i18n="journey_achievements_label">Achievements</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="journey_achievements_h2">Every one of these is computed from real logged data — none are hand-awarded</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="journey_achievements_h2">Every one of these is computed from real logged data — none are hand-awarded</h2>
         <div class="achievement-grid" id="achievementGrid"></div>
       </div>
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="journey_day1vtoday_label">Day 1 vs. Today</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:8px 0 4px;" data-i18n="journey_day1vtoday_h2">Real numeric comparison — no audio replay yet</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;" data-i18n="journey_day1vtoday_h2">Real numeric comparison — no audio replay yet</h2>
         <p class="desc" style="margin-bottom:16px;" data-i18n="journey_day1vtoday_desc">Honest scope: this compares your stored Day 1 Skill Profile snapshot to today's, numerically. Hearing your actual Day 1 vs. today recording side-by-side isn't built — that needs take storage this prototype doesn't have (see PRD §18.6).</p>
         <div id="journeySnapshotCompare"></div>
       </div>
@@ -2318,7 +2318,7 @@
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
       <div class="key-card">
         <div class="step-label" data-i18n="glider_step_label">🏔️ Pitch Mountain — Vocal Journey</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="glider_choose_course">Choose your course</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="glider_choose_course">Choose your course</h2>
         <p class="desc" style="margin-bottom:14px;" data-i18n="glider_course_desc">Sing to fly, go quiet to fall — 7 real courses, not reskins of the same obstacle generator.</p>
 
         <div class="mode-card-grid" id="gliderModeRow">
@@ -2384,7 +2384,7 @@
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
       <div class="key-card">
         <div class="step-label"><span data-i18n="boss_step_label">🐉 Boss Arena — Vocal Boss Battle</span><span class="mock-tag" data-i18n="boss_reuses_tag">REUSES KARAOKE COACH ENGINE</span></div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="boss_choose_h2">Choose your boss and difficulty</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="boss_choose_h2">Choose your boss and difficulty</h2>
         <p class="desc" style="margin-bottom:6px;" data-i18n="boss_choose_desc">Same real engine, genuinely different scoring per boss — not reskins.</p>
         <p class="fine-print" id="bossCurrentSongLabel" style="margin-bottom:14px;">Now practicing: Demo Hymn (C Major) — <button class="link-btn" data-enter-panel="choir">change song</button></p>
 
@@ -2498,7 +2498,7 @@
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
       <div class="key-card">
         <div class="step-label"><span data-i18n="harmony_step_label">🎼 Harmony Castle — Harmony Arena</span><span class="mock-tag" data-i18n="harmony_reuses_tag">REUSES CHOIR WORKSPACE MIXER</span></div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="harmony_hold_h2">Hold your part while the others get louder</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="harmony_hold_h2">Hold your part while the others get louder</h2>
         <p class="fine-print" id="harmonyCurrentSongLabel" style="margin-bottom:14px;">Now practicing: Demo Hymn (C Major) — <button class="link-btn" data-enter-panel="choir">change song</button></p>
 
         <div class="mode-card-grid" id="harmonyPartRow" style="grid-template-columns:1fr 1fr 1fr;">
@@ -2580,7 +2580,7 @@
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
       <div class="key-card">
         <div class="step-label" data-i18n="skilltree_step_label">🌳 Vocal Skill Tree</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="skilltree_h2">Every node unlocks from a real measured threshold</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="skilltree_h2">Every node unlocks from a real measured threshold</h2>
         <p class="desc" style="margin-bottom:18px;" data-i18n="skilltree_desc">No fake currency, no purchasing skill — a node lights up only when your actual Skill Profile, breath, or register data crosses its real threshold. Grey nodes are locked; the detail panel below shows exactly what's needed for the next one.</p>
         <svg class="skilltree-svg" id="skillTreeSvg" viewBox="0 0 400 560"></svg>
         <div class="skilltree-detail" id="skillTreeDetail"></div>
@@ -2592,7 +2592,7 @@
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
       <div class="key-card">
         <div class="step-label"><span data-i18n="rift_step_label">🌀 The Vocal Rift</span><span class="mock-tag" data-i18n="rift_reuses_tag">REUSES PITCH MATCH ENGINE</span></div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="rift_h2">60 seconds, unpredictable real rounds</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="rift_h2">60 seconds, unpredictable real rounds</h2>
         <p class="desc" style="margin-bottom:18px;" data-i18n="rift_desc">Each round is randomly one of four real drills — Pitch, Interval Jump, Sustain Hold, or Quick Catch — with a fresh real target every time. Same capture engine as Pitch Match throughout; only which challenge shows up next is a surprise.</p>
 
         <div class="arcade-hud"><span id="riftRoundsLabel">Rounds: 0</span><span id="riftAvgLabel">Avg: —</span><span id="riftTimeLabel">Time: 60s</span></div>
@@ -2620,7 +2620,7 @@
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
       <div class="key-card">
         <div class="step-label"><span data-i18n="bridge_step_label">Register Runner</span><span class="mock-tag" data-i18n="bridge_reuses_tag">REUSES REGISTER COACH ENGINE</span></div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 14px;" data-i18n="bridge_h2">Chest voice = bottom lane, head voice = top lane</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 14px;" data-i18n="bridge_h2">Chest voice = bottom lane, head voice = top lane</h2>
         <div class="arcade-hud"><span id="bridgeScoreLabel">Score: 0</span><span id="bridgeBestLabelLive">Best: 0</span></div>
         <div class="arcade-canvas-wrap"><canvas id="bridgeCanvas" width="600" height="240" role="img" aria-label="Register Canyon runner — switch between chest and head voice to dodge obstacles in the correct lane"></canvas></div>
         <div class="btn-row" style="justify-content:center;">
@@ -3045,7 +3045,7 @@
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="dashboard_skillprofile_label">Vocal Skill Profile</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="dashboard_skillprofile_h2">Five scores, built from what you've actually practiced</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="dashboard_skillprofile_h2">Five scores, built from what you've actually practiced</h2>
         <p class="desc" style="margin-bottom:18px;" data-i18n="dashboard_skillprofile_desc">Pitch and Agility come from Exercises, Range from Range Finder, Breath from the Breath Trainer. Expression stays honest — it shows "not enough data" until an expression/dynamics trainer exists, rather than guessing.</p>
         <div id="skillProfileBars"></div>
         <div class="skill-summary-row" id="skillSummaryRow"></div>
@@ -3053,14 +3053,14 @@
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="dashboard_todaysplan_label">Today's Plan</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="dashboard_todaysplan_h2">Rule-based, not AI — built from your real weak spots</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="dashboard_todaysplan_h2">Rule-based, not AI — built from your real weak spots</h2>
         <p class="desc" style="margin-bottom:16px;" data-i18n="dashboard_todaysplan_desc">This is a deterministic recommendation engine reading your Skill Profile and Register Coach history, not a language model reasoning about you — worth saying plainly rather than overclaiming "AI."</p>
         <div id="todaysPlanList"></div>
       </div>
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="dashboard_weeklychallenge_label">Weekly Challenge</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;" id="challengeTitle">—</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" id="challengeTitle">—</h2>
         <div class="challenge-progress-track"><div class="challenge-progress-fill" id="challengeProgressFill" style="width:0%;"></div></div>
         <p class="fine-print" id="challengeStatusText" style="margin-top:8px;"></p>
         <p class="desc" style="margin:16px 0 8px;"><span data-i18n="dashboard_howyoucompare">How you compare</span> <span class="mock-tag" data-i18n="dashboard_sampledata_tag">SAMPLE DATA</span> <span data-i18n="dashboard_backend_note">— needs a real multi-user backend, same honesty note as the Director Dashboard.</span></p>
@@ -3069,8 +3069,8 @@
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="dashboard_rangeprogress_label">Vocal Range Progress</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 18px;" data-i18n="dashboard_widestrange_h2">Widest range recorded</h2>
-        <div class="range-span" id="dashRangeSpan" style="font-family:'Space Mono',monospace;font-size:19px;margin-bottom:14px;">Not captured yet — visit Range Finder</div>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 18px;" data-i18n="dashboard_widestrange_h2">Widest range recorded</h2>
+        <div class="range-span" id="dashRangeSpan" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:19px;margin-bottom:14px;">Not captured yet — visit Range Finder</div>
         <div class="range-bar-wrap" style="margin:0;">
           <div class="range-bar"><div class="fill" id="dashRangeFill" style="left:0;width:0;"></div></div>
           <div class="range-bar-labels"><span>C2</span><span>C4</span><span>C6</span></div>
@@ -3079,7 +3079,7 @@
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="dashboard_last14days_label">Last 14 Days</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 18px;" data-i18n="dashboard_activity_h2">Practice activity</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 18px;" data-i18n="dashboard_activity_h2">Practice activity</h2>
         <div class="activity-chart" id="activityChart"></div>
       </div>
 
@@ -3257,10 +3257,10 @@
     <div class="key-card">
       <div class="health-status-banner neutral" id="healthBanner" style="margin-top:18px;">Not enough data yet — practice on a few different days to see trends.</div>
 
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:20px 0 4px;" data-i18n="voicehealth_stability_h2">Stability — last 14 days</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:20px 0 4px;" data-i18n="voicehealth_stability_h2">Stability — last 14 days</h2>
       <div class="health-trend-chart" id="stabilityTrendChart"></div>
 
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:22px 0 4px;" data-i18n="voicehealth_breath_h2">Breath consistency — last 14 days</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:22px 0 4px;" data-i18n="voicehealth_breath_h2">Breath consistency — last 14 days</h2>
       <div class="health-trend-chart" id="breathTrendChart"></div>
     </div>
   </section>
@@ -3640,8 +3640,8 @@
   <!-- STUDIO MODE PANEL -->
   <section class="panel" id="panel-studio">
     <div style="text-align:center;padding:10px 0 20px;">
-      <div style="font-family:'Space Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;" data-i18n="studio_no_gamification">Studio — no XP, no streak, no gamification</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:26px;color:var(--cream);margin-top:8px;" data-i18n="studio_session_title">🎙️ Recording Session</h2>
+      <div style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;" data-i18n="studio_no_gamification">Studio — no XP, no streak, no gamification</div>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:26px;color:var(--cream);margin-top:8px;" data-i18n="studio_session_title">🎙️ Recording Session</h2>
     </div>
     <div class="key-card">
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_song_label">Song</span><span id="studioSongName">—</span></div>
@@ -3902,7 +3902,7 @@
 
     <div class="key-card" style="margin-top:16px;">
       <div class="step-label"><span data-i18n="choir_practicetrack_label">Practice Track</span><span class="mock-tag" data-i18n="choir_synthdemo_tag">SYNTHESIZED DEMO</span></div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:8px 0 4px;" id="choirTrackTitle">Demo Hymn — C Major (I–V–vi–IV)</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 4px;" id="choirTrackTitle">Demo Hymn — C Major (I–V–vi–IV)</h2>
       <p class="desc" style="margin-bottom:20px;" data-i18n="choir_track_desc">
         Real launch content is a licensed, pre-separated multi-track catalog (PRD §3.3) — live AI part separation for arbitrary uploads stays out of scope for the reasons in PRD §9.
         This demo uses original, royalty-free progressions, synthesized live, so mute/solo/volume genuinely work per part rather than simulating the UI.
@@ -4030,7 +4030,7 @@
 
     <div class="key-card" style="margin-top:20px;">
       <div class="step-label"><span data-i18n="choir_director_label">Director Dashboard</span><span class="mock-tag" data-i18n="choir_sampledata_tag">SAMPLE DATA</span></div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="choir_rosterprogress_h2">Choir roster progress</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="choir_rosterprogress_h2">Choir roster progress</h2>
       <p class="desc" style="margin-bottom:16px;" data-i18n="choir_roster_desc">
         This view needs a real multi-user backend to populate — no client-only prototype can show other people's data honestly. The rows below are illustrative sample data showing the shape a director's dashboard would take (PRD §3.3), not live figures.
       </p>
@@ -4198,7 +4198,7 @@
 
     <div class="key-card" id="trialCompleteCard" style="display:none;">
       <div class="step-label" data-i18n="pricing_yourjourney_label">Your 21-Day Journey</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:600;font-size:26px;margin:8px 0 4px;" data-i18n="pricing_comefar_h2">Your voice has come this far.</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;margin:8px 0 4px;" data-i18n="pricing_comefar_h2">Your voice has come this far.</h2>
       <p class="desc" style="margin-bottom:18px;" data-i18n="pricing_realnumbers_desc">Real numbers only — your stored Day 1 baseline compared to today.</p>
       <div id="trialCompareRows"></div>
 
@@ -4229,7 +4229,7 @@
 
     <div class="key-card">
       <div class="step-label" data-i18n="pricing_plans_label">Plans</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:24px;margin:8px 0 4px;" data-i18n="pricing_continue_h2">Continue your vocal journey</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:24px;margin:8px 0 4px;" data-i18n="pricing_continue_h2">Continue your vocal journey</h2>
       <p class="desc" style="margin-bottom:26px;" data-i18n="pricing_trialgates_desc">Every new account gets 21 days of full access first — no feature gates during the trial. These plans are what continues after.</p>
 
       <div class="pricing-grid">
@@ -4360,7 +4360,7 @@
 
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_vocalstats_label">Vocal Statistics</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="profile_vocalstats_h2">Strengths &amp; weaknesses, from your real Skill Profile</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="profile_vocalstats_h2">Strengths &amp; weaknesses, from your real Skill Profile</h2>
         <div id="profileSkillBars"></div>
         <div class="skill-summary-row" id="profileSkillSummary"></div>
         <div class="btn-row" style="margin-top:16px;"><button class="ghost-btn" data-enter-panel="dashboard" data-i18n="profile_opendashboard_btn">Open full Dashboard</button></div>
@@ -4396,7 +4396,7 @@
         <div class="step-label" data-i18n="profile_unifiedprogress_label">📈 Unified Progress</div>
         <p class="fine-print" style="margin:6px 0 14px;" data-i18n="profile_unifiedprogress_desc">One real trend view across your three most-tracked categories — pulled from the same real weekly log every exercise already writes to, not a separate tracker.</p>
         <svg id="unifiedTrendSvg" viewBox="0 0 400 180" style="width:100%;display:block;"></svg>
-        <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;font-family:'Space Mono',monospace;">
+        <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;">
           <span style="color:var(--teal);">● <span data-i18n="profile_pitch_label">Pitch</span></span>
           <span style="color:var(--brass);">● <span data-i18n="profile_breath_label">Breath</span></span>
           <span style="color:var(--coral);">● <span data-i18n="profile_agility_label">Agility</span></span>
@@ -4413,7 +4413,7 @@
 
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="settings_title">Settings</div>
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:16px;margin:8px 0 12px;" data-i18n="settings_language_title">🌐 Language</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:8px 0 12px;" data-i18n="settings_language_title">🌐 Language</h2>
         <div class="ex-type-row" id="profileLanguageRow">
           <button class="ex-type-btn" data-profile-lang="en" aria-pressed="false">🇬🇧 English</button>
           <button class="ex-type-btn" data-profile-lang="fr" aria-pressed="false">🇫🇷 Français</button>
@@ -4422,7 +4422,7 @@
         </div>
         <p class="fine-print" style="margin-top:10px;" data-i18n="lang_select_disclosure">Honest about scope: navigation, onboarding, shared buttons, and account screens are fully translated. Deep tool-specific content across this app's 41 screens is still English-only — real translation of that volume is a larger, ongoing effort, not something to fake with machine text.</p>
 
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_theme_title">🎨 Theme</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_theme_title">🎨 Theme</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_theme_sub">Your current look stays the default — these are optional alternate looks, applied across the whole app.</p>
         <div class="theme-picker-grid" id="themePickerGrid">
           <button class="theme-swatch-btn" data-theme-choice="default" aria-pressed="true">
@@ -4443,14 +4443,14 @@
           </button>
         </div>
 
-        <h2 id="playbackVolumeTitle" style="font-family:'Fraunces',serif;font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">🔊 Playback volume</h2>
+        <h2 id="playbackVolumeTitle" style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">🔊 Playback volume</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_playback_sub">Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.</p>
         <div style="display:flex;align-items:center;gap:12px;">
           <input type="range" id="playbackVolumeSlider" min="0" max="100" step="1" value="100" aria-labelledby="playbackVolumeTitle" style="flex:1;accent-color:var(--teal);">
-          <span id="playbackVolumeVal" style="font-family:'Space Mono',monospace;font-size:13px;min-width:44px;text-align:right;">100%</span>
+          <span id="playbackVolumeVal" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;min-width:44px;text-align:right;">100%</span>
         </div>
 
-        <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">💬 Feedback</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">💬 Feedback</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_feedback_sub">Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.</p>
         <button class="ghost-btn" data-enter-panel="feedback" style="width:100%;justify-content:center;" data-i18n="settings_feedback_btn">Give Feedback</button>
       </div>
@@ -4535,7 +4535,7 @@
     </div>
     <div class="key-card" id="teacherLocked" style="display:none;">
       <div class="step-label" data-i18n="teacher_plan_label">Teacher plan</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 10px;" data-i18n="teacher_locked_h2">Roster and assignment tools are part of the Teacher plan</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 10px;" data-i18n="teacher_locked_h2">Roster and assignment tools are part of the Teacher plan</h2>
       <p class="desc" id="teacherLockedMsg" style="margin-bottom:16px;" data-i18n="teacher_locked_msg">Included in your 21-day trial too — try it now, no separate signup needed.</p>
       <button class="solid-btn teal" id="teacherUpgradeBtn" data-i18n="teacher_viewplan_btn">View Teacher plan</button>
     </div>
@@ -4626,7 +4626,7 @@
   <div class="modal-overlay" id="checkoutModalOverlay" role="dialog" aria-modal="true" aria-labelledby="checkoutPlanName" style="display:none;">
     <div class="modal-card">
       <div class="step-label">Demo checkout — no real payment</div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:22px;margin:8px 0 4px;" id="checkoutPlanName">Upgrade to Pro</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 4px;" id="checkoutPlanName">Upgrade to Pro</h2>
       <p style="color:var(--muted);font-size:13px;margin:0 0 20px;line-height:1.5;" id="checkoutPlanPrice">$9.99/mo</p>
       <p style="color:var(--muted);font-size:12.5px;margin:0 0 22px;line-height:1.5;">
         This button simulates a successful Stripe subscription so you can see what unlocks. No card details are collected because none are processed.
@@ -13637,7 +13637,7 @@ function renderRehearsalRoll(){
   let html = '';
   for(let i=0;i<n;i++){
     html += `<line x1="${i*colW}" y1="0" x2="${i*colW}" y2="${H}" style="stroke:var(--hairline);stroke-width:1"/>`;
-    html += `<text x="${i*colW+4}" y="15" style="fill:var(--muted);font:10px 'Space Mono',monospace">${(i*chordDur).toFixed(1)}s</text>`;
+    html += `<text x="${i*colW+4}" y="15" style="fill:var(--muted);font:10px var(--hl-font);font-variant-numeric:tabular-nums">${(i*chordDur).toFixed(1)}s</text>`;
   }
   // other parts first (visually secondary), selected part drawn last on top
   parts.filter(p=>p!==sel).forEach(p=>{
@@ -13647,7 +13647,7 @@ function renderRehearsalRoll(){
   });
   SONG.parts[sel].notes.forEach((m,i)=>{
     html += `<rect class="rh-sel-note" data-idx="${i}" x="${i*colW+3}" y="${y(m)-7}" width="${colW*0.94-6}" height="14" rx="4" style="fill:${PART_COLORS[sel]}"/>`;
-    html += `<text x="${i*colW+9}" y="${y(m)+4}" style="fill:var(--on-part);font:bold 11px 'Space Mono',monospace;pointer-events:none">${midiName(m)}</text>`;
+    html += `<text x="${i*colW+9}" y="${y(m)+4}" style="fill:var(--on-part);font:bold 11px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${midiName(m)}</text>`;
   });
   html += `<line id="rehearsalPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0"/>`;
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -13867,18 +13867,18 @@ function renderSonicXray(){
   getSongSections().forEach(sec=>{
     const s0 = sec.indices[0]*tl.chordDur, s1 = (sec.indices[sec.indices.length-1]+1)*tl.chordDur;
     html += `<g class="xray-sec" data-sec-start="${sec.indices[0]}"><rect x="${x(s0)+1}" y="2" width="${x(s1)-x(s0)-2}" height="${XRAY_SEC_H-8}" rx="6" style="fill:var(--surface-raised);stroke:var(--hairline)"/>`
-      + `<text x="${x(s0)+8}" y="${XRAY_SEC_H/2+2}" style="fill:var(--cream);font:600 11px Inter,sans-serif;pointer-events:none">▶ ${sectionLabel(sec.name)} · ${s0.toFixed(1)}s</text></g>`;
+      + `<text x="${x(s0)+8}" y="${XRAY_SEC_H/2+2}" style="fill:var(--cream);font:600 11px var(--hl-font);pointer-events:none">▶ ${sectionLabel(sec.name)} · ${s0.toFixed(1)}s</text></g>`;
   });
   parts.forEach((p,r)=>{
     const y0 = XRAY_SEC_H + r*XRAY_ROW_H;
     const notes = tl.parts[p];
     const lo = Math.min(...notes.map(nt=>nt.midi)), hi = Math.max(...notes.map(nt=>nt.midi));
-    html += `<text x="4" y="${y0+11}" style="fill:var(--muted);font:10px 'Space Mono',monospace;pointer-events:none">${partName(p)}</text>`;
+    html += `<text x="4" y="${y0+11}" style="fill:var(--muted);font:10px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${partName(p)}</text>`;
     notes.forEach(nt=>{
       const rel = hi===lo ? 0.5 : (nt.midi-lo)/(hi-lo); // contour within this part's own real range
       const y = y0 + 15 + (1-rel)*10;
       html += `<rect class="xray-note" data-part="${p}" data-idx="${nt.idx}" x="${x(nt.start)}" y="${y}" width="${x(nt.end)-x(nt.start)}" height="11" rx="3" style="fill:${PART_COLORS[p]};opacity:0.85"/>`
-        + `<text x="${x(nt.start)+3}" y="${y+8.5}" style="fill:var(--on-part);font:bold 8.5px 'Space Mono',monospace;pointer-events:none">${midiName(nt.midi)}</text>`;
+        + `<text x="${x(nt.start)+3}" y="${y+8.5}" style="fill:var(--on-part);font:bold 8.5px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${midiName(nt.midi)}</text>`;
     });
   });
   computeSongDnaMoments().forEach(m=>{
@@ -13964,7 +13964,7 @@ function renderMicroscope(){
   for(let s=Math.ceil(w0/step)*step; s<=w1+1e-9; s+=step){
     const label = step<0.1 ? `${Math.round(s*1000)} ms` : `${s.toFixed(step<1?1:0)} s`;
     svg += `<line x1="${x(s)}" y1="${axisH-4}" x2="${x(s)}" y2="${H}" style="stroke:var(--hairline);stroke-width:1"/>`
-      + `<text x="${x(s)+3}" y="12" style="fill:var(--muted);font:10px 'Space Mono',monospace">${label}</text>`;
+      + `<text x="${x(s)+3}" y="12" style="fill:var(--muted);font:10px var(--hl-font);font-variant-numeric:tabular-nums">${label}</text>`;
   }
   parts.forEach((p,r)=>{
     const y = axisH + r*rowH + 6;
@@ -13975,7 +13975,7 @@ function renderMicroscope(){
       seg(nt.start+CHOIR_ATTACK_SEC, nt.end-CHOIR_RELEASE_SEC, 0.9);
       seg(nt.end-CHOIR_RELEASE_SEC, nt.end, 0.45);
       const lx = Math.max(x(nt.start), 0)+4;
-      if(lx < W-40) svg += `<text x="${lx}" y="${y+12}" style="fill:var(--on-part);font:bold 10px 'Space Mono',monospace;pointer-events:none">${partName(p)} ${midiName(nt.midi)}</text>`;
+      if(lx < W-40) svg += `<text x="${lx}" y="${y+12}" style="fill:var(--on-part);font:bold 10px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${partName(p)} ${midiName(nt.midi)}</text>`;
     });
   });
   svg += `<line x1="${x(T)}" y1="0" x2="${x(T)}" y2="${H}" style="stroke:var(--teal);stroke-width:2"/>`;
@@ -14257,11 +14257,11 @@ function renderBreathMap(){
   let svg = '';
   notes.forEach(nt=>{
     svg += `<rect x="${x(nt.start)}" y="18" width="${x(nt.end)-x(nt.start)}" height="16" rx="3" style="fill:${PART_COLORS[part]};opacity:0.8"/>`;
-    svg += `<text x="${x(nt.start)+6}" y="30" style="fill:var(--on-part);font:bold 10px 'Space Mono',monospace">${midiName(nt.midi)}</text>`;
+    svg += `<text x="${x(nt.start)+6}" y="30" style="fill:var(--on-part);font:bold 10px var(--hl-font);font-variant-numeric:tabular-nums">${midiName(nt.midi)}</text>`;
   });
   pts.forEach(p=>{
     svg += `<rect class="bm-gap" data-k="${p.k}" x="${x(p.from)}" y="10" width="${x(p.to)-x(p.from)}" height="32" style="fill:var(--teal);opacity:0.5"/>`;
-    svg += `<text x="${(x(p.from)+x(p.to))/2}" y="52" text-anchor="middle" style="fill:var(--teal);font:bold 10px 'Space Mono',monospace">${p.k}</text>`;
+    svg += `<text x="${(x(p.from)+x(p.to))/2}" y="52" text-anchor="middle" style="fill:var(--teal);font:bold 10px var(--hl-font);font-variant-numeric:tabular-nums">${p.k}</text>`;
   });
   svg += `<line id="bmPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0"/>`;
   const el = document.getElementById('breathMapSvg');
@@ -15289,10 +15289,10 @@ function whyPlotSvg(s){
   g += `<rect x="${L}" y="${T}" width="${x(HM_SKIP_ATTACK_SEC)-L}" height="${H-T-B}" fill="var(--hairline)" opacity="0.5"/>`;
   g += `<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--teal)" stroke-dasharray="3 3"/>`;
   [[RANGE, '+'+RANGE], [0, midiName(s.nt.midi)], [-RANGE, '−'+RANGE]].forEach(([c, lab])=>{
-    g += `<text x="${L-4}" y="${y(c)+3}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">${lab}</text>`;
+    g += `<text x="${L-4}" y="${y(c)+3}" text-anchor="end" font-size="9" fill="var(--muted)" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${lab}</text>`;
   });
-  g += `<text x="${L}" y="${H-5}" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">0 s</text>`;
-  g += `<text x="${W-R}" y="${H-5}" text-anchor="end" font-size="9" fill="var(--muted)" font-family="Space Mono, monospace">${fmtNum(s.len, 2)} s</text>`;
+  g += `<text x="${L}" y="${H-5}" font-size="9" fill="var(--muted)" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">0 s</text>`;
+  g += `<text x="${W-R}" y="${H-5}" text-anchor="end" font-size="9" fill="var(--muted)" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${fmtNum(s.len, 2)} s</text>`;
   if(s.entry!==null) g += `<line x1="${x(s.entry)}" x2="${x(s.entry)}" y1="${T}" y2="${H-B}" stroke="var(--brass)" stroke-dasharray="2 2"/>`;
   s.cents.forEach((c,k)=>{
     // each dot sits where the mic heard it; its colour is the verdict on that moment (natural vibrato taken out)
@@ -15442,8 +15442,8 @@ function renderChoirDna(svgId, noteId, song, example){
   parts.forEach((x,i)=>{
     const [ex, ey] = at(i, maxR), [lx, ly] = at(i, maxR+26);
     g += `<line x1="${at(i, inner)[0].toFixed(1)}" y1="${at(i, inner)[1].toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="var(--hairline)"/>`;
-    g += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" fill="var(--cream)" font-size="12" font-family="Space Mono, monospace">${partName(x.p)}</text>`;
-    g += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${col(x.st)}" font-size="10" font-family="Space Mono, monospace">${t('rd_status_'+x.st)} · ${Math.round(x.v*100)}%</text>`;
+    g += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" fill="var(--cream)" font-size="12" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${partName(x.p)}</text>`;
+    g += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${col(x.st)}" font-size="10" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${t('rd_status_'+x.st)} · ${Math.round(x.v*100)}%</text>`;
   });
   const pts = parts.map((x,i)=>at(i, rOf(x.v)));
   g += `<polygon points="${pts.map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' ')}" fill="color-mix(in srgb, var(--teal) 18%, transparent)" stroke="var(--teal)" stroke-width="2"/>`;
@@ -15451,7 +15451,7 @@ function renderChoirDna(svgId, noteId, song, example){
   const wins = parts.reduce((a,x)=>a+x.inp.wins, 0), losses = parts.reduce((a,x)=>a+x.inp.losses, 0);
   g += `<circle cx="${cx}" cy="${cy}" r="${inner-4}" fill="var(--bg)" stroke="var(--hairline)"/>`;
   g += `<text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="16">👹</text>`;
-  g += `<text x="${cx}" y="${cy+13}" text-anchor="middle" fill="var(--cream)" font-size="12" font-family="Space Mono, monospace">${wins}–${losses}</text>`;
+  g += `<text x="${cx}" y="${cy+13}" text-anchor="middle" fill="var(--cream)" font-size="12" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${wins}–${losses}</text>`;
   svg.innerHTML = g;
   svg.setAttribute('aria-label', `${t('dna_title')}: ${parts.map(x=>`${partName(x.p)} ${t('rd_status_'+x.st)}`).join(', ')}. ${t('dna_boss_aria_tpl').replace('{w}', wins).replace('{l}', losses)}`);
   const note = document.getElementById(noteId);
@@ -15494,7 +15494,7 @@ function renderCwPreviews(){
     const box = document.getElementById(id);
     if(!box) return;
     box.innerHTML = `<div class="step-label">${t('cw_label')} <span class="mock-tag">${planLabel('choir')} · ${price}</span></div>
-      <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;">${t('cw_heading')}</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;">${t('cw_heading')}</h2>
       <p class="desc" data-cw-reason>${reason}</p>
       ${teaser ? `<div style="text-align:center;margin-top:14px;">
         <div class="step-label">${t('dna_title')}</div>
@@ -15598,7 +15598,7 @@ function renderHomeChoirCard(){
   if(!profile){ card.style.display = 'none'; return; }
   card.style.display = 'block';
   const focus = cwFocus();
-  const h2 = txt=>`<h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:20px;margin:8px 0 6px;">${txt}</h2>`;
+  const h2 = txt=>`<h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;">${txt}</h2>`;
   if(!hasChoirWorldAccess()){
     // Locked tiers get the upgrade version: what the Choir plan is, and their saved readiness if they have any.
     card.innerHTML = `<div class="step-label">${t('cw_label')} <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span></div>
@@ -15651,7 +15651,7 @@ function renderJourneyChoirMilestone(){
     foot = `<p class="fine-print" style="margin-top:10px;">${cwReasonText()}</p><button class="solid-btn teal" data-cw-cta="plans" style="margin-top:12px;">${t('cw_cta_plans')}</button>`;
   }
   box.innerHTML = `<div class="step-label">${t('journey_cw_label')}${!m && !open ? ` <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span>` : ''}</div>
-    <h2 style="font-family:'Fraunces',serif;font-weight:500;font-size:18px;margin:8px 0 4px;">${m ? '✓ ' : ''}${t('journey_cw_title')}</h2>
+    <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;">${m ? '✓ ' : ''}${t('journey_cw_title')}</h2>
     <p class="desc">${t('journey_cw_desc_tpl').replace('{pct}', HM_PASS_PCT)}</p>${foot}`;
 }
 // "Continue rehearsing" / "Start rehearsing": straight into I Am the Part, on the song and part it names.
@@ -20220,8 +20220,8 @@ function renderVoiceFingerprint(svgId, noteId){
     axisSvg += `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--hairline)" stroke-width="1"/>`;
     const [lx,ly] = pointAt(i, maxR+22);
     const score = scores[c.key];
-    axisSvg += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="var(--cream)" font-size="12" font-family="Space Mono, monospace">${c.label}</text>`;
-    axisSvg += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${score!==null?'var(--teal)':'var(--muted)'}" font-size="10.5" font-family="Space Mono, monospace">${score!==null?score+'%':'no data'}</text>`;
+    axisSvg += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="var(--cream)" font-size="12" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${c.label}</text>`;
+    axisSvg += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${score!==null?'var(--teal)':'var(--muted)'}" font-size="10.5" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${score!==null?score+'%':'no data'}</text>`;
   });
 
   // real data polygon -- honest treatment: untracked categories sit at center, not a fabricated value
@@ -20495,7 +20495,7 @@ function renderVoiceCard(){
   if(progress.harmonyBest) rows.push({label:t('voicecard_harmony'), text: progress.harmonyBest+'%'});
 
   let y = 220;
-  ctx.font = '400 24px "Space Mono", monospace';
+  ctx.font = '400 24px Archivo, sans-serif';
   rows.forEach(r=>{
     ctx.textAlign = 'left';
     ctx.fillStyle = '#a89f8f';
@@ -20519,7 +20519,7 @@ function renderVoiceCard(){
   ctx.fillText(`${t('voicecard_level')} ${level} — ${name}`, 40, y);
 
   ctx.fillStyle = '#6b6355';
-  ctx.font = '400 16px "Space Mono", monospace';
+  ctx.font = '400 16px Archivo, sans-serif';
   ctx.fillText(t('voicecard_footer'), 40, H-40);
 
   const hasAnyRealData = scores.pitch!==null || scores.breath!==null || scores.agility!==null || rangeText;
