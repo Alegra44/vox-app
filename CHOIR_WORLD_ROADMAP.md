@@ -240,6 +240,9 @@ pinned, noisegate regress mode (A/A on bonanza-b: 0 regressions; the held count 
      **Rumble rerun (2026-10-07, 5 runs per side):** RTF heard master 7/6/4/9/11% (median 7) → branch 4/7/5/6/3%
      (median 5): not worse. Verdict 0 regressions, 1 within noise, 1 already failing (Drills heard on both sides).
      Gate met; release started 2026-10-10.
+     **(d) live 2026-10-10 (dpl_7FcmBiWSDoEjES4WGfUQSUfF3HWQ, merge 307c50b):** 0008 pushed, api deployed with
+     levelup_snapshot, levelup.js 45/45 local (production backend) and 45/45 on production, batch1 112/112 on
+     production; test accounts deleted (0 left). The four tester bugs are done. Next: redesign phase 1 (user specifies).
    That completes the four tester bugs. Next: redesign phase 1, specified separately by the user; it changes how the
    app looks, so **screenshots are reviewed by the user before anything deploys.**
 
