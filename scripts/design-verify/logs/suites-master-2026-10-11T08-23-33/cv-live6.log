@@ -1,0 +1,58 @@
+live sha 1a3a0411ce10b113 local sha 1a3a0411ce10b113 IDENTICAL
+lang fr | choir panel active: true
+FR card before: {
+ "title": "🎤 Votre chorale",
+ "summary": "0 voix sur 5 enregistrées pour Demo Hymn (C Major).",
+ "rows": [
+  "● Soprano · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Voix principale · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Alto · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Ténor · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Basse · non enregistrée — muette à la lecture ● Enregistrer"
+ ],
+ "play": "▶ Écouter ma chorale",
+ "stop": "Arrêter",
+ "headphones": "🎧 Utilisez un casque — avec des haut-parleurs, le micro peut entendre le chœur et le confondre avec vous.",
+ "note": "Vos enregistrements sont conservés uniquement sur cet appareil.",
+ "desc": "Enregistrez-vous en chantant chaque voix, une à la fois, puis écoutez toutes vos prises ensemble comme une chorale complète. Chaque prise commence après un décompte de 4 temps ; pendant l’enregistrement, le synthé joue la voix que vous chantez et vos prises précédentes sont rejouées, pour que vous chantiez avec vous-même. Les voix non enregistrées restent muettes. Pendant la lecture, les curseurs, Muet et Solo ci-dessus règlent vos voix enregistrées."
+}
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+locator.scrollIntoViewIfNeeded: Timeout 29996.653ms exceeded.
+Call log:
+[2m  - attempting scroll into view action[22m
+[2m    2 × waiting for element to be stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying scroll into view action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying scroll into view action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be stable[22m
+[2m       - element is not visible[22m
+[2m     - retrying scroll into view action[22m
+[2m       - waiting 500ms[22m
+
+    at /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/live6.js:65:15 {
+  log: [
+    '  - attempting scroll into view action',
+    '    2 × waiting for element to be stable',
+    '      - element is not visible',
+    '    - retrying scroll into view action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be stable',
+    '      - element is not visible',
+    '    - retrying scroll into view action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be stable',
+    '       - element is not visible',
+    '     - retrying scroll into view action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.3

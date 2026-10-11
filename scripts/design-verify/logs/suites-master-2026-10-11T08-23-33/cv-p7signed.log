@@ -1,0 +1,161 @@
+[reap] FAILED for run 39441 (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-wu-1791707017732@example.com') and email like 'voxcoach-%@example.com' returning email): voxcoach-wu-1791707017732@example.com
+signed up voxcoach-p7-1791713484631@example.com | user_id 7d743e05-cf61-4818-b37c-2295fdfd6ba8
+loaded choir_readiness before any run: {"parts":{},"log":[],"runs":[],"ycTakes":0}
+
+== Harmony Memory stage 1, all in tune
+run: {"score":100,"passed":true}
+== Boss 1 (Drowner), all in tune
+run: {"score":100,"passed":true}
+== Boss 2 (Drifter), silent from chord 2
+run: {"score":13,"passed":false}
+
+== PATCH /me/progress calls: 12
+#1 HTTP 200 | sent==returned: true | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#2 HTTP 200 | sent==returned: true | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#3 HTTP 200 | sent==returned: false | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#4 HTTP 200 | sent==returned: true | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#5 HTTP 200 | sent==returned: false | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":0,"bosses":[null,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:05.712Z","hmPassed":1,"bossesBeaten":0} | log 1 | runs 1
+#6 HTTP 200 | sent==returned: false | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":0,"bosses":[null,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:05.712Z","hmPassed":1,"bossesBeaten":0} | log 1 | runs 1
+#7 HTTP 200 | sent==returned: true | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":0,"bosses":[null,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:05.712Z","hmPassed":1,"bossesBeaten":0} | log 1 | runs 1
+#8 HTTP 200 | sent==returned: false | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:37.648Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#9 HTTP 200 | sent==returned: false | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:37.648Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#10 HTTP 200 | sent==returned: true | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:37.648Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#11 HTTP 200 | sent==returned: true | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T10:12:37.648Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#12 HTTP 200 | sent==returned: false | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,13,null,null,null,null],"levels":[],"losses":1,"status":"developing","updated":"2026-10-11T10:12:58.756Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 3
+
+client final choir_readiness:
+{
+ "log": [
+  {
+   "ts": 1791713525712,
+   "from": "learning",
+   "part": "Alto",
+   "song": "hymn",
+   "status": "developing"
+  }
+ ],
+ "runs": [
+  {
+   "n": 8,
+   "ts": 1791713525712,
+   "held": 8,
+   "kind": "hm",
+   "part": "Alto",
+   "slot": 0,
+   "song": "hymn",
+   "pitch": 99,
+   "score": 100,
+   "passed": true,
+   "timing": 100
+  },
+  {
+   "n": 8,
+   "ts": 1791713557648,
+   "held": 8,
+   "kind": "boss",
+   "part": "Alto",
+   "slot": 0,
+   "song": "hymn",
+   "pitch": 99,
+   "score": 100,
+   "passed": true,
+   "timing": 100
+  },
+  {
+   "n": 8,
+   "ts": 1791713578756,
+   "held": 1,
+   "kind": "boss",
+   "part": "Alto",
+   "slot": 1,
+   "song": "hymn",
+   "pitch": 99,
+   "score": 13,
+   "passed": false,
+   "timing": 100
+  }
+ ],
+ "parts": {
+  "hymn": {
+   "Alto": {
+    "hm": [
+     100,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "snap": {
+     "hm": 0,
+     "ts": null,
+     "bosses": 0,
+     "levels": 0,
+     "status": "learning"
+    },
+    "wins": 1,
+    "bosses": [
+     100,
+     13,
+     null,
+     null,
+     null,
+     null
+    ],
+    "levels": [],
+    "losses": 1,
+    "status": "developing",
+    "updated": "2026-10-11T10:12:58.756Z",
+    "hmPassed": 1,
+    "bossesBeaten": 1
+   }
+  }
+ },
+ "firsts": {
+  "hmPass": {
+   "ts": 1791713525712,
+   "part": "Alto",
+   "song": "hymn",
+   "score": 100,
+   "stage": 0
+  },
+  "bossWin": {
+   "ts": 1791713557648,
+   "part": "Alto",
+   "slot": 0,
+   "song": "hymn"
+  }
+ },
+ "ycTakes": 0
+}
+readiness card: Soprano LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Lead LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Alto (you) DEVELOPING Levels played 0/5 · Harmony Memory 1/6 · Bosses beaten 1/6 · Boss record 1–1 Tenor LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Bass LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+
+== Second device: new context, empty localStorage, sign in to the same account
+localStorage on device 2: [null,null,null]
+loaded == device 1 final: true
+rdInputs(hymn, Alto) on device 2: {"levels":[],"hm":[100,null,null,null,null,null],"bosses":[100,13,null,null,null,null],"hmPassed":1,"bossesBeaten":1,"wins":1,"losses":1} → developing
+device 2 readiness card: Soprano LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Lead LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Alto (you) DEVELOPING Levels played 0/5 · Harmony Memory 1/6 · Bosses beaten 1/6 · Boss record 1–1 Tenor LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Bass LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+Error: Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked select choir_readiness from public.user_progress where user_id = '7d743e05-cf61-4818-b37c-2295fdfd6ba8'
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at query (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/testAccounts.js:37:25)
+    at db (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/testAccounts.js:43:19)
+    at /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/p7signed.js:113:15
+    at runNextTicks (node:internal/process/task_queues:64:5)
+    at process.processImmediate (node:internal/timers:452:9)
+    at process.callbackTrampoline (node:internal/async_hooks:130:17) {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    '{"_tag":"Error","error":{"code":"LegacyProjectNotLinkedError","message":"Cannot find project ref. Have you run supabase link?"}}\n',
+    null
+  ],
+  pid: 42392,
+  stdout: '{"_tag":"Error","error":{"code":"LegacyProjectNotLinkedError","message":"Cannot find project ref. Have you run supabase link?"}}\n',
+  stderr: null
+}
+
+[cleanup] FAILED (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-p7-1791713484631@example.com') and email like 'voxcoach-%@example.com' returning email); the watchdog retries when this process exits: voxcoach-p7-1791713484631@example.com

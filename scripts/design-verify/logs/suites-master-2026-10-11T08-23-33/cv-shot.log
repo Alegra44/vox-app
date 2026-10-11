@@ -1,0 +1,46 @@
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+elementHandle.screenshot: Timeout 30000ms exceeded.
+Call log:
+[2m  - taking element screenshot[22m
+[2m  - waiting for fonts to load...[22m
+[2m  - fonts loaded[22m
+[2m  - attempting scroll into view action[22m
+[2m    2 × waiting for element to be stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying scroll into view action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying scroll into view action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be stable[22m
+[2m       - element is not visible[22m
+[2m     - retrying scroll into view action[22m
+[2m       - waiting 500ms[22m
+
+    at /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/shot.js:10:41 {
+  log: [
+    '  - taking element screenshot',
+    '  - waiting for fonts to load...',
+    '  - fonts loaded',
+    '  - attempting scroll into view action',
+    '    2 × waiting for element to be stable',
+    '      - element is not visible',
+    '    - retrying scroll into view action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be stable',
+    '      - element is not visible',
+    '    - retrying scroll into view action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be stable',
+    '       - element is not visible',
+    '     - retrying scroll into view action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.3

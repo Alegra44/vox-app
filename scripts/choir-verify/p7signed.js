@@ -93,8 +93,10 @@ async function auth(page, mode) {
   console.log('run:', JSON.stringify(await ev(() => ({ score: challenge.lastRun.boss.score, passed: challenge.lastRun.boss.passed }))));
   await sleep(1000);
 
+  // jsonb stores object keys in its own order, so equality is also checked with keys sorted (the "keys sorted" columns)
+  const canon = v => JSON.stringify(v, (k, x) => x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.keys(x).sort().map(q => [q, x[q]])) : x);
   console.log('\n== PATCH /me/progress calls:', patches.length);
-  patches.forEach((p, i) => console.log(`#${i + 1} HTTP ${p.status} | sent==returned: ${JSON.stringify(p.sent) === JSON.stringify(p.got)} | returned parts.hymn.Alto:`,
+  patches.forEach((p, i) => console.log(`#${i + 1} HTTP ${p.status} | sent==returned: ${JSON.stringify(p.sent) === JSON.stringify(p.got)} (keys sorted: ${canon(p.sent) === canon(p.got)}) | returned parts.hymn.Alto:`,
     JSON.stringify(p.got && p.got.parts && p.got.parts.hymn && p.got.parts.hymn.Alto), '| log', (p.got && p.got.log || []).length, '| runs', (p.got && p.got.runs || []).length));
   const clientFinal = await ev(() => progress.choirReadiness);
   console.log('\nclient final choir_readiness:\n' + JSON.stringify(clientFinal, null, 1));
@@ -105,13 +107,13 @@ async function auth(page, mode) {
   await auth(page2, 'signin');
   const loaded = await page2.evaluate(() => ({ cr: progress.choirReadiness, local: ['choirChallengeBest', 'harmonyMemoryBest', 'rehearsalPasses'].map(k => localStorage.getItem(k)), inputs: rdInputs('hymn', 'Alto'), status: rdStatus(rdInputs('hymn', 'Alto')) }));
   console.log('localStorage on device 2:', JSON.stringify(loaded.local));
-  console.log('loaded == device 1 final:', JSON.stringify(loaded.cr) === JSON.stringify(clientFinal));
+  console.log('loaded == device 1 final:', JSON.stringify(loaded.cr) === JSON.stringify(clientFinal), '| keys sorted:', canon(loaded.cr) === canon(clientFinal));
   console.log('rdInputs(hymn, Alto) on device 2:', JSON.stringify(loaded.inputs), '→', loaded.status);
   await page2.evaluate(() => { enterPanel('partrehearsal'); selectSong('hymn'); renderReadiness(); });
   console.log('device 2 readiness card:', await page2.evaluate(() => rdRows.innerText.replace(/\s+/g, ' ')));
 
   const row = db(`select choir_readiness from public.user_progress where user_id = '${uid}'`)[0];
-  console.log('DB row == device 1 final:', JSON.stringify(row.choir_readiness) === JSON.stringify(clientFinal), '|', JSON.stringify(row.choir_readiness).slice(0, 300));
+  console.log('DB row == device 1 final:', JSON.stringify(row.choir_readiness) === JSON.stringify(clientFinal), '| keys sorted:', canon(row.choir_readiness) === canon(clientFinal), '|', JSON.stringify(row.choir_readiness).slice(0, 300));
   console.log('\nUSER_ID', uid);
   console.log('page errors:', errors);
   await browser.close();

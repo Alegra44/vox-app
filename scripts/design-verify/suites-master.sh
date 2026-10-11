@@ -7,7 +7,7 @@
 cd "$(dirname "$0")/../.."; REPO=$PWD; WT=${1:?worktree dir}; shift
 WATCHDOG=${WATCHDOG:-15}
 [ -d "$WT" ] || git worktree add --detach "$WT" master >/dev/null
-rm -rf "$WT/scripts"; cp -R "$REPO/scripts" "$WT/scripts"; ln -sfn "$REPO/node_modules" "$WT/node_modules"
+rm -rf "$WT/scripts"; cp -R "$REPO/scripts" "$WT/scripts"; ln -sfn "$REPO/node_modules" "$WT/node_modules"; ln -sfn "$REPO/supabase/.temp" "$WT/supabase/.temp" # the Supabase link (test-account cleanup)
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=$REPO/scripts/design-verify/logs/suites-master-$STAMP; mkdir -p "$OUT"
 echo "master $(git -C "$WT" rev-parse --short HEAD), scripts from $(git rev-parse --short HEAD) + working copy" > "$OUT/progress.txt"
 L=http://localhost:8765/
