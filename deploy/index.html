@@ -464,7 +464,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .mic-btn{
     display:flex;align-items:center;justify-content:center;gap:10px;
     margin:28px auto 4px; width:fit-content;
-    background:var(--brass); color:var(--on-brass); border:none;
+    background:var(--hl-voice); color:var(--hl-on-voice); border:none; /* rule 1: a button that starts singing is the voice */
     font-family:var(--hl-font);font-weight:700;font-size:14px;
     padding:13px 26px;border-radius:999px;cursor:pointer;
     box-shadow:none;
@@ -472,6 +472,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   }
   .mic-btn:hover{transform:translateY(-1px);box-shadow:none;}
   .mic-btn.listening{background:var(--surface-raised);color:var(--teal);border:1px solid var(--teal);}
+  .mic-btn.vc-ink{background:var(--hl-ink);color:var(--hl-bg);} /* .mic-btn layout on a button that doesn't open the mic */
   .mic-btn .dot-icon{width:8px;height:8px;border-radius:50%;background:currentColor;}
   .mic-btn.listening .dot-icon{animation:pulse 1.4s ease-in-out infinite;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
@@ -566,7 +567,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     background:var(--brass);color:var(--on-brass);border:none;font-weight:700;font-size:13px;
     padding:10px 20px;border-radius:999px;cursor:pointer;font-family:var(--hl-font);
   }
-  .solid-btn.teal{background:var(--teal);color:var(--on-teal);}
+  .solid-btn.teal{background:var(--hl-ink);color:var(--hl-bg);}
+  .solid-btn.teal.vc-sing{background:var(--hl-voice);color:var(--hl-on-voice);} /* rule 1: starts singing directly */
   .fine-print{color:var(--muted);font-size:12px;margin-top:6px;}
   .link-btn{background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;text-decoration:underline;cursor:pointer;padding:0;}
 
@@ -2217,7 +2219,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_challenge_label">Today's challenge</span><span id="curriculumChallenge"></span></div>
         <p class="desc" id="curriculumMessage" style="margin:14px 0;font-style:italic;color:var(--brass);"></p>
         <div class="btn-row">
-          <button class="mic-btn" id="curriculumOpenBtn" style="flex:1;justify-content:center;" data-i18n="journey_open_first_btn">Open today's first tool</button>
+          <button class="mic-btn vc-ink" id="curriculumOpenBtn" style="flex:1;justify-content:center;" data-i18n="journey_open_first_btn">Open today's first tool</button>
           <button class="ghost-btn" id="curriculumDoneBtn" data-i18n="journey_mark_done_btn">Mark done</button>
         </div>
       </div>
@@ -2465,7 +2467,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <div class="ex-target-note" id="bossTrainNoteDisplay">—</div>
             <div class="btn-row" style="justify-content:center;margin-top:16px;">
               <button class="solid-btn" id="bossTrainPlayBtn" data-i18n="boss_play_note_btn">Play the note</button>
-              <button class="solid-btn teal" id="bossTrainListenBtn" data-i18n="boss_listen_score_btn">Listen &amp; score</button>
+              <button class="solid-btn teal vc-sing" id="bossTrainListenBtn" data-i18n="boss_listen_score_btn">Listen &amp; score</button>
             </div>
             <div class="ex-result" id="bossTrainResult" style="display:none;margin-top:14px;">
               <div class="ex-accuracy" id="bossTrainAccVal">—</div>
@@ -2473,7 +2475,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <div class="vl-gauge" id="vlGaugeBossTrain" data-vl-sidecar style="display:none;"></div>
           </div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
-            <button class="solid-btn teal" id="bossRematchBtn" data-i18n="boss_rematch_btn">🐉 Rematch the boss</button>
+            <button class="solid-btn teal vc-sing" id="bossRematchBtn" data-i18n="boss_rematch_btn">🐉 Rematch the boss</button>
           </div>
         </div>
       </div>
@@ -2897,7 +2899,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="ex-target-note" id="pitchTargetNote">—</div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
             <button class="solid-btn" id="pitchPlayBtn" data-i18n="ex_play_target_btn">Play target</button>
-            <button class="solid-btn teal" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
+            <button class="solid-btn teal vc-sing" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="pitchNextBtn" data-i18n="ex_new_note_btn">New note</button>
             <button class="ghost-btn" id="pitchAgainBtn" style="display:none;"></button>
           </div>
@@ -2923,7 +2925,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="ex-target-note" id="intervalTargetLabel">—</div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
             <button class="solid-btn" id="intervalPlayBtn" data-i18n="ex_play_root_interval_btn">Play root + interval</button>
-            <button class="solid-btn teal" id="intervalListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
+            <button class="solid-btn teal vc-sing" id="intervalListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn" id="intervalNextBtn" data-i18n="ex_new_interval_btn">New interval</button>
             <button class="ghost-btn" id="intervalAgainBtn" style="display:none;"></button>
           </div>
@@ -2959,7 +2961,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
           <div class="ex-target-note" id="scaleTargetNote">—</div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
-            <button class="solid-btn teal" id="scaleStartBtn">Start scale run</button>
+            <button class="solid-btn teal vc-sing" id="scaleStartBtn">Start scale run</button>
             <button class="ghost-btn" id="scaleNextBtn" data-i18n="ex_new_root_btn">New root</button>
             <button class="ghost-btn" id="scaleAgainBtn" style="display:none;"></button>
           </div>
@@ -3587,7 +3589,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="dual-score"><div class="dual-label" data-i18n="vocalpuzzle_streak_label">Streak</div><div class="dual-val" id="puzzleStreakVal">0</div></div>
         <div class="dual-score"><div class="dual-label" data-i18n="vocalpuzzle_solved_label">Solved</div><div class="dual-val" id="puzzleSolvedVal">0</div></div>
       </div>
-      <button class="mic-btn" id="puzzleNextBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="vocalpuzzle_next_btn">Next puzzle</button>
+      <button class="mic-btn vc-ink" id="puzzleNextBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="vocalpuzzle_next_btn">Next puzzle</button>
     </div>
   </section>
 
@@ -3619,7 +3621,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="step-label" id="hmResultTitle">—</div>
       <p class="desc" id="hmResultDetail" style="margin-top:10px;"></p>
       <div class="ex-accuracy" id="hmSingAccuracy" style="margin-top:10px;">—</div>
-      <button class="mic-btn" id="hmNextBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="hearmistake_next_btn">Next round</button>
+      <button class="mic-btn vc-ink" id="hmNextBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="hearmistake_next_btn">Next round</button>
     </div>
   </section>
 
@@ -4335,7 +4337,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="step-label" data-i18n="profile_sharevoicecard_label">🎤 Share Your Voice Card</div>
         <p class="desc" style="margin:8px 0 14px;" data-i18n="profile_voicecard_desc">A real snapshot of your actual progress — every number on it comes straight from your real tracked data, nothing staged for the screenshot.</p>
         <canvas id="voiceCardCanvas" width="600" height="800" role="img" aria-label="Preview of your downloadable Voice Card — a shareable image with your real Pitch, Range, Breath, Agility, and streak" style="width:100%;max-width:260px;border-radius:14px;display:block;margin:0 auto;box-shadow:0 8px 24px rgba(0,0,0,0.4);"></canvas>
-        <button class="mic-btn" id="voiceCardDownloadBtn" style="margin-top:16px;"><span class="dot-icon"></span><span data-i18n="profile_downloadcard_btn">Download my Voice Card</span></button>
+        <button class="mic-btn vc-ink" id="voiceCardDownloadBtn" style="margin-top:16px;"><span class="dot-icon"></span><span data-i18n="profile_downloadcard_btn">Download my Voice Card</span></button>
         <p class="fine-print" id="voiceCardNote" style="margin-top:8px;"></p>
       </div>
 
@@ -4484,7 +4486,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <label class="feedback-label" for="fbOther" data-i18n="feedback_q_other">Any additional suggestions?</label>
         <textarea class="text-input" id="fbOther" rows="2"></textarea>
       </div>
-      <button class="mic-btn" id="feedbackSubmitBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="feedback_submit_btn">Submit Feedback</button>
+      <button class="mic-btn vc-ink" id="feedbackSubmitBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="feedback_submit_btn">Submit Feedback</button>
       <p class="fine-print" id="feedbackFormNote" style="margin-top:10px;" data-i18n="feedback_storage_note">Stored locally on this device via the same real persistence the rest of your progress uses — this prototype has no server to send it to yet (see the migration spec).</p>
     </div>
 
@@ -4592,7 +4594,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
       <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
       <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
-      <div class="btn-row"><button class="solid-btn teal" id="warmupContinueBtn" style="display:none;flex:1;justify-content:center;" data-i18n="wu_continue">Start my session</button></div>
+      <div class="btn-row"><button class="solid-btn teal vc-sing" id="warmupContinueBtn" style="display:none;flex:1;justify-content:center;" data-i18n="wu_continue">Start my session</button></div>
     </div>
   </div>
 
