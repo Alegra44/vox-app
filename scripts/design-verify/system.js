@@ -1,6 +1,7 @@
 // Phase 1 checks on the local build: the System theme follows the device (with colorScheme light the body's --hl-bg is
 // paper, with dark it's dusk; an explicit Light / Dark wins over the device), and with prefers-reduced-motion the header
-// and tab bar have no transitions or animations. No account.
+// and tab bar have no transitions or animations; the page really has Archivo (document.fonts.check, not a fallback).
+// No account. DV_URL=https://… checks that site instead of the local build.
 // Usage: node scripts/design-verify/system.js
 const C = require('./common');
 let pass = 0, fail = 0;
@@ -16,6 +17,10 @@ const PAPER = '#F2F3EF', DUSK = '#16181C';
       check(`${theme} theme, device ${scheme}: body --hl-bg`, got.bg.toUpperCase() === want, `${got.bg} (data-theme ${got.attr})${errors.length ? ' errors: ' + errors[0] : ''}`);
       await ctx.close();
     }
+    { const { ctx, page } = await C.openPage(b, { theme: 'light' });
+      const f = await page.evaluate(async () => { await document.fonts.ready; return { archivo: document.fonts.check('16px Archivo'), spectral: document.fonts.check('16px Spectral'), body: getComputedStyle(document.body).fontFamily }; });
+      check("Archivo loaded: document.fonts.check('16px Archivo')", f.archivo, `${f.archivo} · Spectral ${f.spectral} · body ${f.body}`);
+      await ctx.close(); }
     for (const w of [390, 1280]) {
       const { ctx, page } = await C.openPage(b, { theme: 'light', reducedMotion: 'reduce', viewport: { width: w, height: 844 } });
       const moving = await page.evaluate(() => {

@@ -93,9 +93,9 @@ function measure(rootSel) {
 (async () => {
   const dir = C.buildDir(BASE);
   const b = await C.chromium.launch();
-  const report = { base: BASE || 'working copy', at: new Date().toISOString(), viewport: '390x844', themes: {} };
+  const report = { base: C.REMOTE || BASE || 'working copy', at: new Date().toISOString(), viewport: '390x844', themes: {} };
   try {
-    console.log(`== contrast · ${BASE || 'branch (working copy)'} · ${THEMES.join(', ')}`);
+    console.log(`== contrast · ${C.REMOTE || BASE || 'branch (working copy)'} · ${THEMES.join(', ')}`);
     const { ctx, page, errors } = await C.openPage(b, { dir, theme: THEMES[0] });
     await C.signUp(page, 'dvc');
     const state = await ctx.storageState(); await ctx.close();

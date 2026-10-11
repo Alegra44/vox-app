@@ -6,13 +6,16 @@
 // uppercase labels (an uppercased "i" must render "İ"), and System with the device in dark.
 // Then contact sheets, one per hub group: each row is 390 Light | 390 Dark | 1280 Light | 1280 Dark (signed in).
 // Usage: node scripts/design-verify/shots.js [--base <git ref>] [--out <dir>]   (default out: <tmp>/voxcoach-shots-<ref>)
+//   [--panels home,train-hub,…] [--sizes 390] [--no-extras]: a subset (e.g. on production, with DV_URL set)
 const path = require('path'), fs = require('fs'), os = require('os');
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const BASE = arg('--base');
 const OUT = path.resolve(arg('--out') || path.join(os.tmpdir(), `voxcoach-shots-${BASE ? BASE.replace(/\W/g, '_') : 'branch'}`));
 const THEMES = BASE ? ['dark'] : ['light', 'dark'];
-const SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 800 } };
+const ALL_SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 800 } };
+const SIZES = Object.fromEntries(Object.entries(ALL_SIZES).filter(([w]) => !arg('--sizes') || arg('--sizes').split(',').includes(w)));
+const ONLY_PANELS = arg('--panels') ? arg('--panels').split(',') : null, EXTRAS = !process.argv.includes('--no-extras');
 const Q = { type: 'jpeg', quality: 85 };
 const log = [];
 const note = s => { console.log('  ' + s); log.push(s); };
@@ -21,7 +24,7 @@ async function shotPanels(b, dir, state, storageState) {
   for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) {
     const { ctx, page } = await C.openPage(b, { dir, theme, viewport, storageState });
     await C.clearOverlays(page);
-    const keys = await C.panelKeys(page);
+    const keys = (await C.panelKeys(page)).filter(k => !ONLY_PANELS || ONLY_PANELS.includes(k));
     const d = path.join(OUT, state, `${w}-${theme}`); fs.mkdirSync(d, { recursive: true });
     for (const k of keys) {
       const ok = await C.showPanel(page, k); await C.clearOverlays(page); await C.sleep(150);
@@ -58,10 +61,10 @@ async function extras(b, dir, storageState) {
     await page.screenshot({ path: path.join(d, `toast-390-${theme}.jpg`), ...Q });
     await ctx.close();
     // the splash (signed in, so it waits on the session)
-    const ctx2 = await b.newContext({ viewport: SIZES[390], colorScheme: theme, storageState });
-    await ctx2.route(C.LOCAL + '**', r => r.fulfill({ path: path.join(dir, 'index.html'), contentType: 'text/html' }));
+    const ctx2 = await b.newContext({ viewport: ALL_SIZES[390], colorScheme: theme, storageState });
+    if (!C.REMOTE) await ctx2.route(C.LOCAL + '**', r => r.fulfill({ path: path.join(dir, 'index.html'), contentType: 'text/html' }));
     await ctx2.addInitScript(t => { try { localStorage.setItem('theme', t); } catch (e) {} }, theme);
-    const p2 = await ctx2.newPage(); await p2.goto(C.LOCAL, { waitUntil: 'domcontentloaded' }); await C.sleep(900);
+    const p2 = await ctx2.newPage(); await p2.goto(C.PAGE_URL, { waitUntil: 'domcontentloaded' }); await C.sleep(900);
     await p2.screenshot({ path: path.join(d, `splash-390-${theme}.jpg`), ...Q });
     await ctx2.close();
   }
@@ -104,9 +107,10 @@ async function extras(b, dir, storageState) {
 
 async function contactSheets(b, groups) {
   const d = path.join(OUT, 'sheets'); fs.mkdirSync(d, { recursive: true });
-  const cols = ['390-light', '390-dark', '1280-light', '1280-dark'].filter(c => THEMES.includes(c.split('-')[1]));
+  const cols = ['390-light', '390-dark', '1280-light', '1280-dark'].filter(c => THEMES.includes(c.split('-')[1]) && SIZES[c.split('-')[0]]);
   const page = await (await b.newContext({ viewport: { width: 1800, height: 1000 } })).newPage();
-  for (const [group, keys] of Object.entries(groups)) {
+  for (const [group, all] of Object.entries(groups)) {
+    const keys = all.filter(k => !ONLY_PANELS || ONLY_PANELS.includes(k)); if (!keys.length) continue;
     const rows = keys.map(k => `<tr><th>${k}</th>${cols.map(c => {
       const f = path.join(OUT, 'signed-in', c, `${k}.jpg`);
       return `<td>${fs.existsSync(f) ? `<img src="file://${f}" class="w${c.split('-')[0]}">` : '—'}</td>`;
@@ -126,7 +130,7 @@ async function contactSheets(b, groups) {
   fs.rmSync(OUT, { recursive: true, force: true }); fs.mkdirSync(OUT, { recursive: true });
   const b = await C.chromium.launch();
   try {
-    console.log(`== shots · ${BASE || 'branch (working copy)'} → ${OUT}`);
+    console.log(`== shots · ${C.REMOTE || BASE || 'branch (working copy)'} → ${OUT}`);
     const { ctx, page } = await C.openPage(b, { dir, theme: THEMES[0] });
     await C.signUp(page, 'dvs', 'Design Review');
     await page.evaluate(() => recordRangeCapture(45, 69)); await C.sleep(2500);
@@ -140,7 +144,7 @@ async function contactSheets(b, groups) {
     const state = await ctx.storageState(); await ctx.close();
     await shotPanels(b, dir, 'signed-in', state);
     await shotPanels(b, dir, 'signed-out', undefined);
-    await extras(b, dir, state);
+    if (EXTRAS) await extras(b, dir, state);
     await contactSheets(b, groups);
     fs.writeFileSync(path.join(OUT, 'notes.txt'), log.join('\n') + '\n');
     console.log(`done: ${OUT}`);

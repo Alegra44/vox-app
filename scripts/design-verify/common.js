@@ -1,6 +1,7 @@
 // Shared by the redesign checks: serve a build locally (the working copy, or deploy/index.html from a git ref) against
 // the production backend, open a page, sign a throwaway account up (track(): deleted at exit), and show any of the
 // 46 panels through the app's own routing.
+// DV_URL=https://… runs against that site instead (production): no local build, no routing.
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped (see that file)
 const fs = require('fs'), os = require('os'), path = require('path');
@@ -8,6 +9,7 @@ const { execFileSync } = require('child_process');
 const { track, cleanup } = require('../choir-verify/testAccounts');
 
 const ROOT = path.resolve(__dirname, '../..'), DEPLOY = path.join(ROOT, 'deploy'), LOCAL = 'http://localhost:8765/';
+const REMOTE = process.env.DV_URL || null, PAGE_URL = REMOTE || LOCAL;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // The build to serve: null = the working copy's deploy/, or a git ref whose deploy/ files are written to a temp dir.
@@ -36,7 +38,7 @@ const panelKeys = page => page.evaluate(() => [...document.querySelectorAll('.pa
 async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en' } = {}) {
   const ctx = await b.newContext({ viewport, deviceScaleFactor: 1, ...(storageState ? { storageState } : {}),
     colorScheme: scheme || (theme === 'light' ? 'light' : 'dark'), ...(reducedMotion ? { reducedMotion } : {}) });
-  await ctx.route(LOCAL + '**', r => {
+  if (!REMOTE) await ctx.route(LOCAL + '**', r => {
     const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html', f = path.join(dir, p);
     if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
     r.fulfill({ path: f, contentType: p.endsWith('.js') ? 'text/javascript' : p.endsWith('.css') ? 'text/css' : 'text/html' });
@@ -44,7 +46,7 @@ async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 
   if (theme) await ctx.addInitScript(t => { try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {} }, theme);
   const page = await ctx.newPage(), errors = [];
   page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(LOCAL, { waitUntil: 'load' }); await sleep(2500);
+  await page.goto(PAGE_URL, { waitUntil: 'load' }); await sleep(2500);
   if (storageState) await page.waitForFunction(() => { try { return !!profile && !!progress; } catch (e) { return false; } }, null, { timeout: 30000 });
   const ov = page.locator(`#languageSelectOverlay [data-lang="${lang}"]`); if (await ov.isVisible().catch(() => false)) { await ov.click(); await sleep(300); }
   if (lang !== 'en') { await page.evaluate(l => setLanguage(l), lang); await sleep(300); }
@@ -81,4 +83,4 @@ async function clearOverlays(page) {
   });
 }
 
-module.exports = { chromium, ROOT, DEPLOY, LOCAL, sleep, buildDir, HUBS, showPanel, panelKeys, openPage, applyTheme, signUp, clearOverlays, cleanup };
+module.exports = { chromium, ROOT, DEPLOY, LOCAL, REMOTE, PAGE_URL, sleep, buildDir, HUBS, showPanel, panelKeys, openPage, applyTheme, signUp, clearOverlays, cleanup };

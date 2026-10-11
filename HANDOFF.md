@@ -8,11 +8,11 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 | Branch | What it is | Status |
 |---|---|---|
-| `master` | Everything that is live, through the noise gate (dpl_AzAW5Fn, 2026-10-02) | Matches production |
+| `master` | Everything that is live, through House Lights phase 1 + 1.1 (merge 12a1364, dpl_ANbkHxATnBsDJkiKTz6w4HMWh13g, 2026-10-11) | Matches production |
 | `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
-| `redesign/phase1` | House Lights redesign phase 1, Foundation (items 2.1–2.10, spec `design/house-lights/PHASE1.md`) | Built and checked 2026-10-11. **Not merged, not deployed: waiting for the user's review of the screenshots and the diff** |
-| `review/phase1` | Orphan branch, no code: phase 1 screenshots, contact sheets, hooks and contrast JSON | For the review |
+| `redesign/phase1` | House Lights redesign phase 1, Foundation, and the 1.1 fixes (spec `design/house-lights/PHASE1.md`) | Merged (12a1364) and live 2026-10-11. Closed |
+| `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`).
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
@@ -45,7 +45,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 2. The four tester-review fixes (a)–(d): (b) listening window and (c) shared note picker are live (2026-10-05,
    dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X); (a) playback volume is live (2026-10-06, dpl_5GhGgvgLAQCFZQXnmwdmAn8UcyKh, results
    in the roadmap); (d) level-up explanation is next: report its migration and API change before applying. Specs below.
-3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`).
+3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`): **live 2026-10-11** (with the 1.1 fixes).
+   Next: phase 2 (Lighting), spec to come from the user.
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
    Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
@@ -53,8 +54,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Harmony Arena 0–8/8 notes, Harmony Memory 3/8 held); echo cancellation on real devices untested.
 5. Redesign phase 4 onwards. **Item 4** (Glider octave crash) comes after item 3.
 
-Redesign phase 1 loads `/me` and `/me/progress` in parallel (item 2.10, on `redesign/phase1`): profile and progress
-ready in a median 1583 ms vs master's 2761 ms (local builds, production backend, 10 loads each).
+Redesign phase 1 loads `/me` and `/me/progress` in parallel (item 2.10): profile and progress ready in a median
+1583 ms vs master's 2761 ms (local builds, production backend, 10 loads each); on production after the deploy, a
+median 1902 ms (10 loads, `pageload.js`).
 
 ## In flight
 
@@ -189,24 +191,25 @@ failure.** Then on production: batch1, the bleed checks, and `levels.js` if it c
 - The new text goes into all four languages.
 - **Report the migration and the API change to the user before applying the migration.**
 
-### Redesign phase 1, Foundation (`redesign/phase1`): built 2026-10-11, waiting for the user's review
+### Redesign phase 1, Foundation, and the 1.1 fixes: LIVE 2026-10-11
 
-Spec: `design/house-lights/PHASE1.md` (verbatim). One commit per item 2.1–2.10, guards first. **No merge to master and
-no deploy until the user has reviewed the screenshots (`review/phase1`) and the diff.**
-- Guards (`scripts/design-verify/`): `hooks.js` (static master vs working copy: every id / data-i18n / data-panel /
-  data-shell / data-enter-panel, the §9 protected classes and strings, the four languages, House Lights block byte for
-  byte, colour literals outside the exempt canvases): 19 passed, 0 failed (allowed removals: the four old theme
-  names). `contrast.js` (46 panels + header, tab bar, toast; Light and Dark): 0 texts under 3:1 in either theme
-  (master Dark had 21). Left between 3 and 4.5: Light 34 (Choir rehearsal SVG note labels on semi-transparent part
-  shapes, neither ink nor white passes: phase 5) and Exercises `.level-sub` (3.03 Light / 3.24 Dark). `system.js` 6/6.
-- Suites: every suite once on the branch (`suites.sh`), failures re-run on master (`suites-master.sh`); logs in
-  `scripts/design-verify/logs/`. One Regression by the rule: warmup-verify/tracking.js "Karaoke roll markup
-  unchanged" compares exact markup with master; the only difference is the cursor glow `rgba(79,214,196,1)` →
-  `var(--teal)` (the intended 2.3 remap). Recommended: let that check ignore colour values. 11 choir-verify scripts
-  are Already failing (signed-out Choir World runs, blocked by the phase-8 sign-in gate on both builds).
-- Not run: `choir-verify/live.js` (production only, passes only after a deploy) and `p8.js` (needs tier accounts).
-- When it goes live: mark the roadmap's "Page lang stays en" fixed (2.9 sets `<html lang>`). `hub_world_sub` was
-  left unchanged (the spec gives no new text for it).
+Spec: `design/house-lights/PHASE1.md` (phase 1 and the "1.1 fixes" section, verbatim). Reviewed by the user on
+screenshots and the diff, approved, merged `--no-ff` (12a1364) and deployed (dpl_ANbkHxATnBsDJkiKTz6w4HMWh13g).
+- Guards (`scripts/design-verify/`, `DV_URL=` runs them on a site): `hooks.js` (static master vs working copy: ids,
+  data-i18n, data-panel / data-shell / data-enter-panel, §9 protected classes and strings, four languages, House
+  Lights block byte for byte, colour literals): 19/0. `contrast.js` (46 panels + header, tab bar, toast; Light and
+  Dark): 0 under 3:1 in both; between 3 and 4.5: Dark 0, Light 32, all Choir sonic X-ray / Breath Map SVG note labels
+  on semi-transparent part shapes (neither ink nor white passes: phase 5). `system.js` 7/7 (System follows the device,
+  explicit Light/Dark win, reduced motion, Archivo really loaded).
+- Production (`prod.sh`, logs `scripts/design-verify/logs/prod-2026-10-11T15-28-49/`): system 7/7, contrast as
+  above, batch1 112/0, warmup-entries 52/0, warmup-tracking 27/0 (the two master-comparison checks run only on a local
+  build), levelup 45/0, cv-live7 and cv-modalz OK, glider-courses 50/0, pageload median 1902 ms; test accounts 0 left.
+- Before the merge, every suite ran on the branch (`suites.sh`) and failures re-ran on master (`suites-master.sh`):
+  11 choir-verify scripts are Already failing on both (signed-out Choir World runs, blocked by the phase-8 sign-in
+  gate); the warmup-tracking roll check now ignores colour values (1.1). Not run: `choir-verify/live.js` and `p8.js`.
+- `hub_world_sub` unchanged (no new text in the spec). The `.poster` (share poster) is left for phase 7.
+- Logged for phase 4: **Vocal Puzzle asks for the mic it doesn't use** (#puzzleStartBtn calls `initAudio()`, which
+  requests the mic and runs the warm-up gate). Don't change `initAudio` before then (user, 2026-10-11).
 
 ## Waiting on the user (don't start without a go-ahead)
 

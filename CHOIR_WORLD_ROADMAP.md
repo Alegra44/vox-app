@@ -344,12 +344,10 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
   - Fix candidates (not chosen): score only frames that don't match what's playing; or warn when the mic correlates
     with the output; or tie it to item 3's per-feature streams. Scale Run's case was fixed separately (2026-10-06).
 
-- **Page `lang` stays `"en"` whatever language is selected.** Text uppercased with CSS
-  (`text-transform: uppercase`) is then transformed with English rules, which is wrong in Turkish: `i`
-  should uppercase to `İ` (dotted) but comes out as `I`, so the dotted/dotless pair (i/İ, ı/I) is
-  mixed up on every CSS-uppercased label. Not blocking, but worth fixing in a dedicated pass
-  (set `document.documentElement.lang` on every language switch and check the result per language),
-  since it likely affects text outside Choir World too.
+- ~~Page `lang` stays `"en"` whatever language is selected~~ fixed by House Lights phase 1, item 2.9 (a43070c, merge
+  12a1364, live 2026-10-11, dpl_ANbkHxATnBsDJkiKTz6w4HMWh13g): `applyTranslations()` sets
+  `document.documentElement.lang` on load and on every language switch, so CSS-uppercased labels follow the active
+  language's rules; in Turkish "Sesiniz" renders "SESİNİZ" (shots.js, Turkish extras).
 - **Top bar overflows by 7 px at 390 px width** when the account chip shows a long plan label
   ("YEARLY"): the page scrolls sideways slightly. Already on production before Phase 8.
 - ~~Paywall sentence spacing~~ fixed (20e6d01, live 2026-09-24, dpl_9vV6eaRknVdYSYBqDTP1fzfJvtdH): the paywall sentence is now one template per language
