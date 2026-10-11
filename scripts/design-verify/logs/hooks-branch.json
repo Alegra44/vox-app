@@ -1,13 +1,13 @@
 {
  "base": "master",
- "at": "2026-10-11T14:03:49.259Z",
+ "at": "2026-10-11T18:37:17.113Z",
  "passed": 19,
  "failed": 0,
  "results": [
   {
    "check": "every id value in master still exists",
    "ok": true,
-   "detail": "960 checked"
+   "detail": "998 checked"
   },
   {
    "check": "every data-i18n value in master still exists",
@@ -67,7 +67,7 @@
   {
    "check": "every TRANSLATIONS key exists in en, es, fr and tr",
    "ok": true,
-   "detail": "1735 keys"
+   "detail": "1743 keys"
   },
   {
    "check": "no TRANSLATIONS key from master removed",
@@ -100,24 +100,7 @@
    "detail": "136 exempt"
   }
  ],
- "allowedRemovals": [
-  {
-   "hook": "data-i18n=\"theme_default\"",
-   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
-  },
-  {
-   "hook": "data-i18n=\"theme_cyberpunk\"",
-   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
-  },
-  {
-   "hook": "data-i18n=\"theme_aurora\"",
-   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
-  },
-  {
-   "hook": "data-i18n=\"theme_velvetopera\"",
-   "reason": "phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)"
-  }
- ],
+ "allowedRemovals": [],
  "literals": [],
  "exemptLiterals": [
   {
@@ -697,241 +680,241 @@
    "text": ".hl-dimmer{ position: fixed; inset: 0; background: #000; opacity: 0; pointer-events: none; z-index: "
   },
   {
-   "line": 606,
+   "line": 617,
    "literal": "rgba(0,0,0,0.72)",
    "exempt": "black shadow / backdrop",
    "text": "position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(3px);"
   },
   {
-   "line": 670,
+   "line": 681,
    "literal": "rgba(0,0,0,0.82)",
    "exempt": "black shadow / backdrop",
    "text": "position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(4px);"
   },
   {
-   "line": 684,
+   "line": 695,
    "literal": "rgba(0,0,0,0.6)",
    "exempt": "black shadow / backdrop",
    "text": "box-shadow:0 30px 80px rgba(0,0,0,0.6);"
   },
   {
-   "line": 1382,
+   "line": 1456,
    "literal": "rgba(0,0,0,0.25)",
    "exempt": "black shadow / backdrop",
    "text": "font-family:var(--hl-font);font-size:var(--hl-t-small);line-height:1.45;box-shadow:0 8px 24px rgba(0"
   },
   {
-   "line": 1564,
+   "line": 1638,
    "literal": "rgba(0,0,0,0.35)",
    "exempt": "black shadow / backdrop",
    "text": "box-shadow:0 10px 28px rgba(0,0,0,0.35);"
   },
   {
-   "line": 1611,
+   "line": 1685,
    "literal": "rgba(0,0,0,0.85)",
    "exempt": "black shadow / backdrop",
    "text": "position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);"
   },
   {
-   "line": 4339,
+   "line": 4437,
    "literal": "rgba(0,0,0,0.4)",
    "exempt": "black shadow / backdrop",
    "text": "<canvas id=\"voiceCardCanvas\" width=\"600\" height=\"800\" role=\"img\" aria-label=\"Preview of your downloa"
   },
   {
-   "line": 17409,
+   "line": 17597,
    "literal": "#0a0908",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);"
   },
   {
-   "line": 17410,
+   "line": 17598,
    "literal": "#2a2419",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#2a2419';"
   },
   {
-   "line": 17421,
+   "line": 17609,
    "literal": "#e8a33d",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#e8a33d';"
   },
   {
-   "line": 17430,
+   "line": 17618,
    "literal": "#e8735d",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';"
   },
   {
-   "line": 17430,
+   "line": 17618,
    "literal": "#f1ead9",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';"
   },
   {
-   "line": 17433,
+   "line": 17621,
    "literal": "#f1ead9",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#f1ead9'; ctx.font='600 18px system-ui, sans-serif'; ctx.textAlign='center'; ctx.text"
   },
   {
-   "line": 17594,
+   "line": 17782,
    "literal": "#0a0908",
    "exempt": "wuExLoop",
    "text": "ctx.fillStyle = '#0a0908'; ctx.fillRect(0,0,W,H);"
   },
   {
-   "line": 17596,
+   "line": 17784,
    "literal": "#e8a33d",
    "exempt": "wuExLoop",
    "text": "ctx.strokeStyle = '#e8a33d'; ctx.globalAlpha = 0.55; ctx.lineWidth = 3; ctx.setLineDash([4,7]);"
   },
   {
-   "line": 17601,
+   "line": 17789,
    "literal": "#4fd6c4",
    "exempt": "wuExLoop",
    "text": "ctx.strokeStyle = '#4fd6c4'; ctx.lineWidth = 3; ctx.beginPath();"
   },
   {
-   "line": 17607,
+   "line": 17795,
    "literal": "#f1ead9",
    "exempt": "wuExLoop",
    "text": "ctx.fillStyle = '#f1ead9'; ctx.beginPath(); ctx.arc(WU_NOW_X, run.y, 8, 0, Math.PI*2); ctx.fill();"
   },
   {
-   "line": 17610,
+   "line": 17798,
    "literal": "#e8a33d",
    "exempt": "wuExLoop",
    "text": "ctx.textAlign = 'right'; ctx.fillStyle = '#e8a33d'; ctx.fillText(Math.max(0, Math.ceil(WU_EX_SEC - t"
   },
   {
-   "line": 18037,
+   "line": 18225,
    "literal": "#0a0908",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);"
   },
   {
-   "line": 18038,
+   "line": 18226,
    "literal": "#33301f",
    "exempt": "bridgeLoop",
    "text": "ctx.strokeStyle='#33301f'; ctx.lineWidth=1;"
   },
   {
-   "line": 18040,
+   "line": 18228,
    "literal": "#8a8272",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle='#8a8272'; ctx.font='11px monospace';"
   },
   {
-   "line": 18047,
+   "line": 18235,
    "literal": "#e8a33d",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';"
   },
   {
-   "line": 18047,
+   "line": 18235,
    "literal": "#4fd6c4",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';"
   },
   {
-   "line": 18051,
+   "line": 18239,
    "literal": "#f1ead9",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle='#f1ead9';"
   },
   {
-   "line": 19246,
+   "line": 19535,
    "literal": "rgb(${c[0]},${c[1]},${c[2]})",
    "exempt": "resonanceColorFor",
    "text": "return `rgb(${c[0]},${c[1]},${c[2]})`;"
   },
   {
-   "line": 19274,
+   "line": 19563,
    "literal": "rgb(90,84,70)",
    "exempt": "drawResonanceFrame (argument: canvas colour)",
    "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
   },
   {
-   "line": 19294,
+   "line": 19583,
    "literal": "rgb(90,84,70)",
    "exempt": "drawResonanceFrame (argument: canvas colour)",
    "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
   },
   {
-   "line": 19335,
+   "line": 19624,
    "literal": "rgb(90,84,70)",
    "exempt": "drawResonanceFrame (argument: canvas colour)",
    "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
   },
   {
-   "line": 19400,
+   "line": 19689,
    "literal": "rgba(${r},${g},${b},${voiceAmbientAlpha.toFixed(3)",
    "exempt": "tickVoiceAmbient",
    "text": "layer.style.background = `radial-gradient(ellipse 70% 45% at 50% 0%, rgba(${r},${g},${b},${voiceAmbi"
   },
   {
-   "line": 20457,
+   "line": 20746,
    "literal": "#0e0d0b",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#0e0d0b';"
   },
   {
-   "line": 20460,
+   "line": 20749,
    "literal": "rgba(232,163,61,0.10)",
    "exempt": "renderVoiceCard",
    "text": "grad.addColorStop(0, 'rgba(232,163,61,0.10)');"
   },
   {
-   "line": 20461,
+   "line": 20750,
    "literal": "rgba(79,214,196,0.06)",
    "exempt": "renderVoiceCard",
    "text": "grad.addColorStop(1, 'rgba(79,214,196,0.06)');"
   },
   {
-   "line": 20465,
+   "line": 20754,
    "literal": "#e8a33d",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#e8a33d';"
   },
   {
-   "line": 20470,
+   "line": 20759,
    "literal": "#f1ead9",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#f1ead9';"
   },
   {
-   "line": 20490,
+   "line": 20779,
    "literal": "#a89f8f",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#a89f8f';"
   },
   {
-   "line": 20493,
+   "line": 20782,
    "literal": "#4fd6c4",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';"
   },
   {
-   "line": 20493,
+   "line": 20782,
    "literal": "#6b6355",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';"
   },
   {
-   "line": 20500,
+   "line": 20789,
    "literal": "#e8735d",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#e8735d';"
   },
   {
-   "line": 20506,
+   "line": 20795,
    "literal": "#f1ead9",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#f1ead9';"
   },
   {
-   "line": 20510,
+   "line": 20799,
    "literal": "#6b6355",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#6b6355';"

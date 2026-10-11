@@ -1,0 +1,93 @@
+== house · branch (working copy)
+
+-- light · 390px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell .38, tab hit (≤1.0 s) 598 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    971 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              937 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is "}
+  ✓ 8 after: meta theme-color restored                                         #F2F3EF, #F2F3EF → #F2F3EF, #F2F3EF
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              406 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 42 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 938 ms · result true · trace true · 98%
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          58 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          36 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             628 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- light · 1280px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell .38, tab hit (≤1.0 s) 596 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1001 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              938 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is "}
+  ✓ 8 after: meta theme-color restored                                         #F2F3EF, #F2F3EF → #F2F3EF, #F2F3EF
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              405 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 42 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 934 ms · result true · trace true · 98%
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          58 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          36 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             614 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- dark · 390px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell .38, tab hit (≤1.0 s) 603 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    959 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              950 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is "}
+  ✓ 8 after: meta theme-color restored                                         #16181C, #16181C → #16181C, #16181C
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              402 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 42 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 933 ms · result true · trace true · 98%
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          57 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          35 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             615 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- dark · 1280px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell .38, tab hit (≤1.0 s) 599 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    987 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              939 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is "}
+  ✓ 8 after: meta theme-color restored                                         #16181C, #16181C → #16181C, #16181C
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              397 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 42 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 933 ms · result true · trace true · 98%
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          57 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          36 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             614 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+80 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvh-1791743841216@example.com

@@ -2,7 +2,7 @@
 // local build with a fresh signed-in test account (deleted at exit), in Light and in Dark.
 // For each visible element with its own text: its colour against the effective background, found by walking up the
 // ancestors and compositing alpha (opacity included). A gradient counts as its worst colour stop; only an image is
-// "unknown". Thresholds: 4.5:1, or 3:1 for text ≥24px, or ≥18.66px and bold. Disabled controls are listed apart
+// "unknown". HTML text over an SVG shape drawn beneath it counts that shape too. Thresholds: 4.5:1, or 3:1 for text ≥24px, or ≥18.66px and bold. Disabled controls are listed apart
 // (WCAG 1.4.3 exempts inactive components) and don't fail.
 // Phase 2 states (PHASE2.md §1b), with the fake mic singing (stage.js): Tuner live (locked and unlocked), Tuner result,
 // Pitch Match during the take (the reference playing, and singing), Pitch Match result (heard, and no voice), and the
@@ -66,6 +66,20 @@ function measure(rootSel) {
         const ss = getComputedStyle(shape), c = resolve(ss.fill);
         if (/url\(/.test(ss.fill)) unknown = true;
         else if (c) layers.push({ stops: [[c[0], c[1], c[2], c[3] * +ss.fillOpacity * +ss.opacity]] });
+      }
+    }
+    // HTML text over an SVG shape painted beneath it (a sibling's drawing, e.g. the Tuner's lock disc under the note):
+    // the topmost such shape under the text's centre, from elementsFromPoint
+    if (el.tagName !== 'text') {
+      const tr = el.getBoundingClientRect();
+      for (const h of document.elementsFromPoint(tr.x + tr.width / 2, tr.y + tr.height / 2)) {
+        if (h === el) continue;
+        if (h.contains(el)) { const bg = resolve(getComputedStyle(h).backgroundColor); if (bg && bg[3] >= 1) break; continue; } // an ancestor: past a solid one, nothing shows through
+        if (!/^(rect|circle|ellipse|polygon|path)$/.test(h.tagName)) continue;
+        const ss = getComputedStyle(h); if (!ss.fill || ss.fill === 'none') continue;
+        if (/url\(/.test(ss.fill)) { unknown = true; break; }
+        let op = +ss.fillOpacity; for (let a = h; a && a !== document.body; a = a.parentElement) op *= +getComputedStyle(a).opacity;
+        const c = resolve(ss.fill); if (c && op > 0) { layers.push({ stops: [[c[0], c[1], c[2], c[3] * op]] }); break; }
       }
     }
     for (let e = el; e && e.nodeType === 1 && !unknown; e = e.parentElement) {
