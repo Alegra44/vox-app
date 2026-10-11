@@ -84,6 +84,7 @@ async function runStates(page, stim, onState, only = null) {
       if (want('pitch-idle')) await onState('pitch-idle', '#panel-exercises');
       await clickPitch(page);
       await page.waitForFunction(() => document.body.dataset.house === 'down' && document.getElementById('pitchListenBtn').textContent === t('ex_listen_ref'), null, { timeout: 3000 }).catch(() => {});
+      await C.sleep(400); // past the dimmer's fade-out (half of --hl-d-house)
       if (want('pitch-cue')) await onState('pitch-cue', '#panel-exercises');
       await page.waitForFunction(() => { const p = document.querySelector('#pitchLane .pm-lane-voice'); return !!p && (p.getAttribute('d') || '').split(/[ML]/).length > 40; }, null, { timeout: 8000 }).catch(() => {});
       if (want('pitch-live')) await onState('pitch-live', '#panel-exercises');

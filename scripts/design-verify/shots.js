@@ -143,7 +143,7 @@ async function stateShots(dir, state) {
         note(`motion ${which} ${ms} ms: taken at ${at} ms, house ${await page.evaluate(() => document.body.dataset.house)}`);
       }
     };
-    await frames('start', S.startTuner);
+    await frames('start', p => p.evaluate(() => document.getElementById('micBtn').click())); // the panel is open: the click alone
     await page.waitForFunction(() => document.getElementById('centsDisplay').textContent === 'In tune', null, { timeout: 6000 }).catch(() => {});
     await C.sleep(800);
     await frames('stop', S.stopTuner);

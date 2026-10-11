@@ -5271,7 +5271,9 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
     btn.classList.remove('listening');
     label.textContent='Start listening';
     centsDisplay.textContent='Tap start and sing a note';
+    centsDisplay.className='cents-display';
     noteDisplay.innerHTML='—';
+    resetTunerRing(); // the ring and its lock disc back to idle (the loop has stopped)
     if(sessionStabilityReadings.length>5){ // the session's average stability: shown signed in or out, recorded signed in
       const avg = Math.round(sessionStabilityReadings.reduce((a,b)=>a+b,0)/sessionStabilityReadings.length);
       showTunerResult(avg, performance.now()-tunerSessionStartTime);
@@ -18642,10 +18644,13 @@ function houseSwitch(stage){
     setTimeout(()=>{ houseSwitching = false; }, half*2),
   ];
 }
-function houseApply(stage){
+function houseApply(stage, scrollBack = true){
   if(stage!==houseLive){
+    const was = houseLive;
     if(houseLive) stageExit();
     if(stage) stageEnter(stage);
+    // lights up after a take: back to where the stage was, so its result is in view (not when leaving the tool)
+    else if(was && scrollBack && was.isConnected){ const y = was.getBoundingClientRect().top + window.scrollY - 72; window.scrollTo(0, Math.max(0, y)); }
   }
   houseLive = stage;
   document.body.dataset.house = stage ? 'down' : 'up';
@@ -18663,7 +18668,7 @@ function houseUpNow(){
   houseTimers.forEach(clearTimeout); houseTimers = []; houseSwitching = false;
   const dim = document.getElementById('hlDimmer');
   if(dim && dim.classList.contains('is-on')){ dim.style.transition = 'none'; dim.classList.remove('is-on'); void dim.offsetWidth; dim.style.transition = ''; }
-  houseApply(null);
+  houseApply(null, false);
 }
 
 // The stage pattern: stageEnter puts a stage on (it re-lays out its panel, nothing covers it); stageExit takes every mark
