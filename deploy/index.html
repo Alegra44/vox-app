@@ -1008,7 +1008,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   .level-label{font-size:12px;color:var(--muted);}
   .level-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 16px;}
-  .level-sub{font-size:10px;font-weight:500;opacity:0.7;text-transform:none;letter-spacing:0;}
+  .level-sub{font-size:var(--hl-t-label);font-weight:500;color:var(--hl-ink-3);text-transform:none;letter-spacing:0;}
   .time-budget-note{
     font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--muted);
     background:var(--surface);border:1px solid var(--hairline);border-radius:10px;
@@ -1847,7 +1847,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div>
         <div class="home-greeting" id="homeGreeting">Good evening</div>
         <div class="home-stats-line" id="homeStatsLine" hidden>
-          <span class="shell-streak" id="shellStreak"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-flame"/></svg><span class="shell-streak-n">0</span></span>
+          <span class="shell-streak" id="shellStreak" role="img"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-flame"/></svg><span class="shell-streak-n">0</span></span>
           <span class="home-stats-sep" aria-hidden="true">·</span>
           <span class="shell-level" id="shellLevel"><span data-i18n="journey_level_label">Level</span> <span class="shell-level-n">1</span></span>
         </div>
@@ -2628,7 +2628,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-tuner">
     <div class="journey-hero">
       <div class="j-title" data-i18n="tuner_title">🎯 Live Tuner</div>
-      <div class="j-sub" data-i18n="tuner_sub">Sing a note — the ring closes as you approach true pitch, and locks teal when you're there.</div>
+      <div class="j-sub" data-i18n="tuner_sub">Sing a note. The ring closes as you approach the pitch and locks when you're on it.</div>
     </div>
     <div class="tuner-hero-card">
       <div class="tuner-ring-wrap" id="tunerRingWrap">
@@ -5701,7 +5701,7 @@ const TRANSLATIONS = {
     tool_five_ways:'Sing It 5 Ways', tool_one_take:'One Take Challenge', tool_vocal_puzzle:'Vocal Puzzle', tool_hear_mistake:'Can You Hear Your Mistake?',
     tool_vibrato:'Vibrato', tool_live_feedback:'Live Feedback', tool_resonance:'Resonance Visualizer', tool_mirror:'Mirror Mode',
     tool_emotion_mode:'Emotion Mode', tool_genre_coach:'Genre Coach', tool_warmup:'Warmup',
-    tuner_title:'🎯 Live Tuner', tuner_sub:"Sing a note — the ring closes as you approach true pitch, and locks teal when you're there.",
+    tuner_title:'🎯 Live Tuner', tuner_sub:"Sing a note. The ring closes as you approach the pitch and locks when you're on it.",
     tuner_pitch_label:'Pitch', tuner_stability_label:'Stability', tuner_freq_label:'Freq',
     tuner_hint:'Uses your microphone locally in the browser — nothing is uploaded. Best with headphones or a quiet room.',
     range_title:'📏 Range Finder', range_sub:'Sing your lowest comfortable note, then your highest — about 30 seconds for a real voice-type classification and a shareable result card.',
@@ -7064,7 +7064,7 @@ const TRANSLATIONS = {
     tool_five_ways:'Chantez-le de 5 façons', tool_one_take:'Défi en une prise', tool_vocal_puzzle:'Puzzle vocal', tool_hear_mistake:'Entendez-vous votre erreur ?',
     tool_vibrato:'Vibrato', tool_live_feedback:'Retour en direct', tool_resonance:'Visualiseur de résonance', tool_mirror:'Mode miroir',
     tool_emotion_mode:'Mode émotion', tool_genre_coach:'Coach de genre', tool_warmup:'Échauffement',
-    tuner_title:'🎯 Accordeur en direct', tuner_sub:"Chantez une note — l'anneau se referme à mesure que vous approchez de la justesse, et se verrouille en sarcelle quand vous y êtes.",
+    tuner_title:'🎯 Accordeur en direct', tuner_sub:"Chantez une note. L'anneau se referme à mesure que vous approchez de la note et se verrouille quand vous y êtes.",
     tuner_pitch_label:'Justesse', tuner_stability_label:'Stabilité', tuner_freq_label:'Fréq',
     tuner_hint:"Utilise votre microphone localement dans le navigateur — rien n'est envoyé. Idéal avec un casque ou dans une pièce calme.",
     range_title:'📏 Détecteur de tessiture', range_sub:'Chantez votre note la plus basse confortable, puis la plus haute — environ 30 secondes pour une vraie classification de type de voix et une fiche de résultat partageable.',
@@ -8427,7 +8427,7 @@ const TRANSLATIONS = {
     tool_five_ways:'Cántalo de 5 formas', tool_one_take:'Desafío de una toma', tool_vocal_puzzle:'Rompecabezas vocal', tool_hear_mistake:'¿Puedes oír tu error?',
     tool_vibrato:'Vibrato', tool_live_feedback:'Retroalimentación en vivo', tool_resonance:'Visualizador de resonancia', tool_mirror:'Modo espejo',
     tool_emotion_mode:'Modo emoción', tool_genre_coach:'Coach de género', tool_warmup:'Calentamiento',
-    tuner_title:'🎯 Afinador en vivo', tuner_sub:'Canta una nota — el anillo se cierra a medida que te acercas a la afinación correcta, y se bloquea en verde azulado cuando la alcanzas.',
+    tuner_title:'🎯 Afinador en vivo', tuner_sub:'Canta una nota. El anillo se cierra a medida que te acercas a la nota y se fija cuando la alcanzas.',
     tuner_pitch_label:'Afinación', tuner_stability_label:'Estabilidad', tuner_freq_label:'Frec',
     tuner_hint:'Usa tu micrófono localmente en el navegador — no se sube nada. Mejor con auriculares o en una habitación silenciosa.',
     range_title:'📏 Buscador de rango', range_sub:'Canta tu nota más baja cómoda, luego la más alta — unos 30 segundos para una clasificación real de tipo de voz y una tarjeta de resultado para compartir.',
@@ -9790,7 +9790,7 @@ const TRANSLATIONS = {
     tool_five_ways:'5 Şekilde Söyle', tool_one_take:'Tek Çekim Meydan Okuması', tool_vocal_puzzle:'Vokal Bulmaca', tool_hear_mistake:'Hatanı Duyabiliyor musun?',
     tool_vibrato:'Vibrato', tool_live_feedback:'Canlı Geri Bildirim', tool_resonance:'Rezonans Görselleştirici', tool_mirror:'Ayna Modu',
     tool_emotion_mode:'Duygu Modu', tool_genre_coach:'Tür Koçu', tool_warmup:'Isınma',
-    tuner_title:'🎯 Canlı Akort Cihazı', tuner_sub:'Bir nota söyleyin — gerçek perdeye yaklaştıkça halka kapanır ve tam üzerindeyken camgöbeği rengine kilitlenir.',
+    tuner_title:'🎯 Canlı Akort Cihazı', tuner_sub:'Bir nota söyleyin. Notaya yaklaştıkça halka kapanır, tam üzerindeyken kilitlenir.',
     tuner_pitch_label:'Perde', tuner_stability_label:'Kararlılık', tuner_freq_label:'Frekans',
     tuner_hint:'Mikrofonunuzu yerel olarak tarayıcıda kullanır — hiçbir şey yüklenmez. Kulaklıkla veya sessiz bir odada en iyi sonucu verir.',
     range_title:'📏 Ses Aralığı Bulucu', range_sub:'En düşük rahat notanızı, ardından en yüksek notanızı söyleyin — gerçek bir ses tipi sınıflandırması ve paylaşılabilir bir sonuç kartı için yaklaşık 30 saniye.',
@@ -12967,7 +12967,7 @@ function buildKaraokeRoll(ids=KARAOKE_ROLL){ // returns the roll's {minMidi, max
     const x = KARAOKE_PLAYHEAD_X + i*chordDurSec*KARAOKE_PX_PER_SEC;
     const w = chordDurSec*KARAOKE_PX_PER_SEC*0.88;
     const y = midiToY(midi)-9;
-    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:var(--surface-raised);stroke:var(--hairline);stroke-width:1;"/>`;
+    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:color-mix(in srgb, var(--hl-ink) 14%, transparent);stroke:var(--hl-ink-3);stroke-width:1;"/>`;
   });
   svg.innerHTML = `
     <line x1="${KARAOKE_PLAYHEAD_X}" y1="0" x2="${KARAOKE_PLAYHEAD_X}" y2="160" style="stroke:var(--brass);stroke-width:2;"/>
@@ -18507,6 +18507,7 @@ function updateShellTopbar(){
   if(signedOutLine) signedOutLine.hidden = !!profile;
   if(!profile) return;
   streakEl.querySelector('.shell-streak-n').textContent = progress.streak||0;
+  streakEl.setAttribute('aria-label', `${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}`); // the streak sentence, not just the number
   const {level}=levelForXp(progress.xp||0);
   levelEl.querySelector('.shell-level-n').textContent = level;
 }
