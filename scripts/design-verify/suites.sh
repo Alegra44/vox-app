@@ -6,6 +6,7 @@
 # Not run here: choir-verify/live.js (hard-wired to production: checks the live HTML equals deploy/index.html, so it can
 # only pass after a deploy) and p8.js (needs a file of tier accounts).
 # Usage: bash scripts/design-verify/suites.sh [first suite to run]
+#        ONLY="warmup-tracking levelup" bash scripts/design-verify/suites.sh   (just those suites, in this file's order)
 cd "$(dirname "$0")/../.."
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/suites-$STAMP; mkdir -p "$OUT"
 L=http://localhost:8765/
@@ -55,6 +56,7 @@ started=${1:+0}; [ -z "$1" ] && started=1
 for s in "${SUITES[@]}"; do
   name=${s%%|*}; cmd=${s#*|}
   [ "$started" = 0 ] && [ "$name" = "$1" ] && started=1; [ "$started" = 0 ] && continue
+  if [ -n "$ONLY" ]; then case " $ONLY " in *" $name "*) ;; *) continue;; esac; fi
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name" >> "$OUT/progress.txt"
   $cmd > "$OUT/$name.log" 2>&1; rc=$?
   echo "$(date -u +%H:%M:%S) done  $name exit $rc ($(( ($(date +%s)-t0)/60 )) min)" >> "$OUT/progress.txt"
