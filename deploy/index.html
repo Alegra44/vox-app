@@ -1367,6 +1367,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   body[data-house="down"] nav.shell-bottomnav:hover, body[data-house="down"] nav.shell-bottomnav:focus-within{opacity:1;}
   @media (prefers-reduced-motion: reduce){ header.shell-topbar, nav.shell-bottomnav{transition:none;} }
 
+  /* ============ HOUSE LIGHTS: RESULTS (phase 2) ============ */
+  /* .vc-result, on paper after a take: one big number, its label (hl-h3), one coach sentence (.hl-coach), the take's chart,
+     dimension rows (a dl with hairline rules), and details.hl-measure last. */
+  .vc-result{display:grid;gap:var(--hl-s3);text-align:left;color:var(--hl-ink);margin-top:var(--hl-s5);padding-top:var(--hl-s5);border-top:var(--hl-hair) solid var(--hl-rule);}
+  .vc-result-num{font-size:var(--hl-t-metric-l);font-stretch:var(--hl-w-wide);font-weight:300;line-height:.95;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:var(--hl-ink);margin:0;}
+  .vc-result-meta{font-size:var(--hl-t-small);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;margin:0;}
+  .vc-result .hl-coach{max-width:60ch;}
+  .vc-result-chart{display:block;width:100%;height:auto;}
+  .vc-result-dims{margin:0;display:grid;}
+  .vc-result-dims > div, .vc-result-dims > .vc-dim{display:flex;justify-content:space-between;align-items:baseline;gap:var(--hl-s4);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);margin:0;}
+  .vc-result-dims dt{font-size:var(--hl-t-small);color:var(--hl-ink-2);}
+  .vc-result-dims dd{margin:0;font-variant-numeric:tabular-nums;color:var(--hl-ink);}
+  .vc-result > .hl-measure{margin-top:var(--hl-s2);}
+
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
 
