@@ -1347,6 +1347,26 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .skilltree-detail .std-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:15px;color:var(--brass);}
   .skilltree-detail .std-text{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
 
+  /* ============ HOUSE LIGHTS: THE STAGE (phase 2) ============ */
+  /* With the house down the live panel is re-laid out around its stage (it isn't covered): everything else in the panel is
+     offstage, the stage's ancestors lose their card chrome, the stage is a centred column. The header and tab bar stay,
+     dimmed, and still work. */
+  [data-offstage]{display:none !important;}
+  [data-stage-path]{background:none !important;border:0 !important;padding:0 !important;margin:0 !important;box-shadow:none !important;}
+  .vc-stage.is-live .vc-paper-only{display:none !important;}
+  .vc-stage:not(.is-live) .vc-live-only{display:none !important;}
+  .vc-stage.is-live{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--hl-s5);
+    min-height:calc(100dvh - 57px - var(--hl-s5) - 57px - env(safe-area-inset-bottom,0px)); /* minus header and tab bar */
+    max-width:560px;margin:0 auto;padding:var(--hl-s5) 0;box-sizing:border-box;
+  }
+  @media (min-width:960px){ .vc-stage.is-live{min-height:calc(100dvh - 57px - var(--hl-s5));} } /* the tab bar is in the header */
+  header.shell-topbar, nav.shell-bottomnav{transition:opacity var(--hl-d3) var(--hl-ease);}
+  body[data-house="down"] header.shell-topbar, body[data-house="down"] nav.shell-bottomnav{opacity:.38;}
+  body[data-house="down"] header.shell-topbar:hover, body[data-house="down"] header.shell-topbar:focus-within,
+  body[data-house="down"] nav.shell-bottomnav:hover, body[data-house="down"] nav.shell-bottomnav:focus-within{opacity:1;}
+  @media (prefers-reduced-motion: reduce){ header.shell-topbar, nav.shell-bottomnav{transition:none;} }
+
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
 
@@ -18479,6 +18499,28 @@ function houseUpNow(){
   const dim = document.getElementById('hlDimmer');
   if(dim && dim.classList.contains('is-on')){ dim.style.transition = 'none'; dim.classList.remove('is-on'); void dim.offsetWidth; dim.style.transition = ''; }
   houseApply(null);
+}
+
+// The stage pattern: stageEnter puts a stage on (it re-lays out its panel, nothing covers it); stageExit takes every mark
+// off again. Kept on stage besides the stage itself: the Vocal Load break banner and anything marked data-keep-on-stage.
+function stageEnter(stage){
+  const panel = stage.closest('section.panel') || stage.closest('.modal-overlay');
+  if(!panel) return;
+  stage.classList.add('is-live');
+  panel.classList.add('is-staged');
+  for(let el = stage; el && el!==panel; el = el.parentElement){
+    if(el!==stage) el.setAttribute('data-stage-path', '');
+    for(const sib of el.parentElement.children){
+      if(sib!==el && sib.id!=='vlBreak' && !sib.hasAttribute('data-keep-on-stage')) sib.setAttribute('data-offstage', '');
+    }
+  }
+  window.scrollTo(0, 0);
+}
+function stageExit(){
+  document.querySelectorAll('.vc-stage.is-live').forEach(e=>e.classList.remove('is-live'));
+  document.querySelectorAll('.is-staged').forEach(e=>e.classList.remove('is-staged'));
+  document.querySelectorAll('[data-offstage]').forEach(e=>e.removeAttribute('data-offstage'));
+  document.querySelectorAll('[data-stage-path]').forEach(e=>e.removeAttribute('data-stage-path'));
 }
 
 function stopAllActiveSessions(){
