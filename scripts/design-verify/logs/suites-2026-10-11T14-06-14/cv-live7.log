@@ -1,0 +1,33 @@
+live HTML IDENTICAL to deploy/index.html
+1280x720 modal: z 100 over nav 50 | on top at toggle: the toggle itself | toggle clicks → signin → signup
+signed up voxcoach-live7-1791730459787@example.com | user_id 99eb8c02-0d40-4c67-af2c-6ec6b3ae98e4 | choir_readiness loaded: {"parts":{},"log":[],"runs":[],"ycTakes":0}
+
+== Harmony Memory stage 1, plan [{"c":0},{"c":20},{"c":80},{"c":0,"d":0.55},null,{"c":-120},{"c":0},{"c":0}]
+┌─────────┬───────┬────────┬────────┬─────────────┬─────────┬────────┬─────────────┬─────────────┐
+│ (index) │ chord │ target │ frames │ medianCents │ entryMs │ noteMs │ verdict     │ app         │
+├─────────┼───────┼────────┼────────┼─────────────┼─────────┼────────┼─────────────┼─────────────┤
+│ 0       │ 1     │ 'G4'   │ 181    │ 2           │ 16      │ 3133   │ 'held'      │ 'held'      │
+│ 1       │ 2     │ 'B4'   │ 183    │ 21          │ 21      │ 3133   │ 'held'      │ 'held'      │
+│ 2       │ 3     │ 'A4'   │ 182    │ 81          │ 16      │ 3133   │ 'off'       │ 'off'       │
+│ 3       │ 4     │ 'A4'   │ 84     │ 1           │ 1733    │ 3133   │ 'held'      │ 'held'      │
+│ 4       │ 5     │ 'G4'   │ 0      │ null        │ null    │ 3133   │ 'not heard' │ 'not heard' │
+│ 5       │ 6     │ 'A4'   │ 182    │ -118        │ 16      │ 3133   │ 'off'       │ 'off'       │
+│ 6       │ 7     │ 'B4'   │ 181    │ 2           │ 16      │ 3133   │ 'held'      │ 'held'      │
+│ 7       │ 8     │ 'G4'   │ 183    │ 2           │ 11      │ 3133   │ 'held'      │ 'held'      │
+└─────────┴───────┴────────┴────────┴─────────────┴─────────┴────────┴─────────────┴─────────────┘
+independent: {"held":5,"n":8,"score":63,"heard":7,"pitch":80,"timing":93}
+app run: {"held":5,"score":63,"passed":false,"heard":7,"pitch":80,"timing":93,"onTime":6}
+Performance Report shown:
+  Notes held 5/8 notes held within ±50 cents 63
+  Pitch Typically 32 cents from the target across the 7 notes heard 80
+  Timing 6/7 notes heard: your voice arrived in the first 40% of the note · median 16 ms after it started 93
+insight: Your next real improvement isn't your top number — it's Notes held (63).
+
+PATCH /me/progress: [{"status":200,"runs":0},{"status":200,"runs":0},{"status":200,"runs":0},{"status":200,"runs":0}]
+client choir_readiness: {"log":[],"runs":[{"ts":1791730497177,"kind":"hm","song":"hymn","part":"Alto","slot":0,"score":63,"passed":false,"held":5,"n":8,"pitch":80,"timing":93}],"parts":{"hymn":{"Alto":{"levels":[],"hm":[63,null,null,null,null,null],"bosses":[null,null,null,null,null,null],"hmPassed":0,"bossesBeaten":0,"wins":0,"losses":0,"status":"learning","updated":"2026-10-11T14:54:57.177Z"}}},"ycTakes":0,"firsts":{}}
+readiness card (Alto): Alto (you) LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+DB row choir_readiness: {"choir_readiness":{"firsts":{},"log":[],"parts":{"hymn":{"Alto":{"bosses":[null,null,null,null,null,null],"bossesBeaten":0,"hm":[63,null,null,null,null,null],"hmPassed":0,"levels":[],"losses":0,"status":"learning","updated":"2026-10-11T14:54:57.177Z","wins":0}}},"runs":[{"held":5,"kind":"hm","n":8,"part":"Alto","passed":false,"pitch":80,"score":63,"slot":0,"song":"hymn","timing":93,"ts":1791730497177}],"ycTakes":0}}
+
+USER_ID 99eb8c02-0d40-4c67-af2c-6ec6b3ae98e4 | screenshot /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T\live7-report.png | page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-live7-1791730459787@example.com

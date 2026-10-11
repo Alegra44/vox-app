@@ -1,0 +1,41 @@
+pageload 2026-10-10T18-20-43  url: http://localhost:8765/  builds: master, a43070c, branch (local, production backend)  loads: 10 per build  pace 30000 ms  timeout 60000 ms
+sign-up load: ready 4576 ms  (voxcoach-pageload-1791656443640@example.com)
+load  1 master    ready 2900 ms  | /me/progress 200 1157 ms  | /me 200 1417 ms  | auth none
+load  1 a43070c   ready 2809 ms  | /me/progress 200 1606 ms  | /me 200 893 ms  | auth none
+load  1 branch    ready 1486 ms  | /me/progress 200 1206 ms  | /me 200 1218 ms  | auth none
+load  2 master    ready 2808 ms  | /me/progress 200 1557 ms  | /me 200 909 ms  | auth none
+load  2 a43070c   ready 3631 ms  | /me/progress 200 1409 ms  | /me 200 1912 ms  | auth none
+load  2 branch    ready 1918 ms  | /me/progress 200 906 ms  | /me 200 1585 ms  | auth none
+load  3 master    ready 2502 ms  | /me/progress 200 1019 ms  | /me 200 1209 ms  | auth none
+load  3 a43070c   ready 2296 ms  | /me/progress 200 845 ms  | /me 200 1129 ms  | auth none
+load  3 branch    ready 1654 ms  | /me/progress 200 932 ms  | /me 200 1389 ms  | auth none
+load  4 master    ready 3024 ms  | /me/progress 200 1128 ms  | /me 200 1631 ms  | auth none
+load  4 a43070c   ready 2325 ms  | /me/progress 200 850 ms  | /me 200 1194 ms  | auth none
+load  4 branch    ready 1685 ms  | /me/progress 200 944 ms  | /me 200 1433 ms  | auth none
+load  5 master    ready 2714 ms  | /me/progress 200 1048 ms  | /me 200 1430 ms  | auth none
+load  5 a43070c   ready 2184 ms  | /me/progress 200 967 ms  | /me 200 956 ms  | auth none
+load  5 branch    ready 1788 ms  | /me/progress 200 1145 ms  | /me 200 1544 ms  | auth none
+load  6 master    ready 2585 ms  | /me/progress 200 1103 ms  | /me 200 1207 ms  | auth none
+load  6 a43070c   ready 2411 ms  | /me/progress 200 931 ms  | /me 200 1234 ms  | auth none
+load  6 branch    ready 1312 ms  | /me/progress 200 1012 ms  | /me 200 1012 ms  | auth none
+load  7 master    ready 3056 ms  | /me/progress 200 1741 ms  | /me 200 928 ms  | auth none
+load  7 a43070c   ready 3287 ms  | /me/progress 200 1589 ms  | /me 200 1446 ms  | auth none
+load  7 branch    ready 1477 ms  | /me/progress 200 1124 ms  | /me 200 1200 ms  | auth none
+load  8 master    ready 2183 ms  | /me/progress 200 1017 ms  | /me 200 905 ms  | auth none
+load  8 a43070c   ready 2763 ms  | /me/progress 200 954 ms  | /me 200 1566 ms  | auth none
+load  8 branch    ready 2236 ms  | /me/progress 200 1459 ms  | /me 200 1944 ms  | auth none
+load  9 master    ready 2706 ms  | /me/progress 200 1453 ms  | /me 200 938 ms  | auth none
+load  9 a43070c   ready 2652 ms  | /me/progress 200 1137 ms  | /me 200 1211 ms  | auth none
+load  9 branch    ready 1304 ms  | /me/progress 200 979 ms  | /me 200 997 ms  | auth none
+load 10 master    ready 3117 ms  | /me/progress 200 1914 ms  | /me 200 948 ms  | auth none
+load 10 a43070c   ready 3076 ms  | /me/progress 200 1362 ms  | /me 200 1364 ms  | auth none
+load 10 branch    ready 1511 ms  | /me/progress 200 1236 ms  | /me 200 895 ms  | auth none
+== master: 10 loads, ready (profile+progress) min 2183 / median 2761 / max 3117 ms; timeouts 0; 4xx/5xx: none
+== a43070c: 10 loads, ready (profile+progress) min 2184 / median 2707.5 / max 3631 ms; timeouts 0; 4xx/5xx: none
+== branch: 10 loads, ready (profile+progress) min 1304 / median 1582.5 / max 2236 ms; timeouts 0; 4xx/5xx: none
+
+== 30 loads: ready (profile+progress) min 1304 / median 2502 / p90 3117 / max 3631 ms; over 20 s: 0; timeouts: 0
+   /me/progress: min 845 / median 1128 / max 1914 ms over 30 requests
+   401 / 403 / 429: none
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/pageload-local-master-vs-a43070c-vs-branch-2026-10-10T18-20-43.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/pageload-local-master-vs-a43070c-vs-branch-2026-10-10T18-20-43.json

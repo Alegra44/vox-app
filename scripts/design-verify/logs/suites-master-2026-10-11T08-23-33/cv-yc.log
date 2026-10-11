@@ -1,0 +1,46 @@
+== Record Alto (amp 0.5)
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for locator('#ycParts [data-yc-rec="Alto"]')[22m
+[2m    - locator resolved to <button data-yc-rec="Alto" class="practice-chip">● Record</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not visible[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    57 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is not visible[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at record (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/yc.js:49:60)
+    at /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/yc.js:72:50 {
+  log: [
+    `  - waiting for locator('#ycParts [data-yc-rec="Alto"]')`,
+    '    - locator resolved to <button data-yc-rec="Alto" class="practice-chip">● Record</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not visible',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is not visible',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    57 × waiting for element to be visible, enabled and stable',
+    '       - element is not visible',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v22.23.3

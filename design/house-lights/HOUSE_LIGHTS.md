@@ -1,4 +1,9 @@
-# House Lights: the VoxCoach design system (v1.1)
+# House Lights: the VoxCoach design system (v1.2)
+
+v1.2 (2026-10-10, phase 1): font sizes on the ten-size scale (`--hl-t-*` variables, no px), 44px touch targets for
+`.hl-seg` and `.hl-chip`, `.hl-seg` also matches `aria-pressed`, Light colours that were under 4.5:1 on `--hl-sunk` darkened
+(ink-3, miss, warn, ok, lead, ten, bass, game-gold), `--hl-piano-white` / `--hl-piano-black`, the wordmark's mark in ink,
+Archivo loaded as `wdth` 75–125 and `wght` 200–800.
 
 v1.1 (2026-10-02) records five decisions checked against the app: the legacy tab bar stays (it is the
 router), the `singingSession` lighting hook, System / Light / Dark themes, the protected script hooks, and
@@ -49,8 +54,8 @@ open once granted, so the trigger is the singing session, not the mic itself: se
 
 ## 3. Tokens (all in `house-lights.css`)
 
-- **Type:** Archivo variable (`wdth` 62–125, `wght` 100–900) and Spectral italic 400/500, from
-  Google Fonts: `https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Spectral:ital,wght@1,400;1,500&display=swap`.
+- **Type:** Archivo variable (`wdth` 75–125, `wght` 200–800) and Spectral italic 400/500, from
+  Google Fonts: `https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,200..800&family=Spectral:ital,wght@1,400;1,500&display=swap`.
   Remove Fraunces, Inter and Space Mono.
 - **Sizes:** only the ten `--hl-t-*` sizes. No half pixels. Most text is 14 or 16.
 - **Widths:** `--hl-w-wide` (112%) for titles and numbers, normal for reading,

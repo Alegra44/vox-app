@@ -107,7 +107,19 @@ const RUN = async ({ what, seq }) => {
       const oldRolls = await rolls(); await ctx.close();
       ({ ctx, page } = await openPage(b));
       const newRolls = await rolls(); await ctx.close();
-      check('Karaoke roll markup unchanged (every song)', same(oldRolls, newRolls), oldRolls.map((h, i) => h === newRolls[i] ? 'same' : 'DIFF').join(', '));
+      // Colour values are replaced with a placeholder before comparing: the House Lights redesign (phase 1 and 1.1) moves
+      // the roll's colours onto theme tokens on purpose (e.g. the cursor glow rgba(79,214,196,1) → var(--teal), the
+      // target notes → ink), so only colours may differ. Structure, geometry, ids, classes and data attributes must
+      // still match exactly. Colours are blanked in fill and stroke attributes, and in the colour declarations of style.
+      const COLOUR = /color-mix\((?:[^()]|\([^()]*\))*\)|var\(--[\w-]+\)|#[0-9a-fA-F]{3,8}\b|rgba?\([^()]*\)/g;
+      const neutral = h => h
+        .replace(/\b(fill|stroke)="[^"]*"/g, (m, a) => `${a}="◆"`)
+        .replace(/\bstyle="([^"]*)"/g, (m, s) => `style="${s.split(';').map(d => {
+          const i = d.indexOf(':'); if (i < 0) return d;
+          return /color|fill|stroke|background|border|shadow|filter|outline/i.test(d.slice(0, i)) ? d.slice(0, i + 1) + d.slice(i + 1).replace(COLOUR, '◆') : d;
+        }).join(';')}"`);
+      const oldN = oldRolls.map(neutral), newN = newRolls.map(neutral);
+      check('Karaoke roll markup unchanged (every song; colour values ignored)', same(oldN, newN), oldN.map((h, i) => h === newN[i] ? (oldRolls[i] === newRolls[i] ? 'same' : 'same apart from colours') : 'DIFF').join(', '));
     }
 
     // ---------------- B ----------------

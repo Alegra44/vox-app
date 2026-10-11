@@ -11,6 +11,8 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `master` | Everything that is live, through the noise gate (dpl_AzAW5Fn, 2026-10-02) | Matches production |
 | `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
+| `redesign/phase1` | House Lights redesign phase 1, Foundation (items 2.1–2.10, spec `design/house-lights/PHASE1.md`) | Built and checked 2026-10-11. **Not merged, not deployed: waiting for the user's review of the screenshots and the diff** |
+| `review/phase1` | Orphan branch, no code: phase 1 screenshots, contact sheets, hooks and contrast JSON | For the review |
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`).
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
@@ -51,9 +53,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Harmony Arena 0–8/8 notes, Harmony Memory 3/8 held); echo cancellation on real devices untested.
 5. Redesign phase 4 onwards. **Item 4** (Glider octave crash) comes after item 3.
 
-Idea for redesign phase 1 (don't change it before then): `onSignedIn` loads `/me` and then `/me/progress` one after
-the other, so a returning user waits for both (2.7–3.9 s on production, `pageload.js`). Check whether `/me/progress`
-depends on the `/me` response; if not, load them in parallel.
+Redesign phase 1 loads `/me` and `/me/progress` in parallel (item 2.10, on `redesign/phase1`): profile and progress
+ready in a median 1583 ms vs master's 2761 ms (local builds, production backend, 10 loads each).
 
 ## In flight
 
@@ -187,6 +188,25 @@ failure.** Then on production: batch1, the bleed checks, and `levels.js` if it c
   streak". For the first level-up after this ships, count from the start of the account.
 - The new text goes into all four languages.
 - **Report the migration and the API change to the user before applying the migration.**
+
+### Redesign phase 1, Foundation (`redesign/phase1`): built 2026-10-11, waiting for the user's review
+
+Spec: `design/house-lights/PHASE1.md` (verbatim). One commit per item 2.1–2.10, guards first. **No merge to master and
+no deploy until the user has reviewed the screenshots (`review/phase1`) and the diff.**
+- Guards (`scripts/design-verify/`): `hooks.js` (static master vs working copy: every id / data-i18n / data-panel /
+  data-shell / data-enter-panel, the §9 protected classes and strings, the four languages, House Lights block byte for
+  byte, colour literals outside the exempt canvases): 19 passed, 0 failed (allowed removals: the four old theme
+  names). `contrast.js` (46 panels + header, tab bar, toast; Light and Dark): 0 texts under 3:1 in either theme
+  (master Dark had 21). Left between 3 and 4.5: Light 34 (Choir rehearsal SVG note labels on semi-transparent part
+  shapes, neither ink nor white passes: phase 5) and Exercises `.level-sub` (3.03 Light / 3.24 Dark). `system.js` 6/6.
+- Suites: every suite once on the branch (`suites.sh`), failures re-run on master (`suites-master.sh`); logs in
+  `scripts/design-verify/logs/`. One Regression by the rule: warmup-verify/tracking.js "Karaoke roll markup
+  unchanged" compares exact markup with master; the only difference is the cursor glow `rgba(79,214,196,1)` →
+  `var(--teal)` (the intended 2.3 remap). Recommended: let that check ignore colour values. 11 choir-verify scripts
+  are Already failing (signed-out Choir World runs, blocked by the phase-8 sign-in gate on both builds).
+- Not run: `choir-verify/live.js` (production only, passes only after a deploy) and `p8.js` (needs tier accounts).
+- When it goes live: mark the roadmap's "Page lang stays en" fixed (2.9 sets `<html lang>`). `hub_world_sub` was
+  left unchanged (the spec gives no new text for it).
 
 ## Waiting on the user (don't start without a go-ahead)
 

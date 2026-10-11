@@ -1,0 +1,25 @@
+[reap] FAILED for run 39441 (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-wu-1791707017732@example.com') and email like 'voxcoach-%@example.com' returning email): voxcoach-wu-1791707017732@example.com
+[reap] FAILED for run 42351 (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-p7-1791713484631@example.com') and email like 'voxcoach-%@example.com' returning email): voxcoach-p7-1791713484631@example.com
+[reap] FAILED for run 42406 (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-modalz-1791713665484@example.com') and email like 'voxcoach-%@example.com' returning email): voxcoach-modalz-1791713665484@example.com
+account A voxcoach-p9-1791713766223-a@example.com f7b29b40-9bba-4724-8762-a8f723899cbe
+Error: Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked update public.users set day1_start_date = current_date where id = 'f7b29b40-9bba-4724-8762-a8f723899cbe'
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at query (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/testAccounts.js:37:25)
+    at db (/private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/testAccounts.js:43:19)
+    at /private/tmp/claude-501/-Users-alegramusenge-Documents-voxcoach-app/75100de3-91d6-487b-aef7-c4b12d59872a/scratchpad/master-wt/scripts/choir-verify/p9.js:80:3 {
+  status: 1,
+  signal: null,
+  output: [
+    null,
+    '{"_tag":"Error","error":{"code":"LegacyProjectNotLinkedError","message":"Cannot find project ref. Have you run supabase link?"}}\n',
+    null
+  ],
+  pid: 42480,
+  stdout: '{"_tag":"Error","error":{"code":"LegacyProjectNotLinkedError","message":"Cannot find project ref. Have you run supabase link?"}}\n',
+  stderr: null
+}
+
+[cleanup] FAILED (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-p9-1791713766223-a@example.com','voxcoach-p9-1791713766223-b@example.com') and email like 'voxcoach-%@example.com' returning email); the watchdog retries when this process exits: voxcoach-p9-1791713766223-a@example.com, voxcoach-p9-1791713766223-b@example.com
