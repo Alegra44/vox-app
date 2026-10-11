@@ -4,12 +4,17 @@
 // ancestors and compositing alpha (opacity included). A gradient counts as its worst colour stop; only an image is
 // "unknown". Thresholds: 4.5:1, or 3:1 for text ≥24px, or ≥18.66px and bold. Disabled controls are listed apart
 // (WCAG 1.4.3 exempts inactive components) and don't fail.
+// Phase 2 states (PHASE2.md §1b), with the fake mic singing (stage.js): Tuner live (locked and unlocked), Tuner result,
+// Pitch Match during the take (the reference playing, and singing), Pitch Match result (heard, and no voice), and the
+// warm-up overlay. Each is measured on its panel (or the overlay) and, in the same moment, on the header and tab bar.
+// --no-states skips them (e.g. on a build without them).
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).
 const path = require('path'), fs = require('fs');
-const C = require('./common');
+const C = require('./common'), S = require('./stage');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
+const STATES = !process.argv.includes('--no-states');
 const BASE = arg('--base'), THEMES = (arg('--themes') || (BASE ? 'dark' : 'light,dark')).split(',');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const JSON_OUT = arg('--json') || path.join(__dirname, 'logs', `contrast-${BASE ? BASE.replace(/\W/g, '_') : 'branch'}-${stamp}.json`);
@@ -90,6 +95,24 @@ function measure(rootSel) {
   return out;
 }
 
+const STATE_NAMES = ['tuner-live-locked', 'tuner-live-unlocked', 'tuner-result', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-noheard', 'warmup-overlay'];
+async function measureStates(dir, theme, state, panels) {
+  S.ensureStimuli();
+  for (const [stim, names] of Object.entries(S.STATE_STIM)) {
+    const only = names.filter(n => STATE_NAMES.includes(n)); if (!only.length) continue;
+    const b = await S.launchMic(S.STIM[stim]);
+    try {
+      const { page } = await C.openPage(b, { dir, theme, storageState: state });
+      const has = await page.evaluate(() => typeof houseSession === 'function');
+      if (!has) { console.log(`   (${theme}: no lighting engine on this build: states skipped)`); return; }
+      await S.runStates(page, stim, async (name, root) => {
+        panels[`state: ${name}`] = await page.evaluate(measure, root);
+        panels[`state: ${name} · header + tab bar`] = await page.evaluate(measure, 'header.shell-topbar, nav.shell-bottomnav');
+      }, only);
+    } finally { await b.close(); }
+  }
+}
+
 (async () => {
   const dir = C.buildDir(BASE);
   const b = await C.chromium.launch();
@@ -115,6 +138,7 @@ function measure(rootSel) {
         panels[k] = shown ? await page.evaluate(measure, `#panel-${k}`) : [{ status: 'unknown', why: 'panel did not open', text: '', path: '' }];
       }
       await ctx.close();
+      if (STATES) await measureStates(dir, theme, state, panels);
       report.themes[theme] = panels;
       // table
       console.log(`\n-- ${theme}: panel                       fail<3  fail3-4.5  unknown  checked`);
