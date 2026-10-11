@@ -201,3 +201,79 @@ Rules throughout:
 - No new dependencies.
 - Every new or changed string in en, es, fr and tr.
 - Screens not yet rebuilt will look mixed: old layouts in the new colours and type. That's expected. Phase 1 is judged on the shell, type, colour and readability.
+
+## 1.1 fixes
+
+Phase 1 review: approved with one fix round (1.1) before deploy. Same branch (redesign/phase1). Add this message as a section "1.1 fixes" at the end of design/house-lights/PHASE1.md and commit that first.
+
+Keep as it is:
+- header, wordmark, avatar / Sign in
+- tab bar at both widths
+- themes and System
+- Turkish İ
+- toast, splash, piano, part colours
+- the font sweep and the contrast gate
+- 2.10 (2761 → 1583 ms)
+
+Your question: yes, change the warmup-tracking "Karaoke roll markup unchanged" check. Before comparing, replace colour values in style, fill and stroke (var(…), color-mix(…), hex, rgb/rgba) with a placeholder. Structure, geometry, ids, classes and data attributes must still match exactly. Add a note in the script saying why.
+
+Why the fixes are needed: the remap did exactly what the spec said (brass → ink, teal → voice), and in the places below that reads wrong. CSS, inline styles and class additions only. No logic changes, and no ID or existing class is renamed.
+
+A. No washes, glows or two-colour gradients built from legacy colours
+- Card surfaces: every linear-gradient(180deg, var(--surface-raised) …, var(--surface) …), and the 165deg surface→bg one, becomes a flat var(--surface). Today Light shows grey-topped cards fading to white.
+- Tinted washes from color-mix of --brass/--teal: .mission-card, .profile-id-card, .trial-banner, .paywall-icon, .mode-card.active → flat var(--surface). .mode-card.active keeps its selected state as a 1px var(--hl-ink) border.
+- .journey-hero (the title block on 44 screens) stops being a card:
+  · no background, border or radius;
+  · padding 0 0 24px, a bottom hairline var(--hl-rule), margin-bottom 24px;
+  · .j-title: --hl-t-h1 (34px), wide, weight 650;
+  · .j-sub: 14px, var(--hl-ink-2), max-width 60ch.
+- Glows: box-shadow and drop-shadow tints of --brass/--teal become none. That covers .mic-btn and its hover, .plan-card.highlight, .levelup-ring, and the karaoke cursor's drop-shadow. Keep the Tuner lock pulse (the keyframes ~404–406): it's live feedback on the voice, and phase 2 rebuilds it.
+- Fills that run teal → brass become flat:
+  · Live voice meters (.vu-meter-fill, .breath-meter-fill, .range-bar .fill) → var(--hl-voice).
+  · Every other progress or chart fill (.transport-progress .fill, .progress-bar-thin .fill, .week-progress-track .fill, .home-trial-track .fill, .challenge-progress-fill, .skill-bar-fill, .roster-bar-fill, .activity-chart .bar.active, .health-trend-chart .h-bar.has-data) → var(--hl-ink).
+  · .range-preview-bar → flat var(--hl-sunk) with a var(--hl-rule) border, no opacity.
+  · .teacher-roster-avatar → flat var(--hl-ink) with var(--on-brass) text.
+- Leave .poster (the share poster) for phase 7.
+
+B. Rule 1 is inverted today; fix it here. Start-singing buttons are ink, and many buttons that don't sing are blue.
+- .mic-btn gets the sing look: background var(--hl-voice), text var(--hl-on-voice), no shadow. Leave .mic-btn.listening as it is.
+- The .mic-btn buttons that don't open the mic get an added class vc-ink, with the ink look: #curriculumOpenBtn, #feedbackSubmitBtn, #hmNextBtn, #puzzleNextBtn, #voiceCardDownloadBtn, and #puzzleStartBtn if Vocal Puzzle never opens the mic (check). Go through all of them and list which got vc-ink.
+- .solid-btn.teal → ink look: background var(--hl-ink), text var(--hl-bg). If one of them starts singing directly, give it the sing look instead and list it.
+
+C. Success states are green, not the voice colour
+- Where teal means correct / good / ok / improved / active status, use --hl-ok for the text, the border and the color-mix tint:
+  · .ear-choice-btn.correct, .scale-dot.done-good
+  · .health-status-banner.ok, .trial-status-banner.active
+  · .checklist-row:has(.checklist-icon.good), .checklist-icon.good
+  · .snapshot-delta.up, .karaoke-note-chip.good, #unifiedProgressImproved
+  · the ✓ in .trial-checklist li::before
+  · the karaoke note rect when a note scored well (~13020, pitchAcc>=70)
+- Live indicators while singing stay voice: the cursors coloured by cents, the Tuner ring, the pitch lines.
+- List anything else you changed under this rule.
+
+D. Small fixes
+- Karaoke and warm-up roll target notes (buildKaraokeRoll ~12969): fill color-mix(in srgb, var(--hl-ink) 14%, transparent), stroke var(--hl-ink-3). Today they're nearly invisible in Light.
+- tuner_sub names a colour that no longer exists ("locks teal"). Grep scripts/ first, then use:
+  en "Sing a note. The ring closes as you approach the pitch and locks when you're on it."
+  fr "Chantez une note. L'anneau se referme à mesure que vous approchez de la note et se verrouille quand vous y êtes."
+  es "Canta una nota. El anillo se cierra a medida que te acercas a la nota y se fija cuando la alcanzas."
+  tr "Bir nota söyleyin. Notaya yaklaştıkça halka kapanır, tam üzerindeyken kilitlenir."
+- .level-sub (Exercises levels): no opacity, 12px (--hl-t-label), var(--hl-ink-3). This clears the 3.03 contrast item.
+- #shellStreak gets an aria-label built from the existing strings (home_streak_p1 + n + home_streak_p2), so a screen reader hears the streak sentence, not just "1".
+
+E. Checks and screenshots
+- hooks.js and contrast.js (Light and Dark, all panels), same gates. The 2 Dark items and .level-sub should clear.
+- Re-run warmup-tracking (with the new check), warmup-entries, batch1, batch3c, levelup, cv-live7, cv-modalz and glider-courses. Same rule as before: any failure is re-run on master and classified.
+- Run shots.js again and push it to review/phase1 as a new commit that replaces the images. Push redesign/phase1 too. Secret check before both pushes.
+- Report: commits, the vc-ink list, the success-state list, gate results and the suite table. Then stop.
+
+F. Deploy: not yet. After I've seen the new screenshots I'll reply with an explicit go-ahead. Then:
+1. Merge redesign/phase1 into master with --no-ff and push.
+2. From deploy/: npx vercel@62.2.0 deploy --prod --yes --scope alegra1122. Retry once on "Not authorized".
+3. On production, one at a time, paced, with test accounts cleaned up:
+   · system.js, contrast.js
+   · batch1, warmup entries and tracking, levelup
+   · cv-live7, cv-modalz, glider-courses
+   · pageload.js with PL_LOADS=10
+   · shots.js for Home and the four hubs at 390, Light and Dark
+4. Mark the roadmap's "Page lang stays en" entry fixed, update HANDOFF.md, and delete review/phase1 (local and remote).
