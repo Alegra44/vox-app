@@ -1629,7 +1629,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   }
 </style>
 </head>
-<body>
+<body data-house="up">
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
   <!-- VoxCoach House Lights icons. 24px grid, 1.6 stroke, round caps. Filled glyphs (play, pause, stop, record) set fill in the symbol. -->
   <symbol id="hl-mark" viewBox="0 0 28 20"><path d="M1.5 15.5c3 0 3.6-11 6.8-11 3 0 2.8 8.6 5.6 8.6 2.2 0 2.5-3.6 4.6-3.6h8" fill="none" stroke-width="2.4"/></symbol>
@@ -1681,6 +1681,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <symbol id="hl-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
   <symbol id="hl-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
 </svg>
+<div class="hl-dimmer" id="hlDimmer" aria-hidden="true"></div>
 <div class="splash-screen" id="splashScreen">
   <svg class="splash-ring" viewBox="0 0 200 200">
     <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="6"/>
@@ -5176,7 +5177,7 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
   label.textContent='Listening — tap to stop';
   cancelAnimationFrame(rafId);
   loop();
-  vlSidecar(()=>mode==='tuner');
+  singingSession(()=>mode==='tuner');
 });
 
 /* ---------------- Range Finder ---------------- */
@@ -5202,7 +5203,7 @@ document.getElementById('rangeStartBtn').addEventListener('click', async ()=>{
   mode='rangeLow';
   cancelAnimationFrame(rafId);
   loop();
-  vlSidecar(()=>mode==='rangeLow' || mode==='rangeHigh');
+  singingSession(()=>mode==='rangeLow' || mode==='rangeHigh');
   showStep('rangeLow');
 });
 
@@ -12172,7 +12173,7 @@ async function startBreathHold(){
   const ring = document.getElementById('breathRingFill');
   if(ring){ ring.style.strokeDashoffset = 553; ring.style.stroke = 'var(--teal)'; ring.dataset.atTarget = '0'; }
   breathLoop();
-  vlSidecar(()=>breathActive);
+  singingSession(()=>breathActive);
 }
 
 const BREATH_RING_CIRC = 553;
@@ -12699,7 +12700,7 @@ async function startStayInKey(){
   document.getElementById('stayKeyStartLabel').textContent = t('action_stop');
   document.getElementById('stayKeyStartBtn').classList.add('listening');
   stayKeyLoop();
-  vlSidecar(()=>stayKeyActive);
+  singingSession(()=>stayKeyActive);
 }
 function stayKeyLoop(){
   if(!stayKeyActive) return;
@@ -12788,7 +12789,7 @@ async function startEmotionalSinging(){
   document.getElementById('emotionStartLabel').textContent = t('action_stop');
   document.getElementById('emotionStartBtn').classList.add('listening');
   emotionLoop();
-  vlSidecar(()=>emotionActive);
+  singingSession(()=>emotionActive);
 }
 function emotionLoop(){
   if(!emotionActive) return;
@@ -13001,7 +13002,7 @@ async function startKaraoke(){
   document.getElementById('karaokeStartLabel').textContent = t('action_stop');
   document.getElementById('karaokeStartBtn').classList.add('listening');
   karaokeLoop();
-  vlSidecar(()=>karaokeActive);
+  singingSession(()=>karaokeActive);
 }
 function finalizeKaraokeNote(idx){
   if(idx<0) return;
@@ -14159,7 +14160,7 @@ async function startTimingTrainer(){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   timingTrainer.stopTicker = await startAudioTicker(timingTrainerTick);
-  vlSidecar(()=>timingTrainer.active);
+  singingSession(()=>timingTrainer.active);
 }
 
 function finishTimingTrainer(){
@@ -14381,7 +14382,7 @@ async function startHarmonyMemory(){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   harmonyMemory.raf = requestAnimationFrame(hmTick);
-  vlSidecar(()=>harmonyMemory.active);
+  singingSession(()=>harmonyMemory.active);
 }
 
 function hmTick(){
@@ -14625,7 +14626,7 @@ async function startChallenge(kind){
   document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
   runPartRehearsalAnim();
   challenge.raf = requestAnimationFrame(chTick);
-  vlSidecar(()=>challenge.active);
+  singingSession(()=>challenge.active);
 }
 
 function chTick(){
@@ -14906,7 +14907,7 @@ async function ycRecord(part){
   const others = [];
   for(const p of YC_PARTS) if(p!==part && takes[p]) others.push([p, await ycDecode(takes[p].base64)]);
   const rec = yourChoir.recording = {part, song, startCtx:null, recorder:null, cancelled:false, lastIdx:-3};
-  vlSidecar(()=>yourChoir.recording===rec && (!rec.recorder || rec.recorder.state!=='inactive')); // not while the take is saved
+  singingSession(()=>yourChoir.recording===rec && (!rec.recorder || rec.recorder.state!=='inactive')); // not while the take is saved
   choirHeadroomFx = ycHeadroom(takes, part);
   renderYourChoir();
   let started = null;
@@ -16218,7 +16219,7 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   await referenceThenCue(()=>playTone(noteToFreq(target), 0.9), 1050, btn);
   btn.textContent=t('action_listening');
   let listening = true;
-  vlSidecar(()=>listening);
+  singingSession(()=>listening);
   const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg, {showCentsDetail:cfg.showCentsDetail}));
   listening = false;
   btn.disabled = false; btn.textContent=t('action_listenscore');
@@ -16294,7 +16295,7 @@ document.getElementById('intervalListenBtn').addEventListener('click', async ()=
   await referenceThenCue(()=>{ playTone(noteToFreq(root), 0.55, 0); playTone(noteToFreq(target), 0.55, 0.65); }, 1350, btn);
   btn.textContent=t('action_listening');
   let listening = true;
-  vlSidecar(()=>listening);
+  singingSession(()=>listening);
   const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg));
   listening = false;
   btn.disabled = false; btn.textContent=t('action_listenscore');
@@ -16379,7 +16380,7 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('scaleStartBtn');
   btn.disabled = true;
   document.getElementById('scaleAgainBtn').style.display='none';
-  vlSidecar(()=>btn.disabled);
+  singingSession(()=>btn.disabled);
   document.getElementById('scaleResult').style.display='none';
   const results = [];
   for(let i=0;i<steps.length;i++){
@@ -17370,7 +17371,7 @@ async function startGlider(){
   document.getElementById('gliderStartBtn').classList.add('listening');
   if(profile) recordActivity();
   gliderLoop();
-  vlSidecar(()=>gliderActive);
+  singingSession(()=>gliderActive);
 }
 function gliderLoop(){
   if(!gliderActive) return;
@@ -17575,7 +17576,7 @@ async function wuStartExercise(id){
   wuStatus('wu_follow');
   wuRender();
   wuExLoop(run);
-  vlSidecar(()=>wuRun===run); // warming up is singing: it counts toward today's vocal load
+  singingSession(()=>wuRun===run); // warming up is singing: it counts toward today's vocal load
 }
 function wuExLoop(run){
   if(wuRun!==run) return;
@@ -17632,7 +17633,7 @@ async function wuStartSong(id){
   run.t0 = performance.now();
   wuStatus('wu_song_follow');
   wuSongLoop(run);
-  vlSidecar(()=>wuRun===run);
+  singingSession(()=>wuRun===run);
 }
 function wuSongLoop(run){
   if(wuRun!==run) return;
@@ -17740,7 +17741,7 @@ async function startBoss(){
   document.getElementById('bossStartLabel').textContent='Battling — tap to flee';
   document.getElementById('bossStartBtn').classList.add('listening');
   bossLoop();
-  if(!bossUsesRegisterInput) vlSidecar(()=>bossActive);
+  if(!bossUsesRegisterInput) singingSession(()=>bossActive);
 }
 function bossFinalizeNote(idx){
   if(idx<0) return;
@@ -17972,7 +17973,7 @@ document.getElementById('bossTrainListenBtn').addEventListener('click', async ()
   if(window._bossTrainTargetMidi===undefined) return;
   const btn=document.getElementById('bossTrainListenBtn');
   btn.disabled=true; btn.textContent=t('action_listening');
-  vlSidecar(()=>btn.disabled);
+  singingSession(()=>btn.disabled);
   const res = await captureAccuracyForTarget(window._bossTrainTargetMidi, 1600, {accuracyMultiplier:0.6});
   btn.disabled=false; btn.textContent=t('boss_listen_score_btn');
   document.getElementById('bossTrainResult').style.display='block';
@@ -18180,7 +18181,7 @@ async function startHarmonyArena(){
   document.getElementById('harmonyStartLabel').textContent='Singing — tap to stop';
   document.getElementById('harmonyStartBtn').classList.add('listening');
   harmonyLoop();
-  vlSidecar(()=>harmonyActive);
+  singingSession(()=>harmonyActive);
 }
 function harmonyFinalizeNote(idx){
   if(harmonyNoteBuf.length===0){ harmonyNoteResults[idx] = null; return; }
@@ -18405,6 +18406,81 @@ function renderResonanceRing(svgEl, pct, colorVar){
       transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .6s cubic-bezier(.4,0,.2,1);"/>`;
 }
 
+/* ---------------- House lights (House Lights v1.3 §9, phase 2) ---------------- */
+// houseSession(isActive, stage) does the lighting. While a session's isActive() holds and its stage sits in the active
+// panel (or an open overlay), the house is down (body data-house="down") and the newest such session's stage is live.
+// With no session active for HOUSE_UP_AFTER_MS the house comes up; sessions whose predicate is false are dropped.
+// Without a stage nothing changes on screen. Going down or up: the dimmer fades in (half of --hl-d-house), the house
+// switches and the stage enters or exits, the dimmer fades out; with reduced motion the switch is immediate, no dimmer.
+// singingSession(isActive, stage) is houseSession plus vlSidecar(isActive), with the same predicate.
+const HOUSE_UP_AFTER_MS = 600;
+let houseSessions = [], houseRaf = null, houseIdleSince = null, houseLive = null;
+let houseSwitching = false, houseTarget = null, houseTimers = [], houseMeta = null;
+function houseSession(isActive, stage){
+  houseSessions.push({isActive, stage: stage || null});
+  if(!houseRaf) houseRaf = requestAnimationFrame(houseWatch);
+}
+function singingSession(isActive, stage){
+  houseSession(isActive, stage);
+  return vlSidecar(isActive);
+}
+function houseStageShown(stage){
+  if(!stage || !stage.isConnected) return false;
+  const panel = stage.closest('section.panel');
+  if(panel) return panel.classList.contains('active');
+  const overlay = stage.closest('.modal-overlay');
+  return !!overlay && getComputedStyle(overlay).display!=='none';
+}
+function houseWatch(){
+  houseRaf = null;
+  houseSessions = houseSessions.filter(s=>{ try{ return !!s.isActive(); }catch(e){ return false; } });
+  let want = null;
+  for(let i=houseSessions.length-1; i>=0; i--){ if(houseStageShown(houseSessions[i].stage)){ want = houseSessions[i].stage; break; } }
+  const cur = houseSwitching ? houseTarget : houseLive;
+  if(want){ houseIdleSince = null; if(want!==cur) houseSwitch(want); }
+  else if(cur){
+    if(houseIdleSince===null) houseIdleSince = performance.now();
+    else if(performance.now()-houseIdleSince >= HOUSE_UP_AFTER_MS) houseSwitch(null);
+  }
+  if(houseSessions.length || houseLive || houseSwitching) houseRaf = requestAnimationFrame(houseWatch);
+}
+function houseSwitch(stage){
+  houseTarget = stage;
+  if(houseSwitching) return; // the switch under way applies the latest target
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){ houseApply(stage); return; }
+  const dim = document.getElementById('hlDimmer');
+  const half = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hl-d-house')) || 640)/2;
+  houseSwitching = true;
+  dim.classList.add('is-on');
+  houseTimers = [
+    setTimeout(()=>{ houseApply(houseTarget); dim.classList.remove('is-on'); }, half),
+    setTimeout(()=>{ houseSwitching = false; }, half*2),
+  ];
+}
+function houseApply(stage){
+  if(stage!==houseLive){
+    if(houseLive) stageExit();
+    if(stage) stageEnter(stage);
+  }
+  houseLive = stage;
+  document.body.dataset.house = stage ? 'down' : 'up';
+  const metas = document.querySelectorAll('meta[name="theme-color"]'); // the browser chrome goes dark with the house:
+  if(stage){ // the stage's own background (--hl-bg with the house down)
+    const stageBg = getComputedStyle(document.body).getPropertyValue('--hl-bg').trim();
+    if(!houseMeta) houseMeta = [...metas].map(m=>m.getAttribute('content'));
+    metas.forEach(m=>m.setAttribute('content', stageBg));
+  }
+  else if(houseMeta){ metas.forEach((m,i)=>m.setAttribute('content', houseMeta[i])); houseMeta = null; }
+}
+// Leaving a tool: the house comes up at once (no dimmer, no 600 ms), every session is cleared, the stage exits.
+function houseUpNow(){
+  houseSessions = []; houseIdleSince = null; houseTarget = null;
+  houseTimers.forEach(clearTimeout); houseTimers = []; houseSwitching = false;
+  const dim = document.getElementById('hlDimmer');
+  if(dim && dim.classList.contains('is-on')){ dim.style.transition = 'none'; dim.classList.remove('is-on'); void dim.offsetWidth; dim.style.transition = ''; }
+  houseApply(null);
+}
+
 function stopAllActiveSessions(){
   // Real, general safeguard: navigating anywhere should never leave a prior tool's
   // real-time capture loop silently running in the background. Setting each flag
@@ -18435,6 +18511,7 @@ function stopAllActiveSessions(){
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
   if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false);
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
+  houseUpNow();
 }
 function enterPanel(panelName){
   // Delegates to the existing, battle-tested nav system — guarantees every
@@ -19468,7 +19545,7 @@ document.getElementById('customStartBtn')?.addEventListener('click', async ()=>{
   customResults = [];
   const durationMs = CUSTOM_TEMPO_MS[customTempo];
   const runner = document.getElementById('customRunnerCard');
-  vlSidecar(()=>runner.style.display==='block');
+  singingSession(()=>runner.style.display==='block');
 
   for(let i=0;i<customSequence.length;i++){
     const targetMidi = customSequence[i];
@@ -19539,7 +19616,7 @@ document.getElementById('journeyRecordBtn')?.addEventListener('click', async ()=
   const btn = document.getElementById('journeyRecordBtn');
   const check = document.getElementById('voiceRecordCheck');
   btn.disabled = true; btn.textContent = '🔴 Recording… (4s)';
-  vlSidecar(()=>btn.disabled);
+  singingSession(()=>btn.disabled);
   const clip = await recordShortClip(4000);
   btn.disabled = false;
   if(clip){
@@ -19587,7 +19664,7 @@ document.getElementById('recordTodayBtn')?.addEventListener('click', async ()=>{
   if(!profile) return;
   const btn = document.getElementById('recordTodayBtn');
   btn.disabled = true; btn.textContent = '🔴 Recording… (4s)';
-  vlSidecar(()=>btn.disabled);
+  singingSession(()=>btn.disabled);
   const clip = await recordShortClip(4000);
   btn.disabled = false; btn.textContent = '🎙️ Record today\'s clip';
   if(clip){
@@ -19674,7 +19751,7 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('rhythmLiveStatus').textContent = t('rhythm_listen_instructions');
   renderRhythmDots(-1);
   rhythmOnsetLoop(beatMs);
-  vlSidecar(()=>rhythmActive);
+  singingSession(()=>rhythmActive);
 });
 
 function rhythmOnsetLoop(beatMs){
@@ -19799,7 +19876,7 @@ function startMirrorEcho(){
   mirrorEchoStartTime = performance.now();
   mirrorUserTrace = [];
   mirrorEchoLoop();
-  vlSidecar(()=>mirrorActive);
+  singingSession(()=>mirrorActive);
 }
 function mirrorEchoLoop(){
   if(!mirrorActive) return;
@@ -19928,7 +20005,7 @@ document.getElementById('riftStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('riftStartBtn').classList.add('listening');
   riftTimerTick();
   riftRunNextRound();
-  vlSidecar(()=>riftActive);
+  singingSession(()=>riftActive);
 });
 
 function riftTimerTick(){
@@ -20368,7 +20445,7 @@ document.getElementById('eveStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('evePreCard').style.display='none';
   document.getElementById('eveResultCard').style.display='none';
   document.getElementById('eveRunnerCard').style.display='block';
-  vlSidecar(()=>eveActive);
+  singingSession(()=>eveActive);
   runEveLoop();
 });
 
@@ -20585,7 +20662,7 @@ document.getElementById('fiveStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('fivePreCard').style.display='none';
   document.getElementById('fiveResultCard').style.display='none';
   document.getElementById('fiveRunnerCard').style.display='block';
-  vlSidecar(()=>fiveActive);
+  singingSession(()=>fiveActive);
   runFiveLoop();
 });
 
@@ -20674,7 +20751,7 @@ document.getElementById('oneTakeStartBtn')?.addEventListener('click', async ()=>
   oneTakeActive = true;
   document.getElementById('oneTakePreCard').style.display = 'none';
   document.getElementById('oneTakeRunnerCard').style.display = 'block';
-  vlSidecar(()=>oneTakeActive);
+  singingSession(()=>oneTakeActive);
   runOneTake();
 });
 
@@ -20846,7 +20923,7 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
     document.getElementById('hmSingNote').textContent = noteNameFromMidi(hmTargetMidi);
     document.getElementById('hmSingStatus').textContent = 'Listening…';
     hmSinging = true;
-    vlSidecar(()=>hmSinging);
+    singingSession(()=>hmSinging);
     const result = await captureAccuracyForTarget(hmTargetMidi, 1600, {});
     hmSinging = false;
     document.getElementById('hmSingCard').style.display = 'none';
@@ -20903,7 +20980,7 @@ document.getElementById('studioRecordBtn')?.addEventListener('click', async ()=>
   const label = document.getElementById('studioRecordLabel');
   btn.disabled = true;
   label.textContent = t('studio_recording_label');
-  vlSidecar(()=>btn.disabled);
+  singingSession(()=>btn.disabled);
   const clip = await recordShortClip(15000);
   btn.disabled = false;
   label.textContent = t('studio_record_btn');
@@ -20957,7 +21034,7 @@ document.getElementById('emoStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('emoPreCard').style.display = 'none';
   document.getElementById('emoResultCard').style.display = 'none';
   document.getElementById('emoRunnerCard').style.display = 'block';
-  vlSidecar(()=>emoActive);
+  singingSession(()=>emoActive);
 
   await runEmoRound(emoFirstIntent, 1);
   if(!emoActive) return;
@@ -21075,7 +21152,7 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('pdResultCard').style.display='none';
   document.getElementById('pdRunnerCard').style.display='block';
   pdLoop();
-  vlSidecar(()=>pdActive);
+  singingSession(()=>pdActive);
 });
 
 function pdFinalizeNote(idx){
@@ -21402,7 +21479,7 @@ document.getElementById('aiDuetStartBtn')?.addEventListener('click', async ()=>{
   updateAllChoirGains();
   await playChoir();
   aiDuetActive = true;
-  vlSidecar(()=>aiDuetActive && choirIsPlaying);
+  singingSession(()=>aiDuetActive && choirIsPlaying);
   document.getElementById('aiDuetStartBtn').innerHTML = '<span class="dot-icon"></span>Stop';
 });
 
