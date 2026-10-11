@@ -401,10 +401,19 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   }
   .tuner-ring-wrap.locked-pulse{animation:tunerLockPulse 1.1s ease-out;}
   @keyframes tunerLockPulse{
-    0%{filter:drop-shadow(0 0 0 color-mix(in srgb, var(--teal) 0%, transparent));}
-    30%{filter:drop-shadow(0 0 22px color-mix(in srgb, var(--teal) 55%, transparent));}
-    100%{filter:drop-shadow(0 0 0 color-mix(in srgb, var(--teal) 0%, transparent));}
+    0%{filter:none;}
+    30%{filter:var(--hl-glow);}
+    100%{filter:none;}
   }
+  /* locked: the voice fills the ring (a disc in --hl-lock) and the note reads on it */
+  #tunerLockFill{opacity:0;transition:opacity var(--hl-d1) var(--hl-ease);}
+  .tuner-ring-wrap.locked-pulse #tunerLockFill{opacity:1;}
+  .tuner-ring-wrap.locked-pulse .note-display, .tuner-ring-wrap.locked-pulse .note-display .oct,
+  .tuner-ring-wrap.locked-pulse .cents-display.locked{color:var(--hl-on-voice);}
+  /* on the stage: a bigger ring, the note in the display style */
+  .vc-stage.is-live .tuner-ring-wrap, .vc-stage.is-live .tuner-ring{width:min(76vw, 320px);height:min(76vw, 320px);}
+  .vc-stage.is-live .note-display{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;}
+  .vc-stage.is-live .mic-btn{margin:0 auto;}
   @keyframes markerPulse{
     0%{r:9;}
     35%{r:15;}
@@ -414,6 +423,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @media (prefers-reduced-motion: reduce){
     .tuner-ring-wrap.locked-pulse{animation:none;}
     .tuner-ring-wrap #tunerRingFill{transition:none !important;}
+    #tunerLockFill{transition:none;}
     #pitchMarker.marker-pulse{animation:none;}
   }
 
@@ -459,6 +469,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   }
   .cents-display.flat{color:var(--coral);}
   .cents-display.sharp{color:var(--coral);}
+  #centsDisplay.flat, #centsDisplay.sharp{color:var(--hl-ink-2);} /* the Tuner: off the note is information, not an error */
   .cents-display.locked{color:var(--teal);}
 
   .mic-btn{
@@ -2666,10 +2677,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="tuner_sub">Sing a note. The ring closes as you approach the pitch and locks when you're on it.</div>
     </div>
     <div class="tuner-hero-card">
+      <div class="vc-stage" id="tunerStage">
       <div class="tuner-ring-wrap" id="tunerRingWrap">
         <svg class="tuner-ring" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="10"/>
-          <circle id="tunerRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="10"
+          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"/>
+          <circle id="tunerLockFill" cx="100" cy="100" r="80" fill="var(--hl-lock)"/>
+          <circle id="tunerRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"
             stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="553"
             transform="rotate(-90 100 100)" style="transition:stroke-dashoffset .1s linear, stroke .15s ease;"/>
         </svg>
@@ -2687,10 +2700,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
       <div class="health-status-banner neutral" id="vocalHealthBanner" style="display:none;margin-top:12px;"></div>
 
-      <div class="stat-row">
+      <div class="stat-row vc-paper-only">
         <div class="stat-chip"><div class="label" data-i18n="tuner_pitch_label">Pitch</div><div class="val" id="pitchStat">—</div></div>
         <div class="stat-chip"><div class="label" data-i18n="tuner_stability_label">Stability</div><div class="val" id="stabilityStat">—</div></div>
         <div class="stat-chip"><div class="label" data-i18n="tuner_freq_label">Freq</div><div class="val" id="freqStat">—</div></div>
+      </div>
+      </div>
+
+      <div class="vc-result" id="tunerResult" role="status" aria-live="polite" style="display:none;">
+        <p class="vc-result-num" id="tunerResultVal">—</p>
+        <h3 class="hl-h3" data-i18n="tuner_result_label">Average stability</h3>
+        <p class="vc-result-meta" id="tunerResultMeta"></p>
+        <details class="hl-measure"><summary data-i18n="measure_summary">How this is measured</summary><p data-i18n="tuner_measure">Stability is 100 minus three times how much your pitch wavers, in cents, over its last 30 readings (about half a second). This number is the average for the whole time you sang. The ring locks when you're within 6 cents of the note.</p></details>
       </div>
 
       <p class="hint" data-i18n="tuner_hint">Uses your microphone locally in the browser — nothing is uploaded. Best with headphones or a quiet room.</p>
@@ -5144,9 +5165,9 @@ function updateTunerUI(freq){
   const pct = Math.max(-100, Math.min(100, note.cents));
   pitchStat.textContent = (100-Math.min(100,Math.abs(note.cents)*2))+'%';
 
-  // Real voice-reactive ambient: teal and stronger when genuinely locked, brass and faint otherwise — never on silence
+  // Real voice-reactive ambient: the stage's voice colour, stronger by closeness and ×1.5 when genuinely locked — never on silence
   const closeness = Math.max(0, 100-Math.min(100,Math.abs(note.cents)*2));
-  setVoiceAmbientTarget((closeness/100)*0.14, locked ? [79,214,196] : [232,163,61]);
+  setVoiceAmbientTarget((closeness/100)*0.09*(locked ? 1.5 : 1), tunerVoiceRgb || [127,140,255]);
   tickVoiceAmbient();
 
   stabilityBuffer.push(note.cents);
@@ -5168,7 +5189,7 @@ function resetTunerRing(){
   const ring = document.getElementById('tunerRingFill');
   if(!ring) return;
   ring.style.strokeDashoffset = TUNER_RING_CIRC;
-  ring.style.stroke = 'var(--hairline)';
+  ring.style.stroke = 'var(--hl-rule)'; // idle
   document.getElementById('tunerRingWrap')?.classList.remove('locked-pulse');
 }
 function setNeedle(pct, locked){
@@ -5177,11 +5198,28 @@ function setNeedle(pct, locked){
   const closeness = Math.max(0, 100 - Math.min(100, Math.abs(pct)*2));
   const offset = TUNER_RING_CIRC - (closeness/100)*TUNER_RING_CIRC;
   ring.style.strokeDashoffset = offset;
-  ring.style.stroke = locked ? 'var(--teal)' : 'var(--brass)';
+  ring.style.stroke = locked ? 'var(--hl-voice)' : 'var(--hl-ink-2)'; // locked : approaching
   document.getElementById('tunerRingWrap')?.classList.toggle('locked-pulse', locked);
 }
 
 let sessionStabilityReadings = [];
+let tunerVoiceRgb = null; // the stage's voice colour, read once per session
+// A stage's voice colour as [r,g,b]: --hl-voice under data-house="down", read from a probe inside the stage (the house
+// itself is still up when a session starts).
+function stageVoiceRgb(stage){
+  let probe = stage.querySelector(':scope > .vc-stage-probe');
+  if(!probe){ probe = document.createElement('i'); probe.className = 'vc-stage-probe'; probe.setAttribute('data-house', 'down'); probe.hidden = true; stage.prepend(probe); }
+  const v = getComputedStyle(probe).getPropertyValue('--hl-voice').trim();
+  const m = v.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i);
+  return m ? [parseInt(m[1],16), parseInt(m[2],16), parseInt(m[3],16)] : null;
+}
+function showTunerResult(avg, ms){
+  const box = document.getElementById('tunerResult');
+  const sec = Math.max(0, Math.round(ms/1000));
+  document.getElementById('tunerResultVal').textContent = avg+'%';
+  document.getElementById('tunerResultMeta').textContent = `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+  box.style.display = '';
+}
 document.getElementById('micBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('micBtn');
   const label = document.getElementById('micBtnLabel');
@@ -5192,9 +5230,10 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
     label.textContent='Start listening';
     centsDisplay.textContent='Tap start and sing a note';
     noteDisplay.innerHTML='—';
-    if(sessionStabilityReadings.length>5 && profile){
+    if(sessionStabilityReadings.length>5){ // the session's average stability: shown signed in or out, recorded signed in
       const avg = Math.round(sessionStabilityReadings.reduce((a,b)=>a+b,0)/sessionStabilityReadings.length);
-      recordDailyMetric('stability', avg);
+      showTunerResult(avg, performance.now()-tunerSessionStartTime);
+      if(profile) recordDailyMetric('stability', avg);
     }
     sessionStabilityReadings = [];
     return;
@@ -5204,6 +5243,8 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
   if(!ok) return;
   sessionStabilityReadings = [];
   tunerSessionStartTime = performance.now();
+  document.getElementById('tunerResult').style.display = 'none';
+  tunerVoiceRgb = stageVoiceRgb(document.getElementById('tunerStage'));
   vocalHealthWarningShown = false;
   document.getElementById('vocalHealthBanner')?.style.setProperty('display','none');
   mode='tuner';
@@ -5211,7 +5252,7 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
   label.textContent='Listening — tap to stop';
   cancelAnimationFrame(rafId);
   loop();
-  singingSession(()=>mode==='tuner');
+  singingSession(()=>mode==='tuner', document.getElementById('tunerStage'));
 });
 
 /* ---------------- Range Finder ---------------- */
