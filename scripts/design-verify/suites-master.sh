@@ -15,6 +15,7 @@ L=http://localhost:8765/
 trap 'kill $SRV 2>/dev/null' EXIT
 ALL=(
   "batch1|node scripts/vocal-load-verify/batch1.js"
+  "batch3c|node scripts/vocal-load-verify/batch3c.js"
   "glider-courses|node scripts/glider-verify/courses.js"
   "warmup-tracking|node scripts/warmup-verify/tracking.js"
   "cv-verify|node scripts/choir-verify/verify.js all"

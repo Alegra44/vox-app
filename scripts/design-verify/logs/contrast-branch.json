@@ -1,6 +1,6 @@
 {
  "base": "working copy",
- "at": "2026-10-11T18:46:56.212Z",
+ "at": "2026-10-12T14:12:02.826Z",
  "viewport": "390x844",
  "themes": {
   "light": {
@@ -120,7 +120,7 @@
    ],
    "home": [
     {
-     "text": "Good morning, Design Check",
+     "text": "Good evening, Design Check",
      "path": "section#panel-home.panel.active > div.home-greeting-row > div > div#homeGreeting.home-greeting",
      "size": 26,
      "weight": 600,
@@ -2234,7 +2234,7 @@
      "status": "pass"
     },
     {
-     "text": "Morning — starting gentler and a bit longer since voices are",
+     "text": "Evening — shorter is fine if your voice has already been act",
      "path": "div.wrap > section#panel-warmup.panel.active > div.key-card > div#warmupContext.warmup-context",
      "size": 13,
      "weight": 400,
@@ -2258,7 +2258,7 @@
      "status": "pass"
     },
     {
-     "text": "Gentle glide, low to high and back (4.5s)",
+     "text": "Gentle glide, low to high and back (3.5s)",
      "path": "div.key-card > div.warmup-step > div > div#warmupStep1Sub.ws-sub",
      "size": 11.5,
      "weight": 400,
@@ -3260,7 +3260,7 @@
      "status": "pass"
     },
     {
-     "text": "C#3",
+     "text": "G#3",
      "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchTargetNote.ex-target-note",
      "size": 40,
      "weight": 600,
@@ -4090,18 +4090,6 @@
      "status": "pass"
     },
     {
-     "text": "M",
-     "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
-     "size": 9,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.7,
-     "fg": "#616770",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
      "text": "T",
      "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
      "size": 9,
@@ -4247,6 +4235,18 @@
     },
     {
      "text": "S",
+     "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
+     "size": 9,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "M",
      "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
      "size": 9,
      "weight": 400,
@@ -4894,18 +4894,6 @@
      "status": "pass"
     },
     {
-     "text": "M",
-     "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
-     "size": 8,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.7,
-     "fg": "#616770",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
      "text": "T",
      "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
@@ -5051,6 +5039,18 @@
     },
     {
      "text": "S",
+     "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
+     "size": 8,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "M",
      "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
      "weight": 400,
@@ -5074,18 +5074,6 @@
      "status": "pass"
     },
     {
-     "text": "M",
-     "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
-     "size": 8,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.7,
-     "fg": "#616770",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
      "text": "T",
      "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
@@ -5231,6 +5219,18 @@
     },
     {
      "text": "S",
+     "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
+     "size": 8,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "M",
      "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
      "weight": 400,
@@ -15676,10 +15676,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -15688,8 +15688,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -15700,10 +15700,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -15712,10 +15712,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -15724,10 +15724,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -15736,10 +15736,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -15748,10 +15748,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: tuner-result": [
@@ -15781,7 +15781,7 @@
     },
     {
      "text": "Tap start and sing a note",
-     "path": "div#tunerStage.vc-stage > div#tunerRingWrap.tuner-ring-wrap > div.tuner-ring-center > div#centsDisplay.cents-display",
+     "path": "div#tunerStage.vc-stage.vc-has-result > div#tunerRingWrap.tuner-ring-wrap > div.tuner-ring-center > div#centsDisplay.cents-display",
      "size": 13,
      "weight": 400,
      "need": 4.5,
@@ -15793,7 +15793,7 @@
     },
     {
      "text": "Start listening",
-     "path": "div.tuner-hero-card > div#tunerStage.vc-stage > button#micBtn.mic-btn > span#micBtnLabel",
+     "path": "div.tuner-hero-card > div#tunerStage.vc-stage.vc-has-result > button#micBtn.mic-btn > span#micBtnLabel",
      "size": 14,
      "weight": 700,
      "need": 4.5,
@@ -15805,7 +15805,7 @@
     },
     {
      "text": "Vocal load today",
-     "path": "div#tunerStage.vc-stage > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span#vlGaugeTunerLabel",
+     "path": "div#tunerStage.vc-stage.vc-has-result > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span#vlGaugeTunerLabel",
      "size": 12,
      "weight": 400,
      "need": 4.5,
@@ -15817,7 +15817,7 @@
     },
     {
      "text": "0.1% of daily budget",
-     "path": "div#tunerStage.vc-stage > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span.vl-gauge-val",
+     "path": "div#tunerStage.vc-stage.vc-has-result > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span.vl-gauge-val",
      "size": 12,
      "weight": 400,
      "need": 4.5,
@@ -15828,79 +15828,7 @@
      "status": "pass"
     },
     {
-     "text": "Pitch",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div.label",
-     "size": 10,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.7,
-     "fg": "#616770",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
-     "text": "100%",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div#pitchStat.val",
-     "size": 17,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 18.61,
-     "fg": "#111316",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
-     "text": "Stability",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div.label",
-     "size": 10,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.7,
-     "fg": "#616770",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
-     "text": "71%",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div#stabilityStat.val",
-     "size": 17,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 18.61,
-     "fg": "#111316",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
-     "text": "Freq",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div.label",
-     "size": 10,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.7,
-     "fg": "#616770",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
-     "text": "440.0 Hz",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div#freqStat.val",
-     "size": 17,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 18.61,
-     "fg": "#111316",
-     "bg": "#ffffff",
-     "status": "pass"
-    },
-    {
-     "text": "80%",
+     "text": "79%",
      "path": "section#panel-tuner.panel.active > div.tuner-hero-card > div#tunerResult.vc-result > p#tunerResultVal.vc-result-num",
      "size": 72,
      "weight": 300,
@@ -15937,7 +15865,7 @@
     },
     {
      "text": "How this is measured",
-     "path": "div.tuner-hero-card > div#tunerResult.vc-result > details.hl-measure > summary",
+     "path": "div#tunerResult.vc-result > details.hl-measure > summary > span",
      "size": 14,
      "weight": 400,
      "need": 4.5,
@@ -16132,6 +16060,42 @@
      "status": "pass"
     },
     {
+     "text": "−50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "0",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "+50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
      "text": "Listen…",
      "path": "div.ex-target-card > div#pitchStage.vc-stage.is-live > div.btn-row > button#pitchListenBtn.solid-btn.teal",
      "size": 13,
@@ -16176,10 +16140,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -16188,8 +16152,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -16200,10 +16164,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -16212,10 +16176,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -16224,10 +16188,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -16236,10 +16200,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -16248,10 +16212,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: pitch-live": [
@@ -16269,14 +16233,14 @@
     },
     {
      "text": "A4",
-     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage.is-live > div#pitchTargetNote.ex-target-note",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage.is-live > div#pitchTargetNote.ex-target-note.pm-locked",
      "size": 56,
      "weight": 300,
      "need": 3,
      "disabled": false,
-     "ratio": 18,
-     "fg": "#f1f2f4",
-     "bg": "#060708",
+     "ratio": 6.83,
+     "fg": "#05060f",
+     "bg": "#7f8cff",
      "status": "pass"
     },
     {
@@ -16328,6 +16292,54 @@
      "status": "pass"
     },
     {
+     "text": "−50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "0",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "+50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "On the note",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div#pitchCentsRead.pm-cents-read",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 9.05,
+     "fg": "#a9aeb7",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
      "text": "Listening…",
      "path": "div.ex-target-card > div#pitchStage.vc-stage.is-live > div.btn-row > button#pitchListenBtn.solid-btn.teal",
      "size": 13,
@@ -16372,10 +16384,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -16384,8 +16396,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -16396,10 +16408,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -16408,10 +16420,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -16420,10 +16432,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -16432,10 +16444,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -16444,10 +16456,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: pitch-result-heard": [
@@ -16944,7 +16956,7 @@
      "status": "pass"
     },
     {
-     "text": "A4",
+     "text": "F4",
      "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchTargetNote.ex-target-note",
      "size": 40,
      "weight": 600,
@@ -16992,6 +17004,18 @@
      "status": "pass"
     },
     {
+     "text": "Sing it again (A4)",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchAgainBtn.ghost-btn.vc-paper-only",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
      "text": "Vocal load today",
      "path": "div#pitchStage.vc-stage > div#vlGaugePitch.vl-gauge > div.vl-gauge-head > span#vlGaugePitchLabel",
      "size": 12,
@@ -17017,13 +17041,13 @@
     },
     {
      "text": "98%",
-     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchAccuracyVal.ex-accuracy.good",
-     "size": 46,
-     "weight": 600,
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchAccuracyVal.ex-accuracy.vc-result-num",
+     "size": 72,
+     "weight": 300,
      "need": 3,
      "disabled": false,
-     "ratio": 5.71,
-     "fg": "#1e7542",
+     "ratio": 18.61,
+     "fg": "#111316",
      "bg": "#ffffff",
      "status": "pass"
     },
@@ -17053,8 +17077,8 @@
     },
     {
      "text": "0 s",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > svg#pitchTrace > text",
-     "size": 11,
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span",
+     "size": 12,
      "weight": 400,
      "need": 4.5,
      "disabled": false,
@@ -17065,8 +17089,8 @@
     },
     {
      "text": "3 s",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > svg#pitchTrace > text",
-     "size": 11,
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span#pitchTraceEnd",
+     "size": 12,
      "weight": 400,
      "need": 4.5,
      "disabled": false,
@@ -17101,7 +17125,7 @@
     },
     {
      "text": "How this is measured",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > details.hl-measure > summary",
+     "path": "div#pitchResult.ex-result.vc-result > details.hl-measure > summary > span",
      "size": 14,
      "weight": 400,
      "need": 4.5,
@@ -17137,6 +17161,790 @@
     }
    ],
    "state: pitch-result-heard · header + tab bar": [
+    {
+     "text": "VoxCoach",
+     "path": "div.wrap > header.shell-topbar > div.vc-brand > span.vc-word",
+     "size": 16,
+     "weight": 760,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 16.7,
+     "fg": "#111316",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "D",
+     "path": "div.wrap > header.shell-topbar > div#accountBar.account-bar > button.vc-avatar",
+     "size": 14,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Home",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.12,
+     "fg": "#616770",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "Coach",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 16.7,
+     "fg": "#111316",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "Songs",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.12,
+     "fg": "#616770",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "World",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.12,
+     "fg": "#616770",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "You",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.12,
+     "fg": "#616770",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    }
+   ],
+   "state: pitch-result-measure": [
+    {
+     "text": "🎯 Daily Exercises",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.journey-hero > div.j-title",
+     "size": 34,
+     "weight": 650,
+     "need": 3,
+     "disabled": false,
+     "ratio": 16.7,
+     "fg": "#111316",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "Four real ways to train pitch and ear — each scores your liv",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.journey-hero > div.j-sub",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8,
+     "fg": "#454a52",
+     "bg": "#f2f3ef",
+     "status": "pass"
+    },
+    {
+     "text": "Today's Recommended Focus",
+     "path": "div.key-card > div#reweightCard.reweight-card > div.step-label > span",
+     "size": 16,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "ADAPTIVE — RECALCULATED DAILY",
+     "path": "div.key-card > div#reweightCard.reweight-card > div.step-label > span.mock-tag",
+     "size": 10,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8.21,
+     "fg": "#2633d9",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Not a fixed weekly plan — this is computed fresh from your r",
+     "path": "section#panel-exercises.panel.active > div.key-card > div#reweightCard.reweight-card > p.desc",
+     "size": 16,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "20%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#ffffff",
+     "bg": "#111316",
+     "status": "pass"
+    },
+    {
+     "text": "20%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.68,
+     "fg": "#ffffff",
+     "bg": "#985700",
+     "status": "pass"
+    },
+    {
+     "text": "20%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8.21,
+     "fg": "#ffffff",
+     "bg": "#2633d9",
+     "status": "pass"
+    },
+    {
+     "text": "20%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.66,
+     "fg": "#ffffff",
+     "bg": "#bd361e",
+     "status": "pass"
+    },
+    {
+     "text": "20%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 6.42,
+     "fg": "#ffffff",
+     "bg": "#6c3fd1",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch 20% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Agility 20% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Range 20% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item.clickable",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Breath 20% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item.clickable",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Expression 20% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item.clickable",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "This is your first computed weighting — tomorrow's will alre",
+     "path": "section#panel-exercises.panel.active > div.key-card > div#reweightCard.reweight-card > p#reweightDeltaNote.fine-print",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Level — trains a different ability, not just \"harder\":",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.level-row > div.level-label",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Beginner",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.22,
+     "fg": "#111316",
+     "bg": "#e7e9e4",
+     "status": "pass"
+    },
+    {
+     "text": "control & pitch",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span.level-sub",
+     "size": 12,
+     "weight": 500,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 4.66,
+     "fg": "#616770",
+     "bg": "#e7e9e4",
+     "status": "pass"
+    },
+    {
+     "text": "Intermediate",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "technique & flexibility",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span.level-sub",
+     "size": 12,
+     "weight": 500,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Professional",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "precision & expression",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span.level-sub",
+     "size": 12,
+     "weight": 500,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Today's budget (ref): warm-up 5 · breathing 5 · pitch 5 · sc",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.key-card > div#timeBudgetNote.time-budget-note",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "This level's real difficulty breakdown",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.key-card > div.step-label",
+     "size": 16,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Not a single \"Easy/Medium/Hard\" label — five real dimensions",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.key-card > p.fine-print",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch precision",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "0%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Range breadth",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "85%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Speed",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "0%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Interval range",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "42%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Scoring precision",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "0%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch Match",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn.active",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.22,
+     "fg": "#111316",
+     "bg": "#e7e9e4",
+     "status": "pass"
+    },
+    {
+     "text": "Interval Match",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Scale Run",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Ear Training",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Sing this note",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchModeSub.ex-target-sub",
+     "size": 12.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "F4",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchTargetNote.ex-target-note",
+     "size": 40,
+     "weight": 600,
+     "need": 3,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Play target",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchPlayBtn.solid-btn.vc-paper-only",
+     "size": 13,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 16.7,
+     "fg": "#f2f3ef",
+     "bg": "#111316",
+     "status": "pass"
+    },
+    {
+     "text": "Listen & score",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchListenBtn.solid-btn.teal",
+     "size": 13,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8.21,
+     "fg": "#ffffff",
+     "bg": "#2633d9",
+     "status": "pass"
+    },
+    {
+     "text": "New note",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchNextBtn.ghost-btn.vc-paper-only",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Sing it again (A4)",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchAgainBtn.ghost-btn.vc-paper-only",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Vocal load today",
+     "path": "div#pitchStage.vc-stage > div#vlGaugePitch.vl-gauge > div.vl-gauge-head > span#vlGaugePitchLabel",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "0.2% of daily budget",
+     "path": "div#pitchStage.vc-stage > div#vlGaugePitch.vl-gauge > div.vl-gauge-head > span.vl-gauge-val",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "98%",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchAccuracyVal.ex-accuracy.vc-result-num",
+     "size": 72,
+     "weight": 300,
+     "need": 3,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch accuracy",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > h3.hl-h3",
+     "size": 18,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Right on it.",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchFeedback.ex-feedback-text.hl-coach",
+     "size": 13,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "0 s",
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "3 s",
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span#pitchTraceEnd",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "High confidence — 100%",
+     "path": "div#pitchResult.ex-result.vc-result > div.vc-result-dims > p#pitchConfidenceBadge.fine-print > span.conf-high",
+     "size": 14,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.71,
+     "fg": "#1e7542",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "· Clear, consistent pitch detected throughout.",
+     "path": "div#pitchResult.ex-result.vc-result > div.vc-result-dims > p#pitchConfidenceBadge.fine-print > span.conf-reason",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "How this is measured",
+     "path": "div#pitchResult.ex-result.vc-result > details.hl-measure > summary > span",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 18.61,
+     "fg": "#111316",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Accuracy is 100 minus your average distance from the note, i",
+     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > details.hl-measure > p#pitchMeasure",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8.92,
+     "fg": "#454a52",
+     "bg": "#ffffff",
+     "status": "pass"
+    },
+    {
+     "text": "Unlimited exercises — Day 1 of your 21-day free access.",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.key-card > p#exCapNote.ex-cap-note",
+     "size": 12.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.7,
+     "fg": "#616770",
+     "bg": "#ffffff",
+     "status": "pass"
+    }
+   ],
+   "state: pitch-result-measure · header + tab bar": [
     {
      "text": "VoxCoach",
      "path": "div.wrap > header.shell-topbar > div.vc-brand > span.vc-word",
@@ -17540,7 +18348,7 @@
      "status": "pass"
     },
     {
-     "text": "+39 cents (sharp)",
+     "text": "+36 cents (sharp)",
      "path": "div#tunerStage.vc-stage.is-live > div#tunerRingWrap.tuner-ring-wrap > div.tuner-ring-center > div#centsDisplay.cents-display.sharp",
      "size": 13,
      "weight": 400,
@@ -17596,10 +18404,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -17608,8 +18416,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -17620,10 +18428,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -17632,10 +18440,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -17644,10 +18452,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -17656,10 +18464,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -17668,10 +18476,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: pitch-result-noheard": [
@@ -18253,7 +19061,7 @@
     },
     {
      "text": "How this is measured",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > details.hl-measure > summary",
+     "path": "div#pitchResult.ex-result.vc-result > details.hl-measure > summary > span",
      "size": 14,
      "weight": 400,
      "need": 4.5,
@@ -18375,10 +19183,10 @@
     }
    ],
    "__totals": {
-    "fail<3": 16,
-    "fail3-4.5": 40,
+    "fail<3": 0,
+    "fail3-4.5": 32,
     "unknown": 0,
-    "n": 1472
+    "n": 1539
    }
   },
   "dark": {
@@ -18498,7 +19306,7 @@
    ],
    "home": [
     {
-     "text": "Good morning, Design Check",
+     "text": "Good evening, Design Check",
      "path": "section#panel-home.panel.active > div.home-greeting-row > div > div#homeGreeting.home-greeting",
      "size": 26,
      "weight": 600,
@@ -18798,7 +19606,7 @@
      "status": "pass"
     },
     {
-     "text": "Last session: 2026-10-11 · 1 total sessions",
+     "text": "Last session: 2026-10-12 · 1 total sessions",
      "path": "section#panel-home.panel.active > div#homeSecondaryList.home-secondary-list > div.home-secondary-row > div#homeContinueText.hsr-text",
      "size": 13,
      "weight": 400,
@@ -20684,7 +21492,7 @@
      "status": "pass"
     },
     {
-     "text": "Morning — starting gentler and a bit longer since voices are",
+     "text": "Evening — shorter is fine if your voice has already been act",
      "path": "div.wrap > section#panel-warmup.panel.active > div.key-card > div#warmupContext.warmup-context",
      "size": 13,
      "weight": 400,
@@ -20708,7 +21516,7 @@
      "status": "pass"
     },
     {
-     "text": "Gentle glide, low to high and back (4.5s)",
+     "text": "Gentle glide, low to high and back (3.5s)",
      "path": "div.key-card > div.warmup-step > div > div#warmupStep1Sub.ws-sub",
      "size": 11.5,
      "weight": 400,
@@ -21698,7 +22506,7 @@
      "status": "pass"
     },
     {
-     "text": "D#4",
+     "text": "A3",
      "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchTargetNote.ex-target-note",
      "size": 40,
      "weight": 600,
@@ -22612,18 +23420,6 @@
      "status": "pass"
     },
     {
-     "text": "M",
-     "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
-     "size": 9,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.15,
-     "fg": "#8c929b",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
      "text": "T",
      "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
      "size": 9,
@@ -22769,6 +23565,18 @@
     },
     {
      "text": "S",
+     "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
+     "size": 9,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "M",
      "path": "div.key-card > div#activityChart.activity-chart > div.bar-col > div.day-label",
      "size": 9,
      "weight": 400,
@@ -23416,18 +24224,6 @@
      "status": "pass"
     },
     {
-     "text": "M",
-     "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
-     "size": 8,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.15,
-     "fg": "#8c929b",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
      "text": "T",
      "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
@@ -23573,6 +24369,18 @@
     },
     {
      "text": "S",
+     "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
+     "size": 8,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "M",
      "path": "div.key-card > div#stabilityTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
      "weight": 400,
@@ -23596,18 +24404,6 @@
      "status": "pass"
     },
     {
-     "text": "M",
-     "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
-     "size": 8,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.15,
-     "fg": "#8c929b",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
      "text": "T",
      "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
@@ -23753,6 +24549,18 @@
     },
     {
      "text": "S",
+     "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
+     "size": 8,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "M",
      "path": "div.key-card > div#breathTrendChart.health-trend-chart > div.h-bar-col > div.h-day-label",
      "size": 8,
      "weight": 400,
@@ -32418,7 +33226,7 @@
      "status": "pass"
     },
     {
-     "text": "80%",
+     "text": "79%",
      "path": "div.key-card > div#recordsListVoice > div.record-row > span.record-val",
      "size": 14,
      "weight": 400,
@@ -34282,10 +35090,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -34294,8 +35102,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -34306,10 +35114,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -34318,10 +35126,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -34330,10 +35138,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -34342,10 +35150,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -34354,10 +35162,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: tuner-result": [
@@ -34387,7 +35195,7 @@
     },
     {
      "text": "Tap start and sing a note",
-     "path": "div#tunerStage.vc-stage > div#tunerRingWrap.tuner-ring-wrap > div.tuner-ring-center > div#centsDisplay.cents-display",
+     "path": "div#tunerStage.vc-stage.vc-has-result > div#tunerRingWrap.tuner-ring-wrap > div.tuner-ring-center > div#centsDisplay.cents-display",
      "size": 13,
      "weight": 400,
      "need": 4.5,
@@ -34399,7 +35207,7 @@
     },
     {
      "text": "Start listening",
-     "path": "div.tuner-hero-card > div#tunerStage.vc-stage > button#micBtn.mic-btn > span#micBtnLabel",
+     "path": "div.tuner-hero-card > div#tunerStage.vc-stage.vc-has-result > button#micBtn.mic-btn > span#micBtnLabel",
      "size": 14,
      "weight": 700,
      "need": 4.5,
@@ -34411,7 +35219,7 @@
     },
     {
      "text": "Vocal load today",
-     "path": "div#tunerStage.vc-stage > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span#vlGaugeTunerLabel",
+     "path": "div#tunerStage.vc-stage.vc-has-result > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span#vlGaugeTunerLabel",
      "size": 12,
      "weight": 400,
      "need": 4.5,
@@ -34423,80 +35231,8 @@
     },
     {
      "text": "0.3% of daily budget",
-     "path": "div#tunerStage.vc-stage > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span.vl-gauge-val",
+     "path": "div#tunerStage.vc-stage.vc-has-result > div#vlGaugeTuner.vl-gauge > div.vl-gauge-head > span.vl-gauge-val",
      "size": 12,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 13.78,
-     "fg": "#ecedef",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
-     "text": "Pitch",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div.label",
-     "size": 10,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.15,
-     "fg": "#8c929b",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
-     "text": "96%",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div#pitchStat.val",
-     "size": 17,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 13.78,
-     "fg": "#ecedef",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
-     "text": "Stability",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div.label",
-     "size": 10,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.15,
-     "fg": "#8c929b",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
-     "text": "71%",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div#stabilityStat.val",
-     "size": 17,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 13.78,
-     "fg": "#ecedef",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
-     "text": "Freq",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div.label",
-     "size": 10,
-     "weight": 400,
-     "need": 4.5,
-     "disabled": false,
-     "ratio": 5.15,
-     "fg": "#8c929b",
-     "bg": "#1e2126",
-     "status": "pass"
-    },
-    {
-     "text": "440.5 Hz",
-     "path": "div#tunerStage.vc-stage > div.stat-row.vc-paper-only > div.stat-chip > div#freqStat.val",
-     "size": 17,
      "weight": 400,
      "need": 4.5,
      "disabled": false,
@@ -34543,7 +35279,7 @@
     },
     {
      "text": "How this is measured",
-     "path": "div.tuner-hero-card > div#tunerResult.vc-result > details.hl-measure > summary",
+     "path": "div#tunerResult.vc-result > details.hl-measure > summary > span",
      "size": 14,
      "weight": 400,
      "need": 4.5,
@@ -34738,6 +35474,42 @@
      "status": "pass"
     },
     {
+     "text": "−50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "0",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "+50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
      "text": "Listen…",
      "path": "div.ex-target-card > div#pitchStage.vc-stage.is-live > div.btn-row > button#pitchListenBtn.solid-btn.teal",
      "size": 13,
@@ -34782,10 +35554,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -34794,8 +35566,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -34806,10 +35578,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -34818,10 +35590,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -34830,10 +35602,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -34842,10 +35614,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -34854,10 +35626,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: pitch-live": [
@@ -34875,14 +35647,14 @@
     },
     {
      "text": "A4",
-     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage.is-live > div#pitchTargetNote.ex-target-note",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage.is-live > div#pitchTargetNote.ex-target-note.pm-locked",
      "size": 56,
      "weight": 300,
      "need": 3,
      "disabled": false,
-     "ratio": 18,
-     "fg": "#f1f2f4",
-     "bg": "#060708",
+     "ratio": 6.83,
+     "fg": "#05060f",
+     "bg": "#7f8cff",
      "status": "pass"
     },
     {
@@ -34934,6 +35706,54 @@
      "status": "pass"
     },
     {
+     "text": "−50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "0",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "+50",
+     "path": "div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div.pm-cents-scale > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.5,
+     "fg": "#80868f",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
+     "text": "On the note",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage.is-live > div#pitchCents.pm-cents.vc-live-only > div#pitchCentsRead.pm-cents-read",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 9.05,
+     "fg": "#a9aeb7",
+     "bg": "#060708",
+     "status": "pass"
+    },
+    {
      "text": "Listening…",
      "path": "div.ex-target-card > div#pitchStage.vc-stage.is-live > div.btn-row > button#pitchListenBtn.solid-btn.teal",
      "size": 13,
@@ -34978,10 +35798,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -34990,8 +35810,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -35002,10 +35822,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -35014,10 +35834,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -35026,10 +35846,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -35038,10 +35858,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -35050,10 +35870,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: pitch-result-heard": [
@@ -35538,7 +36358,7 @@
      "status": "pass"
     },
     {
-     "text": "A4",
+     "text": "G3",
      "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchTargetNote.ex-target-note",
      "size": 40,
      "weight": 600,
@@ -35586,6 +36406,18 @@
      "status": "pass"
     },
     {
+     "text": "Sing it again (A4)",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchAgainBtn.ghost-btn.vc-paper-only",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
      "text": "Vocal load today",
      "path": "div#pitchStage.vc-stage > div#vlGaugePitch.vl-gauge > div.vl-gauge-head > span#vlGaugePitchLabel",
      "size": 12,
@@ -35610,14 +36442,14 @@
      "status": "pass"
     },
     {
-     "text": "98%",
-     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchAccuracyVal.ex-accuracy.good",
-     "size": 46,
-     "weight": 600,
+     "text": "97%",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchAccuracyVal.ex-accuracy.vc-result-num",
+     "size": 72,
+     "weight": 300,
      "need": 3,
      "disabled": false,
-     "ratio": 7.82,
-     "fg": "#5bc98a",
+     "ratio": 13.78,
+     "fg": "#ecedef",
      "bg": "#1e2126",
      "status": "pass"
     },
@@ -35647,8 +36479,8 @@
     },
     {
      "text": "0 s",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > svg#pitchTrace > text",
-     "size": 11,
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span",
+     "size": 12,
      "weight": 400,
      "need": 4.5,
      "disabled": false,
@@ -35659,8 +36491,8 @@
     },
     {
      "text": "3 s",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > svg#pitchTrace > text",
-     "size": 11,
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span#pitchTraceEnd",
+     "size": 12,
      "weight": 400,
      "need": 4.5,
      "disabled": false,
@@ -35695,7 +36527,7 @@
     },
     {
      "text": "How this is measured",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > details.hl-measure > summary",
+     "path": "div#pitchResult.ex-result.vc-result > details.hl-measure > summary > span",
      "size": 14,
      "weight": 400,
      "need": 4.5,
@@ -35731,6 +36563,778 @@
     }
    ],
    "state: pitch-result-heard · header + tab bar": [
+    {
+     "text": "VoxCoach",
+     "path": "div.wrap > header.shell-topbar > div.vc-brand > span.vc-word",
+     "size": 16,
+     "weight": 760,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.17,
+     "fg": "#ecedef",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "D",
+     "path": "div.wrap > header.shell-topbar > div#accountBar.account-bar > button.vc-avatar",
+     "size": 14,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Home",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.67,
+     "fg": "#8c929b",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "Coach",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.17,
+     "fg": "#ecedef",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "Songs",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.67,
+     "fg": "#8c929b",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "World",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.67,
+     "fg": "#8c929b",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "You",
+     "path": "div.wrap > nav.shell-bottomnav.hl-tabbar > button.snb-item.hl-tab > span.snb-label",
+     "size": 12,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.67,
+     "fg": "#8c929b",
+     "bg": "#16181c",
+     "status": "pass"
+    }
+   ],
+   "state: pitch-result-measure": [
+    {
+     "text": "🎯 Daily Exercises",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.journey-hero > div.j-title",
+     "size": 34,
+     "weight": 650,
+     "need": 3,
+     "disabled": false,
+     "ratio": 15.17,
+     "fg": "#ecedef",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "Four real ways to train pitch and ear — each scores your liv",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.journey-hero > div.j-sub",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8.93,
+     "fg": "#b4b8bf",
+     "bg": "#16181c",
+     "status": "pass"
+    },
+    {
+     "text": "Today's Recommended Focus",
+     "path": "div.key-card > div#reweightCard.reweight-card > div.step-label > span",
+     "size": 16,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "ADAPTIVE — RECALCULATED DAILY",
+     "path": "div.key-card > div#reweightCard.reweight-card > div.step-label > span.mock-tag",
+     "size": 10,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 6.06,
+     "fg": "#8a96ff",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Not a fixed weekly plan — this is computed fresh from your r",
+     "path": "section#panel-exercises.panel.active > div.key-card > div#reweightCard.reweight-card > p.desc",
+     "size": 16,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "24%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 10.91,
+     "fg": "#0a0c1a",
+     "bg": "#ffb347",
+     "status": "pass"
+    },
+    {
+     "text": "24%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 7.3,
+     "fg": "#0a0c1a",
+     "bg": "#8a96ff",
+     "status": "pass"
+    },
+    {
+     "text": "24%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 7.59,
+     "fg": "#0a0c1a",
+     "bg": "#ff7a5f",
+     "status": "pass"
+    },
+    {
+     "text": "23%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightBar.reweight-bar > div.rw-seg",
+     "size": 10.5,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 7.86,
+     "fg": "#0a0c1a",
+     "bg": "#b193ff",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch 5%",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Agility 24% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Range 24% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item.clickable",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Breath 24% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item.clickable",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Expression 23% (new)",
+     "path": "div.key-card > div#reweightCard.reweight-card > div#reweightLegend.reweight-legend > div.rl-item.clickable",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "This is your first computed weighting — tomorrow's will alre",
+     "path": "section#panel-exercises.panel.active > div.key-card > div#reweightCard.reweight-card > p#reweightDeltaNote.fine-print",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Level — trains a different ability, not just \"harder\":",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.level-row > div.level-label",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Beginner",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.88,
+     "fg": "#ecedef",
+     "bg": "#111316",
+     "status": "pass"
+    },
+    {
+     "text": "control & pitch",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span.level-sub",
+     "size": 12,
+     "weight": 500,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.94,
+     "fg": "#8c929b",
+     "bg": "#111316",
+     "status": "pass"
+    },
+    {
+     "text": "Intermediate",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "technique & flexibility",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span.level-sub",
+     "size": 12,
+     "weight": 500,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Professional",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "precision & expression",
+     "path": "div.level-row > div#levelRow.ex-type-row > button.ex-type-btn.level-btn > span.level-sub",
+     "size": 12,
+     "weight": 500,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Today's budget (ref): warm-up 5 · breathing 5 · pitch 5 · sc",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.key-card > div#timeBudgetNote.time-budget-note",
+     "size": 11.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "This level's real difficulty breakdown",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.key-card > div.step-label",
+     "size": 16,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Not a single \"Easy/Medium/Hard\" label — five real dimensions",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.key-card > p.fine-print",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch precision",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "0%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Range breadth",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "85%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Speed",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "0%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Interval range",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "42%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Scoring precision",
+     "path": "div.key-card > div#difficultyDimensions > div.vlab-row > div.vlab-row-label",
+     "size": 14,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "0%",
+     "path": "div#difficultyDimensions > div.vlab-row > div.vlab-row-label > span.vlab-row-notes",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch Match",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn.active",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.88,
+     "fg": "#ecedef",
+     "bg": "#111316",
+     "status": "pass"
+    },
+    {
+     "text": "Interval Match",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Scale Run",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Ear Training",
+     "path": "section#panel-exercises.panel.active > div.key-card > div.ex-type-row > button.ex-type-btn",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Sing this note",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchModeSub.ex-target-sub",
+     "size": 12.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "G3",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchStage.vc-stage > div#pitchTargetNote.ex-target-note",
+     "size": 40,
+     "weight": 600,
+     "need": 3,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Play target",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchPlayBtn.solid-btn.vc-paper-only",
+     "size": 13,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 15.17,
+     "fg": "#16181c",
+     "bg": "#ecedef",
+     "status": "pass"
+    },
+    {
+     "text": "Listen & score",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchListenBtn.solid-btn.teal",
+     "size": 13,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 7.3,
+     "fg": "#0a0c1a",
+     "bg": "#8a96ff",
+     "status": "pass"
+    },
+    {
+     "text": "New note",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchNextBtn.ghost-btn.vc-paper-only",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Sing it again (A4)",
+     "path": "div.ex-target-card > div#pitchStage.vc-stage > div.btn-row > button#pitchAgainBtn.ghost-btn.vc-paper-only",
+     "size": 13,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Vocal load today",
+     "path": "div#pitchStage.vc-stage > div#vlGaugePitch.vl-gauge > div.vl-gauge-head > span#vlGaugePitchLabel",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "0.4% of daily budget",
+     "path": "div#pitchStage.vc-stage > div#vlGaugePitch.vl-gauge > div.vl-gauge-head > span.vl-gauge-val",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "97%",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchAccuracyVal.ex-accuracy.vc-result-num",
+     "size": 72,
+     "weight": 300,
+     "need": 3,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Pitch accuracy",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > h3.hl-h3",
+     "size": 18,
+     "weight": 600,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Right on it.",
+     "path": "div#exPanelPitch.ex-panel > div.ex-target-card > div#pitchResult.ex-result.vc-result > div#pitchFeedback.ex-feedback-text.hl-coach",
+     "size": 13,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "0 s",
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "3 s",
+     "path": "div#pitchResult.ex-result.vc-result > div#pitchTraceBox.vc-result-chart.pm-trace-box > div.pm-trace-axis > span#pitchTraceEnd",
+     "size": 12,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "High confidence — 100%",
+     "path": "div#pitchResult.ex-result.vc-result > div.vc-result-dims > p#pitchConfidenceBadge.fine-print > span.conf-high",
+     "size": 14,
+     "weight": 700,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 7.82,
+     "fg": "#5bc98a",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "· Clear, consistent pitch detected throughout.",
+     "path": "div#pitchResult.ex-result.vc-result > div.vc-result-dims > p#pitchConfidenceBadge.fine-print > span.conf-reason",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "How this is measured",
+     "path": "div#pitchResult.ex-result.vc-result > details.hl-measure > summary > span",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 13.78,
+     "fg": "#ecedef",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Accuracy is 100 minus your average distance from the note, i",
+     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > details.hl-measure > p#pitchMeasure",
+     "size": 14,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 8.11,
+     "fg": "#b4b8bf",
+     "bg": "#1e2126",
+     "status": "pass"
+    },
+    {
+     "text": "Unlimited exercises — Day 1 of your 21-day free access.",
+     "path": "div.wrap > section#panel-exercises.panel.active > div.key-card > p#exCapNote.ex-cap-note",
+     "size": 12.5,
+     "weight": 400,
+     "need": 4.5,
+     "disabled": false,
+     "ratio": 5.15,
+     "fg": "#8c929b",
+     "bg": "#1e2126",
+     "status": "pass"
+    }
+   ],
+   "state: pitch-result-measure · header + tab bar": [
     {
      "text": "VoxCoach",
      "path": "div.wrap > header.shell-topbar > div.vc-brand > span.vc-word",
@@ -36134,7 +37738,7 @@
      "status": "pass"
     },
     {
-     "text": "+40 cents (sharp)",
+     "text": "+36 cents (sharp)",
      "path": "div#tunerStage.vc-stage.is-live > div#tunerRingWrap.tuner-ring-wrap > div.tuner-ring-center > div#centsDisplay.cents-display.sharp",
      "size": 13,
      "weight": 400,
@@ -36190,10 +37794,10 @@
      "weight": 760,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "D",
@@ -36202,8 +37806,8 @@
      "weight": 700,
      "need": 4.5,
      "disabled": false,
-     "ratio": 16.74,
-     "fg": "#f1f2f4",
+     "ratio": 5.11,
+     "fg": "#80868f",
      "bg": "#101216",
      "status": "pass"
     },
@@ -36214,10 +37818,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "Coach",
@@ -36226,10 +37830,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 3.22,
-     "fg": "#5f6062",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail3-4.5"
+     "status": "pass"
     },
     {
      "text": "Songs",
@@ -36238,10 +37842,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "World",
@@ -36250,10 +37854,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     },
     {
      "text": "You",
@@ -36262,10 +37866,10 @@
      "weight": 600,
      "need": 4.5,
      "disabled": false,
-     "ratio": 1.69,
-     "fg": "#34373b",
+     "ratio": 5.5,
+     "fg": "#80868f",
      "bg": "#060708",
-     "status": "fail<3"
+     "status": "pass"
     }
    ],
    "state: pitch-result-noheard": [
@@ -36847,7 +38451,7 @@
     },
     {
      "text": "How this is measured",
-     "path": "div.ex-target-card > div#pitchResult.ex-result.vc-result > details.hl-measure > summary",
+     "path": "div#pitchResult.ex-result.vc-result > details.hl-measure > summary > span",
      "size": 14,
      "weight": 400,
      "need": 4.5,
@@ -36969,10 +38573,10 @@
     }
    ],
    "__totals": {
-    "fail<3": 16,
-    "fail3-4.5": 8,
+    "fail<3": 0,
+    "fail3-4.5": 0,
     "unknown": 0,
-    "n": 1490
+    "n": 1556
    }
   }
  }
