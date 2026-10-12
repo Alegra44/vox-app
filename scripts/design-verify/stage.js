@@ -62,7 +62,7 @@ const houseIs = (page, h, ms) => page.waitForFunction(h => document.body.dataset
 // The phase 2 states, in the order a stimulus can reach them. onState(name, root) is awaited at each moment, with root
 // the selector of what's on screen (a panel or the overlay). Per stimulus:
 //   steady:  tuner-idle, tuner-live-locked, tuner-result, pitch-idle, pitch-cue (the reference playing), pitch-live,
-//            pitch-result-heard, breath-live (not staged), warmup-overlay
+//            pitch-result-heard, pitch-result-measure (its "How this is measured" open), breath-live (not staged), warmup-overlay
 //   sharp:   tuner-live-unlocked
 //   silence: pitch-result-noheard
 async function runStates(page, stim, onState, only = null) {
@@ -79,7 +79,7 @@ async function runStates(page, stim, onState, only = null) {
       await C.sleep(800); await stopTuner(page); await houseIs(page, 'up', 3000); await C.sleep(500);
       if (want('tuner-result')) await onState('tuner-result', '#panel-tuner');
     }
-    if (['pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard'].some(want)) {
+    if (['pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure'].some(want)) {
       await openPitch(page); await C.sleep(300);
       if (want('pitch-idle')) await onState('pitch-idle', '#panel-exercises');
       await clickPitch(page);
@@ -90,6 +90,11 @@ async function runStates(page, stim, onState, only = null) {
       if (want('pitch-live')) await onState('pitch-live', '#panel-exercises');
       await waitPitchDone(page); await houseIs(page, 'up', 3000); await C.sleep(500);
       if (want('pitch-result-heard')) await onState('pitch-result-heard', '#panel-exercises');
+      if (want('pitch-result-measure')) { // the method note open, in view
+        await page.evaluate(() => { const d = document.querySelector('#pitchResult details.hl-measure'); d.open = true; d.scrollIntoView({ block: 'center' }); }); await C.sleep(300);
+        await onState('pitch-result-measure', '#panel-exercises');
+        await page.evaluate(() => { document.querySelector('#pitchResult details.hl-measure').open = false; });
+      }
     }
     if (want('breath-live')) {
       await C.showPanel(page, 'breath'); await C.clearOverlays(page);
@@ -113,7 +118,7 @@ async function runStates(page, stim, onState, only = null) {
     await onState('pitch-result-noheard', '#panel-exercises');
   }
 }
-const STATE_STIM = { steady: ['tuner-idle', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'breath-live', 'warmup-overlay'],
+const STATE_STIM = { steady: ['tuner-idle', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'breath-live', 'warmup-overlay'],
   sharp: ['tuner-live-unlocked'], silence: ['pitch-result-noheard'] };
 
 module.exports = { openWarmup, closeWarmup, houseIs, runStates, STATE_STIM, STIM, STEADY_MIDI, ensureStimuli, launchMic, warmMic, startTuner, tunerRunning, stopTuner, openPitch, clickPitch, pitchBusy, waitPitchDone };

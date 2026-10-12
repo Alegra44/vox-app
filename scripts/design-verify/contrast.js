@@ -109,7 +109,7 @@ function measure(rootSel) {
   return out;
 }
 
-const STATE_NAMES = ['tuner-live-locked', 'tuner-live-unlocked', 'tuner-result', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-noheard', 'warmup-overlay'];
+const STATE_NAMES = ['tuner-live-locked', 'tuner-live-unlocked', 'tuner-result', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'warmup-overlay'];
 async function measureStates(dir, theme, state, panels) {
   S.ensureStimuli();
   for (const [stim, names] of Object.entries(S.STATE_STIM)) {

@@ -2,12 +2,17 @@
 // the fake mic singing a steady real note (stage.js: VocalSet straight-625 centred on A4) and a fresh signed-in test
 // account (deleted at exit). Checks (PHASE2.md §1a):
 //  1 Tuner start: within 1.0 s body data-house="down", #tunerStage.is-live, its panel .is-staged, the title block
-//    offstage, header and tab bar at opacity ≈ 0.38, and a tab is still what elementFromPoint finds at its centre.
+//    offstage, and a tab is still what elementFromPoint finds at its centre. The header and tab bar dim by colour (2.8):
+//    opacity 1, the wordmark, its mark, the avatar, every tab (the active one too) and the playhead at the stage's
+//    --hl-ink-3; hovering the tab bar gives back the usual colours (the active tab --hl-ink, the playhead --hl-voice).
 //  2 Tuner lock: "In tune", #tunerLockFill at opacity 1.
-//  3 Tuner stop: up within 1.5 s, no stage marks left, #tunerResult visible with a number.
+//  3 Tuner stop: up within 1.5 s, no stage marks left, #tunerResult visible with a number, the live .stat-row hidden.
 //  4 Navigation mid-session (Home tab): up within 100 ms, no marks.
 //  5 Pitch Match: down within 1.5 s and never up while the button is disabled (sampled every 100 ms); the lane's voice
-//    path gains points; after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path.
+//    path gains points; #pitchCentsRead reads pm_live_on and #pitchTargetNote gets .pm-locked at some point; no console
+//    errors during the take; after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path, the big
+//    number in --hl-ink, "Sing it again (A4)" shown. With the sharp stimulus (once, Light 390): the readout reads
+//    pm_live_sharp with a number and the note never locks.
 //  6 Not staged: a Breath hold and an Interval Match take keep data-house="up" throughout.
 //  7 Reduced motion: the dimmer never gets .is-on; down within 100 ms of the start, up 600 ms after the stop.
 //  8 While down, every meta theme-color is #060708; afterwards they're restored.
@@ -27,6 +32,21 @@ const STAGE_THEME = '#060708';
 // in the page: a log of every data-house change and every time the dimmer is switched on
 const MONITOR = () => {
   window.__hl = { log: [], dimOn: 0 };
+  // the shell while the house is down: opacity 1, every text and icon at --hl-ink-3 (2.8), tabs hit at their centres
+  window.SHELL = () => {
+    const tok = v => { const i = document.createElement('i'); i.style.color = `var(${v})`; document.body.appendChild(i); const c = getComputedStyle(i).color; i.remove(); return c; };
+    const ink3 = tok('--hl-ink-3'), ink = tok('--hl-ink'), voice = tok('--hl-voice');
+    const head = document.querySelector('header.shell-topbar'), nav = document.querySelector('nav.shell-bottomnav');
+    const tabs = [...nav.querySelectorAll('.hl-tab')], act = nav.querySelector('.hl-tab[aria-current="page"]');
+    const word = head.querySelector('.vc-brand'), mark = head.querySelector('.vc-mark'), av = head.querySelector('.vc-avatar, .vc-signin');
+    const play = act ? getComputedStyle(act, '::before').backgroundColor : null;
+    const hits = tabs.every(tb => { const r = tb.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!h && h.closest('.hl-tab') === tb; });
+    const c = { opacity: [getComputedStyle(head).opacity, getComputedStyle(nav).opacity], word: getComputedStyle(word).color, mark: getComputedStyle(mark).stroke,
+      avatar: av && getComputedStyle(av).color, tabs: tabs.map(tb => getComputedStyle(tb).color), active: act && getComputedStyle(act).color, playhead: play, hits, ink3 };
+    c.ok = c.opacity.every(o => o === '1') && c.word === ink3 && c.mark === ink3 && (!av || c.avatar === ink3) && c.tabs.every(x => x === ink3) && c.playhead === ink3 && hits;
+    c.hoverNav = c.active === ink && c.playhead === voice;
+    return c;
+  };
   new MutationObserver(ms => { for (const m of ms) {
     if (m.target === document.body && m.attributeName === 'data-house') window.__hl.log.push({ t: performance.now(), house: document.body.dataset.house });
     if (m.target.classList && m.target.classList.contains('hl-dimmer') && m.target.classList.contains('is-on')) window.__hl.dimOn++;
@@ -40,7 +60,7 @@ const metas = page => page.evaluate(() => [...document.querySelectorAll('meta[na
 // polls fn in the page every animation frame until it returns true or ms pass; resolves to the elapsed ms or null
 const within = (page, fn, ms, from = '__t0') => page.evaluate(async ({ src, ms, from }) => {
   const f = new Function('return (' + src + ')()');
-  const t0 = window[from] ?? performance.now();
+  const t0 = (from && window[from]) ?? performance.now();
   while (performance.now() - t0 <= ms) { if (f()) return Math.round(performance.now() - t0); await new Promise(r => requestAnimationFrame(r)); }
   return null;
 }, { src: fn.toString(), ms, from });
@@ -48,6 +68,7 @@ const within = (page, fn, ms, from = '__t0') => page.evaluate(async ({ src, ms, 
 async function combo(b, dir, state, theme, w) {
   console.log(`\n-- ${theme} · ${w}px`);
   const { ctx, page, errors } = await C.openPage(b, { dir, theme, viewport: SIZES[w], storageState: state });
+  const consoleErrors = []; page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().split('\n')[0]); });
   await C.clearOverlays(page); await page.evaluate(MONITOR); await S.warmMic(page);
   const metaBefore = await metas(page);
 
@@ -55,18 +76,19 @@ async function combo(b, dir, state, theme, w) {
   await S.startTuner(page);
   const t1 = await within(page, () => {
     const st = document.getElementById('tunerStage'), panel = document.getElementById('panel-tuner'), hero = panel.querySelector('.journey-hero');
-    const op = el => +getComputedStyle(el).opacity;
-    const head = document.querySelector('header.shell-topbar'), nav = document.querySelector('nav.shell-bottomnav');
-    const tab = document.querySelector('.snb-item[data-shell="songs"]'), r = tab.getBoundingClientRect();
-    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
     return document.body.dataset.house === 'down' && st.classList.contains('is-live') && panel.classList.contains('is-staged')
-      && hero.hasAttribute('data-offstage') && getComputedStyle(hero).display === 'none'
-      && Math.abs(op(head) - 0.38) < 0.02 && Math.abs(op(nav) - 0.38) < 0.02 && !!hit && hit.closest('.snb-item') === tab;
+      && hero.hasAttribute('data-offstage') && getComputedStyle(hero).display === 'none' && SHELL().ok;
   }, 1000);
-  const s1 = await page.evaluate(() => { const o = el => (+getComputedStyle(el).opacity).toFixed(2);
-    const tab = document.querySelector('.snb-item[data-shell="songs"]'), r = tab.getBoundingClientRect(), hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-    return `house ${document.body.dataset.house} · stage ${document.getElementById('tunerStage')?.className} · header ${o(document.querySelector('header.shell-topbar'))} · nav ${o(document.querySelector('nav.shell-bottomnav'))} · tab hit ${!!hit && hit.closest('.snb-item') === tab}`; });
-  check('1 Tuner start: down, stage live, panel staged, title offstage, shell .38, tab hit (≤1.0 s)', t1 !== null, t1 !== null ? `${t1} ms` : s1);
+  const s1 = await page.evaluate(() => SHELL());
+  check('1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s)', t1 !== null, t1 !== null ? `${t1} ms` : JSON.stringify(s1));
+  // 1 hover: the tab bar gets its usual colours back, and loses them again when the pointer leaves
+  const nr = await page.evaluate(() => { const r = document.querySelector('nav.shell-bottomnav').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+  await page.mouse.move(nr.x, nr.y);
+  const tHover = await within(page, () => { const s = SHELL(); return s.hoverNav; }, 1500, null);
+  const sHover = await page.evaluate(() => SHELL());
+  await page.mouse.move(2, 300);
+  const tLeave = await within(page, () => SHELL().ok, 1500, null);
+  check('1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving', tHover !== null && tLeave !== null, `${tHover !== null ? `back in ${tHover} ms` : JSON.stringify(sHover)} · ${tLeave !== null ? `dim again in ${tLeave} ms` : 'not dim again'}`);
   // 8 theme-color while down
   const metaDown = await metas(page);
   check('8 while down: every meta theme-color is #060708', metaDown.length > 0 && metaDown.every(c => c.toUpperCase() === STAGE_THEME.toUpperCase()), metaDown.join(', '));
@@ -86,11 +108,13 @@ async function combo(b, dir, state, theme, w) {
   await C.sleep(1500); await S.stopTuner(page);
   const t3 = await within(page, () => document.body.dataset.house === 'up', 1500, '__t1');
   await C.sleep(400);
-  const m3 = await marks(page), res = await page.evaluate(() => { const r = document.getElementById('tunerResult');
-    return { shown: !!r && getComputedStyle(r).display !== 'none' && !!r.getClientRects().length, text: r ? r.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) : null }; });
+  const m3 = await marks(page), res = await page.evaluate(() => { const r = document.getElementById('tunerResult'), sr = document.querySelector('#tunerStage .stat-row');
+    return { shown: !!r && getComputedStyle(r).display !== 'none' && !!r.getClientRects().length, text: r ? r.textContent.replace(/\s+/g, ' ').trim().slice(0, 60) : null,
+      stats: !!sr && getComputedStyle(sr).display !== 'none' }; });
   check('3 Tuner stop: up within 1.5 s', t3 !== null, t3 !== null ? `${t3} ms` : 'still down');
   check('3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left', noMarks(m3), JSON.stringify(m3));
   check('3 Tuner stop: #tunerResult visible with a number', res.shown && /\d/.test(res.text || ''), JSON.stringify(res));
+  check('3 Tuner stop: the live .stat-row hidden while the result shows', res.shown && !res.stats, `stats ${res.stats ? 'shown' : 'hidden'}`);
   const metaAfter = await metas(page);
   check('8 after: meta theme-color restored', JSON.stringify(metaAfter) === JSON.stringify(metaBefore), `${metaBefore.join(', ')} → ${metaAfter.join(', ')}`);
   // 4 navigation mid-session
@@ -107,22 +131,33 @@ async function combo(b, dir, state, theme, w) {
   await S.openPitch(page); await C.sleep(300);
   await page.evaluate(() => { // sample every 100 ms: the house, the button, the lane's voice points
     window.__pm = []; const pts = () => { const p = document.querySelector('#pitchLane .pm-lane-voice'); return p ? (p.getAttribute('d') || '').split(/[ML]/).length - 1 : 0; };
-    window.__pmTimer = setInterval(() => window.__pm.push({ t: performance.now(), house: document.body.dataset.house, busy: document.getElementById('pitchListenBtn').disabled, pts: pts() }), 100);
+    window.__pmTimer = setInterval(() => window.__pm.push({ t: performance.now(), house: document.body.dataset.house, busy: document.getElementById('pitchListenBtn').disabled, pts: pts(),
+      read: document.getElementById('pitchCentsRead').textContent, locked: document.getElementById('pitchTargetNote').classList.contains('pm-locked') }), 50);
   });
+  const cons0 = consoleErrors.length;
   await S.clickPitch(page); await C.sleep(300); await S.waitPitchDone(page); await page.evaluate(() => { window.__t1 = performance.now(); });
+  const takeErrors = consoleErrors.slice(cons0);
   const t5up = await within(page, () => document.body.dataset.house === 'up', 1500, '__t1');
   await C.sleep(300);
   const pm = await page.evaluate(() => { clearInterval(window.__pmTimer);
     const r = document.getElementById('pitchResult'), tr = document.getElementById('pitchTrace');
     return { log: window.__pm, t0: window.__t0, result: !!r && getComputedStyle(r).display !== 'none' && !!r.getClientRects().length,
-      trace: !!tr && [...tr.querySelectorAll('path')].some(p => (p.getAttribute('d') || '').length > 10), acc: document.getElementById('pitchAccuracyVal').textContent }; });
+      trace: !!tr && [...tr.querySelectorAll('path')].some(p => (p.getAttribute('d') || '').length > 10), acc: document.getElementById('pitchAccuracyVal').textContent,
+      on: t('pm_live_on'), numInk: (() => { const i = document.createElement('i'); i.style.color = 'var(--hl-ink)'; document.body.appendChild(i); const c = getComputedStyle(i).color; i.remove(); return getComputedStyle(document.getElementById('pitchAccuracyVal')).color === c; })(),
+      again: (() => { const a = document.getElementById('pitchAgainBtn'); return { shown: getComputedStyle(a).display !== 'none' && !!a.getClientRects().length, text: a.textContent }; })() }; });
   const firstDown = pm.log.find(s => s.house === 'down'), downAt = firstDown ? Math.round(firstDown.t - pm.t0) : null;
   const upWhileBusy = firstDown ? pm.log.filter(s => s.t >= firstDown.t && s.busy && s.house !== 'down').length : null;
   const maxPts = Math.max(0, ...pm.log.map(s => s.pts)), grew = pm.log.some((s, i) => i && s.pts > pm.log[i - 1].pts && pm.log[i - 1].pts > 0);
   check('5 Pitch Match: down within 1.5 s of the click', downAt !== null && downAt <= 1500, downAt !== null ? `${downAt} ms` : 'never down');
   check('5 Pitch Match: never up while the button is disabled (100 ms samples)', upWhileBusy === 0, `${upWhileBusy} samples up of ${pm.log.filter(s => s.busy).length} busy`);
   check('5 Pitch Match: #pitchLane voice path gains points while singing', maxPts > 1 && grew, `max ${maxPts} points`);
+  const reads = [...new Set(pm.log.map(s => s.read).filter(Boolean))];
+  check('5 Pitch Match: #pitchCentsRead reads pm_live_on at some point', reads.includes(pm.on), reads.slice(0, 6).join(' | ') || 'empty');
+  check('5 Pitch Match: #pitchTargetNote gets .pm-locked at some point', pm.log.some(s => s.locked), `${pm.log.filter(s => s.locked).length} of ${pm.log.length} samples`);
+  check('5 Pitch Match: no console errors during the take', takeErrors.length === 0, takeErrors.slice(0, 2).join(' | ') || 'none');
   check('5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path', t5up !== null && pm.result && pm.trace, `${t5up !== null ? t5up + ' ms' : 'still down'} · result ${pm.result} · trace ${pm.trace} · ${pm.acc}`);
+  check('5 Pitch Match: the big number in --hl-ink', pm.numInk, pm.acc);
+  check('5 Pitch Match: "Sing it again (A4)" shown with the result', pm.again.shown && /\(A4\)/.test(pm.again.text), JSON.stringify(pm.again));
   // 6 not staged: a Breath hold and an Interval Match take
   await C.showPanel(page, 'breath'); await C.clearOverlays(page);
   await page.evaluate(() => { window.__ns = []; window.__nsTimer = setInterval(() => window.__ns.push(document.body.dataset.house + (document.querySelector('.is-live') ? '+live' : '')), 100); document.getElementById('breathStartBtn').click(); });
@@ -156,6 +191,25 @@ async function combo(b, dir, state, theme, w) {
   await r.ctx.close();
 }
 
+// The sharp stimulus (40 cents sharp, once, Light 390): the readout reads pm_live_sharp with a number, never locks.
+async function sharpTake(dir, state) {
+  console.log('\n-- sharp stimulus · light · 390px');
+  const b = await S.launchMic(S.STIM.sharp);
+  try {
+    const { page } = await C.openPage(b, { dir, theme: 'light', viewport: SIZES[390], storageState: state });
+    const consoleErrors = []; page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().split('\n')[0]); });
+    await C.clearOverlays(page); await S.warmMic(page); await S.openPitch(page); await C.sleep(300);
+    await page.evaluate(() => { window.__sr = []; window.__srT = setInterval(() => window.__sr.push({ read: document.getElementById('pitchCentsRead').textContent, locked: document.getElementById('pitchTargetNote').classList.contains('pm-locked') }), 50); });
+    await S.clickPitch(page); await C.sleep(300); await S.waitPitchDone(page);
+    const r = await page.evaluate(() => { clearInterval(window.__srT); return { log: window.__sr, sharp: t('pm_live_sharp') }; });
+    const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), re = new RegExp('^' + r.sharp.split('{n}').map(esc).join('\\d+') + '$');
+    const reads = [...new Set(r.log.map(s => s.read).filter(Boolean))];
+    check('5 sharp: #pitchCentsRead reads pm_live_sharp with a number', reads.some(x => re.test(x)), reads.slice(0, 6).join(' | ') || 'empty');
+    check('5 sharp: #pitchTargetNote never gets .pm-locked', r.log.length > 20 && !r.log.some(s => s.locked), `${r.log.filter(s => s.locked).length} of ${r.log.length} samples locked`);
+    check('5 sharp: no console errors during the take', consoleErrors.length === 0, consoleErrors.slice(0, 2).join(' | ') || 'none');
+  } finally { await b.close(); }
+}
+
 (async () => {
   S.ensureStimuli();
   const dir = C.buildDir(BASE);
@@ -168,6 +222,7 @@ async function combo(b, dir, state, theme, w) {
     await C.signUp(page, 'dvh', 'House Check');
     const state = await ctx.storageState(); await ctx.close();
     for (const theme of ['light', 'dark']) for (const w of ['390', '1280']) await combo(b, dir, state, theme, w);
+    await sharpTake(dir, state);
   } finally {
     await b.close();
     console.log(`\n${pass} passed, ${fail} failed`);

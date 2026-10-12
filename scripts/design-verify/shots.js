@@ -24,7 +24,7 @@ const SIZES = Object.fromEntries(Object.entries(ALL_SIZES).filter(([w]) => !arg(
 const ONLY_PANELS = arg('--panels') ? arg('--panels').split(',') : null, EXTRAS = !process.argv.includes('--no-extras');
 const STATES = !process.argv.includes('--no-states'), STATES_ONLY = process.argv.includes('--states-only');
 const S = require('./stage');
-const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
+const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
 const MOTION_MS = [0, 80, 160, 320, 480, 640, 900, 1300];
 const Q = { type: 'jpeg', quality: 85 };
 const log = [];
