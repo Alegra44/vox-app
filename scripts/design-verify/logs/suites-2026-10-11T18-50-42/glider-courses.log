@@ -1,0 +1,68 @@
+== local deploy/
+
+-- highway
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 1, ceiling 1
+-- melody
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 1, ceiling 0
+-- interval
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 89, ceiling 63
+-- sustain
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 1, ceiling 1
+-- agility
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 1, ceiling 1
+-- keyshift
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 143, ceiling 81
+-- memory
+  ✓ starts at the first gap's centre, inside the gap                         200/200
+  ✓ 600 silent frames before the first note: frozen, score 0, no crash       200/200
+  ✗ hint drawn on every frozen frame, never after take-off                   199/200, after take-off 0
+  ✗ take-off on the first note doesn't end the run                           199/200
+     ideal singer, frames flown (cap 1800): min 1800, p10 1800, median 1800; full 1800: 200/200
+  ✗ silence after take-off: crashes within 180 frames, every time            max 1000 frames
+  ✓ never NaN                                                                0
+  ✓ pinned to the floor / ceiling: every run ends within 20000 frames        unbounded 0; max score floor 1, ceiling 0
+  ✓ page errors                                                              none
+
+29 passed, 21 failed

@@ -1,0 +1,142 @@
+signed up voxcoach-p7-1791749471797@example.com | user_id 3f18c138-e655-40ef-9369-a8f612d6101a
+loaded choir_readiness before any run: {"parts":{},"log":[],"runs":[],"ycTakes":0}
+
+== Harmony Memory stage 1, all in tune
+run: {"score":100,"passed":true}
+== Boss 1 (Drowner), all in tune
+run: {"score":100,"passed":true}
+== Boss 2 (Drifter), silent from chord 2
+run: {"score":13,"passed":false}
+
+== PATCH /me/progress calls: 12
+#1 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#2 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#3 HTTP 200 | sent==returned: false (keys sorted: true) | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#4 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: undefined | log 0 | runs 0
+#5 HTTP 200 | sent==returned: false (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":0,"bosses":[null,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:11:49.262Z","hmPassed":1,"bossesBeaten":0} | log 1 | runs 1
+#6 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":0,"bosses":[null,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:11:49.262Z","hmPassed":1,"bossesBeaten":0} | log 1 | runs 1
+#7 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":0,"bosses":[null,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:11:49.262Z","hmPassed":1,"bossesBeaten":0} | log 1 | runs 1
+#8 HTTP 200 | sent==returned: false (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:12:22.695Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#9 HTTP 200 | sent==returned: false (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:12:22.695Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#10 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:12:22.695Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#11 HTTP 200 | sent==returned: true (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,null,null,null,null,null],"levels":[],"losses":0,"status":"developing","updated":"2026-10-11T20:12:22.695Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 2
+#12 HTTP 200 | sent==returned: false (keys sorted: true) | returned parts.hymn.Alto: {"hm":[100,null,null,null,null,null],"snap":{"hm":0,"ts":null,"bosses":0,"levels":0,"status":"learning"},"wins":1,"bosses":[100,13,null,null,null,null],"levels":[],"losses":1,"status":"developing","updated":"2026-10-11T20:12:42.303Z","hmPassed":1,"bossesBeaten":1} | log 1 | runs 3
+
+client final choir_readiness:
+{
+ "log": [
+  {
+   "ts": 1791749509262,
+   "from": "learning",
+   "part": "Alto",
+   "song": "hymn",
+   "status": "developing"
+  }
+ ],
+ "runs": [
+  {
+   "n": 8,
+   "ts": 1791749509262,
+   "held": 8,
+   "kind": "hm",
+   "part": "Alto",
+   "slot": 0,
+   "song": "hymn",
+   "pitch": 99,
+   "score": 100,
+   "passed": true,
+   "timing": 100
+  },
+  {
+   "n": 8,
+   "ts": 1791749542695,
+   "held": 8,
+   "kind": "boss",
+   "part": "Alto",
+   "slot": 0,
+   "song": "hymn",
+   "pitch": 99,
+   "score": 100,
+   "passed": true,
+   "timing": 100
+  },
+  {
+   "n": 8,
+   "ts": 1791749562303,
+   "held": 1,
+   "kind": "boss",
+   "part": "Alto",
+   "slot": 1,
+   "song": "hymn",
+   "pitch": 99,
+   "score": 13,
+   "passed": false,
+   "timing": 100
+  }
+ ],
+ "parts": {
+  "hymn": {
+   "Alto": {
+    "hm": [
+     100,
+     null,
+     null,
+     null,
+     null,
+     null
+    ],
+    "snap": {
+     "hm": 0,
+     "ts": null,
+     "bosses": 0,
+     "levels": 0,
+     "status": "learning"
+    },
+    "wins": 1,
+    "bosses": [
+     100,
+     13,
+     null,
+     null,
+     null,
+     null
+    ],
+    "levels": [],
+    "losses": 1,
+    "status": "developing",
+    "updated": "2026-10-11T20:12:42.303Z",
+    "hmPassed": 1,
+    "bossesBeaten": 1
+   }
+  }
+ },
+ "firsts": {
+  "hmPass": {
+   "ts": 1791749509262,
+   "part": "Alto",
+   "song": "hymn",
+   "score": 100,
+   "stage": 0
+  },
+  "bossWin": {
+   "ts": 1791749542695,
+   "part": "Alto",
+   "slot": 0,
+   "song": "hymn"
+  }
+ },
+ "ycTakes": 0
+}
+readiness card: Soprano LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Lead LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Alto (you) DEVELOPING Levels played 0/5 · Harmony Memory 1/6 · Bosses beaten 1/6 · Boss record 1–1 Tenor LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Bass LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+
+== Second device: new context, empty localStorage, sign in to the same account
+localStorage on device 2: [null,null,null]
+loaded == device 1 final: true | keys sorted: true
+rdInputs(hymn, Alto) on device 2: {"levels":[],"hm":[100,null,null,null,null,null],"bosses":[100,13,null,null,null,null],"hmPassed":1,"bossesBeaten":1,"wins":1,"losses":1} → developing
+device 2 readiness card: Soprano LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Lead LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Alto (you) DEVELOPING Levels played 0/5 · Harmony Memory 1/6 · Bosses beaten 1/6 · Boss record 1–1 Tenor LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Bass LEARNING Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+DB row == device 1 final: false | keys sorted: true | {"firsts":{"bossWin":{"part":"Alto","slot":0,"song":"hymn","ts":1791749542695},"hmPass":{"part":"Alto","score":100,"song":"hymn","stage":0,"ts":1791749509262}},"log":[{"from":"learning","part":"Alto","song":"hymn","status":"developing","ts":1791749509262}],"parts":{"hymn":{"Alto":{"bosses":[100,13,n
+
+USER_ID 3f18c138-e655-40ef-9369-a8f612d6101a
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-p7-1791749471797@example.com

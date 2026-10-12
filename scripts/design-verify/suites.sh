@@ -52,8 +52,8 @@ SUITES=(
   "loopback|env LB_BEFORE=master node scripts/vq-verify/loopback.js"
   "levels|node scripts/vq-verify/levels.js"
   "rtfsoft|node scripts/vq-verify/rtfsoft.js"
-  "vibfix-regress|env VF_MODE=regress node scripts/vq-verify/vibfix.js"
-  "noisegate-regress|env NG_MODE=regress node scripts/vq-verify/noisegate.js"
+  "vibfix-regress|env VF_MODE=regress VF_BEFORE=master node scripts/vq-verify/vibfix.js"
+  "noisegate-regress|env NG_MODE=regress NG_BEFORE=master node scripts/vq-verify/noisegate.js"
 )
 started=${1:+0}; [ -z "$1" ] && started=1
 for s in "${SUITES[@]}"; do
