@@ -175,3 +175,67 @@ c) shots.js: add the same states, plus a frame sequence for the motion: 0, 80, 1
 - No merge and no deploy until I've reviewed.
 
 Rules as before: keep every ID, data-i18n key, data-panel, data-shell and data-enter-panel value, and every protected class and string (§9, including "In tune", "Listening…" and the ex_sing_now cue). No new dependencies. Every new string in all four languages.
+
+---
+
+## 2.8 fixes (review of phase 2, verbatim)
+
+Phase 2 review: approved with one fix round (2.8) before deploy. Same branch (redesign/phase2). Add this message as "2.8 fixes" at the end of PHASE2.md and commit that first.
+
+Keep: the lighting engine, the stage pattern, the motion timing, the Tuner lock, the Pitch Match stage layout, the warm-up overlay, and all seven of your differences from the spec (33 call sites, 0.09 glow base, ink-2 on #centsDisplay only, scroll-back, the probe, div rows, theme colour from --hl-bg). The glider-courses stub fix stands.
+
+Decision 1, the dimmed header and tab bar: neither (a) nor (b). Dim by colour, not opacity:
+- No opacity on the header or tab bar while the lights are down.
+- While down, all their text and icons are var(--hl-ink-3), including the wordmark, its mark and the active tab label. The playhead is --hl-ink-3 too, so on the stage only the singer's own voice is in the voice colour.
+- :hover and :focus-within bring them back to var(--hl-ink).
+- Update house.js to check the computed colour instead of opacity, and to check that they stay clickable.
+- contrast.js now has no exception for them: the stage gate is ≥4.5 for every text.
+
+Decision 2, re-check: yes, once, covering both phases. After the fixes below and their short checks:
+- Run vibfix and noisegate in regress mode, with 9a3bfbf (before phase 1) as the "before" side and redesign/phase2 HEAD as the "after" side. Default runs.
+- Nothing else runs at the same time.
+- Phase 2 deploys only if it shows 0 Regressions.
+- If one appears, bisect it to phase 1 or phase 2 before fixing.
+- Push the screenshots and send the report before this run starts. I'll review while it runs.
+
+The fixes:
+
+A. Pitch Match live readout and lock (bug)
+- pmLaneFrame(t, cents) shadows the global t(): every frame throws at t('pm_live_on'), and the empty catch in captureAccuracyForTarget hides it. So the readout never shows and the target never locks.
+- Rename the parameter (ms).
+- The catch logs the first error per take with console.error and stays silent after that. It still never touches scoring.
+- house.js gains these checks:
+  · with the steady stimulus, #pitchCentsRead reads pm_live_on and #pitchTargetNote has .pm-locked at some point;
+  · with the sharp stimulus, it reads pm_live_sharp with a number and never locks;
+  · the page logs no console errors during a take.
+  Also grep for any other function parameter or local named t that sits next to a t('…') call.
+
+B. Cents meter: labels −50, 0, +50 under the big ticks, 12px, var(--hl-ink-3).
+
+C. Result chart (#pitchTrace):
+- About 120px tall at 390, as in the mockup.
+- Axis labels render at 12px (--hl-t-label). Size the svg so viewBox scaling doesn't shrink the text, or put the labels outside the svg.
+
+D. The big number in .vc-result is var(--hl-ink): no green, amber or red on it (the coach line and the confidence row carry the meaning). The .ex-accuracy good/mid/low colours stay for the results that aren't rebuilt yet (Interval, Scale, Ear).
+
+E. Not heard or no voice: the big "—" is hidden. The label, the coach line and "How this is measured" remain.
+
+F. details.hl-measure: the summary starts with the hl-info icon (as in house-lights.css and the mockup) and has a visible open state. Add a screenshot of it open.
+
+G. Tuner result: while #tunerResult is showing, hide the live .stat-row: its last-moment values next to the average look like a contradiction (Stability 72% vs Average 79%). It shows again when a new session starts. CSS with :has() or a class on the card, your choice. The scripts read those stats only while singing.
+
+H. "Sing it again (A4)" (#pitchAgainBtn) isn't visible in the heard-result shots. Find out whether that's the shot harness or a bug in the stage marks (vc-paper-only and the inline display). It must show after a heard take. Add a house.js check for it.
+
+Checks after the fixes (one at a time):
+- hooks.js
+- house.js with the new checks
+- contrast.js (no exceptions)
+- batch1, batch3c (topmost #micBtn with the break banner), warmup entries
+- listenwin, picker, pmframes ×1, glider-courses
+Same rule: a failure is re-run on the "before" side and classified.
+
+Then:
+- shots.js for the states and the motion sequences; push to review/phase2 as a new commit.
+- Push redesign/phase2, with the secret check before both pushes.
+- Send me the report.
+- Then start the 4¾-hour regress run (decision 2) and report when it ends. No merge and no deploy until I've reviewed the shots and the run shows 0 Regressions.
