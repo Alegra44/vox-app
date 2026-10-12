@@ -1,4 +1,9 @@
-# House Lights: the VoxCoach design system (v1.3)
+# House Lights: the VoxCoach design system (v1.4)
+
+v1.4 (2026-10-12, phase 2.8): with the house down the header and tab bar dim by colour, not opacity: every text and
+icon in them, the playhead included, is `--hl-ink-3`; hover or focus within gives back the usual colours. The stage's
+contrast gate (≥4.5) has no exception for them. `details.hl-measure` starts with the `hl-info` icon and shows when it's
+open; a result's big number is `--hl-ink`, and when nothing was heard it isn't shown (§9).
 
 v1.3 (2026-10-11, phase 2): the lighting hook is `houseSession(isActive, stage)` (lighting) and `singingSession(isActive,
 stage)` (lighting plus `vlSidecar`); the lights go down only on a session that passes a stage in the active panel or an
@@ -202,7 +207,10 @@ to recreate (with `vc-` or area prefixes), not as a library.
     (`data-offstage`), the stage's ancestors lose their card chrome (`data-stage-path`), and the stage becomes a centred
     column. Reason: the verify scripts check that buttons stay topmost and that the vocal-load gauge stays displayed while
     singing.
-  - The header and tab bar stay on the stage at 38% opacity and still work: leaving stops the session, as today.
+  - The header and tab bar stay on the stage and still work: leaving stops the session, as today. They dim by colour
+    (v1.4), not opacity: every text and icon in them is `--hl-ink-3`, the wordmark, its mark, the active tab and the
+    playhead included, so on the stage only the singer's own voice is in the voice colour. Hover or focus within gives
+    back the usual colours.
   - Allowed on the stage besides the singing controls: the vocal-load gauge, the Vocal Load break banner (`#vlBreak`) and
     the vocal health banner. They are safety signals. Anything else that must stay takes `[data-keep-on-stage]`.
   - Pitch Match dims for the whole take (reference tone, cue and singing), not only while listening.
@@ -211,7 +219,9 @@ to recreate (with `vc-` or area prefixes), not as a library.
     Choir recording, part rehearsal, some games) get their call in the phase that rebuilds them.
   - The pre-session warm-up overlay is always a stage (`data-house="down"` on `#warmupOverlay`).
   - Results use one reusable pattern, `.vc-result`: a big number, a label, one coach sentence, the take's chart,
-    dimension rows, and `details.hl-measure` last, on paper.
+    dimension rows, and `details.hl-measure` last, on paper. The number is `--hl-ink` (no good / mid / low colour: the
+    coach line and the confidence row carry the meaning); when nothing was heard there is no number. Chart axis labels
+    render at 12 px whatever the chart's width.
 - No new dependencies. Fonts come from Google Fonts as today.
 - Keep performance: the voice line already draws per frame; don't add continuous animations on
   paper screens; pause anything that animates when it's off screen.

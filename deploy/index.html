@@ -1035,7 +1035,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pm-lane{display:block;width:100%;max-width:520px;height:auto;}
   .pm-lane .pm-grid{stroke:var(--hl-rule);stroke-width:1;}
   .pm-lane .pm-target{stroke:var(--hl-ink);stroke-width:1.5;}
-  .pm-lane text, .pm-trace text{fill:var(--hl-ink-3);font-size:11px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;}
+  .pm-lane text{fill:var(--hl-ink-3);font-size:11px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;}
   .pm-lane .pm-lane-voice, .pm-trace .pm-trace-voice{fill:none;stroke:var(--hl-voice);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;filter:var(--hl-glow);}
   .pm-lane .pm-lane-head{fill:var(--hl-voice);filter:var(--hl-glow);}
   .pm-cents{display:grid;justify-items:center;gap:var(--hl-s1);width:100%;max-width:320px;}
@@ -1043,6 +1043,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pm-cents-meter .pm-tick{stroke:var(--hl-ink-3);stroke-width:1;}
   .pm-cents-meter .pm-tick-big{stroke:var(--hl-ink-2);stroke-width:1.5;}
   .pm-cents-meter .pm-needle{stroke:var(--hl-voice);stroke-width:3;stroke-linecap:round;}
+  .pm-cents-scale{position:relative;width:100%;height:16px;margin-top:-6px;}
+  .pm-cents-scale span{position:absolute;top:0;transform:translateX(-50%);font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   .pm-cents-read{min-height:1.4em;font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
   #pitchTargetNote{transition:background-color var(--hl-d1) var(--hl-ease), color var(--hl-d1) var(--hl-ease);border-radius:999px;padding:0 .35em;}
   #pitchTargetNote.pm-locked{background:var(--hl-lock);color:var(--hl-on-voice);}
@@ -1050,6 +1052,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live #pitchListenBtn:disabled{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);opacity:1;cursor:default;}
   .vc-stage.is-live .btn-row{margin-top:0 !important;}
   /* its result: rows of dimensions; the trace */
+  .pm-trace-box{display:grid;gap:var(--hl-s1);}
+  .pm-trace{display:block;width:100%;height:104px;}
+  .pm-trace :is(line, path){vector-effect:non-scaling-stroke;}
+  .pm-trace-axis{display:flex;justify-content:space-between;font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   .pm-trace .pm-target{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;}
   #pitchResult .sub-score-row{flex-direction:column;gap:0;margin:0;justify-content:flex-start;}
   #pitchResult .sub-score, #pitchResult .cents-detail, #pitchResult #pitchConfidenceBadge{
@@ -1390,7 +1396,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* ============ HOUSE LIGHTS: THE STAGE (phase 2) ============ */
   /* With the house down the live panel is re-laid out around its stage (it isn't covered): everything else in the panel is
      offstage, the stage's ancestors lose their card chrome, the stage is a centred column. The header and tab bar stay,
-     dimmed, and still work. */
+     dimmed by colour, and still work. */
   [data-offstage]{display:none !important;}
   [data-stage-path]{background:none !important;border:0 !important;padding:0 !important;margin:0 !important;box-shadow:none !important;}
   .vc-stage.is-live .vc-paper-only{display:none !important;}
@@ -1401,17 +1407,27 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     max-width:560px;margin:0 auto;padding:var(--hl-s5) 0;box-sizing:border-box;
   }
   @media (min-width:960px){ .vc-stage.is-live{min-height:calc(100dvh - 57px - var(--hl-s5));} } /* the tab bar is in the header */
-  header.shell-topbar, nav.shell-bottomnav{transition:opacity var(--hl-d3) var(--hl-ease);}
-  body[data-house="down"] header.shell-topbar, body[data-house="down"] nav.shell-bottomnav{opacity:.38;}
-  body[data-house="down"] header.shell-topbar:hover, body[data-house="down"] header.shell-topbar:focus-within,
-  body[data-house="down"] nav.shell-bottomnav:hover, body[data-house="down"] nav.shell-bottomnav:focus-within{opacity:1;}
-  @media (prefers-reduced-motion: reduce){ header.shell-topbar, nav.shell-bottomnav{transition:none;} }
+  /* House down: no opacity on the shell; every text and icon in it (wordmark, mark, avatar, tabs, the active tab) is
+     --hl-ink-3, and so is the playhead, so on the stage only the singer's voice is in the voice colour. Hover or focus
+     within gives the shell its usual colours back. */
+  .vc-brand, .vc-mark, .vc-avatar, .vc-signin, .hl-tab, .hl-tab::before{transition:color var(--hl-d3) var(--hl-ease), stroke var(--hl-d3) var(--hl-ease), background-color var(--hl-d3) var(--hl-ease);}
+  body[data-house="down"] :is(header.shell-topbar, nav.shell-bottomnav):not(:hover):not(:focus-within) :is(.vc-brand, .vc-avatar, .vc-signin, .hl-tab){color:var(--hl-ink-3);}
+  body[data-house="down"] header.shell-topbar:not(:hover):not(:focus-within) .vc-mark{stroke:var(--hl-ink-3);}
+  body[data-house="down"] nav.shell-bottomnav:not(:hover):not(:focus-within) .hl-tab[aria-current="page"]::before{background:var(--hl-ink-3);}
+  @media (prefers-reduced-motion: reduce){ .vc-brand, .vc-mark, .vc-avatar, .vc-signin, .hl-tab, .hl-tab::before{transition:none;} }
 
   /* ============ HOUSE LIGHTS: RESULTS (phase 2) ============ */
   /* .vc-result, on paper after a take: one big number, its label (hl-h3), one coach sentence (.hl-coach), the take's chart,
      dimension rows (a dl with hairline rules), and details.hl-measure last. */
   .vc-result{display:grid;gap:var(--hl-s3);text-align:left;color:var(--hl-ink);margin-top:var(--hl-s5);padding-top:var(--hl-s5);border-top:var(--hl-hair) solid var(--hl-rule);}
   .vc-result-num{font-size:var(--hl-t-metric-l);font-stretch:var(--hl-w-wide);font-weight:300;line-height:.95;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;color:var(--hl-ink);margin:0;}
+  .vc-result .vc-result-num.ex-accuracy{color:var(--hl-ink);}
+  .vc-result .vc-result-num.vc-result-none{display:none;} /* not heard: no number, the coach line says why */
+  .hl-measure > summary .vc-measure-chev{margin-left:auto;color:var(--hl-ink-3);transition:transform var(--hl-d1) var(--hl-ease);}
+  .hl-measure[open] > summary{color:var(--hl-ink);}
+  .hl-measure[open] > summary .vc-measure-chev{transform:rotate(90deg);}
+  @media (prefers-reduced-motion: reduce){ .hl-measure > summary .vc-measure-chev{transition:none;} }
+  #tunerStage.vc-has-result .stat-row{display:none;} /* no good / mid / low colour: the coach line and confidence row carry it */
   .vc-result-meta{font-size:var(--hl-t-small);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;margin:0;}
   .vc-result .hl-coach{max-width:60ch;}
   .vc-result-chart{display:block;width:100%;height:auto;}
@@ -2740,7 +2756,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <p class="vc-result-num" id="tunerResultVal">—</p>
         <h3 class="hl-h3" data-i18n="tuner_result_label">Average stability</h3>
         <p class="vc-result-meta" id="tunerResultMeta"></p>
-        <details class="hl-measure"><summary data-i18n="measure_summary">How this is measured</summary><p data-i18n="tuner_measure">Stability is 100 minus three times how much your pitch wavers, in cents, over its last 30 readings (about half a second). This number is the average for the whole time you sang. The ring locks when you're within 6 cents of the note.</p></details>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="tuner_measure">Stability is 100 minus three times how much your pitch wavers, in cents, over its last 30 readings (about half a second). This number is the average for the whole time you sang. The ring locks when you're within 6 cents of the note.</p></details>
       </div>
 
       <p class="hint" data-i18n="tuner_hint">Uses your microphone locally in the browser — nothing is uploaded. Best with headphones or a quiet room.</p>
@@ -2987,6 +3003,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <svg class="pm-lane vc-live-only" id="pitchLane" viewBox="0 0 320 150" aria-hidden="true"></svg>
           <div class="pm-cents vc-live-only" id="pitchCents">
             <svg class="pm-cents-meter" viewBox="0 0 220 34" aria-hidden="true"></svg>
+            <div class="pm-cents-scale" aria-hidden="true"><span style="left:4.545%;">−50</span><span style="left:50%;">0</span><span style="left:95.455%;">+50</span></div>
             <div class="pm-cents-read" id="pitchCentsRead"></div>
           </div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
@@ -3001,7 +3018,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <div class="ex-accuracy vc-result-num" id="pitchAccuracyVal">—</div>
             <h3 class="hl-h3" data-i18n="pm_result_label">Pitch accuracy</h3>
             <div class="ex-feedback-text hl-coach" id="pitchFeedback"></div>
-            <svg class="vc-result-chart pm-trace" id="pitchTrace" viewBox="0 0 320 120" role="img" aria-hidden="true" style="display:none;"></svg>
+            <div class="vc-result-chart pm-trace-box" id="pitchTraceBox" style="display:none;">
+              <svg class="pm-trace" id="pitchTrace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+              <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span id="pitchTraceEnd"></span></div>
+            </div>
             <div class="vc-result-dims">
             <div class="sub-score-row" id="pitchSubScores" style="display:none;">
               <div class="sub-score"><div class="sub-score-label" data-i18n="ex_attack_label">Attack</div><div class="sub-score-val" id="pitchAttackVal">—</div></div>
@@ -3010,7 +3030,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <div class="cents-detail" id="pitchCentsDetail" style="display:none;"></div>
             <p class="fine-print" id="pitchConfidenceBadge" style="display:none;margin-top:8px;"></p>
             </div>
-            <details class="hl-measure"><summary data-i18n="measure_summary">How this is measured</summary><p id="pitchMeasure"></p></details>
+            <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p id="pitchMeasure"></p></details>
           </div>
         </div>
       </div>
@@ -5261,6 +5281,7 @@ function showTunerResult(avg, ms){
   document.getElementById('tunerResultVal').textContent = avg+'%';
   document.getElementById('tunerResultMeta').textContent = `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
   box.style.display = '';
+  document.getElementById('tunerStage').classList.add('vc-has-result'); // the last moment's stats would contradict the average
 }
 document.getElementById('micBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('micBtn');
@@ -5287,7 +5308,7 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
   if(!ok) return;
   sessionStabilityReadings = [];
   tunerSessionStartTime = performance.now();
-  document.getElementById('tunerResult').style.display = 'none';
+  document.getElementById('tunerResult').style.display = 'none'; document.getElementById('tunerStage').classList.remove('vc-has-result');
   tunerVoiceRgb = stageVoiceRgb(document.getElementById('tunerStage'));
   vocalHealthWarningShown = false;
   document.getElementById('vocalHealthBanner')?.style.setProperty('display','none');
@@ -16101,7 +16122,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
   const samples = [];
   let totalFrames = 0;
   const start = performance.now();
-  let voiceAt = opts.waitForVoiceMs ? null : 0;
+  let voiceAt = opts.waitForVoiceMs ? null : 0, frameErr = false;
   return new Promise(resolve=>{
     function frame(){
       analyser.getFloatTimeDomainData(dataArray);
@@ -16119,7 +16140,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
           const cents = centsFromTarget(freq, targetMidi);
           if(cents!==null && Math.abs(cents) < 300){
             samples.push({t, cents});
-            if(opts.onFrame){ try{ opts.onFrame(t, cents); }catch(e){} } // drawing only: it can never touch scoring
+            if(opts.onFrame){ try{ opts.onFrame(t, cents); }catch(e){ if(!frameErr){ frameErr = true; console.error('onFrame', e); } } } // drawing only: it can never touch scoring (the first error per take is logged)
           }
         }
       }
@@ -16348,9 +16369,9 @@ function pmLaneStart(target, win){
     head: document.querySelector('#pitchLane .pm-lane-head'), needle: document.querySelector('#pitchCents .pm-needle'),
     read: document.getElementById('pitchCentsRead'), note: document.getElementById('pitchTargetNote')};
 }
-function pmLaneFrame(t, cents){
+function pmLaneFrame(ms, cents){ // ms, not t: t() is the translator
   const L = pmLane; if(!L) return;
-  const x = PM_LANE.x0 + Math.min(1, t/L.win)*(PM_LANE.x1-PM_LANE.x0), y = pmY(cents);
+  const x = PM_LANE.x0 + Math.min(1, ms/L.win)*(PM_LANE.x1-PM_LANE.x0), y = pmY(cents);
   L.d += `${L.d ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
   L.path.setAttribute('d', L.d);
   L.head.setAttribute('cx', x.toFixed(1)); L.head.setAttribute('cy', y.toFixed(1));
@@ -16368,15 +16389,15 @@ function pmLaneEnd(){
   pmLane = null;
 }
 // The result's trace: the take's scored samples (after vibrato tolerance) against the target, over the window.
+// The svg stretches to the card's width at a fixed height (the strokes don't scale); its axis labels are HTML, at 12 px.
 function pmDrawTrace(samples, win){
-  const svg = document.getElementById('pitchTrace');
-  if(!samples || !samples.length){ svg.style.display = 'none'; svg.innerHTML = ''; return; }
-  const x0 = 8, x1 = 312, mid = 52, y = c => mid - Math.max(-150, Math.min(150, c))/150*44;
+  const box = document.getElementById('pitchTraceBox'), svg = document.getElementById('pitchTrace');
+  if(!samples || !samples.length){ box.style.display = 'none'; svg.innerHTML = ''; return; }
+  const x0 = 0, x1 = 320, mid = 52, y = c => mid - Math.max(-150, Math.min(150, c))/150*46;
   const d = samples.map((s, i)=>`${i ? 'L' : 'M'}${(x0 + Math.min(1, s.t/win)*(x1-x0)).toFixed(1)} ${y(s.cents).toFixed(1)}`).join('');
-  const secs = (win/1000).toLocaleString(localeForLang());
-  svg.innerHTML = `<line class="pm-target" x1="${x0}" x2="${x1}" y1="${mid}" y2="${mid}"/><path class="pm-trace-voice" d="${d}"/>`
-    + `<text x="${x0}" y="114">0 s</text><text x="${x1}" y="114" text-anchor="end">${secs} s</text>`;
-  svg.style.display = '';
+  svg.innerHTML = `<line class="pm-target" x1="${x0}" x2="${x1}" y1="${mid}" y2="${mid}"/><path class="pm-trace-voice" d="${d}"/>`;
+  document.getElementById('pitchTraceEnd').textContent = `${(win/1000).toLocaleString(localeForLang())} s`;
+  box.style.display = '';
 }
 function renderPitchMeasure(){
   const el = document.getElementById('pitchMeasure'); if(!el) return;
@@ -16413,14 +16434,14 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   pmDrawTrace(res.heard && res.samples, win);
   if(res.noVoice){ // nothing sung: not an attempt, not a zero, same note
     document.getElementById('pitchAccuracyVal').textContent = '—';
-    document.getElementById('pitchAccuracyVal').className = 'ex-accuracy';
+    document.getElementById('pitchAccuracyVal').className = 'ex-accuracy vc-result-num vc-result-none';
     document.getElementById('pitchFeedback').textContent = t('ex_noheard_retry');
     ['pitchSubScores','pitchCentsDetail','pitchConfidenceBadge'].forEach(id=>{ const e = document.getElementById(id); if(e) e.style.display='none'; });
     return;
   }
   const accEl = document.getElementById('pitchAccuracyVal');
   accEl.textContent = res.accuracy+'%';
-  accEl.className = 'ex-accuracy '+accuracyClass(res.accuracy);
+  accEl.className = 'ex-accuracy vc-result-num '+accuracyClass(res.accuracy)+(res.heard ? '' : ' vc-result-none');
   document.getElementById('pitchFeedback').textContent = accuracyFeedback(res.accuracy, res.heard);
   const subRow = document.getElementById('pitchSubScores');
   if(cfg.splitAttackLanding && res.heard){
@@ -16435,10 +16456,11 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   } else { centsEl.style.display='none'; }
   renderConfidenceBadge('pitchConfidenceBadge', res.confidence);
   if(res.heard){ recordSkillScore('pitch', res.accuracy); recordWeeklyLog('pitch', res.accuracy); }
-  await registerExerciseCompletion();
+  // the result's controls before the progress save: signed in, the save's round trips held "Sing it again" back 1-3 s
   pitchAgainMidi = target; // a new note for the next attempt; "Sing it again" keeps this one
   newPitchTarget(true);
   showAgain('pitchAgainBtn', noteNameFromMidi(target));
+  await registerExerciseCompletion();
 });
 
 /* ---- Interval Match ---- */
