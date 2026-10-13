@@ -1,18 +1,18 @@
 {
  "base": "master",
- "at": "2026-10-12T14:08:04.841Z",
+ "at": "2026-10-13T02:07:06.978Z",
  "passed": 19,
  "failed": 0,
  "results": [
   {
    "check": "every id value in master still exists",
    "ok": true,
-   "detail": "998 checked"
+   "detail": "1013 checked"
   },
   {
    "check": "every data-i18n value in master still exists",
    "ok": true,
-   "detail": "748 checked"
+   "detail": "752 checked"
   },
   {
    "check": "every data-i18n-placeholder value in master still exists",
@@ -67,7 +67,7 @@
   {
    "check": "every TRANSLATIONS key exists in en, es, fr and tr",
    "ok": true,
-   "detail": "1743 keys"
+   "detail": "1750 keys"
   },
   {
    "check": "no TRANSLATIONS key from master removed",
@@ -704,217 +704,217 @@
    "text": "font-family:var(--hl-font);font-size:var(--hl-t-small);line-height:1.45;box-shadow:0 8px 24px rgba(0"
   },
   {
-   "line": 1654,
+   "line": 1689,
    "literal": "rgba(0,0,0,0.35)",
    "exempt": "black shadow / backdrop",
    "text": "box-shadow:0 10px 28px rgba(0,0,0,0.35);"
   },
   {
-   "line": 1701,
+   "line": 1736,
    "literal": "rgba(0,0,0,0.85)",
    "exempt": "black shadow / backdrop",
    "text": "position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.85);backdrop-filter:blur(4px);"
   },
   {
-   "line": 4457,
+   "line": 4525,
    "literal": "rgba(0,0,0,0.4)",
    "exempt": "black shadow / backdrop",
    "text": "<canvas id=\"voiceCardCanvas\" width=\"600\" height=\"800\" role=\"img\" aria-label=\"Preview of your downloa"
   },
   {
-   "line": 17619,
+   "line": 17702,
    "literal": "#0a0908",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);"
   },
   {
-   "line": 17620,
+   "line": 17703,
    "literal": "#2a2419",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#2a2419';"
   },
   {
-   "line": 17631,
+   "line": 17714,
    "literal": "#e8a33d",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#e8a33d';"
   },
   {
-   "line": 17640,
+   "line": 17723,
    "literal": "#e8735d",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';"
   },
   {
-   "line": 17640,
+   "line": 17723,
    "literal": "#f1ead9",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';"
   },
   {
-   "line": 17643,
+   "line": 17726,
    "literal": "#f1ead9",
    "exempt": "gliderLoop",
    "text": "ctx.fillStyle='#f1ead9'; ctx.font='600 18px system-ui, sans-serif'; ctx.textAlign='center'; ctx.text"
   },
   {
-   "line": 17804,
+   "line": 17887,
    "literal": "#0a0908",
    "exempt": "wuExLoop",
    "text": "ctx.fillStyle = '#0a0908'; ctx.fillRect(0,0,W,H);"
   },
   {
-   "line": 17806,
+   "line": 17889,
    "literal": "#e8a33d",
    "exempt": "wuExLoop",
    "text": "ctx.strokeStyle = '#e8a33d'; ctx.globalAlpha = 0.55; ctx.lineWidth = 3; ctx.setLineDash([4,7]);"
   },
   {
-   "line": 17811,
+   "line": 17894,
    "literal": "#4fd6c4",
    "exempt": "wuExLoop",
    "text": "ctx.strokeStyle = '#4fd6c4'; ctx.lineWidth = 3; ctx.beginPath();"
   },
   {
-   "line": 17817,
+   "line": 17900,
    "literal": "#f1ead9",
    "exempt": "wuExLoop",
    "text": "ctx.fillStyle = '#f1ead9'; ctx.beginPath(); ctx.arc(WU_NOW_X, run.y, 8, 0, Math.PI*2); ctx.fill();"
   },
   {
-   "line": 17820,
+   "line": 17903,
    "literal": "#e8a33d",
    "exempt": "wuExLoop",
    "text": "ctx.textAlign = 'right'; ctx.fillStyle = '#e8a33d'; ctx.fillText(Math.max(0, Math.ceil(WU_EX_SEC - t"
   },
   {
-   "line": 18247,
+   "line": 18330,
    "literal": "#0a0908",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);"
   },
   {
-   "line": 18248,
+   "line": 18331,
    "literal": "#33301f",
    "exempt": "bridgeLoop",
    "text": "ctx.strokeStyle='#33301f'; ctx.lineWidth=1;"
   },
   {
-   "line": 18250,
+   "line": 18333,
    "literal": "#8a8272",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle='#8a8272'; ctx.font='11px monospace';"
   },
   {
-   "line": 18257,
+   "line": 18340,
    "literal": "#e8a33d",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';"
   },
   {
-   "line": 18257,
+   "line": 18340,
    "literal": "#4fd6c4",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';"
   },
   {
-   "line": 18261,
+   "line": 18344,
    "literal": "#f1ead9",
    "exempt": "bridgeLoop",
    "text": "ctx.fillStyle='#f1ead9';"
   },
   {
-   "line": 19557,
+   "line": 19715,
    "literal": "rgb(${c[0]},${c[1]},${c[2]})",
    "exempt": "resonanceColorFor",
    "text": "return `rgb(${c[0]},${c[1]},${c[2]})`;"
   },
   {
-   "line": 19585,
+   "line": 19743,
    "literal": "rgb(90,84,70)",
    "exempt": "drawResonanceFrame (argument: canvas colour)",
    "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
   },
   {
-   "line": 19605,
+   "line": 19763,
    "literal": "rgb(90,84,70)",
    "exempt": "drawResonanceFrame (argument: canvas colour)",
    "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
   },
   {
-   "line": 19646,
+   "line": 19804,
    "literal": "rgb(90,84,70)",
    "exempt": "drawResonanceFrame (argument: canvas colour)",
    "text": "drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);"
   },
   {
-   "line": 19711,
+   "line": 19869,
    "literal": "rgba(${r},${g},${b},${voiceAmbientAlpha.toFixed(3)",
    "exempt": "tickVoiceAmbient",
    "text": "layer.style.background = `radial-gradient(ellipse 70% 45% at 50% 0%, rgba(${r},${g},${b},${voiceAmbi"
   },
   {
-   "line": 20768,
+   "line": 20926,
    "literal": "#0e0d0b",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#0e0d0b';"
   },
   {
-   "line": 20771,
+   "line": 20929,
    "literal": "rgba(232,163,61,0.10)",
    "exempt": "renderVoiceCard",
    "text": "grad.addColorStop(0, 'rgba(232,163,61,0.10)');"
   },
   {
-   "line": 20772,
+   "line": 20930,
    "literal": "rgba(79,214,196,0.06)",
    "exempt": "renderVoiceCard",
    "text": "grad.addColorStop(1, 'rgba(79,214,196,0.06)');"
   },
   {
-   "line": 20776,
+   "line": 20934,
    "literal": "#e8a33d",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#e8a33d';"
   },
   {
-   "line": 20781,
+   "line": 20939,
    "literal": "#f1ead9",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#f1ead9';"
   },
   {
-   "line": 20801,
+   "line": 20959,
    "literal": "#a89f8f",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#a89f8f';"
   },
   {
-   "line": 20804,
+   "line": 20962,
    "literal": "#4fd6c4",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';"
   },
   {
-   "line": 20804,
+   "line": 20962,
    "literal": "#6b6355",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';"
   },
   {
-   "line": 20811,
+   "line": 20969,
    "literal": "#e8735d",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#e8735d';"
   },
   {
-   "line": 20817,
+   "line": 20975,
    "literal": "#f1ead9",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#f1ead9';"
   },
   {
-   "line": 20821,
+   "line": 20979,
    "literal": "#6b6355",
    "exempt": "renderVoiceCard",
    "text": "ctx.fillStyle = '#6b6355';"

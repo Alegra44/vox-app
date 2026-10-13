@@ -13,6 +13,9 @@
 //   0, 80, 160, 320, 480, 640, 900 and 1300 ms after the Tuner starts and after it stops (each file named by the
 //   measured time). Contact sheets: sheets/states.jpg and sheets/motion.jpg.
 //   [--no-states] skips them; [--states-only] takes only them.
+//   Phase 3 (PHASE3.md §1c): Home in each seeded state (homeStates.js) and the Coach tab signed in and signed out, at
+//   390 and 1280 in Light and Dark, viewport and full page (home/<width>-<theme>/<name>.jpg and …-full/); sheet
+//   sheets/home.jpg (full pages). [--no-home] skips them; [--home-only] takes only them.
 const path = require('path'), fs = require('fs'), os = require('os');
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -22,7 +25,10 @@ const THEMES = BASE ? ['dark'] : ['light', 'dark'];
 const ALL_SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 800 } };
 const SIZES = Object.fromEntries(Object.entries(ALL_SIZES).filter(([w]) => !arg('--sizes') || arg('--sizes').split(',').includes(w)));
 const ONLY_PANELS = arg('--panels') ? arg('--panels').split(',') : null, EXTRAS = !process.argv.includes('--no-extras');
-const STATES = !process.argv.includes('--no-states'), STATES_ONLY = process.argv.includes('--states-only');
+const HOME_ONLY = process.argv.includes('--home-only'), HOME = !process.argv.includes('--no-home');
+const STATES = !process.argv.includes('--no-states') && !HOME_ONLY, STATES_ONLY = process.argv.includes('--states-only') || HOME_ONLY;
+const H = require('./homeStates');
+const HOME_ROWS = [...H.HOME_STATES, 'coach-signedin', 'coach-signedout'];
 const S = require('./stage');
 const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
 const MOTION_MS = [0, 80, 160, 320, 480, 640, 900, 1300];
@@ -150,6 +156,23 @@ async function stateShots(dir, state) {
   } finally { await b.close(); }
 }
 
+async function homeShots(b, dir, state) {
+  for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) {
+    const d = path.join(OUT, 'home', `${w}-${theme}`), df = d + '-full'; fs.mkdirSync(df, { recursive: true });
+    for (const name of HOME_ROWS) {
+      const seedName = name === 'coach-signedin' ? 'weakest' : name === 'coach-signedout' ? 'signedout' : name;
+      const { ctx, page } = await C.openPage(b, { dir, theme, viewport, storageState: seedName === 'signedout' ? undefined : state });
+      try {
+        await C.clearOverlays(page); await H.seed(page, seedName);
+        if (name.startsWith('coach-')) { await page.evaluate(() => { showShellSection('train'); window.scrollTo(0, 0); }); await C.sleep(400); }
+        await page.screenshot({ path: path.join(d, `${name}.jpg`), ...Q });
+        await page.screenshot({ path: path.join(df, `${name}.jpg`), fullPage: true, ...Q });
+      } finally { await ctx.close(); }
+    }
+    console.log(`   home · ${w} · ${theme}: ${HOME_ROWS.length} shots`);
+  }
+}
+
 async function contactSheets(b, groups) {
   const d = path.join(OUT, 'sheets'); fs.mkdirSync(d, { recursive: true });
   const cols = ['390-light', '390-dark', '1280-light', '1280-dark'].filter(c => THEMES.includes(c.split('-')[1]) && SIZES[c.split('-')[0]]);
@@ -181,6 +204,12 @@ async function contactSheets(b, groups) {
     const sc = cols.filter(c => fs.existsSync(path.join(OUT, 'states', c)));
     await sheet('states', 'singing states (signed in)', sc, STATE_ORDER.map(n => `<tr><th>${n}</th>${sc.map(c => `<td>${img(path.join(OUT, 'states', c, n + '.jpg'), c.split('-')[0])}</td>`).join('')}</tr>`).join(''));
   }
+  if (fs.existsSync(path.join(OUT, 'home'))) {
+    const hc = cols.filter(c => fs.existsSync(path.join(OUT, 'home', c + '-full')));
+    await sheet('home', 'Home (seeded states) and the Coach tab, full page', hc, HOME_ROWS.map(n => `<tr><th>${n}</th>${hc.map(c => {
+      const f = path.join(OUT, 'home', c + '-full', n + '.jpg');
+      return `<td>${fs.existsSync(f) ? `<img src="file://${f}" style="width:${c.startsWith('390') ? 260 : 420}px">` : '—'}</td>`; }).join('')}</tr>`).join(''));
+  }
   if (fs.existsSync(path.join(OUT, 'motion'))) {
     await sheet('motion', 'motion, 390 Light (ms after the click)', MOTION_MS.map(String),
       ['start', 'stop'].map(w => `<tr><th>${w}</th>${MOTION_MS.map(ms => `<td>${img(path.join(OUT, 'motion', `${w}-${String(ms).padStart(4, '0')}.jpg`), '390')}</td>`).join('')}</tr>`).join(''));
@@ -210,6 +239,7 @@ async function contactSheets(b, groups) {
       if (EXTRAS) await extras(b, dir, state);
     }
     if (STATES) await stateShots(dir, state);
+    if (HOME) await homeShots(b, dir, state);
     await contactSheets(b, groups);
     fs.writeFileSync(path.join(OUT, 'notes.txt'), log.join('\n') + '\n');
     console.log(`done: ${OUT}`);

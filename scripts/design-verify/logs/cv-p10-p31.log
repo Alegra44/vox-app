@@ -1,0 +1,115 @@
+account voxcoach-p10-1791878075007-a@example.com 4b6645ce-0dd0-47fb-a9f9-46a1169aa173 | plan: {"tier":"trial","inTrial":true,"choirWorld":true}
+
+==== DELTA (Demo Hymn, Alto)
+
+--- HM stage 1, silent (fails): {"score":0,"passed":false}
+[home] CHOIR WORLD LEARNING Your Alto is Learning — keep rehearsing Demo Hymn · Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0 Next: play through 3 rehearsal levels, pass Harmony Memory stage 1, or beat any Choir Boss to reach Developing. Continue rehearsing
+[DB] status learning | now levels 0 hm 0 bosses 0 | snap null
+[delta shown]    null
+[delta from DB]  null
+MATCH
+
+--- HM stage 1 passed: {"score":100,"passed":true}
+[home] CHOIR WORLD DEVELOPING Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 0/5 · Harmony Memory 1/6 · Bosses beaten 0/6 · Boss record 0–0 Since you were Learning (today): +1 Harmony Memory stage Toward Ready: levels played 0/5 · Harmony Memory stages 1/5 · bosses beaten 0/2. Continue rehearsing
+[DB] status developing | now levels 0 hm 1 bosses 0 | snap {"bosses":0,"hm":0,"levels":0,"status":"learning","ts":1791878112121} (2026-10-13T07:55:12.121Z)
+[delta shown]    Since you were Learning (today): +1 Harmony Memory stage
+[delta from DB]  Since you were Learning (today): +1 Harmony Memory stage
+MATCH
+
+--- HM stage 2 passed: {"score":100,"passed":true}
+[home] CHOIR WORLD DEVELOPING Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 0/5 · Harmony Memory 2/6 · Bosses beaten 0/6 · Boss record 0–0 Since you were Learning (today): +2 Harmony Memory stages Toward Ready: levels played 0/5 · Harmony Memory stages 2/5 · bosses beaten 0/2. Continue rehearsing
+[DB] status developing | now levels 0 hm 2 bosses 0 | snap {"bosses":0,"hm":0,"levels":0,"status":"learning","ts":1791878112121} (2026-10-13T07:55:12.121Z)
+[delta shown]    Since you were Learning (today): +2 Harmony Memory stages
+[delta from DB]  Since you were Learning (today): +2 Harmony Memory stages
+MATCH
+
+--- Boss 1: {"score":100,"passed":true}
+[home] CHOIR WORLD DEVELOPING Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 0/5 · Harmony Memory 2/6 · Bosses beaten 1/6 · Boss record 1–0 Since you were Learning (today): +2 Harmony Memory stages · +1 boss beaten Toward Ready: levels played 0/5 · Harmony Memory stages 2/5 · bosses beaten 1/2. Continue rehearsing
+[DB] status developing | now levels 0 hm 2 bosses 1 | snap {"bosses":0,"hm":0,"levels":0,"status":"learning","ts":1791878112121} (2026-10-13T07:55:12.121Z)
+[delta shown]    Since you were Learning (today): +2 Harmony Memory stages · +1 boss beaten
+[delta from DB]  Since you were Learning (today): +2 Harmony Memory stages · +1 boss beaten
+MATCH
+
+--- 5 level play-throughs
+[home] CHOIR WORLD DEVELOPING Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 5/5 · Harmony Memory 2/6 · Bosses beaten 1/6 · Boss record 1–0 Since you were Learning (today): +5 rehearsal levels played · +2 Harmony Memory stages · +1 boss beaten Toward Ready: levels played 5/5 · Harmony Memory stages 2/5 · bosses beaten 1/2. Continue rehearsing
+[DB] status developing | now levels 5 hm 2 bosses 1 | snap {"bosses":0,"hm":0,"levels":0,"status":"learning","ts":1791878112121} (2026-10-13T07:55:12.121Z)
+[delta shown]    Since you were Learning (today): +5 rehearsal levels played · +2 Harmony Memory stages · +1 boss beaten
+[delta from DB]  Since you were Learning (today): +5 rehearsal levels played · +2 Harmony Memory stages · +1 boss beaten
+MATCH
+HM stage 3: {"score":100,"passed":true}
+HM stage 4: {"score":100,"passed":true}
+HM stage 5: {"score":100,"passed":true}
+
+--- HM stages 3–5 passed (still Developing: 1 boss)
+[home] CHOIR WORLD DEVELOPING Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 5/5 · Harmony Memory 5/6 · Bosses beaten 1/6 · Boss record 1–0 Since you were Learning (today): +5 rehearsal levels played · +5 Harmony Memory stages · +1 boss beaten Toward Ready: levels played 5/5 · Harmony Memory stages 5/5 · bosses beaten 1/2. Continue rehearsing
+[DB] status developing | now levels 5 hm 5 bosses 1 | snap {"bosses":0,"hm":0,"levels":0,"status":"learning","ts":1791878112121} (2026-10-13T07:55:12.121Z)
+[delta shown]    Since you were Learning (today): +5 rehearsal levels played · +5 Harmony Memory stages · +1 boss beaten
+[delta from DB]  Since you were Learning (today): +5 rehearsal levels played · +5 Harmony Memory stages · +1 boss beaten
+MATCH
+
+--- Boss 2: {"score":100,"passed":true} (→ Ready: the snapshot moves to the Developing record)
+[home] CHOIR WORLD READY Your Alto is Ready — keep it sharp Demo Hymn · Levels played 5/5 · Harmony Memory 5/6 · Bosses beaten 2/6 · Boss record 2–0 Since you were Developing (today): +1 boss beaten Every Ready check is done for this part. Try another part, or the other song. Continue rehearsing
+[DB] status ready | now levels 5 hm 5 bosses 2 | snap {"bosses":1,"hm":5,"levels":5,"status":"developing","ts":1791878489083} (2026-10-13T08:01:29.083Z)
+[delta shown]    Since you were Developing (today): +1 boss beaten
+[delta from DB]  Since you were Developing (today): +1 boss beaten
+MATCH
+
+snapshot after 1st change kept its ts until the 2nd change: 1791878112121 → 1791878489083
+status log: [{"ts":"2026-10-13T07:55:53.678Z","from":"learning","to":"developing"},{"ts":"2026-10-13T08:02:10.624Z","from":"developing","to":"ready"}]
+
+second device delta: Since you were Developing (today): +1 boss beaten | same as device 1: true
+[fr] Depuis le statut « En progrès » (aujourd’hui) : +1 boss battu
+[es] Desde que estabas en «En desarrollo» (hoy): +1 jefe vencido
+[tr] «Gelişiyor» durumundan bu yana (bugün): +1 boss yenildi
+[en] Since you were Developing (today): +1 boss beaten
+cwWhen en: ["0d → today","1d → yesterday","3d → 3 days ago","7d → last week","13d → 2 weeks ago","20d → 3 weeks ago","60d → Aug 14, 2026"]
+cwWhen fr: ["0d → aujourd’hui","1d → hier","3d → il y a 3 jours","7d → la semaine dernière","13d → il y a 2 semaines","20d → il y a 3 semaines","60d → 14 août 2026"]
+cwWhen es: ["0d → hoy","1d → ayer","3d → hace 3 días","7d → la semana pasada","13d → hace 2 semanas","20d → hace 3 semanas","60d → 14 ago 2026"]
+cwWhen tr: ["0d → bugün","1d → dün","3d → 3 gün önce","7d → geçen hafta","13d → 2 hafta önce","20d → 3 hafta önce","60d → 14 Ağu 2026"]
+
+==== EXPORT (Demo Hymn: Soprano, Alto, Bass)
+recorded Soprano: Soprano saved.
+recorded Alto: Alto saved.
+recorded Bass: Bass saved.
+song total 26.666666666666668 s; mixer {"Soprano":{"vol":0.65,"muted":false,"solo":false},"Lead":{"vol":0.85,"muted":false,"solo":false},"Alto":{"vol":0.7,"muted":false,"solo":false},"Tenor":{"vol":0.7,"muted":false,"solo":false},"Bass":{"vol":0.75,"muted":false,"solo":false}}
+
+-- all three at default mixer
+before: button "⬇ Download my choir (WAV)" | note "Downloading plays your choir once, start to end, and saves exactly what you hear (mixer levels, Mute and Solo included) as a WAV file."
+during: button "⏺ Saving…" disabled true | record buttons disabled true | status "Saving 3 recorded parts to a WAV file — let it play to the end (26.7 s)."
+after: status "Saved your-choir-hymn-2026-10-13.wav: 3 parts (Soprano, Alto, Bass), 26.7 s." | button "⬇ Download my choir (WAV)" disabled false
+saved /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/p10-all-three-at-default-mixer-your-choir-hymn-2026-10-13.wav 2560044 bytes; first bytes "RIFF$\u0010'\u0000WAVEfmt "
+header: 1 channel(s), 16-bit, 48000 Hz, 1280000 frames = 26.67 s
+peak 0.846 | samples at full scale 0 | RMS 0.2328
+song: 8 chords of 3.333 s = 26.67 s expected
+Soprano  pitch present (amp > 0.01) on 8/8 chords, median amplitude 0.178
+Alto     pitch present (amp > 0.01) on 8/8 chords, median amplitude 0.1948
+Bass     pitch present (amp > 0.01) on 8/8 chords, median amplitude 0.2086
+JSON {"sr": 48000, "channels": 1, "bits": 16, "seconds": 26.666666666666668, "parts": {"Soprano": {"chords": 8, "heard": 8, "medianAmp": 0.178}, "Alto": {"chords": 8, "heard": 8, "medianAmp": 0.1948}, "Bass": {"chords": 8, "heard": 8, "medianAmp": 0.2086}}}
+
+mixer now {"Alto":0.35,"BassMuted":true}
+
+-- Bass muted, Alto at half
+before: button "⬇ Download my choir (WAV)" | note "Downloading plays your choir once, start to end, and saves exactly what you hear (mixer levels, Mute and Solo included) as a WAV file."
+during: button "⏺ Saving…" disabled true | record buttons disabled true | status "Saving 2 recorded parts to a WAV file — let it play to the end (26.7 s)."
+after: status "Saved your-choir-hymn-2026-10-13.wav: 2 parts (Soprano, Alto), 26.7 s." | button "⬇ Download my choir (WAV)" disabled false
+saved /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/p10-Bass-muted-Alto-at-half-your-choir-hymn-2026-10-13.wav 2560044 bytes; first bytes "RIFF$\u0010'\u0000WAVEfmt "
+header: 1 channel(s), 16-bit, 48000 Hz, 1280000 frames = 26.67 s
+peak 0.633 | samples at full scale 0 | RMS 0.1617
+song: 8 chords of 3.333 s = 26.67 s expected
+Soprano  pitch present (amp > 0.01) on 8/8 chords, median amplitude 0.2035
+Alto     pitch present (amp > 0.01) on 8/8 chords, median amplitude 0.1114
+Bass     pitch present (amp > 0.01) on 0/8 chords, median amplitude 0.0
+JSON {"sr": 48000, "channels": 1, "bits": 16, "seconds": 26.666666666666668, "parts": {"Soprano": {"chords": 8, "heard": 8, "medianAmp": 0.2035}, "Alto": {"chords": 8, "heard": 8, "medianAmp": 0.1114}, "Bass": {"chords": 8, "heard": 0, "medianAmp": 0.0}}}
+
+Alto/Soprano amplitude: 1.094 → 0.547 (×0.500; fader ×0.500)
+Bass: heard on 8/8 chords → 0/8 muted (median amp 0.2086 → 0)
+
+stopped mid-export: status "Stopped before the end — no file was saved." | download fired: false | button enabled again: true
+[fr] button "⬇ Télécharger ma chorale (WAV)" | note "Le téléchargement joue votre chorale une fois, du début à la fin, et enregistre exactement ce que vous entendez (niveaux du mixeur, Muet et Solo compris) dans un fichier WAV." | ["⏺ Enregistrement…","Enregistrement de {n} voix dans un fichier WAV — laissez jouer jusqu’à la fin ({s} s).","{file} enregistré : {n} voix ({parts}), {s} s.","Arrêté avant la fin — aucun fichier n’a été enregistré.","Impossible d’enregistrer le fichier dans ce navigateur."]
+[es] button "⬇ Descargar mi coro (WAV)" | note "Al descargar, tu coro suena una vez de principio a fin y se guarda exactamente lo que oyes (niveles del mezclador, Silencio y Solo incluidos) en un archivo WAV." | ["⏺ Guardando…","Guardando {n} voces grabadas en un archivo WAV — déjalo sonar hasta el final ({s} s).","Guardado {file}: {n} voces ({parts}), {s} s.","Se detuvo antes del final — no se guardó ningún archivo.","No se pudo guardar el archivo en este navegador."]
+[tr] button "⬇ Koromu indir (WAV)" | note "İndirme, koronuzu baştan sona bir kez çalar ve duyduğunuzu aynen (mikser seviyeleri, Sessiz ve Solo dahil) bir WAV dosyasına kaydeder." | ["⏺ Kaydediliyor…","{n} kayıtlı partisyon WAV dosyasına kaydediliyor — sonuna kadar çalmasına izin verin ({s} sn).","{file} kaydedildi: {n} partisyon ({parts}), {s} sn.","Sona gelmeden durduruldu — dosya kaydedilmedi.","Dosya bu tarayıcıda kaydedilemedi."]
+[en] button "⬇ Download my choir (WAV)" | note "Downloading plays your choir once, start to end, and saves exactly what you hear (mixer levels, Mute and Solo included) as a WAV file." | ["⏺ Saving…","Saving {n} recorded parts to a WAV file — let it play to the end ({s} s).","Saved {file}: {n} parts ({parts}), {s} s.","Stopped before the end — no file was saved.","The file couldn’t be saved in this browser."]
+
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-p10-1791878075007-a@example.com

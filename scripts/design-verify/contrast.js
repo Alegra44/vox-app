@@ -8,13 +8,15 @@
 // Pitch Match during the take (the reference playing, and singing), Pitch Match result (heard, and no voice), and the
 // warm-up overlay. Each is measured on its panel (or the overlay) and, in the same moment, on the header and tab bar.
 // --no-states skips them (e.g. on a build without them).
+// Phase 3 (PHASE3.md §1b): Home in each seeded state (homeStates.js) and the Coach tab signed in (the weakest state) and
+// signed out, each with the header and tab bar. --no-home skips them.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).
 const path = require('path'), fs = require('fs');
-const C = require('./common'), S = require('./stage');
+const C = require('./common'), S = require('./stage'), H = require('./homeStates');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const STATES = !process.argv.includes('--no-states');
+const STATES = !process.argv.includes('--no-states'), HOME = !process.argv.includes('--no-home');
 const BASE = arg('--base'), THEMES = (arg('--themes') || (BASE ? 'dark' : 'light,dark')).split(',');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const JSON_OUT = arg('--json') || path.join(__dirname, 'logs', `contrast-${BASE ? BASE.replace(/\W/g, '_') : 'branch'}-${stamp}.json`);
@@ -127,6 +129,20 @@ async function measureStates(dir, theme, state, panels) {
   }
 }
 
+async function measureHome(b, dir, theme, state, panels) {
+  for (const name of H.HOME_STATES) {
+    const { ctx, page } = await C.openPage(b, { dir, theme, storageState: name === 'signedout' ? undefined : state });
+    try {
+      await C.clearOverlays(page); await H.seed(page, name);
+      panels[`home: ${name}`] = await page.evaluate(measure, '#panel-home, header.shell-topbar, nav.shell-bottomnav');
+      if (name === 'weakest' || name === 'signedout') {
+        await page.evaluate(() => { showShellSection('train'); window.scrollTo(0, 0); }); await C.sleep(400);
+        panels[`coach: ${name === 'signedout' ? 'signed out' : 'signed in'}`] = await page.evaluate(measure, '#panel-train-hub');
+      }
+    } finally { await ctx.close(); }
+  }
+}
+
 (async () => {
   const dir = C.buildDir(BASE);
   const b = await C.chromium.launch();
@@ -153,6 +169,7 @@ async function measureStates(dir, theme, state, panels) {
       }
       await ctx.close();
       if (STATES) await measureStates(dir, theme, state, panels);
+      if (HOME) await measureHome(b, dir, theme, state, panels);
       report.themes[theme] = panels;
       // table
       console.log(`\n-- ${theme}: panel                       fail<3  fail3-4.5  unknown  checked`);

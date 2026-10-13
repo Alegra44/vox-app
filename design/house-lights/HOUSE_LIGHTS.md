@@ -1,4 +1,10 @@
-# House Lights: the VoxCoach design system (v1.4)
+# House Lights: the VoxCoach design system (v1.5)
+
+v1.5 (2026-10-13, phase 3; the spec says v1.4, which phase 2.8 had already used): Home shows current values, not "this
+week" with changes (there is no week-over-week storage, and nothing gets invented). Coach rows show a tool's stored
+personal best (the Personal Records values) where one exists, labelled "Best"; no per-tool "last result" is stored.
+Today's focus is one shared function, `computeTodaysFocus()`, used by Home and the Coach tab. Home's pick-up rows come
+from existing signals: Choir World focus, the next Vocal World unlock, Journey level and XP, and the last practice (§5).
 
 v1.4 (2026-10-12, phase 2.8): with the house down the header and tab bar dim by colour, not opacity: every text and
 icon in them, the playhead included, is `--hl-ink-3`; hover or focus within gives back the usual colours. The stage's
@@ -113,8 +119,8 @@ to recreate (with `vc-` or area prefixes), not as a library.
 
 | Area | Lighting | Rule |
 |---|---|---|
-| Home | Up | Greeting, one coach sentence, **one** "Tonight" block with one start button, this week's 3 numbers, 2–3 "pick up" rows |
-| Coach tab | Up | Today's focus (from the existing Skill Profile / Daily Exercises recommendation), then the 23 tools as 7 groups of `.hl-item` rows with last results |
+| Home | Up | Date and plan, greeting, one coach sentence, **one** raised "Today's focus" block (`computeTodaysFocus()`) with one start button, the current numbers (range, pitch, agility, breath: no weekly changes, none are stored), "pick up" rows from existing signals (Choir World focus, the next Vocal World unlock, Journey level and XP, the last practice) |
+| Coach tab | Up | Today's focus (`computeTodaysFocus()`, the same as Home), then the 23 tools as 7 groups of `.hl-item` rows; a row ends with "Best {value}", the stored personal best from the Personal Records list (`personalRecordValues()`), where one exists. No per-tool last result is stored, so none is shown |
 | Instruments while singing | Down | Target note, pitch lane, cents meter, stop. Nothing else |
 | Instrument results | Up | One big number, the take's chart, 2–3 dimension rows, "What to work on next" + a Next button, "Sing it again", `hl-measure` |
 | Choir World rehearsal | Down | Five lanes in part colours, singer's part bold, voice line on it, rehearsal marks, guide level as a fader with the 5 real levels as detents, transport, trainers behind one button |

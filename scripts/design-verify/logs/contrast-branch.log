@@ -4,8 +4,8 @@
    shell: header                             0          0        0        2
    shell: tab bar                            0          0        0        5
    shell: toast                              0          0        0        2
-   home                                      0          0        0       22
-   train-hub                                 0          0        0       39
+   home                                      0          0        0       28
+   train-hub                                 0          0        0       43
    songs-hub                                 0          0        0       28
    you-hub                                   0          0        0       23
    journey                                   0          0        0       27
@@ -68,14 +68,23 @@
    state: tuner-live-unlocked · header + tab bar      0          0        0        7
    state: pitch-result-noheard               0          0        0       51
    state: pitch-result-noheard · header + tab bar      0          0        0        7
-   TOTAL                                     0         32        0     1539
+   home: new                                 0          0        0       35
+   home: priority                            0          0        0       35
+   home: weakest                             0          0        0       43
+   coach: signed in                          0          0        0       48
+   home: struggling                          0          0        0       43
+   home: today                               0          0        0       51
+   home: expired                             0          0        0       25
+   home: signedout                           0          0        0       14
+   coach: signed out                         0          0        0       39
+   TOTAL                                     0         32        0     1882
 
 -- dark: panel                       fail<3  fail3-4.5  unknown  checked
    shell: header                             0          0        0        2
    shell: tab bar                            0          0        0        5
    shell: toast                              0          0        0        2
-   home                                      0          0        0       28
-   train-hub                                 0          0        0       39
+   home                                      0          0        0       35
+   train-hub                                 0          0        0       45
    songs-hub                                 0          0        0       28
    you-hub                                   0          0        0       23
    journey                                   0          0        0       27
@@ -138,7 +147,16 @@
    state: tuner-live-unlocked · header + tab bar      0          0        0        7
    state: pitch-result-noheard               0          0        0       51
    state: pitch-result-noheard · header + tab bar      0          0        0        7
-   TOTAL                                     0          0        0     1556
+   home: new                                 0          0        0       35
+   home: priority                            0          0        0       35
+   home: weakest                             0          0        0       43
+   coach: signed in                          0          0        0       48
+   home: struggling                          0          0        0       43
+   home: today                               0          0        0       51
+   home: expired                             0          0        0       25
+   home: signedout                           0          0        0       14
+   coach: signed out                         0          0        0       39
+   TOTAL                                     0          0        0     1902
 json: scripts/design-verify/logs/contrast-branch.json
 
-[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvc-1791814326504@example.com
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvc-1791876606315@example.com
