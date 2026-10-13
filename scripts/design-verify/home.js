@@ -11,6 +11,8 @@
 //  - #homeVlCard's previous element sibling is #homeChoirCard (batch3c), and #homeChoirCard's text is identical on
 //    master and the branch, whitespace aside (p9/p10): its DOM text (textContent; the label's CSS uppercase aside), with
 //    emoji dropped (Home's 🎼 and 📈 become sprite icons); #homeCwDelta's innerText (what p10 reads) identical.
+// The copy changed in 2.5 is not a difference in logic: the English strings that differ between the builds are listed,
+// and master's page is given the branch's wording for them before it draws, so the comparison is of what is computed.
 // Usage: node scripts/design-verify/home.js [--base <git ref>]   (default base: master)
 const C = require('./common'), H = require('./homeStates');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -73,9 +75,12 @@ async function clickTools() {
   return out;
 }
 
-async function side(b, dir, state, name) {
+let COPY = {}; // key → the branch's English, for the keys whose English differs (2.5)
+async function side(b, dir, state, name, copy) {
   const { ctx, page, errors } = await C.openPage(b, { dir, storageState: name === 'signedout' ? undefined : state });
   try {
+    // the branch's wording, then Home drawn again as on load (the expired state keeps that first drawing)
+    if (copy) await page.evaluate(c => { Object.assign(TRANSLATIONS.en, c); applyTranslations(); showShellSection('home'); }, copy);
     await C.clearOverlays(page);
     await H.seed(page, name);
     const home = await page.evaluate(readHome);
@@ -94,9 +99,14 @@ async function side(b, dir, state, name) {
     const { ctx, page } = await C.openPage(b, { dir: dirs.branch });
     await C.signUp(page, 'dvhome', 'Home Check');
     const state = await ctx.storageState(); await ctx.close();
+    const en = {};
+    for (const [k, dir] of Object.entries(dirs)) { const { ctx, page } = await C.openPage(b, { dir }); en[k] = await page.evaluate(() => TRANSLATIONS.en); await ctx.close(); }
+    for (const k of Object.keys(en.master)) if (k in en.branch && en.branch[k] !== en.master[k]) COPY[k] = en.branch[k];
+    console.log(`English strings changed on the branch (${Object.keys(COPY).length}), given to master's page:`);
+    for (const k of Object.keys(COPY)) console.log(`   ${k}: ${JSON.stringify(en.master[k])} → ${JSON.stringify(COPY[k])}`);
     for (const name of H.HOME_STATES) {
       console.log(`\n-- ${name}`);
-      const m = await side(b, dirs.master, state, name), r = await side(b, dirs.branch, state, name);
+      const m = await side(b, dirs.master, state, name, COPY), r = await side(b, dirs.branch, state, name);
       check('hero shown', m.home.hero === r.home.hero, `${m.home.hero} | ${r.home.hero}`);
       for (const k of ['label', 'pct', 'msg', 'panel']) check(`mission ${k}`, m.home[k] === r.home[k], short(r.home[k]));
       if (m.home.hero === 'mission') {
