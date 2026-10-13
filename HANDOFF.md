@@ -8,10 +8,12 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 | Branch | What it is | Status |
 |---|---|---|
-| `master` | Everything that is live, through House Lights phase 1 + 1.1 (merge 12a1364, dpl_ANbkHxATnBsDJkiKTz6w4HMWh13g, 2026-10-11) | Matches production |
+| `master` | Everything that is live, through House Lights phase 2 + 2.8 (merge 3b29e93, dpl_CLqPg1gb25R563tBixH4WCXsUrNT, 2026-10-13) | Matches production |
 | `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
 | `redesign/phase1` | House Lights redesign phase 1, Foundation, and the 1.1 fixes (spec `design/house-lights/PHASE1.md`) | Merged (12a1364) and live 2026-10-11. Closed |
+| `redesign/phase2` | House Lights phase 2, Lighting, and the 2.8 fixes (spec `design/house-lights/PHASE2.md`) | Merged (3b29e93) and live 2026-10-13. Closed |
+| `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`).
@@ -46,7 +48,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X); (a) playback volume is live (2026-10-06, dpl_5GhGgvgLAQCFZQXnmwdmAn8UcyKh, results
    in the roadmap); (d) level-up explanation is next: report its migration and API change before applying. Specs below.
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`): **live 2026-10-11** (with the 1.1 fixes).
-   Next: phase 2 (Lighting), spec to come from the user.
+   Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Next: phase 3 (Home and the Coach tab), spec to come
+   from the user.
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
    Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
@@ -210,6 +213,24 @@ screenshots and the diff, approved, merged `--no-ff` (12a1364) and deployed (dpl
 - `hub_world_sub` unchanged (no new text in the spec). The `.poster` (share poster) is left for phase 7.
 - Logged for phase 4: **Vocal Puzzle asks for the mic it doesn't use** (#puzzleStartBtn calls `initAudio()`, which
   requests the mic and runs the warm-up gate). Don't change `initAudio` before then (user, 2026-10-11).
+
+### Redesign phase 2, Lighting, and the 2.8 fixes: LIVE 2026-10-13
+
+Spec: `design/house-lights/PHASE2.md` (phase 2, the review and the 2.8 fixes, verbatim). Approved by the user on
+screenshots, merged `--no-ff` (3b29e93) and deployed (dpl_CLqPg1gb25R563tBixH4WCXsUrNT; the first deploy answered
+"Not authorized", the retry deployed).
+- The lighting engine (`houseSession` / `singingSession`, `houseWatch`, the dimmer) lowers the house while someone
+  sings: the shell is dimmed by colour (all text and icons `--hl-ink-3`, no opacity), back to ink on hover or focus.
+- Gate (decision 2): vibfix and noisegate regress, before 9a3bfbf (phase 0), after fd8a512: 0 regressions each
+  (vibfix 136 passed, 1 already failing; noisegate 152 passed, 8 already failing). Logs in `scripts/vq-verify/logs/`.
+- Guards: `house.js` 111/0 (lighting, shell colour, Tuner lock, Pitch Match readout, sharp stimulus, console errors,
+  Sing it again), `hooks.js` 19/0. Fake-mic stimuli and the singing states: `scripts/design-verify/stage.js`.
+- Production (`prod.sh`, logs `scripts/design-verify/logs/prod-2026-10-13T00-02-28/`): house 111/0, system 7/7,
+  contrast as in phase 1 (Light 32 between 3 and 4.5, all Choir / Part Rehearsal labels: phase 5; Dark 0), batch1
+  112/0, batch3c 40/0, warmup-entries 52/0, listenwin 27/0, picker 93/0, glider-courses 50/0; test accounts 0 left.
+- Known flake: batch3c's "banner up at the crossing" can read exactly 100.000% on the poll before (39/1 once; 40/0 on
+  master and the branch on re-run).
+- `scripts/glider-verify/courses.js` stubs `houseSession` (its one-slot rAF stand-in collided with `houseWatch`).
 
 ## Waiting on the user (don't start without a go-ahead)
 
