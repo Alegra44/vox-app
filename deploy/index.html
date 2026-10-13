@@ -5052,7 +5052,8 @@ const VOICE_MIN_CLARITY = 0.6, VOICE_MIN_HZ = 63;
        choir's audible parts) counts only above the bleed × BD_MARGIN_D2 (+12 dB); anything else counts as today. */
 const BD_OUT_ACTIVE = 0.003, BD_CAL_MS = 500, BD_MARGIN_D1 = 2, BD_MARGIN_D2 = 4, BD_CENTS = 50;
 const BD = {k:null, cal:[], calT0:null, outAn:null, outBuf:null, notes:[], inside:false, log:[]};
-function bdMode(){ const m = window.__bleedDefence; return m==='D1' || m==='D2' ? m : null; }
+function bdMode(){ const m = typeof window!=='undefined' ? window.__bleedDefence : null; // the pitch code also runs in Node (realvib.js)
+  return m==='D1' || m==='D2' ? m : null; }
 function bdRms(b){ let s = 0; for(let i=0;i<b.length;i++) s += b[i]*b[i]; return Math.sqrt(s/b.length); }
 function bdOutRms(){
   if(!audioCtx || !playbackIn) return 0;
@@ -5280,7 +5281,7 @@ let liveFreq = null;
          buffer reads an unfiltered loudness path instead. The register input (chest, Vocal Load) is unfiltered as today.
    Set before the first mic use (scripts: an init script); a stream already open keeps its mode. */
 const SS_MODES = ['C1', 'C2', 'C3'];
-function ssMode(){ const m = window.__streamMode; return SS_MODES.includes(m) ? m : null; }
+function ssMode(){ const m = typeof window!=='undefined' ? window.__streamMode : null; return SS_MODES.includes(m) ? m : null; }
 let ssStream = null, ssOpening = null, ssRawAn = null, ssRawBuf = null;
 async function ssGetStream(){
   if(ssStream && ssStream.getAudioTracks().some(tr=>tr.readyState==='live')) return ssStream;
