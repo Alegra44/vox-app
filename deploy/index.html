@@ -1557,6 +1557,24 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .hc-desc{font-size:12px;color:var(--muted);margin:6px 0 14px;line-height:1.5;}
   .hc-btn-row{display:flex;gap:8px;flex-wrap:wrap;}
 
+  /* ---- COACH TAB (phase 3): Today's focus, then the 7 groups as plain sections of rows ---- */
+  #panel-train-hub .coach-focus{display:flex;flex-direction:column;gap:var(--hl-s2);padding:var(--hl-s5);margin-top:var(--hl-s5);}
+  #panel-train-hub .coach-focus[hidden]{display:none;}
+  #panel-train-hub .coach-focus .hl-h3{color:var(--hl-ink);}
+  #panel-train-hub .coach-focus .hl-btn{margin-top:var(--hl-s2);}
+  #panel-train-hub .coach-groups{grid-template-columns:minmax(0,1fr);gap:var(--hl-s6) var(--hl-s7);margin-top:var(--hl-s6);}
+  @media (min-width:960px){ #panel-train-hub .coach-groups{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  #panel-train-hub .hub-category-card{background:none;border:0;border-radius:0;padding:0;}
+  #panel-train-hub .hub-category-card:hover{transform:none;box-shadow:none;}
+  #panel-train-hub .hc-title{font-family:inherit;font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);font-weight:650;
+    text-transform:uppercase;letter-spacing:.09em;line-height:1.2;color:var(--hl-ink-3);}
+  #panel-train-hub .hc-desc{font-size:var(--hl-t-small);line-height:1.45;color:var(--hl-ink-3);margin:var(--hl-s1) 0 var(--hl-s1);}
+  #panel-train-hub .hc-btn-row{display:block;}
+  #panel-train-hub .coach-row .hl-item-title{color:var(--hl-ink);}
+  #panel-train-hub .coach-best:empty{display:none;}
+  /* rows and links are buttons: the House Lights focus ring on the ones it doesn't already cover */
+  .home-sec-link:focus-visible, .home-range-find:focus-visible{outline:2px solid var(--hl-voice);outline-offset:2px;}
+
   /* ---- TRIAL MODAL ---- */
   .trial-modal-card{max-width:420px;text-align:center;}
   .trial-modal-emoji{font-size:36px;}
@@ -2078,70 +2096,77 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-title" data-i18n="hub_train_title">Coach</div>
       <div class="j-sub" data-i18n="hub_train_sub">Exercises and tools for pitch, range, breath and tone.</div>
     </div>
-    <div class="hub-category-grid">
+    <!-- Today's focus (signed in): the same computeTodaysFocus() as Home, filled by renderCoachHub() -->
+    <div class="coach-focus hl-raised" id="coachFocus" hidden>
+      <div class="hl-label" data-i18n="home_mission_eyebrow">Today's Mission</div>
+      <h3 class="hl-h3" id="coachFocusLabel">—</h3>
+      <div class="hl-meta" id="coachFocusMeta"></div>
+      <button class="hl-btn hl-btn--ink hl-btn--block" id="coachFocusBtn" type="button"><span data-i18n="home_start_training_btn">Start training</span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></button>
+    </div>
+    <div class="hub-category-grid coach-groups">
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_pitch_title">Pitch &amp; Tuning</div>
-        <div class="hc-desc" data-i18n="hub_train_pitch_desc">Live tuner and key-aware transposition.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="tuner" data-i18n="tool_tuner">Tuner</button>
-          <button class="ghost-btn" data-enter-panel="key" data-i18n="tool_key_trainer">Key Trainer</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_pitch_title">Pitch &amp; Tuning</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_pitch_desc">Live tuner and key-aware transposition.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="tuner"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg><span class="hl-item-title" data-i18n="tool_tuner">Tuner</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="key"><svg class="hl-icon" aria-hidden="true"><use href="#hl-keys"/></svg><span class="hl-item-title" data-i18n="tool_key_trainer">Key Trainer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_range_title">Range &amp; Register</div>
-        <div class="hc-desc" data-i18n="hub_train_range_desc">Find your range, build chest/head control, and see how it breaks down for real.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="range" data-i18n="tool_range_finder">Range Finder</button>
-          <button class="ghost-btn" data-enter-panel="register" data-i18n="tool_register_coach">Register Coach</button>
-          <button class="ghost-btn" data-enter-panel="registerdrills" data-i18n="tool_register_drills">Register Drills</button>
-          <button class="ghost-btn" data-enter-panel="vocallab" data-i18n="tool_vocal_lab">Vocal Lab</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_range_title">Range &amp; Register</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_range_desc">Find your range, build chest/head control, and see how it breaks down for real.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="range"><svg class="hl-icon" aria-hidden="true"><use href="#hl-range"/></svg><span class="hl-item-title" data-i18n="tool_range_finder">Range Finder</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="register"><svg class="hl-icon" aria-hidden="true"><use href="#hl-steps"/></svg><span class="hl-item-title" data-i18n="tool_register_coach">Register Coach</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="registerdrills"><svg class="hl-icon" aria-hidden="true"><use href="#hl-loop"/></svg><span class="hl-item-title" data-i18n="tool_register_drills">Register Drills</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="vocallab"><svg class="hl-icon" aria-hidden="true"><use href="#hl-xray"/></svg><span class="hl-item-title" data-i18n="tool_vocal_lab">Vocal Lab</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_breath_title">Breath &amp; Control</div>
-        <div class="hc-desc" data-i18n="hub_train_breath_desc">Real sustain timing and consistency.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="breath" data-i18n="tool_breath_trainer">Breath Trainer</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_breath_title">Breath &amp; Control</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_breath_desc">Real sustain timing and consistency.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="breath"><svg class="hl-icon" aria-hidden="true"><use href="#hl-breath"/></svg><span class="hl-item-title" data-i18n="tool_breath_trainer">Breath Trainer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_agility_title">Agility &amp; Ear</div>
-        <div class="hc-desc" data-i18n="hub_train_agility_desc">Pitch Match, Interval Match, Scale Run — 3-tier leveled. Plus build your own and test your timing.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="exercises" data-i18n="tool_exercises">Exercises</button>
-          <button class="ghost-btn" data-enter-panel="custom" data-i18n="tool_custom_challenge">Custom Challenge</button>
-          <button class="ghost-btn" data-enter-panel="rhythm" data-i18n="tool_rhythm_trainer">Rhythm Trainer</button>
-          <button class="ghost-btn" data-enter-panel="earvoiceear" data-i18n="tool_ear_voice_ear">Ear → Voice → Ear</button>
-          <button class="ghost-btn" data-enter-panel="fiveways" data-i18n="tool_five_ways">Sing It 5 Ways</button>
-          <button class="ghost-btn" data-enter-panel="onetake" data-i18n="tool_one_take">One Take Challenge</button>
-          <button class="ghost-btn" data-enter-panel="vocalpuzzle" data-i18n="tool_vocal_puzzle">Vocal Puzzle</button>
-          <button class="ghost-btn" data-enter-panel="hearmistake" data-i18n="tool_hear_mistake">Can You Hear Your Mistake?</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_agility_title">Agility &amp; Ear</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_agility_desc">Pitch Match, Interval Match, Scale Run — 3-tier leveled. Plus build your own and test your timing.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="exercises"><svg class="hl-icon" aria-hidden="true"><use href="#hl-score"/></svg><span class="hl-item-title" data-i18n="tool_exercises">Exercises</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="custom"><svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg><span class="hl-item-title" data-i18n="tool_custom_challenge">Custom Challenge</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="rhythm"><svg class="hl-icon" aria-hidden="true"><use href="#hl-metronome"/></svg><span class="hl-item-title" data-i18n="tool_rhythm_trainer">Rhythm Trainer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="earvoiceear"><svg class="hl-icon" aria-hidden="true"><use href="#hl-ear"/></svg><span class="hl-item-title" data-i18n="tool_ear_voice_ear">Ear → Voice → Ear</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="fiveways"><svg class="hl-icon" aria-hidden="true"><use href="#hl-group"/></svg><span class="hl-item-title" data-i18n="tool_five_ways">Sing It 5 Ways</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="onetake"><svg class="hl-icon" aria-hidden="true"><use href="#hl-record"/></svg><span class="hl-item-title" data-i18n="tool_one_take">One Take Challenge</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="vocalpuzzle"><svg class="hl-icon" aria-hidden="true"><use href="#hl-zoom"/></svg><span class="hl-item-title" data-i18n="tool_vocal_puzzle">Vocal Puzzle</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="hearmistake"><svg class="hl-icon" aria-hidden="true"><use href="#hl-headphones"/></svg><span class="hl-item-title" data-i18n="tool_hear_mistake">Can You Hear Your Mistake?</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_expression_title">Expression</div>
-        <div class="hc-desc" data-i18n="hub_train_expression_desc">Vibrato analysis, live multi-signal feedback, and a real-time visual of your register and stability.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="vibrato" data-i18n="tool_vibrato">Vibrato</button>
-          <button class="ghost-btn" data-enter-panel="voicequality" data-i18n="tool_voice_quality">Voice Quality</button>
-          <button class="ghost-btn" data-enter-panel="livefeedback" data-i18n="tool_live_feedback">Live Feedback</button>
-          <button class="ghost-btn" data-enter-panel="resonance" data-i18n="tool_resonance">Resonance Visualizer</button>
-          <button class="ghost-btn" data-enter-panel="mirror" data-i18n="tool_mirror">Mirror Mode</button>
-          <button class="ghost-btn" data-enter-panel="emotionmode" data-i18n="tool_emotion_mode">Emotion Mode</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_expression_title">Expression</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_expression_desc">Vibrato analysis, live multi-signal feedback, and a real-time visual of your register and stability.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="vibrato"><svg class="hl-icon" aria-hidden="true"><use href="#hl-vibrato"/></svg><span class="hl-item-title" data-i18n="tool_vibrato">Vibrato</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="voicequality"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span class="hl-item-title" data-i18n="tool_voice_quality">Voice Quality</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="livefeedback"><svg class="hl-icon" aria-hidden="true"><use href="#hl-mic"/></svg><span class="hl-item-title" data-i18n="tool_live_feedback">Live Feedback</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="resonance"><svg class="hl-icon" aria-hidden="true"><use href="#hl-chart"/></svg><span class="hl-item-title" data-i18n="tool_resonance">Resonance Visualizer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="mirror"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span class="hl-item-title" data-i18n="tool_mirror">Mirror Mode</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="emotionmode"><svg class="hl-icon" aria-hidden="true"><use href="#hl-flame"/></svg><span class="hl-item-title" data-i18n="tool_emotion_mode">Emotion Mode</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_style_title">Style</div>
-        <div class="hc-desc" data-i18n="hub_train_style_desc">Genre-specific defaults and technique tips.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="genre" data-i18n="tool_genre_coach">Genre Coach</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_style_title">Style</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_style_desc">Genre-specific defaults and technique tips.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="genre"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg><span class="hl-item-title" data-i18n="tool_genre_coach">Genre Coach</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_train_warmup_title">Warmup</div>
-        <div class="hc-desc" data-i18n="hub_train_warmup_desc">Context-aware guided warmup before you start.</div>
-        <div class="hc-btn-row">
-          <button class="ghost-btn" data-enter-panel="warmup" data-i18n="tool_warmup">Warmup</button>
+        <div class="hc-title hl-label" data-i18n="hub_train_warmup_title">Warmup</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_warmup_desc">Context-aware guided warmup before you start.</div>
+        <div class="hc-btn-row hl-list">
+          <button class="hl-item coach-row" data-enter-panel="warmup"><svg class="hl-icon" aria-hidden="true"><use href="#hl-calendar"/></svg><span class="hl-item-title" data-i18n="tool_warmup">Warmup</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
     </div>
@@ -11341,6 +11366,7 @@ function applyTranslations(){
     ()=>typeof renderAccountBar==='function' && renderAccountBar(),
     ()=>typeof renderProfile==='function' && document.getElementById('profileSignedOut') && renderProfile(),
     ()=>typeof renderHomeScreen==='function' && document.getElementById('panel-home') && document.getElementById('panel-home').classList.contains('active') && renderHomeScreen(),
+    ()=>typeof renderCoachHub==='function' && renderCoachHub(),
     ()=>typeof updateArcadeBestLabels==='function' && document.getElementById('gliderBestLabel') && updateArcadeBestLabels(),
     ()=>typeof renderArcadeLocks==='function' && document.querySelector('.arcade-game-card') && renderArcadeLocks(),
     ()=>typeof applyPartNames==='function' && applyPartNames(),
@@ -11662,6 +11688,7 @@ async function onSignedIn(){
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
   if(typeof renderArcadeLocks==='function') renderArcadeLocks();
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof renderCoachHub==='function') renderCoachHub();
   if(typeof loadVocalLoadToday==='function') loadVocalLoadToday();
 }
 
@@ -11721,6 +11748,7 @@ document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
   if(typeof renderArcadeLocks==='function') renderArcadeLocks();
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof renderCoachHub==='function') renderCoachHub();
 });
 
 document.getElementById('dashResetBtn').addEventListener('click', async ()=>{
@@ -11829,6 +11857,7 @@ let appInitPromise = (async function initAccountAndDashboard(){
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
   if(typeof renderArcadeLocks==='function') renderArcadeLocks();
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof renderCoachHub==='function') renderCoachHub();
 })();
 
 /* ---------------- Shareable Posters ---------------- */
@@ -16081,6 +16110,7 @@ document.getElementById('checkoutConfirmBtn').addEventListener('click', async ()
   if(typeof updateArcadeBestLabels==='function') updateArcadeBestLabels();
   if(typeof renderArcadeLocks==='function') renderArcadeLocks();
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof renderCoachHub==='function') renderCoachHub();
   showToast(`${t('plan_subscribed_prefix')} ${planLabel(pendingCheckoutPlan)} ${t('plan_subscribed_suffix')}`);
   pendingCheckoutPlan = null;
 });
@@ -18840,6 +18870,7 @@ function showShellSection(section){
   } else if(section==='train'){
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-train-hub').classList.add('active');
+    renderCoachHub();
   } else if(section==='songs'){
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-songs-hub').classList.add('active');
@@ -19043,6 +19074,31 @@ document.getElementById('homeWorldRow')?.addEventListener('click', ()=>document.
 document.getElementById('homeLevelRow')?.addEventListener('click', ()=>enterPanel('journey'));
 
 /* ---------------- Personal Records (Phase 10 — real consolidation, no fabrication) ---------------- */
+// The Personal Records values, as the list shows them ('A4', '84%', '12.4s'…), null where none is stored. Pure: reads
+// progress, changes nothing. Used by the Personal Records list and the Coach tab's "Best" values.
+function personalRecordValues(){
+  let bestStability = null;
+  if(progress.dailyMetrics){
+    Object.values(progress.dailyMetrics).forEach(day=>{
+      (day.stability||[]).forEach(v=>{ if(bestStability===null || v>bestStability) bestStability=v; });
+    });
+  }
+  const bestPitchAcc = (progress.pitchScores && progress.pitchScores.length) ? Math.max(...progress.pitchScores) : null;
+  const bestAgility = (progress.agilityScores && progress.agilityScores.length) ? Math.max(...progress.agilityScores) : null;
+  return {
+    highestNote: progress.highestMidi!==null && progress.highestMidi!==undefined ? noteNameFromMidi(progress.highestMidi) : null,
+    lowestNote: progress.lowestMidi!==null && progress.lowestMidi!==undefined ? noteNameFromMidi(progress.lowestMidi) : null,
+    bestPitchAcc: bestPitchAcc!==null ? bestPitchAcc+'%' : null,
+    bestAgility: bestAgility!==null ? bestAgility+'%' : null,
+    longestBreath: progress.bestBreathDuration ? progress.bestBreathDuration+'s' : null,
+    bestStability: bestStability!==null ? Math.round(bestStability)+'%' : null,
+    longestCrossing: progress.bestBridgeSeconds ? progress.bestBridgeSeconds+'s' : null,
+    gliderScore: progress.gliderBest ? progress.gliderBest : null,
+    bridgeScore: progress.bridgeBest ? progress.bridgeBest : null,
+    bossWins: progress.bossVictories ? progress.bossVictories+'x' : null,
+    harmonyAcc: progress.harmonyBest ? progress.harmonyBest+'%' : null,
+  };
+}
 function renderRecordsList(){
   const voiceWrap = document.getElementById('recordsListVoice');
   const worldWrap = document.getElementById('recordsListWorld');
@@ -19053,33 +19109,26 @@ function renderRecordsList(){
     worldWrap.innerHTML = ''; songsWrap.innerHTML = '';
     return;
   }
-  let bestStability = null;
-  if(progress.dailyMetrics){
-    Object.values(progress.dailyMetrics).forEach(day=>{
-      (day.stability||[]).forEach(v=>{ if(bestStability===null || v>bestStability) bestStability=v; });
-    });
-  }
-  const bestPitchAcc = (progress.pitchScores && progress.pitchScores.length) ? Math.max(...progress.pitchScores) : null;
-  const bestAgility = (progress.agilityScores && progress.agilityScores.length) ? Math.max(...progress.agilityScores) : null;
+  const v = personalRecordValues();
 
   const rowHtml = r => r.val!==null
     ? `<div class="record-row"><span class="record-label">${r.label}</span><span class="record-val">${r.val}</span></div>`
     : `<div class="record-row"><span class="record-label">${r.label}</span><span class="record-val untracked">${r.note||t('record_note_not_set')}</span></div>`;
 
   const voiceRows = [
-    {label:t('record_label_highest_note'), val: progress.highestMidi!==null && progress.highestMidi!==undefined ? noteNameFromMidi(progress.highestMidi) : null},
-    {label:t('record_label_lowest_note'), val: progress.lowestMidi!==null && progress.lowestMidi!==undefined ? noteNameFromMidi(progress.lowestMidi) : null},
-    {label:t('record_label_best_pitch_acc'), val: bestPitchAcc!==null ? bestPitchAcc+'%' : null},
-    {label:t('record_label_best_agility'), val: bestAgility!==null ? bestAgility+'%' : null},
-    {label:t('record_label_longest_breath'), val: progress.bestBreathDuration ? progress.bestBreathDuration+'s' : null},
-    {label:t('record_label_best_stability'), val: bestStability!==null ? Math.round(bestStability)+'%' : null},
-    {label:t('record_label_longest_crossing'), val: progress.bestBridgeSeconds ? progress.bestBridgeSeconds+'s' : null},
+    {label:t('record_label_highest_note'), val: v.highestNote},
+    {label:t('record_label_lowest_note'), val: v.lowestNote},
+    {label:t('record_label_best_pitch_acc'), val: v.bestPitchAcc},
+    {label:t('record_label_best_agility'), val: v.bestAgility},
+    {label:t('record_label_longest_breath'), val: v.longestBreath},
+    {label:t('record_label_best_stability'), val: v.bestStability},
+    {label:t('record_label_longest_crossing'), val: v.longestCrossing},
   ];
   const worldRows = [
-    {label:t('record_label_glider_score'), val: progress.gliderBest ? progress.gliderBest : null},
-    {label:t('record_label_bridge_score'), val: progress.bridgeBest ? progress.bridgeBest : null},
-    {label:t('record_label_boss_wins'), val: progress.bossVictories ? progress.bossVictories+'x' : null},
-    {label:t('record_label_harmony_acc'), val: progress.harmonyBest ? progress.harmonyBest+'%' : null},
+    {label:t('record_label_glider_score'), val: v.gliderScore},
+    {label:t('record_label_bridge_score'), val: v.bridgeScore},
+    {label:t('record_label_boss_wins'), val: v.bossWins},
+    {label:t('record_label_harmony_acc'), val: v.harmonyAcc},
   ];
   const songsRows = [
     {label:t('record_label_keychange'), val: null, note:t('record_note_keychange')},
@@ -19089,6 +19138,28 @@ function renderRecordsList(){
   voiceWrap.innerHTML = voiceRows.map(rowHtml).join('');
   worldWrap.innerHTML = worldRows.map(rowHtml).join('');
   songsWrap.innerHTML = songsRows.map(rowHtml).join('');
+}
+
+// The Coach tab (phase 3): Today's focus (signed in) and each tool's stored personal best ("Best 84%"; the Range Finder
+// shows the range itself). Runs when the tab opens, after sign-in and progress load, and on a language change.
+function renderCoachHub(){
+  const box = document.getElementById('coachFocus');
+  if(!box) return;
+  box.hidden = !profile;
+  const v = profile ? personalRecordValues() : {};
+  if(profile){
+    const focus = computeTodaysFocus();
+    document.getElementById('coachFocusLabel').textContent = focus.label;
+    document.getElementById('coachFocusMeta').textContent = focusMetaText(focus);
+    document.getElementById('coachFocusBtn').onclick = ()=>enterPanel(focus.panel);
+  }
+  const best = val=>val===null || val===undefined ? '' : t('coach_best_tpl').replace('{v}', val);
+  const ends = {tuner:best(v.bestStability), range:v.lowestNote && v.highestNote ? `${v.lowestNote}–${v.highestNote}` : '',
+    register:best(v.longestCrossing), breath:best(v.longestBreath), exercises:best(v.bestPitchAcc)};
+  document.querySelectorAll('#panel-train-hub [data-enter-panel]').forEach(b=>{
+    const el = b.querySelector('.coach-best');
+    if(el) el.textContent = ends[b.dataset.enterPanel] || '';
+  });
 }
 
 /* ---------------- Onboarding (Phase 2 — real, reuses existing data structures) ---------------- */
@@ -19195,6 +19266,7 @@ document.getElementById('obNextBtn').addEventListener('click', async ()=>{
   closeModalWithA11y(document.getElementById('onboardingOverlay'));
   enterPanel('journey');
   if(typeof renderHomeScreen==='function') renderHomeScreen();
+  if(typeof renderCoachHub==='function') renderCoachHub();
 });
 document.getElementById('obBackBtn').addEventListener('click', ()=>{
   if(obStepIndex>0){ obStepIndex--; renderOnboardingStep(); }
