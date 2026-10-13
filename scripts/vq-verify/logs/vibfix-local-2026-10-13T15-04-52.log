@@ -1,0 +1,30 @@
+vibfix 2026-10-13T15-04-52  sides: before, C1, C2, C3  before: master  mode: regress (rises become "must not move")
+ERROR Error: Command failed: node /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js /Users/alegramusenge/VoxCoachTestData/vocalset --json /Users/alegramusenge/VoxCoachTestData/vibfix/rv.json
+<anonymous_script>:16
+function bdMode(){ const m = window.__bleedDefence; return m==='D1' || m==='D2' ? m : null; }
+                             ^
+
+ReferenceError: window is not defined
+    at bdMode (eval at <anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js:13:11), <anonymous>:16:30)
+    at Object.autoCorrelate (eval at <anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js:13:11), <anonymous>:48:6)
+    at frames (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js:26:86)
+    at Object.<anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/realvib.js:49:14)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+
+Node.js v22.23.3
+
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/vibfix.js:301:16
+    at Object.<anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/vibfix.js:384:3)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)
