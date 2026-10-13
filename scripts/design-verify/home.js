@@ -9,8 +9,8 @@
 //  - every "Best" value on a Coach row equals the Personal Records value for the same progress (branch).
 //  - the Personal Records list (renderRecordsList) renders byte-identical HTML on master and the branch.
 //  - #homeVlCard's previous element sibling is #homeChoirCard (batch3c), and #homeChoirCard's text is identical on
-//    master and the branch, whitespace aside (p9/p10). Its 📈 (replaced by a sprite icon) is the one character dropped
-//    from the comparison.
+//    master and the branch, whitespace aside (p9/p10): its DOM text (textContent; the label's CSS uppercase aside), with
+//    emoji dropped (Home's 🎼 and 📈 become sprite icons); #homeCwDelta's innerText (what p10 reads) identical.
 // Usage: node scripts/design-verify/home.js [--base <git ref>]   (default base: master)
 const C = require('./common'), H = require('./homeStates');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -24,13 +24,14 @@ function readHome() {
   const vis = id => { const el = document.getElementById(id); return !!el && el.getClientRects().length > 0 && getComputedStyle(el).display !== 'none'; };
   const go = sel => { const el = document.querySelector(sel); if (!el) return null; const real = window.enterPanel; let to = null;
     window.enterPanel = p => { to = p; }; try { el.click(); } finally { window.enterPanel = real; } return to; };
-  const norm = s => (s || '').replace(/📈/g, '').replace(/\s+/g, ' ').trim();
+  const norm = s => (s || '').replace(/[\p{Extended_Pictographic}\uFE0F]/gu, '').replace(/\s+/g, ' ').trim();
   const card = document.getElementById('homeChoirCard');
   return {
     hero: vis('homeMissionCard') ? 'mission' : vis('homeSignedOutCard') ? 'signedout' : vis('homeTrialCompleteCard') ? 'trialcomplete' : 'none',
     label: document.getElementById('homeMissionLabel').textContent, pct: document.getElementById('homeMissionPct').textContent,
     msg: document.getElementById('homeMissionMsg').textContent, panel: vis('homeMissionCard') ? go('#homeMissionCta') : null,
-    choirText: card && card.style.display !== 'none' ? norm(card.innerText || card.textContent) : '(hidden)',
+    choirText: card && card.style.display !== 'none' ? norm(card.textContent) : '(hidden)',
+    delta: (() => { const d = document.getElementById('homeCwDelta'); return d ? d.innerText.replace(/^📈\s*/, '').replace(/\s+/g, ' ').trim() : null; })(),
     vlPrev: (document.getElementById('homeVlCard').previousElementSibling || {}).id || null,
     focus: typeof computeTodaysFocus === 'function' && profile ? computeTodaysFocus() : null,
   };
@@ -117,6 +118,7 @@ async function side(b, dir, state, name) {
       if (m.coach.html !== r.coach.html && process.env.HOME_DEBUG) console.log(m.coach.html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '), '\n---\n', r.coach.html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' '));
       check('#homeVlCard follows #homeChoirCard', m.home.vlPrev === 'homeChoirCard' && r.home.vlPrev === 'homeChoirCard', r.home.vlPrev);
       check('#homeChoirCard text identical', m.home.choirText === r.home.choirText, short(r.home.choirText));
+      check('#homeCwDelta as p10 reads it identical', m.home.delta === r.home.delta, short(r.home.delta));
       check('no page errors', !m.errors.length && !r.errors.length, [...m.errors, ...r.errors].slice(0, 2).join(' | ') || 'none');
     }
   } finally {

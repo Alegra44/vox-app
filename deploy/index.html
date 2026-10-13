@@ -1491,47 +1491,61 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     .app-toast-wrap{bottom:24px;}
   }
 
-  /* ---- HOME ---- */
-  .home-greeting-row{margin-bottom:20px;}
-  .home-greeting{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;color:var(--cream);}
-  .home-streak-line{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:4px;}
+  /* ---- HOME (phase 3): lights up, one column, at most 640px at every width ---- */
+  #panel-home .home-col{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:var(--hl-s5);}
+  /* one line of text that wraps like a sentence (renderHomeScreen shows the trial part with display:flex) */
+  .home-dateline{margin-bottom:calc(-1 * var(--hl-s3));}
+  .home-dateline .home-trial-row[style*="flex"]{display:inline !important;}
+  .home-dateline .home-trial-row{background:none;border:0;border-radius:0;padding:0;margin:0;}
+  .home-dateline .home-date-sep{margin:0 var(--hl-s1);}
+  .home-dateline .home-trial-text{display:inline;font-size:inherit;color:inherit;}
+  .home-dateline .home-trial-track[hidden]{display:none;}
+  .home-greeting{color:var(--hl-ink);}
+  .home-streak-line{font-variant-numeric:tabular-nums;font-size:var(--hl-t-small);color:var(--hl-ink-3);margin-top:var(--hl-s1);}
   /* streak and level, moved here from the header (signed in only) */
   .home-stats-line{display:flex;align-items:center;gap:var(--hl-s2);margin-top:var(--hl-s1);font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
   .home-stats-line .shell-streak{display:inline-flex;align-items:center;gap:var(--hl-s1);}
   .home-stats-line .hl-icon{color:var(--hl-ink-2);}
   .home-stats-line[hidden], .home-streak-line[hidden]{display:none;}
 
-  .mission-card{
-    display:flex;align-items:center;gap:24px;
-    background:var(--surface);
-    border:1px solid var(--brass-dim);border-radius:20px;padding:26px;margin-bottom:22px;flex-wrap:wrap;
-  }
-  .mission-ring-wrap{position:relative;width:120px;height:120px;flex-shrink:0;}
-  .mission-ring{width:120px;height:120px;}
-  .mission-ring-pct{
-    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-    font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);
-  }
-  .voice-hero-left{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;}
-  .voice-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);font-weight:700;}
-  .voice-identity-line{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:13.5px;color:var(--brass);margin-bottom:4px;text-align:center;}
-  .voice-dual-stat-row{display:flex;gap:14px;margin-top:8px;}
-  .voice-stat{text-align:center;}
-  .vs-label{font-size:9.5px;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted);}
-  .vs-val{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:15px;color:var(--coral);font-weight:700;margin-top:2px;}
-  .vs-val.strong{color:var(--teal);}
-  .mission-text{flex:1;min-width:200px;}
-  .mission-eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--brass);font-weight:700;}
-  .mission-label{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;color:var(--cream);margin:6px 0 8px;}
-  .mission-msg{color:var(--muted);font-size:13px;line-height:1.5;margin-bottom:16px;}
+  /* the one raised block (Today's focus), or in its place the signed-out / trial-complete block */
+  .home-hero{flex-direction:column;align-items:stretch;gap:var(--hl-s3);padding:var(--hl-s5);}
+  #homeSignedOutCard[style*="block"], #homeTrialCompleteCard[style*="block"]{display:flex !important;}
+  .home-hero .hl-h2{color:var(--hl-ink);}
+  .home-hero-body{margin:0;font-size:var(--hl-t-body);line-height:1.5;color:var(--hl-ink-2);}
+  .mission-text{display:flex;flex-direction:column;gap:var(--hl-s2);}
+  .mission-meta{font-variant-numeric:tabular-nums;}
+  .home-cta{margin-top:var(--hl-s2);}
+  .home-cta .home-chev, .home-hero .hl-btn .home-chev{color:inherit;}
+  .voice-hero-left[hidden]{display:none;}
 
-  .home-secondary-list{display:flex;flex-direction:column;gap:8px;}
-  .home-secondary-row{
-    display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--hairline);
-    border-radius:12px;padding:13px 16px;
-  }
-  .hsr-icon{font-size:16px;width:22px;text-align:center;flex-shrink:0;}
-  .hsr-text{font-size:13px;color:var(--cream);}
+  .home-section{display:flex;flex-direction:column;gap:var(--hl-s3);}
+  .home-section[hidden]{display:none;}
+  .home-section-meta{margin:0;}
+  .home-sec-link{display:inline-flex;align-items:center;gap:var(--hl-s1);align-self:flex-start;min-height:44px;padding:0;background:none;border:0;cursor:pointer;}
+  .home-chev{color:var(--hl-ink-3);}
+  .home-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--hl-s4);}
+  .home-range-find{align-self:flex-start;min-height:44px;padding:0;background:none;border:0;font:inherit;font-size:var(--hl-t-small);color:var(--hl-ink-2);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:left;}
+  .home-range-find[hidden]{display:none;}
+  @media (max-width:599px){ .home-stats{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+  /* Pick up: the Choir World block, today's vocal load, then the rows */
+  .home-pickup{gap:0;}
+  .home-pickup-label{margin-bottom:var(--hl-s2);}
+  .home-pickup-label[hidden]{display:none;}
+  .home-choir{padding:var(--hl-s3) 0 var(--hl-s4);border-bottom:var(--hl-hair) solid var(--hl-rule);}
+  .home-choir[style*="block"]{display:flex !important;flex-direction:column;gap:var(--hl-s2);}
+  .home-choir .step-label{display:flex;align-items:center;flex-wrap:wrap;gap:var(--hl-s2);}
+  .home-choir .hl-h3{color:var(--hl-ink);}
+  .home-choir-line{margin:0;font-size:var(--hl-t-small);line-height:1.5;color:var(--hl-ink-2);}
+  .home-choir-line--status{color:var(--hl-ink);}
+  .home-choir-line--delta{display:flex;align-items:flex-start;gap:var(--hl-s1);color:var(--hl-ink);}
+  .home-choir-btn{align-self:flex-start;margin-top:var(--hl-s1);}
+  .home-vl{padding:var(--hl-s3) 0;border-bottom:var(--hl-hair) solid var(--hl-rule);}
+  .home-vl .vl-disclaimer{margin:var(--hl-s2) 0 0;}
+  .home-secondary-list{display:flex;flex-direction:column;}
+  .home-pick .hsr-text{font-weight:500;}
+  .home-pick--plain{cursor:default;}
 
   /* ---- HUB (Train / Songs / You) ---- */
   .hub-category-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px;}
@@ -1934,9 +1948,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- ============ HOME (new default) ============ -->
   <section class="panel active" id="panel-home">
+   <div class="home-col">
+    <!-- Label line: today's date, then the trial day or plan (#homeTrialRow, shown by renderHomeScreen) -->
+    <div class="home-dateline hl-meta">
+      <span id="homeDate"></span>
+      <div class="home-trial-row" id="homeTrialRow" style="display:none;">
+        <span class="home-date-sep" aria-hidden="true">·</span>
+        <div class="home-trial-text" id="homeTrialText">Day 1 of 21</div>
+        <div class="home-trial-track" hidden><div class="fill" id="homeTrialFill" style="width:0%;"></div></div>
+      </div>
+    </div>
+
     <div class="home-greeting-row">
       <div>
-        <div class="home-greeting" id="homeGreeting">Good evening</div>
+        <h1 class="home-greeting hl-h1" id="homeGreeting">Good evening</h1>
         <div class="home-stats-line" id="homeStatsLine" hidden>
           <span class="shell-streak" id="shellStreak" role="img"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-flame"/></svg><span class="shell-streak-n">0</span></span>
           <span class="home-stats-sep" aria-hidden="true">·</span>
@@ -1946,31 +1971,31 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
     </div>
 
-    <!-- Signed-out state -->
-    <div class="key-card" id="homeSignedOutCard" style="display:none;">
-      <div class="step-label" data-i18n="home_signedout_eyebrow">Welcome</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 12px;" data-i18n="home_signedout_title">Create a free account to get today's real mission</h2>
-      <p class="desc" style="margin-bottom:18px;" data-i18n="home_signedout_desc">Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.</p>
-      <button class="solid-btn teal" id="homeSignInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
+    <!-- The coach sentence: no card, no eyebrow; shown only when renderProactiveInsight has something to say -->
+    <div class="home-coach" id="proactiveInsightCard" style="display:none;">
+      <div class="step-label" data-i18n="home_proactive_eyebrow" hidden>💡 I noticed something</div>
+      <p class="hl-coach" id="proactiveInsightText"></p>
     </div>
 
-    <!-- Trial status row -->
-    <div class="home-trial-row" id="homeTrialRow" style="display:none;">
-      <div class="home-trial-text" id="homeTrialText">Day 1 of 21</div>
-      <div class="home-trial-track"><div class="fill" id="homeTrialFill" style="width:0%;"></div></div>
+    <!-- Signed-out state (takes the focus block's place) -->
+    <div class="home-hero hl-raised" id="homeSignedOutCard" style="display:none;">
+      <div class="step-label hl-label" data-i18n="home_signedout_eyebrow">Welcome</div>
+      <h2 class="hl-h2" data-i18n="home_signedout_title">Create a free account to get today's real mission</h2>
+      <p class="home-hero-body" data-i18n="home_signedout_desc">Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.</p>
+      <button class="hl-btn hl-btn--ink hl-btn--block" id="homeSignInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
     </div>
 
-    <!-- Trial complete state -->
-    <div class="key-card" id="homeTrialCompleteCard" style="display:none;">
-      <div class="step-label" data-i18n="home_trialcomplete_eyebrow">Your 21-Day Journey is complete 🎤</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:22px;margin:8px 0 10px;" data-i18n="home_trialcomplete_title">You've built a foundation. Your next chapter is waiting.</h2>
-      <p class="desc" style="margin-bottom:16px;" data-i18n="home_trialcomplete_desc">Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.</p>
-      <button class="solid-btn teal" id="homeChoosePlanBtn" data-i18n="home_trialcomplete_btn">Choose your plan</button>
+    <!-- Trial complete state (takes the focus block's place) -->
+    <div class="home-hero hl-raised" id="homeTrialCompleteCard" style="display:none;">
+      <div class="step-label hl-label" data-i18n="home_trialcomplete_eyebrow">Your 21-Day Journey is complete 🎤</div>
+      <h2 class="hl-h2" data-i18n="home_trialcomplete_title">You've built a foundation. Your next chapter is waiting.</h2>
+      <p class="home-hero-body" data-i18n="home_trialcomplete_desc">Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.</p>
+      <button class="hl-btn hl-btn--ink hl-btn--block" id="homeChoosePlanBtn" data-i18n="home_trialcomplete_btn">Choose your plan</button>
     </div>
 
-    <!-- Today's Mission hero card -->
-    <div class="mission-card" id="homeMissionCard" style="display:none;">
-      <div class="voice-hero-left">
+    <!-- Today's focus: the one raised block (computeTodaysFocus) -->
+    <div class="mission-card home-hero hl-raised" id="homeMissionCard" style="display:none;">
+      <div class="voice-hero-left" hidden>
         <div class="voice-eyebrow" data-i18n="home_voice_eyebrow">Your Voice</div>
         <div class="voice-identity-line" id="homeVoiceIdentity">—</div>
         <div class="mission-ring-wrap">
@@ -1989,47 +2014,62 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
       </div>
       <div class="mission-text">
-        <div class="mission-eyebrow" data-i18n="home_mission_eyebrow">Today's Mission</div>
-        <div class="mission-label" id="homeMissionLabel">—</div>
-        <p class="mission-msg" id="homeMissionMsg"></p>
-        <button class="solid-btn" id="homeMissionCta" data-i18n="home_start_training_btn">Start training</button>
+        <div class="mission-eyebrow hl-label" data-i18n="home_mission_eyebrow">Today's Mission</div>
+        <h2 class="mission-label hl-h2" id="homeMissionLabel">—</h2>
+        <div class="mission-meta hl-meta" id="homeMissionMeta"></div>
+        <p class="mission-msg home-hero-body" id="homeMissionMsg"></p>
+        <button class="hl-btn hl-btn--ink hl-btn--block home-cta" id="homeMissionCta"><span data-i18n="home_start_training_btn">Start training</span><svg class="hl-icon hl-icon--s home-chev" aria-hidden="true"><use href="#hl-chev"/></svg></button>
       </div>
     </div>
 
-    <div class="key-card" id="proactiveInsightCard" style="display:none;margin-top:16px;">
-      <div class="step-label" data-i18n="home_proactive_eyebrow">💡 I noticed something</div>
-      <p class="desc" id="proactiveInsightText" style="margin-top:8px;"></p>
-    </div>
-
-    <div class="key-card" id="homeTodaysReportCard" style="display:none;margin-bottom:16px;">
-      <div class="step-label" data-i18n="home_todaysreport_eyebrow">Today's Report</div>
-      <p class="desc" style="margin:6px 0 12px;" data-i18n="home_todaysreport_desc">Session start vs. right now — real deltas, not a fixed weekly summary.</p>
+    <!-- Today so far: a plain section, only when it shows today -->
+    <section class="home-section" id="homeTodaysReportCard" style="display:none;">
+      <div class="step-label hl-label" data-i18n="home_todaysreport_eyebrow">Today's Report</div>
+      <p class="hl-meta home-section-meta" data-i18n="home_todaysreport_desc">Session start vs. right now — real deltas, not a fixed weekly summary.</p>
       <div id="homeTodaysReportRows"></div>
-    </div>
+    </section>
 
-    <!-- Choir World status (phase 9): filled from the stored readiness by renderHomeChoirCard() -->
-    <div class="key-card" id="homeChoirCard" style="display:none;margin-bottom:16px;"></div>
+    <!-- Your numbers: current values (nothing weekly is stored) -->
+    <section class="home-section" id="homeNumbers" hidden>
+      <button class="home-sec-link hl-label" id="homeNumbersLink" type="button"><span data-i18n="home_numbers_label">Skill Profile</span><svg class="hl-icon hl-icon--s home-chev" aria-hidden="true"><use href="#hl-chev"/></svg></button>
+      <div class="home-stats">
+        <div class="hl-stat"><div class="hl-meta" data-i18n="skill_range">Range</div><div class="hl-stat-value" id="homeStatRange">—</div><div class="hl-stat-change hl-meta" id="homeStatRangeSub"></div><button class="home-range-find" id="homeRangeFind" type="button" data-i18n="home_range_find" hidden>Find your range</button></div>
+        <div class="hl-stat"><div class="hl-meta" data-i18n="skill_pitch">Pitch</div><div class="hl-stat-value" id="homeStatPitch">—</div></div>
+        <div class="hl-stat"><div class="hl-meta" data-i18n="skill_agility">Agility</div><div class="hl-stat-value" id="homeStatAgility">—</div></div>
+        <div class="hl-stat"><div class="hl-meta" data-i18n="skill_breath">Breath</div><div class="hl-stat-value" id="homeStatBreath">—</div></div>
+      </div>
+    </section>
 
-    <!-- Vocal Load Dosimetry (phase 3c): today's load, shown to every signed-in user -->
-    <div class="key-card" id="homeVlCard" style="display:none;margin-bottom:16px;">
-      <div class="vl-gauge" id="vlGaugeHome" style="display:none;margin-top:0;"></div>
-      <p class="fine-print vl-disclaimer" data-i18n="vl_disclaimer">This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional.</p>
-    </div>
+    <!-- Pick up: Choir World focus, today's vocal load, then the rows in #homeSecondaryList -->
+    <section class="home-section home-pickup" id="homePickup">
+      <div class="hl-label home-pickup-label" id="homePickupLabel" data-i18n="home_pickup_label" hidden>Pick up</div>
+      <!-- Choir World status (phase 9): filled from the stored readiness by renderHomeChoirCard() -->
+      <div class="home-choir" id="homeChoirCard" style="display:none;"></div>
 
-    <div class="home-secondary-list" id="homeSecondaryList">
-      <div class="home-secondary-row">
-        <div class="hsr-icon">↻</div>
-        <div class="hsr-text" id="homeContinueText">No sessions yet — today is Day 1.</div>
+      <!-- Vocal Load Dosimetry (phase 3c): today's load, shown to every signed-in user -->
+      <div class="home-vl" id="homeVlCard" style="display:none;">
+        <div class="vl-gauge" id="vlGaugeHome" style="display:none;margin-top:0;"></div>
+        <p class="fine-print vl-disclaimer" data-i18n="vl_disclaimer">This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional.</p>
       </div>
-      <div class="home-secondary-row">
-        <div class="hsr-icon">🗺️</div>
-        <div class="hsr-text" id="homeWorldNudge">Sign in to see Vocal World progress.</div>
+
+      <div class="home-secondary-list hl-list" id="homeSecondaryList">
+        <button class="hl-item home-pick" id="homeWorldRow" type="button">
+          <svg class="hl-icon" aria-hidden="true"><use href="#hl-world"/></svg>
+          <span class="hl-item-title hsr-text" id="homeWorldNudge">Sign in to see Vocal World progress.</span>
+          <svg class="hl-icon hl-icon--s home-chev" aria-hidden="true"><use href="#hl-chev"/></svg>
+        </button>
+        <button class="hl-item home-pick" id="homeLevelRow" type="button">
+          <svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg>
+          <span class="hl-item-title hsr-text" id="homeLevelLine">Level 1</span>
+          <svg class="hl-icon hl-icon--s home-chev" aria-hidden="true"><use href="#hl-chev"/></svg>
+        </button>
+        <div class="hl-item home-pick home-pick--plain">
+          <svg class="hl-icon" aria-hidden="true"><use href="#hl-calendar"/></svg>
+          <span class="hl-item-title hsr-text" id="homeContinueText">No sessions yet — today is Day 1.</span>
+        </div>
       </div>
-      <div class="home-secondary-row">
-        <div class="hsr-icon">📆</div>
-        <div class="hsr-text" id="homeLevelLine">Level 1</div>
-      </div>
-    </div>
+    </section>
+   </div>
   </section>
 
   <!-- ============ TRAIN HUB ============ -->
@@ -5780,6 +5820,8 @@ let profile = null;
 /* ---------------- Language selection (real i18n infrastructure, honest scope) ---------------- */
 const TRANSLATIONS = {
   en: {
+    home_focus_noscore:"No score yet", home_score_tpl:"Score {n}", home_numbers_label:"Skill Profile", home_range_find:"Find your range",
+    home_semitones_tpl:"{n} semitones", home_pickup_label:"Pick up", coach_best_tpl:"Best {v}",
     nav_home:'Home', nav_train:'Coach', nav_songs:'Songs', nav_world:'World', nav_you:'You',
     auth_title:'Start your Vocal Journey', auth_sub:'Get full access to VoxCoach for 21 days.',
     auth_name_label:'Display name', auth_email_label:'Email',
@@ -7144,6 +7186,8 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Still your weakest',
   },
   fr: {
+    home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
+    home_semitones_tpl:"{n} demi-tons", home_pickup_label:"À reprendre", coach_best_tpl:"Meilleur {v}",
     nav_home:'Accueil', nav_train:'Coach', nav_songs:'Chansons', nav_world:'Monde', nav_you:'Vous',
     auth_title:'Commencez votre parcours vocal', auth_sub:'Accédez à VoxCoach en totalité pendant 21 jours.',
     auth_name_label:"Nom d'affichage", auth_email_label:'E-mail',
@@ -8508,6 +8552,8 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Toujours votre point faible',
   },
   es: {
+    home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
+    home_semitones_tpl:"{n} semitonos", home_pickup_label:"Para retomar", coach_best_tpl:"Mejor {v}",
     nav_home:'Inicio', nav_train:'Coach', nav_songs:'Canciones', nav_world:'Mundo', nav_you:'Tú',
     auth_title:'Comienza tu viaje vocal', auth_sub:'Obtén acceso completo a VoxCoach durante 21 días.',
     auth_name_label:'Nombre a mostrar', auth_email_label:'Correo electrónico',
@@ -9872,6 +9918,8 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Sigue siendo tu punto débil',
   },
   tr: {
+    home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
+    home_semitones_tpl:"{n} yarım ses", home_pickup_label:"Kaldığınız yerden", coach_best_tpl:"En iyi {v}",
     nav_home:'Ana Sayfa', nav_train:'Koç', nav_songs:'Şarkılar', nav_world:'Dünya', nav_you:'Sen',
     auth_title:'Vokal Yolculuğuna Başla', auth_sub:"VoxCoach'a 21 gün boyunca tam erişim kazanın.",
     auth_name_label:'Görünen ad', auth_email_label:'E-posta',
@@ -15728,21 +15776,23 @@ function renderHomeChoirCard(){
   if(!profile){ card.style.display = 'none'; return; }
   card.style.display = 'block';
   const focus = cwFocus();
-  const h2 = txt=>`<h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;">${txt}</h2>`;
+  // a compact block on Home (phase 3): the label's emoji becomes the sprite's choir icon; every text is the same
+  const h = txt=>`<h3 class="hl-h3">${txt}</h3>`;
+  const label = `<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-choir"/></svg>${t('cw_label').replace(/^\p{Extended_Pictographic}\uFE0F?\s*/u, '')}`;
   if(!hasChoirWorldAccess()){
     // Locked tiers get the upgrade version: what the Choir plan is, and their saved readiness if they have any.
-    card.innerHTML = `<div class="step-label">${t('cw_label')} <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span></div>
-      ${h2(t('cw_heading'))}
-      ${focus ? `<p class="desc" style="color:var(--teal);">${t('home_cw_locked_saved_tpl').replace('{part}', partName(focus.part)).replace('{song}', songTitle(focus.song)).replace('{status}', t('rd_status_'+focus.status))}</p>` : ''}
-      <p class="desc" style="margin-top:6px;">${cwReasonText()}</p>
-      <button class="solid-btn teal" data-cw-cta="plans" style="margin-top:14px;">${t('cw_cta_plans')}</button>`;
+    card.innerHTML = `<div class="step-label hl-label">${label} <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span></div>
+      ${h(t('cw_heading'))}
+      ${focus ? `<p class="home-choir-line home-choir-line--status">${t('home_cw_locked_saved_tpl').replace('{part}', partName(focus.part)).replace('{song}', songTitle(focus.song)).replace('{status}', t('rd_status_'+focus.status))}</p>` : ''}
+      <p class="home-choir-line">${cwReasonText()}</p>
+      <button class="hl-btn home-choir-btn" data-cw-cta="plans">${t('cw_cta_plans')}</button>`;
     return;
   }
   if(!focus){
-    card.innerHTML = `<div class="step-label">${t('cw_label')}</div>
-      ${h2(t('home_cw_empty_title'))}
-      <p class="desc">${t('home_cw_empty_desc')}</p>
-      <button class="solid-btn teal" data-cw-go="" style="margin-top:14px;">${t('home_cw_empty_btn')}</button>`;
+    card.innerHTML = `<div class="step-label hl-label">${label}</div>
+      ${h(t('home_cw_empty_title'))}
+      <p class="home-choir-line">${t('home_cw_empty_desc')}</p>
+      <button class="hl-btn home-choir-btn" data-cw-go="">${t('home_cw_empty_btn')}</button>`;
     return;
   }
   const {song, part, inp, status} = focus;
@@ -15753,12 +15803,12 @@ function renderHomeChoirCard(){
       .replace('{b}', Math.min(inp.bossesBeaten, RD_READY.bosses)).replace('{B}', RD_READY.bosses)
     : t('home_cw_next_ready');
   const delta = cwDeltaText(song, part, inp);
-  card.innerHTML = `<div class="step-label">${t('cw_label')} <span class="rd-status ${status}">${t('rd_status_'+status)}</span></div>
-    ${h2(t('home_cw_status_'+status+'_tpl').replace('{part}', partName(part)))}
-    <p class="desc">${songTitle(song)} · ${rdDetailText(inp)}</p>
-    ${delta ? `<p class="desc" id="homeCwDelta" style="margin-top:6px;color:var(--brass);">📈 ${delta}</p>` : ''}
-    <p class="desc" style="margin-top:6px;color:var(--teal);">${next}</p>
-    <button class="solid-btn teal" data-cw-go="${song}|${part}" style="margin-top:14px;">${t('home_cw_continue_btn')}</button>`;
+  card.innerHTML = `<div class="step-label hl-label">${label} <span class="rd-status ${status}">${t('rd_status_'+status)}</span></div>
+    ${h(t('home_cw_status_'+status+'_tpl').replace('{part}', partName(part)))}
+    <p class="home-choir-line">${songTitle(song)} · ${rdDetailText(inp)}</p>
+    ${delta ? `<p class="home-choir-line home-choir-line--delta" id="homeCwDelta"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chart"/></svg>${delta}</p>` : ''}
+    <p class="home-choir-line home-choir-line--status">${next}</p>
+    <button class="hl-btn home-choir-btn" data-cw-go="${song}|${part}">${t('home_cw_continue_btn')}</button>`;
 }
 function renderCwHubStatus(){
   const el = document.getElementById('cwHubStatus');
@@ -18873,6 +18923,10 @@ function renderHomeScreen(){
   const greetWord = hour<12 ? t('home_greeting_morning') : hour<18 ? t('home_greeting_afternoon') : t('home_greeting_evening');
   document.getElementById('homeGreeting').textContent = profile ? `${greetWord}, ${profile.name}` : greetWord;
   document.getElementById('homeStreakLine').textContent = profile ? `${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}` : t('home_signin_streak');
+  document.getElementById('homeDate').textContent = new Intl.DateTimeFormat(currentLanguage, {weekday:'long', day:'numeric', month:'long'}).format(new Date());
+  document.getElementById('homePickup').hidden = !profile;
+  document.getElementById('homePickupLabel').hidden = !profile;
+  document.getElementById('homeNumbers').hidden = true; // shown below once the focus block is
 
   renderHomeChoirCard();
   if(!profile){
@@ -18927,7 +18981,9 @@ function renderHomeScreen(){
   const focus = computeTodaysFocus();
   document.getElementById('homeMissionLabel').textContent=focus.label;
   document.getElementById('homeMissionPct').textContent=focus.pct+'%';
+  document.getElementById('homeMissionMeta').textContent=focusMetaText(focus);
   document.getElementById('homeMissionMsg').textContent=focus.msg;
+  renderHomeNumbers(scores);
   renderResonanceRing(document.getElementById('homeMissionRing'), focus.pct, 'var(--brass)');
   const ctaBtn=document.getElementById('homeMissionCta');
   ctaBtn.onclick=()=>enterPanel(focus.panel);
@@ -18968,6 +19024,23 @@ function renderHomeScreen(){
     : t('home_worldnudge_alldone');
 }
 document.getElementById('homeChoosePlanBtn')?.addEventListener('click', ()=>enterPanel('pricing'));
+// "Score 55" under the focus skill, or "No score yet" (Home and the Coach tab)
+function focusMetaText(focus){ return focus.hasScore ? t('home_score_tpl').replace('{n}', focus.pct) : t('home_focus_noscore'); }
+// Your numbers: the current range and three Skill Profile scores (no weekly change: none is stored)
+function renderHomeNumbers(scores){
+  document.getElementById('homeNumbers').hidden = false;
+  const hasRange = progress.lowestMidi!==null && progress.lowestMidi!==undefined && progress.highestMidi!==null && progress.highestMidi!==undefined;
+  document.getElementById('homeStatRange').textContent = hasRange ? `${noteNameFromMidi(progress.lowestMidi)}–${noteNameFromMidi(progress.highestMidi)}` : '—';
+  document.getElementById('homeStatRangeSub').textContent = hasRange ? t('home_semitones_tpl').replace('{n}', progress.highestMidi-progress.lowestMidi) : '';
+  document.getElementById('homeRangeFind').hidden = hasRange;
+  [['homeStatPitch','pitch'],['homeStatAgility','agility'],['homeStatBreath','breath']].forEach(([id, k])=>{
+    document.getElementById(id).textContent = scores[k]===null ? '—' : scores[k];
+  });
+}
+document.getElementById('homeNumbersLink')?.addEventListener('click', ()=>enterPanel('dashboard'));
+document.getElementById('homeRangeFind')?.addEventListener('click', ()=>enterPanel('range'));
+document.getElementById('homeWorldRow')?.addEventListener('click', ()=>document.querySelector('.snb-item[data-shell="world"]').click());
+document.getElementById('homeLevelRow')?.addEventListener('click', ()=>enterPanel('journey'));
 
 /* ---------------- Personal Records (Phase 10 — real consolidation, no fabrication) ---------------- */
 function renderRecordsList(){
