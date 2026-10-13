@@ -152,7 +152,7 @@ $('b3').onclick = async () => {
     while (performance.now() - p0 < 1000) { await new Promise(r => setTimeout(r, 40)); const v = st.level(); s += v * v; n++; const f = pitch(st.buf, ac.sampleRate); if (f > 0 && Math.abs(1200 * Math.log2(f / 440)) <= 50) onNote++; }
     const during = dB(Math.sqrt(s / Math.max(1, n)));
     const res = R.step3['ec_' + key] = { settings: settings(st.t), quiet, duringTone: during, rise: during !== null && quiet !== null ? +(during - quiet).toFixed(1) : null, heardAsNotePct: Math.round(100 * onNote / Math.max(1, n)) };
-    $('v3' + key).textContent = `${res.rise === null ? '—' : '+' + res.rise + ' dB'} · heard as a note ${res.heardAsNotePct}%`;
+    $('v3' + key).textContent = `${res.rise === null ? '—' : (res.rise > 0 ? '+' : '') + res.rise + ' dB'} · heard as a note ${res.heardAsNotePct}%`;
     $('v3' + key).className = res.heardAsNotePct > 20 ? 'bad' : 'ok';
     st.stream.getTracks().forEach(t => t.stop()); st.src.disconnect();
     await new Promise(r => setTimeout(r, 500));
