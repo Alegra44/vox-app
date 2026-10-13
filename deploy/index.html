@@ -1994,21 +1994,21 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <!-- The coach sentence: no card, no eyebrow; shown only when renderProactiveInsight has something to say -->
     <div class="home-coach" id="proactiveInsightCard" style="display:none;">
-      <div class="step-label" data-i18n="home_proactive_eyebrow" hidden>💡 I noticed something</div>
+      <div class="step-label" data-i18n="home_proactive_eyebrow" hidden>I noticed something</div>
       <p class="hl-coach" id="proactiveInsightText"></p>
     </div>
 
     <!-- Signed-out state (takes the focus block's place) -->
     <div class="home-hero hl-raised" id="homeSignedOutCard" style="display:none;">
       <div class="step-label hl-label" data-i18n="home_signedout_eyebrow">Welcome</div>
-      <h2 class="hl-h2" data-i18n="home_signedout_title">Create a free account to get today's real mission</h2>
-      <p class="home-hero-body" data-i18n="home_signedout_desc">Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.</p>
+      <h2 class="hl-h2" data-i18n="home_signedout_title">Create a free account to get today's focus</h2>
+      <p class="home-hero-body" data-i18n="home_signedout_desc">Everything on this screen comes from your own scores, so there's nothing to show until you have a few.</p>
       <button class="hl-btn hl-btn--ink hl-btn--block" id="homeSignInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
     </div>
 
     <!-- Trial complete state (takes the focus block's place) -->
     <div class="home-hero hl-raised" id="homeTrialCompleteCard" style="display:none;">
-      <div class="step-label hl-label" data-i18n="home_trialcomplete_eyebrow">Your 21-Day Journey is complete 🎤</div>
+      <div class="step-label hl-label" data-i18n="home_trialcomplete_eyebrow">Your 21-Day Journey is complete</div>
       <h2 class="hl-h2" data-i18n="home_trialcomplete_title">You've built a foundation. Your next chapter is waiting.</h2>
       <p class="home-hero-body" data-i18n="home_trialcomplete_desc">Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.</p>
       <button class="hl-btn hl-btn--ink hl-btn--block" id="homeChoosePlanBtn" data-i18n="home_trialcomplete_btn">Choose your plan</button>
@@ -2035,7 +2035,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
       </div>
       <div class="mission-text">
-        <div class="mission-eyebrow hl-label" data-i18n="home_mission_eyebrow">Today's Mission</div>
+        <div class="mission-eyebrow hl-label" data-i18n="home_mission_eyebrow">Today's focus</div>
         <h2 class="mission-label hl-h2" id="homeMissionLabel">—</h2>
         <div class="mission-meta hl-meta" id="homeMissionMeta"></div>
         <p class="mission-msg home-hero-body" id="homeMissionMsg"></p>
@@ -2045,8 +2045,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <!-- Today so far: a plain section, only when it shows today -->
     <section class="home-section" id="homeTodaysReportCard" style="display:none;">
-      <div class="step-label hl-label" data-i18n="home_todaysreport_eyebrow">Today's Report</div>
-      <p class="hl-meta home-section-meta" data-i18n="home_todaysreport_desc">Session start vs. right now — real deltas, not a fixed weekly summary.</p>
+      <div class="step-label hl-label" data-i18n="home_todaysreport_eyebrow">Today so far</div>
+      <p class="hl-meta home-section-meta" data-i18n="home_todaysreport_desc">Where you started today, and where you are now.</p>
       <div id="homeTodaysReportRows"></div>
     </section>
 
@@ -2101,7 +2101,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <!-- Today's focus (signed in): the same computeTodaysFocus() as Home, filled by renderCoachHub() -->
     <div class="coach-focus hl-raised" id="coachFocus" hidden>
-      <div class="hl-label" data-i18n="home_mission_eyebrow">Today's Mission</div>
+      <div class="hl-label" data-i18n="home_mission_eyebrow">Today's focus</div>
       <h3 class="hl-h3" id="coachFocusLabel">—</h3>
       <div class="hl-meta" id="coachFocusMeta"></div>
       <button class="hl-btn hl-btn--ink hl-btn--block" id="coachFocusBtn" type="button"><span data-i18n="home_start_training_btn">Start training</span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></button>
@@ -2117,7 +2117,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
       <div class="hub-category-card">
         <div class="hc-title hl-label" data-i18n="hub_train_range_title">Range &amp; Register</div>
-        <div class="hc-desc hl-meta" data-i18n="hub_train_range_desc">Find your range, build chest/head control, and see how it breaks down for real.</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_range_desc">Find your range, build chest/head control, and see where your voice breaks.</div>
         <div class="hc-btn-row hl-list">
           <button class="hl-item coach-row" data-enter-panel="range"><svg class="hl-icon" aria-hidden="true"><use href="#hl-range"/></svg><span class="hl-item-title" data-i18n="tool_range_finder">Range Finder</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="register"><svg class="hl-icon" aria-hidden="true"><use href="#hl-steps"/></svg><span class="hl-item-title" data-i18n="tool_register_coach">Register Coach</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
@@ -2127,14 +2127,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
       <div class="hub-category-card">
         <div class="hc-title hl-label" data-i18n="hub_train_breath_title">Breath &amp; Control</div>
-        <div class="hc-desc hl-meta" data-i18n="hub_train_breath_desc">Real sustain timing and consistency.</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_breath_desc">How long you sustain a note, and how evenly.</div>
         <div class="hc-btn-row hl-list">
           <button class="hl-item coach-row" data-enter-panel="breath"><svg class="hl-icon" aria-hidden="true"><use href="#hl-breath"/></svg><span class="hl-item-title" data-i18n="tool_breath_trainer">Breath Trainer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
       <div class="hub-category-card">
         <div class="hc-title hl-label" data-i18n="hub_train_agility_title">Agility &amp; Ear</div>
-        <div class="hc-desc hl-meta" data-i18n="hub_train_agility_desc">Pitch Match, Interval Match, Scale Run — 3-tier leveled. Plus build your own and test your timing.</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_agility_desc">Pitch Match, Interval Match and Scale Run at three levels, plus your own exercises and timing tests.</div>
         <div class="hc-btn-row hl-list">
           <button class="hl-item coach-row" data-enter-panel="exercises"><svg class="hl-icon" aria-hidden="true"><use href="#hl-score"/></svg><span class="hl-item-title" data-i18n="tool_exercises">Exercises</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="custom"><svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg><span class="hl-item-title" data-i18n="tool_custom_challenge">Custom Challenge</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
@@ -2148,7 +2148,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
       <div class="hub-category-card">
         <div class="hc-title hl-label" data-i18n="hub_train_expression_title">Expression</div>
-        <div class="hc-desc hl-meta" data-i18n="hub_train_expression_desc">Vibrato analysis, live multi-signal feedback, and a real-time visual of your register and stability.</div>
+        <div class="hc-desc hl-meta" data-i18n="hub_train_expression_desc">Vibrato analysis, live feedback on several signals at once, and a live view of your register and stability.</div>
         <div class="hc-btn-row hl-list">
           <button class="hl-item coach-row" data-enter-panel="vibrato"><svg class="hl-icon" aria-hidden="true"><use href="#hl-vibrato"/></svg><span class="hl-item-title" data-i18n="tool_vibrato">Vibrato</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="voicequality"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span class="hl-item-title" data-i18n="tool_voice_quality">Voice Quality</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
@@ -5899,10 +5899,10 @@ const TRANSLATIONS = {
     hub_songs_karaoke_title:'Karaoke Coach', hub_songs_karaoke_desc:'Predictive note display, live Pitch + Timing scoring.',
     hub_songs_emotion_title:'Emotional Singing', hub_songs_emotion_desc:'Pitch and dynamic-contrast, scored separately.',
     hub_train_pitch_title:'Pitch & Tuning', hub_train_pitch_desc:'Live tuner and key-aware transposition.',
-    hub_train_range_title:'Range & Register', hub_train_range_desc:'Find your range, build chest/head control, and see how it breaks down for real.',
-    hub_train_breath_title:'Breath & Control', hub_train_breath_desc:'Real sustain timing and consistency.',
-    hub_train_agility_title:'Agility & Ear', hub_train_agility_desc:'Pitch Match, Interval Match, Scale Run — 3-tier leveled. Plus build your own and test your timing.',
-    hub_train_expression_title:'Expression', hub_train_expression_desc:'Vibrato analysis, live multi-signal feedback, and a real-time visual of your register and stability.',
+    hub_train_range_title:'Range & Register', hub_train_range_desc:"Find your range, build chest/head control, and see where your voice breaks.",
+    hub_train_breath_title:'Breath & Control', hub_train_breath_desc:"How long you sustain a note, and how evenly.",
+    hub_train_agility_title:'Agility & Ear', hub_train_agility_desc:"Pitch Match, Interval Match and Scale Run at three levels, plus your own exercises and timing tests.",
+    hub_train_expression_title:'Expression', hub_train_expression_desc:"Vibrato analysis, live feedback on several signals at once, and a live view of your register and stability.",
     hub_train_style_title:'Style', hub_train_style_desc:'Genre-specific defaults and technique tips.',
     hub_train_warmup_title:'Warmup', hub_train_warmup_desc:'Context-aware guided warmup before you start.',
     hub_open_btn:'Open',
@@ -6872,11 +6872,11 @@ const TRANSLATIONS = {
     home_continue_none:'No sessions yet — today is Day 1.', home_continue_p1:'Last session:', home_continue_p2:'total sessions',
     home_greeting_afternoon:'Good afternoon', home_greeting_evening:'Good evening', home_greeting_morning:'Good morning',
     home_level_p1:'Level', home_levelxp_p2:'XP',
-    home_mission_default_label:'Get your first score', home_mission_default_msg:"Try a Pitch Match or the Range Finder — that's all it takes to start today's real mission.",
+    home_mission_default_label:'Get your first score', home_mission_default_msg:"Try a Pitch Match or the Range Finder — one score is all it takes to set today's focus.",
     home_mission_priority_p1:'You told us', home_mission_priority_p2:'was your priority when you signed up — this is where to start.',
-    home_mission_weakest_msg:'Your lowest real Skill Profile score right now — training this moves your whole profile the most.',
+    home_mission_weakest_msg:"Your lowest Skill Profile score right now — training it moves your whole profile the most.",
     home_signin_streak:'Sign in to start tracking your streak', home_streak_p1:'', home_streak_p2:'-day streak',
-    home_struggle_p1:"Specifically: you've attempted", home_struggle_p2:'real times, averaging', home_struggle_p3:"% — that's the one worth isolating today.",
+    home_struggle_p1:"Specifically: you've attempted", home_struggle_p2:"times, averaging", home_struggle_p3:"% — that's the one worth isolating today.",
     home_trial_sub_champ_p1:'Your Vocal Championship is coming —', home_trial_sub_champ_p2:'days left.',
     home_trial_sub_days_p2:'days left to complete your transformation.', home_trial_sub_remaining_p2:'days remaining',
     home_trial_sub_tomorrow:'Tomorrow, your 21-day Vocal Journey ends.',
@@ -6945,7 +6945,7 @@ const TRANSLATIONS = {
     todaysplan_signin:'Sign in to get a plan built from your actual practice data.', todaysplan_trypitch:'Try a Pitch Match exercise',
     todaysplan_warmup:'Warm up first', todaysplan_workon:'Work on',
     weeklychallenge_done_badge:'DONE', weeklychallenge_signin:"Sign in to track this week's challenge.", weeklychallenge_you:'You',
-    home_voice_eyebrow:'Your Voice', home_mission_eyebrow:"Today's Mission", home_start_training_btn:'Start training',
+    home_voice_eyebrow:'Your Voice', home_mission_eyebrow:"Today's focus", home_start_training_btn:'Start training',
     accountbar_day_p1:'Day', accountbar_trial_ended:'Trial ended',
     pricingstate_21freetitle:'21 days free', pricingstate_21freedesc:'every new account gets full access to the whole app for 21 days. After that, a subscription continues it.',
     pricingstate_activeon_p1:"You're on the", pricingstate_activeon_p2:'plan — full access continues.',
@@ -7101,7 +7101,7 @@ const TRANSLATIONS = {
     unifiedprogress_nodata:'No real data yet in the last 14 days — practice a bit to see your trend here.',
     unifiedprogress_mostimproved:'Most improved recently:', unifiedprogress_points:'points', unifiedprogress_halves:'first half vs second half of this window',
     proactive_climbed_p1:'Your', proactive_climbed_p2:'has climbed from averaging', proactive_to:'to',
-    proactive_climbed_p3:'recently — real, measurable progress, not a guess.',
+    proactive_climbed_p3:"recently, measured across your sessions.",
     proactive_dipped_p2:'has dipped from averaging', proactive_dipped_p3:'recently — worth a focused session if you have time today.',
     genre_pop_name:'Pop', genre_pop_sub:'mixed voice, clean tone',
     genre_pop_tip1:'Favor mixed voice over pure chest for range and stamina.',
@@ -7201,16 +7201,16 @@ const TRANSLATIONS = {
     ex_sing_again:"Sing it again",
     exfeedback_excellent:'Right on it.', exfeedback_close:'Close — nice control.', exfeedback_nearby:'In the neighborhood, but drifting.',
     exfeedback_offtarget:'Off target — try matching the tone before you start singing.',
-    home_signedout_eyebrow:'Welcome', home_signedout_title:"Create a free account to get today's real mission",
-    home_signedout_desc:"Everything on this screen is computed from your actual scores — there's nothing to show until you have a few.",
-    home_trialcomplete_eyebrow:'Your 21-Day Journey is complete 🎤', home_trialcomplete_title:"You've built a foundation. Your next chapter is waiting.",
+    home_signedout_eyebrow:'Welcome', home_signedout_title:"Create a free account to get today's focus",
+    home_signedout_desc:"Everything on this screen comes from your own scores, so there's nothing to show until you have a few.",
+    home_trialcomplete_eyebrow:"Your 21-Day Journey is complete", home_trialcomplete_title:"You've built a foundation. Your next chapter is waiting.",
     home_trialcomplete_desc:'Your progress, achievements, and history are saved — nothing is deleted. Choose a plan to keep training, practicing songs, playing Vocal World, and getting AI-guided coaching.',
     home_trialcomplete_btn:'Choose your plan',
-    home_proactive_eyebrow:'💡 I noticed something', home_todaysreport_eyebrow:"Today's Report",
-    home_todaysreport_desc:'Session start vs. right now — real deltas, not a fixed weekly summary.',
+    home_proactive_eyebrow:"I noticed something", home_todaysreport_eyebrow:"Today so far",
+    home_todaysreport_desc:"Where you started today, and where you are now.",
     home_todaysreport_improved_template:'{label} improved',
-    home_todaysreport_steady_label:'Steady so far today', home_todaysreport_steady_desc:'Real change usually shows up over a few sessions, not one',
-    home_todaysreport_first_label:'First real scores today', home_todaysreport_first_desc:'Nothing to compare against yet',
+    home_todaysreport_steady_label:'Steady so far today', home_todaysreport_steady_desc:"Change usually shows up over a few sessions, not one",
+    home_todaysreport_first_label:"First scores today", home_todaysreport_first_desc:'Nothing to compare against yet',
     home_todaysreport_weakest_label:'Still your weakest',
   },
   fr: {
@@ -7265,10 +7265,10 @@ const TRANSLATIONS = {
     hub_songs_karaoke_title:'Coach Karaoké', hub_songs_karaoke_desc:'Affichage prédictif des notes, notation en direct de la justesse et du rythme.',
     hub_songs_emotion_title:'Chant émotionnel', hub_songs_emotion_desc:'Justesse et contraste dynamique, notés séparément.',
     hub_train_pitch_title:'Justesse et accordage', hub_train_pitch_desc:'Accordeur en direct et transposition adaptée à la tonalité.',
-    hub_train_range_title:'Tessiture et registre', hub_train_range_desc:'Trouvez votre tessiture, développez le contrôle voix de poitrine/tête, et voyez vraiment comment cela se décompose.',
-    hub_train_breath_title:'Souffle et contrôle', hub_train_breath_desc:'Chronométrage et régularité réels de la tenue de souffle.',
-    hub_train_agility_title:'Agilité et oreille', hub_train_agility_desc:'Pitch Match, Interval Match, Scale Run — niveaux à 3 paliers. Plus créez le vôtre et testez votre rythme.',
-    hub_train_expression_title:'Expression', hub_train_expression_desc:"Analyse du vibrato, retour multi-signal en direct, et visuel en temps réel de votre registre et de votre stabilité.",
+    hub_train_range_title:'Tessiture et registre', hub_train_range_desc:"Trouvez votre tessiture, développez le contrôle voix de poitrine/tête, et voyez où votre voix se casse.",
+    hub_train_breath_title:'Souffle et contrôle', hub_train_breath_desc:"Combien de temps vous tenez une note, et avec quelle régularité.",
+    hub_train_agility_title:'Agilité et oreille', hub_train_agility_desc:"Pitch Match, Interval Match et Scale Run sur trois niveaux, plus vos propres exercices et des tests de rythme.",
+    hub_train_expression_title:'Expression', hub_train_expression_desc:"Analyse du vibrato, retour en direct sur plusieurs signaux, et une vue en direct de votre registre et de votre stabilité.",
     hub_train_style_title:'Style', hub_train_style_desc:'Réglages par genre musical et conseils techniques.',
     hub_train_warmup_title:'Échauffement', hub_train_warmup_desc:'Échauffement guidé et adapté au contexte avant de commencer.',
     hub_open_btn:'Ouvrir',
@@ -8238,11 +8238,11 @@ const TRANSLATIONS = {
     home_continue_none:"Aucune session encore — aujourd'hui, c'est le Jour 1.", home_continue_p1:'Dernière session :', home_continue_p2:'sessions au total',
     home_greeting_afternoon:'Bon après-midi', home_greeting_evening:'Bonsoir', home_greeting_morning:'Bonjour',
     home_level_p1:'Niveau', home_levelxp_p2:'XP',
-    home_mission_default_label:'Obtenez votre premier score', home_mission_default_msg:"Essayez un Pitch Match ou le Détecteur de Tessiture — c'est tout ce qu'il faut pour démarrer la vraie mission du jour.",
+    home_mission_default_label:'Obtenez votre premier score', home_mission_default_msg:"Essayez un Pitch Match ou le Détecteur de tessiture — un seul score suffit pour fixer l'objectif du jour.",
     home_mission_priority_p1:'Vous nous avez dit que', home_mission_priority_p2:"était votre priorité lors de votre inscription — c'est par là qu'il faut commencer.",
-    home_mission_weakest_msg:'Votre score de Profil Vocal le plus bas en ce moment — le travailler fait progresser tout votre profil.',
+    home_mission_weakest_msg:"Votre score le plus bas du Profil de compétences en ce moment — le travailler fait le plus progresser tout votre profil.",
     home_signin_streak:'Connectez-vous pour suivre votre série', home_streak_p1:'', home_streak_p2:' jours de série',
-    home_struggle_p1:'Concrètement : vous avez tenté', home_struggle_p2:'fois réellement, avec une moyenne de', home_struggle_p3:"% — c'est celle qu'il vaut la peine d'isoler aujourd'hui.",
+    home_struggle_p1:'Concrètement : vous avez tenté', home_struggle_p2:"fois, avec une moyenne de", home_struggle_p3:"% — c'est celle qu'il vaut la peine d'isoler aujourd'hui.",
     home_trial_sub_champ_p1:'Votre Championnat Vocal approche —', home_trial_sub_champ_p2:'jours restants.',
     home_trial_sub_days_p2:'jours restants pour terminer votre transformation.', home_trial_sub_remaining_p2:'jours restants',
     home_trial_sub_tomorrow:'Demain, votre Voyage Vocal de 21 jours se termine.',
@@ -8311,7 +8311,7 @@ const TRANSLATIONS = {
     todaysplan_signin:'Connectez-vous pour obtenir un plan basé sur vos vraies données de pratique.', todaysplan_trypitch:'Essayez un exercice Pitch Match',
     todaysplan_warmup:"Échauffez-vous d'abord", todaysplan_workon:'Travaillez',
     weeklychallenge_done_badge:'FAIT', weeklychallenge_signin:'Connectez-vous pour suivre le défi de cette semaine.', weeklychallenge_you:'Vous',
-    home_voice_eyebrow:'Votre voix', home_mission_eyebrow:'Mission du jour', home_start_training_btn:"Commencer l'entraînement",
+    home_voice_eyebrow:'Votre voix', home_mission_eyebrow:"Objectif du jour", home_start_training_btn:"Commencer l'entraînement",
     accountbar_day_p1:'Jour', accountbar_trial_ended:'Essai terminé',
     pricingstate_21freetitle:'21 jours gratuits', pricingstate_21freedesc:'chaque nouveau compte bénéficie d\'un accès complet à toute l\'application pendant 21 jours. Ensuite, un abonnement le prolonge.',
     pricingstate_activeon_p1:'Vous êtes sur le forfait', pricingstate_activeon_p2:'— l\'accès complet continue.',
@@ -8467,7 +8467,7 @@ const TRANSLATIONS = {
     unifiedprogress_nodata:'Pas encore de vraies données sur les 14 derniers jours — pratiquez un peu pour voir votre tendance ici.',
     unifiedprogress_mostimproved:'Plus grande amélioration récente :', unifiedprogress_points:'points', unifiedprogress_halves:'première moitié contre seconde moitié de cette fenêtre',
     proactive_climbed_p1:'Votre', proactive_climbed_p2:'est passé d\'une moyenne de', proactive_to:'à',
-    proactive_climbed_p3:'récemment — un progrès réel et mesurable, pas une supposition.',
+    proactive_climbed_p3:"récemment, mesuré sur vos séances.",
     proactive_dipped_p2:'a baissé d\'une moyenne de', proactive_dipped_p3:'récemment — ça vaut une séance ciblée si vous avez le temps aujourd\'hui.',
     genre_pop_name:'Pop', genre_pop_sub:'voix mixte, timbre net',
     genre_pop_tip1:'Privilégiez la voix mixte à la poitrine pure pour la tessiture et l\'endurance.',
@@ -8567,16 +8567,16 @@ const TRANSLATIONS = {
     ex_sing_again:"Rechanter",
     exfeedback_excellent:'En plein dedans.', exfeedback_close:'Proche — bon contrôle.', exfeedback_nearby:'Dans les environs, mais ça dérive.',
     exfeedback_offtarget:'Hors cible — essayez de caler le ton avant de commencer à chanter.',
-    home_signedout_eyebrow:'Bienvenue', home_signedout_title:"Créez un compte gratuit pour obtenir la vraie mission du jour",
-    home_signedout_desc:"Tout sur cet écran est calculé à partir de vos scores réels — il n'y a rien à montrer tant que vous n'en avez pas quelques-uns.",
-    home_trialcomplete_eyebrow:'Votre parcours de 21 jours est terminé 🎤', home_trialcomplete_title:"Vous avez posé des bases. Votre prochain chapitre vous attend.",
+    home_signedout_eyebrow:'Bienvenue', home_signedout_title:"Créez un compte gratuit pour voir votre objectif du jour",
+    home_signedout_desc:"Tout ce qui s'affiche ici vient de vos propres scores : il n'y a rien à montrer tant que vous n'en avez pas quelques-uns.",
+    home_trialcomplete_eyebrow:"Votre parcours de 21 jours est terminé", home_trialcomplete_title:"Vous avez posé des bases. Votre prochain chapitre vous attend.",
     home_trialcomplete_desc:"Votre progression, vos succès et votre historique sont sauvegardés — rien n'est supprimé. Choisissez un forfait pour continuer à vous entraîner, pratiquer des chansons, jouer dans le Monde Vocal et bénéficier d'un coaching guidé par IA.",
     home_trialcomplete_btn:'Choisir votre forfait',
-    home_proactive_eyebrow:"💡 J'ai remarqué quelque chose", home_todaysreport_eyebrow:"Rapport du jour",
-    home_todaysreport_desc:"Début de session vs. maintenant — de vrais écarts, pas un résumé hebdomadaire figé.",
+    home_proactive_eyebrow:"J'ai remarqué quelque chose", home_todaysreport_eyebrow:"Aujourd'hui, pour l'instant",
+    home_todaysreport_desc:"Où vous en étiez au début de la journée, et où vous en êtes maintenant.",
     home_todaysreport_improved_template:'{label} amélioré',
-    home_todaysreport_steady_label:"Stable pour l'instant aujourd'hui", home_todaysreport_steady_desc:"Un vrai changement se voit généralement sur plusieurs séances, pas une seule",
-    home_todaysreport_first_label:"Premiers vrais scores aujourd'hui", home_todaysreport_first_desc:'Rien à comparer pour le moment',
+    home_todaysreport_steady_label:"Stable pour l'instant aujourd'hui", home_todaysreport_steady_desc:"Un changement se voit généralement sur plusieurs séances, pas une seule",
+    home_todaysreport_first_label:"Premiers scores aujourd'hui", home_todaysreport_first_desc:'Rien à comparer pour le moment',
     home_todaysreport_weakest_label:'Toujours votre point faible',
   },
   es: {
@@ -8631,10 +8631,10 @@ const TRANSLATIONS = {
     hub_songs_karaoke_title:'Coach de Karaoke', hub_songs_karaoke_desc:'Visualización predictiva de notas, puntuación en vivo de afinación y ritmo.',
     hub_songs_emotion_title:'Canto emocional', hub_songs_emotion_desc:'Afinación y contraste dinámico, puntuados por separado.',
     hub_train_pitch_title:'Afinación y Tono', hub_train_pitch_desc:'Afinador en vivo y transposición según la tonalidad.',
-    hub_train_range_title:'Rango y Registro', hub_train_range_desc:'Encuentra tu rango, desarrolla control de pecho/cabeza, y ve realmente cómo se desglosa.',
-    hub_train_breath_title:'Respiración y Control', hub_train_breath_desc:'Cronometraje real y constancia de la sostenida.',
-    hub_train_agility_title:'Agilidad y Oído', hub_train_agility_desc:'Pitch Match, Interval Match, Scale Run — con 3 niveles. Además crea el tuyo propio y prueba tu ritmo.',
-    hub_train_expression_title:'Expresión', hub_train_expression_desc:'Análisis de vibrato, retroalimentación multi-señal en vivo, y un visual en tiempo real de tu registro y estabilidad.',
+    hub_train_range_title:'Rango y Registro', hub_train_range_desc:"Encuentra tu rango, desarrolla control de pecho/cabeza, y ve dónde se quiebra tu voz.",
+    hub_train_breath_title:'Respiración y Control', hub_train_breath_desc:"Cuánto tiempo sostienes una nota, y con qué constancia.",
+    hub_train_agility_title:'Agilidad y Oído', hub_train_agility_desc:"Pitch Match, Interval Match y Scale Run en tres niveles, además de tus propios ejercicios y pruebas de ritmo.",
+    hub_train_expression_title:'Expresión', hub_train_expression_desc:"Análisis de vibrato, retroalimentación en vivo de varias señales, y una vista en vivo de tu registro y estabilidad.",
     hub_train_style_title:'Estilo', hub_train_style_desc:'Ajustes específicos por género y consejos técnicos.',
     hub_train_warmup_title:'Calentamiento', hub_train_warmup_desc:'Calentamiento guiado y adaptado al contexto antes de empezar.',
     hub_open_btn:'Abrir',
@@ -9604,11 +9604,11 @@ const TRANSLATIONS = {
     home_continue_none:'Aún sin sesiones — hoy es el Día 1.', home_continue_p1:'Última sesión:', home_continue_p2:'sesiones en total',
     home_greeting_afternoon:'Buenas tardes', home_greeting_evening:'Buenas noches', home_greeting_morning:'Buenos días',
     home_level_p1:'Nivel', home_levelxp_p2:'XP',
-    home_mission_default_label:'Consigue tu primera puntuación', home_mission_default_msg:'Prueba un Pitch Match o el Buscador de Registro — eso es todo lo que hace falta para empezar la misión real de hoy.',
+    home_mission_default_label:'Consigue tu primera puntuación', home_mission_default_msg:"Prueba un Pitch Match o el Buscador de rango — basta una puntuación para fijar tu objetivo de hoy.",
     home_mission_priority_p1:'Nos dijiste que', home_mission_priority_p2:'era tu prioridad al registrarte — por ahí hay que empezar.',
-    home_mission_weakest_msg:'Tu puntuación más baja del Perfil Vocal ahora mismo — entrenarla es lo que más mueve todo tu perfil.',
+    home_mission_weakest_msg:"Tu puntuación más baja del Perfil de habilidades ahora mismo — entrenarla es lo que más mueve todo tu perfil.",
     home_signin_streak:'Inicia sesión para llevar el control de tu racha', home_streak_p1:'', home_streak_p2:' días de racha',
-    home_struggle_p1:'En concreto: has intentado', home_struggle_p2:'veces de verdad, con un promedio de', home_struggle_p3:'% — esa es la que vale la pena aislar hoy.',
+    home_struggle_p1:'En concreto: has intentado', home_struggle_p2:"veces, con un promedio de", home_struggle_p3:'% — esa es la que vale la pena aislar hoy.',
     home_trial_sub_champ_p1:'Tu Campeonato Vocal se acerca —', home_trial_sub_champ_p2:'días restantes.',
     home_trial_sub_days_p2:'días restantes para completar tu transformación.', home_trial_sub_remaining_p2:'días restantes',
     home_trial_sub_tomorrow:'Mañana termina tu Viaje Vocal de 21 días.',
@@ -9677,7 +9677,7 @@ const TRANSLATIONS = {
     todaysplan_signin:'Inicia sesión para obtener un plan basado en tus datos reales de práctica.', todaysplan_trypitch:'Prueba un ejercicio de Pitch Match',
     todaysplan_warmup:'Calienta primero', todaysplan_workon:'Trabaja',
     weeklychallenge_done_badge:'HECHO', weeklychallenge_signin:'Inicia sesión para seguir el reto de esta semana.', weeklychallenge_you:'Tú',
-    home_voice_eyebrow:'Tu voz', home_mission_eyebrow:'Misión de hoy', home_start_training_btn:'Empezar a entrenar',
+    home_voice_eyebrow:'Tu voz', home_mission_eyebrow:"Objetivo de hoy", home_start_training_btn:'Empezar a entrenar',
     accountbar_day_p1:'Día', accountbar_trial_ended:'Prueba terminada',
     pricingstate_21freetitle:'21 días gratis', pricingstate_21freedesc:'cada cuenta nueva obtiene acceso completo a toda la app durante 21 días. Después, una suscripción lo continúa.',
     pricingstate_activeon_p1:'Estás en el plan', pricingstate_activeon_p2:'— el acceso completo continúa.',
@@ -9833,7 +9833,7 @@ const TRANSLATIONS = {
     unifiedprogress_nodata:'Aún no hay datos reales en los últimos 14 días — practica un poco para ver tu tendencia aquí.',
     unifiedprogress_mostimproved:'Más mejorado recientemente:', unifiedprogress_points:'puntos', unifiedprogress_halves:'primera mitad frente a segunda mitad de esta ventana',
     proactive_climbed_p1:'Tu', proactive_climbed_p2:'ha subido de un promedio de', proactive_to:'a',
-    proactive_climbed_p3:'recientemente — progreso real y medible, no una suposición.',
+    proactive_climbed_p3:"recientemente, medido en tus sesiones.",
     proactive_dipped_p2:'ha bajado de un promedio de', proactive_dipped_p3:'recientemente — vale la pena una sesión enfocada si tienes tiempo hoy.',
     genre_pop_name:'Pop', genre_pop_sub:'voz mixta, tono limpio',
     genre_pop_tip1:'Prefiere la voz mixta sobre el pecho puro para rango y resistencia.',
@@ -9933,16 +9933,16 @@ const TRANSLATIONS = {
     ex_sing_again:"Cantar de nuevo",
     exfeedback_excellent:'Justo en el blanco.', exfeedback_close:'Cerca — buen control.', exfeedback_nearby:'Por ahí cerca, pero se desvía.',
     exfeedback_offtarget:'Fuera de objetivo — intenta igualar el tono antes de empezar a cantar.',
-    home_signedout_eyebrow:'Bienvenido', home_signedout_title:"Crea una cuenta gratis para obtener la misión real de hoy",
-    home_signedout_desc:"Todo en esta pantalla se calcula a partir de tus puntuaciones reales — no hay nada que mostrar hasta que tengas algunas.",
-    home_trialcomplete_eyebrow:'Tu Recorrido de 21 días ha terminado 🎤', home_trialcomplete_title:"Has construido una base. Tu próximo capítulo te espera.",
+    home_signedout_eyebrow:'Bienvenido', home_signedout_title:"Crea una cuenta gratis para ver tu objetivo de hoy",
+    home_signedout_desc:"Todo lo que ves aquí sale de tus propias puntuaciones, así que no hay nada que mostrar hasta que tengas algunas.",
+    home_trialcomplete_eyebrow:"Tu Recorrido de 21 días ha terminado", home_trialcomplete_title:"Has construido una base. Tu próximo capítulo te espera.",
     home_trialcomplete_desc:'Tu progreso, logros e historial están guardados — no se elimina nada. Elige un plan para seguir entrenando, practicando canciones, jugando en el Mundo Vocal y recibiendo coaching guiado por IA.',
     home_trialcomplete_btn:'Elige tu plan',
-    home_proactive_eyebrow:'💡 Noté algo', home_todaysreport_eyebrow:'Informe de hoy',
-    home_todaysreport_desc:'Inicio de sesión frente a ahora mismo — deltas reales, no un resumen semanal fijo.',
+    home_proactive_eyebrow:"Noté algo", home_todaysreport_eyebrow:"Hoy hasta ahora",
+    home_todaysreport_desc:"Cómo empezaste hoy y cómo vas ahora.",
     home_todaysreport_improved_template:'{label} mejoró',
-    home_todaysreport_steady_label:'Estable por ahora', home_todaysreport_steady_desc:'Un cambio real suele notarse tras varias sesiones, no una sola',
-    home_todaysreport_first_label:'Primeras puntuaciones reales de hoy', home_todaysreport_first_desc:'Nada con qué comparar todavía',
+    home_todaysreport_steady_label:'Estable por ahora', home_todaysreport_steady_desc:"Un cambio suele notarse tras varias sesiones, no una sola",
+    home_todaysreport_first_label:"Primeras puntuaciones de hoy", home_todaysreport_first_desc:'Nada con qué comparar todavía',
     home_todaysreport_weakest_label:'Sigue siendo tu punto débil',
   },
   tr: {
@@ -9997,10 +9997,10 @@ const TRANSLATIONS = {
     hub_songs_karaoke_title:'Karaoke Koçu', hub_songs_karaoke_desc:'Öngörülü nota gösterimi, canlı Perde + Zamanlama puanlaması.',
     hub_songs_emotion_title:'Duygusal Söyleyiş', hub_songs_emotion_desc:'Perde ve dinamik kontrast, ayrı ayrı puanlanır.',
     hub_train_pitch_title:'Perde ve Akort', hub_train_pitch_desc:'Canlı akort cihazı ve tonaliteye duyarlı transpozisyon.',
-    hub_train_range_title:'Ses Aralığı ve Register', hub_train_range_desc:'Ses aralığınızı bulun, göğüs/baş sesi kontrolü geliştirin ve bunun gerçekte nasıl ayrıştığını görün.',
-    hub_train_breath_title:'Nefes ve Kontrol', hub_train_breath_desc:'Gerçek sürdürme zamanlaması ve tutarlılık.',
-    hub_train_agility_title:'Çeviklik ve Kulak', hub_train_agility_desc:'Pitch Match, Interval Match, Scale Run — 3 seviyeli. Ayrıca kendi egzersizinizi oluşturun ve zamanlamanızı test edin.',
-    hub_train_expression_title:'İfade', hub_train_expression_desc:'Vibrato analizi, canlı çoklu sinyal geri bildirimi ve register ile kararlılığınızın gerçek zamanlı görseli.',
+    hub_train_range_title:'Ses Aralığı ve Register', hub_train_range_desc:"Ses aralığınızı bulun, göğüs/baş sesi kontrolü geliştirin ve sesinizin nerede kırıldığını görün.",
+    hub_train_breath_title:'Nefes ve Kontrol', hub_train_breath_desc:"Bir notayı ne kadar uzun ve ne kadar dengeli tuttuğunuz.",
+    hub_train_agility_title:'Çeviklik ve Kulak', hub_train_agility_desc:"Üç seviyede Pitch Match, Interval Match ve Scale Run; ayrıca kendi egzersizleriniz ve zamanlama testleri.",
+    hub_train_expression_title:'İfade', hub_train_expression_desc:"Vibrato analizi, birkaç sinyal için canlı geri bildirim ve register ile kararlılığınızın canlı görünümü.",
     hub_train_style_title:'Stil', hub_train_style_desc:'Türe özgü varsayılanlar ve teknik ipuçları.',
     hub_train_warmup_title:'Isınma', hub_train_warmup_desc:'Başlamadan önce bağlama duyarlı, rehberli ısınma.',
     hub_open_btn:'Aç',
@@ -10970,11 +10970,11 @@ const TRANSLATIONS = {
     home_continue_none:'Henüz oturum yok — bugün 1. gün.', home_continue_p1:'Son oturum:', home_continue_p2:'toplam oturum',
     home_greeting_afternoon:'Tünaydın', home_greeting_evening:'İyi akşamlar', home_greeting_morning:'Günaydın',
     home_level_p1:'Seviye', home_levelxp_p2:'XP',
-    home_mission_default_label:'İlk skorunuzu alın', home_mission_default_msg:'Bir Pitch Match veya Ses Aralığı Bulucu deneyin — bugünün gerçek görevine başlamak için tek gereken bu.',
+    home_mission_default_label:'İlk skorunuzu alın', home_mission_default_msg:"Bir Pitch Match veya Ses Aralığı Bulucu deneyin — bugünün odağını belirlemek için tek bir puan yeter.",
     home_mission_priority_p1:'Kayıt olurken önceliğinizin', home_mission_priority_p2:'olduğunu söylemiştiniz — başlangıç noktası burası.',
-    home_mission_weakest_msg:'Şu anki en düşük gerçek Perde Profili skorunuz — bunu çalışmak tüm profilinizi en çok ilerletir.',
+    home_mission_weakest_msg:"Şu anki en düşük Yetenek Profili puanınız — bunu çalışmak tüm profilinizi en çok ilerletir.",
     home_signin_streak:'Serinizi takip etmek için oturum açın', home_streak_p1:'', home_streak_p2:' günlük seri',
-    home_struggle_p1:'Somut olarak:', home_struggle_p2:'kez gerçekten denediniz, ortalama', home_struggle_p3:'% — bugün üzerinde durmaya değer olan bu.',
+    home_struggle_p1:'Somut olarak:', home_struggle_p2:"kez denediniz, ortalama", home_struggle_p3:'% — bugün üzerinde durmaya değer olan bu.',
     home_trial_sub_champ_p1:'Vokal Şampiyonanız yaklaşıyor —', home_trial_sub_champ_p2:'gün kaldı.',
     home_trial_sub_days_p2:'gün kaldı, dönüşümünüzü tamamlamak için.', home_trial_sub_remaining_p2:'gün kaldı',
     home_trial_sub_tomorrow:'Yarın 21 günlük Vokal Yolculuğunuz sona eriyor.',
@@ -11043,7 +11043,7 @@ const TRANSLATIONS = {
     todaysplan_signin:'Gerçek pratik verilerinize dayalı bir plan almak için oturum açın.', todaysplan_trypitch:'Bir Pitch Match egzersizi deneyin',
     todaysplan_warmup:'Önce ısının', todaysplan_workon:'Şunun üzerinde çalışın:',
     weeklychallenge_done_badge:'TAMAMLANDI', weeklychallenge_signin:'Bu haftanın meydan okumasını takip etmek için oturum açın.', weeklychallenge_you:'Siz',
-    home_voice_eyebrow:'Sesiniz', home_mission_eyebrow:'Bugünün Görevi', home_start_training_btn:'Antrenmana başla',
+    home_voice_eyebrow:'Sesiniz', home_mission_eyebrow:"Bugünün odağı", home_start_training_btn:'Antrenmana başla',
     accountbar_day_p1:'Gün', accountbar_trial_ended:'Deneme sona erdi',
     pricingstate_21freetitle:'21 gün ücretsiz', pricingstate_21freedesc:'her yeni hesap 21 gün boyunca uygulamanın tamamına tam erişim kazanır. Sonrasında bir abonelik bunu sürdürür.',
     pricingstate_activeon_p1:'Şu anda', pricingstate_activeon_p2:'planındasınız — tam erişim devam ediyor.',
@@ -11199,7 +11199,7 @@ const TRANSLATIONS = {
     unifiedprogress_nodata:'Son 14 günde henüz gerçek veri yok — eğiliminizi burada görmek için biraz pratik yapın.',
     unifiedprogress_mostimproved:'Son zamanlarda en çok gelişen:', unifiedprogress_points:'puan', unifiedprogress_halves:'bu pencerenin ilk yarısı ile ikinci yarısı',
     proactive_climbed_p1:'', proactive_climbed_p2:'ortalaması yükseldi:', proactive_to:'→',
-    proactive_climbed_p3:'yakın zamanda — gerçek, ölçülebilir bir ilerleme, tahmin değil.',
+    proactive_climbed_p3:"yakın zamanda; oturumlarınızdan ölçüldü.",
     proactive_dipped_p2:'ortalaması düştü:', proactive_dipped_p3:'yakın zamanda — bugün vaktiniz varsa odaklanmış bir oturum buna değer.',
     genre_pop_name:'Pop', genre_pop_sub:'karma ses, temiz ton',
     genre_pop_tip1:'Ses aralığı ve dayanıklılık için saf göğüs yerine karma sesi tercih edin.',
@@ -11299,16 +11299,16 @@ const TRANSLATIONS = {
     ex_sing_again:"Tekrar söyle",
     exfeedback_excellent:'Tam isabet.', exfeedback_close:'Yakın — iyi kontrol.', exfeedback_nearby:'Yakınında ama kayıyor.',
     exfeedback_offtarget:'Hedefin dışında — şarkı söylemeye başlamadan önce tonu yakalamayı deneyin.',
-    home_signedout_eyebrow:'Hoş geldiniz', home_signedout_title:"Bugünün gerçek görevini almak için ücretsiz hesap oluşturun",
-    home_signedout_desc:"Bu ekrandaki her şey gerçek skorlarınızdan hesaplanır — birkaç skorunuz olana kadar gösterilecek bir şey yok.",
-    home_trialcomplete_eyebrow:'21 Günlük Yolculuğunuz tamamlandı 🎤', home_trialcomplete_title:"Bir temel kurdunuz. Bir sonraki bölümünüz sizi bekliyor.",
+    home_signedout_eyebrow:'Hoş geldiniz', home_signedout_title:"Bugünün odağını görmek için ücretsiz hesap oluşturun",
+    home_signedout_desc:"Bu ekrandaki her şey kendi puanlarınızdan gelir; birkaç puanınız olana kadar gösterilecek bir şey yok.",
+    home_trialcomplete_eyebrow:"21 Günlük Yolculuğunuz tamamlandı", home_trialcomplete_title:"Bir temel kurdunuz. Bir sonraki bölümünüz sizi bekliyor.",
     home_trialcomplete_desc:'İlerlemeniz, başarılarınız ve geçmişiniz kaydedildi — hiçbir şey silinmedi. Antrenmana, şarkı pratiğine, Vokal Dünyası\'nda oynamaya ve yapay zeka destekli koçluk almaya devam etmek için bir plan seçin.',
     home_trialcomplete_btn:'Planınızı seçin',
-    home_proactive_eyebrow:'💡 Bir şey fark ettim', home_todaysreport_eyebrow:'Bugünün Raporu',
-    home_todaysreport_desc:'Oturum başlangıcı ile şu an — sabit haftalık özet değil, gerçek farklar.',
+    home_proactive_eyebrow:"Bir şey fark ettim", home_todaysreport_eyebrow:"Bugün şu ana kadar",
+    home_todaysreport_desc:"Bugün nereden başladınız, şimdi neredesiniz.",
     home_todaysreport_improved_template:'{label} gelişti',
-    home_todaysreport_steady_label:'Bugün şimdilik sabit', home_todaysreport_steady_desc:'Gerçek değişim genelde bir değil, birkaç oturumda görülür',
-    home_todaysreport_first_label:'Bugünün ilk gerçek puanları', home_todaysreport_first_desc:'Henüz karşılaştıracak bir şey yok',
+    home_todaysreport_steady_label:'Bugün şimdilik sabit', home_todaysreport_steady_desc:"Değişim genelde bir değil, birkaç oturumda görülür",
+    home_todaysreport_first_label:"Bugünün ilk puanları", home_todaysreport_first_desc:'Henüz karşılaştıracak bir şey yok',
     home_todaysreport_weakest_label:'Hâlâ en zayıf yönünüz',
   },
 };
