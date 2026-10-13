@@ -1522,6 +1522,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .home-section{display:flex;flex-direction:column;gap:var(--hl-s3);}
   .home-section[hidden]{display:none;}
   .home-section-meta{margin:0;}
+  #homeTodaysReportRows .record-val.home-report-up{color:var(--hl-ok);}
+  #homeTodaysReportRows .record-val.home-report-weakest{color:var(--hl-ink);}
   .home-sec-link{display:inline-flex;align-items:center;gap:var(--hl-s1);align-self:flex-start;min-height:44px;padding:0;background:none;border:0;cursor:pointer;}
   .home-chev{color:var(--hl-ink-3);}
   .home-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--hl-s4);}
@@ -1567,6 +1569,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-train-hub .coach-groups{display:block;margin-top:var(--hl-s6);}
   #panel-train-hub .coach-groups>.hub-category-card{break-inside:avoid;margin-bottom:var(--hl-s6);}
   @media (min-width:960px){ #panel-train-hub .coach-groups{column-count:2;column-gap:var(--hl-s7);} }
+  @media (min-width:960px){ #panel-train-hub .coach-focus .hl-btn{width:auto;min-width:280px;align-self:flex-start;} } /* Home's button stays full width */
   #panel-train-hub .hub-category-card{background:none;border:0;border-radius:0;padding:0;}
   #panel-train-hub .hub-category-card:hover{transform:none;box-shadow:none;}
   #panel-train-hub .hc-title{font-family:inherit;font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);font-weight:650;
@@ -19043,7 +19046,7 @@ function renderHomeScreen(){
   }
 
   document.getElementById('homeContinueText').textContent = progress.lastPracticeDate
-    ? `${t('home_continue_p1')} ${progress.lastPracticeDate} · ${progress.totalSessions||0} ${t('home_continue_p2')}`
+    ? `${t('home_continue_p1')} ${new Intl.DateTimeFormat(currentLanguage, {day:'numeric', month:'long'}).format(new Date(...progress.lastPracticeDate.split('-').map((v,i)=>i===1?v-1:+v)))} · ${progress.totalSessions||0} ${t('home_continue_p2')}`
     : t('home_continue_none');
 
   const {level}=levelForXp(progress.xp||0);
@@ -19644,7 +19647,7 @@ function renderTodaysReport(){
   let html = '';
   if(improved.length>0){
     html += improved.slice(0,3).map(r=>
-      `<div class="record-row"><span class="record-label">${t('home_todaysreport_improved_template').replace('{label}', r.label)}</span><span class="record-val" style="color:var(--teal);">+${r.delta}%</span></div>`
+      `<div class="record-row"><span class="record-label">${t('home_todaysreport_improved_template').replace('{label}', r.label)}</span><span class="record-val home-report-up">+${r.delta}%</span></div>`
     ).join('');
   } else if(comparable.length>0){
     html += `<div class="record-row"><span class="record-label">${t('home_todaysreport_steady_label')}</span><span class="record-val untracked">${t('home_todaysreport_steady_desc')}</span></div>`;
@@ -19652,7 +19655,7 @@ function renderTodaysReport(){
     html += `<div class="record-row"><span class="record-label">${t('home_todaysreport_first_label')}</span><span class="record-val untracked">${t('home_todaysreport_first_desc')}</span></div>`;
   }
   if(stillWeak){
-    html += `<div class="record-row"><span class="record-label">${t('home_todaysreport_weakest_label')}</span><span class="record-val" style="color:var(--coral);">${stillWeak.label} (${now[stillWeak.key]}%)</span></div>`;
+    html += `<div class="record-row"><span class="record-label">${t('home_todaysreport_weakest_label')}</span><span class="record-val home-report-weakest">${stillWeak.label} (${now[stillWeak.key]}%)</span></div>`;
   }
   document.getElementById('homeTodaysReportRows').innerHTML = html;
 }

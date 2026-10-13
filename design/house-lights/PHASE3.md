@@ -124,3 +124,36 @@ c) shots.js: the same states at 390 and 1280, Light and Dark.
 - No merge and no deploy until I've reviewed.
 
 Rules as before: keep every ID, data-i18n key, data-panel, data-shell and data-enter-panel value, and every protected class and string. No new dependencies. Lights up on both screens.
+
+---
+
+3.1 (after the phase 3 review; the user's text, verbatim)
+
+Phase 3 review: approved, with three small fixes (3.1) before the deploy. Add this as "3.1" at the end of PHASE3.md.
+
+Fixes:
+1. renderTodaysReport: no inline colours.
+   - The "+N%" improvement values use --hl-ok (a class, not the voice colour).
+   - The "Still your weakest" value uses --hl-ink, not red.
+2. #homeContinueText: format lastPracticeDate with Intl.DateTimeFormat(currentLanguage, {day:'numeric', month:'long'}) instead of the raw ISO date. The words stay the same.
+3. #coachFocus at ≥960px: the button is width:auto with min-width 280px, not full width. Home stays as it is.
+
+Checks (one at a time):
+- home.js, contrast.js, copyscan.js
+- batch3c, cv-p9, cv-p10
+- Re-take the Home "today" and "new" states and the Coach tab at 390 and 1280, Light and Dark. Push them to review/phase3.
+
+If all pass, this is my approval to deploy phase 3:
+1. Merge redesign/phase3 into master with --no-ff, run the secret check, push.
+2. From deploy/: npx vercel@62.2.0 deploy --prod --yes --scope alegra1122 (retry once on "Not authorized").
+3. On production, one at a time, paced, cleaning up test accounts:
+   - contrast.js, system.js, house.js
+   - batch1, batch3c, warm-up entries, levelup
+   - cv-p9, cv-p10
+   - shots of Home (all 7 states) and the Coach tab at 390, Light and Dark
+4. If a production check fails where the local run passed, and a re-run shows it isn't a flake, roll back at once to the phase 2 deployment dpl_CLqPg1gb25R563tBixH4WCXsUrNT and report. Don't fix on production.
+5. Housekeeping:
+   - update HANDOFF.md;
+   - delete review/phase3 locally and on the remote;
+   - push the production shots to review/phase3-prod.
+6. Report the deployment id and the production results, then stop. I'll send the phase 4 spec next.
