@@ -1,0 +1,64 @@
+== local deploy/ (production backend)
+
+   signed up voxcoach-gfl-1791751831258@example.com
+-- stopped during the freeze (new account, best 0)
+  ✓ frozen until stopped: score 0, no scroll                                 {"active":true,"off":false,"scroll":0,"score":0,"y":124.85689297085628,"nan":false}
+  ✓ no best saved; XP only +10 (start + end ticks), no new-best bonus        best {} → {}, xp 0 → 10
+  ✓ page errors                                                              none
+
+-- highway
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":124.85689297085628,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.1 s (still flying at 12 s), score 133
+  ✓ then sustained silence: the run ends within 3 s                          0.54 s, final score 140
+  ✓ never NaN                                                                
+
+-- melody
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":230,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.1 s (still flying at 12 s), score 133
+  ✓ then sustained silence: the run ends within 3 s                          0.37 s, final score 139
+  ✓ never NaN                                                                
+
+-- interval
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":130.37037037037038,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.1 s (still flying at 12 s), score 120
+  ✓ then sustained silence: the run ends within 3 s                          0.48 s, final score 126
+  ✓ never NaN                                                                
+
+-- sustain
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":124.85689297085628,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.0 s (still flying at 12 s), score 133
+  ✓ then sustained silence: the run ends within 3 s                          0.54 s, final score 140
+  ✓ never NaN                                                                
+
+-- agility
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":124.85689297085628,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.0 s (still flying at 12 s), score 213
+  ✓ then sustained silence: the run ends within 3 s                          1.13 s, final score 235
+  ✓ never NaN                                                                
+
+-- keyshift
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":103.9240221831844,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.0 s (still flying at 12 s), score 133
+  ✓ then sustained silence: the run ends within 3 s                          0.54 s, final score 140
+  ✓ never NaN                                                                
+
+-- memory
+  ✓ 3 s before the first note: frozen, no score, still running, hint drawn   {"active":true,"off":false,"scroll":0,"score":0,"y":230,"nan":false,"hinted":true}
+  ✓ singing along: takes off and flies (not out at take-off)                 12.0 s (still flying at 12 s), score 126
+  ✓ then sustained silence: the run ends within 3 s                          0.43 s, final score 132
+  ✓ never NaN                                                                
+  ✓ page errors                                                              none
+
+-- the take-off hint in every language
+  ✓ fr: "Chantez pour décoller"                                              drawn: ["Chantez pour décoller"]
+  ✓ es: "Canta para despegar"                                                drawn: ["Canta para despegar"]
+  ✓ tr: "Havalanmak için söyleyin"                                           drawn: ["Havalanmak için söyleyin"]
+  ✓ en: "Sing to take off"                                                   drawn: ["Sing to take off"]
+  ✓ page errors                                                              none
+
+-- the account
+  ✓ saved glider best = the highest finished score                           235 vs 235
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-gfl-1791751831258@example.com
+
+38 passed, 0 failed

@@ -24,6 +24,7 @@ const SEEDS = 200, FROZEN = 600, FLY = 1800, SILENT_MAX = 180, PINNED = 20000;
 const SETUP = () => {
   // the stand-ins: no mic, no paywall, no account side effects, one frame per call
   requireProFeature = () => true; initAudio = async () => true; vlSidecar = () => {}; recordActivity = () => {};
+  if (typeof houseSession === 'function') houseSession = () => {}; // the house lights (phase 2) run their own rAF loop, which this one-slot stand-in can't hold; the glider has no stage
   analyser = { getFloatTimeDomainData() {} }; audioCtx = { sampleRate: 48000 }; dataArray = new Float32Array(2048);
   window.__rafQ = null; requestAnimationFrame = f => { __rafQ = f; return 1; }; cancelAnimationFrame = () => { __rafQ = null; };
   window.__sing = () => -1; autoCorrelate = () => __sing();

@@ -7,6 +7,12 @@
 // Then contact sheets, one per hub group: each row is 390 Light | 390 Dark | 1280 Light | 1280 Dark (signed in).
 // Usage: node scripts/design-verify/shots.js [--base <git ref>] [--out <dir>]   (default out: <tmp>/voxcoach-shots-<ref>)
 //   [--panels home,train-hub,…] [--sizes 390] [--no-extras]: a subset (e.g. on production, with DV_URL set)
+//   Phase 2 (PHASE2.md §1c, §4): the singing states with the fake mic (stage.js), signed in, at every size and theme:
+//   Tuner idle / live locked / live unlocked / result, Pitch Match idle / the reference playing / live / result heard /
+//   result with no voice, a Breath hold (not staged), the warm-up overlay; and two motion sequences at 390 Light, frames
+//   0, 80, 160, 320, 480, 640, 900 and 1300 ms after the Tuner starts and after it stops (each file named by the
+//   measured time). Contact sheets: sheets/states.jpg and sheets/motion.jpg.
+//   [--no-states] skips them; [--states-only] takes only them.
 const path = require('path'), fs = require('fs'), os = require('os');
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -16,6 +22,10 @@ const THEMES = BASE ? ['dark'] : ['light', 'dark'];
 const ALL_SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 800 } };
 const SIZES = Object.fromEntries(Object.entries(ALL_SIZES).filter(([w]) => !arg('--sizes') || arg('--sizes').split(',').includes(w)));
 const ONLY_PANELS = arg('--panels') ? arg('--panels').split(',') : null, EXTRAS = !process.argv.includes('--no-extras');
+const STATES = !process.argv.includes('--no-states'), STATES_ONLY = process.argv.includes('--states-only');
+const S = require('./stage');
+const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
+const MOTION_MS = [0, 80, 160, 320, 480, 640, 900, 1300];
 const Q = { type: 'jpeg', quality: 85 };
 const log = [];
 const note = s => { console.log('  ' + s); log.push(s); };
@@ -105,12 +115,47 @@ async function extras(b, dir, storageState) {
   }
 }
 
+async function stateShots(dir, state) {
+  S.ensureStimuli();
+  for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) for (const stim of Object.keys(S.STATE_STIM)) {
+    const b = await S.launchMic(S.STIM[stim]);
+    try {
+      const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state });
+      if (!await page.evaluate(() => typeof houseSession === 'function')) { note('states: no lighting engine on this build'); return; }
+      const d = path.join(OUT, 'states', `${w}-${theme}`); fs.mkdirSync(d, { recursive: true });
+      await S.runStates(page, stim, async name => { await page.screenshot({ path: path.join(d, `${name}.jpg`), ...Q }); });
+    } finally { await b.close(); }
+    console.log(`   states · ${w} · ${theme} · ${stim}`);
+  }
+  // the motion: frames after the Tuner starts and after it stops, 390 Light
+  const b = await S.launchMic(S.STIM.steady);
+  try {
+    const { page } = await C.openPage(b, { dir, theme: 'light', viewport: SIZES[390] || { width: 390, height: 844 }, storageState: state });
+    await C.clearOverlays(page); await S.warmMic(page);
+    await C.showPanel(page, 'tuner'); await C.clearOverlays(page);
+    const d = path.join(OUT, 'motion'); fs.mkdirSync(d, { recursive: true });
+    const frames = async (which, click) => {
+      const t0 = Date.now(); await click(page);
+      for (const ms of MOTION_MS) {
+        const wait = t0 + ms - Date.now(); if (wait > 0) await C.sleep(wait);
+        const at = Date.now() - t0;
+        await page.screenshot({ path: path.join(d, `${which}-${String(ms).padStart(4, '0')}.jpg`), ...Q });
+        note(`motion ${which} ${ms} ms: taken at ${at} ms, house ${await page.evaluate(() => document.body.dataset.house)}`);
+      }
+    };
+    await frames('start', p => p.evaluate(() => document.getElementById('micBtn').click())); // the panel is open: the click alone
+    await page.waitForFunction(() => document.getElementById('centsDisplay').textContent === 'In tune', null, { timeout: 6000 }).catch(() => {});
+    await C.sleep(800);
+    await frames('stop', S.stopTuner);
+  } finally { await b.close(); }
+}
+
 async function contactSheets(b, groups) {
   const d = path.join(OUT, 'sheets'); fs.mkdirSync(d, { recursive: true });
   const cols = ['390-light', '390-dark', '1280-light', '1280-dark'].filter(c => THEMES.includes(c.split('-')[1]) && SIZES[c.split('-')[0]]);
   const page = await (await b.newContext({ viewport: { width: 1800, height: 1000 } })).newPage();
   for (const [group, all] of Object.entries(groups)) {
-    const keys = all.filter(k => !ONLY_PANELS || ONLY_PANELS.includes(k)); if (!keys.length) continue;
+    const keys = all.filter(k => !ONLY_PANELS || ONLY_PANELS.includes(k)); if (!keys.length || STATES_ONLY) continue;
     const rows = keys.map(k => `<tr><th>${k}</th>${cols.map(c => {
       const f = path.join(OUT, 'signed-in', c, `${k}.jpg`);
       return `<td>${fs.existsSync(f) ? `<img src="file://${f}" class="w${c.split('-')[0]}">` : '—'}</td>`;
@@ -122,6 +167,23 @@ async function contactSheets(b, groups) {
     await page.goto('file://' + f); await C.sleep(300);
     await page.screenshot({ path: path.join(d, `${group}.jpg`), fullPage: true, ...Q });
     fs.rmSync(f);
+  }
+  const sheet = async (name, title, head, rows) => {
+    const html = `<!doctype html><meta charset="utf-8"><style>body{font:14px system-ui;margin:16px;background:#fff;color:#111}
+      table{border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px;vertical-align:top}th{text-align:left;font-weight:600}
+      img.w390{height:420px}img.w1280{height:300px}</style><h1>${title}</h1><table><tr><th></th>${head.map(c => `<th>${c}</th>`).join('')}</tr>${rows}</table>`;
+    const f = path.join(d, `${name}.html`); fs.writeFileSync(f, html);
+    await page.goto('file://' + f); await C.sleep(300);
+    await page.screenshot({ path: path.join(d, `${name}.jpg`), fullPage: true, ...Q }); fs.rmSync(f);
+  };
+  const img = (f, w) => fs.existsSync(f) ? `<img src="file://${f}" class="w${w}">` : '—';
+  if (fs.existsSync(path.join(OUT, 'states'))) {
+    const sc = cols.filter(c => fs.existsSync(path.join(OUT, 'states', c)));
+    await sheet('states', 'singing states (signed in)', sc, STATE_ORDER.map(n => `<tr><th>${n}</th>${sc.map(c => `<td>${img(path.join(OUT, 'states', c, n + '.jpg'), c.split('-')[0])}</td>`).join('')}</tr>`).join(''));
+  }
+  if (fs.existsSync(path.join(OUT, 'motion'))) {
+    await sheet('motion', 'motion, 390 Light (ms after the click)', MOTION_MS.map(String),
+      ['start', 'stop'].map(w => `<tr><th>${w}</th>${MOTION_MS.map(ms => `<td>${img(path.join(OUT, 'motion', `${w}-${String(ms).padStart(4, '0')}.jpg`), '390')}</td>`).join('')}</tr>`).join(''));
   }
 }
 
@@ -142,9 +204,12 @@ async function contactSheets(b, groups) {
       return g;
     });
     const state = await ctx.storageState(); await ctx.close();
-    await shotPanels(b, dir, 'signed-in', state);
-    await shotPanels(b, dir, 'signed-out', undefined);
-    if (EXTRAS) await extras(b, dir, state);
+    if (!STATES_ONLY) {
+      await shotPanels(b, dir, 'signed-in', state);
+      await shotPanels(b, dir, 'signed-out', undefined);
+      if (EXTRAS) await extras(b, dir, state);
+    }
+    if (STATES) await stateShots(dir, state);
     await contactSheets(b, groups);
     fs.writeFileSync(path.join(OUT, 'notes.txt'), log.join('\n') + '\n');
     console.log(`done: ${OUT}`);

@@ -1,0 +1,126 @@
+== house · branch (working copy)
+
+-- light · 390px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 667 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 269 ms · dim again in 284 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1274 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              941 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"84% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #F2F3EF, #F2F3EF → #F2F3EF, #F2F3EF
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              355 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 19 cents flat | 15 cents flat | 10 cents flat | 14 cents flat | 18 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              38 of 111 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 971 ms · result true · trace true · 98%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  98%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          58 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          35 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             615 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- light · 1280px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 660 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 267 ms · dim again in 281 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1265 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              955 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"83% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #F2F3EF, #F2F3EF → #F2F3EF, #F2F3EF
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              349 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 20 cents flat | 14 cents flat | 9 cents flat | 13 cents flat | 19 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              38 of 110 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 935 ms · result true · trace true · 98%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  98%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          58 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          35 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             614 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- dark · 390px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 658 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 270 ms · dim again in 283 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1265 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              944 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"84% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #16181C, #16181C → #16181C, #16181C
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              350 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 18 cents flat | 13 cents flat | 8 cents flat | 14 cents flat | 6 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              35 of 111 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 939 ms · result true · trace true · 98%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  98%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          57 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          35 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             614 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- dark · 1280px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 666 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 270 ms · dim again in 283 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1273 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              954 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"84% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #16181C, #16181C → #16181C, #16181C
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              351 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 86 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 20 cents flat | 14 cents flat | 9 cents flat | 13 cents flat | 19 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              37 of 111 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 937 ms · result true · trace true · 98%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  98%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Breath hold: data-house="up" throughout, nothing staged                  37 samples: up
+  ✓ 6 Interval Match take: data-house="up" throughout, nothing staged          58 samples: up
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          34 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             630 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- sharp stimulus · light · 390px
+  ✓ 5 sharp: #pitchCentsRead reads pm_live_sharp with a number                 42 cents sharp | 34 cents sharp | 43 cents sharp | 47 cents sharp | 28 cents sharp | 26 cents sharp
+  ✓ 5 sharp: #pitchTargetNote never gets .pm-locked                            0 of 85 samples locked
+  ✓ 5 sharp: no console errors during the take                                 none
+
+111 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvh-1791814133527@example.com
