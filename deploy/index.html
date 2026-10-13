@@ -18825,6 +18825,47 @@ function updateShellTopbar(){
 
 document.getElementById('homeSignInBtn')?.addEventListener('click', openAuthModal);
 
+// Today's focus (Home's mission and the Coach tab's focus block): the weakest scored skill, else the onboarding
+// priority, else the default; plus the struggling-note sentence. Pure: reads profile and progress, changes nothing.
+function computeTodaysFocus(){
+  const scores = computeSkillProfile();
+  const rows=[{key:'pitch',label:t('skill_pitch'),panel:'exercises'},{key:'range',label:t('skill_range'),panel:'range'},{key:'breath',label:t('skill_breath'),panel:'breath'},{key:'agility',label:t('skill_agility'),panel:'exercises'},{key:'expression',label:t('skill_expression'),panel:'emotion'}];
+  const available = rows.filter(r=>scores[r.key]!==null);
+
+  let missionLabel, missionPct, missionMsg, missionPanel;
+  if(available.length===0){
+    const priorityMatch = rows.find(r=>r.key===(profile.onboardingPriority));
+    if(priorityMatch){
+      missionLabel = priorityMatch.label;
+      missionPct = 0;
+      missionMsg = `${t('home_mission_priority_p1')} ${priorityMatch.label} ${t('home_mission_priority_p2')}`;
+      missionPanel = priorityMatch.panel;
+    } else {
+      missionLabel=t('home_mission_default_label');
+      missionPct=0;
+      missionMsg=t('home_mission_default_msg');
+      missionPanel='exercises';
+    }
+  } else {
+    const weakest = available.reduce((a,b)=> scores[a.key]<=scores[b.key] ? a : b);
+    missionLabel=weakest.label;
+    missionPct=scores[weakest.key];
+    missionMsg=t('home_mission_weakest_msg');
+    missionPanel=weakest.panel;
+  }
+
+  if(progress.noteAttemptHistory){
+    const strugglingNotes = Object.entries(progress.noteAttemptHistory)
+      .filter(([midi, rec]) => rec.attempts>=3 && (rec.sumAccuracy/rec.attempts)<65)
+      .map(([midi, rec]) => ({midi:parseInt(midi,10), attempts:rec.attempts, avg:Math.round(rec.sumAccuracy/rec.attempts)}));
+    if(strugglingNotes.length>0){
+      const worst = strugglingNotes.reduce((a,b)=> a.avg<=b.avg ? a : b);
+      missionMsg += ` ${t('home_struggle_p1')} ${noteNameFromMidi(worst.midi)} ${worst.attempts} ${t('home_struggle_p2')} ${worst.avg}${t('home_struggle_p3')}`;
+    }
+  }
+
+  return {label:missionLabel, pct:missionPct, hasScore:available.length>0, msg:missionMsg, panel:missionPanel};
+}
 function renderHomeScreen(){
   updateShellTopbar();
   if(typeof renderProactiveInsight==='function') renderProactiveInsight();
@@ -18883,44 +18924,13 @@ function renderHomeScreen(){
   const rows=[{key:'pitch',label:t('skill_pitch'),panel:'exercises'},{key:'range',label:t('skill_range'),panel:'range'},{key:'breath',label:t('skill_breath'),panel:'breath'},{key:'agility',label:t('skill_agility'),panel:'exercises'},{key:'expression',label:t('skill_expression'),panel:'emotion'}];
   const available = rows.filter(r=>scores[r.key]!==null);
 
-  let missionLabel, missionPct, missionMsg, missionPanel;
-  if(available.length===0){
-    const priorityMatch = rows.find(r=>r.key===(profile.onboardingPriority));
-    if(priorityMatch){
-      missionLabel = priorityMatch.label;
-      missionPct = 0;
-      missionMsg = `${t('home_mission_priority_p1')} ${priorityMatch.label} ${t('home_mission_priority_p2')}`;
-      missionPanel = priorityMatch.panel;
-    } else {
-      missionLabel=t('home_mission_default_label');
-      missionPct=0;
-      missionMsg=t('home_mission_default_msg');
-      missionPanel='exercises';
-    }
-  } else {
-    const weakest = available.reduce((a,b)=> scores[a.key]<=scores[b.key] ? a : b);
-    missionLabel=weakest.label;
-    missionPct=scores[weakest.key];
-    missionMsg=t('home_mission_weakest_msg');
-    missionPanel=weakest.panel;
-  }
-
-  if(progress.noteAttemptHistory){
-    const strugglingNotes = Object.entries(progress.noteAttemptHistory)
-      .filter(([midi, rec]) => rec.attempts>=3 && (rec.sumAccuracy/rec.attempts)<65)
-      .map(([midi, rec]) => ({midi:parseInt(midi,10), attempts:rec.attempts, avg:Math.round(rec.sumAccuracy/rec.attempts)}));
-    if(strugglingNotes.length>0){
-      const worst = strugglingNotes.reduce((a,b)=> a.avg<=b.avg ? a : b);
-      missionMsg += ` ${t('home_struggle_p1')} ${noteNameFromMidi(worst.midi)} ${worst.attempts} ${t('home_struggle_p2')} ${worst.avg}${t('home_struggle_p3')}`;
-    }
-  }
-
-  document.getElementById('homeMissionLabel').textContent=missionLabel;
-  document.getElementById('homeMissionPct').textContent=missionPct+'%';
-  document.getElementById('homeMissionMsg').textContent=missionMsg;
-  renderResonanceRing(document.getElementById('homeMissionRing'), missionPct, 'var(--brass)');
+  const focus = computeTodaysFocus();
+  document.getElementById('homeMissionLabel').textContent=focus.label;
+  document.getElementById('homeMissionPct').textContent=focus.pct+'%';
+  document.getElementById('homeMissionMsg').textContent=focus.msg;
+  renderResonanceRing(document.getElementById('homeMissionRing'), focus.pct, 'var(--brass)');
   const ctaBtn=document.getElementById('homeMissionCta');
-  ctaBtn.onclick=()=>enterPanel(missionPanel);
+  ctaBtn.onclick=()=>enterPanel(focus.panel);
 
   const {level: identityLevel, name: identityName} = levelForXp(progress.xp||0);
   document.getElementById('homeVoiceIdentity').textContent = `${t('home_level_p1')} ${identityLevel} — ${identityName}`;
