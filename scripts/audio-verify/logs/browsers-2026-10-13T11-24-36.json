@@ -1,0 +1,599 @@
+[
+ {
+  "engine": "chromium",
+  "version": "153.0.8010.12",
+  "second": "register",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -27.5,
+     "peak": 0.1889
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -23.2,
+     "peak": 0.1997
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -11.6,
+     "peak": 0.5993
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -30.9,
+     "peak": 0.1114
+    }
+   }
+  }
+ },
+ {
+  "engine": "chromium",
+  "version": "153.0.8010.12",
+  "second": "same",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -27.7,
+     "peak": 0.1889
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -23.2,
+     "peak": 0.1996
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -23.2,
+     "peak": 0.1996
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -30.8,
+     "peak": 0.1114
+    }
+   }
+  }
+ },
+ {
+  "engine": "chromium",
+  "version": "153.0.8010.12",
+  "second": "reverse",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -12.9,
+     "peak": 0.5626
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -12.1,
+     "peak": 0.5635
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -12.1,
+     "peak": 0.5635
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -14.5,
+     "peak": 0.514
+    }
+   }
+  }
+ },
+ {
+  "engine": "webkit",
+  "version": "26.6",
+  "second": "register",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -17.9,
+     "peak": 0.5988
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -19.8,
+     "peak": 0.5988
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -19.8,
+     "peak": 0.5988
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -18.1,
+     "peak": 0.5987
+    }
+   }
+  }
+ },
+ {
+  "engine": "webkit",
+  "version": "26.6",
+  "second": "same",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -19.8,
+     "peak": 0.5978
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -20.1,
+     "peak": 0.5988
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -20,
+     "peak": 0.5988
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -16.9,
+     "peak": 0.5988
+    }
+   }
+  }
+ },
+ {
+  "engine": "webkit",
+  "version": "26.6",
+  "second": "reverse",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -17.8,
+     "peak": 0.5988
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -19.3,
+     "peak": 0.5988
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -19.3,
+     "peak": 0.5988
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Mock audio device 1",
+     "settings": {
+      "ec": true
+     },
+     "dbfs": -19.7,
+     "peak": 0.5987
+    }
+   }
+  }
+ },
+ {
+  "engine": "firefox",
+  "version": "155.0",
+  "second": "register",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   }
+  }
+ },
+ {
+  "engine": "firefox",
+  "version": "155.0",
+  "second": "same",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   }
+  }
+ },
+ {
+  "engine": "firefox",
+  "version": "155.0",
+  "second": "reverse",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   }
+  }
+ }
+]

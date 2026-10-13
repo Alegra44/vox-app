@@ -1,0 +1,294 @@
+[
+ {
+  "engine": "chromium",
+  "version": "153.0.8010.12",
+  "second": "register",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -27.4,
+     "peak": 0.1873
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -23.4,
+     "peak": 0.1988
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -11.6,
+     "peak": 0.5993
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -31.1,
+     "peak": 0.1135
+    }
+   }
+  }
+ },
+ {
+  "engine": "chromium",
+  "version": "153.0.8010.12",
+  "second": "same",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -27.6,
+     "peak": 0.1889
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -23.2,
+     "peak": 0.1997
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -23.2,
+     "peak": 0.1997
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Fake Default Audio Input",
+     "settings": {
+      "ec": true,
+      "ns": true,
+      "agc": true
+     },
+     "dbfs": -30.9,
+     "peak": 0.1114
+    }
+   }
+  }
+ },
+ {
+  "engine": "webkit",
+  "version": "26.6",
+  "second": "register",
+  "r": {
+   "error": "NotAllowedError: The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission."
+  }
+ },
+ {
+  "engine": "webkit",
+  "version": "26.6",
+  "second": "same",
+  "r": {
+   "error": "NotAllowedError: The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission."
+  }
+ },
+ {
+  "engine": "firefox",
+  "version": "155.0",
+  "second": "register",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   }
+  }
+ },
+ {
+  "engine": "firefox",
+  "version": "155.0",
+  "second": "same",
+  "r": {
+   "alone": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "both": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    },
+    "s2": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   },
+   "after": {
+    "s1": {
+     "muted": false,
+     "readyState": "live",
+     "enabled": true,
+     "events": [],
+     "label": "Default Audio Device",
+     "settings": {
+      "ec": false,
+      "ns": false,
+      "agc": false
+     },
+     "dbfs": -23,
+     "peak": 0.1
+    }
+   }
+  }
+ }
+]

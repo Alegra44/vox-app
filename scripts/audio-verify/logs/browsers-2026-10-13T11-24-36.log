@@ -1,0 +1,54 @@
+browsers 2026-10-13T11-24-36  playwright 1.63.0
+
+== chromium 153.0.8010.12
+   shared, then register
+     stream 1 alone          muted false live -27.5 dBFS (ec true ns true agc true)
+     stream 1 with stream 2  muted false live -23.2 dBFS (ec true ns true agc true)
+     stream 2                muted false live -11.6 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -30.9 dBFS (ec true ns true agc true)
+   shared twice
+     stream 1 alone          muted false live -27.7 dBFS (ec true ns true agc true)
+     stream 1 with stream 2  muted false live -23.2 dBFS (ec true ns true agc true)
+     stream 2                muted false live -23.2 dBFS (ec true ns true agc true)
+     stream 1 after 2 stops  muted false live -30.8 dBFS (ec true ns true agc true)
+   register, then shared
+     stream 1 alone          muted false live -12.9 dBFS (ec true ns false agc false)
+     stream 1 with stream 2  muted false live -12.1 dBFS (ec true ns false agc false)
+     stream 2                muted false live -12.1 dBFS (ec true ns false agc false)
+     stream 1 after 2 stops  muted false live -14.5 dBFS (ec true ns false agc false)
+
+== webkit 26.6
+   shared, then register
+     stream 1 alone          muted false live -17.9 dBFS (ec true ns undefined agc undefined)
+     stream 1 with stream 2  muted false live -19.8 dBFS (ec true ns undefined agc undefined)
+     stream 2                muted false live -19.8 dBFS (ec true ns undefined agc undefined)
+     stream 1 after 2 stops  muted false live -18.1 dBFS (ec true ns undefined agc undefined)
+   shared twice
+     stream 1 alone          muted false live -19.8 dBFS (ec true ns undefined agc undefined)
+     stream 1 with stream 2  muted false live -20.1 dBFS (ec true ns undefined agc undefined)
+     stream 2                muted false live -20 dBFS (ec true ns undefined agc undefined)
+     stream 1 after 2 stops  muted false live -16.9 dBFS (ec true ns undefined agc undefined)
+   register, then shared
+     stream 1 alone          muted false live -17.8 dBFS (ec true ns undefined agc undefined)
+     stream 1 with stream 2  muted false live -19.3 dBFS (ec true ns undefined agc undefined)
+     stream 2                muted false live -19.3 dBFS (ec true ns undefined agc undefined)
+     stream 1 after 2 stops  muted false live -19.7 dBFS (ec true ns undefined agc undefined)
+
+== firefox 155.0
+   shared, then register
+     stream 1 alone          muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 with stream 2  muted false live -23 dBFS (ec false ns false agc false)
+     stream 2                muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -23 dBFS (ec false ns false agc false)
+   shared twice
+     stream 1 alone          muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 with stream 2  muted false live -23 dBFS (ec false ns false agc false)
+     stream 2                muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -23 dBFS (ec false ns false agc false)
+   register, then shared
+     stream 1 alone          muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 with stream 2  muted false live -23 dBFS (ec false ns false agc false)
+     stream 2                muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -23 dBFS (ec false ns false agc false)
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/browsers-2026-10-13T11-24-36.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/browsers-2026-10-13T11-24-36.json

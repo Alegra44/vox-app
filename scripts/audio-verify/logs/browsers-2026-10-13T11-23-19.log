@@ -1,0 +1,31 @@
+browsers 2026-10-13T11-23-19  playwright 1.63.0
+
+== chromium 153.0.8010.12
+   second = register
+     stream 1 alone          muted false live -27.4 dBFS (ec true ns true agc true)
+     stream 1 with stream 2  muted false live -23.4 dBFS (ec true ns true agc true)
+     stream 2                muted false live -11.6 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -31.1 dBFS (ec true ns true agc true)
+   second = same
+     stream 1 alone          muted false live -27.6 dBFS (ec true ns true agc true)
+     stream 1 with stream 2  muted false live -23.2 dBFS (ec true ns true agc true)
+     stream 2                muted false live -23.2 dBFS (ec true ns true agc true)
+     stream 1 after 2 stops  muted false live -30.9 dBFS (ec true ns true agc true)
+
+== webkit 26.6
+   second = register: ERROR NotAllowedError: The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.
+   second = same: ERROR NotAllowedError: The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.
+
+== firefox 155.0
+   second = register
+     stream 1 alone          muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 with stream 2  muted false live -23 dBFS (ec false ns false agc false)
+     stream 2                muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -23 dBFS (ec false ns false agc false)
+   second = same
+     stream 1 alone          muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 with stream 2  muted false live -23 dBFS (ec false ns false agc false)
+     stream 2                muted false live -23 dBFS (ec false ns false agc false)
+     stream 1 after 2 stops  muted false live -23 dBFS (ec false ns false agc false)
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/browsers-2026-10-13T11-23-19.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/browsers-2026-10-13T11-23-19.json
