@@ -1,0 +1,61 @@
+resumed 13 finished passes from scripts/audio-verify/logs/loopreal-2026-10-13T11-26-47.json
+loopreal 2026-10-13T12-20-54 · real speakers and mic · nobody singing · today: master · sides today, C1, C2, C3, C1+D1, C1+D2, C2+D1, C2+D2, C3+D1, C3+D2 · reps 3 · song hymn, Harmony part Alto, rehearsal part Lead
+
+== rep 2 · C3: opening the page: no answer in 60 s, skipped
+
+== rep 2 · C1+D1 · mic "Default - MacBook Pro Microphone (Built-in)" ec true ns true agc true · room -41.6 dBFS, pitched 22% · output output volume:50, input volume:50, alert volume:100, output muted:false
+   STOPPED: page.evaluate: Target page, context or browser has been closed
+
+== rep 2 · C1+D2: browserContext.newPage: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /Users/alegramusenge/Library/Caches/ms-playwright/chromium-1243/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --no-sandbox --autoplay-policy=no-user-gesture-required --use-fake-ui-for-media-stream --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --user-data-dir=/var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/playwright_chromiumdev_profile-KAkuDc --remote-debugging-pipe --no-startup-window
+<launched> pid=54349
+[pid=54349][err] [54349:5123558:1013/175058.973430:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[pid=54349][err] [54349:5123558:1013/175058.974351:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[pid=54349][err] [54349:5123558:1013/175058.976650:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[pid=54349][err] [54383:5123817:1013/175059.963913:ERROR:sandbox/mac/system_services.cc:31] SetApplicationIsDaemon: Error Domain=NSOSStatusErrorDomain Code=-50 "paramErr: error in user parameter list" (-50)
+[pid=54349][err] [54349:5123558:1013/175123.283509:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: DEPRECATED_ENDPOINT
+[pid=54349] <gracefully close start>, skipped
+
+== rep 2 · C2+D1: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 2 · C2+D2: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 2 · C3+D1: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 2 · C3+D2: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · today: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C1: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C2: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C3: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C1+D1: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C1+D2: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C2+D1: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C2+D2: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C3+D1: browser.newContext: Target page, context or browser has been closed, skipped
+
+== rep 3 · C3+D2: browser.newContext: Target page, context or browser has been closed, skipped
+
+== phantoms, nobody singing (median over reps; [each rep])
+today   HA guide landed 6 [6/4] · HA guide scored 8 [8/7] · HA distr. scored 4 [2/4] · Scale heard 3 [0/3] · Custom heard 2 [1/2] · Rift heard 1 [0/1] · PM heard 2 [1/2] · Entrances 8 [8/4] · HM1 held 1 [1/1] · HM6 held 3 [1/3] · room -54 dBFS
+C1      HA guide landed 6 [5/6] · HA guide scored 6 [6/6] · HA distr. scored 8 [8/6] · Scale heard 7 [3/7] · Custom heard 5 [4/5] · Rift heard 5 [5/3] · PM heard 3 [3/3] · Entrances 5 [5/4] · HM1 held 2 [2/2] · HM6 held 1 [1/1] · room -50.8 dBFS
+C2      HA guide landed 5 [2/5] · HA guide scored 5 [4/5] · HA distr. scored 6 [6/5] · Scale heard 1 [0/1] · Custom heard 1 [1/1] · Rift heard 1 [1/0] · PM heard 0 [0/0] · Entrances 7 [7/4] · HM1 held 3 [3/3] · HM6 held 3 [0/3] · room -54.7 dBFS
+C3      HA guide landed 3 [3] · HA guide scored 3 [3] · HA distr. scored 5 [5] · Scale heard 0 [0] · Custom heard 0 [0] · Rift heard 0 [0] · PM heard 0 [0] · Entrances 4 [4] · HM1 held 4 [4] · HM6 held 1 [1] · room -54.7 dBFS
+C1+D1   HA guide landed 4 [4/] · HA guide scored 7 [7/] · HA distr. scored 5 [5/] · Scale heard 4 [4/] · Custom heard 2 [2/] · Rift heard 2 [2/] · PM heard 2 [2/] · Entrances 3 [3/] · HM1 held 2 [2/] · HM6 held 1 [1/] · room -41.6 dBFS
+C1+D2   HA guide landed 5 [5] · HA guide scored 6 [6] · HA distr. scored 7 [7] · Scale heard 0 [0] · Custom heard 3 [3] · Rift heard 1 [1] · PM heard 1 [1] · Entrances 4 [4] · HM1 held 0 [0] · HM6 held 2 [2] · room -32.8 dBFS
+C2+D1   HA guide landed 6 [6] · HA guide scored 6 [6] · HA distr. scored 6 [6] · Scale heard 0 [0] · Custom heard 1 [1] · Rift heard 2 [2] · PM heard 0 [0] · Entrances 5 [5] · HM1 held 1 [1] · HM6 held 0 [0] · room -54.9 dBFS
+C2+D2   HA guide landed 5 [5] · HA guide scored 5 [5] · HA distr. scored 6 [6] · Scale heard 1 [1] · Custom heard 0 [0] · Rift heard 0 [0] · PM heard 0 [0] · Entrances 6 [6] · HM1 held 3 [3] · HM6 held 0 [0] · room -45.1 dBFS
+C3+D1   HA guide landed 6 [6] · HA guide scored 6 [6] · HA distr. scored 5 [5] · Scale heard 0 [0] · Custom heard 0 [0] · Rift heard 0 [0] · PM heard 0 [0] · Entrances 4 [4] · HM1 held 2 [2] · HM6 held 1 [1] · room -59.9 dBFS
+C3+D2   HA guide landed 6 [6] · HA guide scored 7 [7] · HA distr. scored 4 [4] · Scale heard 1 [1] · Custom heard 1 [1] · Rift heard 0 [0] · PM heard 0 [0] · Entrances 3 [3] · HM1 held 1 [1] · HM6 held 1 [1] · room -53.5 dBFS
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/loopreal-2026-10-13T12-20-54.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/loopreal-2026-10-13T12-20-54.json

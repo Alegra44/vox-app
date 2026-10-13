@@ -8,8 +8,10 @@
 // Before every side: the Mac's output volume (osascript) and the room's own level on the mic for 2 s (nothing playing).
 // A phantom: a Harmony Arena note landed (≥ 75) or scored, a Harmony Memory note held, an entrance claimed, a Scale Run /
 // Custom / Rift / Pitch Match step heard.
-// Runs Chromium headed (the full browser, so real audio in and out): a window opens while it runs.
-// Usage: [LR_SIDES=…] [LR_REPS=3] [LR_SCEN=harmony,scale,custom,rift,tt,hm,pm] node scripts/audio-verify/loopreal.js
+// Runs Chromium headed (the full browser, so real audio in and out): a window opens while it runs. Background throttling
+// is off (a covered or minimised window would otherwise stop requestAnimationFrame, which every feature loop runs on),
+// each step has a time limit, and LR_RESUME=<earlier .json> keeps that run's finished passes.
+// Usage: [LR_SIDES=…] [LR_REPS=3] [LR_SCEN=harmony,scale,custom,rift,tt,hm,pm] [LR_RESUME=logs/….json] node scripts/audio-verify/loopreal.js
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup');
 const { execFileSync } = require('child_process');
@@ -108,33 +110,42 @@ const memory = (page, stage) => page.evaluate(async stage => {
 (async () => {
   const srv = require('child_process').spawn('python3', ['-m', 'http.server', '8765'], { cwd: path.join(ROOT, 'deploy'), stdio: 'ignore' });
   await new Promise(r => setTimeout(r, 1200));
-  const b = await chromium.launch({ headless: false, args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream'] });
-  const rows = [];
+  const launch = () => chromium.launch({ headless: false, args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream',
+    '--disable-background-timer-throttling', '--disable-backgrounding-occluded-windows', '--disable-renderer-backgrounding'] });
+  let b = null; // a fresh browser per pass: one browser through ~30 passes stopped answering (2026-10-13)
+  const rows = process.env.LR_RESUME ? JSON.parse(fs.readFileSync(process.env.LR_RESUME)) : [];
+  if (rows.length) log(`resumed ${rows.length} finished passes from ${process.env.LR_RESUME}`);
+  const limit = (p, ms, what) => Promise.race([p, new Promise((_, rej) => setTimeout(() => rej(new Error(`${what}: no answer in ${ms / 1000} s`)), ms))]);
   log(`loopreal ${stamp} · real speakers and mic · nobody singing · today: ${BASE} · sides ${SIDES.join(', ')} · reps ${REPS} · song hymn, Harmony part Alto, rehearsal part Lead`);
   try {
     for (let rep = 1; rep <= REPS; rep++) for (const side of SIDES) {
-      const { ctx, page, errors, room } = await open(b, side), o = { rep, side, room, volume: volume() };
+      if (rows.some(r => r.rep === rep && r.side === side)) continue;
+      if (b) await b.close().catch(() => {}); b = await launch();
+      let opened; try { opened = await limit(open(b, side), 60000, 'opening the page'); } catch (e) { log(`\n== rep ${rep} · ${side}: ${e.message}, skipped`); continue; }
+      const { ctx, page, errors, room } = opened, o = { rep, side, room, volume: volume() };
+      try {
       log(`\n== rep ${rep} · ${side} · mic "${room.label}" ec ${room.ec} ns ${room.ns} agc ${room.agc} · room ${room.dbfs} dBFS, pitched ${room.pitched}% · output ${o.volume}`);
       if (want('harmony')) {
         for (const [k, a] of [['harmonyGuide', { guide: true, distraction: false }], ['harmonyDistraction', { guide: false, distraction: true }]]) {
-          const r = o[k] = await harmony(page, a);
+          const r = o[k] = await limit(harmony(page, a), 120000, k);
           log(`   ${k.padEnd(20)} heard ${r.heard}/${r.total} frames · notes scored ${r.scored} · landed ${r.landed}`);
         }
       }
-      if (want('scale')) { const r = o.scale = await scaleRun(page); log(`   ${'Scale Run pro'.padEnd(20)} steps heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
-      if (want('custom')) { const r = o.custom = await custom(page); log(`   ${'Custom 5 notes'.padEnd(20)} steps heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
-      if (want('rift')) { const r = o.rift = await rift(page); log(`   ${'Pitch Rift ~12 s'.padEnd(20)} rounds heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
-      if (want('pm')) { const r = o.pm = await pitchMatch(page); log(`   ${'Pitch Match ×3'.padEnd(20)} takes heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
-      if (want('tt')) { const r = o.tt = await entrance(page); log(`   ${'Entrance Trainer'.padEnd(20)} entrances ${r.entrances}/${r.n} · bleed hits ${r.bleed}`); }
-      if (want('hm')) for (const st of [0, 5]) { const r = o['hm' + st] = await memory(page, st); log(`   ${`Harmony Memory ${st + 1}`.padEnd(20)} held ${r.held}/${r.n} · frames with a pitch ${r.frames}`); }
+      if (want('scale')) { const r = o.scale = await limit(scaleRun(page), 90000, 'Scale Run'); log(`   ${'Scale Run pro'.padEnd(20)} steps heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
+      if (want('custom')) { const r = o.custom = await limit(custom(page), 90000, 'Custom'); log(`   ${'Custom 5 notes'.padEnd(20)} steps heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
+      if (want('rift')) { const r = o.rift = await limit(rift(page), 60000, 'Rift'); log(`   ${'Pitch Rift ~12 s'.padEnd(20)} rounds heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
+      if (want('pm')) { const r = o.pm = await limit(pitchMatch(page), 60000, 'Pitch Match'); log(`   ${'Pitch Match ×3'.padEnd(20)} takes heard ${r.heard}/${r.steps} · scores ${r.scores.join('/')}`); }
+      if (want('tt')) { const r = o.tt = await limit(entrance(page), 120000, 'Entrance Trainer'); log(`   ${'Entrance Trainer'.padEnd(20)} entrances ${r.entrances}/${r.n} · bleed hits ${r.bleed}`); }
+      if (want('hm')) for (const st of [0, 5]) { const r = o['hm' + st] = await limit(memory(page, st), 120000, 'Harmony Memory ' + (st + 1)); log(`   ${`Harmony Memory ${st + 1}`.padEnd(20)} held ${r.held}/${r.n} · frames with a pitch ${r.frames}`); }
       o.k = await page.evaluate(() => typeof BD === 'object' ? BD.log.map(x => +x.k.toFixed(4)) : null).catch(() => null);
       if (o.k && o.k.length) log(`   calibrated bleed ratio k per session: ${o.k.join(', ')}`);
+      } catch (e) { o.failed = e.message; log(`   STOPPED: ${e.message}`); }
       o.errors = errors; if (errors.length) log(`   page errors: ${errors.slice(0, 2).join(' | ')}`);
       rows.push(o); fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1));
-      await ctx.close();
+      await ctx.close().catch(() => {});
     }
   } catch (e) { log('ERROR ' + (e.stack || e)); process.exitCode = 2; }
-  finally { await b.close().catch(() => {}); srv.kill(); }
+  finally { if (b) await b.close().catch(() => {}); srv.kill(); }
   // phantom totals per side (medians over reps)
   const med = a => { const v = a.filter(x => x != null).sort((x, y) => x - y); return v.length ? v[v.length >> 1] : null; };
   log('\n== phantoms, nobody singing (median over reps; [each rep])');
