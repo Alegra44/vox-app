@@ -28,7 +28,12 @@ const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..'), TMP = path.join(TESTDATA, 'vibfix'), VS = path.join(TESTDATA, 'vocalset');
 fs.mkdirSync(TMP, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
-const PROD = process.env.VF_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
+// VF_MODES=C1,C2,C3 (exp/single-stream, with VF_MODE=regress): instead of one 'after' side, one side per
+// window.__streamMode, each the working tree with that mode set before the page loads; every mode is judged against the
+// same 'before' runs (today), one verdict per mode.
+const MODES = (process.env.VF_MODES || '').split(',').filter(Boolean);
+if (MODES.some(m => !['C1', 'C2', 'C3'].includes(m))) throw new Error(`VF_MODES=${process.env.VF_MODES}: only C1, C2, C3`);
+const PROD = process.env.VF_URL, SIDES = PROD ? ['prod'] : MODES.length ? ['before', ...MODES] : ['before', 'after'];
 const REGRESS = !PROD && process.env.VF_MODE === 'regress', RUNS = REGRESS ? +(process.env.VF_RUNS || 3) : 1;
 if (process.env.VF_MODE && process.env.VF_MODE !== 'regress') throw new Error(`VF_MODE=${process.env.VF_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `vibfix-${PROD ? 'prod' : 'local'}-${stamp}`);
@@ -87,9 +92,10 @@ async function withPage(file, which, fn, attempt = 1) {
   const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${file}`] });
   try {
     const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 }, ...(which === 'prod' && AUTH ? { storageState: AUTH } : {}) });
+    if (MODES.includes(which)) await ctx.addInitScript(m => { window.__streamMode = m; }, which);
     if (which !== 'prod') await ctx.route('http://localhost:8765/**', r => { // the page and the scripts next to it (vocal-load*.js), from the same version
       const p = new URL(r.request().url()).pathname.slice(1);
-      if (!p || p === 'index.html') return r.fulfill({ path: HTML[which], contentType: 'text/html' });
+      if (!p || p === 'index.html') return r.fulfill({ path: HTML[which] || HTML.after, contentType: 'text/html' });
       if (!/^[\w.-]+\.js$/.test(p)) return r.fulfill({ status: 404, body: '' });
       const body = which === 'before' ? execFileSync('git', ['show', `${process.env.VF_BEFORE || 'HEAD'}:deploy/${p}`], { cwd: ROOT }) : fs.readFileSync(path.join(ROOT, 'deploy', p));
       return r.fulfill({ body, contentType: 'application/javascript' });
@@ -227,7 +233,7 @@ const median = a => { a = a.filter(x => x != null && !Number.isNaN(x)).sort((x, 
 
 // VF_MODE=regress verdict: master ('before') against the branch ('after'), by the medians of RUNS runs per side. A check
 // has `ok` (judged on each side's median by itself) and/or `better` + `tol` (the branch's median against master's).
-function regressVerdict(rows) {
+function regressVerdict(rows, last = true) {
   const C = { regression: [], fixed: [], already: [], pass: [] };
   const vals = (r, side, k) => r.runs[side].map(x => x[k]);
   const med = (r, side, k) => median(vals(r, side, k));
@@ -285,8 +291,8 @@ function regressVerdict(rows) {
   log(`\n==== VERDICT (regress, ${RUNS} runs per side, medians): ${C.regression.length} regression(s), ${C.fixed.length} fixed, ${C.already.length} already failing, ${C.pass.length} passed`);
   C.pass.forEach(x => log('pass ' + x));
   log(`\nlog: ${LOG}.log  json: ${LOG}.json`);
-  logf.end();
-  process.exitCode = C.regression.length ? 1 : 0;
+  if (last) logf.end();
+  process.exitCode = Math.max(process.exitCode || 0, C.regression.length ? 1 : 0);
 }
 
 (async () => {
@@ -315,6 +321,10 @@ function regressVerdict(rows) {
     fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1));
   }
   // Verdicts
+  if (REGRESS && MODES.length) { // one verdict per stream mode, each against the same 'before' runs
+    MODES.forEach((m, i) => { log(`\n######## today (before) vs ${m}`); regressVerdict(rows.map(r => ({ ...r, res: { before: r.res.before, after: r.res[m] }, runs: { before: r.runs.before, after: r.runs[m] } })), i === MODES.length - 1); });
+    return;
+  }
   if (REGRESS) return regressVerdict(rows);
   const P = [], F = [];
   const check = (ok, s) => (ok ? P : F).push(s);

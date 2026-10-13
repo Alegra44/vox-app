@@ -5040,7 +5040,54 @@ function freqToNote(freq){
 // 0.6), and the pitch must be above VOICE_MIN_HZ, below any sung note (a bass's low C is 65 Hz), so 50 / 60 Hz hum is
 // dropped. A voice speaking nearby is periodic too and still passes; telling speech from singing isn't done here.
 const VOICE_MIN_CLARITY = 0.6, VOICE_MIN_HZ = 63;
+/* ---- exp/single-stream B4 (THIS BRANCH ONLY, never on master): window.__bleedDefence = 'D1' | 'D2' ----
+   Both gate the mic frames every feature scores (the shared buffer and the register input's pitch buffer), in
+   autoCorrelate() (pitch readers) and computeRMS() of the shared buffer (loudness readers), only while the app plays.
+   The bleed is the mic level the app's own playback produces: k × the live output level (an analyser on playbackIn,
+   after the volume setting). k is calibrated per singingSession from the first 0.5 s of the session's own playback
+   (mic RMS ÷ output RMS, median), frames during that 0.5 s count as bleed. window.__bleedK overrides k (scripts that
+   play sung stimuli as the fake mic, where a calibration would hear the singing).
+   D1: a frame counts only above the bleed × BD_MARGIN_D1 (+6 dB).
+   D2: a frame whose pitch is within ±BD_CENTS of a note the app is playing right now (tones, guides, backing, the
+       choir's audible parts) counts only above the bleed × BD_MARGIN_D2 (+12 dB); anything else counts as today. */
+const BD_OUT_ACTIVE = 0.003, BD_CAL_MS = 500, BD_MARGIN_D1 = 2, BD_MARGIN_D2 = 4, BD_CENTS = 50;
+const BD = {k:null, cal:[], calT0:null, outAn:null, outBuf:null, notes:[], inside:false, log:[]};
+function bdMode(){ const m = window.__bleedDefence; return m==='D1' || m==='D2' ? m : null; }
+function bdRms(b){ let s = 0; for(let i=0;i<b.length;i++) s += b[i]*b[i]; return Math.sqrt(s/b.length); }
+function bdOutRms(){
+  if(!audioCtx || !playbackIn) return 0;
+  if(!BD.outAn){ BD.outAn = audioCtx.createAnalyser(); BD.outAn.fftSize = 2048; BD.outBuf = new Float32Array(2048); playbackIn.connect(BD.outAn); }
+  BD.outAn.getFloatTimeDomainData(BD.outBuf); return bdRms(BD.outBuf);
+}
+function bdNote(freq, t0, t1, gainNode){ if(bdMode()) BD.notes.push({freq, t0, t1, gainNode}); }
+function bdPlayingNear(f0){
+  const now = audioCtx.currentTime;
+  BD.notes = BD.notes.filter(n=>n.t1 + 0.15 >= now);
+  return BD.notes.some(n=>n.t0 <= now && (!n.gainNode || n.gainNode.gain.value > 0.001) && Math.abs(1200*Math.log2(f0/n.freq)) <= BD_CENTS);
+}
+function bdSessionStart(){ BD.k = null; BD.cal = []; BD.calT0 = null; }
+function bdIsMic(buf){ return buf===dataArray || (typeof regIn!=='undefined' && regIn && buf===regIn.time); }
+// true: the frame counts (as today); false: it is bleed
+function bdKeep(buf, f0){
+  const out = bdOutRms();
+  if(out < BD_OUT_ACTIVE) return true;
+  const mic = bdRms(buf);
+  if(BD.k===null && window.__bleedK==null){ // calibrating on the session's own first 0.5 s of playback
+    const now = performance.now(); if(BD.calT0===null) BD.calT0 = now;
+    BD.cal.push(mic/out);
+    if(now - BD.calT0 >= BD_CAL_MS){ const v = [...BD.cal].sort((a,b)=>a-b); BD.k = v[v.length>>1]; BD.log.push({k:BD.k, n:v.length, at:Date.now()}); }
+    return false;
+  }
+  const bleed = (window.__bleedK!=null ? window.__bleedK : BD.k) * out;
+  if(bdMode()==='D1') return mic > bleed*BD_MARGIN_D1;
+  if(f0>0 && bdPlayingNear(f0)) return mic > bleed*BD_MARGIN_D2;
+  return true;
+}
 function autoCorrelate(buf, sampleRate){
+  if(bdMode() && !BD.inside && bdIsMic(buf)){
+    BD.inside = true;
+    try{ const f0 = autoCorrelate(buf, sampleRate); return bdKeep(buf, f0) ? f0 : -1; } finally{ BD.inside = false; }
+  }
   const SIZE = buf.length;
   let rms = 0;
   for(let i=0;i<SIZE;i++){ rms += buf[i]*buf[i]; }
@@ -5678,6 +5725,7 @@ function scheduleTone(freq, duration, delay, peak, harmonic){
   osc.connect(gain).connect(playbackDest());
   osc.start(t0);
   osc.stop(t0+duration+0.02);
+  bdNote(freq, t0, t0+duration); // exp/single-stream B4
 }
 // How long after a tone starts it has fully ended at the speaker: its length, the oscillator's stop (20 ms), the
 // output latency, and a short tail for the room. An exercise that listens after a reference waits at least this.
@@ -12404,6 +12452,11 @@ let breathRmsSamples = [];
 let breathSilenceStart = null;
 
 function computeRMS(buf){
+  if(buf===dataArray && bdMode() && !BD.inside){ // exp/single-stream B4: bleed reads as silence
+    BD.inside = true; let keep;
+    try{ keep = bdKeep(dataArray, bdMode()==='D2' ? autoCorrelate(dataArray, audioCtx.sampleRate) : -1); } finally{ BD.inside = false; }
+    if(!keep) return 0;
+  }
   if(buf===dataArray && ssRawAn && ssMode()==='C3'){ ssRawAn.getFloatTimeDomainData(ssRawBuf); buf = ssRawBuf; } // exp/single-stream C3: the loudness path
   let sum=0;
   for(let i=0;i<buf.length;i++) sum += buf[i]*buf[i];
@@ -12909,6 +12962,7 @@ function scheduleBackingNote(freq, startTime, duration){
   osc.start(startTime);
   osc.stop(startTime+duration+0.02);
   backingActiveOsc.push(osc);
+  bdNote(freq, startTime, startTime+duration, backingGainNode); // exp/single-stream B4
 }
 async function playBackingPad(includeLead=false){
   await initAudioOnly();
@@ -13626,6 +13680,7 @@ function scheduleChoirNote(part, freq, startTime, duration, detuneCents=0){
   osc.start(startTime);
   osc.stop(startTime+duration+0.02);
   choirActiveOscillators.push(osc);
+  bdNote(freq*Math.pow(2, detuneCents/1200), startTime, startTime+duration, choirGainNodes[part]); // exp/single-stream B4
 }
 
 async function playChoir(opts={}){
@@ -18744,6 +18799,7 @@ function houseSession(isActive, stage){
   if(!houseRaf) houseRaf = requestAnimationFrame(houseWatch);
 }
 function singingSession(isActive, stage){
+  if(bdMode()) bdSessionStart(); // exp/single-stream B4: calibrate on this session's own playback
   houseSession(isActive, stage);
   return vlSidecar(isActive);
 }

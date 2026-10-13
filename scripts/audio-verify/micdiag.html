@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mic check</title>
+<!-- exp/single-stream B5: a standalone page (no app, no network after load) for the user's phones. It answers what this
+     Mac can't: 1) does a second mic stream mute or starve the first on this device; 2) how much of the phone's own
+     playback its mic hears, with echo cancellation on and off. Nothing is recorded or sent anywhere. -->
+<style>
+  :root{ --bg:#f6f6f4; --ink:#111316; --ink2:#5b616a; --line:#d9dbde; --ok:#1e7542; --bad:#b3261e; --card:#fff; --accent:#111316; --accent-ink:#fff; }
+  @media (prefers-color-scheme: dark){ :root{ --bg:#141518; --ink:#ecedef; --ink2:#a3a8b0; --line:#2c2f35; --ok:#5bc98a; --bad:#ff7a5f; --card:#1c1e22; --accent:#ecedef; --accent-ink:#141518; } }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font:16px/1.45 -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; }
+  main{ max-width:560px; margin:0 auto; padding:20px 16px 48px; }
+  h1{ font-size:24px; margin:0 0 4px; }
+  p{ margin:6px 0; }
+  .meta{ color:var(--ink2); font-size:14px; }
+  section{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; margin-top:16px; }
+  h2{ font-size:17px; margin:0 0 6px; }
+  button{ font:inherit; font-weight:600; border:0; border-radius:10px; padding:12px 16px; background:var(--accent); color:var(--accent-ink); width:100%; margin-top:10px; }
+  button:disabled{ opacity:.4; }
+  .row{ display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-top:1px solid var(--line); font-variant-numeric:tabular-nums; }
+  .row:first-of-type{ border-top:0; }
+  .meter{ height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin-top:4px; }
+  .meter i{ display:block; height:100%; width:0; background:var(--ok); }
+  .ok{ color:var(--ok); } .bad{ color:var(--bad); }
+  pre{ white-space:pre-wrap; word-break:break-word; font:13px/1.4 ui-monospace, Menlo, monospace; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:10px; margin:8px 0 0; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Mic check</h1>
+  <p class="meta">About one minute. Use the phone's own speaker and mic (no headphones, no Bluetooth). Turn the volume up to about three quarters. Nothing is recorded or sent; you copy the results at the end.</p>
+
+  <section>
+    <h2>1 · Mic on</h2>
+    <p class="meta">Allow the microphone. Say "ah" for a second and watch the bar move.</p>
+    <div class="row"><span>Stream 1 level</span><span id="l1">—</span></div><div class="meter"><i id="m1"></i></div>
+    <div class="row"><span>Stream 1 state</span><span id="s1">—</span></div>
+    <button id="b1">Start the mic</button>
+  </section>
+
+  <section>
+    <h2>2 · A second mic stream</h2>
+    <p class="meta">Keep saying "ah" (or hum) steadily for about 8 seconds after you tap.</p>
+    <div class="row"><span>Stream 2 level</span><span id="l2">—</span></div><div class="meter"><i id="m2"></i></div>
+    <div class="row"><span>Stream 2 state</span><span id="s2">—</span></div>
+    <div class="row"><span>Stream 1 with stream 2 open</span><span id="v2">—</span></div>
+    <button id="b2" disabled>Open a second stream</button>
+  </section>
+
+  <section>
+    <h2>3 · Does the mic hear the phone's own sound?</h2>
+    <p class="meta">Stay quiet. The phone plays a 1-second tone twice: once with echo cancellation on, once with it off.</p>
+    <div class="row"><span>Echo cancellation on</span><span id="v3on">—</span></div>
+    <div class="row"><span>Echo cancellation off</span><span id="v3off">—</span></div>
+    <button id="b3" disabled>Play the tone</button>
+    <p class="meta" style="margin-top:10px">Did the tone come out of the <b>loudspeaker</b> (bottom of the phone) or the <b>earpiece</b> (top, quiet, like a call)? Add it when you send the results.</p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <pre id="out">Run steps 1–3.</pre>
+    <button id="copy" disabled>Copy the results</button>
+  </section>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const R = { ua: navigator.userAgent, when: new Date().toISOString() };
+let ac = null;
+const SHARED = { echoCancellation: true, noiseSuppression: true };           // the app's shared mic today
+const RAW = { echoCancellation: true, noiseSuppression: false, autoGainControl: false }; // its register input
+const dB = x => x > 0 ? +(20 * Math.log10(x)).toFixed(1) : null;
+const fmt = d => d === null ? 'silent' : d + ' dBFS';
+function rms(b){ let s = 0; for (const v of b) s += v * v; return Math.sqrt(s / b.length); }
+function settings(t){ try { const s = t.getSettings(); return { ec: s.echoCancellation, ns: s.noiseSuppression, agc: s.autoGainControl, rate: s.sampleRate }; } catch (e) { return {}; } }
+function tap(stream){ // analyser + a running level, and the track's events
+  const src = ac.createMediaStreamSource(stream), an = ac.createAnalyser(); an.fftSize = 2048; src.connect(an);
+  const t = stream.getAudioTracks()[0], o = { stream, src, an, buf: new Float32Array(2048), events: [], t };
+  ['mute', 'unmute', 'ended'].forEach(k => t.addEventListener(k, () => o.events.push(k)));
+  o.level = () => { an.getFloatTimeDomainData(o.buf); return rms(o.buf); };
+  o.state = () => `${t.readyState}${t.muted ? ', muted' : ''}${o.events.length ? ' (' + o.events.join(', ') + ')' : ''}`;
+  return o;
+}
+async function avgLevel(o, ms, show){ // mean power over ms, in dBFS
+  let s = 0, n = 0; const t0 = performance.now();
+  while (performance.now() - t0 < ms) { await new Promise(r => setTimeout(r, 50)); const v = o.level(); s += v * v; n++; if (show) show(v); }
+  return dB(Math.sqrt(s / Math.max(1, n)));
+}
+function meter(el, lv, v){ const d = dB(v); lv.textContent = fmt(d); el.style.width = Math.max(0, Math.min(100, d === null ? 0 : (d + 70) * 1.6)) + '%'; }
+// the pitch of a frame (a simple autocorrelation), for "does it hear the tone as a note"
+function pitch(b, sr){
+  const n = b.length, r = rms(b); if (r < 0.004) return -1;
+  let best = -1, bestC = 0; const lo = Math.floor(sr / 1000), hi = Math.floor(sr / 70);
+  for (let lag = lo; lag <= hi; lag++) { let c = 0, e1 = 0, e2 = 0; for (let i = 0; i + lag < n; i += 2) { c += b[i] * b[i + lag]; e1 += b[i] * b[i]; e2 += b[i + lag] * b[i + lag]; } const nc = c / Math.sqrt(e1 * e2 + 1e-12); if (nc > bestC) { bestC = nc; best = lag; } }
+  return bestC > 0.85 ? sr / best : -1;
+}
+function render(){ $('out').textContent = JSON.stringify(R, null, 1); $('copy').disabled = false; }
+
+let s1 = null, loop1 = null;
+$('b1').onclick = async () => {
+  $('b1').disabled = true;
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)(); await ac.resume();
+    s1 = tap(await navigator.mediaDevices.getUserMedia({ audio: SHARED }));
+    R.step1 = { settings: settings(s1.t), label: s1.t.label, rate: ac.sampleRate };
+    const run = () => { meter($('m1'), $('l1'), s1.level()); $('s1').textContent = s1.state(); loop1 = requestAnimationFrame(run); }; run();
+    $('b2').disabled = false; $('b3').disabled = false; render();
+  } catch (e) { R.step1 = { error: String(e) }; $('s1').textContent = 'Error: ' + e.message; $('s1').className = 'bad'; render(); }
+};
+
+$('b2').onclick = async () => {
+  $('b2').disabled = true;
+  const st = R.step2 = {};
+  st.s1Before = await avgLevel(s1, 2000);
+  let s2;
+  try { s2 = tap(await navigator.mediaDevices.getUserMedia({ audio: RAW })); }
+  catch (e) { st.error = String(e); $('v2').textContent = 'Second stream refused: ' + e.message; render(); return; }
+  st.s2Settings = settings(s2.t);
+  await new Promise(r => setTimeout(r, 300));
+  const [a, b] = await Promise.all([avgLevel(s1, 3000), avgLevel(s2, 3000, v => meter($('m2'), $('l2'), v))]);
+  st.s1With = a; st.s2 = b; st.s1State = s1.state(); st.s2State = s2.state();
+  $('s2').textContent = st.s2State;
+  s2.stream.getTracks().forEach(t => t.stop()); s2.src.disconnect();
+  await new Promise(r => setTimeout(r, 300));
+  st.s1After = await avgLevel(s1, 2000);
+  st.s1StateAfter = s1.state();
+  const drop = a === null ? Infinity : (st.s1Before ?? -120) - a;
+  st.verdict = s1.t.muted || s1.t.readyState !== 'live' ? 'stream 1 muted or ended' : a === null || drop > 15 ? 'stream 1 went quiet' : drop > 6 ? 'stream 1 dropped' : 'stream 1 kept working';
+  $('v2').textContent = `${st.verdict} (${st.s1Before} → ${a} dBFS)`;
+  $('v2').className = st.verdict === 'stream 1 kept working' ? 'ok' : 'bad';
+  render();
+};
+
+$('b3').onclick = async () => {
+  $('b3').disabled = true;
+  cancelAnimationFrame(loop1); if (s1) { s1.stream.getTracks().forEach(t => t.stop()); s1.src.disconnect(); s1 = null; }
+  R.step3 = {};
+  for (const [key, ec] of [['on', true], ['off', false]]) {
+    const st = tap(await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: ec, noiseSuppression: false, autoGainControl: false } }));
+    await new Promise(r => setTimeout(r, 700));
+    const quiet = await avgLevel(st, 1000);
+    // a 1 s tone at A4 with soft harmonics, at the app's reference level (about −12 dBFS)
+    const osc = ac.createOscillator(), g = ac.createGain();
+    osc.setPeriodicWave(ac.createPeriodicWave(new Float32Array(5), new Float32Array([0, 1, 0.25, 0.12, 0.05]), { disableNormalization: true }));
+    osc.frequency.value = 440; g.gain.value = 0; osc.connect(g).connect(ac.destination);
+    const t0 = ac.currentTime + 0.05; g.gain.setValueAtTime(0, t0); g.gain.linearRampToValueAtTime(0.356, t0 + 0.03); g.gain.setValueAtTime(0.356, t0 + 0.92); g.gain.linearRampToValueAtTime(0, t0 + 1);
+    osc.start(t0); osc.stop(t0 + 1.05);
+    let s = 0, n = 0, onNote = 0; const p0 = performance.now();
+    await new Promise(r => setTimeout(r, 150));
+    while (performance.now() - p0 < 1000) { await new Promise(r => setTimeout(r, 40)); const v = st.level(); s += v * v; n++; const f = pitch(st.buf, ac.sampleRate); if (f > 0 && Math.abs(1200 * Math.log2(f / 440)) <= 50) onNote++; }
+    const during = dB(Math.sqrt(s / Math.max(1, n)));
+    const res = R.step3['ec_' + key] = { settings: settings(st.t), quiet, duringTone: during, rise: during !== null && quiet !== null ? +(during - quiet).toFixed(1) : null, heardAsNotePct: Math.round(100 * onNote / Math.max(1, n)) };
+    $('v3' + key).textContent = `${res.rise === null ? '—' : '+' + res.rise + ' dB'} · heard as a note ${res.heardAsNotePct}%`;
+    $('v3' + key).className = res.heardAsNotePct > 20 ? 'bad' : 'ok';
+    st.stream.getTracks().forEach(t => t.stop()); st.src.disconnect();
+    await new Promise(r => setTimeout(r, 500));
+  }
+  render();
+};
+
+$('copy').onclick = async () => {
+  const txt = $('out').textContent;
+  try { await navigator.clipboard.writeText(txt); $('copy').textContent = 'Copied'; }
+  catch (e) { const r = document.createRange(); r.selectNodeContents($('out')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); $('copy').textContent = 'Selected: copy it'; }
+};
+</script>
+</body>
+</html>

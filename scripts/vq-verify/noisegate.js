@@ -23,7 +23,12 @@ const path = require('path'), os = require('os'), fs = require('fs');
 const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(TESTDATA, 'gate');
 fs.mkdirSync(DIR, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
-const PROD = process.env.NG_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
+// NG_MODES=C1,C2,C3 (exp/single-stream, with NG_MODE=regress): instead of one 'after' side, one side per
+// window.__streamMode, each the working tree with that mode set before the page loads; every mode is judged against the
+// same 'before' runs (today), one verdict per mode.
+const MODES = (process.env.NG_MODES || '').split(',').filter(Boolean);
+if (MODES.some(m => !['C1', 'C2', 'C3'].includes(m))) throw new Error(`NG_MODES=${process.env.NG_MODES}: only C1, C2, C3`);
+const PROD = process.env.NG_URL, SIDES = PROD ? ['prod'] : MODES.length ? ['before', ...MODES] : ['before', 'after'];
 const REGRESS = !PROD && process.env.NG_MODE === 'regress', RUNS = REGRESS ? +(process.env.NG_RUNS || 3) : 1;
 if (process.env.NG_MODE && process.env.NG_MODE !== 'regress') throw new Error(`NG_MODE=${process.env.NG_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `noisegate-${PROD ? 'prod' : 'local'}-${stamp}`);
@@ -54,9 +59,10 @@ async function withPage(file, which, fn, attempt = 1) {
   const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${file}`] });
   try {
     const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 }, ...(which === 'prod' && AUTH ? { storageState: AUTH } : {}) });
+    if (MODES.includes(which)) await ctx.addInitScript(m => { window.__streamMode = m; }, which);
     if (which !== 'prod') await ctx.route('http://localhost:8765/**', r => {
       const p = new URL(r.request().url()).pathname.slice(1);
-      if (!p || p === 'index.html') return r.fulfill({ path: HTML[which], contentType: 'text/html' });
+      if (!p || p === 'index.html') return r.fulfill({ path: HTML[which] || HTML.after, contentType: 'text/html' });
       if (!/^[\w.-]+\.js$/.test(p)) return r.fulfill({ status: 404, body: '' });
       const body = which === 'before' ? execFileSync('git', ['show', `${process.env.NG_BEFORE || 'HEAD'}:deploy/${p}`], { cwd: ROOT }) : fs.readFileSync(path.join(ROOT, 'deploy', p));
       return r.fulfill({ body, contentType: 'application/javascript' });
@@ -173,7 +179,7 @@ const brief = o => ({
 
 // NG_MODE=regress verdict: master ('before') against the branch ('after') by the medians of RUNS runs per side
 const median = a => { a = a.filter(x => x != null && !Number.isNaN(x)).sort((x, y) => x - y); if (!a.length) return null; const m = a.length >> 1; return a.length % 2 ? a[m] : (a[m - 1] + a[m]) / 2; };
-function regressVerdict(rows) {
+function regressVerdict(rows, last = true) {
   const C = { regression: [], fixed: [], already: [], noise: [], pass: [] };
   const vals = (r, side, k) => r.runs[side].map(x => x[k]), med = (r, side, k) => median(vals(r, side, k));
   const spread = (r, k) => { const v = vals(r, 'before', k).filter(x => x != null); return v.length ? Math.max(...v) - Math.min(...v) : 0; };
@@ -218,8 +224,8 @@ function regressVerdict(rows) {
   log(`\n==== VERDICT (regress, ${RUNS} runs per side, medians): ${C.regression.length} regression(s), ${C.fixed.length} fixed, ${C.already.length} already failing, ${C.noise.length} within noise, ${C.pass.length} passed`);
   C.pass.forEach(x => log('pass ' + x));
   log(`\nlog: ${LOG}.log  json: ${LOG}.json`);
-  logf.end();
-  process.exitCode = C.regression.length ? 1 : 0;
+  if (last) logf.end();
+  process.exitCode = Math.max(process.exitCode || 0, C.regression.length ? 1 : 0);
 }
 
 (async () => {
@@ -240,6 +246,10 @@ function regressVerdict(rows) {
       log(`   ${(which + (RUNS > 1 ? ` #${k + 1}` : '')).padEnd(RUNS > 1 ? 9 : 6)} Pitch Match ${b.pm} | Drills ${b.drills} | RTF heard ${b.rtfVoiced}% in tune ${b.rtfInTune}% | Tuner heard ${b.tunerVoiced}% in tune ${b.tunerInTune}% | Stay in Key heard ${b.skVoiced}% in key ${b.skInKey}% | Choir World heard ${b.cwFrames}% of frames, held ${b.cwHeld}/2`);
     }
     rows.push({ id, kind: STIM[id], res, ...(REGRESS ? { runs } : {}) }); fs.writeFileSync(LOG + '.json', JSON.stringify(rows, null, 1));
+  }
+  if (REGRESS && MODES.length) { // one verdict per stream mode, each against the same 'before' runs
+    MODES.forEach((m, i) => { log(`\n######## today (before) vs ${m}`); regressVerdict(rows.map(r => ({ ...r, res: { before: r.res.before, after: r.res[m] }, runs: { before: r.runs.before, after: r.runs[m] } })), i === MODES.length - 1); });
+    return;
   }
   if (REGRESS) return regressVerdict(rows);
   const P = [], F = [], check = (ok, s) => (ok ? P : F).push(s), A = PROD ? 'prod' : 'after';
