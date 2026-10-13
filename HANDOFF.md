@@ -8,11 +8,13 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 | Branch | What it is | Status |
 |---|---|---|
-| `master` | Everything that is live, through House Lights phase 2 + 2.8 (merge 3b29e93, dpl_CLqPg1gb25R563tBixH4WCXsUrNT, 2026-10-13) | Matches production |
+| `master` | Everything that is live, through House Lights phase 3 + 3.1 (merge 7996514, dpl_CAMGry4a7b8RewSA6bJNST64PVv7, 2026-10-13) | Matches production |
 | `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
 | `redesign/phase1` | House Lights redesign phase 1, Foundation, and the 1.1 fixes (spec `design/house-lights/PHASE1.md`) | Merged (12a1364) and live 2026-10-11. Closed |
 | `redesign/phase2` | House Lights phase 2, Lighting, and the 2.8 fixes (spec `design/house-lights/PHASE2.md`) | Merged (3b29e93) and live 2026-10-13. Closed |
+| `redesign/phase3` | House Lights phase 3, Home and the Coach tab, and the 3.1 fixes (spec `design/house-lights/PHASE3.md`) | Merged (7996514) and live 2026-10-13. Closed |
+| `review/phase3-prod` | Orphan branch, no code: production screenshots after the phase 3 deploy (Home in the 7 seeded states and the Coach tab, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
@@ -48,8 +50,8 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    dpl_9iW4QDUnWwCQuxNz5bYoZQLotw8X); (a) playback volume is live (2026-10-06, dpl_5GhGgvgLAQCFZQXnmwdmAn8UcyKh, results
    in the roadmap); (d) level-up explanation is next: report its migration and API change before applying. Specs below.
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`): **live 2026-10-11** (with the 1.1 fixes).
-   Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Next: phase 3 (Home and the Coach tab), spec to come
-   from the user.
+   Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Phase 3 (Home and the Coach tab): **live 2026-10-13**
+   (with the 3.1 fixes). Next: phase 4 (Coach tools), spec to come from the user.
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
    Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
@@ -231,6 +233,24 @@ screenshots, merged `--no-ff` (3b29e93) and deployed (dpl_CLqPg1gb25R563tBixH4WC
 - Known flake: batch3c's "banner up at the crossing" can read exactly 100.000% on the poll before (39/1 once; 40/0 on
   master and the branch on re-run).
 - `scripts/glider-verify/courses.js` stubs `houseSession` (its one-slot rAF stand-in collided with `houseWatch`).
+
+### Redesign phase 3, Home and the Coach tab, and the 3.1 fixes: LIVE 2026-10-13
+
+Spec: `design/house-lights/PHASE3.md` (phase 3 and 3.1, verbatim). Approved by the user on screenshots, merged `--no-ff`
+(7996514) and deployed (dpl_CAMGry4a7b8RewSA6bJNST64PVv7; the first deploy answered "Not authorized", the retry deployed).
+- `computeTodaysFocus()` is the one source for Home's "Today's focus" and the Coach tab's `#coachFocus`;
+  `personalRecordValues()` feeds both the Personal Records list and the Coach rows' "Best" values; `renderCoachHub()`
+  runs wherever `renderHomeScreen()` does, on a language change and when the tab opens.
+- Coach icons: 23 sprite symbols, one per tool. Sing It 5 Ways (group), Mirror (you) and Warmup (calendar) get their
+  own icons in phase 4 (user, 2026-10-13).
+- 2.5 copy: no §7 word left on Home or the Coach tab in en/fr/es/tr (`copyscan.js`), including `home_cw_empty_desc`
+  ("your own runs"). HOUSE_LIGHTS.md is v1.5 (the spec said v1.4, which 2.8 had used).
+- Guards: `home.js` 102/0 (master vs branch in 7 seeded states, `homeStates.js`; master's page gets the branch's 18
+  changed English strings first, so it compares what is computed), `hooks.js` 19/0.
+- Production (`prod.sh`, logs `scripts/design-verify/logs/prod-2026-10-13T08-23-21/`): house 111/0, system 7/7,
+  contrast as before (Light 32, all Choir / Part Rehearsal: phase 5; Dark 0), batch1 112/0, batch3c 40/0,
+  warmup-entries 52/0, levelup 45/0, cv-p9 exit 0, cv-p10 exit 0 (7 MATCH); test accounts 0 left.
+- Known flake: cv-p9 can time out at sign-up (backend); it passed on both re-runs.
 
 ## Waiting on the user (don't start without a go-ahead)
 
