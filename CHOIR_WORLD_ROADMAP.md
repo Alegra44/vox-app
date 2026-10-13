@@ -330,6 +330,11 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
 
 ## Known issues (app-wide)
 
+- [ ] **Item 3, the single-stream migration: step 1 (investigation) started 2026-10-13** on `exp/single-stream`
+  (spec verbatim: `design/audio/SPEC.md`). Inventory → `design/audio/STREAMS.md`, measurements in
+  `scripts/audio-verify/`, recommendation → `design/audio/SINGLE_STREAM.md`. No app change is merged or deployed in
+  this step; experimental variants sit behind a branch-only flag (`window.__streamMode`). Phase 4 waits for it.
+
 - [ ] **Speaker bleed scores as singing** (scoped, logged 2026-10-06; not fixed; sits next to item 3, one mic stream per
   feature: HANDOFF.md, "Order of work"). Found by `scripts/vq-verify/loopback.js`, which feeds the app's own playback
   back into its own mic with nobody singing, at a speaker-to-mic coupling of −20 dB (a laptop's own speakers and mic)
