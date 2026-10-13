@@ -5221,12 +5221,35 @@ let tunerSessionStartTime = null, vocalHealthWarningShown = false;
 let tunerVib = makeVibratoTolerantLive();
 let liveFreq = null;
 
+/* ---- exp/single-stream (THIS BRANCH ONLY, never on master): window.__streamMode ----
+   Unset: today. Three streams: the shared micStream (EC + NS on, AGC default), the register input (EC on, NS and AGC
+   off, pitch behind the 1.5 kHz low-pass) and Voice Quality's capture (all off); vlSidecar opens the register input
+   next to the shared stream (desktop Chromium only, VL_SIDECAR_BLOCKED).
+   'C1': one stream with today's shared constraints (EC + NS on, AGC default). The register input, Voice Quality and
+         Vocal Load read it too (Vocal Load on every browser: nothing opens a second stream).
+   'C2': one stream, EC on, NS and AGC off. The shared analyser reads it behind the same 1.5 kHz low-pass as the register
+         input, so pitch AND every loudness reading of the shared analyser come from the filtered signal.
+   'C3': C2's stream split in Web Audio: the shared analyser is the low-passed pitch path; computeRMS() of the shared
+         buffer reads an unfiltered loudness path instead. The register input (chest, Vocal Load) is unfiltered as today.
+   Set before the first mic use (scripts: an init script); a stream already open keeps its mode. */
+const SS_MODES = ['C1', 'C2', 'C3'];
+function ssMode(){ const m = window.__streamMode; return SS_MODES.includes(m) ? m : null; }
+let ssStream = null, ssOpening = null, ssRawAn = null, ssRawBuf = null;
+async function ssGetStream(){
+  if(ssStream && ssStream.getAudioTracks().some(tr=>tr.readyState==='live')) return ssStream;
+  if(!ssOpening) ssOpening = navigator.mediaDevices.getUserMedia({audio: ssMode()==='C1'
+      ? {echoCancellation:true, noiseSuppression:true}
+      : {echoCancellation:true, noiseSuppression:false, autoGainControl:false}})
+    .then(st=>{ ssStream = st; return st; }).finally(()=>{ ssOpening = null; });
+  return ssOpening;
+}
+
 async function initAudio(opts){
   if(!(opts && opts.noWarmup)) await warmupGate(); // the warm-up's own exercises pass noWarmup
   if(audioCtx && analyser) return true;
   try{
     if(!micStream){
-      micStream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true}});
+      micStream = ssMode() ? await ssGetStream() : await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:true}});
     }
     if(!audioCtx){
       audioCtx = new (window.AudioContext||window.webkitAudioContext)();
@@ -5235,7 +5258,11 @@ async function initAudio(opts){
     const source = audioCtx.createMediaStreamSource(micStream);
     analyser = audioCtx.createAnalyser();
     analyser.fftSize = 2048;
-    source.connect(analyser);
+    if(ssMode()==='C2' || ssMode()==='C3'){ // exp/single-stream: pitch behind the register input's low-pass
+      const lp = [0, 1].map(()=>{ const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = VQ_PITCH_LP_HZ; f.Q.value = Math.SQRT1_2; return f; });
+      source.connect(lp[0]).connect(lp[1]).connect(analyser);
+      if(ssMode()==='C3'){ ssRawAn = audioCtx.createAnalyser(); ssRawAn.fftSize = 2048; ssRawBuf = new Float32Array(2048); source.connect(ssRawAn); }
+    } else source.connect(analyser);
     dataArray = new Float32Array(analyser.fftSize);
     return true;
   }catch(e){
@@ -11981,14 +12008,14 @@ async function openRegisterInput({quiet=false}={}){ // quiet: no toast if it fai
   if(regIn) return true;
   if(!regOpening) regOpening = (async ()=>{
     try{
-      const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:false, autoGainControl:false}});
+      const stream = ssMode() ? await ssGetStream() : await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true, noiseSuppression:false, autoGainControl:false}});
       const src = audioCtx.createMediaStreamSource(stream), spec = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser();
       spec.fftSize = REG_FFT; spec.smoothingTimeConstant = 0; // smoothed below on power; the analyser's own smoothing averages magnitude
       pitchAn.fftSize = REG_FFT;
       src.connect(spec);
       const lp = [0, 1].map(()=>{ const f = audioCtx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = VQ_PITCH_LP_HZ; f.Q.value = Math.SQRT1_2; return f; });
       src.connect(lp[0]).connect(lp[1]).connect(pitchAn);
-      regIn = {stream, src, lp, spec, pitchAn, time:new Float32Array(REG_FFT), raw:new Float32Array(REG_FFT), db:new Float32Array(REG_FFT/2), pw:new Float64Array(REG_FFT/2), pwInit:false, lastRead:performance.now()};
+      regIn = {stream, shared:!!ssMode(), src, lp, spec, pitchAn, time:new Float32Array(REG_FFT), raw:new Float32Array(REG_FFT), db:new Float32Array(REG_FFT/2), pw:new Float64Array(REG_FFT/2), pwInit:false, lastRead:performance.now()};
       regIn.idle = setInterval(()=>{ if(regIn && performance.now()-regIn.lastRead > REG_IDLE_MS) closeRegisterInput(); }, 500);
       return true;
     }catch(e){
@@ -12002,7 +12029,7 @@ function closeRegisterInput(){
   if(!regIn) return;
   clearInterval(regIn.idle);
   regIn.src.disconnect(); regIn.lp.forEach(f=>f.disconnect());
-  regIn.stream.getTracks().forEach(tr=>tr.stop());
+  if(!regIn.shared) regIn.stream.getTracks().forEach(tr=>tr.stop()); // exp/single-stream: the one stream stays open
   regIn = null;
 }
 // One frame: the pitch (low-passed path), the chest score from the same moment, and the unfiltered signal (for loudness).
@@ -12243,7 +12270,7 @@ function renderVocalLoadGauge(){
   const txt = t('vl_gauge_pct_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1}));
   const w = Math.min(100, pct).toFixed(1)+'%';
   boxes.forEach(box=>{
-    if(box.hasAttribute('data-vl-sidecar') && VL_SIDECAR_BLOCKED){ box.style.display='none'; return; }
+    if(box.hasAttribute('data-vl-sidecar') && VL_SIDECAR_BLOCKED && !ssMode()){ box.style.display='none'; return; }
     box.style.display='';
     const val = box.querySelector('.vl-gauge-val'), fill = box.querySelector('.vl-gauge-fill');
     if(val.textContent!==txt){ val.textContent = txt; box.setAttribute('aria-valuetext', txt); }
@@ -12327,7 +12354,7 @@ function vlHideBreak(){
 // (a second reader would change its chest smoothing).
 let vlSideRaf = null, vlSideGen = 0;
 async function vlSidecar(isActive){
-  if(!profile || VL_SIDECAR_BLOCKED || typeof VocalLoad==='undefined') return;
+  if(!profile || (VL_SIDECAR_BLOCKED && !ssMode()) || typeof VocalLoad==='undefined') return; // exp/single-stream: no second stream to block
   const gen = ++vlSideGen;
   cancelAnimationFrame(vlSideRaf);
   vlEnd(); // a session left open by the tool used just before (its idle timeout hasn't run yet) isn't this one
@@ -12377,6 +12404,7 @@ let breathRmsSamples = [];
 let breathSilenceStart = null;
 
 function computeRMS(buf){
+  if(buf===dataArray && ssRawAn && ssMode()==='C3'){ ssRawAn.getFloatTimeDomainData(ssRawBuf); buf = ssRawBuf; } // exp/single-stream C3: the loudness path
   let sum=0;
   for(let i=0;i<buf.length;i++) sum += buf[i]*buf[i];
   return Math.sqrt(sum/buf.length);
@@ -12695,7 +12723,7 @@ function vqBrightBounds(f0){
 async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={}){
   await warmupGate();
   await initAudioOnly();
-  const stream = await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
+  const stream = ssMode() ? await ssGetStream() : await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}});
   const src = audioCtx.createMediaStreamSource(stream), an = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser();
   an.fftSize = VQ_FFT; an.smoothingTimeConstant = 0;
   pitchAn.fftSize = VQ_PITCH_WIN;
@@ -12728,7 +12756,7 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={})
   }finally{
     vlEnd();
     src.disconnect(); lp.forEach(f=>f.disconnect());
-    stream.getTracks().forEach(tr=>tr.stop());
+    if(!ssMode()) stream.getTracks().forEach(tr=>tr.stop()); // exp/single-stream: the one stream stays open
   }
   return frames;
 }
