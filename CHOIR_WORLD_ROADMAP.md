@@ -334,6 +334,10 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
   (spec verbatim: `design/audio/SPEC.md`). Inventory → `design/audio/STREAMS.md`, measurements in
   `scripts/audio-verify/`, recommendation → `design/audio/SINGLE_STREAM.md`. No app change is merged or deployed in
   this step; experimental variants sit behind a branch-only flag (`window.__streamMode`). Phase 4 waits for it.
+  **Measured 2026-10-14; recommendation C3 (one stream: EC on, NS and AGC off, pitch low-passed, loudness
+  unfiltered), no bleed defence as specified** (see SINGLE_STREAM.md). The rtfsoft finding of 2026-10-02 (signing in
+  costs RTF soft-singing frames) was a 6 s-window timing artefact: over a whole stimulus loop, signed in = signed out.
+  Waiting for the user's design choice and the phone results (micdiag).
 
 - [ ] **Speaker bleed scores as singing** (scoped, logged 2026-10-06; not fixed; sits next to item 3, one mic stream per
   feature: HANDOFF.md, "Order of work"). Found by `scripts/vq-verify/loopback.js`, which feeds the app's own playback
