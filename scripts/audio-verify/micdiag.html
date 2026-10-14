@@ -38,6 +38,7 @@
     <p class="meta">Allow the microphone. Say "ah" for a second and watch the bar move.</p>
     <div class="row"><span>Stream 1 level</span><span id="l1">—</span></div><div class="meter"><i id="m1"></i></div>
     <div class="row"><span>Stream 1 state</span><span id="s1">—</span></div>
+    <div class="row"><span>Stream 1 applied</span><span id="p1">—</span></div>
     <button id="b1">Start the mic</button>
   </section>
 
@@ -46,6 +47,8 @@
     <p class="meta">Keep saying "ah" (or hum) steadily for about 8 seconds after you tap.</p>
     <div class="row"><span>Stream 2 level</span><span id="l2">—</span></div><div class="meter"><i id="m2"></i></div>
     <div class="row"><span>Stream 2 state</span><span id="s2">—</span></div>
+    <div class="row"><span>Stream 2 applied</span><span id="p2">—</span></div>
+    <div class="row"><span>Stream 1 applied, with stream 2 open</span><span id="p1w">—</span></div>
     <div class="row"><span>Stream 1 with stream 2 open</span><span id="v2">—</span></div>
     <button id="b2" disabled>Open a second stream</button>
   </section>
@@ -74,7 +77,16 @@ const RAW = { echoCancellation: true, noiseSuppression: false, autoGainControl: 
 const dB = x => x > 0 ? +(20 * Math.log10(x)).toFixed(1) : null;
 const fmt = d => d === null ? 'silent' : d + ' dBFS';
 function rms(b){ let s = 0; for (const v of b) s += v * v; return Math.sqrt(s / b.length); }
-function settings(t){ try { const s = t.getSettings(); return { ec: s.echoCancellation, ns: s.noiseSuppression, agc: s.autoGainControl, rate: s.sampleRate }; } catch (e) { return {}; } }
+// what the track actually applied (getSettings), not what was asked; a key the browser doesn't report stays out
+function settings(t){
+  try {
+    const s = t.getSettings(), o = {};
+    for (const k of ['echoCancellation', 'noiseSuppression', 'autoGainControl', 'sampleRate', 'channelCount', 'latency', 'sampleSize']) if (s[k] !== undefined) o[k] = s[k];
+    return o;
+  } catch (e) { return { error: String(e) }; }
+}
+const yn = v => v === true ? 'on' : v === false ? 'off' : 'not reported';
+const short = s => s.error ? 'not reported' : `EC ${yn(s.echoCancellation)} · NS ${yn(s.noiseSuppression)} · AGC ${yn(s.autoGainControl)}${s.sampleRate ? ' · ' + s.sampleRate / 1000 + ' kHz' : ''}`;
 function tap(stream){ // analyser + a running level, and the track's events
   const src = ac.createMediaStreamSource(stream), an = ac.createAnalyser(); an.fftSize = 2048; src.connect(an);
   const t = stream.getAudioTracks()[0], o = { stream, src, an, buf: new Float32Array(2048), events: [], t };
@@ -104,7 +116,8 @@ $('b1').onclick = async () => {
   try {
     ac = ac || new (window.AudioContext || window.webkitAudioContext)(); await ac.resume();
     s1 = tap(await navigator.mediaDevices.getUserMedia({ audio: SHARED }));
-    R.step1 = { settings: settings(s1.t), label: s1.t.label, rate: ac.sampleRate };
+    R.step1 = { asked: SHARED, applied: settings(s1.t), label: s1.t.label, contextRate: ac.sampleRate };
+    $('p1').textContent = short(R.step1.applied);
     const run = () => { meter($('m1'), $('l1'), s1.level()); $('s1').textContent = s1.state(); loop1 = requestAnimationFrame(run); }; run();
     $('b2').disabled = false; $('b3').disabled = false; render();
   } catch (e) { R.step1 = { error: String(e) }; $('s1').textContent = 'Error: ' + e.message; $('s1').className = 'bad'; render(); }
@@ -117,15 +130,17 @@ $('b2').onclick = async () => {
   let s2;
   try { s2 = tap(await navigator.mediaDevices.getUserMedia({ audio: RAW })); }
   catch (e) { st.error = String(e); $('v2').textContent = 'Second stream refused: ' + e.message; render(); return; }
-  st.s2Settings = settings(s2.t);
+  st.s2Asked = RAW; st.s2Applied = settings(s2.t);
   await new Promise(r => setTimeout(r, 300));
+  st.s1AppliedWith = settings(s1.t); // does opening stream 2 change what stream 1 runs with?
+  $('p2').textContent = short(st.s2Applied); $('p1w').textContent = short(st.s1AppliedWith);
   const [a, b] = await Promise.all([avgLevel(s1, 3000), avgLevel(s2, 3000, v => meter($('m2'), $('l2'), v))]);
   st.s1With = a; st.s2 = b; st.s1State = s1.state(); st.s2State = s2.state();
   $('s2').textContent = st.s2State;
   s2.stream.getTracks().forEach(t => t.stop()); s2.src.disconnect();
   await new Promise(r => setTimeout(r, 300));
   st.s1After = await avgLevel(s1, 2000);
-  st.s1StateAfter = s1.state();
+  st.s1StateAfter = s1.state(); st.s1AppliedAfter = settings(s1.t);
   const drop = a === null ? Infinity : (st.s1Before ?? -120) - a;
   st.verdict = s1.t.muted || s1.t.readyState !== 'live' ? 'stream 1 muted or ended' : a === null || drop > 15 ? 'stream 1 went quiet' : drop > 6 ? 'stream 1 dropped' : 'stream 1 kept working';
   $('v2').textContent = `${st.verdict} (${st.s1Before} → ${a} dBFS)`;
@@ -151,8 +166,8 @@ $('b3').onclick = async () => {
     await new Promise(r => setTimeout(r, 150));
     while (performance.now() - p0 < 1000) { await new Promise(r => setTimeout(r, 40)); const v = st.level(); s += v * v; n++; const f = pitch(st.buf, ac.sampleRate); if (f > 0 && Math.abs(1200 * Math.log2(f / 440)) <= 50) onNote++; }
     const during = dB(Math.sqrt(s / Math.max(1, n)));
-    const res = R.step3['ec_' + key] = { settings: settings(st.t), quiet, duringTone: during, rise: during !== null && quiet !== null ? +(during - quiet).toFixed(1) : null, heardAsNotePct: Math.round(100 * onNote / Math.max(1, n)) };
-    $('v3' + key).textContent = `${res.rise === null ? '—' : (res.rise > 0 ? '+' : '') + res.rise + ' dB'} · heard as a note ${res.heardAsNotePct}%`;
+    const res = R.step3['ec_' + key] = { asked: { echoCancellation: ec, noiseSuppression: false, autoGainControl: false }, applied: settings(st.t), quiet, duringTone: during, rise: during !== null && quiet !== null ? +(during - quiet).toFixed(1) : null, heardAsNotePct: Math.round(100 * onNote / Math.max(1, n)) };
+    $('v3' + key).textContent = `${res.rise === null ? '—' : (res.rise > 0 ? '+' : '') + res.rise + ' dB'} · heard as a note ${res.heardAsNotePct}% · EC applied ${yn(res.applied.echoCancellation)}`;
     $('v3' + key).className = res.heardAsNotePct > 20 ? 'bad' : 'ok';
     st.stream.getTracks().forEach(t => t.stop()); st.src.disconnect();
     await new Promise(r => setTimeout(r, 500));
