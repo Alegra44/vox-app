@@ -12357,7 +12357,7 @@ function vlHideBreak(){
   vlBreakShown = null;
 }
 
-/* ---------------- Vocal Load Dosimetry: features on the shared mic (phase 3b) ---------------- */
+/* ---------------- Vocal Load Dosimetry: features that read pitch through initAudio (phase 3b) ---------------- */
 // Features that read pitch through initAudio feed today's load from the register input (its raw path, the same one
 // stream; nothing new is opened), on every browser. vlSidecar(isActive) is called once the feature has started and
 // feeds one register frame per animation frame while isActive() holds, ending the session the moment it doesn't.
@@ -12545,10 +12545,10 @@ document.getElementById('breathStartBtn').addEventListener('click', ()=>{
 
 /* ---------------- Vibrato Analyzer ---------------- */
 let vibratoActive = false;
-// The pitch trace from the same capture as Voice Quality: an unprocessed mic stream (no noise suppression, echo
-// cancellation or auto gain) with the pitch read behind a 1.5 kHz low-pass. Tested against the shared, noise-suppressed
-// mic with a 6 Hz ±50 ct vibrato under room noise, ventilation rumble, other voices and hiss: this path was the most
-// accurate in every case (depth within ~2 ct, where the suppressed mic read ±134 with talkers at 0 dB SNR).
+// The pitch trace from the same capture as Voice Quality: the one mic stream's pitch path (no noise suppression or auto
+// gain, the pitch read behind a 1.5 kHz low-pass). Tested against a noise-suppressed mic with a 6 Hz ±50 ct vibrato
+// under room noise, ventilation rumble, other voices and hiss: this path was the most accurate in every case (depth
+// within ~2 ct, where the suppressed mic read ±134 with talkers at 0 dB SNR).
 async function captureVibratoTrace(durationMs=4000){
   const frames = await vqCapture({ms:durationMs, active:()=>vibratoActive, spectrum:false});
   return frames.map(f=>({t:f.t, midi:f.midi}));
@@ -12682,12 +12682,13 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
 });
 
 /* ---------------- Voice Quality (phase 1: vibrato, breathiness, brightness) ---------------- */
-// Three estimates from the mic signal itself over a 4 s held note. The mic is opened on its own stream with the browser's
-// echo cancellation, noise suppression and auto gain off: noise suppression would filter out the very breath noise the
-// breathiness estimate looks for. Each animation frame reads one 8192-point AnalyserNode (no smoothing, ~5.9 Hz bins at
-// 48 kHz) for the harmonics-to-noise ratio and the spectral centroid, and the pitch (autoCorrelate, the Vibrato Analyzer's
-// detector) from a second 2048-sample analyser behind a 1.5 kHz low-pass: broadband breath noise otherwise swamps the
-// autocorrelation (with white noise at 20 dB HNR it found no pitch at all). Vibrato comes from the pitch trace through analyzeVibrato().
+// Three estimates from the mic signal itself over a 4 s held note, read from the one mic stream (micGraph), which has
+// noise suppression and auto gain off: noise suppression would filter out the very breath noise the breathiness
+// estimate looks for (echo cancellation is on, as for every feature). Each animation frame reads one 8192-point
+// AnalyserNode on the raw path (no smoothing, ~5.9 Hz bins at 48 kHz) for the harmonics-to-noise ratio and the spectral
+// centroid, and the pitch (autoCorrelate, the Vibrato Analyzer's detector) from a 2048-sample analyser on the pitch
+// path, behind the 1.5 kHz low-pass: broadband breath noise otherwise swamps the autocorrelation (with white noise at
+// 20 dB HNR it found no pitch at all). Vibrato comes from the pitch trace through analyzeVibrato().
 const VQ_HOLD_MS = 4000, VQ_FFT = 8192, VQ_PITCH_WIN = 2048, VQ_PITCH_LP_HZ = 1500, VQ_HNR_MAX_HZ = 5000, VQ_CENTROID_MAX_HZ = 6000, VQ_CENTROID_FLOOR_DB = 60, VQ_MIN_FRAMES = 30;
 const VQ_HNR_CLEAR = 20, VQ_HNR_BREATHY = 12; // rough reading bands for this tool, not clinical norms
 // Brightness bands as a harmonic roll-off (dB per octave): steeper than 13 reads dark, shallower than 9 reads bright.
