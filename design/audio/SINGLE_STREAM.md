@@ -354,6 +354,32 @@ Still open before C3 ships: the bleed fixes (loopreal in a quiet room, on AC pow
 - Built on `feat/single-stream` from master, C3 + F2 as the only code path (no flags). Spec verbatim:
   `design/audio/BUILD.md`.
 
+## Build notes (feat/single-stream)
+
+### 1.3 RTF "Steady" with echo cancellation on: no change needed
+
+`scripts/vq-verify/rtfsteady.js` recorded every frame RTF reads over a whole 40 s loop of each vibfix stimulus, master
+and the branch (C3 + F2), 2 runs each, the shared mic opened first as in vibfix (log `rtfsteady-2026-10-15T11-28-36`).
+`rtfsteady-eval.js` replays the Steady row offline with the app's own vibrato helper; the replay matches the page's own
+reading within 2 points.
+
+| Steady, % of voiced frames | whole loop, master / branch | 6 s windows, master (min / median / max) | branch |
+|---|---|---|---|
+| N2 (unsteady, ≤25% line) | 21 / 20 | 11 / 20 / 44 | 7 / 21 / 43 |
+| N1, N4 (unsteady) | 19 / 19, 6 / 6 | 4 / 18 / 35, 0 / 6 / 23 | 4 / 18 / 35, 0 / 5 / 23 |
+| S1 (straight) | 78 / 79 | 75 / 78 / 82 | 76 / 78 / 84 |
+| V1–V6 (vibrato) | 41 / 41, 39 / 38, 97 / 97, 96 / 96, 18 / 19, 72 / 72 | | |
+
+- **The stream doesn't change Steady.** Over a whole loop every stimulus reads within 1–3 points on both sides, N2
+  included (21% / 20%, under its line).
+- **vibfix's N2 +22 was its 6 s window**: on either side a 6 s window of N2 reads anywhere from 7% to 44%, depending on
+  where in the loop RTF starts, which differs between sides that take different times to get there.
+- **No criterion keeps every 6 s window of N2 under 25% without costing the vibrato notes**: a 60-frame window does
+  (N2 ≤ 21%) but takes V1 41 → 17, V2 39 → 19, V6 72 → 50 on both sides; a 80 threshold leaves N2 at 40% in some
+  windows and takes S1 78 → 58. That would be a product change unrelated to the stream.
+- So the criterion is unchanged, and vibfix samples RTF (and the Tuner) over one whole loop (`VF_RTF_MS`, 40 s), as
+  noisegate and rtfsoft now do.
+
 ## Recommendation
 
 ### Configuration: C3
