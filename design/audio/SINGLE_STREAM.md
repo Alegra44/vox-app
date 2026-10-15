@@ -380,6 +380,25 @@ reading within 2 points.
 - So the criterion is unchanged, and vibfix samples RTF (and the Tuner) over one whole loop (`VF_RTF_MS`, 40 s), as
   noisegate and rtfsoft now do.
 
+### 1.4 Tuner thresholds: checked, no number changed
+
+`scripts/vq-verify/tunerstab.js`: the Tuner's own stability readings (sessionStabilityReadings) over a whole 40 s loop of
+each vibfix stimulus, master and the branch, 2 runs each (log `tunerstab-2026-10-15T12-21-52`); `tunerstab-eval.js`
+replays what they feed. The in-tune lock (6 ct) is unchanged.
+
+| What the stability feeds | master | branch |
+|---|---|---|
+| Session average (shown, saved as the day's "stability"): vibrato / straight notes | | +0.9 / +0.7 on average (−1.0 … +4.7) |
+| the same, wrong notes / wobbly notes | | +2.8 (−2.9 … +6.6) / +6.8 (+0.8 … +14.5: W4, the 11 Hz flutter, which the low-pass smooths) |
+| `checkVocalHealthSignal` (first half − second half ≥ 12), one note per session | warns on none of 17 | none of 17 |
+| the same, two-note sessions (steady → wobbly, wobbly → steady, steady → steady; 14 pairs) | warns on 6 | the same 6 (14 of 14 verdicts agree) |
+| Voice Health trend (recent 3 days − prior 3 < −10) | | a step of about +1 for steady singing: it can't read as a decline |
+
+- **Over whole loops the Tuner's shift is +1, not the +7 measured in 6 s windows** (B2), for the notes people hold.
+- **Wobbly notes read steadier by +4 to +15**, but stay below the steady ones (W4 40 against 57–86), and the health
+  signal, which compares a session with itself, gives the same verdict on every session tested.
+- No number changed: the 6 ct lock, the 12-point drop and the −10 trend line all mean what they did.
+
 ## Recommendation
 
 ### Configuration: C3
