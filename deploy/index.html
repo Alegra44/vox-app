@@ -12413,6 +12413,14 @@ let breathRafId = null;
 let breathRmsSamples = [];
 let breathSilenceStart = null;
 
+// The raw path's latest samples (micGraph). Every loudness reading takes these: the pitch path is low-passed and
+// levelled by the quiet-singer gain, so its level isn't the singer's. Call after initAudio.
+let rawArray = null;
+function readRawMic(){
+  if(!rawArray) rawArray = new Float32Array(micG.rawAn.fftSize);
+  micG.rawAn.getFloatTimeDomainData(rawArray);
+  return rawArray;
+}
 function computeRMS(buf){
   let sum=0;
   for(let i=0;i<buf.length;i++) sum += buf[i]*buf[i];
@@ -12444,8 +12452,7 @@ async function startBreathHold(){
 const BREATH_RING_CIRC = 553;
 function breathLoop(){
   if(!breathActive) return;
-  analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(dataArray);
+  const rms = computeRMS(readRawMic());
   const elapsed = (performance.now()-breathStartTime)/1000;
   document.getElementById('breathTimerVal').textContent = elapsed.toFixed(1)+'s';
   const target = BREATH_TARGETS[exerciseLevel||'beginner'];
@@ -13064,7 +13071,7 @@ function emotionLoop(){
   document.getElementById('emotionProgressFill').style.width = Math.min(100,(elapsed/totalMs)*100)+'%';
 
   analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(dataArray);
+  const rms = computeRMS(readRawMic());
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   if(freq>0){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
@@ -14352,8 +14359,8 @@ function renderTimingTrainerIntro(){
 function timingTrainerTick(){
   if(!timingTrainer.active) return;
   const songT = audioCtx.currentTime - choirStartCtxTime;
-  analyser.getFloatTimeDomainData(dataArray);
-  const isVoiced = computeRMS(dataArray) > ONSET_RMS_THRESHOLD;
+  const raw = readRawMic();
+  const isVoiced = computeRMS(raw) > ONSET_RMS_THRESHOLD;
   if(!timingTrainer.armed){
     if(isVoiced) timingTrainer.silentSince = null;
     else if(timingTrainer.silentSince===null) timingTrainer.silentSince = songT;
@@ -14365,12 +14372,12 @@ function timingTrainerTick(){
   // The whole-window RMS only confirms a release as it's about to scroll out of the window, so while
   // still "voiced" keep noting where any trailing silence begins and use that once the release confirms.
   const hopSec = 64/audioCtx.sampleRate;
-  const trailingSilence = edgeSecondsAgo(dataArray, audioCtx.sampleRate, false);
+  const trailingSilence = edgeSecondsAgo(raw, audioCtx.sampleRate, false);
   const pendingRelease = timingTrainer.pendingRelease;
   timingTrainer.pendingRelease = isVoiced ? (trailingSilence>=hopSec ? songT - trailingSilence : null) : null;
   if(rising || falling){
     const edgeT = falling && pendingRelease!==null && pendingRelease!==undefined ? pendingRelease
-      : songT - edgeSecondsAgo(dataArray, audioCtx.sampleRate, rising);
+      : songT - edgeSecondsAgo(raw, audioCtx.sampleRate, rising);
     // An "entrance" landing right on a count-in click means the speakers are leaking into the mic.
     if(rising && edgeT<0 && timingTrainer.clicks.some(c=>edgeT>=c-0.01 && edgeT-c<0.08)) timingTrainer.bleedHits++;
     if(rising===(timingTrainer.mode==='entrance')){
@@ -18178,7 +18185,7 @@ function bossLoop(){
 
   let freq, buf, chestScore=null;
   if(bossUsesRegisterInput){ const fr=readRegisterFrame(); freq=fr.freq; buf=fr.raw; chestScore=fr.chest; vlFeed(freq, buf); }
-  else { analyser.getFloatTimeDomainData(dataArray); freq=autoCorrelate(dataArray, audioCtx.sampleRate); buf=dataArray; }
+  else { analyser.getFloatTimeDomainData(dataArray); freq=autoCorrelate(dataArray, audioCtx.sampleRate); buf=readRawMic(); } // loudness from the raw path
   if(freq>0){
     if(bossNoteOnsetTime===null) bossNoteOnsetTime=performance.now();
     const cents=centsFromTarget(freq, targetMidi);
@@ -20188,8 +20195,7 @@ function rhythmOnsetLoop(beatMs){
   const lastBeatEnd = rhythmBeatTimestamps[7] + beatMs*0.6;
   if(now > lastBeatEnd){ finishRhythmTrainer(); return; }
 
-  analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(dataArray);
+  const rms = computeRMS(readRawMic());
   const isVoiced = rms > ONSET_RMS_THRESHOLD;
 
   if(isVoiced && !rhythmWasVoiced){
@@ -21487,7 +21493,7 @@ async function runEmoRound(intentKey, roundNum){
     function frame(){
       if(!emoActive){ resolve(); return; }
       analyser.getFloatTimeDomainData(dataArray);
-      const rms = computeRMS(dataArray);
+      const rms = computeRMS(readRawMic());
       const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
       if(rms>0.008) rmsSamples.push(rms);
       if(freq>0){
@@ -21624,7 +21630,7 @@ function pdLoop(){
   document.getElementById('pdProgressFill').style.width = Math.min(100,(elapsedMs/totalMs)*100)+'%';
 
   analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(dataArray);
+  const rms = computeRMS(readRawMic());
   if(rms>0.008) pdRmsSamples.push(rms);
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   if(freq>0){
