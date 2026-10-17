@@ -13,6 +13,7 @@
 cd "$(dirname "$0")/../.."
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/suites-$STAMP; mkdir -p "$OUT"
 L=http://localhost:8765/
+WATCHDOG=${WATCHDOG:-15}
 (cd deploy && exec python3 -m http.server 8765 >/dev/null 2>&1) & SRV=$!
 trap 'kill $SRV 2>/dev/null' EXIT
 SUITES=(
@@ -76,7 +77,14 @@ for s in "${SUITES[@]}"; do
   if [ -n "$ONLY" ]; then case " $ONLY " in *" $name "*) ;; *) continue;; esac; fi
   while pmset -g batt | head -1 | grep -q "Battery Power"; do echo "$(date -u +%H:%M:%S) on battery: waiting for AC before $name" >> "$OUT/progress.txt"; sleep 300; done
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name" >> "$OUT/progress.txt"
-  $cmd > "$OUT/$name.log" 2>&1; rc=$?
+  $cmd > "$OUT/$name.log" 2>&1 & PID=$!
+  while kill -0 $PID 2>/dev/null; do # a suite with no output for WATCHDOG minutes is killed (cv-s6fr hung for 44 h on 2026-10-16)
+    sleep 20
+    idle=$(( ($(date +%s) - $(stat -f %m "$OUT/$name.log")) / 60 ))
+    if [ $idle -ge $WATCHDOG ]; then pkill -P $PID 2>/dev/null; kill $PID 2>/dev/null
+      echo "$(date -u +%H:%M:%S) $name killed: no output for $WATCHDOG min" >> "$OUT/progress.txt"; fi
+  done
+  wait $PID; rc=$?
   echo "$(date -u +%H:%M:%S) done  $name exit $rc ($(( ($(date +%s)-t0)/60 )) min)" >> "$OUT/progress.txt"
   sleep 60
 done
