@@ -412,7 +412,7 @@ Runs: `scripts/design-verify/logs/suites-2026-10-15T13-15-16`, `suites-2026-10-1
 - **Already failing (the same error on master):** choir verify (`audioCtx` undefined in waitSongT), s6fr, fix, p5,
   peaks, timing, p7 (no output for 25 min), yc (Record chip not visible), shot, live5, live6 (timeouts).
 - **vibfix (regress), accepted:** W4 Pitch Match pro +4; the Tuner stability shifts W5 −8, N1 +9, N4 +10 (1.4).
-- **Not on the accepted list (block the gate):**
+- **Not on the accepted list (blocked the gate until accepted, below):**
 
 | Regression | branch − master | with the F2 gain off (`noisegate-nogain-2026-10-18T11-01-31`) | Cause |
 |---|---|---|---|
@@ -425,6 +425,21 @@ Runs: `scripts/design-verify/logs/suites-2026-10-15T13-15-16`, `suites-2026-10-1
 - **Voice Quality (master → branch, every verdict unchanged):** vibrato ±1 ct; HNR +0.3 to +0.4 dB on the noisy
   stimuli; live clean tone HNR 50.0 → 45.4 dB ("clear tone" both), consistency 98 → 94%; brightness ratios −0.01 to
   −0.03; centroid −7 Hz.
+
+### Accepted regressions (the user, 2026-10-18)
+
+All five above are accepted; the gate passes with them.
+
+1. **W4 flutter, Choir World +4**: the 1.5 kHz low-pass, the same cause as the accepted Pitch Match pro +4.
+2. **Babble alone, Tuner "in tune" +14**
+3. **Speech alone (Alice), RTF / Tuner +6 / +9**
+4. **TV alone (Bonanza), Tuner +7**
+   (2–4) Voice-like sound. No pitch detector can tell another voice from the singer's, and master already hears babble
+   on 73% of Tuner frames. Logged as a known limit in CHOIR_WORLD_ROADMAP.md ("voice-like background: speech, TV,
+   babble") for a future fix based on onset and the singer's range. It doesn't block this build.
+5. **Breathy singing over traffic, RTF −6**: the price of RTF hearing traffic alone on 0% of frames instead of 80%.
+
+The 1.3 deviation (no Steady retune; N2 reads 21% on master and 20% on the branch over whole loops) is accepted too.
 
 ## Recommendation
 

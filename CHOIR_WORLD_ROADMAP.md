@@ -345,6 +345,13 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
   iPhone check (needs a typed go-ahead), then report. No merge or production deploy before the user's review;
   rollback target dpl_CAMGry4a7b8RewSA6bJNST64PVv7. The quiet-room loopreal run waits for step 7 (bleed fixes).
   Phone results (micdiag) still to come from the user.
+  **Verified 2026-10-18; gate 2.3 passed with five regressions accepted by the user** (SINGLE_STREAM.md, "Accepted
+  regressions"); 1.3 shipped without a Steady retune (accepted).
+
+- [ ] **Voice-like background: speech, TV, babble** (known limit, logged 2026-10-18 from the single-stream gate). The
+  pitch detector can't tell another voice from the singer's: master already hears babble on 73% of Tuner frames, and
+  the single stream adds a little (babble Tuner "in tune" +14, speech RTF / Tuner +6 / +9, TV Tuner +7). Future fix:
+  gate on onsets and the singer's range. Not a blocker for the single stream.
 
 - [ ] **Speaker bleed scores as singing** (scoped, logged 2026-10-06; not fixed; sits next to item 3, one mic stream per
   feature: HANDOFF.md, "Order of work"). Found by `scripts/vq-verify/loopback.js`, which feeds the app's own playback
