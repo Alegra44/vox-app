@@ -1,0 +1,110 @@
+signed up voxcoach-yc-1792329951145@example.com
+== Real-mic take: Record Alto through the one stream
+MICTAKE {"levelDb":-16.3,"p5Db":-16.7,"p95Db":-15.8,"gaps":0,"longestGapMs":0,"windows":1333,"spanS":26.67,"song":26.67,"peakDb":-6.4,"mime":"audio/webm;codecs=opus","status":"Alto saved.","gum":[{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}],"micLive":true}
+== Record Alto (amp 0.5)
+  while recording Alto: chord 2 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.4454 B4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0 —
+Recorded Alto: status ["Recording Alto — count-in…","Recording Alto — chord 2/8"] → Alto saved. | take {"lead":3.4133,"peak":0.668,"dur":27.19,"mime":"audio/webm;codecs=opus","kb":146,"bufDur":30.6,"onset1VsDownbeatMs":66.7,"onset2VsChord2Ms":66.3}
+== Record Bass (amp 0.5) — the Alto take should play back underneath
+  while recording Bass: chord 2 trim 0.831 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2499 B4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.4738 G2✓
+Recorded Bass: status ["Recording Bass — count-in…","Recording Bass — chord 2/8"] → Bass saved. | take {"lead":3.4133,"peak":0.583,"dur":27.19,"mime":"audio/webm;codecs=opus","kb":146,"bufDur":30.6,"onset1VsDownbeatMs":74.7,"onset2VsChord2Ms":74.3}
+rows: [
+  '● Soprano · not recorded — silent in playback ● Record',
+  '● Lead · not recorded — silent in playback ● Record',
+  '● Alto · recorded 10/18/26, 6:57 PM · 27.19 s · peak -3.5 dBFS ● Re-record Delete',
+  '● Tenor · not recorded — silent in playback ● Record',
+  '● Bass · recorded 10/18/26, 6:57 PM · 27.19 s · peak -4.7 dBFS ● Re-record Delete'
+]
+== Stacked playback: Alto + Bass, default faders (Alto 0.70, Bass 0.75)
+  chord 1 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2455 G4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2668 C3✓
+  chord 2 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2493 B4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2673 G2✓
+  chord 4 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2562 A4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2689 F2✓
+  chord 8 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2433 G4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2661 C3✓
+  VU meters at 25 s: {"Soprano":"0%","Lead":"0%","Alto":"37%","Tenor":"0%","Bass":"42%"} | stacked output {"peak":0.805,"peakDbfs":-1.88,"pctOver":0}
+== Stacked playback: Alto fader 1.00, Bass fader 0.30
+  chord 1 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g1 rms 0.348 G4✓ | Tenor g0.7 rms 0 — | Bass g0.3 rms 0.1066 C3✓
+  chord 2 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g1 rms 0.3561 B4✓ | Tenor g0.7 rms 0 — | Bass g0.3 rms 0.1069 G2✓
+  chord 4 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g1 rms 0.3658 A4✓ | Tenor g0.7 rms 0 — | Bass g0.3 rms 0.1077 F2✓
+  chord 8 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g1 rms 0.3473 G4✓ | Tenor g0.7 rms 0 — | Bass g0.3 rms 0.1067 C3✓
+  VU meters at 25 s: {"Soprano":"0%","Lead":"0%","Alto":"54%","Tenor":"0%","Bass":"18%"} | stacked output {"peak":0.803,"peakDbfs":-1.91,"pctOver":0}
+RMS ratio (run 2 / run 1) at each sample — Alto expected 1.429, Bass expected 0.400: [{"Alto":1.418,"Bass":0.4},{"Alto":1.428,"Bass":0.4},{"Alto":1.428,"Bass":0.401},{"Alto":1.427,"Bass":0.401}]
+== Stacked playback: Bass muted via the workspace mute state
+  chord 1 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2442 G4✓ | Tenor g0.7 rms 0 — | Bass g0 rms 0 —
+  chord 2 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2492 B4✓ | Tenor g0.7 rms 0 — | Bass g0 rms 0 —
+  chord 4 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2562 A4✓ | Tenor g0.7 rms 0 — | Bass g0 rms 0 —
+  chord 8 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2437 G4✓ | Tenor g0.7 rms 0 — | Bass g0 rms 0 —
+  VU meters at 25 s: {"Soprano":"0%","Lead":"0%","Alto":"36%","Tenor":"0%","Bass":"0%"} | stacked output {"peak":0.468,"peakDbfs":-6.6,"pctOver":0}
+== Record Soprano, Lead, Tenor near full scale (amp 0.95) for a 5-part stacked peak test
+Recorded Soprano: status ["Recording Soprano — count-in…","Recording Soprano — chord 2/8"] → Soprano saved. | take {"lead":3.4133,"peak":1.163,"dur":27.19,"mime":"audio/webm;codecs=opus","kb":136,"bufDur":30.6,"onset1VsDownbeatMs":72.7,"onset2VsChord2Ms":73.3}
+Recorded Lead: status ["Recording Lead — count-in…","Recording Lead — chord 2/8"] → Lead saved. | take {"lead":3.4133,"peak":1.143,"dur":27.19,"mime":"audio/webm;codecs=opus","kb":146,"bufDur":30.6,"onset1VsDownbeatMs":70.7,"onset2VsChord2Ms":72.3}
+Recorded Tenor: status ["Recording Tenor — count-in…","Recording Tenor — chord 2/8"] → Tenor saved. | take {"lead":3.4133,"peak":1.099,"dur":27.25,"mime":"audio/webm;codecs=opus","kb":146,"bufDur":30.66,"onset1VsDownbeatMs":75.7,"onset2VsChord2Ms":74.3}
+== Stacked playback: all 5 parts, default faders
+  chord 1 trim 0.279 | Soprano g0.65 rms 0.4382 C6✓ | Lead g0.85 rms 0.5973 C5✓ | Alto g0.7 rms 0.2521 G4✓ | Tenor g0.7 rms 0.4727 E4✓ | Bass g0.75 rms 0.2651 C3✓
+  chord 2 trim 0.279 | Soprano g0.65 rms 0.4351 D6✓ | Lead g0.85 rms 0.5764 D5✓ | Alto g0.7 rms 0.2496 B4✓ | Tenor g0.7 rms 0.4694 G4✓ | Bass g0.75 rms 0.2659 G2✓
+  chord 4 trim 0.279 | Soprano g0.65 rms 0.436 C6✓ | Lead g0.85 rms 0.5962 C5✓ | Alto g0.7 rms 0.2555 A4✓ | Tenor g0.7 rms 0.4546 F4✓ | Bass g0.75 rms 0.2691 F2✓
+  chord 8 trim 0.279 | Soprano g0.65 rms 0.4425 C6✓ | Lead g0.85 rms 0.5998 C5✓ | Alto g0.7 rms 0.2496 G4✓ | Tenor g0.7 rms 0.4788 E4✓ | Bass g0.75 rms 0.2666 C3✓
+  VU meters at 25 s: {"Soprano":"67%","Lead":"89%","Alto":"38%","Tenor":"68%","Bass":"39%"} | stacked output {"peak":0.784,"peakDbfs":-2.11,"pctOver":0}
+== Delete Bass, then play
+status: Bass deleted. | stored parts: [ 'Alto', 'Soprano', 'Lead', 'Tenor' ]
+== fr {
+ "title": "🎤 Votre chorale",
+ "summary": "4 voix sur 5 enregistrées pour Demo Hymn (C Major).",
+ "desc": "Enregistrez-vous en chantant chaque voix, une à la fois, puis écoutez toutes vos prises en…",
+ "rows": [
+  "● Soprano · enregistrée le 18/10/2026 18:59 · 27,19 s · crête 1,3 dBFS ● Réenregistrer Supprimer",
+  "● Voix principale · enregistrée le 18/10/2026 18:59 · 27,19 s · crête 1,2 dBFS ● Réenregistrer Supprimer",
+  "● Alto · enregistrée le 18/10/2026 18:57 · 27,19 s · crête -3,5 dBFS ● Réenregistrer Supprimer",
+  "● Ténor · enregistrée le 18/10/2026 19:00 · 27,25 s · crête 0,8 dBFS ● Réenregistrer Supprimer",
+  "● Basse · non enregistrée — muette à la lecture ● Enregistrer"
+ ],
+ "play": "▶ Écouter ma chorale",
+ "stop": "Arrêter",
+ "note": "Vos enregistrements sont conservés uniquement sur cet appareil."
+}
+== es {
+ "title": "🎤 Tu coro",
+ "summary": "4 de 5 voces grabadas para Demo Hymn (C Major).",
+ "desc": "Grábate cantando cada voz, una por una, y luego escucha todas tus tomas juntas como un cor…",
+ "rows": [
+  "● Soprano · grabada 18/10/26, 18:59 · 27,19 s · pico 1,3 dBFS ● Volver a grabar Borrar",
+  "● Voz principal · grabada 18/10/26, 18:59 · 27,19 s · pico 1,2 dBFS ● Volver a grabar Borrar",
+  "● Contralto · grabada 18/10/26, 18:57 · 27,19 s · pico -3,5 dBFS ● Volver a grabar Borrar",
+  "● Tenor · grabada 18/10/26, 19:00 · 27,25 s · pico 0,8 dBFS ● Volver a grabar Borrar",
+  "● Bajo · sin grabar — en silencio al reproducir ● Grabar"
+ ],
+ "play": "▶ Escuchar mi coro",
+ "stop": "Detener",
+ "note": "Tus grabaciones se guardan solo en este dispositivo."
+}
+== tr {
+ "title": "🎤 Senin Koron",
+ "summary": "Demo Hymn (C Major) için 5 partiden 4 tanesi kaydedildi.",
+ "desc": "Her partiyi tek tek kendiniz söyleyerek kaydedin, ardından tüm kayıtlarınızı tam bir koro …",
+ "rows": [
+  "● Soprano · 18.10.2026 18:59 tarihinde kaydedildi · 27,19 sn · tepe 1,3 dBFS ● Yeniden kaydet Sil",
+  "● Ana ses · 18.10.2026 18:59 tarihinde kaydedildi · 27,19 sn · tepe 1,2 dBFS ● Yeniden kaydet Sil",
+  "● Alto · 18.10.2026 18:57 tarihinde kaydedildi · 27,19 sn · tepe -3,5 dBFS ● Yeniden kaydet Sil",
+  "● Tenor · 18.10.2026 19:00 tarihinde kaydedildi · 27,25 sn · tepe 0,8 dBFS ● Yeniden kaydet Sil",
+  "● Bas · kaydedilmedi — çalarken sessiz ● Kaydet"
+ ],
+ "play": "▶ Koromu çal",
+ "stop": "Durdur",
+ "note": "Kayıtlarınız yalnızca bu cihazda saklanır."
+}
+== en {
+ "title": "🎤 Your Choir",
+ "summary": "4 of 5 parts recorded for Demo Hymn (C Major).",
+ "desc": "Record yourself singing each part, one at a time, then hear all your takes together as a f…",
+ "rows": [
+  "● Soprano · recorded 10/18/26, 6:59 PM · 27.19 s · peak 1.3 dBFS ● Re-record Delete",
+  "● Lead · recorded 10/18/26, 6:59 PM · 27.19 s · peak 1.2 dBFS ● Re-record Delete",
+  "● Alto · recorded 10/18/26, 6:57 PM · 27.19 s · peak -3.5 dBFS ● Re-record Delete",
+  "● Tenor · recorded 10/18/26, 7:00 PM · 27.25 s · peak 0.8 dBFS ● Re-record Delete",
+  "● Bass · not recorded — silent in playback ● Record"
+ ],
+ "play": "▶ Play my choir",
+ "stop": "Stop",
+ "note": "Your recordings are saved on this device only."
+}
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-yc-1792329951145@example.com
