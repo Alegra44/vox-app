@@ -8,6 +8,7 @@
 // MICTAKE {...}; run it on master and a branch to compare (ycmic.sh).
 // A steady tone is what noise suppression removes: master's stream (NS and AGC on) records it about 19 dB down, so
 // YC_WAV=<file> sings a real voice instead (vibfix's stim-S1.wav, a held sung note) for the level comparison.
+// Then BALANCE (the take against the choir parts) and STUDIO (a 15 s Studio take's clipped samples).
 // Usage: node scripts/choir-verify/yc.js [url]   (YC_MIC_ONLY=1 stops after the real-mic take; YC_WAV=<wav> the mic's file)
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
@@ -79,6 +80,10 @@ function toneWav() {
   // in 100 ms windows from the song's start to its end: median level and windows 20 dB under it.
   if (!mic.error) Object.assign(mic, await ev(async () => {
     const an = audioCtx.createAnalyser(); an.fftSize = 4096; choirOutNode.connect(an);
+    // every sample after the playback limiter (playbackOutNode, what reaches the speakers): |x| ≥ 0.99 and the peak
+    const sp = audioCtx.createScriptProcessor(1024, 2, 2), clip = { n: 0, over: 0, max: 0 };
+    sp.onaudioprocess = e => { for (let c = 0; c < e.inputBuffer.numberOfChannels; c++) { const d = e.inputBuffer.getChannelData(c); for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); clip.n++; if (v >= 0.99) clip.over++; if (v > clip.max) clip.max = v; } e.outputBuffer.getChannelData(c).fill(0); } };
+    playbackOutNode.connect(sp); sp.connect(audioCtx.destination);
     document.getElementById('ycPlayBtn').click();
     while (!yourChoir.playing) await new Promise(r => setTimeout(r, 10));
     const buf = new Float32Array(4096), db = [];
@@ -87,11 +92,53 @@ function toneWav() {
       if (t > 0.2 && t < songTotalDurMs() / 1000 - 0.2) { an.getFloatTimeDomainData(buf); const r = Math.sqrt(buf.reduce((a, v) => a + v * v, 0) / buf.length); db.push(r > 0 ? 20 * Math.log10(r) : -120); }
       await new Promise(r => setTimeout(r, 100));
     }
-    choirOutNode.disconnect(an);
+    choirOutNode.disconnect(an); playbackOutNode.disconnect(sp); sp.disconnect();
     const s = [...db].sort((a, b) => a - b), med = s[s.length >> 1];
-    return { playDb: +med.toFixed(1), playP5Db: +s[Math.floor(s.length * 0.05)].toFixed(1), playGaps: db.filter(v => v < med - 20).length, playWindows: db.length, trim: +choirOutNode.gain.value.toFixed(3) };
+    // the stored take: every sample of the decoded file, |x| ≥ 0.99
+    const tb = await ycDecode(ycTakes().Alto.base64); let stored = 0, storedN = 0;
+    for (let c = 0; c < tb.numberOfChannels; c++) { const d = tb.getChannelData(c); storedN += d.length; for (let i = 0; i < d.length; i++) if (Math.abs(d[i]) >= 0.99) stored++; }
+    return { storedClipped: stored, storedSamples: storedN, outClipped: clip.over, outSamples: clip.n, outPeakDb: +(20 * Math.log10(clip.max || 1e-9)).toFixed(2), playDb: +med.toFixed(1), playP5Db: +s[Math.floor(s.length * 0.05)].toFixed(1), playGaps: db.filter(v => v < med - 20).length, playWindows: db.length, trim: +choirOutNode.gain.value.toFixed(3) };
   }));
   console.log('MICTAKE ' + JSON.stringify(mic));
+
+  // Balance. Play my choir plays recorded takes only (unrecorded parts stay silent), so the take meets the choir in two
+  // places: (a) while the next part is recorded (your Alto take with the synth's Bass), (b) against the synth choir as the
+  // workspace plays it. Levels per part after its fader (a tap on choirGainNodes[part]), median of 100 ms windows.
+  if (!mic.error) {
+    const bal = {};
+    const tapsOn = () => ev(() => { window.__bt = {}; Object.keys(choirGainNodes).forEach(p => { const a = audioCtx.createAnalyser(); a.fftSize = 4096; choirGainNodes[p].connect(a); __bt[p] = a; }); });
+    const sample = until => ev(async u => {
+      const buf = new Float32Array(4096), db = {}; Object.keys(__bt).forEach(p => db[p] = []);
+      while (eval(u)) {
+        const t = audioCtx.currentTime - choirStartCtxTime;
+        if (t > 0.2 && t < songTotalDurMs() / 1000 - 0.2) Object.entries(__bt).forEach(([p, a]) => { a.getFloatTimeDomainData(buf); const r = Math.sqrt(buf.reduce((x, v) => x + v * v, 0) / buf.length); if (r > 1e-4) db[p].push(20 * Math.log10(r)); });
+        await new Promise(r => setTimeout(r, 100));
+      }
+      Object.entries(__bt).forEach(([p, a]) => choirGainNodes[p].disconnect(a));
+      return Object.fromEntries(Object.entries(db).filter(([, v]) => v.length).map(([p, v]) => { const s = v.sort((x, y) => x - y); return [p, +s[s.length >> 1].toFixed(1)]; }));
+    }, until);
+    await tapsOn();
+    await page.locator('#ycParts [data-yc-rec="Bass"]').click();
+    await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
+    bal.whileRecordingBass = await sample('!!yourChoir.recording');
+    await ev(() => ycDelete('Bass'));
+    await tapsOn();
+    await ev(async () => { await playChoir({ loop: false }); });
+    bal.synthChoir = await sample('choirIsPlaying');
+    bal.faders = await ev(() => Object.fromEntries(Object.keys(choirState).map(p => [p, choirState[p].volume])));
+    console.log('BALANCE ' + JSON.stringify(bal));
+
+    // Studio: one 15 s take with the real Record button; the stored file's clipped samples. Studio plays takes in an
+    // <audio> element at the Playback volume (≤ 1), outside the Web Audio limiter.
+    await ev(() => enterPanel('studio')); await sleep(500);
+    await page.locator('#studioRecordBtn').click();
+    await page.waitForFunction(() => !document.getElementById('studioRecordBtn').disabled && (progress.studioTakes || []).length > 0, null, { timeout: 40000 });
+    console.log('STUDIO ' + JSON.stringify(await ev(async () => {
+      const tk = progress.studioTakes[progress.studioTakes.length - 1], b = await ycDecode(tk.base64); let n = 0, over = 0, mx = 0;
+      for (let c = 0; c < b.numberOfChannels; c++) { const d = b.getChannelData(c); for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); n++; if (v >= 0.99) over++; if (v > mx) mx = v; } }
+      return { clipped: over, samples: n, peakDb: +(20 * Math.log10(mx)).toFixed(2), durS: +b.duration.toFixed(1), note: document.getElementById('studioRecordNote').textContent };
+    })));
+  }
   if (process.env.YC_MIC_ONLY) { console.log('page errors:', errors); await browser.close(); return; }
   await ev(() => ycDelete('Alto'));
 

@@ -438,6 +438,23 @@ All five above are accepted; the gate passes with them.
    on 73% of Tuner frames. Logged as a known limit in CHOIR_WORLD_ROADMAP.md ("voice-like background: speech, TV,
    babble") for a future fix based on onset and the singer's range. It doesn't block this build.
 5. **Breathy singing over traffic, RTF −6**: the price of RTF hearing traffic alone on 0% of frames instead of 80%.
+6. **Your Choir take level +18.4 dB** (yc.js / ycmic.sh, a sung note at −12.2 dBFS: master stores −31.0 and plays back
+   −34.1 dBFS, the branch −12.6 and −15.7; no gaps on either side): the branch records the voice at its real level;
+   master's −31 dBFS came from noise suppression and AGC on its second stream.
+
+Checks after 6 (yc.js, the branch, 2026-10-18; logs `scripts/choir-verify/logs/ycloud-2026-10-18`, `ycmic-2026-10-18T18-16-21`):
+- **Clipping**, a sung note peaking at −1.1 dBFS: the stored take 0 of 1.35 M samples at |x| ≥ 0.99; after the playback
+  limiter 0 of 2.4 M (output peak −4.2 dBFS); a 15 s Studio take 0 clipped (peak −1.1 dBFS; Studio plays it in an
+  `<audio>` element at the Playback volume, outside the limiter).
+- **Balance**, the sung note at −12.2 dBFS, per part after its fader. Play my choir plays recorded takes only (unrecorded
+  parts stay silent), so the take meets the synth while the next part is recorded and in the workspace's choir:
+
+| | master | branch |
+|---|---|---|
+| your Alto take, while recording Bass | −34.3 dBFS | −16.0 dBFS |
+| the synth's Bass at the same time | −6.4 | −6.4 |
+| the synth choir per part (Soprano / Lead / Alto / Tenor / Bass) | −7.7 / −5.3 / −7.0 / −7.0 / −6.4 | the same |
+| take against the synth's Alto | −27 dB | −9 dB |
 
 The 1.3 deviation (no Steady retune; N2 reads 21% on master and 20% on the branch over whole loops) is accepted too.
 
