@@ -1,0 +1,164 @@
+
+==== 0. STEADY TONE over time, Register Coach from the click, 20 s: % frames on the note (±50 ct) / median RMS, windows 0–0.5 s, 0.5–1 s, 1–2 s, 2–3 s, 3–5 s, 5–10 s, 10–15 s, 15–20 s
+  220    Hz timbre 80 before first frame at 0.08 s    74%/0.361  100%/0.363  100%/0.363  100%/0.363  100%/0.363  100%/0.363  100%/0.363  100%/0.363
+  220    Hz timbre 80 after  first frame at 0.09 s    69%/0.361  100%/0.363  100%/0.363  100%/0.363  100%/0.363  100%/0.363  100%/0.363  100%/0.363
+  330    Hz timbre 50 before first frame at 0.08 s    70%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.376
+  330    Hz timbre 50 after  first frame at 0.07 s    70%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.376  100%/0.377  100%/0.377
+  554.37 Hz timbre 15 before first frame at 0.08 s    74%/0.401  100%/0.404  100%/0.404  100%/0.404  100%/0.404  100%/0.404  100%/0.404  100%/0.404
+  554.37 Hz timbre 15 after  first frame at 0.08 s    70%/0.401  100%/0.404  100%/0.404  100%/0.404  100%/0.404  100%/0.404  100%/0.404  100%/0.404
+
+==== 1. THE BUG: Register Coach chest score, straight vs 6 Hz vibrato (median, p10–p90, % frames pushing/mixed/head)
+
+330 Hz, timbre scoring 35 on a clean spectrum
+  straight before  33.3 (33–33) Δ+0.0 · 0/0/100%   |   after  33.3 (33–33) Δ+0.0 · 0/0/100%
+  ±25 ct   before  33.3 (30–35) Δ-0.1 · 0/0/100%   |   after  33.4 (30–35) Δ+0.0 · 0/0/100%
+  ±50 ct   before  33.0 (29–36) Δ-0.3 · 0/34/66%   |   after  33.2 (29–36) Δ-0.2 · 0/33/67%
+  ±100 ct  before  32.4 (26–40) Δ-0.9 · 0/42/58%   |   after  32.8 (26–40) Δ-0.5 · 0/41/59%
+
+330 Hz, timbre scoring 50 on a clean spectrum
+  straight before  48.1 (48–48) Δ+0.0 · 0/100/0%   |   after  48.1 (48–48) Δ+0.0 · 0/100/0%
+  ±25 ct   before  48.0 (45–49) Δ-0.1 · 0/100/0%   |   after  48.1 (45–49) Δ-0.0 · 0/100/0%
+  ±50 ct   before  48.0 (44–50) Δ-0.1 · 0/100/0%   |   after  48.1 (44–50) Δ-0.0 · 0/100/0%
+  ±100 ct  before  47.6 (42–54) Δ-0.5 · 0/100/0%   |   after  46.8 (41–55) Δ-1.3 · 0/100/0%
+
+330 Hz, timbre scoring 62 on a clean spectrum
+  straight before  60.0 (60–60) Δ+0.0 · 0/100/0%   |   after  60.0 (60–60) Δ+0.0 · 0/100/0%
+  ±25 ct   before  60.0 (56–61) Δ-0.0 · 0/100/0%   |   after  59.9 (56–61) Δ-0.1 · 0/100/0%
+  ±50 ct   before  60.1 (55–62) Δ+0.0 · 1/99/0%   |   after  59.7 (55–62) Δ-0.3 · 0/100/0%
+  ±100 ct  before  59.5 (54–66) Δ-0.5 · 31/69/0%   |   after  59.1 (53–66) Δ-0.9 · 31/69/0%
+
+330 Hz, timbre scoring 80 on a clean spectrum
+  straight before  78.0 (78–78) Δ+0.0 · 100/0/0%   |   after  78.0 (78–78) Δ+0.0 · 100/0/0%
+  ±25 ct   before  77.8 (73–79) Δ-0.2 · 100/0/0%   |   after  77.8 (73–79) Δ-0.2 · 100/0/0%
+  ±50 ct   before  77.7 (73–79) Δ-0.3 · 100/0/0%   |   after  77.8 (73–79) Δ-0.2 · 100/0/0%
+  ±100 ct  before  77.8 (71–84) Δ-0.2 · 100/0/0%   |   after  77.3 (71–84) Δ-0.7 · 100/0/0%
+
+440 Hz, timbre scoring 35 on a clean spectrum
+  straight before  34.1 (34–34) Δ+0.0 · 0/0/100%   |   after  34.1 (34–34) Δ+0.0 · 0/0/100%
+  ±25 ct   before  34.1 (33–35) Δ-0.0 · 0/4/96%   |   after  34.2 (33–35) Δ+0.1 · 0/11/89%
+  ±50 ct   before  34.2 (32–36) Δ+0.1 · 0/34/66%   |   after  34.0 (32–36) Δ-0.1 · 0/34/66%
+  ±100 ct  before  34.0 (28–40) Δ-0.1 · 0/42/58%   |   after  34.2 (28–40) Δ+0.1 · 0/40/60%
+
+440 Hz, timbre scoring 50 on a clean spectrum
+  straight before  49.0 (49–49) Δ+0.0 · 0/100/0%   |   after  49.0 (49–49) Δ+0.0 · 0/100/0%
+  ±25 ct   before  49.1 (48–50) Δ+0.0 · 0/100/0%   |   after  49.1 (48–50) Δ+0.0 · 0/100/0%
+  ±50 ct   before  49.0 (48–50) Δ+0.0 · 0/100/0%   |   after  49.1 (48–50) Δ+0.1 · 0/100/0%
+  ±100 ct  before  48.9 (43–55) Δ-0.2 · 0/100/0%   |   after  49.2 (43–55) Δ+0.1 · 0/100/0%
+
+440 Hz, timbre scoring 62 on a clean spectrum
+  straight before  61.0 (61–61) Δ+0.0 · 0/100/0%   |   after  61.0 (61–61) Δ+0.0 · 0/100/0%
+  ±25 ct   before  61.1 (61–62) Δ+0.0 · 0/100/0%   |   after  61.0 (61–62) Δ-0.0 · 0/100/0%
+  ±50 ct   before  61.1 (60–62) Δ+0.0 · 19/81/0%   |   after  61.1 (60–62) Δ+0.0 · 22/78/0%
+  ±100 ct  before  60.9 (55–67) Δ-0.1 · 38/62/0%   |   after  60.8 (55–67) Δ-0.3 · 37/63/0%
+
+440 Hz, timbre scoring 80 on a clean spectrum
+  straight before  79.1 (79–79) Δ+0.0 · 100/0/0%   |   after  79.1 (79–79) Δ+0.0 · 100/0/0%
+  ±25 ct   before  79.1 (79–80) Δ-0.0 · 100/0/0%   |   after  79.1 (79–80) Δ+0.0 · 100/0/0%
+  ±50 ct   before  79.2 (78–80) Δ+0.1 · 100/0/0%   |   after  79.1 (78–80) Δ+0.0 · 100/0/0%
+  ±100 ct  before  78.7 (72–86) Δ-0.4 · 100/0/0%   |   after  78.9 (72–86) Δ-0.2 · 100/0/0%
+
+==== 2a. REGISTER RUNNER: chest note C4 262 Hz (timbre 80) ↔ head note G4 392 Hz (timbre 15), then a closer pair (60 ↔ 40); 2 s each
+  80↔15 straight
+     before lane right 100% of 549 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 77/77/77 0%, head note 14/14/14 0%
+     after lane right 100% of 554 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 77/77/77 0%, head note 14/14/14 0%
+  80↔15 ±50 ct  
+     before lane right 100% of 555 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 75/77/82 0%, head note 10/14/17 0%
+     after lane right 100% of 556 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 75/77/82 0%, head note 10/14/17 0%
+  80↔15 ±100 ct 
+     before lane right 100% of 552 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 70/78/87 0%, head note 6/14/22 0%
+     after lane right 100% of 553 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 70/78/87 0%, head note 6/14/21 0%
+  60↔40 straight
+     before lane right 100% of 546 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 57/57/57 0%, head note 39/39/39 0%
+     after lane right 100% of 548 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 57/57/57 0%, head note 39/39/39 0%
+  60↔40 ±50 ct  
+     before lane right 100% of 553 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 54/58/62 0%, head note 34/39/41 0%
+     after lane right 100% of 555 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 55/58/62 0%, head note 34/39/41 0%
+  60↔40 ±100 ct 
+     before lane right 94% of 552 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 50/58/66 10%, head note 32/39/45 0%
+     after lane right 94% of 554 frames, lane followed each switch in median 0 ms (max 0) over 4 switches; chest score p10/med/p90, % wrong lane: chest note 50/58/66 10%, head note 32/39/45 0%
+
+==== 2b. REGISTER DRILLS: 5 notes each; chest mode targets A3 220 Hz, head mode C#5 554 Hz (range A3–A5, random stubbed to the zone's first note)
+  chest drill, timbre 80 (should match) straight chest✓match/pitch per note: before 76✓/100% 76✓/100% 76✓/100% 76✓/100% 76✓/100%  |  after 76✓/100% 76✓/100% 76✓/100% 76✓/100% 76✓/100%
+  chest drill, timbre 15 (should drift) straight chest✓match/pitch per note: before 13✗/99% 13✗/99% 13✗/99% 13✗/99% 13✗/99%  |  after 13✗/99% 13✗/99% 13✗/99% 13✗/99% 13✗/99%
+  head drill, timbre 15 (should match) straight chest✓match/pitch per note: before 15✓/100% 15✓/100% 15✓/100% 15✓/100% 15✓/100%  |  after 15✓/100% 15✓/100% 15✓/100% 15✓/100% 15✓/100%
+  head drill, timbre 80 (should drift) straight chest✓match/pitch per note: before 80✗/100% 80✗/100% 80✗/100% 80✗/100% 80✗/100%  |  after 80✗/100% 80✗/100% 80✗/100% 80✗/100% 80✗/100%
+  chest drill, timbre 80 (should match) ±50 ct   chest✓match/pitch per note: before 76✓/99% 76✓/99% 75✓/99% 75✓/99% 75✓/99%  |  after 76✓/100% 75✓/99% 75✓/99% 75✓/99% 75✓/99%
+  chest drill, timbre 15 (should drift) ±50 ct   chest✓match/pitch per note: before 13✗/99% 13✗/99% 13✗/99% 13✗/99% 13✗/99%  |  after 13✗/99% 13✗/99% 13✗/99% 13✗/99% 13✗/99%
+  head drill, timbre 15 (should match) ±50 ct   chest✓match/pitch per note: before 15✓/99% 15✓/99% 15✓/99% 15✓/99% 15✓/99%  |  after 15✓/99% 15✓/100% 15✓/99% 15✓/100% 15✓/99%
+  head drill, timbre 80 (should drift) ±50 ct   chest✓match/pitch per note: before 82✗/99% 82✗/99% 81✗/99% 82✗/99% 82✗/99%  |  after 81✗/99% 81✗/99% 81✗/99% 81✗/99% 81✗/99%
+  chest drill, timbre 80 (should match) ±100 ct  chest✓match/pitch per note: before 76✓/98% 75✓/99% 75✓/99% 76✓/99% 76✓/99%  |  after 76✓/99% 76✓/99% 76✓/99% 76✓/99% 76✓/99%
+  chest drill, timbre 15 (should drift) ±100 ct  chest✓match/pitch per note: before 14✗/99% 13✗/99% 13✗/99% 13✗/99% 13✗/98%  |  after 13✗/99% 13✗/98% 13✗/99% 13✗/99% 13✗/99%
+  head drill, timbre 15 (should match) ±100 ct  chest✓match/pitch per note: before 15✓/99% 15✓/99% 15✓/99% 15✓/99% 15✓/99%  |  after 15✓/99% 15✓/99% 15✓/99% 15✓/99% 15✓/99%
+  head drill, timbre 80 (should drift) ±100 ct  chest✓match/pitch per note: before 82✗/99% 82✗/99% 82✗/99% 82✗/99% 82✗/99%  |  after 82✗/99% 82✗/99% 82✗/99% 82✗/99% 82✗/99%
+
+==== 2c. REGISTER WRAITH (the only boss type that scores register): per-note chest average and |cents|, first 12 s of the song
+  220 Hz timbre 80 straight
+     before chest per note 76 76 76 (median  76.3) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+     after chest per note 76 76 76 (median  76.3) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+  440 Hz timbre 15 straight
+     before chest per note 14 14 14 (median  14.3) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+     after chest per note 14 14 14 (median  14.3) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+  220 Hz timbre 80 ±50 ct  
+     before chest per note 75 75 75 (median  75.4) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+     after chest per note 75 75 75 (median  75.5) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+  440 Hz timbre 15 ±50 ct  
+     before chest per note 14 14 14 (median  14.2) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+     after chest per note 14 14 14 (median  14.2) · |cents| median   —   · mic [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+  Pitch boss (not register) before: mic opened with [{"echoCancellation":true,"noiseSuppression":true}]
+  Pitch boss (not register) after: mic opened with [{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}]
+
+==== 2d. REAL-TIME FEEDBACK register row and RESONANCE VISUALIZER zone (440 Hz, above the passaggio)
+  timbre 15 straight before register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 100/0/0%   ||   after register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 100/0/0%
+  timbre 15 ±50 ct   before register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 100/0/0%   ||   after register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 100/0/0%
+  timbre 45 straight before register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/100/0%   ||   after register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/100/0%
+  timbre 45 ±50 ct   before register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/100/0%   ||   after register "pushing" 0% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/100/0%
+  timbre 80 straight before register "pushing" 100% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/0/100%   ||   after register "pushing" 100% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/0/100%
+  timbre 80 ±50 ct   before register "pushing" 100% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/0/100%   ||   after register "pushing" 100% · pitch "In tune" 100% · breath "Steady" 100% | resonance Head/Mixed/Chest 0/0/100%
+
+==== 2e. PITCH PATH through Register Coach: % frames with a pitch, median |cents| vs the true note, per input level (peak)
+  peak 0.5   (before → after)  110: 100%/2.2 → 100%/2.1 | 165: 100%/1.0 → 100%/1.0 | 220: 100%/0.5 → 100%/0.7 | 330: 100%/0.3 → 100%/0.3 | 440: 100%/0.2 → 100%/0.2 | 660: 100%/0.3 → 100%/0.3 | 880: 100%/0.6 → 100%/0.7
+  peak 0.1   (before → after)  110: 100%/5.4 → 100%/4.8 | 165: 100%/2.5 → 100%/2.7 | 220: 100%/1.3 → 100%/1.3 | 330: 100%/0.9 → 100%/1.0 | 440: 100%/0.6 → 100%/0.5 | 660: 100%/0.6 → 100%/0.5 | 880: 100%/0.5 → 100%/0.5
+  peak 0.03  (before → after)  110: 100%/5.0 → 100%/4.8 | 165: 100%/2.7 → 100%/3.0 | 220: 100%/1.3 → 100%/1.5 | 330: 100%/0.8 → 100%/0.7 | 440: 100%/0.5 → 100%/0.5 | 660: 100%/0.5 → 100%/0.5 | 880: 0%/— → 100%/0.5
+  peak 0.015 (before → after)  110: 100%/7.0 → 100%/5.4 | 165: 100%/2.5 → 100%/3.0 | 220: 100%/1.5 → 100%/1.7 | 330: 100%/0.7 → 100%/0.7 | 440: 100%/0.5 → 100%/0.6 | 660: 0%/— → 100%/0.6 | 880: 0%/— → 100%/0.7
+
+==== 3. NOISE: Register Coach at 330 Hz under room noise (noisy.py); median chest, % frames pushing, % of frames with a pitch within 50 ct of the note
+
+head-ish tone (35)
+  straight no noise     before  27.7 push   0% · pitch on the note 100%  |  after  27.7 push   0% · pitch on the note 100%
+  straight pink 20 dB   before  34.3 push   0% · pitch on the note 100%  |  after  34.3 push   0% · pitch on the note 100%
+  straight pink 10 dB   before  42.4 push   0% · pitch on the note 100%  |  after  42.4 push   0% · pitch on the note 100%
+  straight rumble 20 dB before  32.8 push   0% · pitch on the note 100%  |  after  32.8 push   0% · pitch on the note 100%
+  straight rumble 10 dB before  28.6 push   0% · pitch on the note 100%  |  after  28.4 push   0% · pitch on the note 100%
+  straight babble 20 dB before  33.3 push   0% · pitch on the note 100%  |  after  33.3 push   0% · pitch on the note 100%
+  straight babble 10 dB before  33.1 push   7% · pitch on the note  93%  |  after  33.8 push   8% · pitch on the note  92%
+  straight white 20 dB  before  35.6 push   0% · pitch on the note 100%  |  after  35.6 push   0% · pitch on the note 100%
+  straight white 10 dB  before  51.3 push   0% · pitch on the note 100%  |  after  51.5 push   0% · pitch on the note 100%
+  ±50 ct   no noise     before  27.5 push   0% · pitch on the note 100%  |  after  27.5 push   0% · pitch on the note 100%
+  ±50 ct   pink 20 dB   before  34.2 push   0% · pitch on the note 100%  |  after  34.8 push   0% · pitch on the note 100%
+  ±50 ct   pink 10 dB   before  43.2 push   0% · pitch on the note 100%  |  after  43.1 push   0% · pitch on the note 100%
+  ±50 ct   rumble 20 dB before  32.7 push   0% · pitch on the note 100%  |  after  32.8 push   0% · pitch on the note 100%
+  ±50 ct   rumble 10 dB before  28.5 push   0% · pitch on the note 100%  |  after  28.5 push   0% · pitch on the note 100%
+  ±50 ct   babble 20 dB before  33.1 push   0% · pitch on the note 100%  |  after  33.3 push   0% · pitch on the note 100%
+  ±50 ct   babble 10 dB before  33.2 push   3% · pitch on the note  93%  |  after  33.2 push   3% · pitch on the note  93%
+  ±50 ct   white 20 dB  before  35.6 push   0% · pitch on the note 100%  |  after  35.7 push   0% · pitch on the note 100%
+  ±50 ct   white 10 dB  before  51.4 push   0% · pitch on the note 100%  |  after  51.9 push   0% · pitch on the note 100%
+
+chest tone (80)
+  straight no noise     before  65.7 push 100% · pitch on the note 100%  |  after  65.7 push 100% · pitch on the note 100%
+  straight pink 20 dB   before  73.7 push 100% · pitch on the note 100%  |  after  73.6 push 100% · pitch on the note 100%
+  straight pink 10 dB   before  80.4 push 100% · pitch on the note 100%  |  after  80.4 push 100% · pitch on the note 100%
+  straight rumble 20 dB before  72.7 push 100% · pitch on the note 100%  |  after  72.7 push 100% · pitch on the note 100%
+  straight rumble 10 dB before  75.2 push 100% · pitch on the note 100%  |  after  75.4 push 100% · pitch on the note 100%
+  straight babble 20 dB before  73.8 push 100% · pitch on the note 100%  |  after  73.8 push 100% · pitch on the note 100%
+  straight babble 10 dB before  75.9 push 100% · pitch on the note  92%  |  after  75.6 push 100% · pitch on the note  93%
+  straight white 20 dB  before  74.3 push 100% · pitch on the note 100%  |  after  74.3 push 100% · pitch on the note 100%
+  straight white 10 dB  before  84.5 push 100% · pitch on the note 100%  |  after  84.5 push 100% · pitch on the note 100%
+  ±50 ct   no noise     before  65.4 push  64% · pitch on the note 100%  |  after  65.4 push  64% · pitch on the note 100%
+  ±50 ct   pink 20 dB   before  74.3 push 100% · pitch on the note 100%  |  after  74.5 push 100% · pitch on the note 100%
+  ±50 ct   pink 10 dB   before  80.5 push 100% · pitch on the note 100%  |  after  80.4 push 100% · pitch on the note 100%
+  ±50 ct   rumble 20 dB before  72.7 push 100% · pitch on the note 100%  |  after  72.8 push 100% · pitch on the note 100%
+  ±50 ct   rumble 10 dB before  75.0 push 100% · pitch on the note 100%  |  after  74.9 push 100% · pitch on the note 100%
+  ±50 ct   babble 20 dB before  74.5 push 100% · pitch on the note 100%  |  after  74.8 push 100% · pitch on the note 100%
+  ±50 ct   babble 10 dB before  75.3 push 100% · pitch on the note  97%  |  after  75.9 push 100% · pitch on the note  96%
+  ±50 ct   white 20 dB  before  74.8 push 100% · pitch on the note 100%  |  after  74.8 push 100% · pitch on the note 100%
+  ±50 ct   white 10 dB  before  84.6 push 100% · pitch on the note 100%  |  after  84.4 push 100% · pitch on the note 100%

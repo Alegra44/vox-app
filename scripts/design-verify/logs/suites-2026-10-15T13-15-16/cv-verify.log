@@ -1,0 +1,25 @@
+== Fresh unlock state
+[
+  '1:open:Not tried yet',
+  '2:locked:Locked — pass stage 1',
+  '3:locked:Locked — pass stage 2',
+  '4:locked:Locked — pass stage 3',
+  '5:locked:Locked — pass stage 4',
+  '6:locked:Locked — pass stage 5'
+]
+== Real gain per stage (Alto; mixer S .65 L .85 A .70 T .70 B .75)
+node:internal/process/promises:394
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+page.evaluate: TypeError: Cannot read properties of undefined (reading 'currentTime')
+    at eval (eval at evaluate (:311:30), <anonymous>:1:16)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at ev (/Users/alegramusenge/Documents/voxcoach-app/scripts/choir-verify/verify.js:15:29)
+    at waitSongT (/Users/alegramusenge/Documents/voxcoach-app/scripts/choir-verify/verify.js:21:63)
+    at /Users/alegramusenge/Documents/voxcoach-app/scripts/choir-verify/verify.js:34:13 {
+  log: []
+}
+
+Node.js v22.23.3

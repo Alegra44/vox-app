@@ -1,0 +1,23 @@
+rtfsoft 2026-10-17T21-40-32  before: master  after: working tree (2a84bca)  prod: https://deploy-alegra1122.vercel.app  reps 3
+   signed up voxcoach-rtfsoft-before-1792273232840@example.com (before)
+   after attempt 1 failed: page.evaluate: ReferenceError: Cannot access 'authMode' before initialization
+   after attempt 2 failed: page.evaluate: ReferenceError: Cannot access 'authMode' before initialization
+   after attempt 3 failed: page.evaluate: ReferenceError: Cannot access 'authMode' before initialization
+ERROR page.evaluate: ReferenceError: Cannot access 'authMode' before initialization
+    at setAuthMode (http://localhost:8765/:11702:12)
+    at openAuthModal (http://localhost:8765/:11718:3)
+    at eval (eval at evaluate (:311:30), <anonymous>:1:7)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at measure (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/rtfsoft.js:59:18)
+    at async /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/rtfsoft.js:105:29
+
+== RTF heard (% of frames), mean [runs] per side; gate effect = after − before
+sing-pp-92         before NaN []  after NaN []  prod NaN []  gate effect NaN
+sing-pp-646        before NaN []  after NaN []  prod NaN []  gate effect NaN
+sing-breathy-5     before NaN []  after NaN []  prod NaN []  gate effect NaN
+sing-breathy-3002  before NaN []  after NaN []  prod NaN []  gate effect NaN
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/rtfsoft-2026-10-17T21-40-32.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/rtfsoft-2026-10-17T21-40-32.json
+
+[cleanup] FAILED (Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked delete from auth.users where email in ('voxcoach-rtfsoft-before-1792273232840@example.com','voxcoach-rtfsoft-after-1792273232840@example.com','voxcoach-rtfsoft-prod-1792273232841@example.com') and email like 'voxcoach-%@example.com' returning email); the watchdog retries when this process exits: voxcoach-rtfsoft-before-1792273232840@example.com, voxcoach-rtfsoft-after-1792273232840@example.com, voxcoach-rtfsoft-prod-1792273232841@example.com

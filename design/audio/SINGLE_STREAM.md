@@ -399,6 +399,33 @@ replays what they feed. The in-tune lock (6 ct) is unchanged.
   signal, which compares a session with itself, gives the same verdict on every session tested.
 - No number changed: the 6 ct lock, the 12-point drop and the −10 trend line all mean what they did.
 
+### 2.2 / 2.3 Verification (2026-10-15 → 18, on AC)
+
+Runs: `scripts/design-verify/logs/suites-2026-10-15T13-15-16`, `suites-2026-10-17T17-05-34` (branch) and
+`suites-master-2026-10-18T07-10-29` (master re-runs of every suite that failed on the branch, and of vq/livevq/bands/cvib).
+
+- **Pass:** modecheck (Chromium, WebKit, Firefox), house, home, hooks, contrast, VL batch1/2/3a/3b/3c, warm-up entries
+  and tracking, levelup, choir p7signed, modalz, p9, p10, paywall, desc, live7, live9, glider courses and flight, range
+  reload, tt firsttick, listenwin, picker, pmframes ×3, loopback, levels, regfix, vq, livevq, bands, cvib, vlcompare,
+  rtfsoft (re-run `rtfsoft-2026-10-18T10-20-27`: the overnight run's branch sign-up hit a TDZ error once; pp-92 heard
+  38% → 67%).
+- **Already failing (the same error on master):** choir verify (`audioCtx` undefined in waitSongT), s6fr, fix, p5,
+  peaks, timing, p7 (no output for 25 min), yc (Record chip not visible), shot, live5, live6 (timeouts).
+- **vibfix (regress), accepted:** W4 Pitch Match pro +4; the Tuner stability shifts W5 −8, N1 +9, N4 +10 (1.4).
+- **Not on the accepted list (block the gate):**
+
+| Regression | branch − master | with the F2 gain off (`noisegate-nogain-2026-10-18T11-01-31`) | Cause |
+|---|---|---|---|
+| vibfix W4 flutter, Choir World pitch | +4 (tol. 3) | — | the low-pass, as Pitch Match pro (step 1b: C3 alone +3) |
+| noisegate babble, Tuner in tune | +14 | +15 | the single stream, not F2 |
+| noisegate breathy singing + traffic, RTF heard | −6 | −7 | the single stream, not F2 |
+| noisegate Alice speech, RTF / Tuner heard | +6 / +9 | +3 / +3 | half F2, half the stream |
+| noisegate Bonanza TV, Tuner heard | +7 | +5 (in tune +6) | mostly the stream; step 1b had +6 |
+
+- **Voice Quality (master → branch, every verdict unchanged):** vibrato ±1 ct; HNR +0.3 to +0.4 dB on the noisy
+  stimuli; live clean tone HNR 50.0 → 45.4 dB ("clear tone" both), consistency 98 → 94%; brightness ratios −0.01 to
+  −0.03; centroid −7 Hz.
+
 ## Recommendation
 
 ### Configuration: C3

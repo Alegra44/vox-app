@@ -1,0 +1,218 @@
+== local deploy/ + production backend
+   mic: 261.63 Hz (MIDI 60)
+   signed up voxcoach-vlh-1792096024207@example.com
+  ✓ sidecar allowed in this browser (desktop Chromium; on the single stream there is no block at all) 
+
+-- Entrance & Cutoff Trainer, entrances, Lead (runs to the end of the song)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 0
+  ✓ feature result identical with the load feed live                   off {"ticks":true,"laterEdges":0,"claimed":"00000000"} | on {"ticks":true,"laterEdges":0,"claimed":"00000000"}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.6 Hz rms 0.2663 | off 261.7 Hz rms 0.2653
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.682,"ended":true,"load":59.0985432787696,"median_rms":0.266059600362898,"p5_midi":60.0025731167462,"p95_midi":60.0031585379284}]
+  ✓ active seconds ≈ time the feature listened (30.79 s, −1.8/+0.3)    30.682 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 59.0985 vs hand 59.0913
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 0.0850% vs before 0.0000%
+  ✓ gauge = today's stored total / 6800                                "0.9% of daily budget" pct 0.869096 vs 0.869096
+
+-- Choir Bosses, the first boss, Lead (runs to the end or the boss wins)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0.9% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 1
+  ✓ feature result identical with the load feed live                   off {"held":"10111101","score":75,"passed":true,"stoppedAt":null} | on {"held":"10111101","score":75,"passed":true,"stoppedAt":null}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2653 | off 261.7 Hz rms 0.2646
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.38,"ended":true,"load":58.5148602428553,"median_rms":0.266073579620267,"p5_midi":60.0026198058321,"p95_midi":60.0029637672361}]
+  ✓ active seconds ≈ time the feature listened (30.49 s, −1.8/+0.3)    30.380 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.5149 vs hand 58.5096
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 0.9540% vs before 0.8691%
+  ✓ gauge = today's stored total / 6800                                "1.7% of daily budget" pct 1.729609 vs 1.729609
+
+-- Chaos Mode, Lead (seeded plan, runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "1.7% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 2
+  ✓ feature result identical with the load feed live                   off {"held":"10111101","score":75,"passed":true,"stoppedAt":null} | on {"held":"10111101","score":75,"passed":true,"stoppedAt":null}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2677 | off 261.7 Hz rms 0.2649
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.384,"ended":true,"load":58.5240533664762,"median_rms":0.2660755897989,"p5_midi":60.0025924864104,"p95_midi":60.0029759709494}]
+  ✓ active seconds ≈ time the feature listened (30.41 s, −1.8/+0.3)    30.384 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.5241 vs hand 58.5173
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 1.8147% vs before 1.7296%
+  ✓ gauge = today's stored total / 6800                                "2.6% of daily budget" pct 2.590257 vs 2.590257
+
+-- Tempo/Key Ladder, rung 1 up, Lead (runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "2.6% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 3
+  ✓ feature result identical with the load feed live                   off {"held":"10111101","score":75,"passed":true,"stoppedAt":null} | on {"held":"10111101","score":75,"passed":true,"stoppedAt":null}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2646 | off 261.7 Hz rms 0.2693
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.381,"ended":true,"load":58.5160468607151,"median_rms":0.266000297134665,"p5_midi":60.0025918592539,"p95_midi":60.0029943495175}]
+  ✓ active seconds ≈ time the feature listened (30.41 s, −1.8/+0.3)    30.381 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.5160 vs hand 58.5116
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 2.6756% vs before 2.5903%
+  ✓ gauge = today's stored total / 6800                                "3.5% of daily budget" pct 3.450787 vs 3.450787
+
+-- The Vocal Rift (seeded rounds, runs the full 60 s)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "3.5% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 4
+  ✓ feature result identical with the load feed live                   off [{"type":"Pitch","target":48,"acc":100},{"type":"Quick Catch","target":65,"acc":null},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Pitch","target":50,"acc":0},{"type":"Interval Jump","target":52,"acc":null},{"type":"Pitch","target":56,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Quick Catch","target":65,"acc":null},{"type":"Quick Catch","target":57,"acc":null},{"type":"Interval Jump","target":59,"acc":40},{"type":"Quick Catch","target":66,"acc":null},{"type":"Pitch","target":59,"acc":40},{"type":"Interval Jump","target":52,"acc":null},{"type":"Interval Jump","target":56,"acc":null},{"type":"Quick Catch","target":68,"acc":null},{"type":"Pitch","target":71,"acc":40},{"type":"Quick Catch","target":62,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Sustain Hold","target":64,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":47,"acc":40},{"type":"Pitch","target":50,"acc":0},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":48,"acc":100}] | on [{"type":"Pitch","target":48,"acc":100},{"type":"Quick Catch","target":65,"acc":null},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Pitch","target":50,"acc":0},{"type":"Interval Jump","target":52,"acc":null},{"type":"Pitch","target":56,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Quick Catch","target":65,"acc":null},{"type":"Quick Catch","target":57,"acc":null},{"type":"Interval Jump","target":59,"acc":40},{"type":"Quick Catch","target":66,"acc":null},{"type":"Pitch","target":59,"acc":40},{"type":"Interval Jump","target":52,"acc":null},{"type":"Interval Jump","target":56,"acc":null},{"type":"Quick Catch","target":68,"acc":null},{"type":"Pitch","target":71,"acc":40},{"type":"Quick Catch","target":62,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Sustain Hold","target":64,"acc":null},{"type":"Sustain Hold","target":55,"acc":null},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":47,"acc":40},{"type":"Pitch","target":50,"acc":0},{"type":"Sustain Hold","target":58,"acc":0},{"type":"Sustain Hold","target":57,"acc":null},{"type":"Quick Catch","target":48,"acc":100}]
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.265 | off 261.7 Hz rms 0.2646
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":60.002,"ended":true,"load":115.601017089374,"median_rms":0.266073499108166,"p5_midi":60.0026237127069,"p95_midi":60.0029565448172}]
+  ✓ active seconds ≈ time the feature listened (60.04 s, −1.8/+0.3)    60.002 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 115.6010 vs hand 115.5594
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 3.5358% vs before 3.4508%
+  ✓ gauge = today's stored total / 6800                                "5.2% of daily budget" pct 5.150802 vs 5.150802
+
+-- Pitch Dragon weakest-note training: Listen & score (C4, 1.6 s)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "5.2% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 5
+  ✓ feature result identical with the load feed live                   off {"acc":"100%"} | on {"acc":"100%"}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.6 Hz rms 0.2655 | off 261.7 Hz rms 0.2651
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":1.589,"ended":true,"load":3.06379384418433,"median_rms":0.264310381755409,"p5_midi":60.0029665531521,"p95_midi":60.003009580062}]
+  ✓ active seconds ≈ time the feature listened (1.66 s, −1.8/+0.3)     1.589 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 3.0638 vs hand 3.0603
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge = today's stored total / 6800                                "5.2% of daily budget" pct 5.195858 vs 5.195858
+
+-- Ear → Voice → Ear (seeded notes, runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "5.2% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 6
+  ✓ feature result identical with the load feed live                   off {"first":"100%","second":"100%","note":"Your unaided step held up just as well — exactly the same. Real retained pitch memory."} | on {"first":"100%","second":"100%","note":"Your unaided step held up just as well — exactly the same. Real retained pitch memory."}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2662 | off 261.7 Hz rms 0.2644
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":7.016,"ended":true,"load":13.5158580488081,"median_rms":0.266002553489722,"p5_midi":60.0026697138442,"p95_midi":60.0029587795785}]
+  ✓ active seconds ≈ time the feature listened (7.10 s, −1.8/+0.3)     7.016 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 13.5159 vs hand 13.5123
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 5.2809% vs before 5.1959%
+  ✓ gauge = today's stored total / 6800                                "5.4% of daily budget" pct 5.394620 vs 5.394620
+
+-- Sing It 5 Ways (runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "5.4% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 7
+  ✓ feature result identical with the load feed live                   off [{"midi":59,"heard":true,"acc":40},{"midi":60,"heard":true,"acc":100},{"midi":58,"heard":true,"acc":0},{"midi":59,"heard":true,"acc":40},{"midi":59,"heard":true,"acc":40}] | on [{"midi":59,"heard":true,"acc":40},{"midi":60,"heard":true,"acc":100},{"midi":58,"heard":true,"acc":0},{"midi":59,"heard":true,"acc":40},{"midi":59,"heard":true,"acc":40}]
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2652 | off 261.6 Hz rms 0.2645
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":15.081,"ended":true,"load":29.0551763330095,"median_rms":0.26605043487859,"p5_midi":60.0026539542612,"p95_midi":60.0029664375186}]
+  ✓ active seconds ≈ time the feature listened (15.09 s, −1.8/+0.3)    15.081 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 29.0552 vs hand 29.0449
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 5.4796% vs before 5.3946%
+  ✓ gauge = today's stored total / 6800                                "5.8% of daily budget" pct 5.821902 vs 5.821902
+
+-- One Take (today's take cleared before each run)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "5.8% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 8
+  ✓ feature result identical with the load feed live                   off {"pitch":100,"stability":100,"timing":100,"heard":true} | on {"pitch":100,"stability":100,"timing":100,"heard":true}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.269 | off 261.7 Hz rms 0.272
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":7.316,"ended":true,"load":14.0965995624023,"median_rms":0.265806749723643,"p5_midi":60.0026935929075,"p95_midi":60.0029750694852}]
+  ✓ active seconds ≈ time the feature listened (7.40 s, −1.8/+0.3)     7.316 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 14.0966 vs hand 14.0901
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 5.9069% vs before 5.8219%
+  ✓ gauge = today's stored total / 6800                                "6% of daily budget" pct 6.029205 vs 6.029205
+
+-- Can You Hear Your Mistake: the right pick, then the sing-back (1.6 s)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "6% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 9
+  ✓ feature result identical with the load feed live                   off {"acc":"100%","title":"Correct pick!"} | on {"acc":"100%","title":"Correct pick!"}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2646 | off 261.7 Hz rms 0.2645
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":1.595,"ended":true,"load":3.07271634919152,"median_rms":0.264162995011353,"p5_midi":60.0028860719042,"p95_midi":60.0060049620281}]
+  ✓ active seconds ≈ time the feature listened (1.66 s, −1.8/+0.3)     1.595 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 3.0727 vs hand 3.0719
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.006
+  ✓ gauge = today's stored total / 6800                                "6.1% of daily budget" pct 6.074392 vs 6.074392
+
+-- Emotion Mode: Tender, then a seeded second intention (runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "6.1% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 10
+  ✓ feature result identical with the load feed live                   off [{"intent":"tender","heard":true,"stability":100},{"intent":"powerful","heard":true,"stability":99}] | on [{"intent":"tender","heard":true,"stability":100},{"intent":"powerful","heard":true,"stability":100}]
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.6 Hz rms 0.2662 | off 261.7 Hz rms 0.2644
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":7.816,"ended":true,"load":15.0594687238018,"median_rms":0.266058236818589,"p5_midi":60.0026436212645,"p95_midi":60.0032487203731}]
+  ✓ active seconds ≈ time the feature listened (7.84 s, −1.8/+0.3)     7.816 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 15.0595 vs hand 15.0530
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 6.1594% vs before 6.0744%
+  ✓ gauge = today's stored total / 6800                                "6.3% of daily budget" pct 6.295855 vs 6.295855
+
+-- Performance Director (runs to the end of the song)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "6.3% of daily budget"
+  ✓ load feed stubbed out: no session stored, no register input opened opened [], rows 11
+  ✓ feature result identical with the load feed live                   off {"notes":"100/100 0/100 100/100 100/100 100/100 100/100 0/100 100/100"} | on {"notes":"100/100 0/100 100/100 100/100 100/100 100/100 0/100 100/100"}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.265 | off 261.6 Hz rms 0.2685
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":26.664,"ended":true,"load":51.3784149770046,"median_rms":0.266077185951672,"p5_midi":60.0026362726222,"p95_midi":60.0030302109081}]
+  ✓ active seconds ≈ time the feature listened (26.75 s, −1.8/+0.3)    26.664 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 51.3784 vs hand 51.3529
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 6.3812% vs before 6.2959%
+  ✓ gauge = today's stored total / 6800                                "7.1% of daily budget" pct 7.051420 vs 7.051420
+  ✓ page errors                                                        none
+
+-- reload: every gauge resumes today's total from the server
+  ✓ tt: same total after reload, not 0                                 "7.1% of daily budget"
+  ✓ cb: same total after reload, not 0                                 "7.1% of daily budget"
+  ✓ cx: same total after reload, not 0                                 "7.1% of daily budget"
+  ✓ tk: same total after reload, not 0                                 "7.1% of daily budget"
+  ✓ rift: same total after reload, not 0                               "7.1% of daily budget"
+  ✓ bosstrain: same total after reload, not 0                          "7.1% of daily budget"
+  ✓ eve: same total after reload, not 0                                "7.1% of daily budget"
+  ✓ five: same total after reload, not 0                               "7.1% of daily budget"
+  ✓ onetake: same total after reload, not 0                            "7.1% of daily budget"
+  ✓ hm: same total after reload, not 0                                 "7.1% of daily budget"
+  ✓ emo: same total after reload, not 0                                "7.1% of daily budget"
+  ✓ pd: same total after reload, not 0                                 "7.1% of daily budget"
+  ✓ coach: same total after reload, not 0                              "7.1% of daily budget"
+  ✓ daily table = sum of every session                                 [{"day":"2026-10-15","total_load":479.496548676593}] vs 479.4965
+
+-- all four languages (switched with the Profile language buttons)
+  ✓ fr: all 13 gauges' label and value in fr                           "Charge vocale du jour" "7,1 % du budget quotidien"
+  ✓ es: all 13 gauges' label and value in es                           "Carga vocal de hoy" "7,1 % del presupuesto diario"
+  ✓ tr: all 13 gauges' label and value in tr                           "Bugünkü ses yükü" "Günlük bütçe: %7,1"
+  ✓ en: all 13 gauges' label and value in en                           "Vocal load today" "7.1% of daily budget"
+  ✓ page errors                                                        none
+
+-- Safari user agent: one stream, so sidecar features feed the load here too and show their gauge
+  ✓ no sidecar block left (VL_SIDECAR_BLOCKED gone)                    
+  ✓ eve fed the load on the one stream: one session stored             opened [], rows 12→13
+  ✓ every feature's gauge shown                                        all shown
+
+-- signed out
+  ✓ every gauge hidden when signed out                                 all hidden
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlh-1792096024207@example.com
+
+179 passed, 0 failed

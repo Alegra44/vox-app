@@ -1,0 +1,49 @@
+listenwin 2026-10-17T20-53-29  before: master  after: working tree
+
+-- Pitch Match: score (attack / landing), singer starting 0.3 … 1.2 s after the cue
+   beginner      before: 0.3s 100  0.6s 100  0.9s 100  1.2s 100
+                 after:  0.3s 100  0.6s 100  0.9s 100  1.2s 100
+  ✓ pitch beginner 0.3s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 4482 ms
+  ✓ pitch beginner 0.6s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 4714 ms
+  ✓ pitch beginner 0.9s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 5001 ms
+  ✓ pitch beginner 1.2s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 5312 ms
+   intermediate  before: 0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+                 after:  0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+  ✓ pitch intermediate 0.3s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 3915 ms
+  ✓ pitch intermediate 0.6s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4202 ms
+  ✓ pitch intermediate 0.9s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4499 ms
+  ✓ pitch intermediate 1.2s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4797 ms
+   professional  before: 0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+                 after:  0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+  ✓ pitch professional 0.3s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 3414 ms
+  ✓ pitch professional 0.6s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 3714 ms
+  ✓ pitch professional 0.9s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4002 ms
+  ✓ pitch professional 1.2s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4297 ms
+   nobody sings  before: "—" "I didn't hear you, try again." counted 0 · 6270 ms  |  after: "—" "I didn't hear you, try again." counted 0 · 6304 ms
+  ✓ pitch: nobody sings → "I didn't hear you, try again", no score, not counted, same note "—" "I didn't hear you, try again." counted 0 next 60
+
+-- Interval Match: score (attack / landing), singer starting 0.3 … 1.2 s after the cue
+   beginner      before: 0.3s 100  0.6s 100  0.9s 100  1.2s 100
+                 after:  0.3s 100  0.6s 100  0.9s 100  1.2s 100
+  ✓ interval beginner 0.3s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 4713 ms
+  ✓ interval beginner 0.6s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 5016 ms
+  ✓ interval beginner 0.9s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 5302 ms
+  ✓ interval beginner 1.2s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (NaN/NaN) counted 1 · 5597 ms
+   intermediate  before: 0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+                 after:  0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+  ✓ interval intermediate 0.3s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4215 ms
+  ✓ interval intermediate 0.6s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4513 ms
+  ✓ interval intermediate 0.9s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4813 ms
+  ✓ interval intermediate 1.2s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 5117 ms
+   professional  before: 0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+                 after:  0.3s 100 (100/100)  0.6s 100 (100/100)  0.9s 100 (100/100)  1.2s 100 (100/100)
+  ✓ interval professional 0.3s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 3701 ms
+  ✓ interval professional 0.6s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4010 ms
+  ✓ interval professional 0.9s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4302 ms
+  ✓ interval professional 1.2s late: held note scores ≥ 90, attack ≥ 85 when split, counted once 100 (100/100) counted 1 · 4616 ms
+   nobody sings  before: "—" "I didn't hear you, try again." counted 0 · 6606 ms  |  after: "—" "I didn't hear you, try again." counted 0 · 6597 ms
+  ✓ interval: nobody sings → "I didn't hear you, try again", no score, not counted, same note "—" "I didn't hear you, try again." counted 0 next 60
+  ✓ Pitch Match: a scored attempt moves to a new note; "Sing it again" sings the same one next 47 · again on 62 → 100
+
+==== VERDICT: 27 passed, 0 failed
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/listenwin-local-2026-10-17T20-53-29.log

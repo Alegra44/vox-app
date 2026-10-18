@@ -1,0 +1,43 @@
+modecheck 2026-10-15T13-15-16  playwright 1.63.0  signed in: voxcoach-mc-1792070116457@example.com
+
+== chromium 153.0.8010.12
+   signed up voxcoach-mc-1792070116457@example.com
+   ✓ getUserMedia exactly once, with the one stream's constraints · 1× {"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}
+   ✓ applied processing (getSettings) · {"ec":true,"ns":false,"agc":false}
+   ✓ pitch path (initAudio analyser) · 440 Hz, F2 gain 0 dB
+   ✓ raw path (loudness) · -14.2 dBFS
+   ✓ register input: pitch and raw from the same stream · 441 Hz, -11.7 dBFS
+   ✓ Voice Quality capture · 48 frames
+   ✓ recording (MediaRecorder on the one stream) · 3353 bytes
+   ✓ stream still live after every reader closed
+   ✓ Vocal Load gauge shows (Tuner) · {"shown":true,"val":"0% of daily budget"}
+   ✓ page errors · none
+
+== webkit 26.6
+   ✓ getUserMedia exactly once, with the one stream's constraints · 1× {"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}
+   ✓ applied processing (getSettings) · {"ec":true}
+   ✓ pitch path (initAudio analyser) · 151 Hz, F2 gain 0 dB
+   ✓ raw path (loudness) · -23 dBFS
+   ✓ register input: pitch and raw from the same stream · 502 Hz, -12.9 dBFS
+   ✓ Voice Quality capture · 47 frames
+   ✓ recording (MediaRecorder on the one stream) · 5790 bytes
+   ✓ stream still live after every reader closed
+   ✓ Vocal Load gauge shows (Tuner) · {"shown":true,"val":"0% of daily budget"}
+   ✓ page errors · none
+
+== firefox 155.0
+   ✓ getUserMedia exactly once, with the one stream's constraints · 1× {"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false}
+   ✓ applied processing (getSettings) · {"ec":false,"ns":false,"agc":false}
+   ✓ pitch path (initAudio analyser) · 1001 Hz, F2 gain 0 dB
+   ✓ raw path (loudness) · -23 dBFS
+   ✓ register input: pitch and raw from the same stream · 1001 Hz, -23 dBFS
+   ✓ Voice Quality capture · 51 frames
+   ✓ recording (MediaRecorder on the one stream) · 3908 bytes
+   ✓ stream still live after every reader closed
+   ✓ Vocal Load gauge shows (Tuner) · {"shown":true,"val":"0% of daily budget"}
+   ✓ page errors · none
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-mc-1792070116457@example.com
+
+all passed
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/modecheck-2026-10-15T13-15-16.log

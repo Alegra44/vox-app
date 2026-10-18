@@ -1,0 +1,122 @@
+== home · master vs branch (working copy)
+English strings changed on the branch (0), given to master's page:
+
+-- new
+  ✓ hero shown                                                             mission | mission
+  ✓ mission label                                                          Get your first score
+  ✓ mission pct                                                            0%
+  ✓ mission msg                                                            Try a Pitch Match or the Range Finder — one score is all it takes to set today's focus.
+  ✓ mission panel                                                          exercises
+  ✓ computeTodaysFocus() = Home                                            {"label":"Get your first score","pct":0,"hasScore":false,"msg":"Try a Pitch Match or the Range Finder — one…
+  ✓ Coach focus: same label and target as Home's focus                     Get your first score → exercises
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Coach "Best" values = Personal Records                                 {}
+  ✓ Personal Records list: same HTML                                       1973 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          Choir World Sing your part with a full choir around you Pick a part in I Am the Part and rehearse it while …
+  ✓ #homeCwDelta as p10 reads it identical                                 null
+  ✓ no page errors                                                         none
+
+-- priority
+  ✓ hero shown                                                             mission | mission
+  ✓ mission label                                                          Breath
+  ✓ mission pct                                                            0%
+  ✓ mission msg                                                            You told us Breath was your priority when you signed up — this is where to start.
+  ✓ mission panel                                                          breath
+  ✓ computeTodaysFocus() = Home                                            {"label":"Breath","pct":0,"hasScore":false,"msg":"You told us Breath was your priority when you signed up —…
+  ✓ Coach focus: same label and target as Home's focus                     Breath → breath
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Coach "Best" values = Personal Records                                 {}
+  ✓ Personal Records list: same HTML                                       1973 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          Choir World Sing your part with a full choir around you Pick a part in I Am the Part and rehearse it while …
+  ✓ #homeCwDelta as p10 reads it identical                                 null
+  ✓ no page errors                                                         none
+
+-- weakest
+  ✓ hero shown                                                             mission | mission
+  ✓ mission label                                                          Breath
+  ✓ mission pct                                                            55%
+  ✓ mission msg                                                            Your lowest Skill Profile score right now — training it moves your whole profile the most.
+  ✓ mission panel                                                          breath
+  ✓ computeTodaysFocus() = Home                                            {"label":"Breath","pct":55,"hasScore":true,"msg":"Your lowest Skill Profile score right now — training it m…
+  ✓ Coach focus: same label and target as Home's focus                     Breath → breath
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Coach "Best" values = Personal Records                                 {"tuner":"Best 74%","range":"A2–A4","register":"Best 3.2s","breath":"Best 12.4s","exercises":"Best 84%"}
+  ✓ Personal Records list: same HTML                                       1812 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          Choir World Developing Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 4/5 · Harmon…
+  ✓ #homeCwDelta as p10 reads it identical                                 Since you were Learning (2 days ago): +3 rehearsal levels played · +1 Harmony Memory stage
+  ✓ no page errors                                                         none
+
+-- struggling
+  ✓ hero shown                                                             mission | mission
+  ✓ mission label                                                          Breath
+  ✓ mission pct                                                            55%
+  ✓ mission msg                                                            Your lowest Skill Profile score right now — training it moves your whole profile the most. Specifically: yo…
+  ✓ mission panel                                                          breath
+  ✓ computeTodaysFocus() = Home                                            {"label":"Breath","pct":55,"hasScore":true,"msg":"Your lowest Skill Profile score right now — training it m…
+  ✓ Coach focus: same label and target as Home's focus                     Breath → breath
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Coach "Best" values = Personal Records                                 {"tuner":"Best 74%","range":"A2–A4","register":"Best 3.2s","breath":"Best 12.4s","exercises":"Best 84%"}
+  ✓ Personal Records list: same HTML                                       1812 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          Choir World Developing Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 4/5 · Harmon…
+  ✓ #homeCwDelta as p10 reads it identical                                 Since you were Learning (2 days ago): +3 rehearsal levels played · +1 Harmony Memory stage
+  ✓ no page errors                                                         none
+
+-- today
+  ✓ hero shown                                                             mission | mission
+  ✓ mission label                                                          Breath
+  ✓ mission pct                                                            55%
+  ✓ mission msg                                                            Your lowest Skill Profile score right now — training it moves your whole profile the most. Specifically: yo…
+  ✓ mission panel                                                          breath
+  ✓ computeTodaysFocus() = Home                                            {"label":"Breath","pct":55,"hasScore":true,"msg":"Your lowest Skill Profile score right now — training it m…
+  ✓ Coach focus: same label and target as Home's focus                     Breath → breath
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Coach "Best" values = Personal Records                                 {"tuner":"Best 74%","range":"A2–A4","register":"Best 3.2s","breath":"Best 12.4s","exercises":"Best 84%"}
+  ✓ Personal Records list: same HTML                                       1812 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          Choir World Developing Your Alto is Developing — continue rehearsing Demo Hymn · Levels played 4/5 · Harmon…
+  ✓ #homeCwDelta as p10 reads it identical                                 Since you were Learning (2 days ago): +3 rehearsal levels played · +1 Harmony Memory stage
+  ✓ no page errors                                                         none
+
+-- expired
+  ✓ hero shown                                                             trialcomplete | trialcomplete
+  ✓ mission label                                                          Breath
+  ✓ mission pct                                                            55%
+  ✓ mission msg                                                            Your lowest Skill Profile score right now — training it moves your whole profile the most. Specifically: yo…
+  ✓ mission panel                                                          null
+  ✓ Coach focus: same label and target as Home's focus                     Get your first score → exercises
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Coach "Best" values = Personal Records                                 {}
+  ✓ Personal Records list: same HTML                                       1973 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          Choir World Choir · $79/mo Choir World is part of the Choir plan Your 21-day free trial has ended. Choir Wo…
+  ✓ #homeCwDelta as p10 reads it identical                                 null
+  ✓ no page errors                                                         none
+
+-- signedout
+  ✓ hero shown                                                             signedout | signedout
+  ✓ mission label                                                          —
+  ✓ mission pct                                                            0%
+  ✓ mission msg                                                            
+  ✓ mission panel                                                          null
+  ✓ Coach focus hidden signed out                                          
+  ✓ 23 tool buttons on the Coach tab                                       23 | 23
+  ✓ each tool button opens its panel (as on master)                        23 | 23
+  ✓ Personal Records list: same HTML                                       76 chars
+  ✓ #homeVlCard follows #homeChoirCard                                     homeChoirCard
+  ✓ #homeChoirCard text identical                                          (hidden)
+  ✓ #homeCwDelta as p10 reads it identical                                 null
+  ✓ no page errors                                                         none
+
+102 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvhome-1792070469567@example.com
