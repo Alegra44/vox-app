@@ -1060,6 +1060,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live .vc-take-pill:disabled{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);opacity:1;cursor:default;}
   .vc-take-live{display:contents;}
   .vc-stage.is-live .vc-take-pill{width:auto !important;margin-top:0 !important;} /* a full-width start button is a compact pill on the stage */
+  /* a status line as the pill, where the take has no button of its own (Hear Your Mistake's sing-back starts from the A/B pick) */
+  .vc-take-status{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 var(--hl-s5);margin:0;border:var(--hl-hair) solid var(--hl-rule-strong);border-radius:999px;color:var(--hl-ink-2);font-weight:600;}
+  .vc-stage .hm-stage-label{font-size:var(--hl-t-small);font-weight:400;color:var(--hl-ink-3);margin:0;}
   .pm-cents-scale .pm-cs-lo{left:4.545%;} .pm-cents-scale .pm-cs-mid{left:50%;} .pm-cents-scale .pm-cs-hi{left:95.455%;}
   .vc-stage.is-live .btn-row{margin-top:0 !important;}
   /* its result: rows of dimensions; the trace */
@@ -3875,16 +3878,27 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <button class="ghost-btn" id="hmReplayBtn" style="margin-top:14px;width:100%;justify-content:center;" data-i18n="hearmistake_replay_btn">▶ Replay A and B</button>
     </div>
     <div class="key-card" id="hmSingCard" style="display:none;text-align:center;">
-      <div class="step-label" data-i18n="hearmistake_reproduce_label">Now reproduce the correct version</div>
-      <div class="chord-label-display" id="hmSingNote" style="margin-top:10px;">—</div>
-      <p class="desc" id="hmSingStatus" style="margin-top:10px;"></p>
+      <div class="vc-stage" id="hmStage">
+      <div class="step-label hm-stage-label" data-i18n="hearmistake_reproduce_label">Now reproduce the correct version</div>
+      <div class="ex-target-note vc-take-note" id="hmSingNote">—</div>
+      <div class="vc-take-live" data-vc-take></div>
+      <p class="vc-take-status" id="hmSingStatus" role="status"></p>
       <div class="vl-gauge" id="vlGaugeHm" style="display:none;"></div>
+      </div>
     </div>
-    <div class="key-card" id="hmResultCard" style="display:none;text-align:center;">
-      <div class="step-label" id="hmResultTitle">—</div>
-      <p class="desc" id="hmResultDetail" style="margin-top:10px;"></p>
-      <div class="ex-accuracy" id="hmSingAccuracy" style="margin-top:10px;">—</div>
-      <button class="mic-btn vc-ink" id="hmNextBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="hearmistake_next_btn">Next round</button>
+    <div class="key-card" id="hmResultCard" style="display:none;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="hl-label" id="hmResultTitle">—</div>
+      <div class="ex-accuracy vc-result-num" id="hmSingAccuracy">—</div>
+      <h3 class="hl-h3" id="hmResultLabel" data-i18n="hm_result_label">Sing-back accuracy</h3>
+      <p class="ex-feedback-text hl-coach" id="hmResultDetail"></p>
+      <div class="vc-result-chart pm-trace-box" id="hmTraceBox" style="display:none;">
+        <svg class="pm-trace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+        <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span class="pm-trace-end"></span></div>
+      </div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="hm_measure"></p></details>
+      <button class="mic-btn vc-ink" id="hmNextBtn" style="width:100%;justify-content:center;" data-i18n="hearmistake_next_btn">Next round</button>
+      </div>
     </div>
   </section>
 
@@ -7356,6 +7370,9 @@ const TRANSLATIONS = {
     eve_note_nosignal:"One of the sung steps had no clear pitch, so the two can't be compared. Try again a little louder or closer to the mic.",
     eve_measure:"Step 1 plays a note from your range; listening for step 2 opens 1.3 seconds after it starts. Step 4 plays a second note, an interval from your level's set away from the first, and step 5 is sung from memory with no replay. Each sung step listens for 1.6 seconds and scores 100 minus your average distance from the note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the steps where a clear pitch was heard.",
     five_measure:"The note is picked from the lower middle of your range, so a semitone either side still fits. Each round plays it (or the note a semitone up or down) for 0.7 seconds, then listens for 1.5 seconds from 1 second after it starts. A round scores 100 minus your average distance from its note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. Head and mixed voice can't be told apart from pitch: those rounds score your pitch only, and which register you used is for your ear to judge. The big number is the average of the rounds where a clear pitch was heard.",
+    hm_result_label:"Sing-back accuracy",
+    hm_detail_scored:"You picked the accurate one, and your sing-back scored {n}% against it.",
+    hm_measure:"One of A and B is the note itself; the other is shifted 35 to 59 cents up or down, and they play one second apart. Pick the accurate one and you sing it back: listening opens at once for 1.6 seconds, and the score is 100 minus your average distance from the note, in cents, times 0.6. Any octave counts and natural vibrato counts as its centre. A wrong pick isn't sung back.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8734,6 +8751,9 @@ const TRANSLATIONS = {
     eve_note_nosignal:"L'une des étapes chantées n'avait pas de hauteur claire : les deux ne peuvent pas être comparées. Réessayez un peu plus fort ou plus près du micro.",
     eve_measure:"L'étape 1 joue une note de votre tessiture ; l'écoute de l'étape 2 s'ouvre 1,3 seconde après son début. L'étape 4 joue une seconde note, à un intervalle de la première tiré des intervalles de votre niveau, et l'étape 5 se chante de mémoire, sans réécoute. Chaque étape chantée écoute pendant 1,6 seconde et vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des étapes où une hauteur claire a été entendue.",
     five_measure:"La note est tirée du bas-milieu de votre tessiture, pour qu'un demi-ton de chaque côté y tienne encore. Chaque manche la joue (ou la note un demi-ton au-dessus ou en dessous) pendant 0,7 seconde, puis écoute pendant 1,5 seconde à partir d'une seconde après son début. Une manche vaut 100 moins votre écart moyen à sa note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. La voix de tête et la voix mixte ne se distinguent pas par la hauteur : ces manches notent seulement votre justesse, et c'est à votre oreille de juger du registre utilisé. Le grand chiffre est la moyenne des manches où une hauteur claire a été entendue.",
+    hm_result_label:"Justesse du rechant",
+    hm_detail_scored:"Vous avez choisi la bonne, et votre rechant obtient {n} % face à elle.",
+    hm_measure:"L'une des deux, A ou B, est la note elle-même ; l'autre est décalée de 35 à 59 cents vers le haut ou le bas, et elles jouent à une seconde d'intervalle. Choisissez la juste et vous la rechantez : l'écoute s'ouvre aussitôt pendant 1,6 seconde, et le score vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6. Toutes les octaves comptent et un vibrato naturel compte pour son centre. Un mauvais choix n'est pas rechanté.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10112,6 +10132,9 @@ const TRANSLATIONS = {
     eve_note_nosignal:"Uno de los pasos cantados no tuvo una afinación clara, así que no se pueden comparar. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     eve_measure:"El paso 1 toca una nota de tu rango; la escucha del paso 2 se abre 1,3 segundos después de que empiece. El paso 4 toca una segunda nota, a un intervalo de la primera tomado de los intervalos de tu nivel, y el paso 5 se canta de memoria, sin volver a oírla. Cada paso cantado escucha durante 1,6 segundos y vale 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de los pasos en los que se oyó una afinación clara.",
     five_measure:"La nota se elige de la parte media-baja de tu rango, para que medio tono a cada lado siga cabiendo. Cada ronda la toca (o la nota medio tono arriba o abajo) durante 0,7 segundos y luego escucha 1,5 segundos a partir de 1 segundo después de que empiece. Una ronda vale 100 menos tu distancia media a su nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. La voz de cabeza y la voz mixta no se distinguen por la afinación: esas rondas puntúan solo tu afinación, y el registro que usaste lo juzga tu oído. El número grande es la media de las rondas en las que se oyó una afinación clara.",
+    hm_result_label:"Precisión al cantarla",
+    hm_detail_scored:"Elegiste la afinada, y al cantarla sacaste un {n} % frente a ella.",
+    hm_measure:"Una de las dos, A o B, es la nota en sí; la otra está desplazada de 35 a 59 cents hacia arriba o hacia abajo, y suenan con un segundo de diferencia. Elige la afinada y la cantas: la escucha se abre al momento durante 1,6 segundos, y la puntuación es 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6. Cualquier octava cuenta y el vibrato natural cuenta como su centro. Si eliges mal, no se canta.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11490,6 +11513,9 @@ const TRANSLATIONS = {
     eve_note_nosignal:"Söylenen adımlardan birinde net bir perde yoktu, bu yüzden ikisi karşılaştırılamıyor. Biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
     eve_measure:"1. adım aralığınızdan bir nota çalar; 2. adımın dinlemesi notanın başlamasından 1,3 saniye sonra açılır. 4. adım, seviyenizin aralıklarından birinde ilk notadan uzaklaşan ikinci bir nota çalar; 5. adım tekrar dinlemeden, hafızadan söylenir. Söylenen her adım 1,6 saniye dinler ve 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu adımların ortalamasıdır.",
     five_measure:"Nota, her iki yana bir yarım ses daha sığacak şekilde aralığınızın alt-orta bölümünden seçilir. Her tur notayı (ya da bir yarım ses üstünü veya altını) 0,7 saniye çalar, sonra başlamasından 1 saniye sonra itibaren 1,5 saniye dinler. Bir tur, 100'den notasına sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Kafa sesi ve karışık ses perdeden ayırt edilemez: bu turlar yalnızca perdenizi puanlar, hangi registeri kullandığınıza kulağınız karar verir. Büyük sayı, net bir perdenin duyulduğu turların ortalamasıdır.",
+    hm_result_label:"Geri söyleme doğruluğu",
+    hm_detail_scored:"Doğru olanı seçtiniz ve geri söyleyişiniz ona göre %{n} aldı.",
+    hm_measure:"A ve B'den biri notanın kendisidir; diğeri 35 ila 59 sent yukarı veya aşağı kaydırılmıştır ve bir saniye arayla çalarlar. Doğru olanı seçerseniz onu geri söylersiniz: dinleme hemen 1,6 saniyeliğine açılır ve puan, 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla bulunur. Oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Yanlış seçimde geri söyleme yapılmaz.",
   },
 };
 let currentLanguage = 'en';
@@ -21572,7 +21598,9 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
       document.getElementById('hmResultCard').style.display = 'block';
       document.getElementById('hmResultTitle').textContent = 'Not quite.';
       document.getElementById('hmResultDetail').textContent = `${hmCorrectLabel} was the accurate one. Try the next round to keep training your ear.`;
-      document.getElementById('hmSingAccuracy').textContent = '—';
+      vcResultNum(document.getElementById('hmSingAccuracy'), null);
+      document.getElementById('hmResultLabel').style.display = 'none'; // a wrong pick isn't sung back: no number
+      vcTakeTrace(document.getElementById('hmTraceBox'), null, 1600);
       registerExerciseCompletion();
       return;
     }
@@ -21580,16 +21608,20 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
     document.getElementById('hmSingNote').textContent = noteNameFromMidi(hmTargetMidi);
     document.getElementById('hmSingStatus').textContent = 'Listening…';
     hmSinging = true;
-    singingSession(()=>hmSinging);
-    const result = await captureAccuracyForTarget(hmTargetMidi, 1600, {});
+    const stage = document.getElementById('hmStage'), lane = vcTakeStart(stage, hmTargetMidi, 1600);
+    singingSession(()=>hmSinging, stage); // the sing-back is on stage (listening to A and B stays on paper)
+    const result = await captureAccuracyForTarget(hmTargetMidi, 1600, {onFrame:(ms, c)=>vcTakeFrame(lane, ms, c)});
     hmSinging = false;
+    vcTakeEnd(lane);
     document.getElementById('hmSingCard').style.display = 'none';
     document.getElementById('hmResultCard').style.display = 'block';
     document.getElementById('hmResultTitle').textContent = 'Correct pick!';
+    document.getElementById('hmResultLabel').style.display = '';
     document.getElementById('hmResultDetail').textContent = result.heard
-      ? `And your reproduction scored ${result.accuracy}% — real accuracy against the true pitch.`
+      ? t('hm_detail_scored').replace('{n}', result.accuracy)
       : `No clear pitch was captured on your reproduction attempt.`;
-    document.getElementById('hmSingAccuracy').textContent = result.heard ? result.accuracy+'%' : '—';
+    vcResultNum(document.getElementById('hmSingAccuracy'), result.heard ? result.accuracy+'%' : null);
+    vcTakeTrace(document.getElementById('hmTraceBox'), result.heard && result.samples, 1600);
     if(profile && result.heard) recordSkillScore('pitch', result.accuracy);
     registerExerciseCompletion();
   });
