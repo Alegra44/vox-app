@@ -3920,7 +3920,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <div class="key-card" id="puzzlePreCard">
       <p class="desc" style="margin-bottom:16px;" data-i18n="vocalpuzzle_intro_desc">Listen to 4 notes. One doesn't belong. Which one?</p>
-      <button class="mic-btn" id="puzzleStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Play the sequence</button>
+      <button class="mic-btn vc-ink" id="puzzleStartBtn" style="width:100%;justify-content:center;">Play the sequence</button>
     </div>
     <div class="key-card" id="puzzleGuessCard" style="display:none;">
       <p class="desc" style="text-align:center;margin-bottom:16px;" id="puzzleStatus">Which note sounds wrong?</p>
@@ -21659,7 +21659,7 @@ function playPuzzleSequence(){
 }
 document.getElementById('puzzleStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Vocal Puzzle')) return;
-  await initAudio();
+  await initAudioOnly(); // it only plays tones: no mic request, no warm-up gate
   generatePuzzle();
   document.getElementById('puzzlePreCard').style.display = 'none';
   document.getElementById('puzzleResultCard').style.display = 'none';
