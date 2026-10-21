@@ -1046,10 +1046,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pm-cents-scale{position:relative;width:100%;height:16px;margin-top:-6px;}
   .pm-cents-scale span{position:absolute;top:0;transform:translateX(-50%);font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   .pm-cents-read{min-height:1.4em;font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
-  #pitchTargetNote{transition:background-color var(--hl-d1) var(--hl-ease), color var(--hl-d1) var(--hl-ease);border-radius:999px;padding:0 .35em;}
-  #pitchTargetNote.pm-locked{background:var(--hl-lock);color:var(--hl-on-voice);}
-  .vc-stage.is-live #pitchTargetNote{font-size:var(--hl-t-display);font-weight:300;}
-  .vc-stage.is-live #pitchListenBtn:disabled{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);opacity:1;cursor:default;}
+  /* vcTake (phase 4a): the shared stage of every captureAccuracyForTarget tool (Pitch Match's, generalised) */
+  .vc-take-note{transition:background-color var(--hl-d1) var(--hl-ease), color var(--hl-d1) var(--hl-ease);border-radius:999px;padding:0 .35em;}
+  .vc-take-note.pm-locked{background:var(--hl-lock);color:var(--hl-on-voice);}
+  .vc-stage.is-live .vc-take-note{font-size:var(--hl-t-display);font-weight:300;}
+  .vc-stage.is-live .vc-take-pill:disabled{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);opacity:1;cursor:default;}
+  .vc-take-live{display:contents;}
+  .pm-cents-scale .pm-cs-lo{left:4.545%;} .pm-cents-scale .pm-cs-mid{left:50%;} .pm-cents-scale .pm-cs-hi{left:95.455%;}
   .vc-stage.is-live .btn-row{margin-top:0 !important;}
   /* its result: rows of dimensions; the trace */
   .pm-trace-box{display:grid;gap:var(--hl-s1);}
@@ -1057,14 +1060,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pm-trace :is(line, path){vector-effect:non-scaling-stroke;}
   .pm-trace-axis{display:flex;justify-content:space-between;font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   .pm-trace .pm-target{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;}
-  #pitchResult .sub-score-row{flex-direction:column;gap:0;margin:0;justify-content:flex-start;}
-  #pitchResult .sub-score, #pitchResult .cents-detail, #pitchResult #pitchConfidenceBadge{
+  .vc-result .sub-score-row{flex-direction:column;gap:0;margin:0;justify-content:flex-start;}
+  .vc-result .sub-score, .vc-result .cents-detail, #pitchResult #pitchConfidenceBadge, .vc-result .vc-dim{
     display:flex;justify-content:space-between;align-items:baseline;gap:var(--hl-s4);margin:0;padding:var(--hl-s3) 0;
     background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;text-align:left;font-size:var(--hl-t-small);color:var(--hl-ink-2);}
-  #pitchResult .sub-score-val{color:var(--hl-ink);font-variant-numeric:tabular-nums;}
+  .vc-result .sub-score-val{color:var(--hl-ink);font-variant-numeric:tabular-nums;}
   .conf-high{color:var(--hl-ok);font-weight:700;} .conf-mid{color:var(--hl-ink-2);font-weight:700;} .conf-low{color:var(--hl-warn);font-weight:700;}
   .conf-reason{color:var(--hl-ink-3);}
-  @media (prefers-reduced-motion: reduce){ #pitchTargetNote{transition:none;} }
+  @media (prefers-reduced-motion: reduce){ .vc-take-note{transition:none;} }
 
   /* ---- VOCAL SKILL PROFILE ---- */
   .skill-row{display:grid;grid-template-columns:100px 1fr 56px;align-items:center;gap:12px;margin-bottom:12px;}
@@ -3069,7 +3072,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="ex-target-card">
           <div class="vc-stage" id="pitchStage">
           <div class="ex-target-sub" id="pitchModeSub" data-i18n="pitchmode_beginner">Sing this note</div>
-          <div class="ex-target-note" id="pitchTargetNote">—</div>
+          <div class="ex-target-note vc-take-note" id="pitchTargetNote">—</div>
           <div class="pm-hz vc-live-only" id="pitchStageHz"></div>
           <svg class="pm-lane vc-live-only" id="pitchLane" viewBox="0 0 320 150" aria-hidden="true"></svg>
           <div class="pm-cents vc-live-only" id="pitchCents">
@@ -3079,7 +3082,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           </div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
             <button class="solid-btn vc-paper-only" id="pitchPlayBtn" data-i18n="ex_play_target_btn">Play target</button>
-            <button class="solid-btn teal vc-sing" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
+            <button class="solid-btn teal vc-sing vc-take-pill" id="pitchListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
             <button class="ghost-btn vc-paper-only" id="pitchNextBtn" data-i18n="ex_new_note_btn">New note</button>
             <button class="ghost-btn vc-paper-only" id="pitchAgainBtn" style="display:none;"></button>
           </div>
@@ -3091,7 +3094,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <div class="ex-feedback-text hl-coach" id="pitchFeedback"></div>
             <div class="vc-result-chart pm-trace-box" id="pitchTraceBox" style="display:none;">
               <svg class="pm-trace" id="pitchTrace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
-              <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span id="pitchTraceEnd"></span></div>
+              <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span class="pm-trace-end" id="pitchTraceEnd"></span></div>
             </div>
             <div class="vc-result-dims">
             <div class="sub-score-row" id="pitchSubScores" style="display:none;">
@@ -16477,28 +16480,43 @@ function newPitchTarget(keepResult){
   document.getElementById('pitchSubScores').style.display='none';
   document.getElementById('pitchCentsDetail').style.display='none';
 }
-// The lane and the cents meter on the stage, fed by captureAccuracyForTarget's onFrame (drawing only). The lane: time
-// across the listening window, raw cents (±150, clamped) around the target. The meter and its readout go through a
-// vibrato-tolerant reading made fresh for each take, so natural vibrato doesn't flicker.
+/* ---- vcTake (phase 4a): the take stage and its result, shared by every tool scored with captureAccuracyForTarget
+   (generalised from Pitch Match's, phase 2). The stage is a .vc-stage holding: the target note (.vc-take-note) and its
+   frequency (.pm-hz), the lane (svg.pm-lane: time across the listening window, raw cents ±150 around the target, grid
+   lines on the neighbour notes), the cents meter (.pm-cents: ticks every 10 cents, −50 / 0 / +50, the needle) with its
+   readout (.pm-cents-read), the lock (|c| ≤ 6: the note fills with the lock colour), and the tool's own button as the
+   status pill (.vc-take-pill, its texts as the take moves on). captureAccuracyForTarget's onFrame feeds it, drawing
+   only. The meter and readout go through a vibrato-tolerant reading made fresh for each take, so natural vibrato
+   doesn't flicker. A tool whose stage has a [data-vc-take] slot gets the live parts built into it (vcTakeMount).
+   The result is a .vc-result: the big number in ink, its label, the coach line, the trace of res.samples
+   (vcTakeTrace), the dimension rows, details.hl-measure. ---- */
 const PM_LANE = {w:320, h:150, x0:40, x1:316, mid:75, span:65}; // ±150 ct → mid ∓ 65
-let pmLane = null;
 const pmY = c => PM_LANE.mid - Math.max(-150, Math.min(150, c))/150*PM_LANE.span;
-function pmLaneStart(target, win){
-  const {x0, x1} = PM_LANE;
+function vcTakeMount(slot){
+  slot.innerHTML = '<div class="pm-hz vc-live-only"></div><svg class="pm-lane vc-live-only" viewBox="0 0 320 150" aria-hidden="true"></svg>'
+    + '<div class="pm-cents vc-live-only"><svg class="pm-cents-meter" viewBox="0 0 220 34" aria-hidden="true"></svg>'
+    + '<div class="pm-cents-scale" aria-hidden="true"><span class="pm-cs-lo">−50</span><span class="pm-cs-mid">0</span><span class="pm-cs-hi">+50</span></div>'
+    + '<div class="pm-cents-read"></div></div>';
+}
+document.querySelectorAll('[data-vc-take]').forEach(vcTakeMount);
+// A take on `stage` toward `target` over `win` ms: draws the grid and resets the meter; returns the take's handle.
+function vcTakeStart(stage, target, win){
+  const {x0, x1} = PM_LANE, lane = stage.querySelector('.pm-lane'), meter = stage.querySelector('.pm-cents-meter');
   const grid = [[-100, target-1], [0, target], [100, target+1]].map(([c, m])=>
     `<line class="${c===0 ? 'pm-target' : 'pm-grid'}" x1="${x0}" x2="${x1}" y1="${pmY(c)}" y2="${pmY(c)}"/><text x="4" y="${pmY(c)+4}">${noteNameFromMidi(m)}</text>`).join('');
-  document.getElementById('pitchLane').innerHTML = grid + '<path class="pm-lane-voice" d=""/><circle class="pm-lane-head" r="4" cx="-10" cy="-10"/>';
+  lane.innerHTML = grid + '<path class="pm-lane-voice" d=""/><circle class="pm-lane-head" r="4" cx="-10" cy="-10"/>';
   let ticks = '';
   for(let c=-50; c<=50; c+=10){ const x = 10 + (c+50)*2, big = c%50===0; ticks += `<line class="${big ? 'pm-tick-big' : 'pm-tick'}" x1="${x}" x2="${x}" y1="${big ? 4 : 10}" y2="${big ? 30 : 24}"/>`; }
-  document.querySelector('#pitchCents .pm-cents-meter').innerHTML = ticks + '<line class="pm-needle" x1="110" x2="110" y1="2" y2="32" style="display:none;"/>';
-  document.getElementById('pitchCentsRead').textContent = '';
-  document.getElementById('pitchStageHz').textContent = noteToFreq(target).toFixed(1)+' Hz';
-  pmLane = {win, d:'', vib: makeVibratoTolerantLive(), path: document.querySelector('#pitchLane .pm-lane-voice'),
-    head: document.querySelector('#pitchLane .pm-lane-head'), needle: document.querySelector('#pitchCents .pm-needle'),
-    read: document.getElementById('pitchCentsRead'), note: document.getElementById('pitchTargetNote')};
+  meter.innerHTML = ticks + '<line class="pm-needle" x1="110" x2="110" y1="2" y2="32" style="display:none;"/>';
+  const read = stage.querySelector('.pm-cents-read'), hz = stage.querySelector('.pm-hz'), note = stage.querySelector('.vc-take-note');
+  read.textContent = '';
+  if(hz) hz.textContent = noteToFreq(target).toFixed(1)+' Hz';
+  if(note) note.classList.remove('pm-locked');
+  return {win, d:'', vib: makeVibratoTolerantLive(), path: lane.querySelector('.pm-lane-voice'), head: lane.querySelector('.pm-lane-head'),
+    needle: meter.querySelector('.pm-needle'), read, note};
 }
-function pmLaneFrame(ms, cents){ // ms, not t: t() is the translator
-  const L = pmLane; if(!L) return;
+function vcTakeFrame(L, ms, cents){ // ms, not t: t() is the translator
+  if(!L) return;
   const x = PM_LANE.x0 + Math.min(1, ms/L.win)*(PM_LANE.x1-PM_LANE.x0), y = pmY(cents);
   L.d += `${L.d ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
   L.path.setAttribute('d', L.d);
@@ -16510,23 +16528,34 @@ function pmLaneFrame(ms, cents){ // ms, not t: t() is the translator
   const nx = (10 + (Math.max(-50, Math.min(50, held))+50)*2).toFixed(1);
   L.needle.setAttribute('x1', nx); L.needle.setAttribute('x2', nx);
   L.read.textContent = on ? t('pm_live_on') : t(c<0 ? 'pm_live_flat' : 'pm_live_sharp').replace('{n}', Math.abs(c));
-  L.note.classList.toggle('pm-locked', on);
+  if(L.note) L.note.classList.toggle('pm-locked', on);
 }
-function pmLaneEnd(){
-  if(pmLane) pmLane.note.classList.remove('pm-locked');
-  pmLane = null;
-}
-// The result's trace: the take's scored samples (after vibrato tolerance) against the target, over the window.
-// The svg stretches to the card's width at a fixed height (the strokes don't scale); its axis labels are HTML, at 12 px.
-function pmDrawTrace(samples, win){
-  const box = document.getElementById('pitchTraceBox'), svg = document.getElementById('pitchTrace');
+function vcTakeEnd(L){ if(L && L.note) L.note.classList.remove('pm-locked'); }
+// The result's trace: a take's scored samples (after vibrato tolerance) against the target, over the window, in `box`
+// (a .pm-trace-box: svg.pm-trace and the axis, whose .pm-trace-end gets the window's length). The svg stretches to the
+// card's width at a fixed height (the strokes don't scale); its axis labels are HTML, at 12 px. No samples: hidden.
+function vcTakeTrace(box, samples, win){
+  const svg = box.querySelector('svg.pm-trace');
   if(!samples || !samples.length){ box.style.display = 'none'; svg.innerHTML = ''; return; }
   const x0 = 0, x1 = 320, mid = 52, y = c => mid - Math.max(-150, Math.min(150, c))/150*46;
   const d = samples.map((s, i)=>`${i ? 'L' : 'M'}${(x0 + Math.min(1, s.t/win)*(x1-x0)).toFixed(1)} ${y(s.cents).toFixed(1)}`).join('');
   svg.innerHTML = `<line class="pm-target" x1="${x0}" x2="${x1}" y1="${mid}" y2="${mid}"/><path class="pm-trace-voice" d="${d}"/>`;
-  document.getElementById('pitchTraceEnd').textContent = `${(win/1000).toLocaleString(localeForLang())} s`;
+  box.querySelector('.pm-trace-end').textContent = `${(win/1000).toLocaleString(localeForLang())} s`;
   box.style.display = '';
 }
+// A result's big number: the value in ink, or nothing when nothing was heard (the coach line says why).
+function vcResultNum(el, text){
+  el.textContent = text===null ? '—' : text;
+  el.classList.add('vc-result-num');
+  el.classList.toggle('vc-result-none', text===null);
+}
+
+// Pitch Match on vcTake
+let pmLane = null;
+function pmLaneStart(target, win){ pmLane = vcTakeStart(document.getElementById('pitchStage'), target, win); }
+function pmLaneFrame(ms, cents){ vcTakeFrame(pmLane, ms, cents); }
+function pmLaneEnd(){ vcTakeEnd(pmLane); pmLane = null; }
+function pmDrawTrace(samples, win){ vcTakeTrace(document.getElementById('pitchTraceBox'), samples, win); }
 function renderPitchMeasure(){
   const el = document.getElementById('pitchMeasure'); if(!el) return;
   el.textContent = t('pm_measure').replace('{beg}', t('skill_level_beginner')).replace('{int}', t('skill_level_intermediate')).replace('{pro}', t('skill_level_professional'));
