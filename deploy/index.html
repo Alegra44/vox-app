@@ -1481,6 +1481,55 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-dim .dual-val{font-size:var(--hl-t-body);font-weight:400;font-stretch:normal;color:var(--hl-ink);font-variant-numeric:tabular-nums;margin:0;}
   .vc-visually-hidden{position:absolute !important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 
+  /* ============ HOUSE LIGHTS: PAPER TOOLS (phase 4a) ============ */
+  /* Key Trainer, Vocal Lab, Genre Coach, Smart Warmup, Ear Training, Vocal Puzzle: nothing is sung, the lights stay up.
+     Paper with rows instead of cards; one raised block (.hl-raised) where there's a clear action. */
+  :is(#panel-key, #panel-vocallab, #panel-genre, #panel-warmup) > .key-card,
+  #panel-vocalpuzzle > .key-card:not(#puzzleGuessCard){background:none;border:0;border-radius:0;box-shadow:none;padding:0;}
+  #panel-key .key-section{margin:0;padding:var(--hl-s6) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-key .key-section:first-child{border-top:0;padding-top:0;}
+  #panel-key .key-section .step-label, #panel-warmup .step-label{color:var(--hl-ink-3);}
+  #panel-key .solid-btn.teal{background:var(--hl-ink);color:var(--hl-bg);} /* doesn't open the mic: ink, not the voice colour */
+  #panel-key .rec-result{border:0;border-radius:var(--hl-r2);background:var(--hl-raised);margin-top:var(--hl-s5);}
+  #panel-key .rec-result .headline{color:var(--hl-ink);}
+  /* Vocal Lab: the three tiers as rows */
+  #panel-vocallab .vlab-row{margin:0;padding:var(--hl-s4) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-vocallab .vlab-row:first-child{border-top:0;padding-top:0;}
+  #panel-vocallab .vlab-row-label{color:var(--hl-ink);}
+  #panel-vocallab .vlab-track{background:var(--hl-sunk);border:0;height:8px;}
+  /* Genre Coach: genres as an hl-item list; the tips and Set as my genre are the raised block */
+  #genreGrid.hl-list{display:block;margin:0 0 var(--hl-s5);}
+  #genreGrid .genre-card, #genreGrid .genre-card.active, #genreGrid .genre-card:hover{background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;transform:none;box-shadow:none;color:var(--hl-ink);}
+  #genreGrid .genre-card .hl-item-end{color:var(--hl-ink);}
+  #genreGrid .genre-card:not([aria-pressed="true"]) .hl-item-end .hl-icon{visibility:hidden;}
+  .genre-action{padding:var(--hl-s5);display:grid;gap:var(--hl-s4);}
+  .genre-action .genre-tips-list li{color:var(--hl-ink);opacity:1;border-bottom-color:var(--hl-rule);}
+  .genre-action .genre-tips-list li::before{color:var(--hl-ink-3);}
+  .genre-action .btn-row{margin:0 !important;justify-content:flex-start !important;}
+  .genre-action .solid-btn.teal{background:var(--hl-ink);color:var(--hl-bg);}
+  .genre-action .fine-print{text-align:left !important;margin:0 !important;}
+  /* Smart Warmup: the steps as rows; Mark warmup done (ink) in the raised block */
+  #panel-warmup .warmup-context{border:0;border-radius:0;background:none;padding:0;margin:0 0 var(--hl-s4);color:var(--hl-ink-2);}
+  #panel-warmup .warmup-step{background:none;border:0;border-radius:0;border-top:var(--hl-hair) solid var(--hl-rule);margin:0;padding:var(--hl-s4) 0;min-height:60px;}
+  #panel-warmup .warmup-step .ws-title{font-size:var(--hl-t-body);}
+  #panel-warmup .warmup-step .ws-sub{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .warmup-action{padding:var(--hl-s5);margin-top:var(--hl-s5);display:grid;gap:var(--hl-s3);justify-items:start;}
+  .warmup-action .btn-row{margin:0 !important;}
+  .warmup-action .fine-print{text-align:left !important;margin:0 !important;}
+  /* Ear Training: the choices as hl-seg-style buttons; right and wrong in ok and miss */
+  #earChoiceGrid .ear-choice-btn{min-height:var(--hl-touch);border:var(--hl-hair) solid var(--hl-rule-strong);border-radius:var(--hl-r2);background:transparent;color:var(--hl-ink-2);font-size:var(--hl-t-small);font-weight:600;padding:0 var(--hl-s3);}
+  #earChoiceGrid .ear-choice-btn:hover:not(:disabled){border-color:var(--hl-ink);color:var(--hl-ink);}
+  #earChoiceGrid .ear-choice-btn.correct{background:var(--hl-ok);border-color:var(--hl-ok);color:var(--hl-bg);opacity:1;}
+  #earChoiceGrid .ear-choice-btn.wrong{background:var(--hl-miss);border-color:var(--hl-miss);color:var(--hl-bg);opacity:1;}
+  #exPanelEar .reg-stat-row, #panel-vocalpuzzle .dual-score-row{display:grid;gap:0;margin-top:var(--hl-s4) !important;justify-content:stretch;width:100%;}
+  #exPanelEar .stat-chip, #panel-vocalpuzzle .dual-score{display:flex;justify-content:space-between;align-items:baseline;background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;text-align:left;}
+  #exPanelEar .stat-chip .label, #panel-vocalpuzzle .dual-label{font-size:var(--hl-t-small);color:var(--hl-ink-2);text-transform:none;letter-spacing:0;}
+  #exPanelEar .stat-chip .val, #panel-vocalpuzzle .dual-val{font-size:var(--hl-t-body);font-weight:400;font-stretch:normal;color:var(--hl-ink);margin:0;font-variant-numeric:tabular-nums;}
+  /* Vocal Puzzle: the guess is the raised block, its four choices hl-seg-style */
+  #puzzleGuessCard{border:0;border-radius:var(--hl-r2);box-shadow:none;background:var(--hl-raised);}
+  #puzzleGuessRow .ex-type-btn{min-height:var(--hl-touch);border-radius:var(--hl-r2);}
+  #puzzleResultCard .step-label{font-size:var(--hl-t-h3);color:var(--hl-ink);text-transform:none;letter-spacing:0;}
+
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
 
@@ -2900,10 +2949,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="solid-btn" id="warmupPlay3" data-i18n="warmup_play_btn">Play</button>
       </div>
 
-      <div class="btn-row" style="justify-content:center;margin-top:20px;">
-        <button class="solid-btn teal" id="warmupCompleteBtn" data-i18n="warmup_complete_btn">Mark warmup done</button>
+      <div class="hl-raised warmup-action">
+      <div class="btn-row">
+        <button class="solid-btn" id="warmupCompleteBtn" data-i18n="warmup_complete_btn">Mark warmup done</button>
       </div>
-      <p class="fine-print" id="warmupDoneNote" style="text-align:center;margin-top:10px;"></p>
+      <p class="fine-print" id="warmupDoneNote"></p>
+      </div>
     </div>
   </section>
 
@@ -3583,14 +3634,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="genre_sub">Pick a style — real tips and real parameter defaults for Warmup and Vibrato, not audio-detected. You choose; the app doesn't guess.</div>
     </div>
     <div class="key-card">
-      <div class="genre-grid" id="genreGrid" style="margin-top:18px;"></div>
+      <div class="genre-grid hl-list" id="genreGrid" role="list"></div>
 
+      <div class="hl-raised genre-action">
       <ul class="genre-tips-list" id="genreTipsList"></ul>
 
-      <div class="btn-row" style="justify-content:center;margin-top:20px;">
+      <div class="btn-row">
         <button class="solid-btn teal" id="genreApplyBtn" data-i18n="genre_apply_btn">Set as my genre</button>
       </div>
-      <p class="fine-print" id="genreAppliedNote" style="text-align:center;margin-top:10px;"></p>
+      <p class="fine-print" id="genreAppliedNote"></p>
+      </div>
     </div>
   </section>
 
@@ -13415,10 +13468,10 @@ function renderGenreGrid(){
   grid.innerHTML = Object.keys(GENRES).map(key=>{
     const g = GENRES[key];
     const active = profile && profile.genre===key;
-    return `<button class="ex-type-btn mode-card genre-card${active?' active':''}" data-genre="${key}">
-      <div class="mode-card-icon">${GENRE_ICONS[key]||'🎵'}</div>
-      <div class="mode-card-name">${g.name}</div>
-      <div class="mode-card-tag">${g.sub}</div>
+    return `<button class="hl-item genre-card${active?' active':''}" data-genre="${key}" aria-pressed="${active?'true':'false'}">
+      <svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg>
+      <span><span class="hl-item-title">${g.name}</span><br><span class="hl-item-meta">${g.sub}</span></span>
+      <span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg></span>
     </button>`;
   }).join('');
   grid.querySelectorAll('.genre-card').forEach(card=>{
@@ -20871,7 +20924,7 @@ function renderVocalLab(){
   const scaleSpan = Math.max(1, scaleHigh-scaleLow);
 
   const rows = [
-    {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended, color:'var(--coral)'},
+    {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended, color:'var(--hl-voice)'}, // your range: the voice colour (red means a miss)
     {label:t('vocallab_comfortable'), sub:t('vocallab_comfortable_sub'), data:tiers.comfortable, color:'var(--brass)'},
     {label:t('vocallab_reliable'), sub:t('vocallab_reliable_sub'), data:tiers.reliable, color:'var(--teal)'},
   ];
