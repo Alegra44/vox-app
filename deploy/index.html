@@ -539,6 +539,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live .range-step .step-label{color:var(--hl-ink-3);}
   .vc-stage.is-live .range-note-live{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;background:none;border:0;padding:0;color:var(--hl-ink);}
   .vc-stage.is-live .capture-btn{background:var(--hl-ink);color:var(--hl-bg);} /* on the stage only the voice is in the voice colour */
+  /* Breath Trainer (4a): the seconds big in the ring (voice colour) against the target, the level it reads as a meter */
+  .vc-stage.is-live #breathTimerVal{font-size:var(--hl-t-display) !important;}
+  .breath-level{width:100%;max-width:280px;--part:var(--hl-voice);}
+  #breathResult .vc-dim .ex-accuracy{font-size:inherit;font-weight:400;font-stretch:normal;color:var(--hl-ink);}
   .range-sofar{width:100%;max-width:320px;}
   .result-card.vc-result{text-align:left;}
   .result-card.vc-result .range-span{font-size:var(--hl-t-metric-l);letter-spacing:-0.03em;color:var(--hl-ink);margin:0;}
@@ -3414,6 +3418,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="breath_sub">Sustain "Ah" as long and as steadily as you can. Measures real sustain duration and loudness consistency — timing ends automatically when your breath runs out (detected as sustained silence), not on a guess.</div>
     </div>
     <div class="tuner-hero-card">
+      <div class="vc-stage breath-stage" id="breathStage">
       <div class="tuner-ring-wrap" id="breathRingWrap">
         <svg class="tuner-ring" viewBox="0 0 200 200">
           <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="10"/>
@@ -3426,19 +3431,24 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="cents-display" id="breathTargetSub">Target: 12s (Beginner)</div>
         </div>
       </div>
+      <div class="hl-meter breath-level vc-live-only" id="breathLevel" role="meter" aria-label="Level" aria-valuemin="0" aria-valuemax="100"><i></i></div>
 
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="breathStartBtn"><span class="dot-icon"></span><span id="breathStartLabel" data-i18n="breath_start_hold_label">Start hold</span></button>
       </div>
       <div class="vl-gauge" id="vlGaugeBreath" style="display:none;"></div>
+      </div>
 
-      <div class="ex-result" id="breathResult" style="display:none;text-align:center;margin-top:22px;">
-        <div class="ex-accuracy" id="breathAccuracyVal">—</div>
-        <div class="ex-feedback-text" id="breathFeedback"></div>
-        <div class="reg-stat-row" style="margin-top:16px;">
-          <div class="stat-chip"><div class="label" data-i18n="breath_duration_label">Duration</div><div class="val" id="breathDurationStat">—</div></div>
-          <div class="stat-chip"><div class="label" data-i18n="breath_consistency_label">Consistency</div><div class="val" id="breathConsistencyStat">—</div></div>
+      <div class="ex-result vc-result" id="breathResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-num" id="breathSecondsVal">—</div>
+        <h3 class="hl-h3" data-i18n="breath_result_label">Seconds held</h3>
+        <div class="ex-feedback-text hl-coach" id="breathFeedback"></div>
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="breath_duration_label">Duration</span><span id="breathDurationStat">—</span></div>
+          <div class="vc-dim"><span data-i18n="breath_consistency_label">Consistency</span><span id="breathConsistencyStat">—</span></div>
+          <div class="vc-dim"><span data-i18n="breath_score_label">Score</span><span class="ex-accuracy" id="breathAccuracyVal">—</span></div>
         </div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p id="breathMeasure"></p></details>
       </div>
     </div>
   </section>
@@ -7404,6 +7414,9 @@ const TRANSLATIONS = {
     range_semitones_label:"Semitones",
     range_voicetype_label:"Voice type",
     range_measure:"The note on screen is the pitch heard right now. Tapping capture keeps the note you're on at that moment: first your lowest, then your highest. Semitones is the distance between them. The voice type is the one whose usual range has its middle closest to the middle of yours (bass, baritone, tenor, contralto, alto, mezzo-soprano or soprano): a rough guide from two notes, not a classification of your voice.",
+    breath_result_label:"Seconds held",
+    breath_score_label:"Score",
+    breath_measure:"The timer runs from the moment you start. It stops when you tap stop, or by itself after 0.6 seconds of silence once you've sung for a moment. The target is 12, 18 or 24 seconds at {beg}, {int} or {pro}. Consistency is 100 minus 140 times how much your loudness varies (its standard deviation over its mean) while you sing. The score is 60% the time held against the target (up to 100) and 40% consistency. A hold under 2 seconds isn't recorded.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8791,6 +8804,9 @@ const TRANSLATIONS = {
     range_semitones_label:"Demi-tons",
     range_voicetype_label:"Type de voix",
     range_measure:"La note affichée est la hauteur entendue à l'instant. Appuyer sur la capture garde la note sur laquelle vous êtes à ce moment : d'abord la plus grave, puis la plus aiguë. Les demi-tons sont l'écart entre elles. Le type de voix est celui dont la tessiture habituelle a son milieu le plus proche du milieu de la vôtre (basse, baryton, ténor, contralto, alto, mezzo-soprano ou soprano) : un repère approximatif tiré de deux notes, pas une classification de votre voix.",
+    breath_result_label:"Secondes tenues",
+    breath_score_label:"Score",
+    breath_measure:"Le chrono démarre dès que vous commencez. Il s'arrête quand vous appuyez sur stop, ou tout seul après 0,6 seconde de silence une fois que vous avez chanté un moment. L'objectif est de 12, 18 ou 24 secondes en {beg}, {int} ou {pro}. La régularité vaut 100 moins 140 fois la variation de votre volume (son écart type rapporté à sa moyenne) pendant que vous chantez. Le score compte pour 60 % le temps tenu face à l'objectif (jusqu'à 100) et pour 40 % la régularité. Une tenue de moins de 2 secondes n'est pas enregistrée.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10178,6 +10194,9 @@ const TRANSLATIONS = {
     range_semitones_label:"Semitonos",
     range_voicetype_label:"Tipo de voz",
     range_measure:"La nota en pantalla es la afinación que se oye en este momento. Al pulsar capturar se guarda la nota en la que estás en ese instante: primero la más grave y luego la más aguda. Los semitonos son la distancia entre ellas. El tipo de voz es aquel cuyo rango habitual tiene el centro más cerca del centro del tuyo (bajo, barítono, tenor, contralto, alto, mezzosoprano o soprano): una guía aproximada a partir de dos notas, no una clasificación de tu voz.",
+    breath_result_label:"Segundos sostenidos",
+    breath_score_label:"Puntuación",
+    breath_measure:"El cronómetro corre desde que empiezas. Se detiene cuando pulsas parar, o solo tras 0,6 segundos de silencio una vez que has cantado un momento. El objetivo es de 12, 18 o 24 segundos en {beg}, {int} o {pro}. La regularidad es 100 menos 140 veces cuánto varía tu volumen (su desviación típica sobre su media) mientras cantas. La puntuación es un 60 % el tiempo sostenido frente al objetivo (hasta 100) y un 40 % la regularidad. Una nota de menos de 2 segundos no se registra.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11565,6 +11584,9 @@ const TRANSLATIONS = {
     range_semitones_label:"Yarım ses",
     range_voicetype_label:"Ses tipi",
     range_measure:"Ekrandaki nota, şu anda duyulan perdedir. Yakala'ya dokunduğunuzda o andaki nota kaydedilir: önce en pes, sonra en tiz notanız. Yarım ses, ikisi arasındaki mesafedir. Ses tipi, olağan aralığının ortası sizinkinin ortasına en yakın olandır (bas, bariton, tenor, kontralto, alto, mezzosoprano veya soprano): iki notadan çıkarılan kaba bir yön göstergesi, sesinizin sınıflandırması değil.",
+    breath_result_label:"Tutulan saniye",
+    breath_score_label:"Puan",
+    breath_measure:"Süre, başladığınız anda işlemeye başlar. Dur'a dokunduğunuzda ya da bir süre söyledikten sonra 0,6 saniyelik sessizlikte kendiliğinden durur. Hedef {beg} seviyesinde 12, {int} seviyesinde 18, {pro} seviyesinde 24 saniyedir. Tutarlılık, söylerken ses yüksekliğinizin ne kadar değiştiğinin (standart sapmasının ortalamasına oranı) 140 katının 100'den çıkarılmasıdır. Puan, hedefe göre tutulan sürenin (en fazla 100) %60'ı ve tutarlılığın %40'ıdır. 2 saniyeden kısa tutuşlar kaydedilmez.",
   },
 };
 let currentLanguage = 'en';
@@ -12643,7 +12665,7 @@ async function startBreathHold(){
   const ring = document.getElementById('breathRingFill');
   if(ring){ ring.style.strokeDashoffset = 553; ring.style.stroke = 'var(--teal)'; ring.dataset.atTarget = '0'; }
   breathLoop();
-  singingSession(()=>breathActive);
+  singingSession(()=>breathActive, document.getElementById('breathStage')); // the hold is on stage
 }
 
 const BREATH_RING_CIRC = 553;
@@ -12666,6 +12688,11 @@ function breathLoop(){
     }
   }
 
+  { // the level it reads, on the stage's meter: −60 to 0 dBFS (display only)
+    const db = rms > 0 ? 20*Math.log10(rms) : -60, pct = Math.max(0, Math.min(100, (db+60)/60*100));
+    const m = document.getElementById('breathLevel');
+    if(m){ m.style.setProperty('--val', pct.toFixed(0)+'%'); m.setAttribute('aria-valuenow', pct.toFixed(0)); }
+  }
   const VOICED_THRESHOLD = 0.012;
   if(rms > VOICED_THRESHOLD){
     breathRmsSamples.push(rms);
@@ -12709,6 +12736,8 @@ function finishBreathHold(){
   const accEl = document.getElementById('breathAccuracyVal');
   accEl.textContent = overall+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(overall);
+  vcResultNum(document.getElementById('breathSecondsVal'), duration.toFixed(1)+' s'); // the big number: the seconds held
+  document.getElementById('breathMeasure').textContent = t('breath_measure').replace(/\{beg\}/g, t('skill_level_beginner')).replace(/\{int\}/g, t('skill_level_intermediate')).replace(/\{pro\}/g, t('skill_level_professional'));
   document.getElementById('breathFeedback').textContent =
     duration < 2 ? t('breath_fb_tooshort') :
     overall>=85 ? t('breath_fb_strong') :
