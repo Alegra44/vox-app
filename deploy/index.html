@@ -1000,6 +1000,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .ex-feedback-text{color:var(--muted);font-size:13px;margin-top:4px;}
 
   .scale-dots{display:flex;gap:8px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
+  .vc-stage.is-live .scale-dots{margin-top:0;}
+  .vc-result .vc-dim > :last-child{color:var(--hl-ink);font-variant-numeric:tabular-nums;}
 
   .ear-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;max-width:440px;margin:0 auto;}
   .ear-choice-btn{
@@ -3153,9 +3155,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <!-- SCALE RUN -->
       <div class="ex-panel" id="exPanelScale" style="display:none;">
         <div class="ex-target-card mode-scale">
-          <div class="ex-target-sub" id="scaleModeSub" data-i18n="scalemode_beginner">Echo each scale degree as it's your turn</div>
+          <div class="vc-stage" id="scaleStage">
+          <div class="ex-target-sub vc-paper-only" id="scaleModeSub" data-i18n="scalemode_beginner">Echo each scale degree as it's your turn</div>
 
-          <div class="field-row" id="scaleTypeRow" style="display:none;justify-content:center;margin-bottom:14px;">
+          <div class="field-row vc-paper-only" id="scaleTypeRow" style="display:none;justify-content:center;margin-bottom:14px;">
             <div class="field">
               <label for="scaleTypeSel" data-i18n="ex_scaletype_label">Scale type</label>
               <select id="scaleTypeSel">
@@ -3168,17 +3171,23 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             </div>
           </div>
 
-          <div class="ex-target-note" id="scaleTargetNote">—</div>
+          <div class="ex-target-note vc-paper-only" id="scaleTargetNote">—</div>
+          <div class="ex-target-note vc-take-note vc-live-only" id="scaleLiveNote">—</div>
+          <div class="vc-take-live" data-vc-take></div>
+          <div class="scale-dots" id="scaleDots"></div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
-            <button class="solid-btn teal vc-sing" id="scaleStartBtn">Start scale run</button>
-            <button class="ghost-btn" id="scaleNextBtn" data-i18n="ex_new_root_btn">New root</button>
-            <button class="ghost-btn" id="scaleAgainBtn" style="display:none;"></button>
+            <button class="solid-btn teal vc-sing vc-take-pill" id="scaleStartBtn">Start scale run</button>
+            <button class="ghost-btn vc-paper-only" id="scaleNextBtn" data-i18n="ex_new_root_btn">New root</button>
+            <button class="ghost-btn vc-paper-only" id="scaleAgainBtn" style="display:none;"></button>
           </div>
           <div class="vl-gauge" id="vlGaugeScale" style="display:none;"></div>
-          <div class="scale-dots" id="scaleDots"></div>
-          <div class="ex-result" id="scaleResult" style="display:none;">
-            <div class="ex-accuracy" id="scaleAccuracyVal">—</div>
-            <div class="ex-feedback-text" id="scaleFeedback" data-i18n="scale_average_desc">Average across the run</div>
+          </div>
+          <div class="ex-result vc-result" id="scaleResult" role="status" aria-live="polite" style="display:none;">
+            <div class="ex-accuracy vc-result-num" id="scaleAccuracyVal">—</div>
+            <h3 class="hl-h3" id="scaleFeedback" data-i18n="scale_average_desc">Average across the run</h3>
+            <div class="ex-feedback-text hl-coach" id="scaleCoach"></div>
+            <div class="vc-result-dims" id="scaleRows"></div>
+            <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p id="scaleMeasure"></p></details>
           </div>
         </div>
       </div>
@@ -7292,6 +7301,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Still your weakest',
     interval_result_label:"Interval accuracy",
     interval_measure:"Accuracy is 100 minus your average distance from the target note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. The target note is the root plus the interval, in any octave. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. At {int} and {pro}, the first and second halves of what's scored are shown apart as attack and landing. Natural vibrato counts as its centre, not as an error.",
+    scale_measure:"Each note of the run is scored on its own. Its reference plays (up to half a second), then listening opens once the reference has ended, for 1.1, 0.9 or 0.65 seconds at {beg}, {int} or {pro}. A note scores 100 minus your average distance from it, in cents, times 0.45, 0.6 or 0.9; any octave counts, natural vibrato counts as its centre, and a note with no clear pitch scores 0. The big number is the average of every note. The dots show each note: 85 and up, 60 to 84, under 60.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8660,6 +8670,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Toujours votre point faible',
     interval_result_label:"Justesse de l'intervalle",
     interval_measure:"La justesse vaut 100 moins votre écart moyen à la note cible, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. La note cible est la fondamentale plus l'intervalle, dans n'importe quelle octave. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. En {int} et en {pro}, la première et la seconde moitié de la partie notée sont affichées à part : l'attaque et l'atterrissage. Un vibrato naturel compte pour son centre, pas comme une erreur.",
+    scale_measure:"Chaque note du parcours est notée séparément. Sa référence joue (une demi-seconde au plus), puis l'écoute s'ouvre une fois la référence terminée, pendant 1,1, 0,9 ou 0,65 seconde en {beg}, {int} ou {pro}. Une note vaut 100 moins votre écart moyen à elle, en cents, multiplié par 0,45, 0,6 ou 0,9 ; toutes les octaves comptent, un vibrato naturel compte pour son centre, et une note sans hauteur claire vaut 0. Le grand chiffre est la moyenne de toutes les notes. Les points montrent chaque note : 85 et plus, de 60 à 84, moins de 60.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10028,6 +10039,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Sigue siendo tu punto débil',
     interval_result_label:"Precisión del intervalo",
     interval_measure:"La precisión es 100 menos tu distancia media a la nota objetivo, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La nota objetivo es la fundamental más el intervalo, en cualquier octava. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. En {int} y {pro}, la primera y la segunda mitad de lo puntuado se muestran por separado como ataque y aterrizaje. El vibrato natural cuenta como su centro, no como un error.",
+    scale_measure:"Cada nota del recorrido se puntúa por separado. Suena su referencia (medio segundo como mucho) y la escucha se abre cuando la referencia termina, durante 1,1, 0,9 o 0,65 segundos en {beg}, {int} o {pro}. Una nota vale 100 menos tu distancia media a ella, en cents, multiplicada por 0,45, 0,6 o 0,9; cualquier octava cuenta, el vibrato natural cuenta como su centro y una nota sin afinación clara vale 0. El número grande es la media de todas las notas. Los puntos muestran cada nota: 85 o más, de 60 a 84, menos de 60.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11396,6 +11408,7 @@ const TRANSLATIONS = {
     home_todaysreport_weakest_label:'Hâlâ en zayıf yönünüz',
     interval_result_label:"Aralık doğruluğu",
     interval_measure:"Doğruluk, 100'den hedef notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Hedef nota, kök notaya aralığın eklenmesiyle bulunur; hangi oktavda olduğu fark etmez. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. {int} ve {pro} seviyelerinde puanlanan bölümün ilk ve ikinci yarısı atak ve iniş olarak ayrı gösterilir. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
+    scale_measure:"Dizideki her nota ayrı puanlanır. Önce referansı çalar (en fazla yarım saniye), referans bittikten sonra dinleme {beg} seviyesinde 1,1, {int} seviyesinde 0,9, {pro} seviyesinde 0,65 saniye açık kalır. Bir nota, 100'den ona sent cinsinden ortalama uzaklığınızın 0,45, 0,6 veya 0,9 katının çıkarılmasıyla puanlanır; oktav fark etmez, doğal vibrato merkezi olarak sayılır ve net perde duyulmayan nota 0 alır. Büyük sayı tüm notaların ortalamasıdır. Noktalar her notayı gösterir: 85 ve üstü, 60–84 arası, 60'ın altı.",
   },
 };
 let currentLanguage = 'en';
@@ -16769,6 +16782,10 @@ function renderScaleDots(currentIdx, results, total){
   }
   wrap.innerHTML = html;
 }
+function renderScaleMeasure(){
+  const el = document.getElementById('scaleMeasure'); if(!el) return;
+  el.textContent = t('scale_measure').replace(/\{beg\}/g, t('skill_level_beginner')).replace(/\{int\}/g, t('skill_level_intermediate')).replace(/\{pro\}/g, t('skill_level_professional'));
+}
 document.getElementById('scaleNextBtn').addEventListener('click', ()=>newScaleRoot());
 let scaleAgainRoot = null;
 document.getElementById('scaleAgainBtn').addEventListener('click', ()=>{
@@ -16784,19 +16801,23 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('scaleStartBtn');
   btn.disabled = true;
   document.getElementById('scaleAgainBtn').style.display='none';
-  singingSession(()=>btn.disabled);
+  const stage = document.getElementById('scaleStage');
+  singingSession(()=>btn.disabled, stage); // the whole run is on stage: every reference and every note
   document.getElementById('scaleResult').style.display='none';
   const results = [];
   for(let i=0;i<steps.length;i++){
     const midi = scaleRootMidi + steps[i];
     renderScaleDots(i, results, steps.length);
+    document.getElementById('scaleLiveNote').textContent = noteNameFromMidi(midi);
+    const lane = vcTakeStart(stage, midi, cfg.scaleNoteDuration); // a lane per note
     const refSec = Math.min(0.5, cfg.scaleNoteDuration/1000);
     await playTone(noteToFreq(midi), refSec);
     // listen only once the reference has ended at the speaker (scaleGap counted from its start used to cut into it:
     // with nobody singing, Professional scored its own tone at 93–96%)
     await new Promise(r=>setTimeout(r, Math.max(cfg.scaleGap, referenceDoneMs(refSec))));
     btn.textContent = `Listening (${i+1}/${steps.length})…`;
-    const res = await captureAccuracyForTarget(midi, cfg.scaleNoteDuration, {accuracyMultiplier:cfg.accuracyMultiplier});
+    const res = await captureAccuracyForTarget(midi, cfg.scaleNoteDuration, {accuracyMultiplier:cfg.accuracyMultiplier, onFrame:(ms, c)=>vcTakeFrame(lane, ms, c)});
+    vcTakeEnd(lane);
     results.push(res.accuracy);
     renderScaleDots(i, results, steps.length);
   }
@@ -16804,8 +16825,12 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
   const avg = Math.round(results.reduce((a,b)=>a+b,0)/results.length);
   document.getElementById('scaleResult').style.display='block';
   const accEl = document.getElementById('scaleAccuracyVal');
-  accEl.textContent = avg+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(avg);
+  vcResultNum(accEl, avg+'%');
+  document.getElementById('scaleCoach').textContent = accuracyFeedback(avg, true);
+  document.getElementById('scaleRows').innerHTML = results.map((acc, i)=>
+    `<div class="vc-dim"><span>${i+1} · ${noteNameFromMidi(root + steps[i])}</span><span>${acc}%</span></div>`).join('');
+  renderScaleMeasure();
   recordSkillScore('agility', avg);
   recordWeeklyLog('agility', avg);
   await registerExerciseCompletion();
