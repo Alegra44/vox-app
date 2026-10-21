@@ -1450,6 +1450,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-result > .ghost-btn, .vc-result > .mic-btn{justify-self:start;}
   .vc-take-runner[style*="block"]{display:grid !important;justify-items:center;gap:var(--hl-s5);width:100%;} /* a runner card shown on its stage (4a) */
   .vc-stage .vc-take-runner .step-label{font-size:var(--hl-t-small);font-weight:400;color:var(--hl-ink-3);margin:0;}
+  /* Ear → Voice → Ear: an ear test, so its stage names no note (no Hz, no grid labels); step 5 has no live guide */
+  .eve-stage .pm-hz, .eve-stage .pm-lane text{display:none;}
+  .vc-stage.is-live.eve-unguided .pm-lane, .vc-stage.is-live.eve-unguided .pm-cents{visibility:hidden;}
+  .vc-stage.is-live #eveStepNote{font-size:var(--hl-t-h1);font-weight:400;}
+  .vc-chart-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .vc-result-dims.dual-score-row{display:grid;gap:0;margin:0;justify-content:stretch;}
+  .vc-result-dims > .vc-dim.dual-score{background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;text-align:left;}
+  .vc-dim .dual-label{font-size:var(--hl-t-small);color:var(--hl-ink-2);text-transform:none;letter-spacing:0;}
+  .vc-dim .dual-val{font-size:var(--hl-t-body);font-weight:400;font-stretch:normal;color:var(--hl-ink);font-variant-numeric:tabular-nums;margin:0;}
   .vc-visually-hidden{position:absolute !important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 
   /* ============ SIGNAL SHELL ============ */
@@ -3720,25 +3729,41 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="eve_sub">A real 5-step loop: hear a note, sing it back, get analyzed, hear a harder one, then sing that one from memory alone — no replay right before. Reuses the exact same capture engine as Pitch Match throughout.</div>
     </div>
     <div class="key-card" id="evePreCard">
-      <p class="desc" style="margin-bottom:16px;" data-i18n="eve_intro_desc">Five real steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.</p>
-      <button class="mic-btn" id="eveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Begin the loop</button>
-    </div>
-
-    <div class="key-card" id="eveRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="eveStepLabel">Step 1 — Hear</div>
-      <div class="chord-label-display" id="eveStepNote" style="margin-top:10px;">—</div>
-      <p class="desc" id="eveStepStatus" style="margin-top:10px;"></p>
-      <div class="vl-gauge" id="vlGaugeEve" style="display:none;"></div>
-    </div>
-
-    <div class="key-card" id="eveResultCard" style="display:none;text-align:center;">
-      <div class="step-label" data-i18n="eve_results_label">Real results</div>
-      <div class="dual-score-row" style="margin-top:10px;">
-        <div class="dual-score"><div class="dual-label" data-i18n="eve_step2_label">Step 2 — Sing</div><div class="dual-val" id="eveResultFirst">—</div></div>
-        <div class="dual-score"><div class="dual-label" data-i18n="eve_step5_label">Step 5 — Without help</div><div class="dual-val" id="eveResultSecond">—</div></div>
+      <div class="vc-stage eve-stage" id="eveStage">
+      <p class="desc vc-paper-only" id="eveIntro" style="margin-bottom:16px;" data-i18n="eve_intro_desc">Five real steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.</p>
+      <div class="vc-take-runner" id="eveRunnerCard" style="display:none;">
+        <div class="step-label" id="eveStepLabel">Step 1 — Hear</div>
+        <div class="ex-target-note vc-take-note" id="eveStepNote">—</div>
+        <div class="vc-take-live" data-vc-take></div>
+        <p class="vc-visually-hidden" id="eveStepStatus" role="status"></p>
       </div>
-      <p class="desc" id="eveResultNote" style="margin-top:14px;"></p>
-      <button class="ghost-btn" id="eveRetryBtn" style="margin-top:16px;" data-i18n="eve_retry_btn">Run it again</button>
+      <button class="mic-btn vc-take-pill" id="eveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="eveStartLabel">Begin the loop</span></button>
+      <div class="vl-gauge" id="vlGaugeEve" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="key-card" id="eveResultCard" style="display:none;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="ex-accuracy vc-result-num" id="eveResultAvg">—</div>
+      <h3 class="hl-h3" data-i18n="eve_results_label">Real results</h3>
+      <p class="ex-feedback-text hl-coach" id="eveResultNote"></p>
+      <div class="vc-result-chart pm-trace-box" id="eveTraceFirst" style="display:none;">
+        <div class="vc-chart-label" data-i18n="eve_step2_label">Step 2 — Sing</div>
+        <svg class="pm-trace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+        <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span class="pm-trace-end"></span></div>
+      </div>
+      <div class="vc-result-chart pm-trace-box" id="eveTraceSecond" style="display:none;">
+        <div class="vc-chart-label" data-i18n="eve_step5_label">Step 5 — Without help</div>
+        <svg class="pm-trace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+        <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span class="pm-trace-end"></span></div>
+      </div>
+      <div class="vc-result-dims dual-score-row">
+        <div class="vc-dim dual-score"><div class="dual-label" data-i18n="eve_step2_label">Step 2 — Sing</div><div class="dual-val" id="eveResultFirst">—</div></div>
+        <div class="vc-dim dual-score"><div class="dual-label" data-i18n="eve_step5_label">Step 5 — Without help</div><div class="dual-val" id="eveResultSecond">—</div></div>
+      </div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="eve_measure"></p></details>
+      <button class="ghost-btn" id="eveRetryBtn" data-i18n="eve_retry_btn">Run it again</button>
+      </div>
     </div>
   </section>
 
@@ -6145,7 +6170,7 @@ const TRANSLATIONS = {
     eve_title:'👂 Ear → Voice → Ear',
     eve_sub:'A real 5-step loop: hear a note, sing it back, get analyzed, hear a harder one, then sing that one from memory alone — no replay right before. Reuses the exact same capture engine as Pitch Match throughout.',
     eve_intro_desc:'Five real steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.',
-    eve_results_label:'Real results',
+    eve_results_label:"Average of your two sung steps",
     eve_step2_label:'Step 2 — Sing',
     eve_step5_label:'Step 5 — Without help',
     eve_retry_btn:'Run it again',
@@ -7314,6 +7339,13 @@ const TRANSLATIONS = {
     interval_measure:"Accuracy is 100 minus your average distance from the target note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. The target note is the root plus the interval, in any octave. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. At {int} and {pro}, the first and second halves of what's scored are shown apart as attack and landing. Natural vibrato counts as its centre, not as an error.",
     scale_measure:"Each note of the run is scored on its own. Its reference plays (up to half a second), then listening opens once the reference has ended, for 1.1, 0.9 or 0.65 seconds at {beg}, {int} or {pro}. A note scores 100 minus your average distance from it, in cents, times 0.45, 0.6 or 0.9; any octave counts, natural vibrato counts as its centre, and a note with no clear pitch scores 0. The big number is the average of every note. The dots show each note: 85 and up, 60 to 84, under 60.",
     custom_measure:"The 6 notes are picked at random from the range you set: Chest uses its lower third, Head its upper third, Mixed all of it. Each note is scored on its own: its reference plays for half a second, then listening opens once it has ended, for 2.2, 1.6 or 1.1 seconds at a slow, medium or fast pace. A note scores 100 minus your average distance from it, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the notes where a clear pitch was heard; a note with none shows as no signal and isn't counted.",
+    eve_status_captured:"Result captured.",
+    eve_status_jump:"A {interval} jump from the first note. Listen once.",
+    eve_note_better:"Without help you scored {n} points higher than with the note just played. Your pitch memory held.",
+    eve_note_same:"Without help you scored the same as with the note just played. Your pitch memory held.",
+    eve_note_dropped:"Without help you scored {n} points lower than with the note just played. A gap is normal: run the loop again to train your pitch memory.",
+    eve_note_nosignal:"One of the sung steps had no clear pitch, so the two can't be compared. Try again a little louder or closer to the mic.",
+    eve_measure:"Step 1 plays a note from your range; listening for step 2 opens 1.3 seconds after it starts. Step 4 plays a second note, an interval from your level's set away from the first, and step 5 is sung from memory with no replay. Each sung step listens for 1.6 seconds and scores 100 minus your average distance from the note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the steps where a clear pitch was heard.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7515,7 +7547,7 @@ const TRANSLATIONS = {
     eve_title:'👂 Oreille → Voix → Oreille',
     eve_sub:'Une vraie boucle en 5 étapes : entendre une note, la chanter en retour, être analysé, en entendre une plus difficile, puis la chanter de mémoire seule — pas de rejeu juste avant. Réutilise exactement le même moteur de capture que Pitch Match tout du long.',
     eve_intro_desc:'Cinq vraies étapes : Entendre → Chanter → Analyser → Entendre encore (plus difficile) → Chanter sans aide.',
-    eve_results_label:'Résultats réels',
+    eve_results_label:"Moyenne de vos deux étapes chantées",
     eve_step2_label:'Étape 2 — Chanter',
     eve_step5_label:'Étape 5 — Sans aide',
     eve_retry_btn:'Recommencer',
@@ -8684,6 +8716,13 @@ const TRANSLATIONS = {
     interval_measure:"La justesse vaut 100 moins votre écart moyen à la note cible, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. La note cible est la fondamentale plus l'intervalle, dans n'importe quelle octave. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. En {int} et en {pro}, la première et la seconde moitié de la partie notée sont affichées à part : l'attaque et l'atterrissage. Un vibrato naturel compte pour son centre, pas comme une erreur.",
     scale_measure:"Chaque note du parcours est notée séparément. Sa référence joue (une demi-seconde au plus), puis l'écoute s'ouvre une fois la référence terminée, pendant 1,1, 0,9 ou 0,65 seconde en {beg}, {int} ou {pro}. Une note vaut 100 moins votre écart moyen à elle, en cents, multiplié par 0,45, 0,6 ou 0,9 ; toutes les octaves comptent, un vibrato naturel compte pour son centre, et une note sans hauteur claire vaut 0. Le grand chiffre est la moyenne de toutes les notes. Les points montrent chaque note : 85 et plus, de 60 à 84, moins de 60.",
     custom_measure:"Les 6 notes sont tirées au hasard dans la tessiture choisie : Poitrine en utilise le tiers inférieur, Tête le tiers supérieur, Mixte toute la tessiture. Chaque note est notée séparément : sa référence joue une demi-seconde, puis l'écoute s'ouvre une fois la référence terminée, pendant 2,2, 1,6 ou 1,1 seconde selon le rythme lent, moyen ou rapide. Une note vaut 100 moins votre écart moyen à elle, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des notes où une hauteur claire a été entendue ; une note sans hauteur claire s'affiche sans signal et n'est pas comptée.",
+    eve_status_captured:"Résultat enregistré.",
+    eve_status_jump:"Un saut de {interval} depuis la première note. Écoutez une fois.",
+    eve_note_better:"Sans aide, vous avez obtenu {n} points de plus qu'avec la note juste jouée. Votre mémoire de la hauteur a tenu.",
+    eve_note_same:"Sans aide, vous avez obtenu le même score qu'avec la note juste jouée. Votre mémoire de la hauteur a tenu.",
+    eve_note_dropped:"Sans aide, vous avez obtenu {n} points de moins qu'avec la note juste jouée. Un écart est normal : refaites la boucle pour entraîner votre mémoire de la hauteur.",
+    eve_note_nosignal:"L'une des étapes chantées n'avait pas de hauteur claire : les deux ne peuvent pas être comparées. Réessayez un peu plus fort ou plus près du micro.",
+    eve_measure:"L'étape 1 joue une note de votre tessiture ; l'écoute de l'étape 2 s'ouvre 1,3 seconde après son début. L'étape 4 joue une seconde note, à un intervalle de la première tiré des intervalles de votre niveau, et l'étape 5 se chante de mémoire, sans réécoute. Chaque étape chantée écoute pendant 1,6 seconde et vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des étapes où une hauteur claire a été entendue.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -8885,7 +8924,7 @@ const TRANSLATIONS = {
     eve_title:'👂 Oído → Voz → Oído',
     eve_sub:'Un bucle real de 5 pasos: escuchar una nota, cantarla de vuelta, ser analizado, escuchar una más difícil, luego cantarla solo de memoria — sin repetición justo antes. Reutiliza exactamente el mismo motor de captura que Precisión de nota en todo momento.',
     eve_intro_desc:'Cinco pasos reales: Escuchar → Cantar → Analizar → Escuchar de nuevo (más difícil) → Cantar sin ayuda.',
-    eve_results_label:'Resultados reales',
+    eve_results_label:"Media de tus dos pasos cantados",
     eve_step2_label:'Paso 2 — Cantar',
     eve_step5_label:'Paso 5 — Sin ayuda',
     eve_retry_btn:'Ejecutarlo de nuevo',
@@ -10054,6 +10093,13 @@ const TRANSLATIONS = {
     interval_measure:"La precisión es 100 menos tu distancia media a la nota objetivo, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La nota objetivo es la fundamental más el intervalo, en cualquier octava. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. En {int} y {pro}, la primera y la segunda mitad de lo puntuado se muestran por separado como ataque y aterrizaje. El vibrato natural cuenta como su centro, no como un error.",
     scale_measure:"Cada nota del recorrido se puntúa por separado. Suena su referencia (medio segundo como mucho) y la escucha se abre cuando la referencia termina, durante 1,1, 0,9 o 0,65 segundos en {beg}, {int} o {pro}. Una nota vale 100 menos tu distancia media a ella, en cents, multiplicada por 0,45, 0,6 o 0,9; cualquier octava cuenta, el vibrato natural cuenta como su centro y una nota sin afinación clara vale 0. El número grande es la media de todas las notas. Los puntos muestran cada nota: 85 o más, de 60 a 84, menos de 60.",
     custom_measure:"Las 6 notas se eligen al azar dentro del rango que fijaste: Pecho usa su tercio inferior, Cabeza su tercio superior y Mixto todo el rango. Cada nota se puntúa por separado: su referencia suena medio segundo y la escucha se abre cuando termina, durante 2,2, 1,6 o 1,1 segundos con un ritmo lento, medio o rápido. Una nota vale 100 menos tu distancia media a ella, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de las notas en las que se oyó una afinación clara; una nota sin ella aparece sin señal y no cuenta.",
+    eve_status_captured:"Resultado registrado.",
+    eve_status_jump:"Un salto de {interval} desde la primera nota. Escucha una vez.",
+    eve_note_better:"Sin ayuda sacaste {n} puntos más que con la nota recién tocada. Tu memoria de la afinación aguantó.",
+    eve_note_same:"Sin ayuda sacaste lo mismo que con la nota recién tocada. Tu memoria de la afinación aguantó.",
+    eve_note_dropped:"Sin ayuda sacaste {n} puntos menos que con la nota recién tocada. Es normal que haya diferencia: repite el ciclo para entrenar tu memoria de la afinación.",
+    eve_note_nosignal:"Uno de los pasos cantados no tuvo una afinación clara, así que no se pueden comparar. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
+    eve_measure:"El paso 1 toca una nota de tu rango; la escucha del paso 2 se abre 1,3 segundos después de que empiece. El paso 4 toca una segunda nota, a un intervalo de la primera tomado de los intervalos de tu nivel, y el paso 5 se canta de memoria, sin volver a oírla. Cada paso cantado escucha durante 1,6 segundos y vale 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de los pasos en los que se oyó una afinación clara.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10255,7 +10301,7 @@ const TRANSLATIONS = {
     eve_title:'👂 Kulak → Ses → Kulak',
     eve_sub:'Gerçek 5 adımlı bir döngü: bir nota duyun, geri söyleyin, analiz edilin, daha zor bir tane duyun, ardından onu sadece hafızadan söyleyin — hemen öncesinde tekrar yok. Boyunca Nota Eşleştirme ile tamamen aynı yakalama motorunu yeniden kullanır.',
     eve_intro_desc:'Beş gerçek adım: Duy → Söyle → Analiz Et → Tekrar Duy (daha zor) → Yardımsız Söyle.',
-    eve_results_label:'Gerçek sonuçlar',
+    eve_results_label:"Söylediğiniz iki adımın ortalaması",
     eve_step2_label:'Adım 2 — Söyle',
     eve_step5_label:'Adım 5 — Yardımsız',
     eve_retry_btn:'Tekrar çalıştır',
@@ -11424,6 +11470,13 @@ const TRANSLATIONS = {
     interval_measure:"Doğruluk, 100'den hedef notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Hedef nota, kök notaya aralığın eklenmesiyle bulunur; hangi oktavda olduğu fark etmez. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. {int} ve {pro} seviyelerinde puanlanan bölümün ilk ve ikinci yarısı atak ve iniş olarak ayrı gösterilir. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
     scale_measure:"Dizideki her nota ayrı puanlanır. Önce referansı çalar (en fazla yarım saniye), referans bittikten sonra dinleme {beg} seviyesinde 1,1, {int} seviyesinde 0,9, {pro} seviyesinde 0,65 saniye açık kalır. Bir nota, 100'den ona sent cinsinden ortalama uzaklığınızın 0,45, 0,6 veya 0,9 katının çıkarılmasıyla puanlanır; oktav fark etmez, doğal vibrato merkezi olarak sayılır ve net perde duyulmayan nota 0 alır. Büyük sayı tüm notaların ortalamasıdır. Noktalar her notayı gösterir: 85 ve üstü, 60–84 arası, 60'ın altı.",
     custom_measure:"6 nota, seçtiğiniz aralıktan rastgele seçilir: Göğüs alt üçte birini, Kafa üst üçte birini, Karışık aralığın tamamını kullanır. Her nota ayrı puanlanır: referansı yarım saniye çalar, bittikten sonra dinleme yavaş, orta veya hızlı tempoda 2,2, 1,6 veya 1,1 saniye açık kalır. Bir nota, 100'den ona sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu notaların ortalamasıdır; perde duyulmayan nota sinyal yok olarak görünür ve sayılmaz.",
+    eve_status_captured:"Sonuç kaydedildi.",
+    eve_status_jump:"İlk notadan {interval} sıçrama. Bir kez dinleyin.",
+    eve_note_better:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan fazla aldınız. Perde hafızanız sağlam kaldı.",
+    eve_note_same:"Yardımsız adımda, nota az önce çalındığındakiyle aynı puanı aldınız. Perde hafızanız sağlam kaldı.",
+    eve_note_dropped:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan az aldınız. Bu fark normaldir: perde hafızanızı çalıştırmak için döngüyü tekrarlayın.",
+    eve_note_nosignal:"Söylenen adımlardan birinde net bir perde yoktu, bu yüzden ikisi karşılaştırılamıyor. Biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
+    eve_measure:"1. adım aralığınızdan bir nota çalar; 2. adımın dinlemesi notanın başlamasından 1,3 saniye sonra açılır. 4. adım, seviyenizin aralıklarından birinde ilk notadan uzaklaşan ikinci bir nota çalar; 5. adım tekrar dinlemeden, hafızadan söylenir. Söylenen her adım 1,6 saniye dinler ve 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu adımların ortalamasıdır.",
   },
 };
 let currentLanguage = 'en';
@@ -20994,12 +21047,29 @@ document.getElementById('eveStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Ear → Voice → Ear')) return;
   await initAudio();
   eveActive = true;
-  document.getElementById('evePreCard').style.display='none';
+  document.getElementById('evePreCard').style.display='block'; // the loop runs on its stage, in this card
+  document.getElementById('eveIntro').style.display='none';
   document.getElementById('eveResultCard').style.display='none';
   document.getElementById('eveRunnerCard').style.display='block';
-  singingSession(()=>eveActive);
+  document.getElementById('eveStartBtn').disabled = true;
+  singingSession(()=>eveActive, document.getElementById('eveStage')); // the whole loop is on stage: hearing and singing
   runEveLoop();
 });
+// The button is the stage's status pill: the step's status as the loop moves on.
+function eveStatus(text){
+  document.getElementById('eveStepStatus').textContent = text;
+  document.getElementById('eveStartLabel').textContent = text;
+}
+// A sung step on the stage: its lane and meter (no note name or Hz: this is an ear test). Step 5 is sung without help,
+// so it gets no live guide.
+async function eveSing(midi, guide){
+  const stage = document.getElementById('eveStage');
+  stage.classList.toggle('eve-unguided', !guide);
+  const lane = guide ? vcTakeStart(stage, midi, 1600) : null;
+  const res = await captureAccuracyForTarget(midi, 1600, guide ? {onFrame:(ms, c)=>vcTakeFrame(lane, ms, c)} : {});
+  vcTakeEnd(lane);
+  return res;
+}
 
 async function runEveLoop(){
   const {lowMidi, highMidi} = registerRangeBounds();
@@ -21007,20 +21077,20 @@ async function runEveLoop(){
   eveFirstMidi = lowMidi + Math.floor(Math.random()*Math.max(1,(highMidi-lowMidi+1)));
   document.getElementById('eveStepLabel').textContent = 'Step 1 — Hear';
   document.getElementById('eveStepNote').textContent = '♪';
-  document.getElementById('eveStepStatus').textContent = 'Listen closely…';
+  eveStatus('Listen closely…');
   playTone(noteToFreq(eveFirstMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
   if(!eveActive) return;
 
   document.getElementById('eveStepLabel').textContent = 'Step 2 — Sing';
   document.getElementById('eveStepNote').textContent = 'Sing it back';
-  document.getElementById('eveStepStatus').textContent = 'Listening…';
-  eveFirstResult = await captureAccuracyForTarget(eveFirstMidi, 1600, {});
+  eveStatus('Listening…');
+  eveFirstResult = await eveSing(eveFirstMidi, true);
   if(!eveActive) return;
 
   document.getElementById('eveStepLabel').textContent = 'Step 3 — Analyze';
   document.getElementById('eveStepNote').textContent = eveFirstResult.heard ? `${eveFirstResult.accuracy}%` : 'No signal';
-  document.getElementById('eveStepStatus').textContent = 'Real result captured.';
+  eveStatus(t('eve_status_captured'));
   await new Promise(r=>setTimeout(r, 1200));
   if(!eveActive) return;
 
@@ -21032,15 +21102,15 @@ async function runEveLoop(){
   eveSecondMidi = Math.max(lowMidi, Math.min(highMidi, candidate));
   document.getElementById('eveStepLabel').textContent = 'Step 4 — Hear again (harder)';
   document.getElementById('eveStepNote').textContent = '♪';
-  document.getElementById('eveStepStatus').textContent = `A real ${iv.name} jump from the first note — listen once.`;
+  eveStatus(t('eve_status_jump').replace('{interval}', iv.name));
   playTone(noteToFreq(eveSecondMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
   if(!eveActive) return;
 
   document.getElementById('eveStepLabel').textContent = 'Step 5 — Sing without help';
   document.getElementById('eveStepNote').textContent = 'From memory — no replay';
-  document.getElementById('eveStepStatus').textContent = 'Listening…';
-  eveSecondResult = await captureAccuracyForTarget(eveSecondMidi, 1600, {});
+  eveStatus('Listening…');
+  eveSecondResult = await eveSing(eveSecondMidi, false);
   if(!eveActive) return;
 
   finishEveLoop();
@@ -21049,22 +21119,27 @@ async function runEveLoop(){
 function finishEveLoop(){
   eveActive = false;
   document.getElementById('eveRunnerCard').style.display='none';
+  document.getElementById('evePreCard').style.display='none';
+  document.getElementById('eveStartBtn').disabled = false;
+  document.getElementById('eveStartLabel').textContent = 'Begin the loop';
   document.getElementById('eveResultCard').style.display='block';
   document.getElementById('eveResultFirst').textContent = eveFirstResult.heard ? eveFirstResult.accuracy+'%' : 'No signal';
   document.getElementById('eveResultSecond').textContent = eveSecondResult.heard ? eveSecondResult.accuracy+'%' : 'No signal';
+  vcTakeTrace(document.getElementById('eveTraceFirst'), eveFirstResult.heard && eveFirstResult.samples, 1600);
+  vcTakeTrace(document.getElementById('eveTraceSecond'), eveSecondResult.heard && eveSecondResult.samples, 1600);
 
   let note = '';
   if(eveFirstResult.heard && eveSecondResult.heard){
     const delta = eveSecondResult.accuracy - eveFirstResult.accuracy;
-    note = delta>=0
-      ? `Your unaided step held up just as well — ${delta>0?'actually +'+delta+'% better':'exactly the same'}. Real retained pitch memory.`
-      : `Retained pitch memory dropped ${Math.abs(delta)}% without a note right before singing — that gap is honest, not a flaw.`;
+    note = (delta>0 ? t('eve_note_better') : delta===0 ? t('eve_note_same') : t('eve_note_dropped')).replace('{n}', Math.abs(delta));
   } else {
-    note = 'Not enough signal on at least one step to compare honestly.';
+    note = t('eve_note_nosignal');
   }
   document.getElementById('eveResultNote').textContent = note;
 
   const heardResults = [eveFirstResult, eveSecondResult].filter(r=>r.heard);
+  // the big number: the average of the sung steps that were heard (the score recorded below)
+  vcResultNum(document.getElementById('eveResultAvg'), heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.accuracy,0)/heardResults.length)+'%' : null);
   if(heardResults.length>0 && profile){
     const combinedAvg = Math.round(heardResults.reduce((a,b)=>a+b.accuracy,0)/heardResults.length);
     recordSkillScore('pitch', combinedAvg);
@@ -21074,6 +21149,7 @@ function finishEveLoop(){
 document.getElementById('eveRetryBtn')?.addEventListener('click', ()=>{
   document.getElementById('eveResultCard').style.display='none';
   document.getElementById('evePreCard').style.display='block';
+  document.getElementById('eveIntro').style.display='';
 });
 
 /* ---------------- Shareable Voice Card (real canvas render, real PNG download) ---------------- */
