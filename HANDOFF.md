@@ -55,12 +55,12 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    (with the 3.1 fixes). **Phase 4a (14 Coach tools onto the take stage and result, spec verbatim
    `design/house-lights/PHASE4A.md`): building on `redesign/phase4a` since 2026-10-21**; no merge or deploy before the
    user reviews the screenshots; rollback target dpl_6FBgCU661see6RBdPhXoMniCp42s. Phase 4b: the 10 tools with their own displays.
-   **Progress 2026-10-21 (stopped at the usage limit):** done and committed: spec, guards (fbbbb90), 2.1 vcTake (Pitch
-   Match identical), 2.2 Interval Match, Scale Run, Custom Challenge, Ear → Voice → Ear (each scores.js-equal to master).
-   Left: 2.2 Sing It 5 Ways and Hear Your Mistake; 2.3 Range Finder (batch2 reads #rangeSpanOut: change it with the
-   copy), Breath Trainer; 2.4 paper screens; 2.5 Vocal Puzzle initAudioOnly; 2.6 copy and icons; §3 checks; §4 shots
-   and the review/phase4a push; §5 report. Open for the user: EVE step 5 has no live guide (it's "sing without help")
-   and EVE's stage names no note, a deviation from vcTake to keep the ear test.
+   **Progress 2026-10-21:** build done and committed (spec bdeb0a4, guards fbbbb90, 2.1 2887c0a, 2.2 442c0f0 71d4fff
+   ecb187d 877b562 804ac6d b23d3e5, 2.3 a3ebc82 8bf32c7, 2.4 32d67d4, 2.5 7e6bb1a, 2.6 390d425). Each sung tool equal to
+   master in a one-run scores.js; copyscan --tools 0 in four languages; modecheck: Vocal Puzzle 0 getUserMedia. Left: §3
+   checks (on AC power; scores.js 3 runs per side), §4 shots and the review/phase4a push, §5 report. Open for the user:
+   EVE step 5 has no live guide and EVE's stage names no note (an ear test); Range Finder's "so far" rows show the notes
+   captured so far; Pitch Match's attack/landing rows are now full width (a phase 2 layout bug).
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3
