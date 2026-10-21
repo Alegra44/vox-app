@@ -1446,6 +1446,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-result-dims dt{font-size:var(--hl-t-small);color:var(--hl-ink-2);}
   .vc-result-dims dd{margin:0;font-variant-numeric:tabular-nums;color:var(--hl-ink);}
   .vc-result > .hl-measure{margin-top:var(--hl-s2);}
+  .key-card > .vc-result:first-child{margin-top:0;padding-top:0;border-top:0;} /* a result that is its card's content (4a) */
+  .vc-result > .ghost-btn, .vc-result > .mic-btn{justify-self:start;}
+  .vc-take-runner[style*="block"]{display:grid !important;justify-items:center;gap:var(--hl-s5);width:100%;} /* a runner card shown on its stage (4a) */
+  .vc-stage .vc-take-runner .step-label{font-size:var(--hl-t-small);font-weight:400;color:var(--hl-ink-3);margin:0;}
+  .vc-visually-hidden{position:absolute !important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
@@ -3650,25 +3655,31 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <div class="key-card" id="customPreviewCard" style="display:none;margin-top:16px;">
-      <div class="step-label" data-i18n="custom_your_challenge">Your challenge</div>
-      <p class="desc" id="customPreviewSummary" style="margin:8px 0 14px;"></p>
+      <div class="vc-stage" id="customStage">
+      <div class="step-label vc-paper-only" data-i18n="custom_your_challenge">Your challenge</div>
+      <p class="desc vc-paper-only" id="customPreviewSummary" style="margin:8px 0 14px;"></p>
+      <div class="vc-take-runner" id="customRunnerCard" style="display:none;">
+        <div class="step-label" id="customRunnerProgress">Note 1 of 6</div>
+        <div class="ex-target-note vc-take-note" id="customRunnerTarget">—</div>
+        <div class="vc-take-live" data-vc-take></div>
+        <p class="vc-visually-hidden" id="customRunnerStatus" role="status">Listening…</p>
+      </div>
       <div class="scale-dots" id="customPreviewDots"></div>
-      <button class="mic-btn" id="customStartBtn" style="margin-top:20px;"><span class="dot-icon"></span><span id="customStartLabel" data-i18n="custom_start_challenge_btn">Start challenge</span></button>
-    </div>
-
-    <div class="key-card" id="customRunnerCard" style="display:none;margin-top:16px;text-align:center;">
-      <div class="step-label" id="customRunnerProgress">Note 1 of 6</div>
-      <div class="chord-label-display" id="customRunnerTarget" style="margin-top:10px;">—</div>
-      <p class="desc" id="customRunnerStatus" style="margin-top:10px;">Listening…</p>
+      <button class="mic-btn vc-take-pill" id="customStartBtn" style="margin-top:20px;"><span class="dot-icon"></span><span id="customStartLabel" data-i18n="custom_start_challenge_btn">Start challenge</span></button>
       <div class="vl-gauge" id="vlGaugeCustom" style="display:none;"></div>
+      </div>
     </div>
 
-    <div class="key-card" id="customResultCard" style="display:none;margin-top:16px;text-align:center;">
-      <div class="step-label" data-i18n="custom_complete_label">Challenge complete</div>
-      <div class="ex-accuracy" id="customResultAvg" style="margin-top:10px;">—</div>
-      <div class="ex-feedback-text" data-i18n="custom_result_desc">average across your custom sequence</div>
-      <div id="customResultRows" style="margin-top:16px;text-align:left;"></div>
-      <button class="ghost-btn" id="customRebuildBtn" style="margin-top:16px;" data-i18n="custom_rebuild_btn">Build another</button>
+    <div class="key-card" id="customResultCard" style="display:none;margin-top:16px;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="hl-label" data-i18n="custom_complete_label">Challenge complete</div>
+      <div class="ex-accuracy vc-result-num" id="customResultAvg">—</div>
+      <h3 class="hl-h3" data-i18n="custom_result_desc">average across your custom sequence</h3>
+      <div class="ex-feedback-text hl-coach" id="customCoach"></div>
+      <div class="vc-result-dims" id="customResultRows"></div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="custom_measure"></p></details>
+      <button class="ghost-btn" id="customRebuildBtn" data-i18n="custom_rebuild_btn">Build another</button>
+      </div>
     </div>
   </section>
 
@@ -6119,7 +6130,7 @@ const TRANSLATIONS = {
     custom_generate_btn:'Generate my challenge',
     custom_your_challenge:'Your challenge',
     custom_complete_label:'Challenge complete',
-    custom_result_desc:'average across your custom sequence',
+    custom_result_desc:"Average across your sequence",
     custom_rebuild_btn:'Build another',
     rhythm_title:'🥁 Rhythm Trainer',
     rhythm_sub:'Genuinely different from every other tool here — this measures WHEN you sing, not pitch. Real onset detection against a real metronome, not a fixed animation.',
@@ -7302,6 +7313,7 @@ const TRANSLATIONS = {
     interval_result_label:"Interval accuracy",
     interval_measure:"Accuracy is 100 minus your average distance from the target note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. The target note is the root plus the interval, in any octave. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. At {int} and {pro}, the first and second halves of what's scored are shown apart as attack and landing. Natural vibrato counts as its centre, not as an error.",
     scale_measure:"Each note of the run is scored on its own. Its reference plays (up to half a second), then listening opens once the reference has ended, for 1.1, 0.9 or 0.65 seconds at {beg}, {int} or {pro}. A note scores 100 minus your average distance from it, in cents, times 0.45, 0.6 or 0.9; any octave counts, natural vibrato counts as its centre, and a note with no clear pitch scores 0. The big number is the average of every note. The dots show each note: 85 and up, 60 to 84, under 60.",
+    custom_measure:"The 6 notes are picked at random from the range you set: Chest uses its lower third, Head its upper third, Mixed all of it. Each note is scored on its own: its reference plays for half a second, then listening opens once it has ended, for 2.2, 1.6 or 1.1 seconds at a slow, medium or fast pace. A note scores 100 minus your average distance from it, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the notes where a clear pitch was heard; a note with none shows as no signal and isn't counted.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7488,7 +7500,7 @@ const TRANSLATIONS = {
     custom_generate_btn:'Générer mon défi',
     custom_your_challenge:'Votre défi',
     custom_complete_label:'Défi terminé',
-    custom_result_desc:'moyenne sur votre séquence personnalisée',
+    custom_result_desc:"Moyenne sur votre séquence",
     custom_rebuild_btn:'En créer un autre',
     rhythm_title:'🥁 Entraîneur de Rythme',
     rhythm_sub:'Vraiment différent de tous les autres outils ici — ceci mesure QUAND vous chantez, pas la justesse. Vraie détection d\'attaque contre un vrai métronome, pas une animation fixe.',
@@ -8671,6 +8683,7 @@ const TRANSLATIONS = {
     interval_result_label:"Justesse de l'intervalle",
     interval_measure:"La justesse vaut 100 moins votre écart moyen à la note cible, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. La note cible est la fondamentale plus l'intervalle, dans n'importe quelle octave. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. En {int} et en {pro}, la première et la seconde moitié de la partie notée sont affichées à part : l'attaque et l'atterrissage. Un vibrato naturel compte pour son centre, pas comme une erreur.",
     scale_measure:"Chaque note du parcours est notée séparément. Sa référence joue (une demi-seconde au plus), puis l'écoute s'ouvre une fois la référence terminée, pendant 1,1, 0,9 ou 0,65 seconde en {beg}, {int} ou {pro}. Une note vaut 100 moins votre écart moyen à elle, en cents, multiplié par 0,45, 0,6 ou 0,9 ; toutes les octaves comptent, un vibrato naturel compte pour son centre, et une note sans hauteur claire vaut 0. Le grand chiffre est la moyenne de toutes les notes. Les points montrent chaque note : 85 et plus, de 60 à 84, moins de 60.",
+    custom_measure:"Les 6 notes sont tirées au hasard dans la tessiture choisie : Poitrine en utilise le tiers inférieur, Tête le tiers supérieur, Mixte toute la tessiture. Chaque note est notée séparément : sa référence joue une demi-seconde, puis l'écoute s'ouvre une fois la référence terminée, pendant 2,2, 1,6 ou 1,1 seconde selon le rythme lent, moyen ou rapide. Une note vaut 100 moins votre écart moyen à elle, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des notes où une hauteur claire a été entendue ; une note sans hauteur claire s'affiche sans signal et n'est pas comptée.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -8857,7 +8870,7 @@ const TRANSLATIONS = {
     custom_generate_btn:'Generar mi desafío',
     custom_your_challenge:'Tu desafío',
     custom_complete_label:'Desafío completado',
-    custom_result_desc:'promedio en tu secuencia personalizada',
+    custom_result_desc:"Promedio de tu secuencia",
     custom_rebuild_btn:'Crear otro',
     rhythm_title:'🥁 Entrenador de Ritmo',
     rhythm_sub:'Genuinamente diferente de cualquier otra herramienta aquí — esto mide CUÁNDO cantas, no la afinación. Detección real de ataque contra un metrónomo real, no una animación fija.',
@@ -10040,6 +10053,7 @@ const TRANSLATIONS = {
     interval_result_label:"Precisión del intervalo",
     interval_measure:"La precisión es 100 menos tu distancia media a la nota objetivo, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La nota objetivo es la fundamental más el intervalo, en cualquier octava. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. En {int} y {pro}, la primera y la segunda mitad de lo puntuado se muestran por separado como ataque y aterrizaje. El vibrato natural cuenta como su centro, no como un error.",
     scale_measure:"Cada nota del recorrido se puntúa por separado. Suena su referencia (medio segundo como mucho) y la escucha se abre cuando la referencia termina, durante 1,1, 0,9 o 0,65 segundos en {beg}, {int} o {pro}. Una nota vale 100 menos tu distancia media a ella, en cents, multiplicada por 0,45, 0,6 o 0,9; cualquier octava cuenta, el vibrato natural cuenta como su centro y una nota sin afinación clara vale 0. El número grande es la media de todas las notas. Los puntos muestran cada nota: 85 o más, de 60 a 84, menos de 60.",
+    custom_measure:"Las 6 notas se eligen al azar dentro del rango que fijaste: Pecho usa su tercio inferior, Cabeza su tercio superior y Mixto todo el rango. Cada nota se puntúa por separado: su referencia suena medio segundo y la escucha se abre cuando termina, durante 2,2, 1,6 o 1,1 segundos con un ritmo lento, medio o rápido. Una nota vale 100 menos tu distancia media a ella, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de las notas en las que se oyó una afinación clara; una nota sin ella aparece sin señal y no cuenta.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10226,7 +10240,7 @@ const TRANSLATIONS = {
     custom_generate_btn:'Meydan okumamı oluştur',
     custom_your_challenge:'Meydan okumanız',
     custom_complete_label:'Meydan okuma tamamlandı',
-    custom_result_desc:'özel dizinizdeki ortalama',
+    custom_result_desc:"Dizinizin ortalaması",
     custom_rebuild_btn:'Başka bir tane oluştur',
     rhythm_title:'🥁 Ritim Antrenörü',
     rhythm_sub:'Buradaki diğer her araçtan gerçekten farklı — bu, NE ZAMAN söylediğinizi ölçer, perdeyi değil. Sabit bir animasyon değil, gerçek bir metronoma karşı gerçek başlangıç algılama.',
@@ -11409,6 +11423,7 @@ const TRANSLATIONS = {
     interval_result_label:"Aralık doğruluğu",
     interval_measure:"Doğruluk, 100'den hedef notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Hedef nota, kök notaya aralığın eklenmesiyle bulunur; hangi oktavda olduğu fark etmez. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. {int} ve {pro} seviyelerinde puanlanan bölümün ilk ve ikinci yarısı atak ve iniş olarak ayrı gösterilir. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
     scale_measure:"Dizideki her nota ayrı puanlanır. Önce referansı çalar (en fazla yarım saniye), referans bittikten sonra dinleme {beg} seviyesinde 1,1, {int} seviyesinde 0,9, {pro} seviyesinde 0,65 saniye açık kalır. Bir nota, 100'den ona sent cinsinden ortalama uzaklığınızın 0,45, 0,6 veya 0,9 katının çıkarılmasıyla puanlanır; oktav fark etmez, doğal vibrato merkezi olarak sayılır ve net perde duyulmayan nota 0 alır. Büyük sayı tüm notaların ortalamasıdır. Noktalar her notayı gösterir: 85 ve üstü, 60–84 arası, 60'ın altı.",
+    custom_measure:"6 nota, seçtiğiniz aralıktan rastgele seçilir: Göğüs alt üçte birini, Kafa üst üçte birini, Karışık aralığın tamamını kullanır. Her nota ayrı puanlanır: referansı yarım saniye çalar, bittikten sonra dinleme yavaş, orta veya hızlı tempoda 2,2, 1,6 veya 1,1 saniye açık kalır. Bir nota, 100'den ona sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu notaların ortalamasıdır; perde duyulmayan nota sinyal yok olarak görünür ve sayılmaz.",
   },
 };
 let currentLanguage = 'en';
@@ -20063,40 +20078,50 @@ document.getElementById('customGenerateBtn')?.addEventListener('click', ()=>{
   const registerLabel = customRegister.charAt(0).toUpperCase()+customRegister.slice(1);
   document.getElementById('customPreviewSummary').textContent =
     `${noteNameFromMidi(lo)}–${noteNameFromMidi(hi)}, ${registerLabel} focus, ${customTempo} pace — ${customSequence.map(m=>noteNameFromMidi(m)).join(', ')}`;
-  document.getElementById('customPreviewDots').innerHTML = customSequence.map(()=>`<div class="scale-dot"></div>`).join('');
+  document.getElementById('customPreviewDots').innerHTML = customSequence.map((m, i)=>`<div class="scale-dot">${i+1}</div>`).join('');
 });
 
 document.getElementById('customStartBtn')?.addEventListener('click', async ()=>{
   if(blockExercise()) return;
-  document.getElementById('customPreviewCard').style.display='none';
-  document.getElementById('customRunnerCard').style.display='block';
+  document.getElementById('customRunnerCard').style.display='block'; // the challenge card is the stage
   customResults = [];
   const durationMs = CUSTOM_TEMPO_MS[customTempo];
-  const runner = document.getElementById('customRunnerCard');
-  singingSession(()=>runner.style.display==='block');
+  const runner = document.getElementById('customRunnerCard'), stage = document.getElementById('customStage');
+  const btn = document.getElementById('customStartBtn'), pill = document.getElementById('customStartLabel'), status = document.getElementById('customRunnerStatus');
+  const dots = document.querySelectorAll('#customPreviewDots .scale-dot');
+  btn.disabled = true;
+  singingSession(()=>runner.style.display==='block', stage); // the whole sequence is on stage
+  const say = text => { status.textContent = text; pill.textContent = text; }; // the button is the status pill
 
   for(let i=0;i<customSequence.length;i++){
     const targetMidi = customSequence[i];
     document.getElementById('customRunnerProgress').textContent = `Note ${i+1} of ${customSequence.length}`;
     document.getElementById('customRunnerTarget').textContent = noteNameFromMidi(targetMidi);
-    document.getElementById('customRunnerStatus').textContent = 'Listening…';
+    if(dots[i]) dots[i].className = 'scale-dot current';
+    const lane = vcTakeStart(stage, targetMidi, durationMs); // a lane per note
+    say('Listening…');
     await playTone(noteToFreq(targetMidi), 0.5, 0);
     // listen only once the reference has ended at the speaker (550 ms from its start left ~30 ms, less the output
     // latency: with nobody singing it scored its own tone, 3 of 5 notes at 91%)
     await new Promise(r=>setTimeout(r, Math.max(550, referenceDoneMs(0.5))));
-    const res = await captureAccuracyForTarget(targetMidi, durationMs, {});
+    const res = await captureAccuracyForTarget(targetMidi, durationMs, {onFrame:(ms, c)=>vcTakeFrame(lane, ms, c)});
+    vcTakeEnd(lane);
     customResults.push({midi:targetMidi, accuracy:res.accuracy, heard:res.heard});
-    document.getElementById('customRunnerStatus').textContent = res.heard ? `${res.accuracy}%` : 'No clear pitch heard';
+    say(res.heard ? `${res.accuracy}%` : 'No clear pitch heard');
+    if(dots[i]) dots[i].className = 'scale-dot done-'+(res.heard ? accuracyClass(res.accuracy) : 'low');
     await new Promise(r=>setTimeout(r, 350));
   }
 
   document.getElementById('customRunnerCard').style.display='none';
+  document.getElementById('customPreviewCard').style.display='none';
+  btn.disabled = false; pill.textContent = t('custom_start_challenge_btn');
   document.getElementById('customResultCard').style.display='block';
   const heardResults = customResults.filter(r=>r.heard);
   const avg = heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.accuracy,0)/heardResults.length) : 0;
   const avgEl = document.getElementById('customResultAvg');
-  avgEl.textContent = avg+'%';
   avgEl.className = 'ex-accuracy '+accuracyClass(avg);
+  vcResultNum(avgEl, heardResults.length ? avg+'%' : null);
+  document.getElementById('customCoach').textContent = heardResults.length ? accuracyFeedback(avg, true) : t('exfeedback_nopitch');
   document.getElementById('customResultRows').innerHTML = customResults.map(r=>
     `<div class="record-row"><span class="record-label">${noteNameFromMidi(r.midi)}</span><span class="record-val${!r.heard?' untracked':''}">${r.heard?r.accuracy+'%':'No signal'}</span></div>`
   ).join('');
