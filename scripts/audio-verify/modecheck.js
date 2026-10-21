@@ -7,6 +7,8 @@
 //     input's pitch and raw signal, Voice Quality's frames, the recording's size; and the stream is still live after;
 //   - signed in (a test account, deleted after): the Vocal Load gauge shows in a sidecar feature (the Tuner) on every
 //     engine (until this branch it was hidden outside desktop Chromium).
+//   - phase 4a (PHASE4A.md §2.5), signed in, in a fresh page: a Vocal Puzzle round (start, the sequence, a guess) makes
+//     no getUserMedia call (it plays tones only: initAudioOnly), and its result shows.
 // Fake capture: Chromium plays a sung note from a file; Firefox's fake device is its own tone; WebKit's is whatever
 // Playwright's build gives (signal levels are reported as found: −∞ means digital silence, which can't show pitch).
 // Usage: node scripts/audio-verify/modecheck.js [chromium,webkit,firefox]   (MC_SIGNED_OUT=1 skips the gauge check;
@@ -115,6 +117,25 @@ let auth = null;
         if (SIGNED_IN) check('Vocal Load gauge shows (Tuner)', !!(r.gauge && r.gauge.shown), JSON.stringify(r.gauge));
         check('page errors', errors.length === 0, errors.join(' | ') || 'none');
         await ctx.close();
+        if (SIGNED_IN) { // a Vocal Puzzle round in a fresh page: no mic
+          const pctx = await b.newContext({ ...ctxOpts, storageState: auth });
+          await pctx.addInitScript(SKIP); await pctx.addInitScript(GUM);
+          const pp = await pctx.newPage(), perr = [];
+          pp.on('pageerror', e => perr.push(String(e).split('\n')[0]));
+          await pp.goto(URL_ || `http://localhost:${PORT}/`, { waitUntil: 'load' }); await sleep(2500);
+          await pp.waitForFunction(() => !!profile && !!progress, null, { timeout: 20000 });
+          await pp.evaluate(() => { const o = document.getElementById('onboardingOverlay'); if (o) o.style.display = 'none'; enterPanel('vocalpuzzle'); });
+          await sleep(500);
+          await pp.evaluate(() => document.getElementById('puzzleStartBtn').click()); await sleep(3000);
+          const pz = await pp.evaluate(async () => {
+            const g = document.querySelector(`#puzzleGuessRow [data-puzzle-guess="${puzzleWrongIndex}"]`); if (g) g.click();
+            await new Promise(r => setTimeout(r, 500));
+            const rc = document.getElementById('puzzleResultCard');
+            return { gum: window.__gum.length, result: !!rc && getComputedStyle(rc).display !== 'none', title: document.getElementById('puzzleResultTitle').textContent, ctx: typeof audioCtx !== 'undefined' && !!audioCtx };
+          });
+          check('Vocal Puzzle round: 0 getUserMedia calls, the result shows', pz.gum === 0 && pz.result, JSON.stringify(pz) + (perr.length ? ' · page errors ' + perr.join(' | ') : ''));
+          await pctx.close();
+        }
       } catch (e) { fail++; log(`   ✗ ${name}: could not run (${e.message.split('\n')[0]})`); }
       finally { if (b) await b.close().catch(() => {}); }
     }

@@ -13,7 +13,14 @@
 //    errors during the take; after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path, the big
 //    number in --hl-ink, "Sing it again (A4)" shown. With the sharp stimulus (once, Light 390): the readout reads
 //    pm_live_sharp with a number and the note never locks.
-//  6 Not staged: a Breath hold and an Interval Match take keep data-house="up" throughout.
+//  6 Phase 4a (PHASE4A.md §1b), the tools on the take stage (tools.js: Interval Match, Scale Run, Custom Challenge,
+//    Ear → Voice → Ear, Sing It 5 Ways, Hear Your Mistake's sing-back, Range Finder, Breath Trainer), each: the house
+//    down within 1.5 s of the take's start and never up while it runs (100 ms samples), its .vc-stage live; #vlBreak
+//    displayed on its stage (not offstage); the tool's control on the stage (tools.js btn) topmost at its centre; after
+//    the take up within 1.5 s, the result shown, no marks left. A second take: stopAllActiveSessions() brings the house
+//    up within 100 ms, no marks left. The paper tools (Key Trainer, Vocal Lab, Genre Coach, Smart Warmup, Ear Training,
+//    Vocal Puzzle): their action keeps data-house="up" throughout, nothing staged. (Phase 2's check 6, a Breath hold and an
+//    Interval Match take not staged, is replaced: 4a puts both on the stage.)
 //  7 Reduced motion: the dimmer never gets .is-on; down within 100 ms of the start, up 600 ms after the stop.
 //  8 While down, every meta theme-color is #060708; afterwards they're restored.
 //  9 #warmupOverlay has data-house="down".
@@ -21,7 +28,7 @@
 // The shared mic is opened once before the measured starts (stage.js warmMic), so the timings measure the lights.
 // On a build without the lighting engine (master) there is nothing to test: the script says so and exits 0.
 // Usage: node scripts/design-verify/house.js [--base <git ref>]   (DV_URL=https://… runs it on that site)
-const C = require('./common'), S = require('./stage');
+const C = require('./common'), S = require('./stage'), T = require('./tools');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const BASE = arg('--base');
 let pass = 0, fail = 0;
@@ -158,19 +165,8 @@ async function combo(b, dir, state, theme, w) {
   check('5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path', t5up !== null && pm.result && pm.trace, `${t5up !== null ? t5up + ' ms' : 'still down'} · result ${pm.result} · trace ${pm.trace} · ${pm.acc}`);
   check('5 Pitch Match: the big number in --hl-ink', pm.numInk, pm.acc);
   check('5 Pitch Match: "Sing it again (A4)" shown with the result', pm.again.shown && /\(A4\)/.test(pm.again.text), JSON.stringify(pm.again));
-  // 6 not staged: a Breath hold and an Interval Match take
-  await C.showPanel(page, 'breath'); await C.clearOverlays(page);
-  await page.evaluate(() => { window.__ns = []; window.__nsTimer = setInterval(() => window.__ns.push(document.body.dataset.house + (document.querySelector('.is-live') ? '+live' : '')), 100); document.getElementById('breathStartBtn').click(); });
-  await C.sleep(2500); await page.evaluate(() => { if (breathActive) document.getElementById('breathStartBtn').click(); }); await C.sleep(1200);
-  const br = await page.evaluate(() => { clearInterval(window.__nsTimer); return window.__ns; });
-  check('6 Breath hold: data-house="up" throughout, nothing staged', br.length > 10 && br.every(h => h === 'up'), `${br.length} samples: ${[...new Set(br)].join(', ')}`);
-  await C.showPanel(page, 'exercises'); await C.clearOverlays(page);
-  await page.evaluate(() => { document.querySelector('.ex-type-btn[data-extype="interval"]').click();
-    window.__ns = []; window.__nsTimer = setInterval(() => window.__ns.push(document.body.dataset.house + (document.querySelector('.is-live') ? '+live' : '')), 100);
-    document.getElementById('intervalListenBtn').click(); });
-  await C.sleep(500); await page.waitForFunction(() => !document.getElementById('intervalListenBtn').disabled, null, { timeout: 20000 }); await C.sleep(1200);
-  const iv = await page.evaluate(() => { clearInterval(window.__nsTimer); return window.__ns; });
-  check('6 Interval Match take: data-house="up" throughout, nothing staged', iv.length > 10 && iv.every(h => h === 'up'), `${iv.length} samples: ${[...new Set(iv)].join(', ')}`);
+  // 6 the phase 4a tools
+  await toolChecks(page, consoleErrors);
   // 9 the warm-up overlay is a stage
   const wu = await page.evaluate(() => document.getElementById('warmupOverlay')?.getAttribute('data-house'));
   check('9 #warmupOverlay has data-house="down"', wu === 'down', String(wu));
@@ -189,6 +185,64 @@ async function combo(b, dir, state, theme, w) {
   check('7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)', u7 !== null && u7 >= 590 && u7 <= 700, u7 !== null ? `${u7} ms` : 'not up');
   check('7 reduced motion: the dimmer never gets .is-on', dim7 === 0, `${dim7} times`);
   await r.ctx.close();
+}
+
+// 6 the phase 4a tools (see the header)
+async function toolChecks(page, consoleErrors) {
+  const sample = () => page.evaluate(busySrc => { const busy = new Function('return (' + busySrc + ')()');
+    window.__ts = []; clearInterval(window.__tsT);
+    window.__tsT = setInterval(() => { let b = false; try { b = !!busy(); } catch (e) {} window.__ts.push({ t: performance.now(), house: document.body.dataset.house, busy: b, live: !!document.querySelector('.vc-stage.is-live') }); }, 100); }, ONE.busy.toString());
+  let ONE;
+  for (const tool of T.SUNG) {
+    ONE = tool;
+    await tool.open(page); await C.sleep(400);
+    await sample(); const cons0 = consoleErrors.length;
+    let brk = null, top = null;
+    const { started, done } = await T.runTake(page, tool, { liveAt: 1300, onLive: async () => {
+      top = await page.evaluate(sel => { const e = document.querySelector(sel); if (!e) return { found: false };
+        const r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        return { found: true, shown: !!e.getClientRects().length && getComputedStyle(e).display !== 'none', top: !!h && (h === e || e.contains(h)) }; }, tool.btn);
+      await page.evaluate(() => vlShowBreak(todayStr(), 80, false)); await C.sleep(250);
+      brk = await page.evaluate(() => { const box = document.getElementById('vlBreak'); return { shown: !!box && getComputedStyle(box).display !== 'none' && !!box.getClientRects().length, off: !!box && box.hasAttribute('data-offstage'), house: document.body.dataset.house }; });
+      await page.evaluate(() => vlHideBreak());
+    } });
+    await page.evaluate(() => { window.__t1 = performance.now(); });
+    const up = await within(page, () => document.body.dataset.house === 'up', 1500, '__t1');
+    await C.sleep(400);
+    const log = await page.evaluate(() => { clearInterval(window.__tsT); return { s: window.__ts, t0: window.__t0 }; });
+    const m = await marks(page), shown = await page.evaluate(T.vis, tool.result);
+    const firstDown = log.s.find(x => x.house === 'down'), downAt = firstDown ? Math.round(firstDown.t - log.t0) : null;
+    const upBusy = firstDown ? log.s.filter(x => x.t >= firstDown.t && x.busy && x.house !== 'down').length : null;
+    const n = tool.name, errs = consoleErrors.slice(cons0);
+    check(`6 ${n}: down within 1.5 s of the start, the stage live`, started && downAt !== null && downAt <= 1500 && log.s.some(x => x.live), `${downAt !== null ? downAt + ' ms' : 'never down'}${started ? '' : ' · take did not start'}`);
+    check(`6 ${n}: never up while the take runs (100 ms samples)`, upBusy === 0, `${upBusy} up of ${log.s.filter(x => x.busy).length} busy`);
+    check(`6 ${n}: #vlBreak displayed on its stage, not offstage`, !!brk && brk.shown && !brk.off && brk.house === 'down', JSON.stringify(brk));
+    check(`6 ${n}: ${tool.btn} topmost on the stage`, !!top && top.found && top.shown && top.top, JSON.stringify(top));
+    check(`6 ${n}: up within 1.5 s after, result shown, no marks left`, done && up !== null && shown && noMarks(m), `${up !== null ? up + ' ms' : 'still down'} · result ${shown} · ${JSON.stringify(m)}${done ? '' : ' · take did not finish'}`);
+    check(`6 ${n}: no console errors during the take`, errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
+    await T.restoreRange(page);
+    // a second take, stopped by stopAllActiveSessions while the house is down
+    await tool.open(page); await C.sleep(400);
+    if (tool.pre) await tool.pre(page);
+    await tool.act(page);
+    const down2 = await page.waitForFunction(() => document.body.dataset.house === 'down', null, { timeout: 4000 }).then(() => true, () => false);
+    const t6 = await page.evaluate(async () => { const t0 = performance.now(); stopAllActiveSessions();
+      while (performance.now() - t0 <= 100) { if (document.body.dataset.house === 'up') return Math.round(performance.now() - t0); await new Promise(r => setTimeout(r, 5)); } return null; });
+    await C.sleep(50); const m6 = await marks(page);
+    check(`6 ${n}: stopAllActiveSessions() brings it up within 100 ms, no marks`, down2 && t6 !== null && noMarks(m6), `${down2 ? '' : 'never down · '}${t6 !== null ? t6 + ' ms' : 'not up'} · ${JSON.stringify(m6)}`);
+    // let a take that stopAllActiveSessions doesn't end run out (it stays lit), then clean up
+    await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: tool.timeout || 20000 }).catch(() => {});
+    if (tool.key === 'range') await page.evaluate(() => { mode = null; });
+    if (tool.key === 'breath') await page.evaluate(() => { if (breathActive) finishBreathHold(); });
+    await T.restoreRange(page); await C.sleep(300);
+  }
+  for (const tool of T.PAPER) {
+    await tool.open(page); await C.sleep(400);
+    await page.evaluate(() => { window.__ns = []; clearInterval(window.__nsT); window.__nsT = setInterval(() => window.__ns.push(document.body.dataset.house + (document.querySelector('.is-live, .is-staged, [data-offstage]') ? '+staged' : '')), 100); });
+    await tool.act(page); await C.sleep(1500);
+    const ns = await page.evaluate(() => { clearInterval(window.__nsT); return window.__ns; });
+    check(`6 ${tool.name} (not sung): data-house="up" throughout, nothing staged`, ns.length > 10 && ns.every(h => h === 'up'), `${ns.length} samples: ${[...new Set(ns)].join(', ')}`);
+  }
 }
 
 // The sharp stimulus (40 cents sharp, once, Light 390): the readout reads pm_live_sharp with a number, never locks.

@@ -10,13 +10,17 @@
 // --no-states skips them (e.g. on a build without them).
 // Phase 3 (PHASE3.md §1b): Home in each seeded state (homeStates.js) and the Coach tab signed in (the weakest state) and
 // signed out, each with the header and tab bar. --no-home skips them.
+// Phase 4a (PHASE4A.md §1c): the 14 tools (tools.js) idle, on the stage during a take (the sung ones) and with their
+// result, at 390 and 1280, each with the header and tab bar, the fake mic singing the steady A4. --no-tools skips them;
+// --tools-only measures only them.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).
 const path = require('path'), fs = require('fs');
-const C = require('./common'), S = require('./stage'), H = require('./homeStates');
+const C = require('./common'), S = require('./stage'), H = require('./homeStates'), T = require('./tools');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const STATES = !process.argv.includes('--no-states'), HOME = !process.argv.includes('--no-home');
+const TOOLS_ONLY = process.argv.includes('--tools-only'), TOOLS = !process.argv.includes('--no-tools');
+const STATES = !process.argv.includes('--no-states') && !TOOLS_ONLY, HOME = !process.argv.includes('--no-home') && !TOOLS_ONLY;
 const BASE = arg('--base'), THEMES = (arg('--themes') || (BASE ? 'dark' : 'light,dark')).split(',');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const JSON_OUT = arg('--json') || path.join(__dirname, 'logs', `contrast-${BASE ? BASE.replace(/\W/g, '_') : 'branch'}-${stamp}.json`);
@@ -129,6 +133,21 @@ async function measureStates(dir, theme, state, panels) {
   }
 }
 
+async function measureTools(dir, theme, state, panels) {
+  S.ensureStimuli();
+  for (const [w, viewport] of [['390', { width: 390, height: 844 }], ['1280', { width: 1280, height: 800 }]]) {
+    const b = await S.launchMic(S.STIM.steady);
+    try {
+      const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state });
+      await C.clearOverlays(page); await S.warmMic(page);
+      for (const tool of T.TOOLS) await T.toolStates(page, tool, async (name, root) => {
+        panels[`tool ${w}: ${name}`] = await page.evaluate(measure, `${root}, header.shell-topbar, nav.shell-bottomnav`);
+      });
+    } finally { await b.close(); }
+    console.log(`   tools · ${theme} · ${w}`);
+  }
+}
+
 async function measureHome(b, dir, theme, state, panels) {
   for (const name of H.HOME_STATES) {
     const { ctx, page } = await C.openPage(b, { dir, theme, storageState: name === 'signedout' ? undefined : state });
@@ -153,9 +172,11 @@ async function measureHome(b, dir, theme, state, panels) {
     await C.signUp(page, 'dvc');
     const state = await ctx.storageState(); await ctx.close();
     for (const theme of THEMES) {
+      const panels = {};
+      if (!TOOLS_ONLY) {
       const { ctx, page } = await C.openPage(b, { dir, theme, storageState: state });
       await C.clearOverlays(page);
-      const keys = await C.panelKeys(page), panels = {};
+      const keys = await C.panelKeys(page);
       // the shell, and a toast
       await C.showPanel(page, 'home');
       panels['shell: header'] = await page.evaluate(measure, 'header.shell-topbar');
@@ -168,7 +189,9 @@ async function measureHome(b, dir, theme, state, panels) {
         panels[k] = shown ? await page.evaluate(measure, `#panel-${k}`) : [{ status: 'unknown', why: 'panel did not open', text: '', path: '' }];
       }
       await ctx.close();
+      }
       if (STATES) await measureStates(dir, theme, state, panels);
+      if (TOOLS) await measureTools(dir, theme, state, panels);
       if (HOME) await measureHome(b, dir, theme, state, panels);
       report.themes[theme] = panels;
       // table
