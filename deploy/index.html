@@ -534,6 +534,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .range-bar-labels{display:flex;justify-content:space-between;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--muted);margin-top:6px;}
 
   .share-note{color:var(--muted);font-size:13px;margin-top:8px;}
+  /* Range Finder (4a): its two steps on the stage, the live note big (as the Tuner's); the result as .vc-result */
+  .vc-stage.is-live .range-step h2{font-size:var(--hl-t-h3);font-weight:400;color:var(--hl-ink-2);margin:var(--hl-s2) 0 var(--hl-s5);}
+  .vc-stage.is-live .range-step .step-label{color:var(--hl-ink-3);}
+  .vc-stage.is-live .range-note-live{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;background:none;border:0;padding:0;color:var(--hl-ink);}
+  .vc-stage.is-live .capture-btn{background:var(--hl-ink);color:var(--hl-bg);} /* on the stage only the voice is in the voice colour */
+  .range-sofar{width:100%;max-width:320px;}
+  .result-card.vc-result{text-align:left;}
+  .result-card.vc-result .range-span{font-size:var(--hl-t-metric-l);letter-spacing:-0.03em;color:var(--hl-ink);margin:0;}
+  .result-card.vc-result .voice-type{font-size:inherit;font-weight:400;color:var(--hl-ink);margin:0;}
+  .result-card.vc-result .range-bar-wrap{margin:0;max-width:none;}
+  .result-card.vc-result .btn-row{justify-content:flex-start;}
+  .result-card.vc-result .restart-link{margin-top:0;justify-self:start;}
   .restart-link{display:block;margin-top:18px;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:var(--hl-font);}
   .restart-link:hover{color:var(--cream);}
 
@@ -2910,10 +2922,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="mic-btn" id="rangeStartBtn"><span class="dot-icon"></span><span data-i18n="range_begin_btn">Begin</span></button>
       </div>
 
+      <div class="vc-stage range-stage" id="rangeStage">
       <div id="rangeLow" class="range-step" style="display:none;">
         <div class="step-label" data-i18n="range_step1">Step 1 of 2</div>
         <h2 data-i18n="range_low_h2">Sing your lowest comfortable note</h2>
-        <p data-i18n="range_low_p">Hold it steady for a second, then tap capture.</p>
+        <p class="vc-paper-only" data-i18n="range_low_p">Hold it steady for a second, then tap capture.</p>
         <div class="range-note-live" id="lowLiveNote">—</div>
         <button class="capture-btn" id="captureLowBtn" data-i18n="range_capture_low_btn">Capture lowest note</button>
       </div>
@@ -2921,24 +2934,32 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div id="rangeHigh" class="range-step" style="display:none;">
         <div class="step-label" data-i18n="range_step2">Step 2 of 2</div>
         <h2 data-i18n="range_high_h2">Now your highest comfortable note</h2>
-        <p data-i18n="range_high_p">Don't strain — comfortable, not maximum.</p>
+        <p class="vc-paper-only" data-i18n="range_high_p">Don't strain — comfortable, not maximum.</p>
         <div class="range-note-live" id="highLiveNote">—</div>
         <button class="capture-btn" id="captureHighBtn" data-i18n="range_capture_high_btn">Capture highest note</button>
       </div>
+      <div class="vc-result-dims range-sofar vc-live-only">
+        <div class="vc-dim"><span data-i18n="range_lowest_sofar">Lowest so far</span><span id="rangeLowSoFar">—</span></div>
+        <div class="vc-dim"><span data-i18n="range_highest_sofar">Highest so far</span><span id="rangeHighSoFar">—</span></div>
+      </div>
       <div class="vl-gauge" id="vlGaugeRange" style="display:none;"></div>
+      </div>
 
-      <div id="rangeResult" class="result-card" style="display:none;">
-        <div class="step-label" data-i18n="range_result_label">Your result</div>
-        <div class="voice-type" id="voiceTypeOut">—</div>
-        <div class="range-span" id="rangeSpanOut">—</div>
-
-        <div class="range-bar-wrap">
+      <div id="rangeResult" class="result-card vc-result" role="status" aria-live="polite" style="display:none;">
+        <div class="hl-label" data-i18n="range_result_label">Your result</div>
+        <div class="vc-result-num range-span" id="rangeSpanOut">—</div>
+        <h3 class="hl-h3" data-i18n="range_result_h3">Your captured range</h3>
+        <div class="range-bar-wrap vc-result-chart">
           <div class="range-bar"><div class="fill" id="rangeFill"></div></div>
           <div class="range-bar-labels"><span>C2</span><span>C4</span><span>C6</span></div>
         </div>
-
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="range_semitones_label">Semitones</span><span id="rangeSemitones">—</span></div>
+          <div class="vc-dim"><span data-i18n="range_voicetype_label">Voice type</span><span class="voice-type" id="voiceTypeOut">—</span></div>
+        </div>
         <p class="share-note" data-i18n="range_share_note">This card is built to share — a Pro account tracks how this number grows every week.</p>
-        <div class="btn-row" style="justify-content:center;margin-top:14px;">
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="range_measure"></p></details>
+        <div class="btn-row">
           <button class="solid-btn" id="shareRangeBtn" data-i18n="range_share_btn">Share this result</button>
         </div>
         <button class="restart-link" id="restartRangeBtn" data-i18n="range_restart_btn">Run it again</button>
@@ -5557,13 +5578,15 @@ document.getElementById('rangeStartBtn').addEventListener('click', async ()=>{
   mode='rangeLow';
   cancelAnimationFrame(rafId);
   loop();
-  singingSession(()=>mode==='rangeLow' || mode==='rangeHigh');
+  document.getElementById('rangeLowSoFar').textContent = '—'; document.getElementById('rangeHighSoFar').textContent = '—';
+  singingSession(()=>mode==='rangeLow' || mode==='rangeHigh', document.getElementById('rangeStage')); // both steps on stage
   showStep('rangeLow');
 });
 
 document.getElementById('captureLowBtn').addEventListener('click', ()=>{
   if(!liveFreq){ showToast('No steady pitch detected yet — keep singing the note and try again.', 'warn'); return; }
   lowNote = freqToNote(liveFreq);
+  document.getElementById('rangeLowSoFar').textContent = `${lowNote.name}${lowNote.octave}`;
   mode='rangeHigh';
   showStep('rangeHigh');
 });
@@ -5612,7 +5635,9 @@ function renderRangeResult(){
 
   const voiceType = classifyVoice(lo.midi, hi.midi);
   document.getElementById('voiceTypeOut').textContent = voiceType;
-  document.getElementById('rangeSpanOut').textContent = `${lo.name}${lo.octave} → ${hi.name}${hi.octave}`;
+  document.getElementById('rangeSpanOut').textContent = `${lo.name}${lo.octave}–${hi.name}${hi.octave}`;
+  document.getElementById('rangeSemitones').textContent = hi.midi - lo.midi;
+  document.getElementById('rangeHighSoFar').textContent = `${highNote.name}${highNote.octave}`;
 
   // map midi C2(36) - C6(84) onto 0-100% for the bar
   const minM=36, maxM=84;
@@ -7373,6 +7398,12 @@ const TRANSLATIONS = {
     hm_result_label:"Sing-back accuracy",
     hm_detail_scored:"You picked the accurate one, and your sing-back scored {n}% against it.",
     hm_measure:"One of A and B is the note itself; the other is shifted 35 to 59 cents up or down, and they play one second apart. Pick the accurate one and you sing it back: listening opens at once for 1.6 seconds, and the score is 100 minus your average distance from the note, in cents, times 0.6. Any octave counts and natural vibrato counts as its centre. A wrong pick isn't sung back.",
+    range_lowest_sofar:"Lowest so far",
+    range_highest_sofar:"Highest so far",
+    range_result_h3:"Your captured range",
+    range_semitones_label:"Semitones",
+    range_voicetype_label:"Voice type",
+    range_measure:"The note on screen is the pitch heard right now. Tapping capture keeps the note you're on at that moment: first your lowest, then your highest. Semitones is the distance between them. The voice type is the one whose usual range has its middle closest to the middle of yours (bass, baritone, tenor, contralto, alto, mezzo-soprano or soprano): a rough guide from two notes, not a classification of your voice.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8754,6 +8785,12 @@ const TRANSLATIONS = {
     hm_result_label:"Justesse du rechant",
     hm_detail_scored:"Vous avez choisi la bonne, et votre rechant obtient {n} % face à elle.",
     hm_measure:"L'une des deux, A ou B, est la note elle-même ; l'autre est décalée de 35 à 59 cents vers le haut ou le bas, et elles jouent à une seconde d'intervalle. Choisissez la juste et vous la rechantez : l'écoute s'ouvre aussitôt pendant 1,6 seconde, et le score vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6. Toutes les octaves comptent et un vibrato naturel compte pour son centre. Un mauvais choix n'est pas rechanté.",
+    range_lowest_sofar:"Plus grave pour l'instant",
+    range_highest_sofar:"Plus aiguë pour l'instant",
+    range_result_h3:"Votre tessiture enregistrée",
+    range_semitones_label:"Demi-tons",
+    range_voicetype_label:"Type de voix",
+    range_measure:"La note affichée est la hauteur entendue à l'instant. Appuyer sur la capture garde la note sur laquelle vous êtes à ce moment : d'abord la plus grave, puis la plus aiguë. Les demi-tons sont l'écart entre elles. Le type de voix est celui dont la tessiture habituelle a son milieu le plus proche du milieu de la vôtre (basse, baryton, ténor, contralto, alto, mezzo-soprano ou soprano) : un repère approximatif tiré de deux notes, pas une classification de votre voix.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10135,6 +10172,12 @@ const TRANSLATIONS = {
     hm_result_label:"Precisión al cantarla",
     hm_detail_scored:"Elegiste la afinada, y al cantarla sacaste un {n} % frente a ella.",
     hm_measure:"Una de las dos, A o B, es la nota en sí; la otra está desplazada de 35 a 59 cents hacia arriba o hacia abajo, y suenan con un segundo de diferencia. Elige la afinada y la cantas: la escucha se abre al momento durante 1,6 segundos, y la puntuación es 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6. Cualquier octava cuenta y el vibrato natural cuenta como su centro. Si eliges mal, no se canta.",
+    range_lowest_sofar:"La más grave hasta ahora",
+    range_highest_sofar:"La más aguda hasta ahora",
+    range_result_h3:"Tu rango registrado",
+    range_semitones_label:"Semitonos",
+    range_voicetype_label:"Tipo de voz",
+    range_measure:"La nota en pantalla es la afinación que se oye en este momento. Al pulsar capturar se guarda la nota en la que estás en ese instante: primero la más grave y luego la más aguda. Los semitonos son la distancia entre ellas. El tipo de voz es aquel cuyo rango habitual tiene el centro más cerca del centro del tuyo (bajo, barítono, tenor, contralto, alto, mezzosoprano o soprano): una guía aproximada a partir de dos notas, no una clasificación de tu voz.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11516,6 +11559,12 @@ const TRANSLATIONS = {
     hm_result_label:"Geri söyleme doğruluğu",
     hm_detail_scored:"Doğru olanı seçtiniz ve geri söyleyişiniz ona göre %{n} aldı.",
     hm_measure:"A ve B'den biri notanın kendisidir; diğeri 35 ila 59 sent yukarı veya aşağı kaydırılmıştır ve bir saniye arayla çalarlar. Doğru olanı seçerseniz onu geri söylersiniz: dinleme hemen 1,6 saniyeliğine açılır ve puan, 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla bulunur. Oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Yanlış seçimde geri söyleme yapılmaz.",
+    range_lowest_sofar:"Şimdiye kadarki en pes",
+    range_highest_sofar:"Şimdiye kadarki en tiz",
+    range_result_h3:"Kaydedilen aralığınız",
+    range_semitones_label:"Yarım ses",
+    range_voicetype_label:"Ses tipi",
+    range_measure:"Ekrandaki nota, şu anda duyulan perdedir. Yakala'ya dokunduğunuzda o andaki nota kaydedilir: önce en pes, sonra en tiz notanız. Yarım ses, ikisi arasındaki mesafedir. Ses tipi, olağan aralığının ortası sizinkinin ortasına en yakın olandır (bas, bariton, tenor, kontralto, alto, mezzosoprano veya soprano): iki notadan çıkarılan kaba bir yön göstergesi, sesinizin sınıflandırması değil.",
   },
 };
 let currentLanguage = 'en';

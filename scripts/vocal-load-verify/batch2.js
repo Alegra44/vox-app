@@ -62,7 +62,8 @@ const FEATURES = [
   { key: 'range', label: 'Range Finder (low captured at 3.5 s, high at 6 s)', kind: 'sidecar', shell: 'train', enter: train('range'), startBtn: 'rangeStartBtn', gauge: 'vlGaugeRange',
     prep: "showStep('rangeIntro')", active: "mode==='rangeLow' || mode==='rangeHigh'", stopAfter: 3500,
     stop: async p => { await p.locator('#captureLowBtn').click(); await sleep(2500); await p.locator('#captureHighBtn').click(); },
-    result: () => ({ type: document.getElementById('voiceTypeOut').textContent, span: document.getElementById('rangeSpanOut').textContent }) },
+    // phase 4a writes the range as "C4–C4" (it was "C4 → C4"): the notes are compared, not the separator
+    result: () => ({ type: document.getElementById('voiceTypeOut').textContent, span: document.getElementById('rangeSpanOut').textContent.replace(/\s*(→|–)\s*/, '–') }) },
 ];
 
 run(FEATURES).catch(e => { console.error(e); process.exitCode = 1; });
