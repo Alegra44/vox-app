@@ -1894,6 +1894,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <symbol id="hl-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="1.5"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/></symbol>
   <symbol id="hl-passport" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1.5"/><circle cx="12" cy="10" r="3"/><path d="M9 16h6"/></symbol>
   <symbol id="hl-group" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 19.5a6 6 0 0 1 12 0"/><path d="M16 5.3a3 3 0 0 1 0 5.4"/><path d="M18 14.6a5.6 5.6 0 0 1 3 4.9"/></symbol>
+  <!-- phase 4a: Sing It 5 Ways, Mirror Mode, Warmup -->
+  <symbol id="hl-fiveways" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="4" cy="18" r="1.5"/><circle cx="8" cy="15.5" r="1.5"/><circle cx="12" cy="13" r="1.5"/><circle cx="16" cy="10.5" r="1.5"/><circle cx="20" cy="8" r="1.5"/></g></symbol>
+  <symbol id="hl-mirror" viewBox="0 0 24 24"><path d="M12 3.5v17" stroke-dasharray="2 2.2"/><path d="M2.5 12c1.2-3.6 2.4-3.6 3.6 0s2.4 3.6 3.6 0"/><path d="M21.5 12c-1.2-3.6-2.4-3.6-3.6 0s-2.4 3.6-3.6 0"/></symbol>
+  <symbol id="hl-warmup" viewBox="0 0 24 24"><path d="M2.5 17.5h19"/><path d="M6.5 17.5a5.5 5.5 0 0 1 11 0"/><path d="M12 9.5V7M6.6 12.1 5 10.5M17.4 12.1 19 10.5"/></symbol>
 
   <!-- interface -->
   <symbol id="hl-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 11v5.2"/><path d="M12 7.7v.1"/></symbol>
@@ -2236,7 +2240,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <button class="hl-item coach-row" data-enter-panel="custom"><svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg><span class="hl-item-title" data-i18n="tool_custom_challenge">Custom Challenge</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="rhythm"><svg class="hl-icon" aria-hidden="true"><use href="#hl-metronome"/></svg><span class="hl-item-title" data-i18n="tool_rhythm_trainer">Rhythm Trainer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="earvoiceear"><svg class="hl-icon" aria-hidden="true"><use href="#hl-ear"/></svg><span class="hl-item-title" data-i18n="tool_ear_voice_ear">Ear → Voice → Ear</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-          <button class="hl-item coach-row" data-enter-panel="fiveways"><svg class="hl-icon" aria-hidden="true"><use href="#hl-group"/></svg><span class="hl-item-title" data-i18n="tool_five_ways">Sing It 5 Ways</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="fiveways"><svg class="hl-icon" aria-hidden="true"><use href="#hl-fiveways"/></svg><span class="hl-item-title" data-i18n="tool_five_ways">Sing It 5 Ways</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="onetake"><svg class="hl-icon" aria-hidden="true"><use href="#hl-record"/></svg><span class="hl-item-title" data-i18n="tool_one_take">One Take Challenge</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="vocalpuzzle"><svg class="hl-icon" aria-hidden="true"><use href="#hl-zoom"/></svg><span class="hl-item-title" data-i18n="tool_vocal_puzzle">Vocal Puzzle</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="hearmistake"><svg class="hl-icon" aria-hidden="true"><use href="#hl-headphones"/></svg><span class="hl-item-title" data-i18n="tool_hear_mistake">Can You Hear Your Mistake?</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
@@ -2250,7 +2254,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <button class="hl-item coach-row" data-enter-panel="voicequality"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span class="hl-item-title" data-i18n="tool_voice_quality">Voice Quality</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="livefeedback"><svg class="hl-icon" aria-hidden="true"><use href="#hl-mic"/></svg><span class="hl-item-title" data-i18n="tool_live_feedback">Live Feedback</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="resonance"><svg class="hl-icon" aria-hidden="true"><use href="#hl-chart"/></svg><span class="hl-item-title" data-i18n="tool_resonance">Resonance Visualizer</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-          <button class="hl-item coach-row" data-enter-panel="mirror"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span class="hl-item-title" data-i18n="tool_mirror">Mirror Mode</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="mirror"><svg class="hl-icon" aria-hidden="true"><use href="#hl-mirror"/></svg><span class="hl-item-title" data-i18n="tool_mirror">Mirror Mode</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
           <button class="hl-item coach-row" data-enter-panel="emotionmode"><svg class="hl-icon" aria-hidden="true"><use href="#hl-flame"/></svg><span class="hl-item-title" data-i18n="tool_emotion_mode">Emotion Mode</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
@@ -2265,7 +2269,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="hc-title hl-label" data-i18n="hub_train_warmup_title">Warmup</div>
         <div class="hc-desc hl-meta" data-i18n="hub_train_warmup_desc">Context-aware guided warmup before you start.</div>
         <div class="hc-btn-row hl-list">
-          <button class="hl-item coach-row" data-enter-panel="warmup"><svg class="hl-icon" aria-hidden="true"><use href="#hl-calendar"/></svg><span class="hl-item-title" data-i18n="tool_warmup">Warmup</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+          <button class="hl-item coach-row" data-enter-panel="warmup"><svg class="hl-icon" aria-hidden="true"><use href="#hl-warmup"/></svg><span class="hl-item-title" data-i18n="tool_warmup">Warmup</span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         </div>
       </div>
     </div>
@@ -2930,7 +2934,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- SMART WARMUP PANEL -->
   <section class="panel" id="panel-warmup">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="warmup_title">🔥 Smart Warmup</div>
+      <div class="j-title" data-i18n="warmup_title">Smart Warmup</div>
       <div class="j-sub" data-i18n="warmup_sub">A short warmup, shaped by real signals — time of day, your practice gap, and your weakest Skill Profile category, not a generic routine.</div>
     </div>
     <div class="key-card">
@@ -2961,7 +2965,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- RANGE PANEL -->
   <section class="panel" id="panel-range">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="range_title">📏 Range Finder</div>
+      <div class="j-title" data-i18n="range_title">Range Finder</div>
       <div class="j-sub" data-i18n="range_sub">Sing your lowest comfortable note, then your highest — about 30 seconds for a real voice-type classification and a shareable result card.</div>
     </div>
     <div class="range-card">
@@ -3026,7 +3030,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- KEY TRAINER PANEL -->
   <section class="panel" id="panel-key">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="key_title">🎹 Key Trainer</div>
+      <div class="j-title" data-i18n="key_title">Key Trainer</div>
       <div class="j-sub" data-i18n="key_sub">Play a reference tone in any key, or let the app recommend the best key for your captured range — real transposition, not a guess.</div>
     </div>
     <div class="key-card">
@@ -3132,7 +3136,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- EXERCISES PANEL -->
   <section class="panel" id="panel-exercises">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="exercises_title">🎯 Daily Exercises</div>
+      <div class="j-title" data-i18n="exercises_title">Daily Exercises</div>
       <div class="j-sub" data-i18n="exercises_sub">Four real ways to train pitch and ear — each scores your live mic input, octave-independent, tiered across Beginner/Intermediate/Professional.</div>
     </div>
     <div class="key-card">
@@ -3465,7 +3469,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- BREATH TRAINER PANEL -->
   <section class="panel" id="panel-breath">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="breath_title">💨 Breath Control</div>
+      <div class="j-title" data-i18n="breath_title">Breath Control</div>
       <div class="j-sub" data-i18n="breath_sub">Sustain "Ah" as long and as steadily as you can. Measures real sustain duration and loudness consistency — timing ends automatically when your breath runs out (detected as sustained silence), not on a guess.</div>
     </div>
     <div class="tuner-hero-card">
@@ -3630,7 +3634,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- GENRE COACH PANEL -->
   <section class="panel" id="panel-genre">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="genre_title">🎨 Genre Coach</div>
+      <div class="j-title" data-i18n="genre_title">Genre Coach</div>
       <div class="j-sub" data-i18n="genre_sub">Pick a style — real tips and real parameter defaults for Warmup and Vibrato, not audio-detected. You choose; the app doesn't guess.</div>
     </div>
     <div class="key-card">
@@ -3723,7 +3727,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- CUSTOM CHALLENGE BUILDER PANEL -->
   <section class="panel" id="panel-custom">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="custom_title">🧩 Build Your Own Challenge</div>
+      <div class="j-title" data-i18n="custom_title">Build Your Own Challenge</div>
       <div class="j-sub" data-i18n="custom_sub">Pick your range, register focus, and pace — this generates a real 6-note sequence and scores it with the exact same capture engine as Pitch Match, not a separate simulation.</div>
     </div>
 
@@ -3813,7 +3817,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- EAR TO VOICE TO EAR PANEL -->
   <section class="panel" id="panel-earvoiceear">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="eve_title">👂 Ear → Voice → Ear</div>
+      <div class="j-title" data-i18n="eve_title">Ear → Voice → Ear</div>
       <div class="j-sub" data-i18n="eve_sub">A real 5-step loop: hear a note, sing it back, get analyzed, hear a harder one, then sing that one from memory alone — no replay right before. Reuses the exact same capture engine as Pitch Match throughout.</div>
     </div>
     <div class="key-card" id="evePreCard">
@@ -3858,7 +3862,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- SING IT 5 WAYS PANEL -->
   <section class="panel" id="panel-fiveways">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="fiveways_title">🎼 Sing It 5 Ways</div>
+      <div class="j-title" data-i18n="fiveways_title">Sing It 5 Ways</div>
       <div class="j-sub" data-i18n="fiveways_sub">One note, five real contexts — original, up a semitone, down a semitone, then the same note again with a deliberate register instruction. Honest limit: this app measures your real pitch accuracy in each round; it can't verify which register you actually used, only you and your ear can.</div>
     </div>
     <div class="key-card" id="fivePreCard">
@@ -3915,7 +3919,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- VOCAL PUZZLE PANEL -->
   <section class="panel" id="panel-vocalpuzzle">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="vocalpuzzle_title">🧩 Vocal Puzzle</div>
+      <div class="j-title" data-i18n="vocalpuzzle_title">Vocal Puzzle</div>
       <div class="j-sub" data-i18n="vocalpuzzle_sub">A real 4-note sequence from a real scale, with one genuinely wrong note hidden in it. Trains your ear to catch a mistake, not just match a pitch.</div>
     </div>
     <div class="key-card" id="puzzlePreCard">
@@ -3946,7 +3950,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- CAN YOU HEAR YOUR MISTAKE PANEL -->
   <section class="panel" id="panel-hearmistake">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="hearmistake_title">👂 Can You Hear Your Mistake?</div>
+      <div class="j-title" data-i18n="hearmistake_title">Can You Hear Your Mistake?</div>
       <div class="j-sub" data-i18n="hearmistake_sub">Two real versions of the same note — one exactly on pitch, one genuinely shifted. Pick the correct one, then sing it back to prove you can reproduce it.</div>
     </div>
     <div class="key-card" id="hmPreCard">
@@ -4136,7 +4140,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- VOCAL LAB PANEL -->
   <section class="panel" id="panel-vocallab">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="vocallab_title">🔬 Vocal Lab</div>
+      <div class="j-title" data-i18n="vocallab_title">Vocal Lab</div>
       <div class="j-sub" data-i18n="vocallab_sub">Not one range number — three. A note you hit once isn't the same as a note you can rely on. Every tier here comes from real captured attempts, not a guess.</div>
     </div>
     <div class="key-card">
@@ -6150,24 +6154,24 @@ const TRANSLATIONS = {
     tuner_result_label:"Average stability", pm_result_label:"Pitch accuracy", pm_live_on:"On the note", pm_live_flat:"{n} cents flat", pm_live_sharp:"{n} cents sharp", measure_summary:"How this is measured", tuner_measure:"Stability is 100 minus three times how much your pitch wavers, in cents, over its last 30 readings (about half a second). This number is the average for the whole time you sang. The ring locks when you're within 6 cents of the note.", pm_measure:"Accuracy is 100 minus your average distance from the note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. Natural vibrato counts as its centre, not as an error.",
     tuner_pitch_label:'Pitch', tuner_stability_label:'Stability', tuner_freq_label:'Freq',
     tuner_hint:'Uses your microphone locally in the browser — nothing is uploaded. Best with headphones or a quiet room.',
-    range_title:'📏 Range Finder', range_sub:'Sing your lowest comfortable note, then your highest — about 30 seconds for a real voice-type classification and a shareable result card.',
+    range_title:'Range Finder', range_sub:"Sing your lowest comfortable note, then your highest. About 30 seconds for your range, a voice type and a result card to share.",
     range_intro_step:'Vocal Range Finder', range_intro_h2:'Find your natural range', range_intro_p:"We'll ask you to sing your lowest comfortable note, then your highest. Takes about 30 seconds.",
     range_label_bass:'A2 · low bass', range_label_mid:'C4 · middle', range_label_soprano:'C6 · high soprano', range_begin_btn:'Begin',
     range_step1:'Step 1 of 2', range_low_h2:'Sing your lowest comfortable note', range_low_p:'Hold it steady for a second, then tap capture.', range_capture_low_btn:'Capture lowest note',
     range_step2:'Step 2 of 2', range_high_h2:'Now your highest comfortable note', range_high_p:"Don't strain — comfortable, not maximum.", range_capture_high_btn:'Capture highest note',
     range_result_label:'Your result', range_share_note:'This card is built to share — a Pro account tracks how this number grows every week.',
     range_share_btn:'Share this result', range_restart_btn:'Run it again',
-    warmup_title:'🔥 Smart Warmup', warmup_sub:'A short warmup, shaped by real signals — time of day, your practice gap, and your weakest Skill Profile category, not a generic routine.',
+    warmup_title:'Smart Warmup', warmup_sub:"A short warmup shaped by the time of day, how long since you last practised, and your weakest Skill Profile category.",
     warmup_step1_title:'💋 1. Lip trill siren', warmup_play_btn:'Play', warmup_step2_title:'🎵 2. Hum siren', warmup_step2_sub:'Same glide, hummed "mmm"',
     warmup_step3_title:'🎹 3. Gentle 5-note scale', warmup_complete_btn:'Mark warmup done',
-    exercises_title:'🎯 Daily Exercises', exercises_sub:'Four real ways to train pitch and ear — each scores your live mic input, octave-independent, tiered across Beginner/Intermediate/Professional.',
+    exercises_title:'Daily Exercises', exercises_sub:"Four ways to train pitch and ear. Each scores your voice live, in any octave, at Beginner, Intermediate or Professional.",
     exercises_focus_label:"Today's Recommended Focus", exercises_focus_tag:'ADAPTIVE — RECALCULATED DAILY',
-    exercises_focus_desc:"Not a fixed weekly plan — this is computed fresh from your real Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can generate a first score.",
+    exercises_focus_desc:"Not a fixed weekly plan: it's worked out again from your Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can get a first score.",
     exercises_level_label:'Level — trains a different ability, not just "harder":',
     exercises_level_beginner:'Beginner', exercises_level_intermediate:'Intermediate', exercises_level_professional:'Professional',
     exercises_level_beginner_sub:'control & pitch', exercises_level_intermediate_sub:'technique & flexibility', exercises_level_professional_sub:'precision & expression',
-    exercises_difficulty_label:"This level's real difficulty breakdown",
-    exercises_difficulty_desc:'Not a single "Easy/Medium/Hard" label — five real dimensions, each pulled directly from the actual parameters driving your current level, not a separate rating system.',
+    exercises_difficulty_label:"What this level asks of you",
+    exercises_difficulty_desc:"Not one Easy / Medium / Hard label: five dimensions, each taken from the settings your current level uses, not a separate rating.",
     exercises_tab_pitch:'Pitch Match', exercises_tab_interval:'Interval Match', exercises_tab_scale:'Scale Run', exercises_tab_ear:'Ear Training',
     register_title:'🌉 Register Bridge',
     beta_heuristic_tag:'BETA HEURISTIC',
@@ -6181,8 +6185,8 @@ const TRANSLATIONS = {
     registerdrills_head_btn:'Head Voice',
     registerdrills_results_label:'Real results',
     registerdrills_retry_btn:'Try again',
-    breath_title:'💨 Breath Control',
-    breath_sub:'Sustain "Ah" as long and as steadily as you can. Measures real sustain duration and loudness consistency — timing ends automatically when your breath runs out (detected as sustained silence), not on a guess.',
+    breath_title:'Breath Control',
+    breath_sub:"Hold an \"Ah\" as long and as steadily as you can. Measures how long you hold it and how even your loudness stays; the timer stops by itself when your breath runs out and you go quiet.",
     breath_duration_label:'Duration',
     breath_consistency_label:'Consistency',
     // Voice Quality (phase 1)
@@ -6230,8 +6234,8 @@ const TRANSLATIONS = {
     emotion_sub:'Sing the Lead line and get Pitch and dynamic contrast scored separately — "technically perfect, needs more emotion," made real, not just phrasing/breath analysis a mic can\'t actually do.',
     emotion_pitch_label:'Pitch',
     emotion_expression_label:'Expression',
-    genre_title:'🎨 Genre Coach',
-    genre_sub:'Pick a style — real tips and real parameter defaults for Warmup and Vibrato, not audio-detected. You choose; the app doesn\'t guess.',
+    genre_title:'Genre Coach',
+    genre_sub:"Pick a style: tips and default settings for Warmup and Vibrato. You choose; the app doesn't detect it from your voice.",
     genre_apply_btn:'Set as my genre',
     karaoke_title:'🎤 Karaoke Coach',
     karaoke_sub:'Notes scroll toward you before you need to hit them — real Pitch and Timing scoring from your mic. Expression and pronunciation stay honestly unscored; no reliable signal exists for either.',
@@ -6252,8 +6256,8 @@ const TRANSLATIONS = {
     resonance_steadiness_label:'Steadiness',
     resonance_oscillation_label:'Oscillation',
     resonance_limits_note:'Honest about limits: "oscillation" here is a live proxy (rolling pitch variance + zero-crossing rate), not lab-grade vibrato analysis — for that, see the Vibrato Analyzer, which runs a real peak-detection pass on a captured take.',
-    custom_title:'🧩 Build Your Own Challenge',
-    custom_sub:'Pick your range, register focus, and pace — this generates a real 6-note sequence and scores it with the exact same capture engine as Pitch Match, not a separate simulation.',
+    custom_title:'Build Your Own Challenge',
+    custom_sub:"Pick your range, register focus and pace: you get a 6-note sequence, scored the same way as Pitch Match.",
     custom_step1:'1. Note range',
     custom_step2:'2. Register focus',
     custom_chest_btn:'Chest — lower third',
@@ -6278,24 +6282,24 @@ const TRANSLATIONS = {
     rhythm_result_label:'Timing result',
     rhythm_result_desc:'average timing accuracy across 8 real beats',
     rhythm_retry_btn:'Try again',
-    eve_title:'👂 Ear → Voice → Ear',
-    eve_sub:'A real 5-step loop: hear a note, sing it back, get analyzed, hear a harder one, then sing that one from memory alone — no replay right before. Reuses the exact same capture engine as Pitch Match throughout.',
-    eve_intro_desc:'Five real steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.',
+    eve_title:'Ear → Voice → Ear',
+    eve_sub:"A 5-step loop: hear a note, sing it back, see your score, hear a harder one, then sing that one from memory, with no replay just before. Scored the same way as Pitch Match.",
+    eve_intro_desc:"Five steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.",
     eve_results_label:"Average of your two sung steps",
     eve_step2_label:'Step 2 — Sing',
     eve_step5_label:'Step 5 — Without help',
     eve_retry_btn:'Run it again',
-    fiveways_title:'🎼 Sing It 5 Ways',
-    fiveways_sub:'One note, five real contexts — original, up a semitone, down a semitone, then the same note again with a deliberate register instruction. Honest limit: this app measures your real pitch accuracy in each round; it can\'t verify which register you actually used, only you and your ear can.',
-    fiveways_intro_desc:'Five real rounds, same underlying note, five different real challenges.',
+    fiveways_title:'Sing It 5 Ways',
+    fiveways_sub:"One note, five ways: as it is, a semitone up, a semitone down, then the same note in head voice and in mixed voice. Each round scores your pitch; which register you used is for you and your ear to judge.",
+    fiveways_intro_desc:"Five rounds on the same note, each a different challenge.",
     fiveways_results_label:"Average across the five rounds",
     fiveways_try_again_btn:'Try again',
     onetake_title:'🔥 One Take Challenge',
     onetake_sub:'One real attempt per day. No restarting once you begin, no live pitch guide while you sing, no correction. Just you, one note, one honest result.',
     onetake_result_label:'Today\'s one take',
     onetake_expression_note:'Expression isn\'t shown — no reliable real detector exists for it anywhere in this app, and this challenge won\'t fake one just to fill a fourth number.',
-    vocalpuzzle_title:'🧩 Vocal Puzzle',
-    vocalpuzzle_sub:'A real 4-note sequence from a real scale, with one genuinely wrong note hidden in it. Trains your ear to catch a mistake, not just match a pitch.',
+    vocalpuzzle_title:'Vocal Puzzle',
+    vocalpuzzle_sub:"Four notes from a scale, one of them wrong. Trains your ear to catch a mistake, not just match a pitch.",
     vocalpuzzle_intro_desc:'Listen to 4 notes. One doesn\'t belong. Which one?',
     vocalpuzzle_note1:'Note 1',
     vocalpuzzle_note2:'Note 2',
@@ -6305,8 +6309,8 @@ const TRANSLATIONS = {
     vocalpuzzle_streak_label:'Streak',
     vocalpuzzle_solved_label:'Solved',
     vocalpuzzle_next_btn:'Next puzzle',
-    hearmistake_title:'👂 Can You Hear Your Mistake?',
-    hearmistake_sub:'Two real versions of the same note — one exactly on pitch, one genuinely shifted. Pick the correct one, then sing it back to prove you can reproduce it.',
+    hearmistake_title:'Can You Hear Your Mistake?',
+    hearmistake_sub:"Two versions of the same note: one on pitch, one shifted. Pick the accurate one, then sing it back.",
     hearmistake_intro_desc:'Listen to A, then B. One is accurate, one is shifted.',
     hearmistake_replay_btn:'▶ Replay A and B',
     hearmistake_reproduce_label:'Now reproduce the correct version',
@@ -6347,8 +6351,8 @@ const TRANSLATIONS = {
     emotion_dramatic:'😱 Dramatic',
     emotionmode_differences_label:'Real, measured differences',
     emotionmode_retry_btn:'Try two different intentions',
-    vocallab_title:'🔬 Vocal Lab',
-    vocallab_sub:'Not one range number — three. A note you hit once isn\'t the same as a note you can rely on. Every tier here comes from real captured attempts, not a guess.',
+    vocallab_title:'Vocal Lab',
+    vocallab_sub:"Not one range number but three. A note you hit once isn't the same as a note you can rely on. Every tier comes from your captured attempts.",
     passport_title:'🪪 Vocal Passport',
     passport_sub:'Your long-term identity, consolidated in one place. Every field here is pulled from data already tracked elsewhere — nothing new is measured, nothing is invented to fill a gap.',
     passport_identity_label:'Identity',
@@ -6377,8 +6381,8 @@ const TRANSLATIONS = {
     teacher_sub:'A real roster and assignment tracker — not sample data, an actual local tool you can use.',
     journey_title:'21 Days to Discover Your Voice',
     journey_sub:'Not a trial countdown — a structured baseline, three themed weeks, and an honest before/after at the end. Every number here comes from tools already built elsewhere in this app, sequenced into one guided path.',
-    key_title:'🎹 Key Trainer',
-    key_sub:'Play a reference tone in any key, or let the app recommend the best key for your captured range — real transposition, not a guess.',
+    key_title:'Key Trainer',
+    key_sub:"Play a reference tone in any key, or let the app recommend the best key for your captured range, transposed to fit.",
     dashboard_title:'📊 Dashboard',
     dashboard_sub:'Your 5-score Skill Profile, Today\'s Plan, and the adaptive engine that reweights your training from real results.',
     boss_choose_desc:'Same real engine, genuinely different scoring per boss — not reskins.',
@@ -6909,7 +6913,7 @@ const TRANSLATIONS = {
     key_play_recommended_btn:'Play recommended key',
     key_play_scale_btn:'Play major scale',
     key_recommend_btn:'Recommend a key',
-    key_reference_desc:'Pick a root note and transpose it up or down — useful for warming up in the key you\'ll actually be singing in.',
+    key_reference_desc:"Pick a root note and transpose it up or down: useful for warming up in the key you'll sing in.",
     key_reference_h2:'Play a note or scale in any key',
     key_reference_label:'Reference Pitch',
     key_root_note_label:'Root note',
@@ -6918,7 +6922,7 @@ const TRANSLATIONS = {
     key_song_high_label:'Song\'s highest note',
     key_song_low_label:'Song\'s lowest note',
     key_transpose_label:'Transpose',
-    key_try_ranked_label:'Try a few real keys, ranked by fit',
+    key_try_ranked_label:"Try a few keys, ranked by fit",
     key_use_captured_btn:'Use my Range Finder result',
     pricing_aboutcheckout_label:'About this checkout:',
     pricing_bestvalue_badge:'BEST VALUE',
@@ -7222,9 +7226,9 @@ const TRANSLATIONS = {
     karaoke_mission_holdfinal:'Hold the final phrase', karaoke_mission_fullperf:'Full performance — no notes missed',
     karaoke_mission_nodata:'no data', karaoke_mission_missed:'missed', karaoke_mission_clean:'clean', karaoke_mission_notes:'notes',
     karaoke_mission_perfectchorus:'Perfect chorus (90%+)', karaoke_mission_tighttiming:'Tight timing (85%+ avg)', karaoke_mission_flawless:'Flawless take (90%+ pitch)',
-    ear_sub_chord:'Listen, then pick the chord quality you heard — a real triad-quality identify-by-ear drill',
-    ear_sub_progression:'Listen to a real 4-chord progression, then pick which one you heard — this is genuine key-context ear training, not just single-chord ID',
-    ear_sub_interval:'Listen, then pick the interval you heard — a real identify-by-ear drill, not sing-back',
+    ear_sub_chord:"Listen, then pick the quality of the triad you heard.",
+    ear_sub_progression:"Listen to a 4-chord progression, then pick which one you heard: ear training in the context of a key, not single chords.",
+    ear_sub_interval:"Listen, then pick the interval you heard. An ear drill: you don't sing.",
     ear_play_chord:'▶ Play chord', ear_play_progression:'▶ Play progression', ear_play_interval:'▶ Play interval',
     ear_correct:'Correct!', ear_thatwas_template:'That was {name}.', ear_thatwas_a:'a ',
     rhythm_running:'Running…', rhythm_beat_label:'Beat', rhythm_missed:'Missed',
@@ -7262,7 +7266,7 @@ const TRANSLATIONS = {
     reweight_wasfocus_p1:'was', reweight_wasfocus_p2:"of your last session's focus — today it's",
     reweight_wasfocus_p3:'based on your actual score change.',
     reweight_comparedto_p1:'Compared with your last session', reweight_comparedto_p2:"today's weighting has shifted slightly as your real scores changed.",
-    reweight_firstweighting:'This is your first computed weighting — tomorrow\'s will already reflect today\'s real results.',
+    reweight_firstweighting:"This is your first weighting; tomorrow's will already reflect today's results.",
     timebudget_beginner:'Today\'s budget (ref): warm-up 5 · breathing 5 · pitch 5 · scales 5 · registers 5 · intervals 3 · agility 2–3 · sustain 3 · song 5–10 min — total 30–40 min',
     timebudget_intermediate:'Today\'s budget (ref): warm-up 5–7 · breathing 5 · pitch 8 · scales 8 · registers 8 · intervals 5 · agility 5 · sustain 5 · vibrato 3 · song 10–15 min — total 50–65 min',
     timebudget_professional:'Today\'s budget (ref): warm-up 7–10 · breathing 5–8 · pitch 10 · scales 10 · registers 10 · intervals 8 · agility 8 · sustain 5 · vibrato 5 · song 15–20 min — total 70–90 min',
@@ -7310,10 +7314,10 @@ const TRANSLATIONS = {
     vocallab_signin:'Sign in to start building your real Vocal Lab data.',
     vocallab_needrangefinder:'Run the Range Finder at least once to establish your Extended range — everything else builds from there.',
     vocallab_extended:'Extended', vocallab_extended_sub:'What you can physically reach',
-    vocallab_comfortable:'Comfortable', vocallab_comfortable_sub:'Sung at least once with real accuracy',
-    vocallab_reliable:'Reliable', vocallab_reliable_sub:'3+ real attempts, consistently accurate',
+    vocallab_comfortable:'Comfortable', vocallab_comfortable_sub:"Sung accurately at least once",
+    vocallab_reliable:'Reliable', vocallab_reliable_sub:"3+ attempts, consistently accurate",
     vocallab_notenoughdata:'not enough data yet',
-    vocallab_notecount_suffix:'distinct notes tracked from real Pitch Match, Custom Challenge, Boss Battle, and Vocal Rift attempts.',
+    vocallab_notecount_suffix:"distinct notes tracked from your Pitch Match, Custom Challenge, Boss Battle and Vocal Rift attempts.",
     passport_signin:'Sign in to start building your real Vocal Passport.',
     passport_needrangefinder:'Run the Range Finder and a few real exercises first — your Passport builds from that same real data.',
     passport_notenoughdata:'Not enough data yet', passport_singfulltake:'Sing a full take in Karaoke Coach to set this',
@@ -7344,7 +7348,7 @@ const TRANSLATIONS = {
     genre_pop_vibrato:'Pop vocals typically use tighter, sparser vibrato than classical styles.',
     genre_rock_name:'Rock', genre_rock_sub:'power, chest-forward',
     genre_rock_tip1:'Chest-dominant belting is common, but watch for strain — build up gradually.',
-    genre_rock_tip2:'Avoid vocal fry or distortion effects until fundamentals are solid; they carry real injury risk if forced.',
+    genre_rock_tip2:"Avoid vocal fry or distortion effects until your fundamentals are solid; forced, they can injure your voice.",
     genre_rock_tip3:'Breath support matters more at high volume, not less.',
     genre_rock_vibrato:'Rock vocals often use little to no vibrato — a straight, driven tone is typical.',
     genre_gospel_name:'Gospel', genre_gospel_sub:'runs, melisma, agility',
@@ -7363,24 +7367,24 @@ const TRANSLATIONS = {
     genre_mt_tip3:'Emotional/dynamic contrast between verses and choruses is often the point.',
     genre_mt_vibrato:'Vibrato use varies a lot by role and era — moderate and flexible is a safe default.',
     genre_carnatic_name:'Carnatic / Hindustani', genre_carnatic_sub:'approximation only',
-    genre_carnatic_tip1:'Honest limitation: this app is built on 12-tone equal temperament and doesn\'t model gamakas (ornamented pitch bends) or microtonal shruti.',
-    genre_carnatic_tip2:'Pentatonic-based warmups here are the closest rough approximation available, not a real raga trainer.',
+    genre_carnatic_tip1:"A limit to know: this app is built on 12-tone equal temperament and doesn't model gamakas (ornamented pitch bends) or microtonal shruti.",
+    genre_carnatic_tip2:"Pentatonic-based warmups here are the closest rough approximation available, not a raga trainer.",
     genre_carnatic_tip3:'For serious Carnatic/Hindustani training, a dedicated teacher or specialized tool will serve you far better than this app in its current form.',
     genre_carnatic_vibrato:'This app\'s vibrato analysis isn\'t designed for gamaka-style ornamentation and may not read it meaningfully.',
     genre_metal_name:'Metal', genre_metal_sub:'power, extended technique',
-    genre_metal_tip1:'Screams and growls use false-cord/distortion technique, not raw chest belting — forcing volume through the true vocal folds here is a real injury risk.',
+    genre_metal_tip1:"Screams and growls use false-cord / distortion technique, not raw chest belting: forcing volume through the vocal folds themselves risks injury.",
     genre_metal_tip2:'Warm up thoroughly and for longer than other genres before any distorted technique; cold-starting extreme vocals is the single biggest cause of vocal damage in this style.',
     genre_metal_tip3:'Breath support and airflow control matter more here, not less — distortion needs a steady controlled air stream underneath it.',
     genre_metal_vibrato:'Vibrato is rarely a focus in metal vocals — sustained power and control under distortion matter far more than oscillation.',
     genre_jazz_name:'Jazz', genre_jazz_sub:'phrasing, blue notes, control',
     genre_jazz_tip1:'Phrasing sits deliberately behind or around the beat rather than locked to it — rhythmic freedom is part of the style, not a timing error.',
-    genre_jazz_tip2:'Blue notes (flattened 3rd, 5th, and 7th) are a real, intentional part of the vocabulary — the Blues/Jazz scale options in Exercises reflect this.',
+    genre_jazz_tip2:"Blue notes (flattened 3rd, 5th and 7th) are an intentional part of the vocabulary; the Blues and Jazz scale options in Exercises reflect this.",
     genre_jazz_tip3:'Tone tends to favor control and nuance over volume — dynamic range and phrasing carry more weight than raw power.',
     genre_jazz_vibrato:'Jazz vibrato is typically subtle and used sparingly for expression at phrase ends, not sustained throughout a note.',
     genre_arabic_name:'Arabic', genre_arabic_sub:'maqam-based, approximation only',
-    genre_arabic_tip1:'Honest limitation: like Carnatic/Hindustani, this app\'s 12-tone equal temperament doesn\'t model the quarter-tones central to maqam systems.',
-    genre_arabic_tip2:'Real maqam singing is ornamentation-heavy in ways this app\'s pitch detection isn\'t built to read or score meaningfully.',
-    genre_arabic_tip3:'Treat any feedback here as a rough approximation — a maqam-trained ear is the real authority, not this app.',
+    genre_arabic_tip1:"A limit to know: like Carnatic/Hindustani, this app's 12-tone equal temperament doesn't model the quarter-tones central to maqam systems.",
+    genre_arabic_tip2:"Maqam singing is heavy with ornamentation in ways this app's pitch detection isn't built to read or score meaningfully.",
+    genre_arabic_tip3:"Treat any feedback here as a rough approximation: a maqam-trained ear is the authority, not this app.",
     genre_arabic_vibrato:'This app\'s vibrato analysis isn\'t tuned for the ornamentation styles used in Arabic vocal music.',
     genre_reggae_name:'Reggae', genre_reggae_sub:'off-beat phrasing, relaxed tone',
     genre_reggae_tip1:'Phrasing deliberately sits on the off-beat (the "skank") — rhythmic placement matters as much as pitch here.',
@@ -7388,13 +7392,13 @@ const TRANSLATIONS = {
     genre_reggae_tip3:'Deep rib/intercostal breath support sustains long, laid-back rhythmic chanting phrases.',
     genre_reggae_vibrato:'Vibrato is usually light — rhythmic feel carries more of the expression than sustained tone.',
     genre_celtic_name:'Celtic', genre_celtic_sub:'ornamentation, modal melody',
-    genre_celtic_tip1:'Heavy ornamentation — grace notes, rolls, slides — is a defining feature, not decoration on top of the "real" melody.',
+    genre_celtic_tip1:"Heavy ornamentation (grace notes, rolls, slides) is a defining feature, not decoration on top of the melody.",
     genre_celtic_tip2:'Melodies lean modal (Dorian, natural minor, pentatonic) rather than strictly major/minor.',
     genre_celtic_tip3:'Sean-nós style singing uses free, rubato rhythm — locked timing isn\'t always the goal.',
     genre_celtic_vibrato:'Often a straight, ornament-forward tone — the grace notes and slides carry the expression instead of vibrato.',
     genre_flamenco_name:'Flamenco', genre_flamenco_sub:'raw intensity, Phrygian color',
-    genre_flamenco_tip1:'Phrygian-mode, Andalusian-cadence color is central — still fully within 12-TET, unlike Carnatic/Arabic microtonality. This app\'s scale presets don\'t include a literal Phrygian option, so "Minor" is the closest available approximation for warmups, not an exact match.',
-    genre_flamenco_tip2:'Raspy, intense vocal quality (voz rota) is stylistic — but pushing rasp before your technique is solid carries real strain risk, same caution as Rock/Metal.',
+    genre_flamenco_tip1:"Phrygian-mode, Andalusian-cadence color is central — still fully within 12-TET, unlike Carnatic/Arabic microtonality. This app's scale presets don't include a literal Phrygian option, so \"Minor\" is the closest available approximation for warmups, not an exact match.",
+    genre_flamenco_tip2:"Raspy, intense vocal quality (voz rota) is stylistic, but pushing rasp before your technique is solid risks strain: the same caution as Rock/Metal.",
     genre_flamenco_tip3:'Explosive diaphragmatic bursts power the dramatic "¡Ay!" cries — breath support work transfers directly here.',
     genre_flamenco_vibrato:'Intensity and rasp carry more expressive weight here than vibrato — this app doesn\'t score rasp/grit.',
     genre_bossanova_name:'Bossa Nova', genre_bossanova_sub:'soft, syncopated, intimate',
@@ -7470,6 +7474,7 @@ const TRANSLATIONS = {
     breath_result_label:"Seconds held",
     breath_score_label:"Score",
     breath_measure:"The timer runs from the moment you start. It stops when you tap stop, or by itself after 0.6 seconds of silence once you've sung for a moment. The target is 12, 18 or 24 seconds at {beg}, {int} or {pro}. Consistency is 100 minus 140 times how much your loudness varies (its standard deviation over its mean) while you sing. The score is 60% the time held against the target (up to 100) and 40% consistency. A hold under 2 seconds isn't recorded.",
+    puzzle_wrong_note:"The wrong note was Note {n} ({note}).",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7540,24 +7545,24 @@ const TRANSLATIONS = {
     tuner_result_label:"Stabilité moyenne", pm_result_label:"Justesse", pm_live_on:"Sur la note", pm_live_flat:"{n} cents trop bas", pm_live_sharp:"{n} cents trop haut", measure_summary:"Comment c'est mesuré", tuner_measure:"La stabilité vaut 100 moins trois fois l'écart de votre hauteur, en cents, sur ses 30 dernières mesures (environ une demi-seconde). Ce chiffre est la moyenne de tout le temps où vous avez chanté. L'anneau se verrouille quand vous êtes à moins de 6 cents de la note.", pm_measure:"La justesse vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. Un vibrato naturel compte pour son centre, pas comme une erreur.",
     tuner_pitch_label:'Justesse', tuner_stability_label:'Stabilité', tuner_freq_label:'Fréq',
     tuner_hint:"Utilise votre microphone localement dans le navigateur — rien n'est envoyé. Idéal avec un casque ou dans une pièce calme.",
-    range_title:'📏 Détecteur de tessiture', range_sub:'Chantez votre note la plus basse confortable, puis la plus haute — environ 30 secondes pour une vraie classification de type de voix et une fiche de résultat partageable.',
+    range_title:'Détecteur de tessiture', range_sub:"Chantez votre note la plus grave confortable, puis la plus aiguë. Environ 30 secondes pour votre tessiture, un type de voix et une fiche de résultat à partager.",
     range_intro_step:'Détecteur de tessiture vocale', range_intro_h2:'Trouvez votre tessiture naturelle', range_intro_p:'Nous allons vous demander de chanter votre note la plus basse confortable, puis la plus haute. Environ 30 secondes.',
     range_label_bass:'A2 · basse grave', range_label_mid:'C4 · médium', range_label_soprano:'C6 · soprano aigu', range_begin_btn:'Commencer',
     range_step1:'Étape 1 sur 2', range_low_h2:'Chantez votre note la plus basse confortable', range_low_p:'Tenez-la stable une seconde, puis appuyez sur capturer.', range_capture_low_btn:'Capturer la note la plus basse',
     range_step2:'Étape 2 sur 2', range_high_h2:'Maintenant votre note la plus haute confortable', range_high_p:'Ne forcez pas — confortable, pas maximale.', range_capture_high_btn:'Capturer la note la plus haute',
     range_result_label:'Votre résultat', range_share_note:'Cette fiche est conçue pour être partagée — un compte Pro suit la progression de ce chiffre chaque semaine.',
     range_share_btn:'Partager ce résultat', range_restart_btn:'Recommencer',
-    warmup_title:'🔥 Échauffement intelligent', warmup_sub:"Un échauffement court, façonné par de vrais signaux — l'heure de la journée, votre écart de pratique, et votre catégorie de Profil de compétences la plus faible, pas une routine générique.",
+    warmup_title:'Échauffement intelligent', warmup_sub:"Un échauffement court, adapté à l'heure, au temps écoulé depuis votre dernière séance et à votre catégorie la plus faible du Profil de compétences.",
     warmup_step1_title:'💋 1. Sirène lèvres roulées', warmup_play_btn:'Jouer', warmup_step2_title:'🎵 2. Sirène fredonnée', warmup_step2_sub:'Même glissando, fredonné "mmm"',
     warmup_step3_title:'🎹 3. Gamme douce à 5 notes', warmup_complete_btn:"Marquer l'échauffement comme fait",
-    exercises_title:'🎯 Exercices quotidiens', exercises_sub:"Quatre façons réelles d'entraîner la justesse et l'oreille — chacune note votre voix en direct, indépendamment de l'octave, répartie en Débutant/Intermédiaire/Professionnel.",
+    exercises_title:'Exercices quotidiens', exercises_sub:"Quatre façons d'entraîner la justesse et l'oreille. Chacune note votre voix en direct, dans n'importe quelle octave, en Débutant, Intermédiaire ou Professionnel.",
     exercises_focus_label:'Focus recommandé du jour', exercises_focus_tag:'ADAPTATIF — RECALCULÉ CHAQUE JOUR',
-    exercises_focus_desc:"Pas un plan hebdomadaire fixe — ceci est calculé à nouveau à partir de votre vrai Profil de compétences chaque fois que vous ouvrez cet onglet. Les catégories plus faibles reçoivent plus de temps aujourd'hui ; les catégories sans données reçoivent une part de départ équitable pour générer un premier score.",
+    exercises_focus_desc:"Pas un plan hebdomadaire figé : il est recalculé à partir de votre Profil de compétences chaque fois que vous ouvrez cet onglet. Les catégories plus faibles reçoivent plus du temps d'aujourd'hui ; celles sans données reçoivent une part de départ équitable pour obtenir un premier score.",
     exercises_level_label:'Niveau — entraîne une capacité différente, pas juste "plus difficile" :',
     exercises_level_beginner:'Débutant', exercises_level_intermediate:'Intermédiaire', exercises_level_professional:'Professionnel',
     exercises_level_beginner_sub:'contrôle et justesse', exercises_level_intermediate_sub:'technique et flexibilité', exercises_level_professional_sub:'précision et expression',
-    exercises_difficulty_label:'La vraie répartition de difficulté de ce niveau',
-    exercises_difficulty_desc:'Pas une simple étiquette "Facile/Moyen/Difficile" — cinq dimensions réelles, chacune tirée directement des paramètres réels de votre niveau actuel, pas un système de notation séparé.',
+    exercises_difficulty_label:"Ce que ce niveau vous demande",
+    exercises_difficulty_desc:"Pas une simple étiquette Facile / Moyen / Difficile : cinq dimensions, chacune tirée des réglages qu'utilise votre niveau actuel, pas une note à part.",
     exercises_tab_pitch:'Précision de note', exercises_tab_interval:"Reconnaissance d'intervalles", exercises_tab_scale:'Gamme', exercises_tab_ear:"Entraînement de l'oreille",
     register_title:'🌉 Pont de Registre',
     beta_heuristic_tag:'HEURISTIQUE BÊTA',
@@ -7571,8 +7576,8 @@ const TRANSLATIONS = {
     registerdrills_head_btn:'Voix de tête',
     registerdrills_results_label:'Résultats réels',
     registerdrills_retry_btn:'Réessayer',
-    breath_title:'💨 Contrôle du souffle',
-    breath_sub:'Tenez "Ah" aussi longtemps et aussi régulièrement que possible. Mesure la durée de tenue réelle et la consistance du volume — le chronométrage se termine automatiquement quand votre souffle s\'épuise (détecté comme un silence prolongé), pas par supposition.',
+    breath_title:'Contrôle du souffle',
+    breath_sub:"Tenez un « Ah » aussi longtemps et aussi régulièrement que possible. Mesure combien de temps vous le tenez et la régularité de votre volume ; le chrono s'arrête tout seul quand votre souffle s'épuise et que vous vous taisez.",
     breath_duration_label:'Durée',
     breath_consistency_label:'Régularité',
     // Voice Quality (phase 1)
@@ -7620,8 +7625,8 @@ const TRANSLATIONS = {
     emotion_sub:'Chantez la ligne principale et obtenez la justesse et le contraste dynamique notés séparément — "techniquement parfait, a besoin de plus d\'émotion," rendu réel, pas juste une analyse de phrasé/souffle qu\'un micro ne peut pas vraiment faire.',
     emotion_pitch_label:'Justesse',
     emotion_expression_label:'Expression',
-    genre_title:'🎨 Coach de Genre',
-    genre_sub:'Choisissez un style — de vrais conseils et de vrais paramètres par défaut pour l\'Échauffement et le Vibrato, pas détecté par l\'audio. Vous choisissez ; l\'application ne devine pas.',
+    genre_title:'Coach de Genre',
+    genre_sub:"Choisissez un style : des conseils et des réglages par défaut pour l'Échauffement et le Vibrato. Vous choisissez ; l'application ne le détecte pas dans votre voix.",
     genre_apply_btn:'Définir comme mon genre',
     karaoke_title:'🎤 Coach Karaoké',
     karaoke_sub:'Les notes défilent vers vous avant que vous ayez besoin de les atteindre — vraie notation de justesse et de rythme depuis votre micro. L\'expression et la prononciation restent honnêtement non notées ; aucun signal fiable n\'existe pour l\'une ou l\'autre.',
@@ -7642,8 +7647,8 @@ const TRANSLATIONS = {
     resonance_steadiness_label:'Stabilité',
     resonance_oscillation_label:'Oscillation',
     resonance_limits_note:'Honnête sur les limites : « oscillation » ici est un proxy en direct (variance de justesse glissante + taux de passage à zéro), pas une analyse de vibrato de qualité laboratoire — pour cela, voir l\'Analyseur de vibrato, qui exécute une vraie passe de détection de crêtes sur une prise capturée.',
-    custom_title:'🧩 Créez Votre Propre Défi',
-    custom_sub:'Choisissez votre tessiture, votre focus de registre, et votre rythme — ceci génère une vraie séquence de 6 notes et la note avec exactement le même moteur de capture que Pitch Match, pas une simulation séparée.',
+    custom_title:'Créez Votre Propre Défi',
+    custom_sub:"Choisissez votre tessiture, votre registre et votre rythme : vous obtenez une séquence de 6 notes, notée de la même façon que Pitch Match.",
     custom_step1:'1. Plage de notes',
     custom_step2:'2. Focus de registre',
     custom_chest_btn:'Poitrine — tiers inférieur',
@@ -7668,24 +7673,24 @@ const TRANSLATIONS = {
     rhythm_result_label:'Résultat de rythme',
     rhythm_result_desc:'précision de rythme moyenne sur 8 vrais temps',
     rhythm_retry_btn:'Réessayer',
-    eve_title:'👂 Oreille → Voix → Oreille',
-    eve_sub:'Une vraie boucle en 5 étapes : entendre une note, la chanter en retour, être analysé, en entendre une plus difficile, puis la chanter de mémoire seule — pas de rejeu juste avant. Réutilise exactement le même moteur de capture que Pitch Match tout du long.',
-    eve_intro_desc:'Cinq vraies étapes : Entendre → Chanter → Analyser → Entendre encore (plus difficile) → Chanter sans aide.',
+    eve_title:'Oreille → Voix → Oreille',
+    eve_sub:"Une boucle en 5 étapes : entendre une note, la rechanter, voir votre score, en entendre une plus difficile, puis la chanter de mémoire, sans réécoute juste avant. Notée de la même façon que Pitch Match.",
+    eve_intro_desc:"Cinq étapes : Entendre → Chanter → Analyser → Entendre encore (plus difficile) → Chanter sans aide.",
     eve_results_label:"Moyenne de vos deux étapes chantées",
     eve_step2_label:'Étape 2 — Chanter',
     eve_step5_label:'Étape 5 — Sans aide',
     eve_retry_btn:'Recommencer',
-    fiveways_title:'🎼 Chantez-le de 5 Façons',
-    fiveways_sub:'Une note, cinq vrais contextes — original, un demi-ton plus haut, un demi-ton plus bas, puis la même note à nouveau avec une instruction de registre délibérée. Limite honnête : cette application mesure votre vraie précision de justesse à chaque tour ; elle ne peut pas vérifier quel registre vous avez réellement utilisé, seuls vous et votre oreille le pouvez.',
-    fiveways_intro_desc:'Cinq vrais tours, même note sous-jacente, cinq défis réels différents.',
+    fiveways_title:'Chantez-le de 5 Façons',
+    fiveways_sub:"Une note, cinq façons : telle quelle, un demi-ton plus haut, un demi-ton plus bas, puis la même note en voix de tête et en voix mixte. Chaque manche note votre justesse ; le registre utilisé, c'est à vous et à votre oreille d'en juger.",
+    fiveways_intro_desc:"Cinq manches sur la même note, chacune un défi différent.",
     fiveways_results_label:"Moyenne sur les cinq manches",
     fiveways_try_again_btn:'Réessayer',
     onetake_title:'🔥 Défi en Une Prise',
     onetake_sub:'Une vraie tentative par jour. Pas de redémarrage une fois commencé, pas de guide de justesse en direct pendant que vous chantez, pas de correction. Juste vous, une note, un résultat honnête.',
     onetake_result_label:'La prise du jour',
     onetake_expression_note:'L\'expression n\'est pas affichée — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, et ce défi n\'en simulera pas un juste pour remplir un quatrième chiffre.',
-    vocalpuzzle_title:'🧩 Puzzle Vocal',
-    vocalpuzzle_sub:'Une vraie séquence de 4 notes d\'une vraie gamme, avec une note vraiment fausse cachée dedans. Entraîne votre oreille à repérer une erreur, pas seulement à égaler une justesse.',
+    vocalpuzzle_title:'Puzzle Vocal',
+    vocalpuzzle_sub:"Quatre notes d'une gamme, dont une incorrecte. Entraîne votre oreille à repérer une erreur, pas seulement à reproduire une hauteur.",
     vocalpuzzle_intro_desc:'Écoutez 4 notes. Une n\'a pas sa place. Laquelle ?',
     vocalpuzzle_note1:'Note 1',
     vocalpuzzle_note2:'Note 2',
@@ -7695,8 +7700,8 @@ const TRANSLATIONS = {
     vocalpuzzle_streak_label:'Série',
     vocalpuzzle_solved_label:'Résolus',
     vocalpuzzle_next_btn:'Puzzle suivant',
-    hearmistake_title:'👂 Pouvez-vous Entendre Votre Erreur ?',
-    hearmistake_sub:'Deux vraies versions de la même note — une exactement juste, une vraiment décalée. Choisissez la bonne, puis chantez-la en retour pour prouver que vous pouvez la reproduire.',
+    hearmistake_title:'Pouvez-vous Entendre Votre Erreur ?',
+    hearmistake_sub:"Deux versions de la même note : l'une juste, l'autre décalée. Choisissez la juste, puis rechantez-la.",
     hearmistake_intro_desc:'Écoutez A, puis B. Une est précise, une est décalée.',
     hearmistake_replay_btn:'▶ Rejouer A et B',
     hearmistake_reproduce_label:'Maintenant reproduisez la bonne version',
@@ -7737,8 +7742,8 @@ const TRANSLATIONS = {
     emotion_dramatic:'😱 Dramatique',
     emotionmode_differences_label:'Vraies différences mesurées',
     emotionmode_retry_btn:'Essayer deux intentions différentes',
-    vocallab_title:'🔬 Labo Vocal',
-    vocallab_sub:'Pas un chiffre de tessiture — trois. Une note que vous atteignez une fois n\'est pas la même chose qu\'une note sur laquelle vous pouvez compter. Chaque niveau ici provient de vraies tentatives capturées, pas d\'une supposition.',
+    vocallab_title:'Labo Vocal',
+    vocallab_sub:"Pas un chiffre de tessiture, mais trois. Une note atteinte une fois n'est pas une note sur laquelle vous pouvez compter. Chaque niveau vient de vos tentatives enregistrées.",
     passport_title:'🪪 Passeport Vocal',
     passport_sub:'Votre identité à long terme, consolidée en un seul endroit. Chaque champ ici est tiré de données déjà suivies ailleurs — rien de nouveau n\'est mesuré, rien n\'est inventé pour combler un vide.',
     passport_identity_label:'Identité',
@@ -7767,8 +7772,8 @@ const TRANSLATIONS = {
     teacher_sub:'Un vrai suivi de liste d\'élèves et de devoirs — pas des données d\'exemple, un vrai outil local que vous pouvez utiliser.',
     journey_title:'21 Jours pour Découvrir Votre Voix',
     journey_sub:'Pas un compte à rebours d\'essai — une base structurée, trois semaines thématiques, et un vrai avant/après honnête à la fin. Chaque chiffre ici provient d\'outils déjà construits ailleurs dans cette application, séquencés en un seul chemin guidé.',
-    key_title:'🎹 Entraîneur de Tonalité',
-    key_sub:'Jouez un ton de référence dans n\'importe quelle tonalité, ou laissez l\'application recommander la meilleure tonalité pour votre tessiture capturée — vraie transposition, pas une supposition.',
+    key_title:'Entraîneur de Tonalité',
+    key_sub:"Jouez un son de référence dans n'importe quelle tonalité, ou laissez l'application recommander la meilleure tonalité pour votre tessiture enregistrée, transposée pour lui convenir.",
     dashboard_title:'📊 Tableau de Bord',
     dashboard_sub:'Votre Profil de compétences à 5 scores, le Plan du jour, et le moteur adaptatif qui repondère votre entraînement à partir de vrais résultats.',
     boss_choose_desc:'Même vrai moteur, notation vraiment différente par boss — pas de simples re-habillages.',
@@ -8299,7 +8304,7 @@ const TRANSLATIONS = {
     key_play_recommended_btn:'Jouer la tonalité recommandée',
     key_play_scale_btn:'Jouer la gamme majeure',
     key_recommend_btn:'Recommander une tonalité',
-    key_reference_desc:'Choisissez une note fondamentale et transposez-la vers le haut ou le bas — utile pour vous échauffer dans la tonalité où vous chanterez réellement.',
+    key_reference_desc:"Choisissez une fondamentale et transposez-la vers le haut ou le bas : utile pour s'échauffer dans la tonalité où vous chanterez.",
     key_reference_h2:'Jouez une note ou une gamme dans n\'importe quelle tonalité',
     key_reference_label:'Hauteur de référence',
     key_root_note_label:'Note fondamentale',
@@ -8308,7 +8313,7 @@ const TRANSLATIONS = {
     key_song_high_label:'Note la plus haute de la chanson',
     key_song_low_label:'Note la plus basse de la chanson',
     key_transpose_label:'Transposer',
-    key_try_ranked_label:'Essayez quelques vraies tonalités, classées par pertinence',
+    key_try_ranked_label:"Essayez quelques tonalités, classées selon leur adéquation",
     key_use_captured_btn:'Utiliser mon résultat du Détecteur de tessiture',
     pricing_aboutcheckout_label:'À propos de ce paiement :',
     pricing_bestvalue_badge:'MEILLEUR RAPPORT',
@@ -8612,9 +8617,9 @@ const TRANSLATIONS = {
     karaoke_mission_holdfinal:'Tenir la phrase finale', karaoke_mission_fullperf:'Performance complète — aucune note manquée',
     karaoke_mission_nodata:'aucune donnée', karaoke_mission_missed:'manquée', karaoke_mission_clean:'parfait', karaoke_mission_notes:'notes',
     karaoke_mission_perfectchorus:'Refrain parfait (90 %+)', karaoke_mission_tighttiming:'Timing serré (85 %+ en moyenne)', karaoke_mission_flawless:'Prise sans faute (90 %+ justesse)',
-    ear_sub_chord:'Écoutez, puis choisissez la qualité d\'accord entendue — un vrai exercice d\'identification à l\'oreille de qualité de triade',
-    ear_sub_progression:'Écoutez une vraie progression de 4 accords, puis choisissez celle entendue — c\'est un vrai entraînement d\'oreille contextuel à la tonalité, pas juste l\'identification d\'un seul accord',
-    ear_sub_interval:'Écoutez, puis choisissez l\'intervalle entendu — un vrai exercice d\'identification à l\'oreille, pas de chant en écho',
+    ear_sub_chord:"Écoutez, puis choisissez la qualité de l'accord de trois sons entendu.",
+    ear_sub_progression:"Écoutez une progression de 4 accords, puis choisissez laquelle vous avez entendue : de l'entraînement d'oreille dans le contexte d'une tonalité, pas des accords isolés.",
+    ear_sub_interval:"Écoutez, puis choisissez l'intervalle entendu. Un exercice d'oreille : vous ne chantez pas.",
     ear_play_chord:'▶ Jouer l\'accord', ear_play_progression:'▶ Jouer la progression', ear_play_interval:'▶ Jouer l\'intervalle',
     ear_correct:'Correct !', ear_thatwas_template:'C\'était {name}.', ear_thatwas_a:'un ',
     rhythm_running:'En cours…', rhythm_beat_label:'Temps', rhythm_missed:'Manqué',
@@ -8652,7 +8657,7 @@ const TRANSLATIONS = {
     reweight_wasfocus_p1:'représentait', reweight_wasfocus_p2:"de votre dernière séance — aujourd'hui c'est",
     reweight_wasfocus_p3:'basé sur l\'évolution réelle de vos scores.',
     reweight_comparedto_p1:'Par rapport à votre dernière séance', reweight_comparedto_p2:'la pondération d\'aujourd\'hui a légèrement changé selon l\'évolution réelle de vos scores.',
-    reweight_firstweighting:'Ceci est votre première pondération calculée — celle de demain reflétera déjà vos vrais résultats d\'aujourd\'hui.',
+    reweight_firstweighting:"C'est votre première pondération ; celle de demain reflétera déjà vos résultats d'aujourd'hui.",
     timebudget_beginner:'Budget du jour (réf.) : échauffement 5 · respiration 5 · justesse 5 · gammes 5 · registres 5 · intervalles 3 · agilité 2–3 · tenue 3 · chanson 5–10 min — total 30–40 min',
     timebudget_intermediate:'Budget du jour (réf.) : échauffement 5–7 · respiration 5 · justesse 8 · gammes 8 · registres 8 · intervalles 5 · agilité 5 · tenue 5 · vibrato 3 · chanson 10–15 min — total 50–65 min',
     timebudget_professional:'Budget du jour (réf.) : échauffement 7–10 · respiration 5–8 · justesse 10 · gammes 10 · registres 10 · intervalles 8 · agilité 8 · tenue 5 · vibrato 5 · chanson 15–20 min — total 70–90 min',
@@ -8700,10 +8705,10 @@ const TRANSLATIONS = {
     vocallab_signin:'Connectez-vous pour commencer à construire vos vraies données de Laboratoire vocal.',
     vocallab_needrangefinder:'Lancez le Détecteur de tessiture au moins une fois pour établir votre tessiture étendue — tout le reste se construit à partir de là.',
     vocallab_extended:'Étendue', vocallab_extended_sub:'Ce que vous pouvez physiquement atteindre',
-    vocallab_comfortable:'Confortable', vocallab_comfortable_sub:'Chantée au moins une fois avec une vraie précision',
-    vocallab_reliable:'Fiable', vocallab_reliable_sub:'3+ tentatives réelles, précision constante',
+    vocallab_comfortable:'Confortable', vocallab_comfortable_sub:"Chantée juste au moins une fois",
+    vocallab_reliable:'Fiable', vocallab_reliable_sub:"3+ tentatives, toujours justes",
     vocallab_notenoughdata:'pas encore assez de données',
-    vocallab_notecount_suffix:'notes distinctes suivies depuis de vraies tentatives de Pitch Match, Défi personnalisé, Combat de boss et Faille vocale.',
+    vocallab_notecount_suffix:"notes distinctes suivies depuis vos tentatives de Pitch Match, Défi personnalisé, Combat de boss et Faille vocale.",
     passport_signin:'Connectez-vous pour commencer à construire votre vrai Passeport vocal.',
     passport_needrangefinder:'Lancez d\'abord le Buscador de rango et quelques vrais exercices — votre Passeport se construit à partir de ces mêmes données réelles.',
     passport_notenoughdata:'Pas encore assez de données', passport_singfulltake:'Chantez une prise complète dans Karaoke Coach pour définir ceci',
@@ -8734,7 +8739,7 @@ const TRANSLATIONS = {
     genre_pop_vibrato:'Les voix pop utilisent généralement un vibrato plus serré et plus rare que les styles classiques.',
     genre_rock_name:'Rock', genre_rock_sub:'puissance, poitrine dominante',
     genre_rock_tip1:'Le belting dominé par la poitrine est courant, mais attention à la tension — progressez graduellement.',
-    genre_rock_tip2:'Évitez le vocal fry ou les effets de distorsion tant que les fondamentaux ne sont pas solides ; ils comportent un vrai risque de blessure s\'ils sont forcés.',
+    genre_rock_tip2:"Évitez le vocal fry et les effets de distorsion tant que vos bases ne sont pas solides ; forcés, ils peuvent blesser votre voix.",
     genre_rock_tip3:'Le soutien respiratoire compte davantage à fort volume, pas moins.',
     genre_rock_vibrato:'Les voix rock utilisent souvent peu ou pas de vibrato — un timbre droit et poussé est typique.',
     genre_gospel_name:'Gospel', genre_gospel_sub:'vocalises, mélismes, agilité',
@@ -8753,24 +8758,24 @@ const TRANSLATIONS = {
     genre_mt_tip3:'Le contraste émotionnel/dynamique entre couplets et refrains est souvent l\'essentiel.',
     genre_mt_vibrato:'L\'usage du vibrato varie beaucoup selon le rôle et l\'époque — modéré et flexible est un choix par défaut sûr.',
     genre_carnatic_name:'Carnatique / Hindoustani', genre_carnatic_sub:'approximation seulement',
-    genre_carnatic_tip1:'Limite honnête : cette application est construite sur un tempérament égal à 12 tons et ne modélise pas les gamakas (inflexions de pitch ornées) ni les shrutis microtonaux.',
-    genre_carnatic_tip2:'Les échauffements pentatoniques ici sont l\'approximation la plus proche disponible, pas un vrai entraîneur de raga.',
+    genre_carnatic_tip1:"Une limite à connaître : cette application repose sur le tempérament égal à 12 tons et ne modélise ni les gamakas (inflexions ornées de la hauteur) ni les shrutis microtonaux.",
+    genre_carnatic_tip2:"Les échauffements pentatoniques ici sont l'approximation la plus proche disponible, pas un entraîneur de raga.",
     genre_carnatic_tip3:'Pour un entraînement carnatique/hindoustani sérieux, un professeur dédié ou un outil spécialisé vous servira bien mieux que cette application dans sa forme actuelle.',
     genre_carnatic_vibrato:'L\'analyse de vibrato de cette application n\'est pas conçue pour l\'ornementation de style gamaka et peut ne pas la lire correctement.',
     genre_metal_name:'Metal', genre_metal_sub:'puissance, technique étendue',
-    genre_metal_tip1:'Les cris et growls utilisent une technique de fausses cordes/distorsion, pas du belting de poitrine brut — forcer le volume à travers les vrais plis vocaux ici est un vrai risque de blessure.',
+    genre_metal_tip1:"Les cris et growls utilisent une technique de fausses cordes / distorsion, pas du belting de poitrine brut : forcer le volume à travers les cordes vocales elles-mêmes expose à une blessure.",
     genre_metal_tip2:'Échauffez-vous minutieusement et plus longtemps que pour d\'autres genres avant toute technique déformée ; démarrer à froid des vocaux extrêmes est la première cause de dommage vocal dans ce style.',
     genre_metal_tip3:'Le soutien du souffle et le contrôle du flux d\'air comptent plus ici, pas moins — la distorsion a besoin d\'un flux d\'air stable et contrôlé en dessous.',
     genre_metal_vibrato:'Le vibrato est rarement un objectif dans le metal — la puissance soutenue et le contrôle sous distorsion comptent bien plus que l\'oscillation.',
     genre_jazz_name:'Jazz', genre_jazz_sub:'phrasé, blue notes, contrôle',
     genre_jazz_tip1:'Le phrasé se place délibérément derrière ou autour du temps plutôt que verrouillé dessus — la liberté rythmique fait partie du style, pas une erreur de timing.',
-    genre_jazz_tip2:'Les blue notes (3ce, 5te et 7me abaissées) font partie réelle et intentionnelle du vocabulaire — les options de gamme Blues/Jazz dans Exercices reflètent cela.',
+    genre_jazz_tip2:"Les blue notes (3ce, 5te et 7e abaissées) font partie intentionnelle du vocabulaire ; les gammes Blues et Jazz des Exercices en tiennent compte.",
     genre_jazz_tip3:'Le timbre tend à privilégier le contrôle et la nuance sur le volume — l\'étendue dynamique et le phrasé pèsent plus que la force brute.',
     genre_jazz_vibrato:'Le vibrato jazz est généralement subtil et utilisé avec parcimonie pour l\'expression en fin de phrase, pas soutenu tout au long d\'une note.',
     genre_arabic_name:'Arabe', genre_arabic_sub:'basé sur le maqam, approximation seulement',
-    genre_arabic_tip1:'Limite honnête : comme le carnatique/hindoustani, le tempérament égal à 12 tons de cette application ne modélise pas les quarts de ton centraux aux systèmes de maqam.',
-    genre_arabic_tip2:'Le vrai chant maqam est riche en ornementation d\'une façon que la détection de justesse de cette application n\'est pas conçue pour lire ou noter de manière significative.',
-    genre_arabic_tip3:'Traitez tout retour ici comme une approximation grossière — une oreille formée au maqam est la vraie autorité, pas cette application.',
+    genre_arabic_tip1:"Une limite à connaître : comme pour le carnatique/hindoustani, le tempérament égal à 12 tons de cette application ne modélise pas les quarts de ton centraux des systèmes de maqam.",
+    genre_arabic_tip2:"Le chant maqam est riche en ornements d'une façon que la détection de hauteur de cette application n'est pas conçue pour lire ou noter de manière utile.",
+    genre_arabic_tip3:"Considérez tout retour ici comme une approximation : une oreille formée au maqam fait autorité, pas cette application.",
     genre_arabic_vibrato:'L\'analyse de vibrato de cette application n\'est pas calibrée pour les styles d\'ornementation utilisés dans la musique vocale arabe.',
     genre_reggae_name:'Reggae', genre_reggae_sub:'phrasé décalé, timbre détendu',
     genre_reggae_tip1:'Le phrasé se place délibérément sur le contretemps (le « skank ») — le placement rythmique compte autant que la justesse ici.',
@@ -8778,13 +8783,13 @@ const TRANSLATIONS = {
     genre_reggae_tip3:'Un soutien respiratoire costal/intercostal profond soutient de longues phrases scandées rythmiques et décontractées.',
     genre_reggae_vibrato:'Le vibrato est généralement léger — le feeling rythmique porte plus l\'expression qu\'un timbre soutenu.',
     genre_celtic_name:'Celtique', genre_celtic_sub:'ornementation, mélodie modale',
-    genre_celtic_tip1:'Une ornementation lourde — notes d\'agrément, roulades, glissés — est une caractéristique déterminante, pas une décoration ajoutée à la « vraie » mélodie.',
+    genre_celtic_tip1:"Une ornementation abondante (notes d'agrément, roulades, glissés) est un trait déterminant, pas une décoration posée sur la mélodie.",
     genre_celtic_tip2:'Les mélodies penchent vers le modal (dorien, mineur naturel, pentatonique) plutôt que strictement majeur/mineur.',
     genre_celtic_tip3:'Le chant de style sean-nós utilise un rythme libre, rubato — un timing verrouillé n\'est pas toujours l\'objectif.',
     genre_celtic_vibrato:'Souvent un timbre droit, tourné vers l\'ornement — les notes d\'agrément et glissés portent l\'expression à la place du vibrato.',
     genre_flamenco_name:'Flamenco', genre_flamenco_sub:'intensité brute, couleur phrygienne',
-    genre_flamenco_tip1:'La couleur en mode phrygien, cadence andalouse, est centrale — toujours entièrement dans le tempérament égal à 12 tons, contrairement à la microtonalité carnatique/arabe. Les préréglages de gammes de cette application n\'incluent pas d\'option phrygienne littérale, donc « Mineur » est l\'approximation la plus proche disponible pour les échauffements, pas une correspondance exacte.',
-    genre_flamenco_tip2:'La qualité vocale rauque et intense (voz rota) est stylistique — mais pousser le rauque avant que votre technique soit solide comporte un vrai risque de tension, même prudence que Rock/Metal.',
+    genre_flamenco_tip1:"La couleur en mode phrygien, cadence andalouse, est centrale — toujours entièrement dans le tempérament égal à 12 tons, contrairement à la microtonalité carnatique/arabe. Les préréglages de gammes de cette application n'incluent pas d'option phrygienne littérale, donc « Mineur » est l'approximation la plus proche disponible pour les échauffements, pas une correspondance exacte.",
+    genre_flamenco_tip2:"La qualité vocale rauque et intense (voz rota) est stylistique, mais forcer le rauque avant que votre technique soit solide expose à des tensions : même prudence que pour le Rock/Metal.",
     genre_flamenco_tip3:'Des explosions diaphragmatiques puissantes alimentent les cris dramatiques « ¡Ay! » — le travail de soutien du souffle se transfère directement ici.',
     genre_flamenco_vibrato:'L\'intensité et le rauque portent plus de poids expressif ici que le vibrato — cette application ne note pas le rauque/la texture rugueuse.',
     genre_bossanova_name:'Bossa Nova', genre_bossanova_sub:'doux, syncopé, intime',
@@ -8860,6 +8865,7 @@ const TRANSLATIONS = {
     breath_result_label:"Secondes tenues",
     breath_score_label:"Score",
     breath_measure:"Le chrono démarre dès que vous commencez. Il s'arrête quand vous appuyez sur stop, ou tout seul après 0,6 seconde de silence une fois que vous avez chanté un moment. L'objectif est de 12, 18 ou 24 secondes en {beg}, {int} ou {pro}. La régularité vaut 100 moins 140 fois la variation de votre volume (son écart type rapporté à sa moyenne) pendant que vous chantez. Le score compte pour 60 % le temps tenu face à l'objectif (jusqu'à 100) et pour 40 % la régularité. Une tenue de moins de 2 secondes n'est pas enregistrée.",
+    puzzle_wrong_note:"La note incorrecte était la note {n} ({note}).",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -8930,24 +8936,24 @@ const TRANSLATIONS = {
     tuner_result_label:"Estabilidad media", pm_result_label:"Precisión de afinación", pm_live_on:"En la nota", pm_live_flat:"{n} cents por debajo", pm_live_sharp:"{n} cents por encima", measure_summary:"Cómo se mide", tuner_measure:"La estabilidad es 100 menos tres veces cuánto oscila tu afinación, en cents, en sus últimas 30 lecturas (alrededor de medio segundo). Este número es la media de todo el tiempo que cantaste. El anillo se fija cuando estás a 6 cents o menos de la nota.", pm_measure:"La precisión es 100 menos tu distancia media a la nota, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. El vibrato natural cuenta como su centro, no como un error.",
     tuner_pitch_label:'Afinación', tuner_stability_label:'Estabilidad', tuner_freq_label:'Frec',
     tuner_hint:'Usa tu micrófono localmente en el navegador — no se sube nada. Mejor con auriculares o en una habitación silenciosa.',
-    range_title:'📏 Buscador de rango', range_sub:'Canta tu nota más baja cómoda, luego la más alta — unos 30 segundos para una clasificación real de tipo de voz y una tarjeta de resultado para compartir.',
+    range_title:'Buscador de rango', range_sub:"Canta tu nota más grave cómoda y luego la más aguda. Unos 30 segundos para tu rango, un tipo de voz y una tarjeta de resultado para compartir.",
     range_intro_step:'Buscador de rango vocal', range_intro_h2:'Encuentra tu rango natural', range_intro_p:'Te pediremos que cantes tu nota más baja cómoda, luego la más alta. Toma unos 30 segundos.',
     range_label_bass:'A2 · bajo grave', range_label_mid:'C4 · medio', range_label_soprano:'C6 · soprano agudo', range_begin_btn:'Comenzar',
     range_step1:'Paso 1 de 2', range_low_h2:'Canta tu nota más baja cómoda', range_low_p:'Mantenla estable un segundo, luego toca capturar.', range_capture_low_btn:'Capturar nota más baja',
     range_step2:'Paso 2 de 2', range_high_h2:'Ahora tu nota más alta cómoda', range_high_p:'No fuerces — cómoda, no máxima.', range_capture_high_btn:'Capturar nota más alta',
     range_result_label:'Tu resultado', range_share_note:'Esta tarjeta está diseñada para compartir — una cuenta Pro rastrea cómo crece este número cada semana.',
     range_share_btn:'Compartir este resultado', range_restart_btn:'Repetirlo',
-    warmup_title:'🔥 Calentamiento inteligente', warmup_sub:'Un calentamiento corto, moldeado por señales reales — la hora del día, tu intervalo de práctica, y tu categoría más débil del Perfil de habilidades, no una rutina genérica.',
+    warmup_title:'Calentamiento inteligente', warmup_sub:"Un calentamiento corto según la hora del día, el tiempo desde tu última práctica y tu categoría más débil del Perfil de habilidades.",
     warmup_step1_title:'💋 1. Sirena con labios vibrando', warmup_play_btn:'Reproducir', warmup_step2_title:'🎵 2. Sirena tarareada', warmup_step2_sub:'Mismo deslizamiento, tarareado "mmm"',
     warmup_step3_title:'🎹 3. Escala suave de 5 notas', warmup_complete_btn:'Marcar calentamiento como hecho',
-    exercises_title:'🎯 Ejercicios diarios', exercises_sub:'Cuatro formas reales de entrenar afinación y oído — cada una puntúa tu voz en vivo, independiente de la octava, en niveles Principiante/Intermedio/Profesional.',
+    exercises_title:'Ejercicios diarios', exercises_sub:"Cuatro formas de entrenar afinación y oído. Cada una puntúa tu voz en directo, en cualquier octava, en Principiante, Intermedio o Profesional.",
     exercises_focus_label:'Enfoque recomendado de hoy', exercises_focus_tag:'ADAPTATIVO — RECALCULADO A DIARIO',
-    exercises_focus_desc:'No es un plan semanal fijo — esto se calcula de nuevo desde tu Perfil de habilidades real cada vez que abres esta pestaña. Las categorías más débiles reciben más tiempo hoy; las categorías sin datos reciben una parte inicial justa para generar una primera puntuación.',
+    exercises_focus_desc:"No es un plan semanal fijo: se vuelve a calcular a partir de tu Perfil de habilidades cada vez que abres esta pestaña. Las categorías más débiles reciben más tiempo hoy; las que aún no tienen datos reciben una parte inicial justa para conseguir una primera puntuación.",
     exercises_level_label:'Nivel — entrena una habilidad diferente, no solo "más difícil":',
     exercises_level_beginner:'Principiante', exercises_level_intermediate:'Intermedio', exercises_level_professional:'Profesional',
     exercises_level_beginner_sub:'control y afinación', exercises_level_intermediate_sub:'técnica y flexibilidad', exercises_level_professional_sub:'precisión y expresión',
-    exercises_difficulty_label:'El desglose real de dificultad de este nivel',
-    exercises_difficulty_desc:'No es una simple etiqueta "Fácil/Medio/Difícil" — cinco dimensiones reales, cada una extraída directamente de los parámetros reales de tu nivel actual, no un sistema de calificación aparte.',
+    exercises_difficulty_label:"Lo que te pide este nivel",
+    exercises_difficulty_desc:"No es una sola etiqueta Fácil / Medio / Difícil: cinco dimensiones, cada una tomada de los ajustes que usa tu nivel actual, no una calificación aparte.",
     exercises_tab_pitch:'Precisión de nota', exercises_tab_interval:'Reconocimiento de intervalos', exercises_tab_scale:'Escala', exercises_tab_ear:'Entrenamiento auditivo',
     register_title:'🌉 Puente de Registro',
     beta_heuristic_tag:'HEURÍSTICA BETA',
@@ -8961,8 +8967,8 @@ const TRANSLATIONS = {
     registerdrills_head_btn:'Voz de cabeza',
     registerdrills_results_label:'Resultados reales',
     registerdrills_retry_btn:'Intentar de nuevo',
-    breath_title:'💨 Control de respiración',
-    breath_sub:'Sostén "Ah" tan largo y establemente como puedas. Mide la duración real de sostenido y la consistencia del volumen — el cronometraje termina automáticamente cuando se acaba tu aliento (detectado como silencio sostenido), no por suposición.',
+    breath_title:'Control de respiración',
+    breath_sub:"Sostén un \"Ah\" tanto tiempo y tan estable como puedas. Mide cuánto lo sostienes y lo uniforme que se mantiene tu volumen; el cronómetro se detiene solo cuando se te acaba el aire y te callas.",
     breath_duration_label:'Duración',
     breath_consistency_label:'Consistencia',
     // Voice Quality (phase 1)
@@ -9010,8 +9016,8 @@ const TRANSLATIONS = {
     emotion_sub:'Canta la línea principal y obtén la afinación y el contraste dinámico puntuados por separado — "técnicamente perfecto, necesita más emoción," hecho real, no solo un análisis de fraseo/respiración que un micrófono no puede realmente hacer.',
     emotion_pitch_label:'Afinación',
     emotion_expression_label:'Expresión',
-    genre_title:'🎨 Coach de Género',
-    genre_sub:'Elige un estilo — consejos reales y parámetros predeterminados reales para el Calentamiento y el Vibrato, no detectados por audio. Tú eliges; la app no adivina.',
+    genre_title:'Coach de Género',
+    genre_sub:"Elige un estilo: consejos y ajustes predeterminados para el Calentamiento y el Vibrato. Tú eliges; la app no lo detecta en tu voz.",
     genre_apply_btn:'Establecer como mi género',
     karaoke_title:'🎤 Coach de Karaoke',
     karaoke_sub:'Las notas se desplazan hacia ti antes de que necesites alcanzarlas — puntuación real de afinación y ritmo desde tu micrófono. La expresión y la pronunciación permanecen honestamente sin puntuar; no existe una señal confiable para ninguna de las dos.',
@@ -9032,8 +9038,8 @@ const TRANSLATIONS = {
     resonance_steadiness_label:'Estabilidad',
     resonance_oscillation_label:'Oscilación',
     resonance_limits_note:'Honestos sobre los límites: "oscilación" aquí es un proxy en vivo (varianza de afinación continua + tasa de cruce por cero), no un análisis de vibrato de grado laboratorio — para eso, ve el Analizador de vibrato, que ejecuta una pasada real de detección de picos en una toma capturada.',
-    custom_title:'🧩 Crea Tu Propio Desafío',
-    custom_sub:'Elige tu rango, enfoque de registro, y ritmo — esto genera una secuencia real de 6 notas y la puntúa con exactamente el mismo motor de captura que Precisión de nota, no una simulación separada.',
+    custom_title:'Crea Tu Propio Desafío',
+    custom_sub:"Elige tu rango, tu registro y tu ritmo: obtienes una secuencia de 6 notas, puntuada igual que Precisión de nota.",
     custom_step1:'1. Rango de notas',
     custom_step2:'2. Enfoque de registro',
     custom_chest_btn:'Pecho — tercio inferior',
@@ -9058,24 +9064,24 @@ const TRANSLATIONS = {
     rhythm_result_label:'Resultado de ritmo',
     rhythm_result_desc:'precisión de ritmo promedio en 8 tiempos reales',
     rhythm_retry_btn:'Intentar de nuevo',
-    eve_title:'👂 Oído → Voz → Oído',
-    eve_sub:'Un bucle real de 5 pasos: escuchar una nota, cantarla de vuelta, ser analizado, escuchar una más difícil, luego cantarla solo de memoria — sin repetición justo antes. Reutiliza exactamente el mismo motor de captura que Precisión de nota en todo momento.',
-    eve_intro_desc:'Cinco pasos reales: Escuchar → Cantar → Analizar → Escuchar de nuevo (más difícil) → Cantar sin ayuda.',
+    eve_title:'Oído → Voz → Oído',
+    eve_sub:"Un ciclo de 5 pasos: oye una nota, cántala, mira tu puntuación, oye una más difícil y cántala de memoria, sin volver a oírla justo antes. Se puntúa igual que Precisión de nota.",
+    eve_intro_desc:"Cinco pasos: Escuchar → Cantar → Analizar → Escuchar de nuevo (más difícil) → Cantar sin ayuda.",
     eve_results_label:"Media de tus dos pasos cantados",
     eve_step2_label:'Paso 2 — Cantar',
     eve_step5_label:'Paso 5 — Sin ayuda',
     eve_retry_btn:'Ejecutarlo de nuevo',
-    fiveways_title:'🎼 Cántalo de 5 Formas',
-    fiveways_sub:'Una nota, cinco contextos reales — original, un semitono arriba, un semitono abajo, luego la misma nota de nuevo con una instrucción de registro deliberada. Límite honesto: esta app mide tu precisión de afinación real en cada ronda; no puede verificar qué registro usaste realmente, solo tú y tu oído pueden.',
-    fiveways_intro_desc:'Cinco rondas reales, la misma nota subyacente, cinco desafíos reales diferentes.',
+    fiveways_title:'Cántalo de 5 Formas',
+    fiveways_sub:"Una nota, cinco formas: tal cual, medio tono arriba, medio tono abajo, y la misma nota en voz de cabeza y en voz mixta. Cada ronda puntúa tu afinación; el registro que usaste lo juzgas tú con tu oído.",
+    fiveways_intro_desc:"Cinco rondas sobre la misma nota, cada una un desafío distinto.",
     fiveways_results_label:"Media de las cinco rondas",
     fiveways_try_again_btn:'Intentar de nuevo',
     onetake_title:'🔥 Desafío de Una Toma',
     onetake_sub:'Un intento real por día. Sin reiniciar una vez que comienzas, sin guía de afinación en vivo mientras cantas, sin corrección. Solo tú, una nota, un resultado honesto.',
     onetake_result_label:'La toma de hoy',
     onetake_expression_note:'La expresión no se muestra — no existe un detector real confiable para ella en ninguna parte de esta app, y este desafío no simulará uno solo para llenar un cuarto número.',
-    vocalpuzzle_title:'🧩 Rompecabezas Vocal',
-    vocalpuzzle_sub:'Una secuencia real de 4 notas de una escala real, con una nota genuinamente incorrecta escondida en ella. Entrena tu oído para detectar un error, no solo igualar una afinación.',
+    vocalpuzzle_title:'Rompecabezas Vocal',
+    vocalpuzzle_sub:"Cuatro notas de una escala, una de ellas incorrecta. Entrena tu oído para detectar un error, no solo para igualar una afinación.",
     vocalpuzzle_intro_desc:'Escucha 4 notas. Una no pertenece. ¿Cuál?',
     vocalpuzzle_note1:'Nota 1',
     vocalpuzzle_note2:'Nota 2',
@@ -9085,8 +9091,8 @@ const TRANSLATIONS = {
     vocalpuzzle_streak_label:'Racha',
     vocalpuzzle_solved_label:'Resueltos',
     vocalpuzzle_next_btn:'Siguiente rompecabezas',
-    hearmistake_title:'👂 ¿Puedes Oír Tu Error?',
-    hearmistake_sub:'Dos versiones reales de la misma nota — una exactamente afinada, una genuinamente desplazada. Elige la correcta, luego cántala de vuelta para probar que puedes reproducirla.',
+    hearmistake_title:'¿Puedes Oír Tu Error?',
+    hearmistake_sub:"Dos versiones de la misma nota: una afinada y otra desplazada. Elige la afinada y luego cántala.",
     hearmistake_intro_desc:'Escucha A, luego B. Una es precisa, una está desplazada.',
     hearmistake_replay_btn:'▶ Repetir A y B',
     hearmistake_reproduce_label:'Ahora reproduce la versión correcta',
@@ -9127,8 +9133,8 @@ const TRANSLATIONS = {
     emotion_dramatic:'😱 Dramático',
     emotionmode_differences_label:'Diferencias reales medidas',
     emotionmode_retry_btn:'Prueba dos intenciones diferentes',
-    vocallab_title:'🔬 Laboratorio Vocal',
-    vocallab_sub:'No un número de rango — tres. Una nota que alcanzas una vez no es lo mismo que una nota en la que puedes confiar. Cada nivel aquí proviene de intentos reales capturados, no de una suposición.',
+    vocallab_title:'Laboratorio Vocal',
+    vocallab_sub:"No un número de rango, sino tres. Una nota que alcanzas una vez no es una nota en la que puedes confiar. Cada nivel sale de tus intentos registrados.",
     passport_title:'🪪 Pasaporte Vocal',
     passport_sub:'Tu identidad a largo plazo, consolidada en un solo lugar. Cada campo aquí se extrae de datos ya rastreados en otro lugar — nada nuevo se mide, nada se inventa para llenar un vacío.',
     passport_identity_label:'Identidad',
@@ -9157,8 +9163,8 @@ const TRANSLATIONS = {
     teacher_sub:'Un seguimiento real de lista de alumnos y tareas — no datos de muestra, una herramienta local real que puedes usar.',
     journey_title:'21 Días para Descubrir Tu Voz',
     journey_sub:'No es una cuenta regresiva de prueba — una línea base estructurada, tres semanas temáticas, y un antes/después honesto al final. Cada número aquí proviene de herramientas ya construidas en otra parte de esta app, secuenciadas en un camino guiado.',
-    key_title:'🎹 Entrenador de Tonalidad',
-    key_sub:'Toca un tono de referencia en cualquier tonalidad, o deja que la app recomiende la mejor tonalidad para tu rango capturado — transposición real, no una suposición.',
+    key_title:'Entrenador de Tonalidad',
+    key_sub:"Toca un tono de referencia en cualquier tonalidad, o deja que la app recomiende la mejor tonalidad para tu rango registrado, transportada para que encaje.",
     dashboard_title:'📊 Panel',
     dashboard_sub:'Tu Perfil de habilidades de 5 puntuaciones, el Plan de hoy, y el motor adaptativo que reajusta tu entrenamiento a partir de resultados reales.',
     boss_choose_desc:'Mismo motor real, puntuación genuinamente diferente por jefe — no solo reskins.',
@@ -9689,7 +9695,7 @@ const TRANSLATIONS = {
     key_play_recommended_btn:'Reproducir tono recomendado',
     key_play_scale_btn:'Reproducir escala mayor',
     key_recommend_btn:'Recomendar un tono',
-    key_reference_desc:'Elige una nota fundamental y transpónla hacia arriba o abajo — útil para calentar en el tono en el que realmente vas a cantar.',
+    key_reference_desc:"Elige una nota fundamental y transpórtala arriba o abajo: útil para calentar en la tonalidad en la que vas a cantar.",
     key_reference_h2:'Reproduce una nota o escala en cualquier tono',
     key_reference_label:'Tono de referencia',
     key_root_note_label:'Nota fundamental',
@@ -9698,7 +9704,7 @@ const TRANSLATIONS = {
     key_song_high_label:'Nota más alta de la canción',
     key_song_low_label:'Nota más baja de la canción',
     key_transpose_label:'Transponer',
-    key_try_ranked_label:'Prueba algunos tonos reales, clasificados por ajuste',
+    key_try_ranked_label:"Prueba algunas tonalidades, ordenadas por ajuste",
     key_use_captured_btn:'Usar mi resultado del Buscador de rango',
     pricing_aboutcheckout_label:'Sobre este pago:',
     pricing_bestvalue_badge:'MEJOR VALOR',
@@ -10002,9 +10008,9 @@ const TRANSLATIONS = {
     karaoke_mission_holdfinal:'Sostén la frase final', karaoke_mission_fullperf:'Interpretación completa — ninguna nota perdida',
     karaoke_mission_nodata:'sin datos', karaoke_mission_missed:'perdida', karaoke_mission_clean:'perfecto', karaoke_mission_notes:'notas',
     karaoke_mission_perfectchorus:'Estribillo perfecto (90 %+)', karaoke_mission_tighttiming:'Ritmo preciso (85 %+ de media)', karaoke_mission_flawless:'Toma impecable (90 %+ afinación)',
-    ear_sub_chord:'Escucha, luego elige la calidad de acorde que oíste — un verdadero ejercicio de identificación auditiva de tríadas',
-    ear_sub_progression:'Escucha una progresión real de 4 acordes, luego elige cuál oíste — es un verdadero entrenamiento auditivo contextual de tonalidad, no solo identificar un acorde',
-    ear_sub_interval:'Escucha, luego elige el intervalo que oíste — un verdadero ejercicio de identificación auditiva, no de repetir cantando',
+    ear_sub_chord:"Escucha y elige la calidad de la tríada que oíste.",
+    ear_sub_progression:"Escucha una progresión de 4 acordes y elige cuál oíste: entrenamiento auditivo en el contexto de una tonalidad, no acordes sueltos.",
+    ear_sub_interval:"Escucha y elige el intervalo que oíste. Un ejercicio de oído: no cantas.",
     ear_play_chord:'▶ Reproducir acorde', ear_play_progression:'▶ Reproducir progresión', ear_play_interval:'▶ Reproducir intervalo',
     ear_correct:'¡Correcto!', ear_thatwas_template:'Eso era {name}.', ear_thatwas_a:'un ',
     rhythm_running:'En curso…', rhythm_beat_label:'Tiempo', rhythm_missed:'Perdido',
@@ -10042,7 +10048,7 @@ const TRANSLATIONS = {
     reweight_wasfocus_p1:'fue', reweight_wasfocus_p2:'del enfoque de tu última sesión — hoy es',
     reweight_wasfocus_p3:'según el cambio real de tus puntuaciones.',
     reweight_comparedto_p1:'Comparado con tu última sesión', reweight_comparedto_p2:'la ponderación de hoy ha cambiado ligeramente según tus puntuaciones reales.',
-    reweight_firstweighting:'Esta es tu primera ponderación calculada — la de mañana ya reflejará tus resultados reales de hoy.',
+    reweight_firstweighting:"Esta es tu primera ponderación; la de mañana ya reflejará tus resultados de hoy.",
     timebudget_beginner:'Presupuesto de hoy (ref.): calentamiento 5 · respiración 5 · afinación 5 · escalas 5 · registros 5 · intervalos 3 · agilidad 2–3 · sostenido 3 · canción 5–10 min — total 30–40 min',
     timebudget_intermediate:'Presupuesto de hoy (ref.): calentamiento 5–7 · respiración 5 · afinación 8 · escalas 8 · registros 8 · intervalos 5 · agilidad 5 · sostenido 5 · vibrato 3 · canción 10–15 min — total 50–65 min',
     timebudget_professional:'Presupuesto de hoy (ref.): calentamiento 7–10 · respiración 5–8 · afinación 10 · escalas 10 · registros 10 · intervalos 8 · agilidad 8 · sostenido 5 · vibrato 5 · canción 15–20 min — total 70–90 min',
@@ -10090,10 +10096,10 @@ const TRANSLATIONS = {
     vocallab_signin:'Inicia sesión para empezar a construir tus datos reales de Laboratorio Vocal.',
     vocallab_needrangefinder:'Ejecuta el Buscador de rango al menos una vez para establecer tu rango extendido — todo lo demás se construye desde ahí.',
     vocallab_extended:'Extendido', vocallab_extended_sub:'Lo que puedes alcanzar físicamente',
-    vocallab_comfortable:'Cómodo', vocallab_comfortable_sub:'Cantado al menos una vez con precisión real',
-    vocallab_reliable:'Fiable', vocallab_reliable_sub:'3+ intentos reales, consistentemente preciso',
+    vocallab_comfortable:'Cómodo', vocallab_comfortable_sub:"Cantada con precisión al menos una vez",
+    vocallab_reliable:'Fiable', vocallab_reliable_sub:"3+ intentos, precisos de forma constante",
     vocallab_notenoughdata:'aún no hay suficientes datos',
-    vocallab_notecount_suffix:'notas distintas registradas de intentos reales de Precisión de nota, Desafío personalizado, Combate de jefe y Grieta Vocal.',
+    vocallab_notecount_suffix:"notas distintas registradas de tus intentos de Precisión de nota, Desafío personalizado, Combate de jefe y Grieta Vocal.",
     passport_signin:'Inicia sesión para empezar a construir tu verdadero Pasaporte Vocal.',
     passport_needrangefinder:'Ejecuta primero el Buscador de rango y algunos ejercicios reales — tu Pasaporte se construye a partir de esos mismos datos reales.',
     passport_notenoughdata:'Aún no hay suficientes datos', passport_singfulltake:'Canta una toma completa en Karaoke Coach para fijar esto',
@@ -10124,7 +10130,7 @@ const TRANSLATIONS = {
     genre_pop_vibrato:'Las voces pop suelen usar un vibrato más cerrado y escaso que los estilos clásicos.',
     genre_rock_name:'Rock', genre_rock_sub:'poder, dominante de pecho',
     genre_rock_tip1:'El belting dominante de pecho es común, pero cuidado con la tensión — progresa gradualmente.',
-    genre_rock_tip2:'Evita el vocal fry o los efectos de distorsión hasta que los fundamentos sean sólidos; conllevan un riesgo real de lesión si se fuerzan.',
+    genre_rock_tip2:"Evita el vocal fry y los efectos de distorsión hasta que tus bases sean sólidas; forzados, pueden lesionar tu voz.",
     genre_rock_tip3:'El apoyo respiratorio importa más a alto volumen, no menos.',
     genre_rock_vibrato:'Las voces rock suelen usar poco o nada de vibrato — un tono recto y directo es típico.',
     genre_gospel_name:'Gospel', genre_gospel_sub:'melismas, agilidad',
@@ -10143,24 +10149,24 @@ const TRANSLATIONS = {
     genre_mt_tip3:'El contraste emocional/dinámico entre estrofas y estribillos suele ser el punto central.',
     genre_mt_vibrato:'El uso del vibrato varía mucho según el papel y la época — moderado y flexible es una opción segura por defecto.',
     genre_carnatic_name:'Carnático / Hindustani', genre_carnatic_sub:'solo aproximación',
-    genre_carnatic_tip1:'Limitación honesta: esta app está construida sobre temperamento igual de 12 tonos y no modela gamakas (inflexiones de tono ornamentadas) ni shrutis microtonales.',
-    genre_carnatic_tip2:'Los calentamientos pentatónicos aquí son la aproximación aproximada más cercana disponible, no un entrenador real de raga.',
+    genre_carnatic_tip1:"Un límite a tener en cuenta: esta app se basa en el temperamento igual de 12 tonos y no modela los gamakas (inflexiones de tono ornamentadas) ni los shrutis microtonales.",
+    genre_carnatic_tip2:"Los calentamientos pentatónicos de aquí son la aproximación más cercana disponible, no un entrenador de raga.",
     genre_carnatic_tip3:'Para un entrenamiento serio de Carnático/Hindustani, un profesor dedicado o una herramienta especializada te servirá mucho mejor que esta app en su forma actual.',
     genre_carnatic_vibrato:'El análisis de vibrato de esta app no está diseñado para la ornamentación estilo gamaka y puede no leerla de forma significativa.',
     genre_metal_name:'Metal', genre_metal_sub:'poder, técnica extendida',
-    genre_metal_tip1:'Los gritos y growls usan técnica de falsas cuerdas/distorsión, no belting de pecho crudo — forzar el volumen a través de los pliegues vocales verdaderos aquí es un riesgo real de lesión.',
+    genre_metal_tip1:"Los gritos y growls usan técnica de falsas cuerdas / distorsión, no belting de pecho crudo: forzar el volumen a través de las propias cuerdas vocales te expone a una lesión.",
     genre_metal_tip2:'Calienta a fondo y durante más tiempo que en otros géneros antes de cualquier técnica distorsionada; empezar en frío con vocales extremas es la mayor causa de daño vocal en este estilo.',
     genre_metal_tip3:'El apoyo respiratorio y el control del flujo de aire importan más aquí, no menos — la distorsión necesita un flujo de aire estable y controlado debajo.',
     genre_metal_vibrato:'El vibrato rara vez es un foco en las voces metal — la potencia sostenida y el control bajo distorsión importan mucho más que la oscilación.',
     genre_jazz_name:'Jazz', genre_jazz_sub:'fraseo, blue notes, control',
     genre_jazz_tip1:'El fraseo se sitúa deliberadamente detrás o alrededor del pulso en lugar de fijo a él — la libertad rítmica es parte del estilo, no un error de tiempo.',
-    genre_jazz_tip2:'Las blue notes (3ª, 5ª y 7ª bemolizadas) son parte real e intencional del vocabulario — las opciones de escala Blues/Jazz en Ejercicios reflejan esto.',
+    genre_jazz_tip2:"Las blue notes (3ª, 5ª y 7ª bemolizadas) son una parte intencional del vocabulario; las escalas Blues y Jazz de Ejercicios lo reflejan.",
     genre_jazz_tip3:'El tono tiende a favorecer el control y el matiz sobre el volumen — el rango dinámico y el fraseo pesan más que la fuerza bruta.',
     genre_jazz_vibrato:'El vibrato jazz suele ser sutil y usado con moderación para la expresión al final de las frases, no sostenido a lo largo de una nota.',
     genre_arabic_name:'Árabe', genre_arabic_sub:'basado en maqam, solo aproximación',
-    genre_arabic_tip1:'Limitación honesta: como el carnático/hindustani, el temperamento igual de 12 tonos de esta app no modela los cuartos de tono centrales de los sistemas maqam.',
-    genre_arabic_tip2:'El canto maqam real está muy cargado de ornamentación de formas que la detección de afinación de esta app no está diseñada para leer o puntuar de forma significativa.',
-    genre_arabic_tip3:'Trata cualquier retroalimentación aquí como una aproximación aproximada — un oído entrenado en maqam es la verdadera autoridad, no esta app.',
+    genre_arabic_tip1:"Un límite a tener en cuenta: como en el carnático/hindustani, el temperamento igual de 12 tonos de esta app no modela los cuartos de tono centrales de los sistemas maqam.",
+    genre_arabic_tip2:"El canto maqam está muy cargado de ornamentación de formas que la detección de afinación de esta app no está hecha para leer o puntuar de forma útil.",
+    genre_arabic_tip3:"Toma cualquier comentario de aquí como una aproximación: la autoridad es un oído formado en maqam, no esta app.",
     genre_arabic_vibrato:'El análisis de vibrato de esta app no está ajustado para los estilos de ornamentación usados en la música vocal árabe.',
     genre_reggae_name:'Reggae', genre_reggae_sub:'fraseo a contratiempo, tono relajado',
     genre_reggae_tip1:'El fraseo se sitúa deliberadamente en el contratiempo (el "skank") — la colocación rítmica importa tanto como la afinación aquí.',
@@ -10168,13 +10174,13 @@ const TRANSLATIONS = {
     genre_reggae_tip3:'Un apoyo respiratorio costal/intercostal profundo sostiene frases rítmicas largas y relajadas tipo cantilena.',
     genre_reggae_vibrato:'El vibrato suele ser ligero — la sensación rítmica lleva más de la expresión que el tono sostenido.',
     genre_celtic_name:'Celta', genre_celtic_sub:'ornamentación, melodía modal',
-    genre_celtic_tip1:'La ornamentación intensa — notas de adorno, floreos, deslizamientos — es una característica definitoria, no una decoración sobre la melodía "real".',
+    genre_celtic_tip1:"La ornamentación intensa (notas de adorno, floreos, deslizamientos) es un rasgo definitorio, no una decoración sobre la melodía.",
     genre_celtic_tip2:'Las melodías se inclinan hacia lo modal (dórico, menor natural, pentatónico) en lugar de estrictamente mayor/menor.',
     genre_celtic_tip3:'El canto estilo sean-nós usa un ritmo libre, rubato — el tiempo fijo no siempre es el objetivo.',
     genre_celtic_vibrato:'A menudo un tono recto orientado al ornamento — las notas de adorno y deslizamientos llevan la expresión en lugar del vibrato.',
     genre_flamenco_name:'Flamenco', genre_flamenco_sub:'intensidad cruda, color frigio',
-    genre_flamenco_tip1:'El color de modo frigio, cadencia andaluza, es central — sigue estando totalmente dentro del temperamento igual de 12 tonos, a diferencia de la microtonalidad carnática/árabe. Los preajustes de escala de esta app no incluyen una opción frigia literal, así que "Menor" es la aproximación más cercana disponible para calentamientos, no una coincidencia exacta.',
-    genre_flamenco_tip2:'La calidad vocal rasgada e intensa (voz rota) es estilística — pero forzar el rasgado antes de que tu técnica sea sólida conlleva un riesgo real de tensión, la misma precaución que Rock/Metal.',
+    genre_flamenco_tip1:"El color de modo frigio, cadencia andaluza, es central — sigue estando totalmente dentro del temperamento igual de 12 tonos, a diferencia de la microtonalidad carnática/árabe. Los preajustes de escala de esta app no incluyen una opción frigia literal, así que \"Menor\" es la aproximación más cercana disponible para calentamientos, no una coincidencia exacta.",
+    genre_flamenco_tip2:"La calidad vocal rasgada e intensa (voz rota) es estilística, pero forzar el rasgado antes de que tu técnica sea sólida te expone a tensiones: la misma precaución que en Rock/Metal.",
     genre_flamenco_tip3:'Explosiones diafragmáticas explosivas potencian los dramáticos gritos "¡Ay!" — el trabajo de apoyo respiratorio se transfiere directamente aquí.',
     genre_flamenco_vibrato:'La intensidad y el rasgado llevan más peso expresivo aquí que el vibrato — esta app no puntúa el rasgado/aspereza.',
     genre_bossanova_name:'Bossa Nova', genre_bossanova_sub:'suave, sincopado, íntimo',
@@ -10250,6 +10256,7 @@ const TRANSLATIONS = {
     breath_result_label:"Segundos sostenidos",
     breath_score_label:"Puntuación",
     breath_measure:"El cronómetro corre desde que empiezas. Se detiene cuando pulsas parar, o solo tras 0,6 segundos de silencio una vez que has cantado un momento. El objetivo es de 12, 18 o 24 segundos en {beg}, {int} o {pro}. La regularidad es 100 menos 140 veces cuánto varía tu volumen (su desviación típica sobre su media) mientras cantas. La puntuación es un 60 % el tiempo sostenido frente al objetivo (hasta 100) y un 40 % la regularidad. Una nota de menos de 2 segundos no se registra.",
+    puzzle_wrong_note:"La nota incorrecta era la nota {n} ({note}).",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10320,24 +10327,24 @@ const TRANSLATIONS = {
     tuner_result_label:"Ortalama kararlılık", pm_result_label:"Perde doğruluğu", pm_live_on:"Tam notada", pm_live_flat:"{n} sent pes", pm_live_sharp:"{n} sent diyez", measure_summary:"Nasıl ölçülüyor", tuner_measure:"Kararlılık, perdenizin son 30 ölçümde (yaklaşık yarım saniye) sent cinsinden ne kadar dalgalandığının üç katının 100'den çıkarılmasıyla bulunur. Bu sayı, şarkı söylediğiniz sürenin tamamının ortalamasıdır. Notaya 6 sent yaklaştığınızda halka kilitlenir.", pm_measure:"Doğruluk, 100'den notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
     tuner_pitch_label:'Perde', tuner_stability_label:'Kararlılık', tuner_freq_label:'Frekans',
     tuner_hint:'Mikrofonunuzu yerel olarak tarayıcıda kullanır — hiçbir şey yüklenmez. Kulaklıkla veya sessiz bir odada en iyi sonucu verir.',
-    range_title:'📏 Ses Aralığı Bulucu', range_sub:'En düşük rahat notanızı, ardından en yüksek notanızı söyleyin — gerçek bir ses tipi sınıflandırması ve paylaşılabilir bir sonuç kartı için yaklaşık 30 saniye.',
+    range_title:'Ses Aralığı Bulucu', range_sub:"En pes rahat notanızı, sonra en tiz notanızı söyleyin. Aralığınız, bir ses tipi ve paylaşılabilir bir sonuç kartı için yaklaşık 30 saniye.",
     range_intro_step:'Vokal Ses Aralığı Bulucu', range_intro_h2:'Doğal ses aralığınızı bulun', range_intro_p:'Önce en düşük rahat notanızı, sonra en yüksek notanızı söylemenizi isteyeceğiz. Yaklaşık 30 saniye sürer.',
     range_label_bass:'A2 · pes bas', range_label_mid:'C4 · orta', range_label_soprano:'C6 · tiz soprano', range_begin_btn:'Başla',
     range_step1:'2 Adımdan 1.', range_low_h2:'En düşük rahat notanızı söyleyin', range_low_p:'Bir saniye sabit tutun, ardından yakala düğmesine dokunun.', range_capture_low_btn:'En düşük notayı yakala',
     range_step2:'2 Adımdan 2.', range_high_h2:'Şimdi en yüksek rahat notanız', range_high_p:'Zorlamayın — rahat olsun, maksimum değil.', range_capture_high_btn:'En yüksek notayı yakala',
     range_result_label:'Sonucunuz', range_share_note:'Bu kart paylaşılmak üzere tasarlandı — bir Pro hesap bu sayının her hafta nasıl büyüdüğünü takip eder.',
     range_share_btn:'Bu sonucu paylaş', range_restart_btn:'Tekrar çalıştır',
-    warmup_title:'🔥 Akıllı Isınma', warmup_sub:'Gerçek sinyallerle şekillenen kısa bir ısınma — günün saati, pratik aranız ve en zayıf Yetenek Profili kategoriniz, genel bir rutin değil.',
+    warmup_title:'Akıllı Isınma', warmup_sub:"Günün saatine, son pratiğinizden bu yana geçen süreye ve Yetenek Profilinizdeki en zayıf kategoriye göre şekillenen kısa bir ısınma.",
     warmup_step1_title:'💋 1. Dudak titretme sireni', warmup_play_btn:'Çal', warmup_step2_title:'🎵 2. Mırıldanma sireni', warmup_step2_sub:'Aynı kayma, "mmm" mırıldanarak',
     warmup_step3_title:'🎹 3. Yumuşak 5 notalı gam', warmup_complete_btn:'Isınmayı tamamlandı olarak işaretle',
-    exercises_title:'🎯 Günlük Egzersizler', exercises_sub:'Perde ve kulağı eğitmenin dört gerçek yolu — her biri canlı mikrofon girdinizi, oktavdan bağımsız olarak, Başlangıç/Orta/Profesyonel seviyelerinde puanlar.',
+    exercises_title:'Günlük Egzersizler', exercises_sub:"Perdeyi ve kulağı çalıştırmanın dört yolu. Her biri sesinizi canlı olarak, hangi oktavda olursa olsun, Başlangıç, Orta veya Profesyonel seviyede puanlar.",
     exercises_focus_label:"Bugünün Önerilen Odağı", exercises_focus_tag:'UYARLANABİLİR — HER GÜN YENİDEN HESAPLANIR',
-    exercises_focus_desc:'Sabit bir haftalık plan değil — bu, bu sekmeyi her açtığınızda gerçek Yetenek Profilinizden yeniden hesaplanır. Zayıf kategoriler bugün daha fazla zaman alır; verisi olmayan kategoriler ilk puanı oluşturabilmesi için adil bir başlangıç payı alır.',
+    exercises_focus_desc:"Sabit bir haftalık plan değil: bu sekmeyi her açtığınızda Yetenek Profilinizden yeniden hesaplanır. Zayıf kategoriler bugünün zamanından daha fazla pay alır; henüz verisi olmayan kategoriler ilk puanlarını alabilmeleri için adil bir başlangıç payı alır.",
     exercises_level_label:'Seviye — sadece "daha zor" değil, farklı bir yeteneği eğitir:',
     exercises_level_beginner:'Başlangıç', exercises_level_intermediate:'Orta', exercises_level_professional:'Profesyonel',
     exercises_level_beginner_sub:'kontrol ve perde', exercises_level_intermediate_sub:'teknik ve esneklik', exercises_level_professional_sub:'hassasiyet ve ifade',
-    exercises_difficulty_label:'Bu seviyenin gerçek zorluk dağılımı',
-    exercises_difficulty_desc:'Tek bir "Kolay/Orta/Zor" etiketi değil — mevcut seviyenizi yönlendiren gerçek parametrelerden doğrudan alınan beş gerçek boyut, ayrı bir derecelendirme sistemi değil.',
+    exercises_difficulty_label:"Bu seviyenin sizden istedikleri",
+    exercises_difficulty_desc:"Tek bir Kolay / Orta / Zor etiketi değil: her biri mevcut seviyenizin kullandığı ayarlardan alınan beş boyut, ayrı bir derecelendirme değil.",
     exercises_tab_pitch:'Nota Eşleştirme', exercises_tab_interval:'Aralık Eşleştirme', exercises_tab_scale:'Gam Çalışması', exercises_tab_ear:'Kulak Eğitimi',
     register_title:'🌉 Register Köprüsü',
     beta_heuristic_tag:'BETA SEZGİSEL',
@@ -10351,8 +10358,8 @@ const TRANSLATIONS = {
     registerdrills_head_btn:'Baş Sesi',
     registerdrills_results_label:'Gerçek sonuçlar',
     registerdrills_retry_btn:'Tekrar dene',
-    breath_title:'💨 Nefes Kontrolü',
-    breath_sub:'"Ah" sesini olabildiğince uzun ve sabit tutun. Gerçek sürdürme süresini ve ses düzeyi tutarlılığını ölçer — zamanlama, nefesiniz bittiğinde otomatik olarak sona erer (sürdürülen sessizlik olarak algılanır), tahminle değil.',
+    breath_title:'Nefes Kontrolü',
+    breath_sub:"Bir \"Ah\" sesini olabildiğince uzun ve sabit tutun. Ne kadar tuttuğunuzu ve ses yüksekliğinizin ne kadar dengeli kaldığını ölçer; nefesiniz bitip sustuğunuzda süre kendiliğinden durur.",
     breath_duration_label:'Süre',
     breath_consistency_label:'Tutarlılık',
     // Voice Quality (phase 1)
@@ -10400,8 +10407,8 @@ const TRANSLATIONS = {
     emotion_sub:'Lead hattını söyleyin ve Perde ile dinamik kontrastın ayrı ayrı puanlanmasını sağlayın — "teknik olarak mükemmel, daha fazla duyguya ihtiyacı var" gerçek hale getirildi, bir mikrofonun gerçekten yapamayacağı ifade/nefes analizi değil.',
     emotion_pitch_label:'Perde',
     emotion_expression_label:'İfade',
-    genre_title:'🎨 Tür Koçu',
-    genre_sub:'Bir stil seçin — Isınma ve Vibrato için gerçek ipuçları ve gerçek parametre varsayılanları, ses ile algılanmaz. Siz seçersiniz; uygulama tahmin etmez.',
+    genre_title:'Tür Koçu',
+    genre_sub:"Bir stil seçin: Isınma ve Vibrato için ipuçları ve varsayılan ayarlar. Siz seçersiniz; uygulama bunu sesinizden algılamaz.",
     genre_apply_btn:'Türüm olarak ayarla',
     karaoke_title:'🎤 Karaoke Koçu',
     karaoke_sub:'Notalar, onlara ulaşmanız gerekmeden önce size doğru kayar — mikrofonunuzdan gerçek Perde ve Zamanlama puanlaması. İfade ve telaffuz dürüstçe puanlanmadan kalır; ikisi için de güvenilir bir sinyal yoktur.',
@@ -10422,8 +10429,8 @@ const TRANSLATIONS = {
     resonance_steadiness_label:'Sabitlik',
     resonance_oscillation_label:'Salınım',
     resonance_limits_note:'Sınırlar konusunda dürüz: buradaki "salınım" canlı bir vekildir (kayan perde varyansı + sıfır geçiş oranı), laboratuvar kalitesinde vibrato analizi değil — bunun için, yakalanmış bir alım üzerinde gerçek bir tepe-algılama geçişi çalıştıran Vibrato Analizörüne bakın.',
-    custom_title:'🧩 Kendi Meydan Okumanı Oluştur',
-    custom_sub:'Aralığınızı, register odağınızı ve hızınızı seçin — bu gerçek bir 6 nota dizisi oluşturur ve onu Nota Eşleştirme ile tamamen aynı yakalama motoruyla puanlar, ayrı bir simülasyon değil.',
+    custom_title:'Kendi Meydan Okumanı Oluştur',
+    custom_sub:"Aralığınızı, register odağınızı ve temponuzu seçin: Nota Eşleştirme ile aynı şekilde puanlanan 6 notalık bir dizi alırsınız.",
     custom_step1:'1. Nota aralığı',
     custom_step2:'2. Register odağı',
     custom_chest_btn:'Göğüs — alt üçte bir',
@@ -10448,24 +10455,24 @@ const TRANSLATIONS = {
     rhythm_result_label:'Zamanlama sonucu',
     rhythm_result_desc:'8 gerçek vuruş boyunca ortalama zamanlama doğruluğu',
     rhythm_retry_btn:'Tekrar dene',
-    eve_title:'👂 Kulak → Ses → Kulak',
-    eve_sub:'Gerçek 5 adımlı bir döngü: bir nota duyun, geri söyleyin, analiz edilin, daha zor bir tane duyun, ardından onu sadece hafızadan söyleyin — hemen öncesinde tekrar yok. Boyunca Nota Eşleştirme ile tamamen aynı yakalama motorunu yeniden kullanır.',
-    eve_intro_desc:'Beş gerçek adım: Duy → Söyle → Analiz Et → Tekrar Duy (daha zor) → Yardımsız Söyle.',
+    eve_title:'Kulak → Ses → Kulak',
+    eve_sub:"5 adımlı bir döngü: bir nota duyun, geri söyleyin, puanınızı görün, daha zor bir nota duyun, sonra onu hemen öncesinde tekrar dinlemeden hafızadan söyleyin. Nota Eşleştirme ile aynı şekilde puanlanır.",
+    eve_intro_desc:"Beş adım: Duy → Söyle → Analiz Et → Tekrar Duy (daha zor) → Yardımsız Söyle.",
     eve_results_label:"Söylediğiniz iki adımın ortalaması",
     eve_step2_label:'Adım 2 — Söyle',
     eve_step5_label:'Adım 5 — Yardımsız',
     eve_retry_btn:'Tekrar çalıştır',
-    fiveways_title:'🎼 5 Şekilde Söyle',
-    fiveways_sub:'Bir nota, beş gerçek bağlam — orijinal, bir yarım ton yukarı, bir yarım ton aşağı, ardından bilinçli bir register talimatıyla aynı nota tekrar. Dürüst sınır: bu uygulama her turda gerçek perde doğruluğunuzu ölçer; gerçekte hangi register\'ı kullandığınızı doğrulayamaz, sadece siz ve kulağınız bilebilir.',
-    fiveways_intro_desc:'Beş gerçek tur, aynı temel nota, beş farklı gerçek meydan okuma.',
+    fiveways_title:'5 Şekilde Söyle',
+    fiveways_sub:"Bir nota, beş şekilde: olduğu gibi, bir yarım ses yukarı, bir yarım ses aşağı, sonra aynı nota kafa sesi ve karışık sesle. Her tur perdenizi puanlar; hangi registeri kullandığınıza siz ve kulağınız karar verirsiniz.",
+    fiveways_intro_desc:"Aynı nota üzerinde, her biri farklı bir zorluk olan beş tur.",
     fiveways_results_label:"Beş turun ortalaması",
     fiveways_try_again_btn:'Tekrar dene',
     onetake_title:'🔥 Tek Çekim Meydan Okuması',
     onetake_sub:'Günde bir gerçek deneme. Başladıktan sonra yeniden başlatma yok, şarkı söylerken canlı perde rehberi yok, düzeltme yok. Sadece siz, bir nota, bir dürüst sonuç.',
     onetake_result_label:'Bugünün tek çekimi',
     onetake_expression_note:'İfade gösterilmez — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur ve bu meydan okuma dördüncü bir sayıyı doldurmak için birini sahtelemeyecektir.',
-    vocalpuzzle_title:'🧩 Vokal Bulmaca',
-    vocalpuzzle_sub:'Gerçek bir gam\'dan gerçek bir 4 nota dizisi, içinde gerçekten yanlış bir nota gizlenmiş. Kulağınızı sadece bir perdeyi eşleştirmeye değil, bir hatayı yakalamaya eğitir.',
+    vocalpuzzle_title:'Vokal Bulmaca',
+    vocalpuzzle_sub:"Bir gamdan dört nota, biri yanlış. Kulağınızı yalnızca bir perdeyi eşleştirmeye değil, bir hatayı yakalamaya çalıştırır.",
     vocalpuzzle_intro_desc:'4 nota dinleyin. Biri uymuyor. Hangisi?',
     vocalpuzzle_note1:'Nota 1',
     vocalpuzzle_note2:'Nota 2',
@@ -10475,8 +10482,8 @@ const TRANSLATIONS = {
     vocalpuzzle_streak_label:'Seri',
     vocalpuzzle_solved_label:'Çözülen',
     vocalpuzzle_next_btn:'Sonraki bulmaca',
-    hearmistake_title:'👂 Hatanı Duyabiliyor musun?',
-    hearmistake_sub:'Aynı notanın iki gerçek versiyonu — biri tam perdede, biri gerçekten kaymış. Doğru olanı seçin, ardından onu yeniden üretebildiğinizi kanıtlamak için geri söyleyin.',
+    hearmistake_title:'Hatanı Duyabiliyor musun?',
+    hearmistake_sub:"Aynı notanın iki hâli: biri perdesinde, biri kaydırılmış. Doğru olanı seçin, sonra onu geri söyleyin.",
     hearmistake_intro_desc:'A\'yı, ardından B\'yi dinleyin. Biri doğru, biri kaymış.',
     hearmistake_replay_btn:'▶ A ve B\'yi tekrar çal',
     hearmistake_reproduce_label:'Şimdi doğru versiyonu yeniden üretin',
@@ -10517,8 +10524,8 @@ const TRANSLATIONS = {
     emotion_dramatic:'😱 Dramatik',
     emotionmode_differences_label:'Gerçek, ölçülen farklar',
     emotionmode_retry_btn:'İki farklı niyet deneyin',
-    vocallab_title:'🔬 Vokal Laboratuvarı',
-    vocallab_sub:'Bir aralık sayısı değil — üç. Bir kez vurduğunuz bir nota, güvenebileceğiniz bir nota ile aynı değildir. Buradaki her katman gerçek yakalanan denemelerden gelir, tahminden değil.',
+    vocallab_title:'Vokal Laboratuvarı',
+    vocallab_sub:"Tek bir aralık sayısı değil, üç. Bir kez ulaştığınız nota, güvenebileceğiniz bir nota değildir. Her katman kaydedilen denemelerinizden gelir.",
     passport_title:'🪪 Vokal Pasaportu',
     passport_sub:'Uzun vadeli kimliğiniz, tek bir yerde birleştirilmiş. Buradaki her alan başka yerde zaten izlenen verilerden alınır — yeni hiçbir şey ölçülmez, bir boşluğu doldurmak için hiçbir şey uydurulmaz.',
     passport_identity_label:'Kimlik',
@@ -10547,8 +10554,8 @@ const TRANSLATIONS = {
     teacher_sub:'Gerçek bir öğrenci listesi ve ödev takipçisi — örnek veri değil, kullanabileceğiniz gerçek bir yerel araç.',
     journey_title:'Sesinizi Keşfetmek İçin 21 Gün',
     journey_sub:'Bir deneme geri sayımı değil — yapılandırılmış bir başlangıç noktası, üç temalı hafta ve sonunda dürüst bir öncesi/sonrası. Buradaki her sayı, uygulamanın başka yerinde zaten oluşturulmuş araçlardan gelir, tek bir rehberli yola dizilmiştir.',
-    key_title:'🎹 Tonalite Antrenörü',
-    key_sub:'Herhangi bir tonda bir referans ses çalın veya uygulamanın yakalanan aralığınız için en iyi tonu önermesine izin verin — gerçek transpozisyon, tahmin değil.',
+    key_title:'Tonalite Antrenörü',
+    key_sub:"Herhangi bir tonda referans ses çalın ya da uygulamanın kaydedilen aralığınıza en uygun tonu, ona göre transpoze ederek önermesine izin verin.",
     dashboard_title:'📊 Panel',
     dashboard_sub:'5 puanlı Yetenek Profiliniz, Bugünün Planı ve gerçek sonuçlardan antrenmanınızı yeniden ağırlıklandıran uyarlanabilir motor.',
     boss_choose_desc:'Aynı gerçek motor, boss başına gerçekten farklı puanlama — yeniden kaplamalar değil.',
@@ -11079,7 +11086,7 @@ const TRANSLATIONS = {
     key_play_recommended_btn:'Önerilen tonu çal',
     key_play_scale_btn:'Majör gam çal',
     key_recommend_btn:'Bir ton öner',
-    key_reference_desc:'Bir kök nota seçin ve yukarı veya aşağı transpoze edin — gerçekten söyleyeceğiniz tonda ısınmak için kullanışlıdır.',
+    key_reference_desc:"Bir kök nota seçin ve yukarı ya da aşağı transpoze edin: söyleyeceğiniz tonda ısınmak için kullanışlıdır.",
     key_reference_h2:'Herhangi bir tonda bir nota veya gam çalın',
     key_reference_label:'Referans Perde',
     key_root_note_label:'Kök nota',
@@ -11088,7 +11095,7 @@ const TRANSLATIONS = {
     key_song_high_label:'Şarkının en yüksek notası',
     key_song_low_label:'Şarkının en düşük notası',
     key_transpose_label:'Transpoze et',
-    key_try_ranked_label:'Uyuma göre sıralanmış birkaç gerçek ton deneyin',
+    key_try_ranked_label:"Uyuma göre sıralanmış birkaç ton deneyin",
     key_use_captured_btn:'Ses Aralığı Bulucu sonucumu kullan',
     pricing_aboutcheckout_label:'Bu ödeme hakkında:',
     pricing_bestvalue_badge:'EN İYİ DEĞER',
@@ -11392,9 +11399,9 @@ const TRANSLATIONS = {
     karaoke_mission_holdfinal:'Son cümleyi tut', karaoke_mission_fullperf:'Tam performans — hiçbir nota kaçırılmadı',
     karaoke_mission_nodata:'veri yok', karaoke_mission_missed:'kaçırıldı', karaoke_mission_clean:'kusursuz', karaoke_mission_notes:'nota',
     karaoke_mission_perfectchorus:'Mükemmel nakarat (%90+)', karaoke_mission_tighttiming:'Sıkı zamanlama (%85+ ortalama)', karaoke_mission_flawless:'Kusursuz performans (%90+ perde)',
-    ear_sub_chord:'Dinleyin, sonra duyduğunuz akor tayfını seçin — gerçek bir triyad tayfı kulaktan tanıma alıştırması',
-    ear_sub_progression:'Gerçek bir 4 akorluk ilerlemeyi dinleyin, sonra hangisini duyduğunuzu seçin — bu tek akor tanımlamaktan çok, gerçek bir ton bağlamlı kulak eğitimidir',
-    ear_sub_interval:'Dinleyin, sonra duyduğunuz aralığı seçin — gerçek bir kulaktan tanıma alıştırması, şarkı söyleyerek tekrar değil',
+    ear_sub_chord:"Dinleyin, sonra duyduğunuz üçlü akorun türünü seçin.",
+    ear_sub_progression:"4 akorluk bir ilerlemeyi dinleyin, sonra hangisini duyduğunuzu seçin: tek tek akorlar değil, bir ton bağlamında kulak eğitimi.",
+    ear_sub_interval:"Dinleyin, sonra duyduğunuz aralığı seçin. Bir kulak alıştırması: şarkı söylemezsiniz.",
     ear_play_chord:'▶ Akoru çal', ear_play_progression:'▶ İlerlemeyi çal', ear_play_interval:'▶ Aralığı çal',
     ear_correct:'Doğru!', ear_thatwas_template:'Bu {name} idi.', ear_thatwas_a:'bir ',
     rhythm_running:'Çalışıyor…', rhythm_beat_label:'Vuruş', rhythm_missed:'Kaçırıldı',
@@ -11432,7 +11439,7 @@ const TRANSLATIONS = {
     reweight_wasfocus_p1:'son oturumunuzun odağının', reweight_wasfocus_p2:'kadarıydı — bugün',
     reweight_wasfocus_p3:'gerçek puan değişikliğinize dayanıyor.',
     reweight_comparedto_p1:'Son oturumunuzla karşılaştırıldığında', reweight_comparedto_p2:'bugünün ağırlıklandırması gerçek puanlarınız değiştikçe biraz kaydı.',
-    reweight_firstweighting:'Bu, hesaplanan ilk ağırlıklandırmanız — yarınki, bugünün gerçek sonuçlarını zaten yansıtacak.',
+    reweight_firstweighting:"Bu ilk ağırlıklandırmanız; yarınki bugünün sonuçlarını zaten yansıtacak.",
     timebudget_beginner:'Bugünün bütçesi (ref): ısınma 5 · nefes 5 · perde 5 · gamlar 5 · registerlar 5 · aralıklar 3 · çeviklik 2–3 · sürdürme 3 · şarkı 5–10 dk — toplam 30–40 dk',
     timebudget_intermediate:'Bugünün bütçesi (ref): ısınma 5–7 · nefes 5 · perde 8 · gamlar 8 · registerlar 8 · aralıklar 5 · çeviklik 5 · sürdürme 5 · vibrato 3 · şarkı 10–15 dk — toplam 50–65 dk',
     timebudget_professional:'Bugünün bütçesi (ref): ısınma 7–10 · nefes 5–8 · perde 10 · gamlar 10 · registerlar 10 · aralıklar 8 · çeviklik 8 · sürdürme 5 · vibrato 5 · şarkı 15–20 dk — toplam 70–90 dk',
@@ -11480,10 +11487,10 @@ const TRANSLATIONS = {
     vocallab_signin:'Gerçek Vokal Laboratuvarı verilerinizi oluşturmaya başlamak için oturum açın.',
     vocallab_needrangefinder:'Genişletilmiş ses aralığınızı belirlemek için Ses Aralığı Bulucu\'yu en az bir kez çalıştırın — diğer her şey buradan inşa edilir.',
     vocallab_extended:'Genişletilmiş', vocallab_extended_sub:'Fiziksel olarak ulaşabildikleriniz',
-    vocallab_comfortable:'Rahat', vocallab_comfortable_sub:'En az bir kez gerçek doğrulukla söylendi',
-    vocallab_reliable:'Güvenilir', vocallab_reliable_sub:'3+ gerçek deneme, tutarlı şekilde doğru',
+    vocallab_comfortable:'Rahat', vocallab_comfortable_sub:"En az bir kez doğru söylendi",
+    vocallab_reliable:'Güvenilir', vocallab_reliable_sub:"3+ deneme, tutarlı şekilde doğru",
     vocallab_notenoughdata:'henüz yeterli veri yok',
-    vocallab_notecount_suffix:'farklı nota, gerçek Nota Eşleştirme, Özel Meydan Okuma, Boss Battle ve Vokal Yarığı denemelerinden takip edildi.',
+    vocallab_notecount_suffix:"farklı nota; Nota Eşleştirme, Özel Meydan Okuma, Boss Battle ve Vokal Yarığı denemelerinizden takip edildi.",
     passport_signin:'Gerçek Vokal Pasaportunuzu oluşturmaya başlamak için oturum açın.',
     passport_needrangefinder:'Önce Ses Aralığı Bulucu\'yu ve birkaç gerçek egzersizi çalıştırın — Pasaportunuz aynı gerçek verilerden inşa edilir.',
     passport_notenoughdata:'Henüz yeterli veri yok', passport_singfulltake:'Bunu belirlemek için Karaoke Coach\'ta tam bir performans söyleyin',
@@ -11514,7 +11521,7 @@ const TRANSLATIONS = {
     genre_pop_vibrato:'Pop vokaller genellikle klasik stillere göre daha sıkı, daha seyrek vibrato kullanır.',
     genre_rock_name:'Rock', genre_rock_sub:'güç, göğüs ağırlıklı',
     genre_rock_tip1:'Göğüs ağırlıklı belting yaygındır, ama zorlanmaya dikkat edin — kademeli olarak geliştirin.',
-    genre_rock_tip2:'Temeller sağlamlaşana kadar vokal fry veya distorsiyon efektlerinden kaçının; zorlanırsa gerçek yaralanma riski taşırlar.',
+    genre_rock_tip2:"Temelleriniz sağlamlaşana kadar vocal fry ve distorsiyon efektlerinden kaçının; zorlanırlarsa sesinize zarar verebilirler.",
     genre_rock_tip3:'Nefes desteği yüksek seste daha az değil, daha çok önemlidir.',
     genre_rock_vibrato:'Rock vokaller genellikle az veya hiç vibrato kullanmaz — düz, itmeli bir ton tipiktir.',
     genre_gospel_name:'Gospel', genre_gospel_sub:'geçişler, melisma, çeviklik',
@@ -11533,24 +11540,24 @@ const TRANSLATIONS = {
     genre_mt_tip3:'Kıtalar ve nakaratlar arasındaki duygusal/dinamik kontrast genellikle asıl noktadır.',
     genre_mt_vibrato:'Vibrato kullanımı role ve döneme göre çok değişir — ölçülü ve esnek güvenli bir varsayılandır.',
     genre_carnatic_name:'Karnatik / Hindustani', genre_carnatic_sub:'sadece yaklaşık',
-    genre_carnatic_tip1:'Dürüst sınırlama: bu uygulama 12 tonlu eşit tampereman üzerine kuruludur ve gamakaları (süslü perde bükülmeleri) veya mikrotonal shrutileri modellemez.',
-    genre_carnatic_tip2:'Buradaki pentatonik tabanlı ısınmalar mevcut en yakın kaba yaklaşımdır, gerçek bir raga antrenörü değildir.',
+    genre_carnatic_tip1:"Bilinmesi gereken bir sınır: bu uygulama 12 tonlu eşit tamperaman üzerine kuruludur ve gamakaları (süslü perde bükülmeleri) ya da mikrotonal shrutileri modellemez.",
+    genre_carnatic_tip2:"Buradaki pentatonik tabanlı ısınmalar mevcut en yakın kaba yaklaşımdır, bir raga antrenörü değildir.",
     genre_carnatic_tip3:'Ciddi Karnatik/Hindustani eğitimi için, özel bir öğretmen veya uzmanlaşmış bir araç sizi bu uygulamanın mevcut haliyle olduğundan çok daha iyi hizmet edecektir.',
     genre_carnatic_vibrato:'Bu uygulamanın vibrato analizi gamaka tarzı süslemeler için tasarlanmamıştır ve anlamlı şekilde okuyamayabilir.',
     genre_metal_name:'Metal', genre_metal_sub:'güç, gelişmiş teknik',
-    genre_metal_tip1:'Çığlıklar ve gırtlaktan sesler yalancı kord/distorsiyon tekniği kullanır, ham göğüs belting değil — burada hacmi gerçek vokal kordlar üzerinden zorlamak gerçek bir yaralanma riskidir.',
+    genre_metal_tip1:"Çığlıklar ve growl'lar ham göğüs belting'i değil, yalancı kord / distorsiyon tekniği kullanır: sesi doğrudan ses tellerinin üzerinden zorlamak yaralanma riski taşır.",
     genre_metal_tip2:'Herhangi bir distorsiyonlu teknikten önce diğer türlere göre daha kapsamlı ve daha uzun ısının; soğuk başlamak bu stildeki vokal hasarının en büyük tek nedenidir.',
     genre_metal_tip3:'Nefes desteği ve hava akışı kontrolü burada daha az değil daha çok önemlidir — distorsiyonun altında sabit, kontrollü bir hava akışına ihtiyaç vardır.',
     genre_metal_vibrato:'Vibrato metal vokallerde nadiren odak noktasıdır — distorsiyon altında sürdürülen güç ve kontrol, salınımdan çok daha önemlidir.',
     genre_jazz_name:'Caz', genre_jazz_sub:'ifade, blue notlar, kontrol',
     genre_jazz_tip1:'İfade bilinçli olarak vuruşun gerisinde veya etrafında durur, ona kilitli değil — ritmik özgürlük stilin bir parçasıdır, zamanlama hatası değil.',
-    genre_jazz_tip2:'Blue notlar (bemol 3, 5 ve 7) kelime dağarcığının gerçek, kasıtlı bir parçasıdır — Egzersizlerdeki Blues/Caz gam seçenekleri bunu yansıtır.',
+    genre_jazz_tip2:"Blue notalar (bemol 3, 5 ve 7) kelime dağarcığının bilinçli bir parçasıdır; Egzersizlerdeki Blues ve Caz gam seçenekleri bunu yansıtır.",
     genre_jazz_tip3:'Ton, hacim yerine kontrol ve nüansı tercih etme eğilimindedir — dinamik aralık ve ifade ham güçten daha ağır basar.',
     genre_jazz_vibrato:'Caz vibratosu genellikle inceliklidir ve cümle sonlarında ifade için az kullanılır, bir nota boyunca sürdürülmez.',
     genre_arabic_name:'Arap', genre_arabic_sub:'makam tabanlı, sadece yaklaşık',
-    genre_arabic_tip1:'Dürüst sınırlama: Karnatik/Hindustani gibi, bu uygulamanın 12 tonlu eşit tamperemanı makam sistemlerinin merkezindeki çeyrek tonları modellemez.',
-    genre_arabic_tip2:'Gerçek makam şarkı söylemesi, bu uygulamanın perde algılamasının anlamlı şekilde okumak veya puanlamak üzere tasarlanmadığı şekillerde ağır süslemelidir.',
-    genre_arabic_tip3:'Buradaki her türlü geri bildirimi kaba bir yaklaşım olarak görün — makam eğitimli bir kulak gerçek otoritedir, bu uygulama değil.',
+    genre_arabic_tip1:"Bilinmesi gereken bir sınır: Karnatik/Hindustani'de olduğu gibi, bu uygulamanın 12 tonlu eşit tamperamanı makam sistemlerinin merkezindeki çeyrek sesleri modellemez.",
+    genre_arabic_tip2:"Makam şarkıcılığı, bu uygulamanın perde algılamasının anlamlı biçimde okuyup puanlamak için yapılmadığı yollarla yoğun süslemeler içerir.",
+    genre_arabic_tip3:"Buradaki her geri bildirimi kaba bir yaklaşım olarak görün: söz sahibi makam eğitimli bir kulaktır, bu uygulama değil.",
     genre_arabic_vibrato:'Bu uygulamanın vibrato analizi, Arap vokal müziğinde kullanılan süsleme stilleri için ayarlanmamıştır.',
     genre_reggae_name:'Reggae', genre_reggae_sub:'off-beat ifade, rahat ton',
     genre_reggae_tip1:'İfade bilinçli olarak off-beat üzerinde durur ("skank") — burada ritmik yerleşim perde kadar önemlidir.',
@@ -11558,13 +11565,13 @@ const TRANSLATIONS = {
     genre_reggae_tip3:'Derin kaburga/interkostal nefes desteği, uzun, rahat ritmik anlatım cümlelerini sürdürür.',
     genre_reggae_vibrato:'Vibrato genellikle hafiftir — ritmik his, sürdürülen tondan daha fazla ifadeyi taşır.',
     genre_celtic_name:'Kelt', genre_celtic_sub:'süsleme, modal melodi',
-    genre_celtic_tip1:'Ağır süsleme — appoggiatura, tril, kaymalar — tanımlayıcı bir özelliktir, "gerçek" melodinin üzerine dekorasyon değil.',
+    genre_celtic_tip1:"Yoğun süsleme (appoggiatura, tril, kaymalar) tanımlayıcı bir özelliktir, melodinin üzerine eklenmiş bir dekorasyon değil.",
     genre_celtic_tip2:'Melodiler kesinlikle majör/minör yerine modale (Dorian, doğal minör, pentatonik) eğilimlidir.',
     genre_celtic_tip3:'Sean-nós tarzı şarkı söyleme serbest, rubato ritim kullanır — kilitli zamanlama her zaman hedef değildir.',
     genre_celtic_vibrato:'Genellikle düz, süsleme ağırlıklı bir ton — appoggiatura ve kaymalar vibrato yerine ifadeyi taşır.',
     genre_flamenco_name:'Flamenko', genre_flamenco_sub:'ham yoğunluk, Frig rengi',
-    genre_flamenco_tip1:'Frig modu, Endülüs kadansı rengi merkezdedir — yine de Karnatik/Arap mikrotonalitesinin aksine tamamen 12-TET içindedir. Bu uygulamanın gam ön ayarları gerçek bir Frig seçeneği içermez, bu yüzden "Minör" ısınmalar için mevcut en yakın yaklaşımdır, tam bir eşleşme değil.',
-    genre_flamenco_tip2:'Rasp, yoğun vokal kalitesi (voz rota) stilseldir — ama tekniğiniz sağlamlaşmadan önce rasp\'ı zorlamak gerçek bir zorlanma riski taşır, Rock/Metal ile aynı uyarı.',
+    genre_flamenco_tip1:"Frig modu, Endülüs kadansı rengi merkezdedir — yine de Karnatik/Arap mikrotonalitesinin aksine tamamen 12-TET içindedir. Bu uygulamanın gam ön ayarlarında Frig seçeneği yoktur, bu yüzden \"Minör\" ısınmalar için mevcut en yakın yaklaşımdır, tam bir eşleşme değil.",
+    genre_flamenco_tip2:"Hırıltılı, yoğun vokal rengi (voz rota) stile aittir; ama tekniğiniz sağlamlaşmadan hırıltıyı zorlamak zorlanma riski taşır: Rock/Metal'deki uyarının aynısı.",
     genre_flamenco_tip3:'Patlayıcı diyafram patlamaları dramatik "¡Ay!" çığlıklarını güçlendirir — nefes desteği çalışması doğrudan buraya aktarılır.',
     genre_flamenco_vibrato:'Yoğunluk ve rasp burada vibratodan daha fazla ifade ağırlığı taşır — bu uygulama rasp/pürüzü puanlamaz.',
     genre_bossanova_name:'Bossa Nova', genre_bossanova_sub:'yumuşak, senkoplu, samimi',
@@ -11640,6 +11647,7 @@ const TRANSLATIONS = {
     breath_result_label:"Tutulan saniye",
     breath_score_label:"Puan",
     breath_measure:"Süre, başladığınız anda işlemeye başlar. Dur'a dokunduğunuzda ya da bir süre söyledikten sonra 0,6 saniyelik sessizlikte kendiliğinden durur. Hedef {beg} seviyesinde 12, {int} seviyesinde 18, {pro} seviyesinde 24 saniyedir. Tutarlılık, söylerken ses yüksekliğinizin ne kadar değiştiğinin (standart sapmasının ortalamasına oranı) 140 katının 100'den çıkarılmasıdır. Puan, hedefe göre tutulan sürenin (en fazla 100) %60'ı ve tutarlılığın %40'ıdır. 2 saniyeden kısa tutuşlar kaydedilmez.",
+    puzzle_wrong_note:"Yanlış nota {n}. notaydı ({note}).",
   },
 };
 let currentLanguage = 'en';
@@ -21679,7 +21687,7 @@ document.querySelectorAll('#puzzleGuessRow .ex-type-btn').forEach(btn=>{
     document.getElementById('puzzleGuessCard').style.display = 'none';
     document.getElementById('puzzleResultCard').style.display = 'block';
     document.getElementById('puzzleResultTitle').textContent = correct ? 'Correct!' : 'Not quite.';
-    document.getElementById('puzzleResultDetail').textContent = `The real wrong note was Note ${puzzleWrongIndex+1} (${noteNameFromMidi(puzzleSequence[puzzleWrongIndex])}).`;
+    document.getElementById('puzzleResultDetail').textContent = t('puzzle_wrong_note').replace('{n}', puzzleWrongIndex+1).replace('{note}', noteNameFromMidi(puzzleSequence[puzzleWrongIndex]));
     document.getElementById('puzzleStreakVal').textContent = puzzleStreak;
     document.getElementById('puzzleSolvedVal').textContent = puzzleSolved;
     if(profile) recordSkillScore('agility', correct?100:40);

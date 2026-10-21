@@ -38,7 +38,7 @@ This folder is the source of truth for the VoxCoach redesign.
 |---|---|
 | `HOUSE_LIGHTS.md` | This spec: rules, decisions, how to implement, build phases |
 | `house-lights.css` | The real tokens and components. Paste into `deploy/index.html` in phase 1 |
-| `house-lights-icons.svg` | The icon sprite (36 symbols) that replaces emoji. Paste inline in phase 1 |
+| `house-lights-icons.svg` | The icon sprite (39 symbols; 4a added hl-fiveways, hl-mirror, hl-warmup) that replaces emoji. Paste inline in phase 1 |
 | `house-lights.html` | Reference mockups of 8 screens, built from the same CSS. Open it in a browser to compare your work |
 | `build.py`, `page.html` | How `house-lights.html` is generated (`python3 build.py`). Edit these, not the HTML |
 
