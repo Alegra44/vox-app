@@ -1059,6 +1059,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live .vc-take-note{font-size:var(--hl-t-display);font-weight:300;}
   .vc-stage.is-live .vc-take-pill:disabled{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);opacity:1;cursor:default;}
   .vc-take-live{display:contents;}
+  .vc-stage.is-live .vc-take-pill{width:auto !important;margin-top:0 !important;} /* a full-width start button is a compact pill on the stage */
   .pm-cents-scale .pm-cs-lo{left:4.545%;} .pm-cents-scale .pm-cs-mid{left:50%;} .pm-cents-scale .pm-cs-hi{left:95.455%;}
   .vc-stage.is-live .btn-row{margin-top:0 !important;}
   /* its result: rows of dimensions; the trace */
@@ -3774,19 +3775,27 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="fiveways_sub">One note, five real contexts — original, up a semitone, down a semitone, then the same note again with a deliberate register instruction. Honest limit: this app measures your real pitch accuracy in each round; it can't verify which register you actually used, only you and your ear can.</div>
     </div>
     <div class="key-card" id="fivePreCard">
-      <p class="desc" style="margin-bottom:16px;" data-i18n="fiveways_intro_desc">Five real rounds, same underlying note, five different real challenges.</p>
-      <button class="mic-btn" id="fiveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Begin</button>
-    </div>
-    <div class="key-card" id="fiveRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="fiveStepLabel">Round 1 of 5 — Original key</div>
-      <div class="chord-label-display" id="fiveStepNote" style="margin-top:10px;">—</div>
-      <p class="desc" id="fiveStepStatus" style="margin-top:10px;"></p>
+      <div class="vc-stage" id="fiveStage">
+      <p class="desc vc-paper-only" id="fiveIntro" style="margin-bottom:16px;" data-i18n="fiveways_intro_desc">Five real rounds, same underlying note, five different real challenges.</p>
+      <div class="vc-take-runner" id="fiveRunnerCard" style="display:none;">
+        <div class="step-label" id="fiveStepLabel">Round 1 of 5 — Original key</div>
+        <div class="ex-target-note vc-take-note" id="fiveStepNote">—</div>
+        <div class="vc-take-live" data-vc-take></div>
+        <p class="vc-visually-hidden" id="fiveStepStatus" role="status"></p>
+      </div>
+      <button class="mic-btn vc-take-pill" id="fiveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="fiveStartLabel">Begin</span></button>
       <div class="vl-gauge" id="vlGaugeFive" style="display:none;"></div>
+      </div>
     </div>
     <div class="key-card" id="fiveResultCard" style="display:none;">
-      <div class="step-label" style="text-align:center;" data-i18n="fiveways_results_label">Real results across all 5</div>
-      <div id="fiveResultRows" style="margin-top:14px;"></div>
-      <button class="ghost-btn" id="fiveRetryBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="fiveways_try_again_btn">Try again</button>
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="ex-accuracy vc-result-num" id="fiveResultAvg">—</div>
+      <h3 class="hl-h3" data-i18n="fiveways_results_label">Real results across all 5</h3>
+      <p class="ex-feedback-text hl-coach" id="fiveCoach"></p>
+      <div class="vc-result-dims" id="fiveResultRows"></div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="five_measure"></p></details>
+      <button class="ghost-btn" id="fiveRetryBtn" data-i18n="fiveways_try_again_btn">Try again</button>
+      </div>
     </div>
   </section>
 
@@ -6177,7 +6186,7 @@ const TRANSLATIONS = {
     fiveways_title:'🎼 Sing It 5 Ways',
     fiveways_sub:'One note, five real contexts — original, up a semitone, down a semitone, then the same note again with a deliberate register instruction. Honest limit: this app measures your real pitch accuracy in each round; it can\'t verify which register you actually used, only you and your ear can.',
     fiveways_intro_desc:'Five real rounds, same underlying note, five different real challenges.',
-    fiveways_results_label:'Real results across all 5',
+    fiveways_results_label:"Average across the five rounds",
     fiveways_try_again_btn:'Try again',
     onetake_title:'🔥 One Take Challenge',
     onetake_sub:'One real attempt per day. No restarting once you begin, no live pitch guide while you sing, no correction. Just you, one note, one honest result.',
@@ -7122,7 +7131,7 @@ const TRANSLATIONS = {
     five_round_headvoice:'Same note — head voice', five_round_mixedvoice:'Same note — mixed voice',
     five_instr_naturally:'Sing it naturally', five_instr_halfstepup:'Sing it a half-step up', five_instr_halfstepdown:'Sing it a half-step down',
     five_instr_headvoice:'Deliberately switch to head voice', five_instr_mixedvoice:'Deliberately switch to mixed voice',
-    five_round_prefix:'Round', five_round_of5:'of 5', five_listenfirst:'listen first…',
+    five_round_prefix:'Round', five_round_of5:'of 5', five_listenfirst:"Listen first…",
     drill_chestvoice:'Chest Voice', drill_headvoice:'Head Voice',
     drill_note_chest:'Five real notes from the lower third of your range — sing with real chest-dominant resonance, not just the right pitch.',
     drill_note_head:'Five real notes from the upper third of your range — sing with real head-dominant resonance, not just the right pitch.',
@@ -7346,6 +7355,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Without help you scored {n} points lower than with the note just played. A gap is normal: run the loop again to train your pitch memory.",
     eve_note_nosignal:"One of the sung steps had no clear pitch, so the two can't be compared. Try again a little louder or closer to the mic.",
     eve_measure:"Step 1 plays a note from your range; listening for step 2 opens 1.3 seconds after it starts. Step 4 plays a second note, an interval from your level's set away from the first, and step 5 is sung from memory with no replay. Each sung step listens for 1.6 seconds and scores 100 minus your average distance from the note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the steps where a clear pitch was heard.",
+    five_measure:"The note is picked from the lower middle of your range, so a semitone either side still fits. Each round plays it (or the note a semitone up or down) for 0.7 seconds, then listens for 1.5 seconds from 1 second after it starts. A round scores 100 minus your average distance from its note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. Head and mixed voice can't be told apart from pitch: those rounds score your pitch only, and which register you used is for your ear to judge. The big number is the average of the rounds where a clear pitch was heard.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7554,7 +7564,7 @@ const TRANSLATIONS = {
     fiveways_title:'🎼 Chantez-le de 5 Façons',
     fiveways_sub:'Une note, cinq vrais contextes — original, un demi-ton plus haut, un demi-ton plus bas, puis la même note à nouveau avec une instruction de registre délibérée. Limite honnête : cette application mesure votre vraie précision de justesse à chaque tour ; elle ne peut pas vérifier quel registre vous avez réellement utilisé, seuls vous et votre oreille le pouvez.',
     fiveways_intro_desc:'Cinq vrais tours, même note sous-jacente, cinq défis réels différents.',
-    fiveways_results_label:'Résultats réels sur les 5',
+    fiveways_results_label:"Moyenne sur les cinq manches",
     fiveways_try_again_btn:'Réessayer',
     onetake_title:'🔥 Défi en Une Prise',
     onetake_sub:'Une vraie tentative par jour. Pas de redémarrage une fois commencé, pas de guide de justesse en direct pendant que vous chantez, pas de correction. Juste vous, une note, un résultat honnête.',
@@ -8499,7 +8509,7 @@ const TRANSLATIONS = {
     five_round_headvoice:'Même note — voix de tête', five_round_mixedvoice:'Même note — voix mixte',
     five_instr_naturally:'Chantez-la naturellement', five_instr_halfstepup:'Chantez-la un demi-ton plus haut', five_instr_halfstepdown:'Chantez-la un demi-ton plus bas',
     five_instr_headvoice:'Passez délibérément en voix de tête', five_instr_mixedvoice:'Passez délibérément en voix mixte',
-    five_round_prefix:'Round', five_round_of5:'sur 5', five_listenfirst:'écoutez d\'abord…',
+    five_round_prefix:'Round', five_round_of5:'sur 5', five_listenfirst:"Écoutez d'abord…",
     drill_chestvoice:'Voix de poitrine', drill_headvoice:'Voix de tête',
     drill_note_chest:'Cinq vraies notes du tiers inférieur de votre tessiture — chantez avec une vraie résonance dominante de poitrine, pas seulement la bonne note.',
     drill_note_head:'Cinq vraies notes du tiers supérieur de votre tessiture — chantez avec une vraie résonance dominante de tête, pas seulement la bonne note.',
@@ -8723,6 +8733,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Sans aide, vous avez obtenu {n} points de moins qu'avec la note juste jouée. Un écart est normal : refaites la boucle pour entraîner votre mémoire de la hauteur.",
     eve_note_nosignal:"L'une des étapes chantées n'avait pas de hauteur claire : les deux ne peuvent pas être comparées. Réessayez un peu plus fort ou plus près du micro.",
     eve_measure:"L'étape 1 joue une note de votre tessiture ; l'écoute de l'étape 2 s'ouvre 1,3 seconde après son début. L'étape 4 joue une seconde note, à un intervalle de la première tiré des intervalles de votre niveau, et l'étape 5 se chante de mémoire, sans réécoute. Chaque étape chantée écoute pendant 1,6 seconde et vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des étapes où une hauteur claire a été entendue.",
+    five_measure:"La note est tirée du bas-milieu de votre tessiture, pour qu'un demi-ton de chaque côté y tienne encore. Chaque manche la joue (ou la note un demi-ton au-dessus ou en dessous) pendant 0,7 seconde, puis écoute pendant 1,5 seconde à partir d'une seconde après son début. Une manche vaut 100 moins votre écart moyen à sa note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. La voix de tête et la voix mixte ne se distinguent pas par la hauteur : ces manches notent seulement votre justesse, et c'est à votre oreille de juger du registre utilisé. Le grand chiffre est la moyenne des manches où une hauteur claire a été entendue.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -8931,7 +8942,7 @@ const TRANSLATIONS = {
     fiveways_title:'🎼 Cántalo de 5 Formas',
     fiveways_sub:'Una nota, cinco contextos reales — original, un semitono arriba, un semitono abajo, luego la misma nota de nuevo con una instrucción de registro deliberada. Límite honesto: esta app mide tu precisión de afinación real en cada ronda; no puede verificar qué registro usaste realmente, solo tú y tu oído pueden.',
     fiveways_intro_desc:'Cinco rondas reales, la misma nota subyacente, cinco desafíos reales diferentes.',
-    fiveways_results_label:'Resultados reales en las 5',
+    fiveways_results_label:"Media de las cinco rondas",
     fiveways_try_again_btn:'Intentar de nuevo',
     onetake_title:'🔥 Desafío de Una Toma',
     onetake_sub:'Un intento real por día. Sin reiniciar una vez que comienzas, sin guía de afinación en vivo mientras cantas, sin corrección. Solo tú, una nota, un resultado honesto.',
@@ -9876,7 +9887,7 @@ const TRANSLATIONS = {
     five_round_headvoice:'Misma nota — voz de cabeza', five_round_mixedvoice:'Misma nota — voz mixta',
     five_instr_naturally:'Cántala naturalmente', five_instr_halfstepup:'Cántala medio tono más alto', five_instr_halfstepdown:'Cántala medio tono más bajo',
     five_instr_headvoice:'Cambia deliberadamente a voz de cabeza', five_instr_mixedvoice:'Cambia deliberadamente a voz mixta',
-    five_round_prefix:'Ronda', five_round_of5:'de 5', five_listenfirst:'escucha primero…',
+    five_round_prefix:'Ronda', five_round_of5:'de 5', five_listenfirst:"Escucha primero…",
     drill_chestvoice:'Voz de pecho', drill_headvoice:'Voz de cabeza',
     drill_note_chest:'Cinco notas reales del tercio inferior de tu registro — canta con una verdadera resonancia dominante de pecho, no solo la nota correcta.',
     drill_note_head:'Cinco notas reales del tercio superior de tu registro — canta con una verdadera resonancia dominante de cabeza, no solo la nota correcta.',
@@ -10100,6 +10111,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Sin ayuda sacaste {n} puntos menos que con la nota recién tocada. Es normal que haya diferencia: repite el ciclo para entrenar tu memoria de la afinación.",
     eve_note_nosignal:"Uno de los pasos cantados no tuvo una afinación clara, así que no se pueden comparar. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     eve_measure:"El paso 1 toca una nota de tu rango; la escucha del paso 2 se abre 1,3 segundos después de que empiece. El paso 4 toca una segunda nota, a un intervalo de la primera tomado de los intervalos de tu nivel, y el paso 5 se canta de memoria, sin volver a oírla. Cada paso cantado escucha durante 1,6 segundos y vale 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de los pasos en los que se oyó una afinación clara.",
+    five_measure:"La nota se elige de la parte media-baja de tu rango, para que medio tono a cada lado siga cabiendo. Cada ronda la toca (o la nota medio tono arriba o abajo) durante 0,7 segundos y luego escucha 1,5 segundos a partir de 1 segundo después de que empiece. Una ronda vale 100 menos tu distancia media a su nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. La voz de cabeza y la voz mixta no se distinguen por la afinación: esas rondas puntúan solo tu afinación, y el registro que usaste lo juzga tu oído. El número grande es la media de las rondas en las que se oyó una afinación clara.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10308,7 +10320,7 @@ const TRANSLATIONS = {
     fiveways_title:'🎼 5 Şekilde Söyle',
     fiveways_sub:'Bir nota, beş gerçek bağlam — orijinal, bir yarım ton yukarı, bir yarım ton aşağı, ardından bilinçli bir register talimatıyla aynı nota tekrar. Dürüst sınır: bu uygulama her turda gerçek perde doğruluğunuzu ölçer; gerçekte hangi register\'ı kullandığınızı doğrulayamaz, sadece siz ve kulağınız bilebilir.',
     fiveways_intro_desc:'Beş gerçek tur, aynı temel nota, beş farklı gerçek meydan okuma.',
-    fiveways_results_label:'5 turda gerçek sonuçlar',
+    fiveways_results_label:"Beş turun ortalaması",
     fiveways_try_again_btn:'Tekrar dene',
     onetake_title:'🔥 Tek Çekim Meydan Okuması',
     onetake_sub:'Günde bir gerçek deneme. Başladıktan sonra yeniden başlatma yok, şarkı söylerken canlı perde rehberi yok, düzeltme yok. Sadece siz, bir nota, bir dürüst sonuç.',
@@ -11253,7 +11265,7 @@ const TRANSLATIONS = {
     five_round_headvoice:'Aynı nota — baş sesi', five_round_mixedvoice:'Aynı nota — karma ses',
     five_instr_naturally:'Doğal bir şekilde söyleyin', five_instr_halfstepup:'Yarım ton yukarı söyleyin', five_instr_halfstepdown:'Yarım ton aşağı söyleyin',
     five_instr_headvoice:'Bilinçli olarak baş sesine geçin', five_instr_mixedvoice:'Bilinçli olarak karma sese geçin',
-    five_round_prefix:'Tur', five_round_of5:'/ 5', five_listenfirst:'önce dinleyin…',
+    five_round_prefix:'Tur', five_round_of5:'/ 5', five_listenfirst:"Önce dinleyin…",
     drill_chestvoice:'Göğüs Sesi', drill_headvoice:'Baş Sesi',
     drill_note_chest:'Ses aralığınızın alt üçte birinden beş gerçek nota — sadece doğru perde değil, gerçek göğüs baskın rezonansıyla söyleyin.',
     drill_note_head:'Ses aralığınızın üst üçte birinden beş gerçek nota — sadece doğru perde değil, gerçek baş baskın rezonansıyla söyleyin.',
@@ -11477,6 +11489,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan az aldınız. Bu fark normaldir: perde hafızanızı çalıştırmak için döngüyü tekrarlayın.",
     eve_note_nosignal:"Söylenen adımlardan birinde net bir perde yoktu, bu yüzden ikisi karşılaştırılamıyor. Biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
     eve_measure:"1. adım aralığınızdan bir nota çalar; 2. adımın dinlemesi notanın başlamasından 1,3 saniye sonra açılır. 4. adım, seviyenizin aralıklarından birinde ilk notadan uzaklaşan ikinci bir nota çalar; 5. adım tekrar dinlemeden, hafızadan söylenir. Söylenen her adım 1,6 saniye dinler ve 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu adımların ortalamasıdır.",
+    five_measure:"Nota, her iki yana bir yarım ses daha sığacak şekilde aralığınızın alt-orta bölümünden seçilir. Her tur notayı (ya da bir yarım ses üstünü veya altını) 0,7 saniye çalar, sonra başlamasından 1 saniye sonra itibaren 1,5 saniye dinler. Bir tur, 100'den notasına sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Kafa sesi ve karışık ses perdeden ayırt edilemez: bu turlar yalnızca perdenizi puanlar, hangi registeri kullandığınıza kulağınız karar verir. Büyük sayı, net bir perdenin duyulduğu turların ortalamasıdır.",
   },
 };
 let currentLanguage = 'en';
@@ -21287,27 +21300,36 @@ document.getElementById('fiveStartBtn')?.addEventListener('click', async ()=>{
   fiveResults = [];
   const {lo, hi} = comfortBounds(1, 1); // the rounds also sing a semitone either side
   fiveBaseMidi = pickNote('five', lo, hi);
-  document.getElementById('fivePreCard').style.display='none';
+  document.getElementById('fivePreCard').style.display='block'; // the rounds run on its stage, in this card
+  document.getElementById('fiveIntro').style.display='none';
   document.getElementById('fiveResultCard').style.display='none';
   document.getElementById('fiveRunnerCard').style.display='block';
-  singingSession(()=>fiveActive);
+  document.getElementById('fiveStartBtn').disabled = true;
+  singingSession(()=>fiveActive, document.getElementById('fiveStage')); // every round is on stage
   runFiveLoop();
 });
+function fiveStatus(text){ // the button is the stage's status pill
+  document.getElementById('fiveStepStatus').textContent = text;
+  document.getElementById('fiveStartLabel').textContent = text;
+}
 
 async function runFiveLoop(){
   for(let i=0;i<FIVE_ROUNDS.length;i++){
     if(!fiveActive) return;
     const round = FIVE_ROUNDS[i];
     const targetMidi = fiveBaseMidi + round.offsetSemi;
-    document.getElementById('fiveStepLabel').textContent = `${t('five_round_prefix')} ${i+1} ${t('five_round_of5')} — ${round.label}`;
+    // the label: the round's number and its instruction; the target note as before
+    document.getElementById('fiveStepLabel').textContent = `${t('five_round_prefix')} ${i+1} ${t('five_round_of5')} — ${round.instruction}`;
     document.getElementById('fiveStepNote').textContent = noteNameFromMidi(targetMidi);
-    document.getElementById('fiveStepStatus').textContent = round.instruction + ` — ${t('five_listenfirst')}`;
+    const lane = vcTakeStart(document.getElementById('fiveStage'), targetMidi, 1500);
+    fiveStatus(t('five_listenfirst'));
     playTone(noteToFreq(targetMidi), 0.7, 0);
     await new Promise(r=>setTimeout(r, 1000));
-    document.getElementById('fiveStepStatus').textContent = t('action_listening');
-    const result = await captureAccuracyForTarget(targetMidi, 1500, {});
+    fiveStatus(t('action_listening'));
+    const result = await captureAccuracyForTarget(targetMidi, 1500, {onFrame:(ms, c)=>vcTakeFrame(lane, ms, c)});
+    vcTakeEnd(lane);
     fiveResults.push({label:round.label, midi:targetMidi, accuracy:result.accuracy, heard:result.heard});
-    document.getElementById('fiveStepStatus').textContent = result.heard ? `${result.accuracy}%` : t('boss_no_signal');
+    fiveStatus(result.heard ? `${result.accuracy}%` : t('boss_no_signal'));
     await new Promise(r=>setTimeout(r, 500));
   }
   finishFiveWays();
@@ -21316,7 +21338,13 @@ async function runFiveLoop(){
 function finishFiveWays(){
   fiveActive = false;
   document.getElementById('fiveRunnerCard').style.display='none';
+  document.getElementById('fivePreCard').style.display='none';
+  document.getElementById('fiveStartBtn').disabled = false;
+  document.getElementById('fiveStartLabel').textContent = 'Begin';
   document.getElementById('fiveResultCard').style.display='block';
+  { const h = fiveResults.filter(r=>r.heard), avg = h.length ? Math.round(h.reduce((a,b)=>a+b.accuracy,0)/h.length) : null;
+    vcResultNum(document.getElementById('fiveResultAvg'), avg===null ? null : avg+'%'); // the average recorded below
+    document.getElementById('fiveCoach').textContent = avg===null ? t('exfeedback_nopitch') : accuracyFeedback(avg, true); }
   document.getElementById('fiveResultRows').innerHTML = fiveResults.map(r=>
     `<div class="record-row"><span class="record-label">${r.label} (${noteNameFromMidi(r.midi)})</span><span class="record-val${!r.heard?' untracked':''}">${r.heard?r.accuracy+'%':t('boss_no_signal')}</span></div>`
   ).join('');
@@ -21330,6 +21358,7 @@ function finishFiveWays(){
 document.getElementById('fiveRetryBtn')?.addEventListener('click', ()=>{
   document.getElementById('fiveResultCard').style.display='none';
   document.getElementById('fivePreCard').style.display='block';
+  document.getElementById('fiveIntro').style.display='';
 });
 
 /* ---------------- One Take Challenge (real daily gate, one real irreversible capture) ---------------- */
