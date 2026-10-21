@@ -1,7 +1,9 @@
 // "Is someone singing" gate (autoCorrelate's clarity ≥ VOICE_MIN_CLARITY and f0 ≥ VOICE_MIN_HZ), through the real UI with
 // nobody singing and with singing the gate must not lose, before (deploy/index.html at NG_BEFORE, default HEAD) and after
 // (the working tree), or on a deployed URL (NG_URL) signed in as one throwaway account deleted at exit (testAccounts.js).
-//   Pitch Match (Listen, Intermediate, 2 takes), Register Drills (5 notes), Real-Time Feedback (6 s), Tuner (6 s),
+//   Pitch Match (Listen, Intermediate, 2 takes), Register Drills (5 notes), Real-Time Feedback (one whole loop of the
+//   stimulus, NG_RTF_MS, default 40 s: a 6 s window read whatever stretch of the loop the page had reached, which differs
+//   between sides that take different times to get there; 2026-10-14 wholeloop.js), Tuner (6 s),
 //   Stay in Key (6 s), Choir World capture + verdict (2 × 3.3 s) — the same drivers as vibfix.js, target A3 (57).
 // Stimuli: $VOXCOACH_TESTDATA (~/VoxCoachTestData)/gate/*.wav from gatestim.py (see README). Noise alone is at the level it has 10 dB under a
 // typical sung note on this mic chain; real speech and TV are public-domain recordings (LibriVox, Bonanza PD episodes).
@@ -25,6 +27,7 @@ fs.mkdirSync(DIR, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.NG_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
 const REGRESS = !PROD && process.env.NG_MODE === 'regress', RUNS = REGRESS ? +(process.env.NG_RUNS || 3) : 1;
+const RTF_MS = +(process.env.NG_RTF_MS || 40000);
 if (process.env.NG_MODE && process.env.NG_MODE !== 'regress') throw new Error(`NG_MODE=${process.env.NG_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `noisegate-${PROD ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
@@ -125,15 +128,15 @@ async function runAll(page, target) {
     Math.random = rnd; if (window.__pick) pickNote = __pick;
     return drillResults.map(r => r.heard ? r.pitchAcc : null);
   }, target);
-  out.rtf = await page.evaluate(async () => {
+  out.rtf = await page.evaluate(async RTF_MS => {
     document.getElementById('liveFeedbackStartBtn').click();
     await new Promise(r => setTimeout(r, 1000));
     const s = [], t0 = performance.now();
-    while (performance.now() - t0 < 6000) { s.push(document.getElementById('lfPitchIcon').dataset.state); await new Promise(r => setTimeout(r, 50)); }
+    while (performance.now() - t0 < RTF_MS) { s.push(document.getElementById('lfPitchIcon').dataset.state); await new Promise(r => setTimeout(r, 50)); }
     document.getElementById('liveFeedbackStartBtn').click();
     const v = s.filter(x => x !== 'neutral');
     return { voiced: Math.round(100 * v.length / s.length), inTune: Math.round(100 * v.filter(x => x === 'good').length / s.length) }; // % of all frames
-  });
+  }, RTF_MS);
   out.tuner = await page.evaluate(async () => {
     document.getElementById('micBtn').click();
     await new Promise(r => setTimeout(r, 1000));

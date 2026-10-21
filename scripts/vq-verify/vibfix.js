@@ -3,8 +3,11 @@
 // deployed URL (VF_URL) signed in as one throwaway account that is deleted at exit (testAccounts.js).
 //   Pitch Match      its Listen button, Intermediate and Professional, target set to the sung note          (shared mic)
 //   Register Drills  its Start button, 5 notes, the random target stubbed to the sung note                  (register input)
-//   Real-Time Feedback its Start button; the Pitch ("In tune") and Stability ("Steady") rows sampled for 6 s (register input)
-//   Tuner            its mic button; the "In tune" readout and Stability % sampled for 6 s — measured, not checked (shared mic)
+//   Real-Time Feedback its Start button; the Pitch ("In tune") and Stability ("Steady") rows sampled over VF_RTF_MS (register input)
+//   Tuner            its mic button; the "In tune" readout and Stability % sampled over VF_RTF_MS (shared mic)
+//                    VF_RTF_MS: one whole loop of the stimulus, default 40 s (it was 6 s, which read whatever stretch of the
+//                    loop the page had reached: RTF "Steady" on N2 reads 7–44% in 6 s windows on master and the branch alike,
+//                    21% / 20% over the loop; rtfsteady.js, 2026-10-15)
 //   Stay in Key      its Start button, every chord tone stubbed to the sung note; "In key" sampled for 6 s — measured, not checked (shared mic)
 //   Choir World      its capture and verdict code (captureNoteFrame → judgeHeldNote → Performance Report), one held
 //                    note of 3.3 s on the sung note (the song timing is the only part replaced)                  (shared mic)
@@ -30,6 +33,7 @@ fs.mkdirSync(TMP, { recursive: true });
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.VF_URL, SIDES = PROD ? ['prod'] : ['before', 'after'];
 const REGRESS = !PROD && process.env.VF_MODE === 'regress', RUNS = REGRESS ? +(process.env.VF_RUNS || 3) : 1;
+const RTF_MS = +(process.env.VF_RTF_MS || 40000);
 if (process.env.VF_MODE && process.env.VF_MODE !== 'regress') throw new Error(`VF_MODE=${process.env.VF_MODE}: only "regress" is known`);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `vibfix-${PROD ? 'prod' : 'local'}-${stamp}`);
 const logf = fs.createWriteStream(LOG + '.log');
@@ -164,11 +168,11 @@ async function runAll(page, target) {
     return drillResults.map(r => ({ midi: r.midi, pitchAcc: r.heard ? r.pitchAcc : null }));
   }, target);
   // Real-Time Feedback: the real Start button; the Pitch and Stability rows' states every 50 ms for 6 s after a 1 s settle
-  out.rtf = await page.evaluate(async () => {
+  out.rtf = await page.evaluate(async RTF_MS => {
     document.getElementById('liveFeedbackStartBtn').click();
     await new Promise(r => setTimeout(r, 1000));
     const s = { pitch: [], stab: [], pitchText: {} }, t0 = performance.now();
-    while (performance.now() - t0 < 6000) {
+    while (performance.now() - t0 < RTF_MS) {
       s.pitch.push(document.getElementById('lfPitchIcon').dataset.state); s.stab.push(document.getElementById('lfStabilityIcon').dataset.state);
       const tx = document.getElementById('lfPitchText').textContent; s.pitchText[tx] = (s.pitchText[tx] || 0) + 1;
       await new Promise(r => setTimeout(r, 50));
@@ -179,13 +183,13 @@ async function runAll(page, target) {
     const pct = a => nv ? Math.round(100 * a.filter((x, i) => voiced[i] && x === 'good').length / nv) : null;
     const top = Object.entries(s.pitchText).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k, v]) => `${k}×${v}`).join(', ');
     return { inTune: pct(s.pitch), steady: pct(s.stab), n: s.pitch.length, voiced: nv, top };
-  });
+  }, RTF_MS);
   // Tuner: the real mic button; its readout every 50 ms for 6 s after a 1 s settle (measured, not checked)
-  out.tuner = await page.evaluate(async () => {
+  out.tuner = await page.evaluate(async RTF_MS => {
     document.getElementById('micBtn').click();
     await new Promise(r => setTimeout(r, 1000));
     const s = [], t0 = performance.now();
-    while (performance.now() - t0 < 6000) {
+    while (performance.now() - t0 < RTF_MS) {
       s.push({ text: document.getElementById('centsDisplay').textContent, stab: parseInt(document.getElementById('stabilityStat').textContent, 10) });
       await new Promise(r => setTimeout(r, 50));
     }
@@ -193,7 +197,7 @@ async function runAll(page, target) {
     const v = s.filter(x => x.text !== 'Listening…'), st = v.filter(x => !Number.isNaN(x.stab));
     return { voiced: v.length, n: s.length, inTune: v.length ? Math.round(100 * v.filter(x => x.text === 'In tune').length / v.length) : null,
       stable: st.length ? Math.round(100 * st.filter(x => x.stab >= 75).length / st.length) : null, stabMean: st.length ? Math.round(st.reduce((a, x) => a + x.stab, 0) / st.length) : null };
-  });
+  }, RTF_MS);
   // Stay in Key: the real Start button, every chord tone stubbed to the sung note; "In key" every 50 ms for 6 s (measured, not checked)
   out.stayKey = await page.evaluate(async target => {
     chordTonePitchClasses = () => new Set([((target % 12) + 12) % 12]);

@@ -52,7 +52,13 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`): **live 2026-10-11** (with the 1.1 fixes).
    Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Phase 3 (Home and the Coach tab): **live 2026-10-13**
    (with the 3.1 fixes). Next: phase 4 (Coach tools), spec to come from the user.
-4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). Its priority went up
+4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
+   progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
+   Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3
+   recommended). Branch-only flags `window.__streamMode`, `window.__bleedDefence`; scripts in `scripts/audio-verify/`.
+   **Decided 2026-10-15: C3 + F2 (quiet-singer gain on the pitch path).** **Building on `feat/single-stream`** per
+   `design/audio/BUILD.md` (5 commits, full verification, iPhone preview after a typed go-ahead, then report; no merge or
+   prod deploy before review; rollback dpl_CAMGry4a7b8RewSA6bJNST64PVv7). Long jobs on AC power with checkpoint/resume. Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
    Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
    issues (app-wide)"): with nobody singing, the app's own playback is credited (Entrance Trainer 8/8 entrances,

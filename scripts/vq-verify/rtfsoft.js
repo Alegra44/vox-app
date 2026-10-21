@@ -5,7 +5,9 @@
 //   after   the working tree (with the gate), served locally
 //   prod    RS_URL (default https://deploy-alegra1122.vercel.app)
 // The page is driven exactly as noisegate.js drives it up to RTF (Pitch Match Listen ×2 → Register Drills → RTF), so the
-// shared mic and the register input are in the same state; only RTF is measured (6 s, % of 50 ms samples voiced / in tune).
+// shared mic and the register input are in the same state; only RTF is measured (% of 50 ms samples voiced / in tune) over
+// one whole loop of the stimulus (RS_RTF_MS, default 40 s; it was 6 s, which read whatever stretch of the loop the page had
+// reached: on 2026-10-14 wholeloop.js showed the 2026-10-02 signed-in loss was that, not the sidecar).
 // Usage: [RS_REPS=3] [RS_PACE_MS=45000] node scripts/vq-verify/rtfsoft.js [stimuli, comma-separated]
 const { chromium } = require('playwright');
 const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scripts/testdata.js)
@@ -16,7 +18,7 @@ const { track } = require('../choir-verify/testAccounts');
 const ROOT = path.resolve(__dirname, '../..'), DIR = path.join(TESTDATA, 'gate');
 const LOGDIR = path.join(__dirname, 'logs'); fs.mkdirSync(LOGDIR, { recursive: true });
 const PROD = process.env.RS_URL || 'https://deploy-alegra1122.vercel.app', BEFORE_REF = process.env.RS_BEFORE || 'b37cd57';
-const REPS = +(process.env.RS_REPS || 3), PACE = +(process.env.RS_PACE_MS ?? 45000), TARGET = 57;
+const REPS = +(process.env.RS_REPS || 3), PACE = +(process.env.RS_PACE_MS ?? 45000), TARGET = 57, RTF_MS = +(process.env.RS_RTF_MS || 40000);
 const STIMS = (process.argv[2] || 'sing-pp-92,sing-pp-646,sing-breathy-5,sing-breathy-3002').split(',');
 const SIDES = ['before', 'after', 'prod'];
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19), LOG = path.join(LOGDIR, `rtfsoft-${stamp}`);
@@ -63,9 +65,9 @@ async function measure(file, side) {
     const ready = Date.now() - t0;
     if (!a.auth) { a.auth = await ctx.storageState(); log(`   signed up ${a.email} (${side})`); }
     const st = await page.evaluate(() => { const o = document.getElementById('onboardingOverlay'); if (o) o.style.display = 'none';
-      return { paid: isPaid(), gate: typeof VOICE_MIN_CLARITY === 'number', sidecarBlocked: VL_SIDECAR_BLOCKED }; });
+      return { paid: isPaid(), gate: typeof VOICE_MIN_CLARITY === 'number', sidecarBlocked: typeof VL_SIDECAR_BLOCKED !== 'undefined' ? VL_SIDECAR_BLOCKED : false }; }); // VL_SIDECAR_BLOCKED: gone since the single stream
     if (!st.paid) throw new Error(`${side}: account can't use the features`);
-    return await page.evaluate(async target => {
+    return await page.evaluate(async ({ target, RTF_MS }) => {
       for (let k = 0; k < 2; k++) { // Pitch Match Listen ×2 (its vlSidecar runs while signed in)
         setExerciseLevel('intermediate'); pitchTargetMidi = target;
         const btn = document.getElementById('pitchListenBtn'); btn.click();
@@ -82,12 +84,12 @@ async function measure(file, side) {
       document.getElementById('liveFeedbackStartBtn').click(); // RTF, sampled as noisegate.js samples it
       await new Promise(r => setTimeout(r, 1000));
       const s = [], t0 = performance.now();
-      while (performance.now() - t0 < 6000) { s.push(document.getElementById('lfPitchIcon').dataset.state); await new Promise(r => setTimeout(r, 50)); }
+      while (performance.now() - t0 < RTF_MS) { s.push(document.getElementById('lfPitchIcon').dataset.state); await new Promise(r => setTimeout(r, 50)); }
       const vlFed = typeof vlRun !== 'undefined' && !!vlRun;
       document.getElementById('liveFeedbackStartBtn').click();
       const v = s.filter(x => x !== 'neutral');
       return { voiced: Math.round(100 * v.length / s.length), inTune: Math.round(100 * v.filter(x => x === 'good').length / s.length), n: s.length, regOpenAtStart: regOpen, vlFedDuringRtf: vlFed };
-    }, TARGET).then(r => ({ ...r, ...st, readyMs: ready }));
+    }, { target: TARGET, RTF_MS }).then(r => ({ ...r, ...st, readyMs: ready }));
   } finally { await b.close().catch(() => {}); }
 }
 

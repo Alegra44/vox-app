@@ -1,19 +1,147 @@
 // Phase 6 checks: Your Choir. A test tone stands in for the mic (a real MediaStream, so Studio Mode's
 // MediaRecorder genuinely records it), singing each part's real notes on the song clock.
-// Usage: node scripts/choir-verify/yc.js [url]
+// Your Choir is Choir World's (cw-gated): the run signs up a throwaway account first (deleted at exit, testAccounts.js).
+// First, one take through the real mic (the single stream since 2026-10-18): Chromium's fake capture plays a steady
+// sung-like tone ($VOXCOACH_TESTDATA/yc/tone-220.wav, built here), Record Alto through the real button, and the decoded
+// take (what playback plays) is measured from its downbeat to the song's end: level (median of 20 ms RMS windows) and gaps
+// (windows 20 dB under that median), then Play my choir with that take alone: the output's level and gaps. One line,
+// MICTAKE {...}; run it on master and a branch to compare (ycmic.sh).
+// A steady tone is what noise suppression removes: master's stream (NS and AGC on) records it about 19 dB down, so
+// YC_WAV=<file> sings a real voice instead (vibfix's stim-S1.wav, a held sung note) for the level comparison.
+// Then BALANCE (the take against the choir parts) and STUDIO (a 15 s Studio take's clipped samples).
+// Usage: node scripts/choir-verify/yc.js [url]   (YC_MIC_ONLY=1 stops after the real-mic take; YC_WAV=<wav> the mic's file)
 const { chromium } = require('playwright');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
+const path = require('path'), fs = require('fs');
+const { TESTDATA } = require('../testdata');
+const { track } = require('./testAccounts'); // deletes the account this run creates when it exits
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const SHOTS = require('os').tmpdir() + '/';
+const email = track(`voxcoach-yc-${Date.now()}@example.com`), password = 'YC-' + Math.random().toString(36).slice(2) + '!x9';
+
+// 60 s at 48 kHz: 220 Hz with harmonics 1–8 (amplitude 1/k), a 5.5 Hz ±30 ct vibrato, peak 0.3. Continuous, so any gap
+// in a take is the recording's.
+function toneWav() {
+  const dir = path.join(TESTDATA, 'yc'), f = path.join(dir, 'tone-220.wav');
+  if (fs.existsSync(f)) return f;
+  fs.mkdirSync(dir, { recursive: true });
+  const sr = 48000, n = sr * 60, x = new Float32Array(n); let ph = 0, mx = 0;
+  for (let i = 0; i < n; i++) {
+    ph += 2 * Math.PI * 220 * Math.pow(2, 30 / 1200 * Math.sin(2 * Math.PI * 5.5 * i / sr)) / sr;
+    let v = 0; for (let k = 1; k <= 8; k++) v += Math.sin(k * ph) / k;
+    x[i] = v; mx = Math.max(mx, Math.abs(v));
+  }
+  const b = Buffer.alloc(44 + n * 2);
+  b.write('RIFF', 0); b.writeUInt32LE(36 + n * 2, 4); b.write('WAVEfmt ', 8); b.writeUInt32LE(16, 16); b.writeUInt16LE(1, 20); b.writeUInt16LE(1, 22);
+  b.writeUInt32LE(sr, 24); b.writeUInt32LE(sr * 2, 28); b.writeUInt16LE(2, 32); b.writeUInt16LE(16, 34); b.write('data', 36); b.writeUInt32LE(n * 2, 40);
+  for (let i = 0; i < n; i++) b.writeInt16LE(Math.round(x[i] / mx * 0.3 * 32767), 44 + i * 2);
+  fs.writeFileSync(f, b); return f;
+}
+
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${process.env.YC_WAV || toneWav()}`] });
   const ctx = await browser.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });
   const page = await ctx.newPage();
-  await page.addInitScript(() => { localStorage.setItem('language', 'en'); localStorage.removeItem('yourChoirTakes'); });
+  await page.addInitScript(() => {
+    localStorage.setItem('language', 'en'); localStorage.removeItem('yourChoirTakes');
+    window.__gum = []; const g = MediaDevices.prototype.getUserMedia;
+    MediaDevices.prototype.getUserMedia = function (c) { window.__gum.push(c.audio); return g.call(this, c); };
+  });
   const errors = []; page.on('pageerror', e => errors.push(String(e))); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
   const ev = (f, a) => page.evaluate(f, a);
+  const lang = page.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) { await lang.click(); await sleep(300); }
+  await ev(() => openAuthModal());
+  await page.locator('#authName').fill('Your Choir Check'); await page.locator('#authEmail').fill(email); await page.locator('#authPassword').fill(password);
+  await page.locator('#authCreateBtn').click();
+  await page.waitForFunction(() => !!profile && document.getElementById('authModalOverlay').style.display === 'none', null, { timeout: 20000 });
+  await ev(() => { const o = document.getElementById('onboardingOverlay'); if (o) o.style.display = 'none'; });
+  console.log('signed up', email);
+
+  console.log('== Real-mic take: Record Alto through the one stream');
+  await ev(() => { enterPanel('choir'); selectSong('hymn'); });
+  await sleep(500);
+  await page.locator('#ycParts [data-yc-rec="Alto"]').click();
+  await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
+  await ev(async () => { while (yourChoir.recording) await new Promise(r => setTimeout(r, 50)); });
+  const mic = await ev(async () => {
+    const tk = ycTakes().Alto; if (!tk) return { error: 'no take: ' + document.getElementById('ycStatus').textContent };
+    const buf = await ycDecode(tk.base64), d = buf.getChannelData(0), sr = buf.sampleRate, total = songTotalDurMs() / 1000;
+    const w = Math.round(0.02 * sr), from = Math.floor(tk.lead * sr), to = Math.min(d.length, Math.floor((tk.lead + total) * sr)), db = [];
+    for (let i = from; i + w <= to; i += w) { let s = 0; for (let j = i; j < i + w; j++) s += d[j] * d[j]; const r = Math.sqrt(s / w); db.push(r > 0 ? 20 * Math.log10(r) : -120); }
+    const sorted = [...db].sort((a, b) => a - b), med = sorted[sorted.length >> 1];
+    let gaps = 0, run = 0, longest = 0; for (const v of db) { if (v < med - 20) { gaps++; run++; longest = Math.max(longest, run); } else run = 0; }
+    return { levelDb: +med.toFixed(1), p5Db: +sorted[Math.floor(sorted.length * 0.05)].toFixed(1), p95Db: +sorted[Math.floor(sorted.length * 0.95)].toFixed(1),
+      gaps, longestGapMs: longest * 20, windows: db.length, spanS: +((to - from) / sr).toFixed(2), song: +total.toFixed(2), peakDb: +(20 * Math.log10(tk.peak)).toFixed(1),
+      mime: tk.mimeType, status: document.getElementById('ycStatus').textContent, gum: window.__gum, micLive: !!micStream && micStream.getAudioTracks().some(t => t.readyState === 'live') };
+  });
+  // And what it plays back at: Play my choir with only this take, the output (choirOutNode, after the headroom trim)
+  // in 100 ms windows from the song's start to its end: median level and windows 20 dB under it.
+  if (!mic.error) Object.assign(mic, await ev(async () => {
+    const an = audioCtx.createAnalyser(); an.fftSize = 4096; choirOutNode.connect(an);
+    // every sample after the playback limiter (playbackOutNode, what reaches the speakers): |x| ≥ 0.99 and the peak
+    const sp = audioCtx.createScriptProcessor(1024, 2, 2), clip = { n: 0, over: 0, max: 0 };
+    sp.onaudioprocess = e => { for (let c = 0; c < e.inputBuffer.numberOfChannels; c++) { const d = e.inputBuffer.getChannelData(c); for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); clip.n++; if (v >= 0.99) clip.over++; if (v > clip.max) clip.max = v; } e.outputBuffer.getChannelData(c).fill(0); } };
+    playbackOutNode.connect(sp); sp.connect(audioCtx.destination);
+    document.getElementById('ycPlayBtn').click();
+    while (!yourChoir.playing) await new Promise(r => setTimeout(r, 10));
+    const buf = new Float32Array(4096), db = [];
+    while (yourChoir.playing) {
+      const t = audioCtx.currentTime - choirStartCtxTime;
+      if (t > 0.2 && t < songTotalDurMs() / 1000 - 0.2) { an.getFloatTimeDomainData(buf); const r = Math.sqrt(buf.reduce((a, v) => a + v * v, 0) / buf.length); db.push(r > 0 ? 20 * Math.log10(r) : -120); }
+      await new Promise(r => setTimeout(r, 100));
+    }
+    choirOutNode.disconnect(an); playbackOutNode.disconnect(sp); sp.disconnect();
+    const s = [...db].sort((a, b) => a - b), med = s[s.length >> 1];
+    // the stored take: every sample of the decoded file, |x| ≥ 0.99
+    const tb = await ycDecode(ycTakes().Alto.base64); let stored = 0, storedN = 0;
+    for (let c = 0; c < tb.numberOfChannels; c++) { const d = tb.getChannelData(c); storedN += d.length; for (let i = 0; i < d.length; i++) if (Math.abs(d[i]) >= 0.99) stored++; }
+    return { storedClipped: stored, storedSamples: storedN, outClipped: clip.over, outSamples: clip.n, outPeakDb: +(20 * Math.log10(clip.max || 1e-9)).toFixed(2), playDb: +med.toFixed(1), playP5Db: +s[Math.floor(s.length * 0.05)].toFixed(1), playGaps: db.filter(v => v < med - 20).length, playWindows: db.length, trim: +choirOutNode.gain.value.toFixed(3) };
+  }));
+  console.log('MICTAKE ' + JSON.stringify(mic));
+
+  // Balance. Play my choir plays recorded takes only (unrecorded parts stay silent), so the take meets the choir in two
+  // places: (a) while the next part is recorded (your Alto take with the synth's Bass), (b) against the synth choir as the
+  // workspace plays it. Levels per part after its fader (a tap on choirGainNodes[part]), median of 100 ms windows.
+  if (!mic.error) {
+    const bal = {};
+    const tapsOn = () => ev(() => { window.__bt = {}; Object.keys(choirGainNodes).forEach(p => { const a = audioCtx.createAnalyser(); a.fftSize = 4096; choirGainNodes[p].connect(a); __bt[p] = a; }); });
+    const sample = until => ev(async u => {
+      const buf = new Float32Array(4096), db = {}; Object.keys(__bt).forEach(p => db[p] = []);
+      while (eval(u)) {
+        const t = audioCtx.currentTime - choirStartCtxTime;
+        if (t > 0.2 && t < songTotalDurMs() / 1000 - 0.2) Object.entries(__bt).forEach(([p, a]) => { a.getFloatTimeDomainData(buf); const r = Math.sqrt(buf.reduce((x, v) => x + v * v, 0) / buf.length); if (r > 1e-4) db[p].push(20 * Math.log10(r)); });
+        await new Promise(r => setTimeout(r, 100));
+      }
+      Object.entries(__bt).forEach(([p, a]) => choirGainNodes[p].disconnect(a));
+      return Object.fromEntries(Object.entries(db).filter(([, v]) => v.length).map(([p, v]) => { const s = v.sort((x, y) => x - y); return [p, +s[s.length >> 1].toFixed(1)]; }));
+    }, until);
+    await tapsOn();
+    await page.locator('#ycParts [data-yc-rec="Bass"]').click();
+    await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
+    bal.whileRecordingBass = await sample('!!yourChoir.recording');
+    await ev(() => ycDelete('Bass'));
+    await tapsOn();
+    await ev(async () => { await playChoir({ loop: false }); });
+    bal.synthChoir = await sample('choirIsPlaying');
+    bal.faders = await ev(() => Object.fromEntries(Object.keys(choirState).map(p => [p, choirState[p].volume])));
+    console.log('BALANCE ' + JSON.stringify(bal));
+
+    // Studio: one 15 s take with the real Record button; the stored file's clipped samples. Studio plays takes in an
+    // <audio> element at the Playback volume (≤ 1), outside the Web Audio limiter.
+    await ev(() => enterPanel('studio')); await sleep(500);
+    await page.locator('#studioRecordBtn').click();
+    await page.waitForFunction(() => !document.getElementById('studioRecordBtn').disabled && (progress.studioTakes || []).length > 0, null, { timeout: 40000 });
+    console.log('STUDIO ' + JSON.stringify(await ev(async () => {
+      const tk = progress.studioTakes[progress.studioTakes.length - 1], b = await ycDecode(tk.base64); let n = 0, over = 0, mx = 0;
+      for (let c = 0; c < b.numberOfChannels; c++) { const d = b.getChannelData(c); for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); n++; if (v >= 0.99) over++; if (v > mx) mx = v; } }
+      return { clipped: over, samples: n, peakDb: +(20 * Math.log10(mx)).toFixed(2), durS: +b.duration.toFixed(1), note: document.getElementById('studioRecordNote').textContent };
+    })));
+  }
+  if (process.env.YC_MIC_ONLY) { console.log('page errors:', errors); await browser.close(); return; }
+  await ev(() => ycDelete('Alto'));
+
   await ev(async () => {
     enterPanel('choir'); selectSong('hymn');
     await initAudioOnly(); ensureChoirGainNodes();

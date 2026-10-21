@@ -170,8 +170,9 @@ async function runOnce(page, f, { live, target }) {
   const mid = await page.evaluate(() => {
     const tr = micStream && micStream.getAudioTracks()[0], s = tr ? tr.getSettings() : {};
     analyser.getFloatTimeDomainData(dataArray);
-    return { gum: window.__gum.slice(), shared: !!micStream, regLive: !!regIn && regIn.stream.getAudioTracks()[0].readyState === 'live', live: tr && tr.readyState === 'live', muted: tr && tr.muted, ns: s.noiseSuppression, agc: s.autoGainControl, ec: s.echoCancellation,
-      rms: +computeRMS(dataArray).toFixed(4), freq: +autoCorrelate(dataArray, audioCtx.sampleRate).toFixed(1), reg: !!regIn, pct: vlPercent() };
+    const single = typeof micGraph === 'function'; // the single stream (feat/single-stream): loudness from its raw path
+    return { gum: window.__gum.slice(), single, shared: !!micStream, regLive: !!regIn && (regIn.stream || micStream).getAudioTracks()[0].readyState === 'live', live: tr && tr.readyState === 'live', muted: tr && tr.muted, ns: s.noiseSuppression, agc: s.autoGainControl, ec: s.echoCancellation,
+      rms: +computeRMS(single ? readRawMic() : dataArray).toFixed(4), freq: +autoCorrelate(dataArray, audioCtx.sampleRate).toFixed(1), reg: !!regIn, pct: vlPercent() };
   });
   await page.waitForFunction(`!(${ACTIVE[f]})`, null, { timeout: 90000, polling: 100 });
   const listened = (Date.now() - tStart) / 1000;
@@ -199,7 +200,7 @@ async function feature(page, f, label, { target } = {}) {
   if (!await page.evaluate(() => !!micStream)) { await warm(page); await page.evaluate(() => initAudio()); await sleep(5000); }
   const off = await runOnce(page, f, { live: false, target });
   await sleep(1500);
-  check('sidecar stubbed out: no register input opened, no session stored', rowsDb().length === rowsSeen && !off.mid.gum.some(REG_STREAM) && !off.mid.reg, `opened [${off.mid.gum.join(' + ')}], rows ${rowsDb().length}`);
+  check('sidecar stubbed out: no register input opened, no session stored', rowsDb().length === rowsSeen && (off.mid.single ? off.mid.gum.length <= 1 : !off.mid.gum.some(REG_STREAM)) && !off.mid.reg, `opened [${off.mid.gum.join(' + ')}], rows ${rowsDb().length}`);
   const on = await runOnce(page, f, { live: true, target });
   const same = SAME[f] ? SAME[f](off.result, on.result) : JSON.stringify(off.result) === JSON.stringify(on.result);
   check('feature result identical with the sidecar live', same, `off ${JSON.stringify(off.result)} | on ${JSON.stringify(on.result)}`);
@@ -207,8 +208,9 @@ async function feature(page, f, label, { target } = {}) {
     check(`${k}: starts at the first gap's centre, takes off on frame 1 (no wait)`, r.startY === r.firstGapY && r.tookOffOnFrame === 1, `start y ${r.startY}, first gap ${r.firstGapY}, took off on frame ${r.tookOffOnFrame}`);
   const m = on.mid, o = off.mid;
   // the shared mic opens once per page (on the first run); the register input opens on every live run
-  check('both live at once: the feature\'s own mic + the register input', m.shared && m.live && m.regLive && m.gum.filter(REG_STREAM).length === 1, `opened this run [${m.gum.join(' + ')}]`);
-  check('feature\'s own track still live, unmuted, NS/AGC/EC unchanged', m.live && !m.muted && m.ns === o.ns && m.agc === o.agc && m.ec === o.ec && m.ns === true,
+  if (m.single) check('one stream: the feature\'s analyser and the register input both on it, nothing opened for the load', m.shared && m.live && m.regLive && m.gum.length === 0, `opened this run [${m.gum.join(' + ')}]`);
+  else check('both live at once: the feature\'s own mic + the register input', m.shared && m.live && m.regLive && m.gum.filter(REG_STREAM).length === 1, `opened this run [${m.gum.join(' + ')}]`);
+  check('feature\'s own track still live, unmuted, NS/AGC/EC unchanged', m.live && !m.muted && m.ns === o.ns && m.agc === o.agc && m.ec === o.ec && m.ns === !m.single,
     `on: ns ${m.ns} agc ${m.agc} ec ${m.ec} muted ${m.muted} | off: ns ${o.ns} agc ${o.agc} ec ${o.ec}`);
   check('feature\'s own analyser hears the same tone', Math.abs(m.freq - TONE.hz) < 0.03 * TONE.hz && Math.abs(m.freq - o.freq) < 2 && Math.abs(m.rms - o.rms) <= 0.15 * o.rms,
     `on ${m.freq} Hz rms ${m.rms} | off ${o.freq} Hz rms ${o.rms}`);
@@ -236,7 +238,7 @@ async function feature(page, f, label, { target } = {}) {
     console.log(`== ${URL_ || 'local deploy/ + production backend'}`);
     console.log(`   mic: ${TONE.hz.toFixed(2)} Hz (MIDI ${TONE.midi})`);
     let { ctx, page, errors } = await openPage(b);
-    check('sidecar allowed in this browser (desktop Chromium)', await page.evaluate(() => !VL_SIDECAR_BLOCKED), '');
+    check('sidecar allowed in this browser (desktop Chromium; on the single stream there is no block at all)', await page.evaluate(() => typeof VL_SIDECAR_BLOCKED === 'undefined' || !VL_SIDECAR_BLOCKED), '');
     await feature(page, 'pitch', 'Pitch Match (drill): target C4, a pass', { target: 60 });
     await feature(page, 'pitch', 'Pitch Match (drill): target D4, a miss', { target: 62 });
     await feature(page, 'staykey', 'Stay in Key (song drill, runs to the end)');
@@ -281,9 +283,11 @@ async function feature(page, f, label, { target } = {}) {
     check('page errors', errors.length === 0, errors.join(' | ') || 'none');
     await ctx.close();
 
-    console.log('\n-- Safari user agent: no second stream, nothing stored, these gauges hidden');
     ({ ctx, page, errors } = await openPage(b, { ua: SAFARI_UA }));
-    check('sidecar blocked for this user agent', await page.evaluate(() => VL_SIDECAR_BLOCKED), '');
+    const single = await page.evaluate(() => typeof micGraph === 'function');
+    console.log(single ? '\n-- Safari user agent: one stream, so Glider feeds the load here too and every gauge shows' : '\n-- Safari user agent: no second stream, nothing stored, these gauges hidden');
+    if (single) check('no sidecar block left (VL_SIDECAR_BLOCKED gone)', await page.evaluate(() => typeof VL_SIDECAR_BLOCKED === 'undefined'), '');
+    else check('sidecar blocked for this user agent', await page.evaluate(() => VL_SIDECAR_BLOCKED), '');
     const before = rowsDb().length;
     await goTo(page, 'glider');
     await warm(page); await page.evaluate(() => initAudio()); await sleep(5000);
@@ -291,12 +295,12 @@ async function feature(page, f, label, { target } = {}) {
       const st = await page.evaluate(() => ({ gliderActive, gliderScoreVal, gliderY, analyser: !!analyser, mic: !!micStream })).catch(x => String(x));
       throw new Error(`${e.message}\n   state ${JSON.stringify(st)}\n   page errors: ${errors.join(' | ') || 'none'}`);
     });
-    await sleep(4000);
-    check('Glider ran on its own stream only, no session stored', r.mid.live && !r.mid.gum.some(REG_STREAM) && !r.mid.reg && rowsDb().length === before, `opened [${r.mid.gum.join(' + ')}], rows ${before}→${rowsDb().length}, score ${r.result.score}`);
+    if (single) { const rows = await waitRows(before + 1); check('Glider fed the load on the one stream: one session stored', r.mid.live && r.mid.gum.length <= 1 && r.mid.reg && rows.length === before + 1, `opened [${r.mid.gum.join(' + ')}], rows ${before}→${rows.length}, score ${r.result.score}`); }
+    else { await sleep(4000); check('Glider ran on its own stream only, no session stored', r.mid.live && !r.mid.gum.some(REG_STREAM) && !r.mid.reg && rowsDb().length === before, `opened [${r.mid.gum.join(' + ')}], rows ${before}→${rowsDb().length}, score ${r.result.score}`); }
     check('Glider started at the first gap\'s centre and took off on frame 1', r.result.startY === r.result.firstGapY && r.result.tookOffOnFrame === 1, `start y ${r.result.startY}, first gap ${r.result.firstGapY}, frame ${r.result.tookOffOnFrame}`);
     const hid = [];
-    for (const [f, id] of Object.entries(GAUGES)) { const g = await gauge(page, id); if (g.visible !== (f === 'coach')) hid.push(`${f} visible ${g.visible}`); }
-    check('the six features\' gauges hidden, Register Coach\'s still shown', hid.length === 0, hid.join('; ') || 'ok');
+    for (const [f, id] of Object.entries(GAUGES)) { const g = await gauge(page, id); if (g.visible !== (single || f === 'coach')) hid.push(`${f} visible ${g.visible}`); }
+    check(single ? 'every gauge shown' : 'the six features\' gauges hidden, Register Coach\'s still shown', hid.length === 0, hid.join('; ') || 'ok');
     await ctx.close();
 
     console.log('\n-- signed out');

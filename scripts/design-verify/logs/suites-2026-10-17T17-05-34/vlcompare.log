@@ -1,0 +1,36 @@
+vlcompare 2026-10-17T22-47-16  today: master signed in  branch: the working tree  reps 3
+   signed up voxcoach-ssvl-in-1792277237198@example.com (in)
+rep 1 harness C4        in  tuner 5.87s 11.31 (rms 0.2706) · breath 5.99s 11.53 (rms 0.2705) · stayKey 5.98s 11.51 (rms 0.2706) · pitch 2.5s 4.82 (rms 0.2707) · drills 9.36s 18.03 (rms 0.2707) · rtf 5.99s 11.55 (rms 0.2706) · vq 3.98s 7.67 (rms 0.2706)
+   signed up voxcoach-ssvl-branch-1792277237199@example.com (branch)
+rep 1 harness C4        branch tuner 5.93s 11.42 (rms 0.2660) · breath 5.99s 11.54 (rms 0.2661) · stayKey 5.98s 11.52 (rms 0.2660) · pitch 2.52s 4.85 (rms 0.2658) · drills 9.4s 18.1 (rms 0.2660) · rtf 6s 11.55 (rms 0.2662) · vq 4.01s 7.73 (rms 0.2661)
+rep 1 sing-pp-646       in  tuner 27.2s 71.31 (rms 0.0629)
+rep 1 sing-pp-646       branch tuner 27.31s 71.66 (rms 0.0600)
+rep 1 sing-breathy-3002 in  tuner 33.46s 54.49 (rms 0.0942)
+rep 1 sing-breathy-3002 branch tuner 33.37s 54.36 (rms 0.0927)
+rep 2 harness C4        in  tuner 5.94s 11.45 (rms 0.2705) · breath 5.98s 11.52 (rms 0.2706) · stayKey 5.98s 11.52 (rms 0.2706) · pitch 2.51s 4.83 (rms 0.2706) · drills 9.39s 18.09 (rms 0.2706) · rtf 6s 11.57 (rms 0.2706) · vq 3.98s 7.67 (rms 0.2706)
+rep 2 harness C4        branch tuner 5.94s 11.45 (rms 0.2662) · breath 5.98s 11.52 (rms 0.2661) · stayKey 5.99s 11.53 (rms 0.2660) · pitch 2.51s 4.83 (rms 0.2663) · drills 9.39s 18.09 (rms 0.2660) · rtf 5.99s 11.53 (rms 0.2661) · vq 4.01s 7.72 (rms 0.2660)
+rep 2 sing-pp-646       in  tuner 27.25s 71.47 (rms 0.0617)
+rep 2 sing-pp-646       branch tuner 27.3s 71.63 (rms 0.0597)
+rep 2 sing-breathy-3002 in  tuner 33.46s 54.5 (rms 0.0947)
+rep 2 sing-breathy-3002 branch tuner 33.38s 54.37 (rms 0.0922)
+rep 3 harness C4        in  tuner 5.94s 11.45 (rms 0.2707) · breath 5.98s 11.52 (rms 0.2706) · stayKey 5.98s 11.51 (rms 0.2706) · pitch 2.51s 4.84 (rms 0.2706) · drills 9.39s 18.08 (rms 0.2706) · rtf 5.99s 11.54 (rms 0.2706) · vq 3.96s 7.63 (rms 0.2706)
+rep 3 harness C4        branch tuner 5.94s 11.44 (rms 0.2661) · breath 6s 11.55 (rms 0.2662) · stayKey 5.99s 11.53 (rms 0.2659) · pitch 2.51s 4.83 (rms 0.2661) · drills 9.4s 18.1 (rms 0.2660) · rtf 5.98s 11.52 (rms 0.2660) · vq 4s 7.71 (rms 0.2660)
+rep 3 sing-pp-646       in  tuner 27.32s 71.65 (rms 0.0631)
+rep 3 sing-pp-646       branch tuner 27.25s 71.49 (rms 0.0595)
+rep 3 sing-breathy-3002 in  tuner 33.46s 54.49 (rms 0.0948)
+rep 3 sing-breathy-3002 branch tuner 33.37s 54.36 (rms 0.0933)
+
+== median active seconds / load per session; the branch against today ("in")
+harness C4        tuner    in 5.94s/11.45 · branch 5.94s/11.44 (-0%)
+harness C4        breath   in 5.98s/11.52 · branch 5.99s/11.54 (+0%)
+harness C4        stayKey  in 5.98s/11.51 · branch 5.99s/11.53 (+0%)
+harness C4        pitch    in 2.51s/4.83 · branch 2.51s/4.83 (+0%)
+harness C4        drills   in 9.39s/18.08 · branch 9.4s/18.1 (+0%)
+harness C4        rtf      in 5.99s/11.55 · branch 5.99s/11.53 (-0%)
+harness C4        vq       in 3.98s/7.67 · branch 4.01s/7.72 (+1%)
+sing-pp-646       tuner    in 27.25s/71.47 · branch 27.3s/71.63 (+0%)
+sing-breathy-3002 tuner    in 33.46s/54.49 · branch 33.37s/54.36 (-0%)
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/vlcompare-2026-10-17T22-47-16.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/audio-verify/logs/vlcompare-2026-10-17T22-47-16.json
+
+[cleanup] deleted 2 test account(s) this run created; 0 left of voxcoach-ssvl-in-1792277237198@example.com, voxcoach-ssvl-branch-1792277237199@example.com

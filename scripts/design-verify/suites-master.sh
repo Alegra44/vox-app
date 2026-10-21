@@ -33,11 +33,22 @@ ALL=(
   "cv-shot|node scripts/choir-verify/shot.js"
   "cv-live5|node scripts/choir-verify/live5.js $L"
   "cv-live6|node scripts/choir-verify/live6.js $L"
+  "cv-p10|node scripts/choir-verify/p10.js all $L"
+  "cv-live7|node scripts/choir-verify/live7.js $L"
+  "cv-live9|node scripts/choir-verify/live9.js $L"
+  "batch2|node scripts/vocal-load-verify/batch2.js"
+  "batch3a|node scripts/vocal-load-verify/batch3a.js"
+  "batch3b|node scripts/vocal-load-verify/batch3b.js"
+  "vq|node scripts/vq-verify/vq.js all"
+  "livevq|node scripts/vq-verify/livevq.js $L"
+  "bands|node scripts/vq-verify/bands.js"
+  "cvib|node scripts/vq-verify/cvib.js"
 )
 cd "$WT"
 for s in "${ALL[@]}"; do
   name=${s%%|*}; cmd=${s#*|}
   if [ $# -gt 0 ]; then case " $* " in *" $name "*) ;; *) continue;; esac; fi
+  while pmset -g batt | head -1 | grep -q "Battery Power"; do echo "$(date -u +%H:%M:%S) on battery: waiting for AC before $name" >> "$OUT/progress.txt"; sleep 300; done
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name" >> "$OUT/progress.txt"
   $cmd > "$OUT/$name.log" 2>&1 & PID=$!
   while kill -0 $PID 2>/dev/null; do

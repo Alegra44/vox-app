@@ -1,0 +1,102 @@
+
+==== VIBRATO (voice-like tone: harmonics 1, ½, ⅓, ¼)
+6 Hz ±50 ct @330 Hz            injected 6 Hz ±50 ct      measured 6 Hz ±51 ct | 6 Hz ±50 ct  [238/241 frames]
+4.5 Hz ±30 ct @330 Hz          injected 4.5 Hz ±30 ct    measured 4.5 Hz ±30 ct | 4.5 Hz ±30 ct  [238/241 frames]
+7 Hz ±100 ct @330 Hz           injected 7 Hz ±100 ct     measured 7 Hz ±100 ct | 7 Hz ±100 ct  [239/241 frames]
+5.5 Hz ±40 ct @220 Hz          injected 5.5 Hz ±40 ct    measured 5.5 Hz ±41 ct | 5.5 Hz ±40 ct  [239/241 frames]
+6 Hz ±20 ct @440 Hz            injected 6 Hz ±20 ct      measured 6 Hz ±20 ct | 6 Hz ±20 ct  [239/241 frames]
+6 Hz ±50 ct + 15 ct/s drift    injected 6 Hz ±50 ct      measured 6 Hz ±51 ct | 6 Hz ±51 ct  [239/241 frames]
+6 Hz ±50 ct + white noise      injected 6 Hz ±50 ct      measured 6 Hz ±50 ct | 6 Hz ±50 ct  [239/240 frames]
+straight tone @330 Hz          injected none             measured none (straight) | none (straight)  [239/240 frames]
+4.5 Hz ±30 ct + 600 ms stall   injected 4.5 Hz ±30 ct    measured 4.6 Hz ±30 ct (longest frame gap 608 ms) | 4.6 Hz ±30 ct (longest frame gap 608 ms)
+
+-- Vibrato Analyzer panel (its capture, now the unprocessed low-passed one), the two cases that used to fail
+4.5 Hz ±30 ct (was ±984)               measured 4.5 Hz ±30 ct | 4.5 Hz ±30 ct
+6 Hz ±50 ct + 15 ct/s drift (was 74)   measured 6 Hz ±50 ct | 6 Hz ±50 ct
+
+==== BREATHINESS (HNR), tone at 220 Hz, harmonics 1, ½, ⅓, ¼, ⅕, plus white noise
+clean (no noise)   noise RMS 0.0000  injected HNR ∞ (16-bit floor)measured 70.0 dB | 70.0 dB
+noise for 35 dB    noise RMS 0.0107  injected HNR 35 dB         measured 35.3 dB | 35.4 dB
+noise for 25 dB    noise RMS 0.0337  injected HNR 25 dB         measured 25.3 dB | 25.4 dB
+noise for 20 dB    noise RMS 0.0599  injected HNR 20 dB         measured 20.4 dB | 20.4 dB
+noise for 15 dB    noise RMS 0.1066  injected HNR 15 dB         measured 15.4 dB | 15.4 dB
+noise for 12 dB    noise RMS 0.1506  injected HNR 12 dB         measured 12.4 dB | 12.4 dB
+noise for 8 dB     noise RMS 0.2387  injected HNR 8 dB          measured 8.4 dB | 8.4 dB
+noise for 4 dB     noise RMS 0.3782  injected HNR 4 dB          measured 4.3 dB | 4.5 dB
+noise for 0 dB     noise RMS 0.5995  injected HNR 0 dB          measured 0.2 dB | 0.3 dB
+measured HNR falls strictly as noise rises: true
+
+-- the same, with 6 Hz ±50 ct vibrato (harmonics smear across bins within one 170 ms frame)
+injected 25 dB + vibrato      measured 23.4 dB | 23.4 dB
+injected 12 dB + vibrato      measured 12.1 dB | 12.1 dB
+
+==== BRIGHTNESS (spectral centroid, power-weighted, 50 Hz–6 kHz), straight and with 6 Hz vibrato
+pure sine 440 Hz                       injected  440 Hz | straight 440/440 (-0.0/-0.0%) | ±25 440/440 (+0.0/+0.0%) | ±50 441/441 (+0.2/+0.2%) | ±100 441/441 (+0.3/+0.1%)
+220 Hz, 10 harmonics, 1/k²             injected  243 Hz | straight 242/242 (-0.7/-0.7%) | ±25 242/242 (-0.6/-0.6%) | ±50 242/243 (-0.5/-0.4%) | ±100 244/243 (+0.0/-0.2%)
+220 Hz, 10 harmonics, 1/k              injected  416 Hz | straight 403/403 (-3.1/-3.1%) | ±25 403/403 (-3.0/-3.0%) | ±50 403/403 (-3.0/-3.0%) | ±100 404/404 (-2.8/-2.8%)
+220 Hz, 10 harmonics, flat             injected 1210 Hz | straight 1193/1193 (-1.4/-1.4%) | ±25 1194/1194 (-1.3/-1.3%) | ±50 1195/1194 (-1.3/-1.3%) | ±100 1199/1199 (-0.9/-0.9%)
+330 Hz, harmonics 1, ½, ⅓, ¼           injected  482 Hz | straight 475/475 (-1.5/-1.5%) | ±25 475/475 (-1.4/-1.4%) | ±50 475/475 (-1.4/-1.5%) | ±100 478/477 (-0.9/-1.1%)
+165 Hz, 1/k (to 6 kHz: 36 harmonics)   injected  426 Hz | straight 412/412 (-3.2/-3.2%) | ±25 412/412 (-3.2/-3.2%) | ±50 412/412 (-3.2/-3.2%) | ±100 413/413 (-3.1/-3.1%)
+220 Hz 1/k + white noise (rms 0.05)    clean value 416 Hz → measured 425 Hz (noise adds high-frequency energy, so it rises)
+
+-- reading bands: harmonic tones rolling off at a known slope, straight and ±50 ct vibrato (dark < 13 dB/oct steepness, bright > 9)
+110 Hz  16 dB/oct: 1.03× (bounds 1.08–1.36) → dark ✓ | 16 dB/oct ±50: 1.03× (bounds 1.08–1.36) → dark ✓ | 11 dB/oct: 1.17× (bounds 1.08–1.36) → balanced ✓ | 11 dB/oct ±50: 1.16× (bounds 1.08–1.36) → balanced ✓ | 6 dB/oct: 2.83× (bounds 1.08–1.36) → bright ✓ | 6 dB/oct ±50: 2.83× (bounds 1.08–1.36) → bright ✓
+220 Hz  16 dB/oct: 1.03× (bounds 1.08–1.34) → dark ✓ | 16 dB/oct ±50: 1.03× (bounds 1.08–1.34) → dark ✓ | 11 dB/oct: 1.15× (bounds 1.08–1.34) → balanced ✓ | 11 dB/oct ±50: 1.15× (bounds 1.08–1.34) → balanced ✓ | 6 dB/oct: 2.33× (bounds 1.08–1.34) → bright ✓ | 6 dB/oct ±50: 2.33× (bounds 1.08–1.34) → bright ✓
+440 Hz  16 dB/oct: 1.03× (bounds 1.08–1.31) → dark ✓ | 16 dB/oct ±50: 1.03× (bounds 1.08–1.31) → dark ✓ | 11 dB/oct: 1.15× (bounds 1.08–1.31) → balanced ✓ | 11 dB/oct ±50: 1.15× (bounds 1.08–1.31) → balanced ✓ | 6 dB/oct: 2.00× (bounds 1.08–1.31) → bright ✓ | 6 dB/oct ±50: 2.00× (bounds 1.08–1.31) → bright ✓
+
+==== PANEL (real button click; sign-in gate stubbed, since the test has no account)
+panel active: panel-voicequality | result hidden before a run: true
+during: label "Listening…" | listening class true
+
+[en] 🔬 Voice QualityBETA ANALYSIS
+     Hold one comfortable note on an open vowel ("ah") for 4 seconds. Three estimates come from your live microphone signal: vibrato, breathiness and brightness. They are training cues, not a lab or medical measurement.
+     Hold a note for 4s
+     Measured on C4 (262 Hz), 3.9 s of steady voice.
+     VIBRATO 5.8 Hz · ±45 ct Within the commonly cited natural range (about 5–6.5 Hz).
+     BREATHINESS (HNR) 34.3 dB Clear tone: the harmonics stand well above the noise between them.
+     BRIGHTNESS 377 Hz · 1.44× pitch Brighter, more forward tone: strong upper harmonics.
+     How it's measured: vibrato is the timing of the peaks in your pitch trace and the swing of each cycle (± cents). Breathiness compares the energy at your harmonics with the noise floor between them, up to 5 kHz, as a harmonics-to-noise ratio (higher = clearer). Brightness is the spectral centroid, the energy-weighted average frequency up to 6 kHz; it's also shown as a multiple of your pitch, because it rises with the note. Noise suppression is off for this measurement so breath noise isn't filtered out.
+     These are training estimates from your microphone, not a medical assessment. Mic, room, distance, vowel and pitch all move them, so compare yourself on the same setup, note and vowel. The bands (for example, 20 dB or more reads as clear) are rough guides for this tool, not clinical norms. If hoarseness or breathiness persists, or singing hurts, a voice teacher or voice professional is the right person to ask.
+
+[fr] 🔬 Qualité vocaleANALYSE BÊTA
+     Tenez une note confortable sur une voyelle ouverte (« a ») pendant 4 secondes. Trois estimations viennent du signal de votre micro en direct : vibrato, souffle et brillance. Ce sont des repères d’entraînement, pas une mesure de laboratoire ni une mesure médicale.
+     Tenez une note 4 s
+     Mesuré sur C4 (262 Hz), 3,9 s de voix stable.
+     VIBRATO 5,8 Hz · ±45 ct Dans la plage naturelle couramment citée (environ 5–6,5 Hz).
+     SOUFFLE (HNR) 34,3 dB Son clair : les harmoniques dépassent nettement le bruit qui les sépare.
+     BRILLANCE 377 Hz · 1,44× la hauteur Son plus brillant et projeté : harmoniques aiguës marquées.
+     Comment c’est mesuré : le vibrato est le rythme des crêtes de votre tracé de hauteur et l’amplitude de chaque cycle (± cents). Le souffle compare l’énergie de vos harmoniques au bruit de fond qui les sépare, jusqu’à 5 kHz, sous forme de rapport harmoniques/bruit (plus élevé = plus clair). La brillance est le centroïde spectral, la fréquence moyenne pondérée par l’énergie jusqu’à 6 kHz ; elle est aussi affichée en multiple de votre hauteur, car elle monte avec la note. La réduction de bruit est désactivée pour cette mesure afin de ne pas filtrer le bruit du souffle.
+     Ce sont des estimations d’entraînement tirées de votre micro, pas un bilan médical. Le micro, la pièce, la distance, la voyelle et la hauteur les font varier : comparez-vous avec le même matériel, la même note et la même voyelle. Les seuils (par exemple, 20 dB ou plus = clair) sont des repères approximatifs propres à cet outil, pas des normes cliniques. Si un enrouement ou un souffle persiste, ou si chanter fait mal, un professeur de chant ou un professionnel de la voix est la bonne personne à consulter.
+
+[es] 🔬 Calidad vocalANÁLISIS BETA
+     Sostén una nota cómoda en una vocal abierta («a») durante 4 segundos. Tres estimaciones salen de la señal de tu micrófono en vivo: vibrato, aire en la voz y brillo. Son referencias de entrenamiento, no una medición de laboratorio ni médica.
+     Sostén una nota 4 s
+     Medido en C4 (262 Hz), 3,9 s de voz estable.
+     VIBRATO 5,8 Hz · ±45 ct Dentro del rango natural citado habitualmente (unos 5–6,5 Hz).
+     AIRE EN LA VOZ (HNR) 34,3 dB Tono claro: los armónicos sobresalen bien por encima del ruido entre ellos.
+     BRILLO 377 Hz · 1,44× la altura Tono más brillante y proyectado: armónicos agudos marcados.
+     Cómo se mide: el vibrato es el ritmo de los picos de tu trazo de afinación y la oscilación de cada ciclo (± cents). El aire en la voz compara la energía de tus armónicos con el ruido de fondo entre ellos, hasta 5 kHz, como relación armónicos/ruido (más alto = más claro). El brillo es el centroide espectral, la frecuencia media ponderada por la energía hasta 6 kHz; también se muestra como múltiplo de tu altura, porque sube con la nota. La supresión de ruido está desactivada en esta medición para no filtrar el ruido del aire.
+     Son estimaciones de entrenamiento a partir de tu micrófono, no una evaluación médica. El micrófono, la sala, la distancia, la vocal y la altura las cambian, así que compárate con el mismo equipo, la misma nota y la misma vocal. Los umbrales (por ejemplo, 20 dB o más se lee como claro) son guías aproximadas de esta herramienta, no normas clínicas. Si la ronquera o el aire en la voz persisten, o si cantar duele, un profesor de canto o un profesional de la voz es la persona adecuada a quien consultar.
+
+[tr] 🔬 Ses KalitesiBETA ANALİZ
+     Rahat bir notayı açık bir ünlüyle ("a") 4 saniye tutun. Canlı mikrofon sinyalinizden üç tahmin çıkarılır: vibrato, nefeslilik ve parlaklık. Bunlar antrenman ipuçlarıdır; laboratuvar ya da tıbbi ölçüm değildir.
+     Bir notayı 4 sn tutun
+     C4 (262 Hz) üzerinde, 3,9 sn sabit sesle ölçüldü.
+     VİBRATO 5,8 Hz · ±45 sent Sık belirtilen doğal aralıkta (yaklaşık 5–6,5 Hz).
+     NEFESLİLİK (HNR) 34,3 dB Net ses: harmonikler aralarındaki gürültünün belirgin biçimde üstünde.
+     PARLAKLIK 377 Hz · perdenin 1,44 katı Daha parlak, öne çıkan ses: güçlü üst harmonikler.
+     Nasıl ölçülür: vibrato, perde izinizdeki tepelerin zamanlaması ve her döngünün salınımıdır (± sent). Nefeslilik, harmoniklerinizdeki enerjiyi aralarındaki gürültü tabanıyla 5 kHz'e kadar karşılaştırır ve harmonik/gürültü oranı olarak verir (yüksek = daha net). Parlaklık, 6 kHz'e kadar enerjiyle ağırlıklandırılmış ortalama frekans olan spektral ağırlık merkezidir; notayla birlikte yükseldiği için perdenizin katı olarak da gösterilir. Nefes gürültüsü filtrelenmesin diye bu ölçümde gürültü bastırma kapalıdır.
+     Bunlar mikrofonunuzdan elde edilen antrenman tahminleridir, tıbbi bir değerlendirme değildir. Mikrofon, oda, mesafe, ünlü ve perde hepsini etkiler; kendinizi aynı düzen, aynı nota ve aynı ünlüyle karşılaştırın. Eşikler (örneğin 20 dB ve üzeri net sayılır) bu araca özgü kaba ölçütlerdir, klinik normlar değildir. Ses kısıklığı ya da nefeslilik sürerse veya şarkı söylemek acı veriyorsa, bir şan öğretmenine ya da ses uzmanına danışmak doğru olur.
+
+mic stream opened with []
+navigated away mid-hold: vqActive false | listening class removed true | nothing shown for the cut-short hold true | mic tracks now []
+390 px: page scrolls sideways: false (scrollWidth 390)
+screenshots: /Users/alegramusenge/VoxCoachTestData
+
+==== VIBRATO ANALYZER PANEL (real button click; sign-in gate stubbed)
+6 Hz ±50 ct    injected 6 Hz ±50 ct | during "Listening…" | shown: rate 6 Hz, depth 50 ct, consistency 92%, 238 wave points
+  feedback: 6 Hz is within the commonly-cited natural range.
+  mic: [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"tracks":["live"]}]
+straight tone  injected none | during "Listening…" | shown: rate —, depth —, consistency —, 238 wave points
+  feedback: No clear oscillation detected — that's expected for a straight tone, or the hold may need to be steadier/longer.
+  mic: [{"audio":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"tracks":["live"]}]

@@ -209,11 +209,14 @@ async function stopTuner(page) { if (await page.evaluate(TUNER)) await page.loca
 
     console.log('\n-- Safari user agent (a fresh browser: no dismissals, no disclaimer shown yet)');
     await reopen({ ua: SAFARI_UA });
-    check('sidecar blocked for this user agent', await page.evaluate(() => VL_SIDECAR_BLOCKED), '');
+    const single = await page.evaluate(() => typeof micGraph === 'function'); // the single stream: nothing blocks the Tuner's feed here
+    if (single) check('no sidecar block left (VL_SIDECAR_BLOCKED gone)', await page.evaluate(() => typeof VL_SIDECAR_BLOCKED === 'undefined'), '');
+    else check('sidecar blocked for this user agent', await page.evaluate(() => VL_SIDECAR_BLOCKED), '');
     await goHome(page); h = await home(page);
     check('Home card shown, with today\'s total', h.card && h.gauge && h.val === shown(p, 'en'), `"${h.val}"`);
-    await startTuner(page); await sleep(4000);
-    check('Tuner can\'t feed the load here: no banner', !(await banner(page)).up && await page.evaluate(TUNER), '');
+    await startTuner(page);
+    if (single) { r = await singUntilBanner(page, TUNER, 10000); check('Tuner feeds the load here too (one stream): the 100% banner', r.b.up && r.b.level === '100', JSON.stringify({ up: r.b.up, level: r.b.level, panel: r.b.panel })); }
+    else { await sleep(4000); check('Tuner can\'t feed the load here: no banner', !(await banner(page)).up && await page.evaluate(TUNER), ''); }
     await stopTuner(page);
     await startCoach(page);
     r = await singUntilBanner(page, COACH, 10000);
