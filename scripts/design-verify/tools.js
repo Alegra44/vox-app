@@ -27,20 +27,20 @@ const restoreRange = page => page.evaluate(() => { if (window.__rrb) { registerR
 const vis = sel => { const e = document.querySelector(sel); return !!e && getComputedStyle(e).display !== 'none' && !!e.getClientRects().length; };
 
 const TOOLS = [
-  { key: 'interval', liveAt: 2300, name: 'Interval Match', panel: 'exercises', sung: true, btn: '#intervalListenBtn', result: '#intervalResult',
+  { key: 'interval', idle: '#intervalListenBtn', liveAt: 2300, name: 'Interval Match', panel: 'exercises', sung: true, btn: '#intervalListenBtn', result: '#intervalResult',
     open: async page => {
       await C.showPanel(page, 'exercises'); await C.clearOverlays(page); await exTab(page, 'interval');
       await page.evaluate(() => {
         setExerciseLevel('professional');
         intervalRootMidi = 62; intervalDef = { name: 'Perfect 5th', semi: 7 }; intervalTargetMidi = 69;
-        document.getElementById('intervalTargetLabel').textContent = intervalDef.name;
-        document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(62);
+        if (typeof showIntervalTarget === 'function') showIntervalTarget(); // the branch: the name, the note and the root
+        else { document.getElementById('intervalTargetLabel').textContent = intervalDef.name; document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(62); }
       });
     },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('intervalListenBtn').click(); }),
     busy: () => document.getElementById('intervalListenBtn').disabled,
     display: () => ({ big: document.getElementById('intervalAccuracyVal').textContent, attack: document.getElementById('intervalAttackVal').textContent, landing: document.getElementById('intervalLandingVal').textContent }) },
-  { key: 'scale', liveAt: 1600, name: 'Scale Run', panel: 'exercises', sung: true, btn: '#scaleStartBtn', result: '#scaleResult', timeout: 40000,
+  { key: 'scale', idle: '#scaleStartBtn', liveAt: 1600, name: 'Scale Run', panel: 'exercises', sung: true, btn: '#scaleStartBtn', result: '#scaleResult', timeout: 40000,
     open: async page => {
       await C.showPanel(page, 'exercises'); await C.clearOverlays(page); await exTab(page, 'scale');
       await page.evaluate(() => { setExerciseLevel('professional'); scaleRootMidi = 57; });
@@ -48,7 +48,7 @@ const TOOLS = [
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('scaleStartBtn').click(); }),
     busy: () => document.getElementById('scaleStartBtn').disabled,
     display: () => ({ big: document.getElementById('scaleAccuracyVal').textContent, dots: [...document.querySelectorAll('#scaleDots .scale-dot')].map(d => d.className.replace('scale-dot', '').trim()).join(',') }) },
-  { key: 'custom', liveAt: 1700, name: 'Custom Challenge', panel: 'custom', sung: true, btn: '#customStartBtn', result: '#customResultCard', timeout: 40000,
+  { key: 'custom', idle: '#customStartBtn', liveAt: 1700, name: 'Custom Challenge', panel: 'custom', sung: true, btn: '#customStartBtn', result: '#customResultCard', timeout: 40000,
     open: async page => {
       await C.showPanel(page, 'custom'); await C.clearOverlays(page);
       await page.evaluate(() => {
@@ -61,17 +61,17 @@ const TOOLS = [
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('customStartBtn').click(); }),
     busy: () => { const r = document.getElementById('customRunnerCard'); return !!r && r.style.display === 'block'; },
     display: () => ({ big: document.getElementById('customResultAvg').textContent, rows: [...document.querySelectorAll('#customResultRows .record-val')].map(e => e.textContent).join(',') }) },
-  { key: 'eve', liveAt: 1900, name: 'Ear → Voice → Ear', panel: 'earvoiceear', sung: true, btn: '#eveStartBtn', result: '#eveResultCard', timeout: 30000,
+  { key: 'eve', idle: '#eveStartBtn', liveAt: 1900, name: 'Ear → Voice → Ear', panel: 'earvoiceear', sung: true, btn: '#eveStartBtn', result: '#eveResultCard', timeout: 30000,
     open: async page => { await C.showPanel(page, 'earvoiceear'); await C.clearOverlays(page); await page.evaluate(`(${narrow})(69, 69)`); },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('eveStartBtn').click(); }),
     busy: () => eveActive,
     display: () => ({ first: document.getElementById('eveResultFirst').textContent, second: document.getElementById('eveResultSecond').textContent }) },
-  { key: 'five', liveAt: 1500, name: 'Sing It 5 Ways', panel: 'fiveways', sung: true, btn: '#fiveStartBtn', result: '#fiveResultCard', timeout: 40000,
+  { key: 'five', idle: '#fiveStartBtn', liveAt: 1500, name: 'Sing It 5 Ways', panel: 'fiveways', sung: true, btn: '#fiveStartBtn', result: '#fiveResultCard', timeout: 40000,
     open: async page => { await C.showPanel(page, 'fiveways'); await C.clearOverlays(page); await page.evaluate(`(${narrow})(68, 70)`); },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('fiveStartBtn').click(); }),
     busy: () => fiveActive,
     display: () => ({ rows: [...document.querySelectorAll('#fiveResultRows .record-val')].map(e => e.textContent).join(',') }) },
-  { key: 'hearmistake', liveAt: 700, name: 'Can You Hear Your Mistake?', panel: 'hearmistake', sung: true, btn: '#hmSingStatus', result: '#hmResultCard', timeout: 20000,
+  { key: 'hearmistake', idle: '#hmStartBtn', liveAt: 700, name: 'Can You Hear Your Mistake?', panel: 'hearmistake', sung: true, btn: '#hmSingStatus', result: '#hmResultCard', timeout: 20000,
     open: async page => { await C.showPanel(page, 'hearmistake'); await C.clearOverlays(page); await page.evaluate(`(${narrow})(69, 69)`); },
     // listening (A and B) on paper, then the correct pick: the sing-back is the take
     pre: async page => {
@@ -81,7 +81,7 @@ const TOOLS = [
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.querySelector(`[data-hm-guess="${hmCorrectLabel}"]`).click(); }),
     busy: () => hmSinging,
     display: () => ({ big: document.getElementById('hmSingAccuracy').textContent }) },
-  { key: 'range', liveAt: 900, name: 'Range Finder', panel: 'range', sung: true, btn: '#captureLowBtn', result: '#rangeResult', timeout: 15000,
+  { key: 'range', idle: '#rangeStartBtn', liveAt: 900, name: 'Range Finder', panel: 'range', sung: true, btn: '#captureLowBtn', result: '#rangeResult', timeout: 15000,
     open: async page => { await C.showPanel(page, 'range'); await C.clearOverlays(page); },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('rangeStartBtn').click(); }),
     // the take: the lowest captured at 1.5 s, the highest 1.5 s later
@@ -91,7 +91,7 @@ const TOOLS = [
     },
     busy: () => mode === 'rangeLow' || mode === 'rangeHigh',
     display: () => ({ type: document.getElementById('voiceTypeOut').textContent, span: document.getElementById('rangeSpanOut').textContent }) },
-  { key: 'breath', liveAt: 1500, name: 'Breath Trainer', panel: 'breath', sung: true, btn: '#breathStartBtn', result: '#breathResult', timeout: 15000,
+  { key: 'breath', idle: '#breathStartBtn', liveAt: 1500, name: 'Breath Trainer', panel: 'breath', sung: true, btn: '#breathStartBtn', result: '#breathResult', timeout: 15000,
     open: async page => { await C.showPanel(page, 'breath'); await C.clearOverlays(page); },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('breathStartBtn').click(); }),
     drive: async page => { await C.sleep(4000); await page.evaluate(() => { if (breathActive) document.getElementById('breathStartBtn').click(); }); },
@@ -110,7 +110,7 @@ const TOOLS = [
   { key: 'warmup', name: 'Smart Warmup', panel: 'warmup', sung: false, result: '#warmupDoneNote',
     open: async page => { await C.showPanel(page, 'warmup'); await C.clearOverlays(page); },
     act: page => page.evaluate(() => { document.getElementById('warmupPlay1').click(); document.getElementById('warmupCompleteBtn').click(); }) },
-  { key: 'ear', name: 'Ear Training', panel: 'exercises', sung: false, result: '#earFeedback',
+  { key: 'ear', idle: '#earPlayBtn', name: 'Ear Training', panel: 'exercises', sung: false, result: '#earFeedback',
     open: async page => { await C.showPanel(page, 'exercises'); await C.clearOverlays(page); await exTab(page, 'ear'); },
     act: async page => {
       await page.evaluate(() => document.getElementById('earPlayBtn').click()); await C.sleep(1600);
@@ -163,6 +163,7 @@ const readTake = (page, tool) => page.evaluate(({ display, key }) => {
 // onState(name, rootSelector) is awaited at each.
 async function toolStates(page, tool, onState) {
   await tool.open(page); await C.sleep(500);
+  if (tool.idle) { await page.evaluate(sel => { const e = document.querySelector(sel); if (e && e.getClientRects().length) e.scrollIntoView({ block: 'center' }); }, tool.idle); await C.sleep(250); }
   await onState(`${tool.key}-idle`, `#panel-${tool.panel}`);
   if (tool.sung) {
     await runTake(page, tool, { liveAt: tool.liveAt || 1200, onLive: () => onState(`${tool.key}-stage`, `#panel-${tool.panel}`) });

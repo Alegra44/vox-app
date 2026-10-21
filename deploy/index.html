@@ -984,6 +984,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   }
   .interval-root-badge .root-note{color:var(--hl-sop);font-weight:700;}
   .interval-root-badge .arrow{color:var(--hairline);}
+  /* phase 4a: the root is a quiet label; the target is the interval's name over the note it lands on */
+  .ex-target-card.mode-interval .interval-root-badge{background:none;border:0;padding:0;font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .ex-target-card.mode-interval .interval-root-badge .root-note{color:var(--hl-ink-2);font-weight:500;}
+  .ex-target-card.mode-interval .interval-root-badge .arrow{color:var(--hl-ink-3);}
+  .ex-target-name{font-size:var(--hl-t-h3);font-stretch:var(--hl-w-wide);font-weight:500;color:var(--hl-ink-2);}
   .ex-target-note{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:40px;color:var(--cream);}
   .ex-target-sub{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--muted);margin-top:4px;}
 
@@ -1060,7 +1065,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pm-trace :is(line, path){vector-effect:non-scaling-stroke;}
   .pm-trace-axis{display:flex;justify-content:space-between;font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   .pm-trace .pm-target{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;}
-  .vc-result .sub-score-row{flex-direction:column;gap:0;margin:0;justify-content:flex-start;}
+  .vc-result .sub-score-row{flex-direction:column;gap:0;margin:0;justify-content:flex-start;align-items:stretch;padding:0;border-top:0;} /* 4a: rows full width (the dims' baseline alignment kept them narrow) */
   .vc-result .sub-score, .vc-result .cents-detail, #pitchResult #pitchConfidenceBadge, .vc-result .vc-dim{
     display:flex;justify-content:space-between;align-items:baseline;gap:var(--hl-s4);margin:0;padding:var(--hl-s3) 0;
     background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;text-align:left;font-size:var(--hl-t-small);color:var(--hl-ink-2);}
@@ -3112,23 +3117,35 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <!-- INTERVAL MATCH -->
       <div class="ex-panel" id="exPanelInterval" style="display:none;">
         <div class="ex-target-card mode-interval">
+          <div class="vc-stage" id="intervalStage">
           <div class="interval-root-badge"><span data-i18n="ex_root_label">Root:</span> <span class="root-note" id="intervalRootLabel">—</span><span class="arrow">→</span><span data-i18n="ex_sing_interval">sing the interval</span></div>
-          <div class="ex-target-sub"><span data-i18n="ex_rootplays_p1">Root plays, then the interval — echo the</span> <em data-i18n="ex_second_word">second</em> <span data-i18n="ex_rootplays_p2">note</span></div>
-          <div class="ex-target-note" id="intervalTargetLabel">—</div>
+          <div class="ex-target-sub vc-paper-only"><span data-i18n="ex_rootplays_p1">Root plays, then the interval — echo the</span> <em data-i18n="ex_second_word">second</em> <span data-i18n="ex_rootplays_p2">note</span></div>
+          <div class="ex-target-name" id="intervalTargetLabel">—</div>
+          <div class="ex-target-note vc-take-note" id="intervalTargetNote">—</div>
+          <div class="vc-take-live" data-vc-take></div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
-            <button class="solid-btn" id="intervalPlayBtn" data-i18n="ex_play_root_interval_btn">Play root + interval</button>
-            <button class="solid-btn teal vc-sing" id="intervalListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
-            <button class="ghost-btn" id="intervalNextBtn" data-i18n="ex_new_interval_btn">New interval</button>
-            <button class="ghost-btn" id="intervalAgainBtn" style="display:none;"></button>
+            <button class="solid-btn vc-paper-only" id="intervalPlayBtn" data-i18n="ex_play_root_interval_btn">Play root + interval</button>
+            <button class="solid-btn teal vc-sing vc-take-pill" id="intervalListenBtn" data-i18n="action_listenscore">Listen &amp; score</button>
+            <button class="ghost-btn vc-paper-only" id="intervalNextBtn" data-i18n="ex_new_interval_btn">New interval</button>
+            <button class="ghost-btn vc-paper-only" id="intervalAgainBtn" style="display:none;"></button>
           </div>
           <div class="vl-gauge" id="vlGaugeInterval" style="display:none;"></div>
-          <div class="ex-result" id="intervalResult" style="display:none;">
-            <div class="ex-accuracy" id="intervalAccuracyVal">—</div>
-            <div class="ex-feedback-text" id="intervalFeedback"></div>
+          </div>
+          <div class="ex-result vc-result" id="intervalResult" role="status" aria-live="polite" style="display:none;">
+            <div class="ex-accuracy vc-result-num" id="intervalAccuracyVal">—</div>
+            <h3 class="hl-h3" data-i18n="interval_result_label">Interval accuracy</h3>
+            <div class="ex-feedback-text hl-coach" id="intervalFeedback"></div>
+            <div class="vc-result-chart pm-trace-box" id="intervalTraceBox" style="display:none;">
+              <svg class="pm-trace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+              <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span class="pm-trace-end"></span></div>
+            </div>
+            <div class="vc-result-dims">
             <div class="sub-score-row" id="intervalSubScores" style="display:none;">
               <div class="sub-score"><div class="sub-score-label" data-i18n="ex_attack_label">Attack</div><div class="sub-score-val" id="intervalAttackVal">—</div></div>
               <div class="sub-score"><div class="sub-score-label" data-i18n="ex_landing_label">Landing</div><div class="sub-score-val" id="intervalLandingVal">—</div></div>
             </div>
+            </div>
+            <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p id="intervalMeasure"></p></details>
           </div>
         </div>
       </div>
@@ -7273,6 +7290,8 @@ const TRANSLATIONS = {
     home_todaysreport_steady_label:'Steady so far today', home_todaysreport_steady_desc:"Change usually shows up over a few sessions, not one",
     home_todaysreport_first_label:"First scores today", home_todaysreport_first_desc:'Nothing to compare against yet',
     home_todaysreport_weakest_label:'Still your weakest',
+    interval_result_label:"Interval accuracy",
+    interval_measure:"Accuracy is 100 minus your average distance from the target note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. The target note is the root plus the interval, in any octave. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. At {int} and {pro}, the first and second halves of what's scored are shown apart as attack and landing. Natural vibrato counts as its centre, not as an error.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8639,6 +8658,8 @@ const TRANSLATIONS = {
     home_todaysreport_steady_label:"Stable pour l'instant aujourd'hui", home_todaysreport_steady_desc:"Un changement se voit généralement sur plusieurs séances, pas une seule",
     home_todaysreport_first_label:"Premiers scores aujourd'hui", home_todaysreport_first_desc:'Rien à comparer pour le moment',
     home_todaysreport_weakest_label:'Toujours votre point faible',
+    interval_result_label:"Justesse de l'intervalle",
+    interval_measure:"La justesse vaut 100 moins votre écart moyen à la note cible, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. La note cible est la fondamentale plus l'intervalle, dans n'importe quelle octave. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. En {int} et en {pro}, la première et la seconde moitié de la partie notée sont affichées à part : l'attaque et l'atterrissage. Un vibrato naturel compte pour son centre, pas comme une erreur.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10005,6 +10026,8 @@ const TRANSLATIONS = {
     home_todaysreport_steady_label:'Estable por ahora', home_todaysreport_steady_desc:"Un cambio suele notarse tras varias sesiones, no una sola",
     home_todaysreport_first_label:"Primeras puntuaciones de hoy", home_todaysreport_first_desc:'Nada con qué comparar todavía',
     home_todaysreport_weakest_label:'Sigue siendo tu punto débil',
+    interval_result_label:"Precisión del intervalo",
+    interval_measure:"La precisión es 100 menos tu distancia media a la nota objetivo, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La nota objetivo es la fundamental más el intervalo, en cualquier octava. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. En {int} y {pro}, la primera y la segunda mitad de lo puntuado se muestran por separado como ataque y aterrizaje. El vibrato natural cuenta como su centro, no como un error.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11371,6 +11394,8 @@ const TRANSLATIONS = {
     home_todaysreport_steady_label:'Bugün şimdilik sabit', home_todaysreport_steady_desc:"Değişim genelde bir değil, birkaç oturumda görülür",
     home_todaysreport_first_label:"Bugünün ilk puanları", home_todaysreport_first_desc:'Henüz karşılaştıracak bir şey yok',
     home_todaysreport_weakest_label:'Hâlâ en zayıf yönünüz',
+    interval_result_label:"Aralık doğruluğu",
+    interval_measure:"Doğruluk, 100'den hedef notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Hedef nota, kök notaya aralığın eklenmesiyle bulunur; hangi oktavda olduğu fark etmez. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. {int} ve {pro} seviyelerinde puanlanan bölümün ilk ve ikinci yarısı atak ve iniş olarak ayrı gösterilir. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
   },
 };
 let currentLanguage = 'en';
@@ -16632,12 +16657,21 @@ function newIntervalTarget(keepResult){
   const {lo, hi} = practiceBounds(levelMargin(), intervalDef.semi); // the root, with room for the interval above it
   intervalRootMidi = pickNote('intervalRoot', lo, hi);
   intervalTargetMidi = intervalRootMidi + intervalDef.semi;
-  document.getElementById('intervalTargetLabel').textContent = intervalDef.name;
-  document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(intervalRootMidi);
+  showIntervalTarget();
   if(keepResult===true) return;
   document.getElementById('intervalAgainBtn').style.display='none';
   document.getElementById('intervalResult').style.display='none';
   document.getElementById('intervalSubScores').style.display='none';
+}
+// The stage's target: the interval's name and the note it lands on; the root is a quiet label above them.
+function showIntervalTarget(){
+  document.getElementById('intervalTargetLabel').textContent = intervalDef.name;
+  document.getElementById('intervalTargetNote').textContent = noteNameFromMidi(intervalTargetMidi);
+  document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(intervalRootMidi);
+}
+function renderIntervalMeasure(){
+  const el = document.getElementById('intervalMeasure'); if(!el) return;
+  el.textContent = t('interval_measure').replace(/\{beg\}/g, t('skill_level_beginner')).replace(/\{int\}/g, t('skill_level_intermediate')).replace(/\{pro\}/g, t('skill_level_professional'));
 }
 document.getElementById('intervalPlayBtn').addEventListener('click', ()=>{
   playTone(noteToFreq(intervalRootMidi), 0.55, 0);
@@ -16647,8 +16681,7 @@ document.getElementById('intervalNextBtn').addEventListener('click', ()=>newInte
 let intervalAgain = null;
 document.getElementById('intervalAgainBtn').addEventListener('click', ()=>{
   ({root:intervalRootMidi, def:intervalDef} = intervalAgain); intervalTargetMidi = intervalRootMidi + intervalDef.semi;
-  document.getElementById('intervalTargetLabel').textContent = intervalDef.name;
-  document.getElementById('intervalRootLabel').textContent = noteNameFromMidi(intervalRootMidi);
+  showIntervalTarget();
   document.getElementById('intervalListenBtn').click();
 });
 document.getElementById('intervalListenBtn').addEventListener('click', async ()=>{
@@ -16658,24 +16691,29 @@ document.getElementById('intervalListenBtn').addEventListener('click', async ()=
   btn.disabled = true;
   document.getElementById('intervalAgainBtn').style.display='none';
   if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  const stage = document.getElementById('intervalStage'), win = LISTEN_WINDOW_MS[exerciseLevel];
+  houseSession(()=>btn.disabled, stage); // the whole take is on stage: reference, cue and singing
+  const lane = vcTakeStart(stage, target, win);
   await referenceThenCue(()=>{ playTone(noteToFreq(root), 0.55, 0); playTone(noteToFreq(target), 0.55, 0.65); }, 1350, btn);
   btn.textContent=t('action_listening');
   let listening = true;
-  singingSession(()=>listening);
-  const res = await captureAccuracyForTarget(target, LISTEN_WINDOW_MS[exerciseLevel], listenOpts(cfg));
+  singingSession(()=>listening, stage);
+  const res = await captureAccuracyForTarget(target, win, listenOpts(cfg, {onFrame:(ms, c)=>vcTakeFrame(lane, ms, c)}));
   listening = false;
+  vcTakeEnd(lane);
   btn.disabled = false; btn.textContent=t('action_listenscore');
   document.getElementById('intervalResult').style.display='block';
+  renderIntervalMeasure();
+  vcTakeTrace(document.getElementById('intervalTraceBox'), res.heard && res.samples, win);
   if(res.noVoice){
-    document.getElementById('intervalAccuracyVal').textContent = '—';
-    document.getElementById('intervalAccuracyVal').className = 'ex-accuracy';
+    vcResultNum(document.getElementById('intervalAccuracyVal'), null);
     document.getElementById('intervalFeedback').textContent = t('ex_noheard_retry');
     document.getElementById('intervalSubScores').style.display='none';
     return;
   }
   const accEl = document.getElementById('intervalAccuracyVal');
-  accEl.textContent = res.accuracy+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(res.accuracy);
+  vcResultNum(accEl, res.heard ? res.accuracy+'%' : null);
   document.getElementById('intervalFeedback').textContent = accuracyFeedback(res.accuracy, res.heard);
   const subRow = document.getElementById('intervalSubScores');
   if(cfg.splitAttackLanding && res.heard){
