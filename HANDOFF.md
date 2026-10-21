@@ -52,7 +52,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    in the roadmap); (d) level-up explanation is next: report its migration and API change before applying. Specs below.
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`): **live 2026-10-11** (with the 1.1 fixes).
    Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Phase 3 (Home and the Coach tab): **live 2026-10-13**
-   (with the 3.1 fixes). Next: phase 4 (Coach tools), spec to come from the user.
+   (with the 3.1 fixes). **Phase 4a (14 Coach tools onto the take stage and result, spec verbatim
+   `design/house-lights/PHASE4A.md`): building on `redesign/phase4a` since 2026-10-21**; no merge or deploy before the
+   user reviews the screenshots; rollback target dpl_6FBgCU661see6RBdPhXoMniCp42s. Phase 4b: the 10 tools with their own displays.
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3
