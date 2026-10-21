@@ -8,7 +8,8 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 | Branch | What it is | Status |
 |---|---|---|
-| `master` | Everything that is live, through House Lights phase 3 + 3.1 (merge 7996514, dpl_CAMGry4a7b8RewSA6bJNST64PVv7, 2026-10-13) | Matches production |
+| `master` | Everything that is live, through the single mic stream, item 3 (merge 7bfc47a, dpl_6FBgCU661see6RBdPhXoMniCp42s, 2026-10-21; before it House Lights phase 3, dpl_CAMGry4a7b8RewSA6bJNST64PVv7) | Matches production |
+| `feat/single-stream` | Item 3: C3 + F2 single mic stream (spec `design/audio/BUILD.md`) | Merged (7bfc47a) and live 2026-10-21. Closed |
 | `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
 | `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
 | `redesign/phase1` | House Lights redesign phase 1, Foundation, and the 1.1 fixes (spec `design/house-lights/PHASE1.md`) | Merged (12a1364) and live 2026-10-11. Closed |
@@ -58,7 +59,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    recommended). Branch-only flags `window.__streamMode`, `window.__bleedDefence`; scripts in `scripts/audio-verify/`.
    **Decided 2026-10-15: C3 + F2 (quiet-singer gain on the pitch path).** **Building on `feat/single-stream`** per
    `design/audio/BUILD.md` (5 commits, full verification, iPhone preview after a typed go-ahead, then report; no merge or
-   prod deploy before review; rollback dpl_CAMGry4a7b8RewSA6bJNST64PVv7). Long jobs on AC power with checkpoint/resume. Its priority went up
+   prod deploy before review; rollback dpl_CAMGry4a7b8RewSA6bJNST64PVv7). **Live 2026-10-21: dpl_6FBgCU661see6RBdPhXoMniCp42s**
+   (merge 7bfc47a; iPhone checks a–e, g pass, f skipped; every production check passed, results in the roadmap).
+   Still open: real-speaker loopback timing, micdiag phone results, quiet-room loopreal (step 7). Long jobs on AC power with checkpoint/resume. Its priority went up
    on 2026-10-02: signed in, RTF hears soft singing on fewer frames than signed out (see the roadmap's noise-gate entry).
    Next to it, scoped (2026-10-06), not to be fixed yet: **"Speaker bleed scores as singing"** (roadmap, "Known
    issues (app-wide)"): with nobody singing, the app's own playback is credited (Entrance Trainer 8/8 entrances,

@@ -330,7 +330,7 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
 
 ## Known issues (app-wide)
 
-- [ ] **Item 3, the single-stream migration: step 1 (investigation) started 2026-10-13** on `exp/single-stream`
+- [x] **Item 3, the single-stream migration: step 1 (investigation) started 2026-10-13** on `exp/single-stream`
   (spec verbatim: `design/audio/SPEC.md`). Inventory → `design/audio/STREAMS.md`, measurements in
   `scripts/audio-verify/`, recommendation → `design/audio/SINGLE_STREAM.md`. No app change is merged or deployed in
   this step; experimental variants sit behind a branch-only flag (`window.__streamMode`). Phase 4 waits for it.
@@ -347,6 +347,18 @@ the first 400 ms isn't scored and the window is 3.0 / 2.5 / 2.0 s by level (`lis
   Phone results (micdiag) still to come from the user.
   **Verified 2026-10-18; gate 2.3 passed with five regressions accepted by the user** (SINGLE_STREAM.md, "Accepted
   regressions"); 1.3 shipped without a Steady retune (accepted).
+  **Live 2026-10-21: dpl_6FBgCU661see6RBdPhXoMniCp42s** (merge 7bfc47a, `--no-ff`; rollback target
+  dpl_CAMGry4a7b8RewSA6bJNST64PVv7). Accepted before it: the Your Choir take level +18.4 dB (item 6); clipping 0 at the
+  output, in the stored take and in a Studio take; the take sits 9 dB under the synth parts (master 27 dB). iPhone
+  checks on the preview (dpl_2oEcWarNEXHZTRze6g92QXqTnxkD): a Tuner "In tune", b Pitch Match score, c Vocal Load gauge,
+  d Studio record/play, e one orange mic indicator, g loud Studio take without crackle: pass; f (Your Choir balance)
+  skipped, Choir World locked on the user's account, covered by yc.js. Production checks (one at a time, paced,
+  0 test accounts left): house 111/0, system 7/7, contrast as phase 3 (Light 32, Dark 0), batch1 112/0, batch3c 40/0,
+  warm-up entries 52/0, levelup 45/0, cv-p9 exit 0, cv-p10 7 MATCH / 0 MISMATCH, Home shots, listenwin 27/0, picker
+  93/0, glider-courses 50/0, modecheck 30/30 (Chromium, WebKit, Firefox: one getUserMedia, EC on, NS/AGC off, Vocal
+  Load gauge on all three), yc.js: no gaps, no clipping; sung take stored −12.6 / played −15.7 dBFS, identical to the
+  local branch. Logs: `scripts/design-verify/logs/prod-2026-10-21T10-45-07/`. Still open: real-speaker loopback timing,
+  the micdiag phone results, the quiet-room loopreal run (step 7, bleed fixes).
 
 - [ ] **Voice-like background: speech, TV, babble** (known limit, logged 2026-10-18 from the single-stream gate). The
   pitch detector can't tell another voice from the singer's: master already hears babble on 73% of Tuner frames, and

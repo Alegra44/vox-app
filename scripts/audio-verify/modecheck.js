@@ -9,7 +9,8 @@
 //     engine (until this branch it was hidden outside desktop Chromium).
 // Fake capture: Chromium plays a sung note from a file; Firefox's fake device is its own tone; WebKit's is whatever
 // Playwright's build gives (signal levels are reported as found: −∞ means digital silence, which can't show pitch).
-// Usage: node scripts/audio-verify/modecheck.js [chromium,webkit,firefox]   (MC_SIGNED_OUT=1 skips the gauge check)
+// Usage: node scripts/audio-verify/modecheck.js [chromium,webkit,firefox]   (MC_SIGNED_OUT=1 skips the gauge check;
+//   MC_URL=<url> runs against a deployment, e.g. production, instead of serving deploy/)
 const pw = require('playwright');
 const path = require('path'), fs = require('fs'), http = require('http');
 const { TESTDATA } = require('../testdata');
@@ -27,6 +28,7 @@ const ENGINES = {
   webkit: [{}, { permissions: ['microphone'] }],
   firefox: [{ firefoxUserPrefs: { 'media.navigator.streams.fake': true, 'media.navigator.permission.disabled': true, 'media.autoplay.default': 0 } }, {}],
 };
+const URL_ = process.env.MC_URL || null;
 const ONLY = (process.argv[2] || 'chromium,webkit,firefox').split(',');
 const WANT = { echoCancellation: true, noiseSuppression: false, autoGainControl: false };
 const GUM = () => {
@@ -47,10 +49,11 @@ let auth = null;
     const p = decodeURIComponent(new URL(q.url, 'http://x').pathname).replace(/^\//, '') || 'index.html', f = path.join(DEPLOY, p);
     if (!f.startsWith(DEPLOY) || !fs.existsSync(f)) { r.writeHead(404); r.end(); return; }
     r.writeHead(200, { 'content-type': types[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(r);
-  }).listen(PORT);
+  });
+  if (!URL_) srv.listen(PORT);
   let fail = 0;
   const check = (name, ok, detail) => { if (!ok) fail++; log(`   ${ok ? '✓' : '✗'} ${name}${detail ? ' · ' + detail : ''}`); };
-  log(`modecheck ${stamp}  playwright ${require('playwright/package.json').version}  ${SIGNED_IN ? 'signed in: ' + email : 'signed out'}`);
+  log(`modecheck ${stamp}  ${URL_ || 'local build'}  playwright ${require('playwright/package.json').version}  ${SIGNED_IN ? 'signed in: ' + email : 'signed out'}`);
   try {
     for (const name of ONLY) {
       const [launch, ctxOpts] = ENGINES[name];
@@ -62,7 +65,7 @@ let auth = null;
         await ctx.addInitScript(SKIP); await ctx.addInitScript(GUM);
         const page = await ctx.newPage(), errors = [];
         page.on('pageerror', e => errors.push(String(e).split('\n')[0]));
-        await page.goto(`http://localhost:${PORT}/`, { waitUntil: 'load' }); await sleep(2500);
+        await page.goto(URL_ || `http://localhost:${PORT}/`, { waitUntil: 'load' }); await sleep(2500);
         const lang = page.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible().catch(() => false)) { await lang.click(); await sleep(300); }
         if (SIGNED_IN && !auth) {
           await page.evaluate(() => openAuthModal());
