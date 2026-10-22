@@ -57,8 +57,13 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    user reviews the screenshots; rollback target dpl_6FBgCU661see6RBdPhXoMniCp42s. Phase 4b: the 10 tools with their own displays.
    **Progress 2026-10-21:** build done and committed (spec bdeb0a4, guards fbbbb90, 2.1 2887c0a, 2.2 442c0f0 71d4fff
    ecb187d 877b562 804ac6d b23d3e5, 2.3 a3ebc82 8bf32c7, 2.4 32d67d4, 2.5 7e6bb1a, 2.6 390d425). Each sung tool equal to
-   master in a one-run scores.js; copyscan --tools 0 in four languages; modecheck: Vocal Puzzle 0 getUserMedia. Left: §3
-   checks (on AC power; scores.js 3 runs per side), §4 shots and the review/phase4a push, §5 report. Open for the user:
+   master in a one-run scores.js; copyscan --tools 0 in four languages; modecheck: Vocal Puzzle 0 getUserMedia.
+   **2026-10-22: §3–§5 done, waiting for the user's review.** Checks (logs/p4a-checks-2026-10-22T03-15-02 and
+   logs/suites-2026-10-22T04-01-49): scores.js 3 runs per side within ±2; house 351/0; contrast: the only new items are
+   the take note caught inside its 120 ms lock fade (settled 6.83/18; master's Pitch Match has the same fade), the choir
+   X-ray/level rows are the same on master Light; every suite passes. Fix e4de6ca: a stopped EVE / 5 Ways session left
+   Start disabled (stopcheck.js, new). NB suites.sh's house/contrast `--base master` test master only. Copy table
+   design/house-lights/PHASE4A_COPY.md. Pushed redesign/phase4a and review/phase4a (orphan, shots). Open for the user:
    EVE step 5 has no live guide and EVE's stage names no note (an ear test); Range Finder's "so far" rows show the notes
    captured so far; Pitch Match's attack/landing rows are now full width (a phase 2 layout bug).
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
