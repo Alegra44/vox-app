@@ -1489,6 +1489,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
      Paper with rows instead of cards; one raised block (.hl-raised) where there's a clear action. */
   :is(#panel-key, #panel-vocallab, #panel-genre, #panel-warmup) > .key-card,
   #panel-vocalpuzzle > .key-card:not(#puzzleGuessCard){background:none;border:0;border-radius:0;box-shadow:none;padding:0;}
+  #panel-exercises > .key-card{background:none;border:0;border-radius:0;box-shadow:none;padding-left:0;padding-right:0;} /* 4a.1: the page on paper; the tool card and the difficulty breakdown stay raised */
+  :is(#pitchAgainBtn, #intervalAgainBtn, #scaleAgainBtn){white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
   #panel-key .key-section{margin:0;padding:var(--hl-s6) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
   #panel-key .key-section:first-child{border-top:0;padding-top:0;}
   #panel-key .key-section .step-label, #panel-warmup .step-label{color:var(--hl-ink-3);}
@@ -16721,7 +16723,19 @@ async function referenceThenCue(playReference, refMs, btn){
 function listenOpts(cfg, extra={}){
   return {accuracyMultiplier:cfg.accuracyMultiplier, splitAttackLanding:cfg.splitAttackLanding, waitForVoiceMs:LISTEN_WAIT_MS, graceMs:LISTEN_GRACE_MS, ...extra};
 }
-function showAgain(id, label){ const b = document.getElementById(id); b.textContent = `${t('ex_sing_again')} (${label})`; b.style.display = ''; }
+// "Sing it again (D4 → Perfect 5th)" on one line: if the full text overflows, "Sing it again" alone, the full text in its
+// aria-label. Re-fitted when its container's width changes (it is hidden on the stage when set, shown when the house is up).
+function fitAgain(b){
+  const full = b.dataset.full; if(!full || !b.clientWidth) return;
+  b.textContent = full; b.removeAttribute('aria-label');
+  if(b.scrollWidth > b.clientWidth){ b.textContent = t('ex_sing_again'); b.setAttribute('aria-label', full); }
+}
+const againFit = typeof ResizeObserver === 'function' ? new ResizeObserver(es => es.forEach(e => e.target.querySelectorAll(':scope > [data-full]').forEach(fitAgain))) : null;
+function showAgain(id, label){
+  const b = document.getElementById(id);
+  b.dataset.full = `${t('ex_sing_again')} (${label})`; b.textContent = b.dataset.full; b.style.display = '';
+  fitAgain(b); if(againFit) againFit.observe(b.parentElement);
+}
 
 function setExerciseLevel(level){
   exerciseLevel = level;
