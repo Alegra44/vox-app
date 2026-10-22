@@ -993,8 +993,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     background:var(--surface);border:1px solid var(--hairline);border-top:3px solid var(--hairline);border-radius:16px;
     padding:26px;text-align:center;
   }
-  .ex-target-card.mode-interval{border-top-color:var(--hl-sop);}
-  .ex-target-card.mode-scale{border-top-color:var(--brass);}
   .interval-root-badge{
     display:inline-flex;align-items:center;gap:8px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;
     color:var(--muted);background:var(--surface-raised);border:1px solid var(--hairline);
@@ -1475,7 +1473,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* Ear → Voice → Ear: an ear test, so its stage names no note (no Hz, no grid labels); step 5 has no live guide */
   .eve-stage .pm-hz, .eve-stage .pm-lane text{display:none;}
   .vc-stage.is-live.eve-unguided .pm-lane, .vc-stage.is-live.eve-unguided .pm-cents{visibility:hidden;}
-  .vc-stage.is-live #eveStepNote{font-size:var(--hl-t-h1);font-weight:400;}
+  .vc-stage.is-live #eveStepNote{font-size:var(--hl-t-h1);font-weight:400;text-align:center;}
   .vc-chart-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
   .vc-result-dims.dual-score-row{display:grid;gap:0;margin:0;justify-content:stretch;}
   .vc-result-dims > .vc-dim.dual-score{background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;text-align:left;}

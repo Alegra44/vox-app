@@ -142,3 +142,18 @@ Before pushing, fix these on redesign/phase4a (copy only):
 Re-run hooks (--base master), copyscan --tools and fixshots for the Ear → Voice → Ear stage and result and the Breath stage, in French and Turkish. Add those shots to review/phase4a-fix. Run the secret check, then push redesign/phase4a and review/phase4a-fix. Then stop and report. Don't deploy until I type "deploy".
 
 Build note: ear_correct already existed on master as Ear Training's feedback line ("Correct!"); 4a.1 fix 8 defined it a second time, so the later definition replaced the feedback text too. The feedback line's key is now ear_feedback_correct with master's text in four languages; ear_correct is the visually hidden answer label above.
+
+---
+
+## 4a.3 (user, 2026-10-22, verbatim)
+
+4a.2 review: approved. Two small CSS fixes before the merge:
+
+1. Ear → Voice → Ear step 5: centre #eveStepNote when it shows the "From memory" phrase, to match the rest of the stage.
+2. Remove the coloured mode stripes from the Daily Exercises tool card: .ex-target-card.mode-interval (--hl-sop) and .mode-scale (--brass). Every mode keeps the plain hairline top border. Part colours are only for choir parts.
+
+Commit, run hooks (--base master), and take a fixshot of the Interval result and the Ear → Voice → Ear step 5 stage at 390 Light. If both look right, go straight on with the deploy steps from 4a.1: merge with --no-ff, secret check, push, deploy, production checks, roll back to dpl_6FBgCU661see6RBdPhXoMniCp42s if a failure repeats, review/phase4a-prod, HANDOFF.
+
+Add these to HANDOFF:
+- For phase 4b: Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help"), the hard-coded "Listening…" on stage buttons, and Mirror's "No signal at this moment".
+- For phase 10: on Daily Exercises, the Today's Recommended Focus text is bigger than the page subtitle and its title isn't bold; Smart Warmup's "(3s)" needs a space before the unit, like everywhere else.
