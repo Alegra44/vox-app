@@ -86,3 +86,38 @@ Failures are re-run on master and classified. vibfix and noisegate aren't needed
 5. REPORT, then stop
 - Commits; scores.js table; house and contrast results; the suite table; the copy table in four languages; anything you couldn't fit the pattern.
 - No merge and no deploy until I've reviewed. The rollback target for this phase is dpl_6FBgCU661see6RBdPhXoMniCp42s.
+
+4a.1 FIX ROUND (user's review, 2026-10-22)
+Approved as built: Ear → Voice → Ear step 5 with no live guide and no note name (no live lane); Range Finder's captured-notes rows; Pitch Match's full-width attack/landing rows (list them in the report as the one expected change from master); per-note rows instead of a trace for Scale Run, Custom Challenge and Sing It 5 Ways; the half-faded lock (a 120 ms transition, not a bug).
+Work on redesign/phase4a. AC power only, one verify script at a time. Ask the user before pushing anything.
+
+FIXES
+1. Ear → Voice → Ear says "1 points". When |delta| is 1, use new keys eve_note_better_one / eve_note_dropped_one: en "1 point higher / 1 point lower", fr "1 point de plus / de moins", es "1 punto más / menos". Turkish has no singular form, so the tr _one keys use the current text.
+2. "No signal" is hard-coded in English in Custom Challenge's result rows and in Ear → Voice → Ear's step note. New key take_not_heard: en "Not heard", fr "Non entendu", es "No se oyó", tr "Duyulmadı". Same size as the other row values, in ink-3. Mirror's "No signal at this moment" stays for 4b (on the 4b list in HANDOFF).
+3. Custom Challenge result rows: numbered like Scale Run ("1 · A4"), because a sequence can repeat a note.
+4. Smart Warmup: remove the emoji from warmup_step1_title, warmup_step2_title, warmup_step3_title in all four languages ("1. Lip trill siren"). Replace warmup_stylescale_suffix with a template key warmup_stylescale: en "{genre}-style scale", fr "Gamme de style {genre}", es "Escala de estilo {genre}", tr "{genre} tarzı gam".
+5. Breath Trainer:
+   - The amber glow at the top of the stage (setVoiceAmbientTarget(…, [232,163,61])) uses the voice colour like the Tuner does (--hl-voice for the current theme), with the same cap.
+   - The bar under the ring gets a label above it, small and ink-3: breath_level_label: en "Loudness", fr "Volume", es "Volumen", tr "Ses düzeyi"; the same key for its aria-label (now hard-coded "Level"). Its empty track takes the vocal-load bar's track colour, so it shows on the dark stage.
+   - While a hold runs, the button looks like the active button on the other stages (neutral outline and dot, like "Listening…"), not voice blue. The label stays "Stop". Rule 1: the voice colour is for starting to sing, not for stopping.
+   - Seconds: one format everywhere on Breath (ring, target line, result number, Duration row): one decimal from Intl.NumberFormat in the current language, a no-break space and "s" ("5.5 s", fr "5,5 s"). Display only; stored values unchanged.
+6. Vocal Lab tiers are a record, not the live voice: no voice colour. In ink by reliability: Extended --hl-ink-3, Comfortable --hl-ink-2, Reliable --hl-ink, opacity 1. A tier covering a single note gets a minimum width of 8 px at its position.
+7. Daily Exercises layout: flatten #panel-exercises > .key-card at every width (no background, border, shadow, radius or side padding); the tool card and the difficulty breakdown stay raised. Pitch Match changes too (intended). "Sing it again" stays on one line (white-space: nowrap); if it still overflows (scrollWidth), show "Sing it again" alone with the full text in its aria-label. Check at 390 and 360.
+8. Ear Training answers don't rely on colour alone: hl-check before the correct choice, hl-close before a wrong pick (16 px, currentColor), visually hidden text ear_correct "Right answer", ear_wrong "Your pick, wrong" in four languages. Fills stay.
+9. Range Finder result: "Run it again" becomes the same outline button as everywhere else.
+
+CHECKS (branch vs master in the same run where it applies, medians of 3)
+- scores.js is the gate: all tools, 3 runs per side, every score equal within ±2 (display-only changes).
+- Then hooks.js; contrast.js (report the Vocal Lab fills: 3:1 or better against their track, both themes); copyscan.js (the new keys); house.js; stopcheck.js; picker; batch1.
+- Secret check; push redesign/phase4a only after the user says so.
+
+SCREENSHOTS (review/phase4a-fix, pushed only after the user says so)
+At 390 Light and Dark and 1280 Light: Daily Exercises idle; Interval result (the again button); Scale result; Ear result; Custom result; Ear → Voice → Ear result, also in French; Breath stage and result; Vocal Lab; Smart Warmup, also in French; Range result. One sheet: sheets/fix.jpg.
+Then stop and report. No deploy until the user types "deploy".
+
+WHEN THE USER TYPES "deploy"
+1. Merge redesign/phase4a into master with --no-ff, secret check, push.
+2. From deploy/: npx vercel@62.2.0 deploy --prod --yes --scope alegra1122 (retry once on "Not authorized").
+3. Production checks: prod.sh, house.js, modecheck, scores.js, stopcheck; spaced out; delete the test accounts afterwards.
+4. A failing check runs once more; failing again → roll back to dpl_6FBgCU661see6RBdPhXoMniCp42s and report.
+5. Delete review/phase4a and review/phase4a-fix, push review/phase4a-prod with production screenshots, update HANDOFF.md.
