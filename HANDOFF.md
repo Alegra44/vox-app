@@ -54,7 +54,7 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Phase 3 (Home and the Coach tab): **live 2026-10-13**
    (with the 3.1 fixes). **Phase 4a (14 Coach tools onto the take stage and result, spec verbatim
    `design/house-lights/PHASE4A.md`): building on `redesign/phase4a` since 2026-10-21**; no merge or deploy before the
-   user reviews the screenshots; rollback target dpl_6FBgCU661see6RBdPhXoMniCp42s. Phase 4b: the 10 tools with their own displays.
+   user reviews the screenshots; rollback target dpl_6FBgCU661see6RBdPhXoMniCp42s. Phase 4b: the 10 tools with their own displays; its list also has Mirror's hard-coded "No signal at this moment" (4a.1 fix 2 left it for 4b).
    **Progress 2026-10-21:** build done and committed (spec bdeb0a4, guards fbbbb90, 2.1 2887c0a, 2.2 442c0f0 71d4fff
    ecb187d 877b562 804ac6d b23d3e5, 2.3 a3ebc82 8bf32c7, 2.4 32d67d4, 2.5 7e6bb1a, 2.6 390d425). Each sung tool equal to
    master in a one-run scores.js; copyscan --tools 0 in four languages; modecheck: Vocal Puzzle 0 getUserMedia.

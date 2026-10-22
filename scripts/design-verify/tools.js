@@ -60,7 +60,7 @@ const TOOLS = [
     },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('customStartBtn').click(); }),
     busy: () => { const r = document.getElementById('customRunnerCard'); return !!r && r.style.display === 'block'; },
-    display: () => ({ big: document.getElementById('customResultAvg').textContent, rows: [...document.querySelectorAll('#customResultRows .record-val')].map(e => e.textContent).join(',') }) },
+    display: () => ({ big: document.getElementById('customResultAvg').textContent, rows: [...document.querySelectorAll('#customResultRows .record-val, #customResultRows .vc-dim > :last-child')].map(e => e.textContent).join(',') }) },
   { key: 'eve', idle: '#eveStartBtn', liveAt: 1900, name: 'Ear → Voice → Ear', panel: 'earvoiceear', sung: true, btn: '#eveStartBtn', result: '#eveResultCard', timeout: 30000,
     open: async page => { await C.showPanel(page, 'earvoiceear'); await C.clearOverlays(page); await page.evaluate(`(${narrow})(69, 69)`); },
     act: page => page.evaluate(() => { window.__t0 = performance.now(); document.getElementById('eveStartBtn').click(); }),

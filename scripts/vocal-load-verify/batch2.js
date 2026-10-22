@@ -44,7 +44,7 @@ const FEATURES = [
     prep: "document.getElementById('customResultCard').style.display='none'; document.getElementById('customBuilderCard').style.display='block'; __seed(7);",
     start: async p => { await p.locator('#customGenerateBtn').click(); await sleep(300); await p.locator('#customStartBtn').click(); },
     active: "document.getElementById('customRunnerCard').style.display==='block'",
-    result: () => ({ avg: document.getElementById('customResultAvg').textContent, rows: document.getElementById('customResultRows').textContent }) },
+    result: () => ({ avg: document.getElementById('customResultAvg').textContent, rows: document.getElementById('customResultRows').textContent.replace(/\d+ · /g, '') }) }, // 4a.1 numbers the rows
   { key: 'rhythm', label: 'Rhythm Trainer (runs to the end)', kind: 'sidecar', shell: 'train', enter: train('rhythm'), startBtn: 'rhythmStartBtn', gauge: 'vlGaugeRhythm',
     active: 'rhythmActive',
     result: () => ({ claimed: rhythmResults.map(r => r.claimed ? 1 : 0).join(''), card: document.getElementById('rhythmResultCard').style.display }) },

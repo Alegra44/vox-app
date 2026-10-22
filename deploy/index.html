@@ -1479,6 +1479,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-result-dims > .vc-dim.dual-score{background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;text-align:left;}
   .vc-dim .dual-label{font-size:var(--hl-t-small);color:var(--hl-ink-2);text-transform:none;letter-spacing:0;}
   .vc-dim .dual-val{font-size:var(--hl-t-body);font-weight:400;font-stretch:normal;color:var(--hl-ink);font-variant-numeric:tabular-nums;margin:0;}
+  .vc-result .vc-dim > .vc-not-heard, .vc-dim .dual-val.vc-not-heard, .vc-take-note.vc-not-heard{color:var(--hl-ink-3);} /* a take nobody heard: the row's size, in ink-3 */
   .vc-visually-hidden{position:absolute !important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;}
 
   /* ============ HOUSE LIGHTS: PAPER TOOLS (phase 4a) ============ */
@@ -7461,6 +7462,7 @@ const TRANSLATIONS = {
     eve_note_same:"Without help you scored the same as with the note just played. Your pitch memory held.",
     eve_note_dropped:"Without help you scored {n} points lower than with the note just played. A gap is normal: run the loop again to train your pitch memory.",
     eve_note_dropped_one:"Without help you scored 1 point lower than with the note just played. A gap is normal: run the loop again to train your pitch memory.",
+    take_not_heard:"Not heard",
     eve_note_nosignal:"One of the sung steps had no clear pitch, so the two can't be compared. Try again a little louder or closer to the mic.",
     eve_measure:"Step 1 plays a note from your range; listening for step 2 opens 1.3 seconds after it starts. Step 4 plays a second note, an interval from your level's set away from the first, and step 5 is sung from memory with no replay. Each sung step listens for 1.6 seconds and scores 100 minus your average distance from the note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the steps where a clear pitch was heard.",
     five_measure:"The note is picked from the lower middle of your range, so a semitone either side still fits. Each round plays it (or the note a semitone up or down) for 0.7 seconds, then listens for 1.5 seconds from 1 second after it starts. A round scores 100 minus your average distance from its note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. Head and mixed voice can't be told apart from pitch: those rounds score your pitch only, and which register you used is for your ear to judge. The big number is the average of the rounds where a clear pitch was heard.",
@@ -8854,6 +8856,7 @@ const TRANSLATIONS = {
     eve_note_same:"Sans aide, vous avez obtenu le même score qu'avec la note juste jouée. Votre mémoire de la hauteur a tenu.",
     eve_note_dropped:"Sans aide, vous avez obtenu {n} points de moins qu'avec la note juste jouée. Un écart est normal : refaites la boucle pour entraîner votre mémoire de la hauteur.",
     eve_note_dropped_one:"Sans aide, vous avez obtenu 1 point de moins qu'avec la note juste jouée. Un écart est normal : refaites la boucle pour entraîner votre mémoire de la hauteur.",
+    take_not_heard:"Non entendu",
     eve_note_nosignal:"L'une des étapes chantées n'avait pas de hauteur claire : les deux ne peuvent pas être comparées. Réessayez un peu plus fort ou plus près du micro.",
     eve_measure:"L'étape 1 joue une note de votre tessiture ; l'écoute de l'étape 2 s'ouvre 1,3 seconde après son début. L'étape 4 joue une seconde note, à un intervalle de la première tiré des intervalles de votre niveau, et l'étape 5 se chante de mémoire, sans réécoute. Chaque étape chantée écoute pendant 1,6 seconde et vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des étapes où une hauteur claire a été entendue.",
     five_measure:"La note est tirée du bas-milieu de votre tessiture, pour qu'un demi-ton de chaque côté y tienne encore. Chaque manche la joue (ou la note un demi-ton au-dessus ou en dessous) pendant 0,7 seconde, puis écoute pendant 1,5 seconde à partir d'une seconde après son début. Une manche vaut 100 moins votre écart moyen à sa note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. La voix de tête et la voix mixte ne se distinguent pas par la hauteur : ces manches notent seulement votre justesse, et c'est à votre oreille de juger du registre utilisé. Le grand chiffre est la moyenne des manches où une hauteur claire a été entendue.",
@@ -10247,6 +10250,7 @@ const TRANSLATIONS = {
     eve_note_same:"Sin ayuda sacaste lo mismo que con la nota recién tocada. Tu memoria de la afinación aguantó.",
     eve_note_dropped:"Sin ayuda sacaste {n} puntos menos que con la nota recién tocada. Es normal que haya diferencia: repite el ciclo para entrenar tu memoria de la afinación.",
     eve_note_dropped_one:"Sin ayuda sacaste 1 punto menos que con la nota recién tocada. Es normal que haya diferencia: repite el ciclo para entrenar tu memoria de la afinación.",
+    take_not_heard:"No se oyó",
     eve_note_nosignal:"Uno de los pasos cantados no tuvo una afinación clara, así que no se pueden comparar. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     eve_measure:"El paso 1 toca una nota de tu rango; la escucha del paso 2 se abre 1,3 segundos después de que empiece. El paso 4 toca una segunda nota, a un intervalo de la primera tomado de los intervalos de tu nivel, y el paso 5 se canta de memoria, sin volver a oírla. Cada paso cantado escucha durante 1,6 segundos y vale 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de los pasos en los que se oyó una afinación clara.",
     five_measure:"La nota se elige de la parte media-baja de tu rango, para que medio tono a cada lado siga cabiendo. Cada ronda la toca (o la nota medio tono arriba o abajo) durante 0,7 segundos y luego escucha 1,5 segundos a partir de 1 segundo después de que empiece. Una ronda vale 100 menos tu distancia media a su nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. La voz de cabeza y la voz mixta no se distinguen por la afinación: esas rondas puntúan solo tu afinación, y el registro que usaste lo juzga tu oído. El número grande es la media de las rondas en las que se oyó una afinación clara.",
@@ -11640,6 +11644,7 @@ const TRANSLATIONS = {
     eve_note_same:"Yardımsız adımda, nota az önce çalındığındakiyle aynı puanı aldınız. Perde hafızanız sağlam kaldı.",
     eve_note_dropped:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan az aldınız. Bu fark normaldir: perde hafızanızı çalıştırmak için döngüyü tekrarlayın.",
     eve_note_dropped_one:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan az aldınız. Bu fark normaldir: perde hafızanızı çalıştırmak için döngüyü tekrarlayın.",
+    take_not_heard:"Duyulmadı",
     eve_note_nosignal:"Söylenen adımlardan birinde net bir perde yoktu, bu yüzden ikisi karşılaştırılamıyor. Biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
     eve_measure:"1. adım aralığınızdan bir nota çalar; 2. adımın dinlemesi notanın başlamasından 1,3 saniye sonra açılır. 4. adım, seviyenizin aralıklarından birinde ilk notadan uzaklaşan ikinci bir nota çalar; 5. adım tekrar dinlemeden, hafızadan söylenir. Söylenen her adım 1,6 saniye dinler ve 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu adımların ortalamasıdır.",
     five_measure:"Nota, her iki yana bir yarım ses daha sığacak şekilde aralığınızın alt-orta bölümünden seçilir. Her tur notayı (ya da bir yarım ses üstünü veya altını) 0,7 saniye çalar, sonra başlamasından 1 saniye sonra itibaren 1,5 saniye dinler. Bir tur, 100'den notasına sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Kafa sesi ve karışık ses perdeden ayırt edilemez: bu turlar yalnızca perdenizi puanlar, hangi registeri kullandığınıza kulağınız karar verir. Büyük sayı, net bir perdenin duyulduğu turların ortalamasıdır.",
@@ -20361,8 +20366,8 @@ document.getElementById('customStartBtn')?.addEventListener('click', async ()=>{
   avgEl.className = 'ex-accuracy '+accuracyClass(avg);
   vcResultNum(avgEl, heardResults.length ? avg+'%' : null);
   document.getElementById('customCoach').textContent = heardResults.length ? accuracyFeedback(avg, true) : t('exfeedback_nopitch');
-  document.getElementById('customResultRows').innerHTML = customResults.map(r=>
-    `<div class="record-row"><span class="record-label">${noteNameFromMidi(r.midi)}</span><span class="record-val${!r.heard?' untracked':''}">${r.heard?r.accuracy+'%':'No signal'}</span></div>`
+  document.getElementById('customResultRows').innerHTML = customResults.map((r, i)=>
+    `<div class="vc-dim"><span>${i+1} · ${noteNameFromMidi(r.midi)}</span><span${r.heard?'':' class="vc-not-heard"'}>${r.heard?r.accuracy+'%':t('take_not_heard')}</span></div>`
   ).join('');
   if(heardResults.length){ recordSkillScore('pitch', avg); }
   await registerExerciseCompletion();
@@ -21263,6 +21268,7 @@ async function runEveLoop(){
   eveFirstMidi = lowMidi + Math.floor(Math.random()*Math.max(1,(highMidi-lowMidi+1)));
   document.getElementById('eveStepLabel').textContent = 'Step 1 — Hear';
   document.getElementById('eveStepNote').textContent = '♪';
+  document.getElementById('eveStepNote').classList.remove('vc-not-heard');
   eveStatus('Listen closely…');
   playTone(noteToFreq(eveFirstMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
@@ -21275,7 +21281,8 @@ async function runEveLoop(){
   if(!eveActive) return eveStopped();
 
   document.getElementById('eveStepLabel').textContent = 'Step 3 — Analyze';
-  document.getElementById('eveStepNote').textContent = eveFirstResult.heard ? `${eveFirstResult.accuracy}%` : 'No signal';
+  document.getElementById('eveStepNote').textContent = eveFirstResult.heard ? `${eveFirstResult.accuracy}%` : t('take_not_heard');
+  document.getElementById('eveStepNote').classList.toggle('vc-not-heard', !eveFirstResult.heard);
   eveStatus(t('eve_status_captured'));
   await new Promise(r=>setTimeout(r, 1200));
   if(!eveActive) return eveStopped();
@@ -21288,6 +21295,7 @@ async function runEveLoop(){
   eveSecondMidi = Math.max(lowMidi, Math.min(highMidi, candidate));
   document.getElementById('eveStepLabel').textContent = 'Step 4 — Hear again (harder)';
   document.getElementById('eveStepNote').textContent = '♪';
+  document.getElementById('eveStepNote').classList.remove('vc-not-heard');
   eveStatus(t('eve_status_jump').replace('{interval}', iv.name));
   playTone(noteToFreq(eveSecondMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
@@ -21317,8 +21325,10 @@ function finishEveLoop(){
   document.getElementById('eveStartBtn').disabled = false;
   document.getElementById('eveStartLabel').textContent = 'Begin the loop';
   document.getElementById('eveResultCard').style.display='block';
-  document.getElementById('eveResultFirst').textContent = eveFirstResult.heard ? eveFirstResult.accuracy+'%' : 'No signal';
-  document.getElementById('eveResultSecond').textContent = eveSecondResult.heard ? eveSecondResult.accuracy+'%' : 'No signal';
+  document.getElementById('eveResultFirst').textContent = eveFirstResult.heard ? eveFirstResult.accuracy+'%' : t('take_not_heard');
+  document.getElementById('eveResultFirst').classList.toggle('vc-not-heard', !eveFirstResult.heard);
+  document.getElementById('eveResultSecond').textContent = eveSecondResult.heard ? eveSecondResult.accuracy+'%' : t('take_not_heard');
+  document.getElementById('eveResultSecond').classList.toggle('vc-not-heard', !eveSecondResult.heard);
   vcTakeTrace(document.getElementById('eveTraceFirst'), eveFirstResult.heard && eveFirstResult.samples, 1600);
   vcTakeTrace(document.getElementById('eveTraceSecond'), eveSecondResult.heard && eveSecondResult.samples, 1600);
 
