@@ -121,3 +121,24 @@ WHEN THE USER TYPES "deploy"
 3. Production checks: prod.sh, house.js, modecheck, scores.js, stopcheck; spaced out; delete the test accounts afterwards.
 4. A failing check runs once more; failing again → roll back to dpl_6FBgCU661see6RBdPhXoMniCp42s and report.
 5. Delete review/phase4a and review/phase4a-fix, push review/phase4a-prod with production screenshots, update HANDOFF.md.
+
+---
+
+## 4a.2 COPY ROUND (user, 2026-10-22, verbatim)
+
+4a.1 review: approved. The hooks failure is the intended removal of warmup_stylescale_suffix: record it in hooks.js as an intended removal so it passes. The house failures were Supabase 503s; the production checks run house again.
+
+Before pushing, fix these on redesign/phase4a (copy only):
+
+1. Breath Trainer: make "Target:" a template key, breath_target: en "Target: {s} ({level})", fr "Objectif : {s} ({level})", es "Objetivo: {s} ({level})", tr "Hedef: {s} ({level})". For the level names, use the existing Beginner / Intermediate / Professional keys.
+2. Ear → Voice → Ear: new keys
+   - eve_sing_back: en "Sing it back", fr "Rechantez-la", es "Vuelve a cantarla", tr "Şimdi siz söyleyin"
+   - eve_from_memory: en "From memory — no replay", fr "De mémoire, sans réécoute", es "De memoria, sin volver a escuchar", tr "Ezberden, tekrar dinlemeden"
+3. Ear Training answer labels:
+   - ear_correct: fr "Bonne réponse", es "Respuesta correcta", tr "Doğru cevap"
+   - ear_wrong: fr "Votre choix, incorrect", es "Tu elección, incorrecta", tr "Seçiminiz, yanlış"
+4. French Smart Warmup: remove the space before the period in "préférence Rock ."
+
+Re-run hooks (--base master), copyscan --tools and fixshots for the Ear → Voice → Ear stage and result and the Breath stage, in French and Turkish. Add those shots to review/phase4a-fix. Run the secret check, then push redesign/phase4a and review/phase4a-fix. Then stop and report. Don't deploy until I type "deploy".
+
+Build note: ear_correct already existed on master as Ear Training's feedback line ("Correct!"); 4a.1 fix 8 defined it a second time, so the later definition replaced the feedback text too. The feedback line's key is now ear_feedback_correct with master's text in four languages; ear_correct is the visually hidden answer label above.
