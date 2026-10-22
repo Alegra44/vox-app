@@ -541,7 +541,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live .capture-btn{background:var(--hl-ink);color:var(--hl-bg);} /* on the stage only the voice is in the voice colour */
   /* Breath Trainer (4a): the seconds big in the ring (voice colour) against the target, the level it reads as a meter */
   .vc-stage.is-live #breathTimerVal{font-size:var(--hl-t-display) !important;}
-  .breath-level{width:100%;max-width:280px;--part:var(--hl-voice);}
+  .breath-level{width:100%;max-width:280px;--part:var(--hl-voice);background:var(--hairline);} /* the empty track: the vocal-load bar's, so it shows on the dark stage */
+  .breath-level-label{width:100%;max-width:280px;font-size:var(--hl-t-small);color:var(--hl-ink-3);margin-bottom:var(--hl-s1);}
+  .vc-stage.is-live #breathStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);} /* Stop: the neutral active look of the other stages; the voice colour is for starting */
   #breathResult .vc-dim .ex-accuracy{font-size:inherit;font-weight:400;font-stretch:normal;color:var(--hl-ink);}
   .range-sofar{width:100%;max-width:320px;}
   .result-card.vc-result{text-align:left;}
@@ -3483,11 +3485,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             transform="rotate(-90 100 100)" style="transition:stroke-dashoffset .08s linear, stroke .15s ease;"/>
         </svg>
         <div class="tuner-ring-center">
-          <div class="note-display" id="breathTimerVal" style="font-size:38px;">0.0s</div>
-          <div class="cents-display" id="breathTargetSub">Target: 12s (Beginner)</div>
+          <div class="note-display" id="breathTimerVal" style="font-size:38px;">0.0&nbsp;s</div>
+          <div class="cents-display" id="breathTargetSub">Target: 12.0&nbsp;s (Beginner)</div>
         </div>
       </div>
-      <div class="hl-meter breath-level vc-live-only" id="breathLevel" role="meter" aria-label="Level" aria-valuemin="0" aria-valuemax="100"><i></i></div>
+      <div class="breath-level-label vc-live-only" data-i18n="breath_level_label" aria-hidden="true">Loudness</div>
+      <div class="hl-meter breath-level vc-live-only" id="breathLevel" role="meter" aria-label="Loudness" aria-valuemin="0" aria-valuemax="100"><i></i></div>
 
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="breathStartBtn"><span class="dot-icon"></span><span id="breathStartLabel" data-i18n="breath_start_hold_label">Start hold</span></button>
@@ -7463,6 +7466,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Without help you scored {n} points lower than with the note just played. A gap is normal: run the loop again to train your pitch memory.",
     eve_note_dropped_one:"Without help you scored 1 point lower than with the note just played. A gap is normal: run the loop again to train your pitch memory.",
     take_not_heard:"Not heard",
+    breath_level_label:"Loudness",
     eve_note_nosignal:"One of the sung steps had no clear pitch, so the two can't be compared. Try again a little louder or closer to the mic.",
     eve_measure:"Step 1 plays a note from your range; listening for step 2 opens 1.3 seconds after it starts. Step 4 plays a second note, an interval from your level's set away from the first, and step 5 is sung from memory with no replay. Each sung step listens for 1.6 seconds and scores 100 minus your average distance from the note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. The big number is the average of the steps where a clear pitch was heard.",
     five_measure:"The note is picked from the lower middle of your range, so a semitone either side still fits. Each round plays it (or the note a semitone up or down) for 0.7 seconds, then listens for 1.5 seconds from 1 second after it starts. A round scores 100 minus your average distance from its note, in cents, times 0.6; any octave counts and natural vibrato counts as its centre. Head and mixed voice can't be told apart from pitch: those rounds score your pitch only, and which register you used is for your ear to judge. The big number is the average of the rounds where a clear pitch was heard.",
@@ -8857,6 +8861,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Sans aide, vous avez obtenu {n} points de moins qu'avec la note juste jouée. Un écart est normal : refaites la boucle pour entraîner votre mémoire de la hauteur.",
     eve_note_dropped_one:"Sans aide, vous avez obtenu 1 point de moins qu'avec la note juste jouée. Un écart est normal : refaites la boucle pour entraîner votre mémoire de la hauteur.",
     take_not_heard:"Non entendu",
+    breath_level_label:"Volume",
     eve_note_nosignal:"L'une des étapes chantées n'avait pas de hauteur claire : les deux ne peuvent pas être comparées. Réessayez un peu plus fort ou plus près du micro.",
     eve_measure:"L'étape 1 joue une note de votre tessiture ; l'écoute de l'étape 2 s'ouvre 1,3 seconde après son début. L'étape 4 joue une seconde note, à un intervalle de la première tiré des intervalles de votre niveau, et l'étape 5 se chante de mémoire, sans réécoute. Chaque étape chantée écoute pendant 1,6 seconde et vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. Le grand chiffre est la moyenne des étapes où une hauteur claire a été entendue.",
     five_measure:"La note est tirée du bas-milieu de votre tessiture, pour qu'un demi-ton de chaque côté y tienne encore. Chaque manche la joue (ou la note un demi-ton au-dessus ou en dessous) pendant 0,7 seconde, puis écoute pendant 1,5 seconde à partir d'une seconde après son début. Une manche vaut 100 moins votre écart moyen à sa note, en cents, multiplié par 0,6 ; toutes les octaves comptent et un vibrato naturel compte pour son centre. La voix de tête et la voix mixte ne se distinguent pas par la hauteur : ces manches notent seulement votre justesse, et c'est à votre oreille de juger du registre utilisé. Le grand chiffre est la moyenne des manches où une hauteur claire a été entendue.",
@@ -10251,6 +10256,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Sin ayuda sacaste {n} puntos menos que con la nota recién tocada. Es normal que haya diferencia: repite el ciclo para entrenar tu memoria de la afinación.",
     eve_note_dropped_one:"Sin ayuda sacaste 1 punto menos que con la nota recién tocada. Es normal que haya diferencia: repite el ciclo para entrenar tu memoria de la afinación.",
     take_not_heard:"No se oyó",
+    breath_level_label:"Volumen",
     eve_note_nosignal:"Uno de los pasos cantados no tuvo una afinación clara, así que no se pueden comparar. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     eve_measure:"El paso 1 toca una nota de tu rango; la escucha del paso 2 se abre 1,3 segundos después de que empiece. El paso 4 toca una segunda nota, a un intervalo de la primera tomado de los intervalos de tu nivel, y el paso 5 se canta de memoria, sin volver a oírla. Cada paso cantado escucha durante 1,6 segundos y vale 100 menos tu distancia media a la nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. El número grande es la media de los pasos en los que se oyó una afinación clara.",
     five_measure:"La nota se elige de la parte media-baja de tu rango, para que medio tono a cada lado siga cabiendo. Cada ronda la toca (o la nota medio tono arriba o abajo) durante 0,7 segundos y luego escucha 1,5 segundos a partir de 1 segundo después de que empiece. Una ronda vale 100 menos tu distancia media a su nota, en cents, multiplicada por 0,6; cualquier octava cuenta y el vibrato natural cuenta como su centro. La voz de cabeza y la voz mixta no se distinguen por la afinación: esas rondas puntúan solo tu afinación, y el registro que usaste lo juzga tu oído. El número grande es la media de las rondas en las que se oyó una afinación clara.",
@@ -11645,6 +11651,7 @@ const TRANSLATIONS = {
     eve_note_dropped:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan az aldınız. Bu fark normaldir: perde hafızanızı çalıştırmak için döngüyü tekrarlayın.",
     eve_note_dropped_one:"Yardımsız adımda, nota az önce çalındığındakinden {n} puan az aldınız. Bu fark normaldir: perde hafızanızı çalıştırmak için döngüyü tekrarlayın.",
     take_not_heard:"Duyulmadı",
+    breath_level_label:"Ses düzeyi",
     eve_note_nosignal:"Söylenen adımlardan birinde net bir perde yoktu, bu yüzden ikisi karşılaştırılamıyor. Biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
     eve_measure:"1. adım aralığınızdan bir nota çalar; 2. adımın dinlemesi notanın başlamasından 1,3 saniye sonra açılır. 4. adım, seviyenizin aralıklarından birinde ilk notadan uzaklaşan ikinci bir nota çalar; 5. adım tekrar dinlemeden, hafızadan söylenir. Söylenen her adım 1,6 saniye dinler ve 100'den notaya sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Büyük sayı, net bir perdenin duyulduğu adımların ortalamasıdır.",
     five_measure:"Nota, her iki yana bir yarım ses daha sığacak şekilde aralığınızın alt-orta bölümünden seçilir. Her tur notayı (ya da bir yarım ses üstünü veya altını) 0,7 saniye çalar, sonra başlamasından 1 saniye sonra itibaren 1,5 saniye dinler. Bir tur, 100'den notasına sent cinsinden ortalama uzaklığınızın 0,6 katının çıkarılmasıyla puanlanır; oktav fark etmez ve doğal vibrato merkezi olarak sayılır. Kafa sesi ve karışık ses perdeden ayırt edilemez: bu turlar yalnızca perdenizi puanlar, hangi registeri kullandığınıza kulağınız karar verir. Büyük sayı, net bir perdenin duyulduğu turların ortalamasıdır.",
@@ -12720,10 +12727,12 @@ function computeRMS(buf){
   return Math.sqrt(sum/buf.length);
 }
 
+// Seconds on Breath, one format everywhere: one decimal in the current language, a no-break space, "s" (display only)
+function breathSecs(x){ return new Intl.NumberFormat(currentLanguage, {minimumFractionDigits:1, maximumFractionDigits:1}).format(x)+'\u00a0s'; }
 function updateBreathTargetLabel(){
   const level = exerciseLevel || 'beginner';
   const target = BREATH_TARGETS[level];
-  document.getElementById('breathTargetSub').textContent = `Target: ${target}s (${LEVEL_CONFIG[level].label})`;
+  document.getElementById('breathTargetSub').textContent = `Target: ${breathSecs(target)} (${LEVEL_CONFIG[level].label})`;
 }
 
 async function startBreathHold(){
@@ -12736,18 +12745,21 @@ async function startBreathHold(){
   document.getElementById('breathResult').style.display='none';
   document.getElementById('breathStartLabel').textContent = t('action_stop');
   document.getElementById('breathStartBtn').classList.add('listening');
+  document.getElementById('breathLevel').setAttribute('aria-label', t('breath_level_label'));
+  breathVoiceRgb = stageVoiceRgb(document.getElementById('breathStage'));
   const ring = document.getElementById('breathRingFill');
   if(ring){ ring.style.strokeDashoffset = 553; ring.style.stroke = 'var(--teal)'; ring.dataset.atTarget = '0'; }
   breathLoop();
   singingSession(()=>breathActive, document.getElementById('breathStage')); // the hold is on stage
 }
 
+let breathVoiceRgb = null; // the stage's voice colour, read once per hold
 const BREATH_RING_CIRC = 553;
 function breathLoop(){
   if(!breathActive) return;
   const rms = computeRMS(readRawMic());
   const elapsed = (performance.now()-breathStartTime)/1000;
-  document.getElementById('breathTimerVal').textContent = elapsed.toFixed(1)+'s';
+  document.getElementById('breathTimerVal').textContent = breathSecs(elapsed);
   const target = BREATH_TARGETS[exerciseLevel||'beginner'];
   const pct = Math.min(100,(elapsed/target)*100);
   const ring = document.getElementById('breathRingFill');
@@ -12771,8 +12783,8 @@ function breathLoop(){
   if(rms > VOICED_THRESHOLD){
     breathRmsSamples.push(rms);
     breathSilenceStart = null;
-    // Real voice-reactive ambient: warm brass glow that grows with genuine sustained loudness
-    setVoiceAmbientTarget(Math.min(0.14, rms*3.2), [232,163,61]);
+    // voice-reactive ambient in the stage's voice colour, like the Tuner's (setVoiceAmbientTarget caps it)
+    setVoiceAmbientTarget(rms*3.2, breathVoiceRgb || [127,140,255]);
   } else {
     if(breathSilenceStart===null) breathSilenceStart = performance.now();
     clearVoiceAmbient();
@@ -12810,14 +12822,14 @@ function finishBreathHold(){
   const accEl = document.getElementById('breathAccuracyVal');
   accEl.textContent = overall+'%';
   accEl.className = 'ex-accuracy '+accuracyClass(overall);
-  vcResultNum(document.getElementById('breathSecondsVal'), duration.toFixed(1)+' s'); // the big number: the seconds held
+  vcResultNum(document.getElementById('breathSecondsVal'), breathSecs(duration)); // the big number: the seconds held
   document.getElementById('breathMeasure').textContent = t('breath_measure').replace(/\{beg\}/g, t('skill_level_beginner')).replace(/\{int\}/g, t('skill_level_intermediate')).replace(/\{pro\}/g, t('skill_level_professional'));
   document.getElementById('breathFeedback').textContent =
     duration < 2 ? t('breath_fb_tooshort') :
     overall>=85 ? t('breath_fb_strong') :
     overall>=60 ? t('breath_fb_solid') :
     t('breath_fb_wavered');
-  document.getElementById('breathDurationStat').textContent = duration.toFixed(1)+'s / '+target+'s';
+  document.getElementById('breathDurationStat').textContent = breathSecs(duration)+' / '+breathSecs(target);
   document.getElementById('breathConsistencyStat').textContent = consistency!==null ? consistency+'%' : '—';
 
   if(duration >= 2){
