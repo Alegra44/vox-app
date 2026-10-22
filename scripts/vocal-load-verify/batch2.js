@@ -44,7 +44,7 @@ const FEATURES = [
     prep: "document.getElementById('customResultCard').style.display='none'; document.getElementById('customBuilderCard').style.display='block'; __seed(7);",
     start: async p => { await p.locator('#customGenerateBtn').click(); await sleep(300); await p.locator('#customStartBtn').click(); },
     active: "document.getElementById('customRunnerCard').style.display==='block'",
-    result: () => ({ avg: document.getElementById('customResultAvg').textContent, rows: document.getElementById('customResultRows').textContent }) },
+    result: () => ({ avg: document.getElementById('customResultAvg').textContent, rows: document.getElementById('customResultRows').textContent.replace(/\d+ · /g, '') }) }, // 4a.1 numbers the rows
   { key: 'rhythm', label: 'Rhythm Trainer (runs to the end)', kind: 'sidecar', shell: 'train', enter: train('rhythm'), startBtn: 'rhythmStartBtn', gauge: 'vlGaugeRhythm',
     active: 'rhythmActive',
     result: () => ({ claimed: rhythmResults.map(r => r.claimed ? 1 : 0).join(''), card: document.getElementById('rhythmResultCard').style.display }) },
@@ -62,7 +62,8 @@ const FEATURES = [
   { key: 'range', label: 'Range Finder (low captured at 3.5 s, high at 6 s)', kind: 'sidecar', shell: 'train', enter: train('range'), startBtn: 'rangeStartBtn', gauge: 'vlGaugeRange',
     prep: "showStep('rangeIntro')", active: "mode==='rangeLow' || mode==='rangeHigh'", stopAfter: 3500,
     stop: async p => { await p.locator('#captureLowBtn').click(); await sleep(2500); await p.locator('#captureHighBtn').click(); },
-    result: () => ({ type: document.getElementById('voiceTypeOut').textContent, span: document.getElementById('rangeSpanOut').textContent }) },
+    // phase 4a writes the range as "C4–C4" (it was "C4 → C4"): the notes are compared, not the separator
+    result: () => ({ type: document.getElementById('voiceTypeOut').textContent, span: document.getElementById('rangeSpanOut').textContent.replace(/\s*(→|–)\s*/, '–') }) },
 ];
 
 run(FEATURES).catch(e => { console.error(e); process.exitCode = 1; });

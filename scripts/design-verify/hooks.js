@@ -98,8 +98,12 @@ function translations(src) {
     const gaps = ['en', 'es', 'fr', 'tr'].map(l => [l, [...all].filter(k => !(T[l] && k in T[l]))]).filter(([, ks]) => ks.length);
     check('every TRANSLATIONS key exists in en, es, fr and tr', gaps.length === 0,
       gaps.length ? gaps.map(([l, ks]) => `${l} lacks ${ks.length}: ${ks.slice(0, 12).join(', ')}${ks.length > 12 ? '…' : ''}`).join(' | ') : `${all.size} keys`);
-    const T0 = translations(master), dropped = Object.keys(T0.en).filter(k => !(k in T.en));
-    check(`no TRANSLATIONS key from ${BASE} removed`, dropped.length === 0, dropped.length ? `removed: ${dropped.join(', ')}` : 'none removed');
+    // keys a spec removes on purpose: key → where it says so
+    const INTENDED = { warmup_stylescale_suffix: 'PHASE4A.md 4a.1 fix 4 (replaced by the template warmup_stylescale)' };
+    const T0 = translations(master), gone = Object.keys(T0.en).filter(k => !(k in T.en));
+    const dropped = gone.filter(k => !(k in INTENDED)), meant = gone.filter(k => k in INTENDED);
+    check(`no TRANSLATIONS key from ${BASE} removed`, dropped.length === 0,
+      (dropped.length ? `removed: ${dropped.join(', ')}` : 'none removed') + (meant.length ? ` · intended: ${meant.map(k => `${k} (${INTENDED[k]})`).join(', ')}` : ''));
   }
 }
 

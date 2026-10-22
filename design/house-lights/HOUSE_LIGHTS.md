@@ -1,4 +1,10 @@
-# House Lights: the VoxCoach design system (v1.5)
+# House Lights: the VoxCoach design system (v1.6)
+
+v1.6 (2026-10-21, phase 4a, spec `PHASE4A.md`): the shared take stage and result, `vcTake` (generalised from Pitch Match:
+target note and Hz, the lane with neighbour-note grid lines, the cents meter, the readout, the lock at |c| ≤ 6, the status
+pill; then the `.vc-result` result), are the pattern for every tool scored with `captureAccuracyForTarget`. Phase 4 splits
+in two: 4a moves 14 Coach tools onto it (the take tools, Range Finder and Breath Trainer on the stage, and six paper
+screens); phase 4b covers the 10 tools with their own displays.
 
 v1.5 (2026-10-13, phase 3; the spec says v1.4, which phase 2.8 had already used): Home shows current values, not "this
 week" with changes (there is no week-over-week storage, and nothing gets invented). Coach rows show a tool's stored
@@ -32,7 +38,7 @@ This folder is the source of truth for the VoxCoach redesign.
 |---|---|
 | `HOUSE_LIGHTS.md` | This spec: rules, decisions, how to implement, build phases |
 | `house-lights.css` | The real tokens and components. Paste into `deploy/index.html` in phase 1 |
-| `house-lights-icons.svg` | The icon sprite (36 symbols) that replaces emoji. Paste inline in phase 1 |
+| `house-lights-icons.svg` | The icon sprite (39 symbols; 4a added hl-fiveways, hl-mirror, hl-warmup) that replaces emoji. Paste inline in phase 1 |
 | `house-lights.html` | Reference mockups of 8 screens, built from the same CSS. Open it in a browser to compare your work |
 | `build.py`, `page.html` | How `house-lights.html` is generated (`python3 build.py`). Edit these, not the HTML |
 
@@ -246,7 +252,8 @@ time. Phases start only after `wip/noise-gate` and `warmup` are merged into mast
 2. **Lighting:** `houseSession` / `singingSession` and the `data-house` watcher (§9), dimmer, the singing layout and the results layout
    as reusable patterns, applied first to the Tuner and Pitch Match only.
 3. **Home and the Coach tab.**
-4. **Vocal Coach tools**, one group at a time, onto the singing and results layouts.
+4. **Vocal Coach tools**, one group at a time, onto the singing and results layouts. 4a (v1.6): the 14 tools on `vcTake`
+   and paper; 4b: the 10 tools with their own displays.
 5. **Choir World:** song page sub-navigation, rehearsal stage, Song Lab with X-Ray lightbox and
    Microscope, the mixer as channel strips.
 6. **Performance:** Studio as the stage; the Performance Report.

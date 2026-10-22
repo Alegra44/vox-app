@@ -16,6 +16,10 @@
 //   Phase 3 (PHASE3.md §1c): Home in each seeded state (homeStates.js) and the Coach tab signed in and signed out, at
 //   390 and 1280 in Light and Dark, viewport and full page (home/<width>-<theme>/<name>.jpg and …-full/); sheet
 //   sheets/home.jpg (full pages). [--no-home] skips them; [--home-only] takes only them.
+//   Phase 4a (PHASE4A.md §1c, §4): the 14 tools (tools.js), idle, on the stage mid-take (the sung ones) and with their
+//   result, at every size and theme (tools/<width>-<theme>/<tool>-<state>.jpg); the Scale Run motion at 390 Light, frames
+//   after its start and after it ends (motion/scale-start-*, scale-stop-*); the sprite icons new in 4a (icons.jpg).
+//   Sheets: sheets/tools.jpg, sheets/scale-motion.jpg. [--no-tools] skips them; [--tools-only] takes only them.
 const path = require('path'), fs = require('fs'), os = require('os');
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -25,11 +29,13 @@ const THEMES = BASE ? ['dark'] : ['light', 'dark'];
 const ALL_SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 800 } };
 const SIZES = Object.fromEntries(Object.entries(ALL_SIZES).filter(([w]) => !arg('--sizes') || arg('--sizes').split(',').includes(w)));
 const ONLY_PANELS = arg('--panels') ? arg('--panels').split(',') : null, EXTRAS = !process.argv.includes('--no-extras');
-const HOME_ONLY = process.argv.includes('--home-only'), HOME = !process.argv.includes('--no-home');
-const STATES = !process.argv.includes('--no-states') && !HOME_ONLY, STATES_ONLY = process.argv.includes('--states-only') || HOME_ONLY;
+const HOME_ONLY = process.argv.includes('--home-only'), HOME = !process.argv.includes('--no-home') && !process.argv.includes('--tools-only');
+const TOOLS_ONLY = process.argv.includes('--tools-only'), TOOLS = !process.argv.includes('--no-tools') && !HOME_ONLY && !process.argv.includes('--states-only');
+const STATES = !process.argv.includes('--no-states') && !HOME_ONLY && !TOOLS_ONLY, STATES_ONLY = process.argv.includes('--states-only') || HOME_ONLY || TOOLS_ONLY;
 const H = require('./homeStates');
 const HOME_ROWS = [...H.HOME_STATES, 'coach-signedin', 'coach-signedout'];
-const S = require('./stage');
+const S = require('./stage'), T = require('./tools');
+const NEW_ICONS = ['hl-fiveways', 'hl-mirror', 'hl-warmup'];
 const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
 const MOTION_MS = [0, 80, 160, 320, 480, 640, 900, 1300];
 const Q = { type: 'jpeg', quality: 85 };
@@ -156,6 +162,52 @@ async function stateShots(dir, state) {
   } finally { await b.close(); }
 }
 
+async function toolShots(dir, state) {
+  S.ensureStimuli();
+  for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) {
+    const b = await S.launchMic(S.STIM.steady);
+    try {
+      const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state });
+      await C.clearOverlays(page); await S.warmMic(page);
+      const d = path.join(OUT, 'tools', `${w}-${theme}`); fs.mkdirSync(d, { recursive: true });
+      for (const tool of T.TOOLS) await T.toolStates(page, tool, async name => { await page.screenshot({ path: path.join(d, `${name}.jpg`), ...Q }); });
+    } finally { await b.close(); }
+    console.log(`   tools · ${w} · ${theme}`);
+  }
+  // the Scale Run motion, 390 Light: frames after the start, and after the run ends (the house coming up)
+  const b = await S.launchMic(S.STIM.steady);
+  try {
+    const { page } = await C.openPage(b, { dir, theme: 'light', viewport: { width: 390, height: 844 }, storageState: state });
+    await C.clearOverlays(page); await S.warmMic(page);
+    const tool = T.byKey('scale'); await tool.open(page); await C.sleep(500);
+    const d = path.join(OUT, 'motion'); fs.mkdirSync(d, { recursive: true });
+    const frames = async which => { const t0 = Date.now();
+      for (const ms of MOTION_MS) { const wait = t0 + ms - Date.now(); if (wait > 0) await C.sleep(wait);
+        const at = Date.now() - t0; await page.screenshot({ path: path.join(d, `scale-${which}-${String(ms).padStart(4, '0')}.jpg`), ...Q });
+        note(`motion scale ${which} ${ms} ms: taken at ${at} ms, house ${await page.evaluate(() => document.body.dataset.house)}`); } };
+    await tool.act(page); await frames('start');
+    await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: 40000 }).catch(() => {});
+    await frames('stop');
+  } finally { await b.close(); }
+  // the icons new in 4a, at 24 and 48 px, Light and Dark
+  { const b2 = await C.chromium.launch();
+    try {
+      const d = path.join(OUT, 'icons'); fs.mkdirSync(d, { recursive: true });
+      for (const theme of ['light', 'dark']) {
+        const { ctx, page } = await C.openPage(b2, { dir, theme });
+        const found = await page.evaluate(names => {
+          const box = document.createElement('div'); box.id = 'iconShot';
+          box.style.cssText = 'position:fixed;inset:0;z-index:99999;background:var(--hl-bg);color:var(--hl-ink);display:grid;place-content:center;gap:24px;font:16px var(--hl-font)';
+          box.innerHTML = names.map(n => `<div style="display:flex;align-items:center;gap:24px"><svg class="hl-icon" style="width:24px;height:24px"><use href="#${n}"/></svg><svg class="hl-icon" style="width:48px;height:48px"><use href="#${n}"/></svg><span>${n}</span></div>`).join('');
+          document.body.appendChild(box); return names.filter(n => document.getElementById(n));
+        }, NEW_ICONS);
+        await C.sleep(300); await page.screenshot({ path: path.join(d, `icons-${theme}.jpg`), ...Q });
+        note(`icons (${theme}): ${found.length} of ${NEW_ICONS.length} in the sprite (${found.join(', ') || 'none'})`);
+        await ctx.close();
+      }
+    } finally { await b2.close(); } }
+}
+
 async function homeShots(b, dir, state) {
   for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) {
     const d = path.join(OUT, 'home', `${w}-${theme}`), df = d + '-full'; fs.mkdirSync(df, { recursive: true });
@@ -210,7 +262,14 @@ async function contactSheets(b, groups) {
       const f = path.join(OUT, 'home', c + '-full', n + '.jpg');
       return `<td>${fs.existsSync(f) ? `<img src="file://${f}" style="width:${c.startsWith('390') ? 260 : 420}px">` : '—'}</td>`; }).join('')}</tr>`).join(''));
   }
-  if (fs.existsSync(path.join(OUT, 'motion'))) {
+  if (fs.existsSync(path.join(OUT, 'tools'))) {
+    const tc = cols.filter(c => fs.existsSync(path.join(OUT, 'tools', c)));
+    await sheet('tools', 'the 14 tools: idle, stage, result (signed in)', tc, T.STATE_NAMES.map(n => `<tr><th>${n}</th>${tc.map(c => `<td>${img(path.join(OUT, 'tools', c, n + '.jpg'), c.split('-')[0])}</td>`).join('')}</tr>`).join(''));
+    if (fs.existsSync(path.join(OUT, 'motion', 'scale-start-0000.jpg')))
+      await sheet('scale-motion', 'Scale Run motion, 390 Light (ms after the start, and after the run ends)', MOTION_MS.map(String),
+        ['start', 'stop'].map(w => `<tr><th>${w}</th>${MOTION_MS.map(ms => `<td>${img(path.join(OUT, 'motion', `scale-${w}-${String(ms).padStart(4, '0')}.jpg`), '390')}</td>`).join('')}</tr>`).join(''));
+  }
+  if (fs.existsSync(path.join(OUT, 'motion', 'start-0000.jpg'))) {
     await sheet('motion', 'motion, 390 Light (ms after the click)', MOTION_MS.map(String),
       ['start', 'stop'].map(w => `<tr><th>${w}</th>${MOTION_MS.map(ms => `<td>${img(path.join(OUT, 'motion', `${w}-${String(ms).padStart(4, '0')}.jpg`), '390')}</td>`).join('')}</tr>`).join(''));
   }
@@ -240,6 +299,7 @@ async function contactSheets(b, groups) {
     }
     if (STATES) await stateShots(dir, state);
     if (HOME) await homeShots(b, dir, state);
+    if (TOOLS) await toolShots(dir, state);
     await contactSheets(b, groups);
     fs.writeFileSync(path.join(OUT, 'notes.txt'), log.join('\n') + '\n');
     console.log(`done: ${OUT}`);

@@ -42,7 +42,8 @@ const ENTRIES = [
     prep: "__seed(7); document.getElementById('hmResultCard').style.display='none'; document.getElementById('hmGuessCard').style.display='none'; document.getElementById('hmPreCard').style.display='block';" },
   { key: 'emo', panel: 'emotionmode', startBtn: 'emoStartBtn', active: 'emoActive',
     prep: range(56, 65) + " __seed(7); document.querySelector('#emoIntentRow [data-emo=\"tender\"]').click(); document.getElementById('emoResultCard').style.display='none'; document.getElementById('emoPreCard').style.display='block';" },
-  { key: 'puzzle', panel: 'vocalpuzzle', startBtn: 'puzzleStartBtn', active: shown('puzzleGuessCard'),
+  // phase 4a 2.5: Vocal Puzzle doesn't sing (initAudioOnly), so it has no warm-up gate: the round starts straight away
+  { key: 'puzzle', panel: 'vocalpuzzle', startBtn: 'puzzleStartBtn', active: shown('puzzleGuessCard'), noGate: true,
     prep: "document.getElementById('puzzleGuessCard').style.display='none'; document.getElementById('puzzleResultCard').style.display='none'; document.getElementById('puzzlePreCard').style.display='block';" },
   // Songs hub
   { key: 'staykey', panel: 'staykey', startBtn: 'stayKeyStartBtn', active: 'stayKeyActive', stop: click('#stayKeyStartBtn') },
@@ -121,6 +122,12 @@ async function entry(page, E) {
   if (E.before) await E.before(page);
   const reached = await startVisible(page, E); // after prep / before: Custom Routine's start appears once a routine exists
   await page.locator(startSel(E)).click();
+  if (E.noGate) {
+    const started = await waitFor(page, E.active, 20000), up = await overlayShown(page);
+    check(`${E.key.padEnd(10)} no warm-up → session starts`, reached && started && !up, `reached ${reached} · shown ${up} · started ${started}`);
+    if (E.prep) await page.evaluate(E.prep); // a round waits for a guess: put the screen back
+    await sleep(800); return;
+  }
   const up = await waitFor(page, () => getComputedStyle(document.getElementById('warmupOverlay')).display !== 'none', 10000);
   const skip = up ? await skipInView(page) : { ok: false };
   const heldBack = up ? await page.evaluate(() => typeof wuPending !== 'undefined' && !!wuPending) : false; // the session is waiting on it

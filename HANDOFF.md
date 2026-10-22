@@ -52,7 +52,30 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    in the roadmap); (d) level-up explanation is next: report its migration and API change before applying. Specs below.
 3. House Lights redesign phase 1 (`design/house-lights/HOUSE_LIGHTS.md`): **live 2026-10-11** (with the 1.1 fixes).
    Phase 2 (Lighting): **live 2026-10-13** (with the 2.8 fixes). Phase 3 (Home and the Coach tab): **live 2026-10-13**
-   (with the 3.1 fixes). Next: phase 4 (Coach tools), spec to come from the user.
+   (with the 3.1 fixes). **Phase 4a (14 Coach tools onto the take stage and result, spec verbatim
+   `design/house-lights/PHASE4A.md`): building on `redesign/phase4a` since 2026-10-21**; no merge or deploy before the
+   user reviews the screenshots; rollback target dpl_6FBgCU661see6RBdPhXoMniCp42s. Phase 4b: the 10 tools with their own displays; its list also has Mirror's hard-coded "No signal at this moment" (4a.1 fix 2 left it for 4b).
+   **Progress 2026-10-21:** build done and committed (spec bdeb0a4, guards fbbbb90, 2.1 2887c0a, 2.2 442c0f0 71d4fff
+   ecb187d 877b562 804ac6d b23d3e5, 2.3 a3ebc82 8bf32c7, 2.4 32d67d4, 2.5 7e6bb1a, 2.6 390d425). Each sung tool equal to
+   master in a one-run scores.js; copyscan --tools 0 in four languages; modecheck: Vocal Puzzle 0 getUserMedia.
+   **2026-10-22: §3–§5 done, waiting for the user's review.** Checks (logs/p4a-checks-2026-10-22T03-15-02 and
+   logs/suites-2026-10-22T04-01-49): scores.js 3 runs per side within ±2; house 351/0; contrast: the only new items are
+   the take note caught inside its 120 ms lock fade (settled 6.83/18; master's Pitch Match has the same fade), the choir
+   X-ray/level rows are the same on master Light; every suite passes. Fix e4de6ca: a stopped EVE / 5 Ways session left
+   Start disabled (stopcheck.js, new). NB suites.sh's house/contrast `--base master` test master only. Copy table
+   design/house-lights/PHASE4A_COPY.md. Pushed redesign/phase4a and review/phase4a (orphan, shots). Open for the user:
+   EVE step 5 has no live guide and EVE's stage names no note (an ear test); Range Finder's "so far" rows show the notes
+   captured so far; Pitch Match's attack/landing rows are now full width (a phase 2 layout bug). The user approved all
+   four; **4a.1 fix round (PHASE4A.md "4a.1 FIX ROUND", 9 fixes 047a7e2…29b92d1, follow-up 187f4d5 fr ear_wrong, fixshots.js
+   74edf26) built and checked 2026-10-22** (logs/p4a1-checks-2026-10-22T07-06-11): scores within ±2; hooks only the planned
+   removal of warmup_stylescale_suffix; contrast 0; Vocal Lab fills ≥ 4.66:1; copyscan 0; house 350–349/1–2, only
+   Supabase 503s, a different check each run; stopcheck, picker 93/0, batch1 112/0. review/phase4a-fix (orphan, a522b6f)
+   is ready locally. 4a.1 approved; **4a.2 copy round** (PHASE4A.md, 2052b45; 3649c35, fixshots --copy 43e4007): breath_target,
+   eve_sing_back / eve_from_memory, fr warmup period; ear_correct had been defined twice (fix 8), so the feedback line is
+   now ear_feedback_correct with master's text; hooks 19/0 (warmup_stylescale_suffix recorded as intended), copyscan 0.
+   Pushed redesign/phase4a and review/phase4a-fix (+ copy/ shots fr, tr). **No deploy until the user types "deploy".**
+   Hard-coded English left (same on master): EVE's step labels "Step 1 — Hear" … "Step 5 — Sing without help",
+   "Listening…" on stage buttons, Breath's level names in LEVEL_CONFIG are keyed but the markup default is English.
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3
