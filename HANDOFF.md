@@ -65,7 +65,12 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Start disabled (stopcheck.js, new). NB suites.sh's house/contrast `--base master` test master only. Copy table
    design/house-lights/PHASE4A_COPY.md. Pushed redesign/phase4a and review/phase4a (orphan, shots). Open for the user:
    EVE step 5 has no live guide and EVE's stage names no note (an ear test); Range Finder's "so far" rows show the notes
-   captured so far; Pitch Match's attack/landing rows are now full width (a phase 2 layout bug).
+   captured so far; Pitch Match's attack/landing rows are now full width (a phase 2 layout bug). The user approved all
+   four; **4a.1 fix round (PHASE4A.md "4a.1 FIX ROUND", 9 fixes 047a7e2…29b92d1, follow-up 187f4d5 fr ear_wrong, fixshots.js
+   74edf26) built and checked 2026-10-22** (logs/p4a1-checks-2026-10-22T07-06-11): scores within ±2; hooks only the planned
+   removal of warmup_stylescale_suffix; contrast 0; Vocal Lab fills ≥ 4.66:1; copyscan 0; house 350–349/1–2, only
+   Supabase 503s, a different check each run; stopcheck, picker 93/0, batch1 112/0. review/phase4a-fix (orphan, a522b6f)
+   is ready locally. **Neither branch pushed: the user asked to be asked first. No deploy until the user types "deploy".**
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3
