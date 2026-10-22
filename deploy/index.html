@@ -1500,6 +1500,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-vocallab .vlab-row:first-child{border-top:0;padding-top:0;}
   #panel-vocallab .vlab-row-label{color:var(--hl-ink);}
   #panel-vocallab .vlab-track{background:var(--hl-sunk);border:0;height:8px;}
+  #panel-vocallab .vlab-fill{opacity:1;}
   /* Genre Coach: genres as an hl-item list; the tips and Set as my genre are the raised block */
   #genreGrid.hl-list{display:block;margin:0 0 var(--hl-s5);}
   #genreGrid .genre-card, #genreGrid .genre-card.active, #genreGrid .genre-card:hover{background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;transform:none;box-shadow:none;color:var(--hl-ink);}
@@ -20957,9 +20958,9 @@ function renderVocalLab(){
   const scaleSpan = Math.max(1, scaleHigh-scaleLow);
 
   const rows = [
-    {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended, color:'var(--hl-voice)'}, // your range: the voice colour (red means a miss)
-    {label:t('vocallab_comfortable'), sub:t('vocallab_comfortable_sub'), data:tiers.comfortable, color:'var(--brass)'},
-    {label:t('vocallab_reliable'), sub:t('vocallab_reliable_sub'), data:tiers.reliable, color:'var(--teal)'},
+    {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended, color:'var(--hl-ink-3)'}, // a record of past attempts, not the live voice: ink by how much you can rely on it
+    {label:t('vocallab_comfortable'), sub:t('vocallab_comfortable_sub'), data:tiers.comfortable, color:'var(--hl-ink-2)'},
+    {label:t('vocallab_reliable'), sub:t('vocallab_reliable_sub'), data:tiers.reliable, color:'var(--hl-ink)'},
   ];
   document.getElementById('vocalLabRangesCard').innerHTML = rows.map(r=>{
     if(!r.data) return `<div class="vlab-row"><div class="vlab-row-label">${r.label}</div><div class="vlab-row-sub">${r.sub} — ${t('vocallab_notenoughdata')}</div></div>`;
@@ -20968,7 +20969,7 @@ function renderVocalLab(){
     return `<div class="vlab-row">
       <div class="vlab-row-label">${r.label} <span class="vlab-row-notes">${noteNameFromMidi(r.data.lowMidi)} – ${noteNameFromMidi(r.data.highMidi)}</span></div>
       <div class="vlab-row-sub">${r.sub}</div>
-      <div class="vlab-track"><div class="vlab-fill" style="left:${leftPct}%;width:${widthPct}%;background:${r.color};"></div></div>
+      <div class="vlab-track"><div class="vlab-fill" style="left:min(${leftPct}%, calc(100% - 8px));width:max(${widthPct}%, 8px);background:${r.color};"></div></div>
     </div>`;
   }).join('');
   document.getElementById('vocalLabNoteCount').textContent = `${tiers.totalNotesAttempted} ${t('vocallab_notecount_suffix')}`;
