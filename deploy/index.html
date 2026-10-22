@@ -2942,15 +2942,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="warmup-context" id="warmupContext"></div>
 
       <div class="warmup-step">
-        <div><div class="ws-title" data-i18n="warmup_step1_title">💋 1. Lip trill siren</div><div class="ws-sub" id="warmupStep1Sub">Gentle glide, low to high and back</div></div>
+        <div><div class="ws-title" data-i18n="warmup_step1_title">1. Lip trill siren</div><div class="ws-sub" id="warmupStep1Sub">Gentle glide, low to high and back</div></div>
         <button class="solid-btn" id="warmupPlay1" data-i18n="warmup_play_btn">Play</button>
       </div>
       <div class="warmup-step">
-        <div><div class="ws-title" data-i18n="warmup_step2_title">🎵 2. Hum siren</div><div class="ws-sub" data-i18n="warmup_step2_sub">Same glide, hummed "mmm"</div></div>
+        <div><div class="ws-title" data-i18n="warmup_step2_title">2. Hum siren</div><div class="ws-sub" data-i18n="warmup_step2_sub">Same glide, hummed "mmm"</div></div>
         <button class="solid-btn" id="warmupPlay2" data-i18n="warmup_play_btn">Play</button>
       </div>
       <div class="warmup-step">
-        <div><div class="ws-title" data-i18n="warmup_step3_title">🎹 3. Gentle 5-note scale</div><div class="ws-sub" id="warmupStep3Sub">1-2-3-4-5-4-3-2-1 in a comfortable key</div></div>
+        <div><div class="ws-title" data-i18n="warmup_step3_title">3. Gentle 5-note scale</div><div class="ws-sub" id="warmupStep3Sub">1-2-3-4-5-4-3-2-1 in a comfortable key</div></div>
         <button class="solid-btn" id="warmupPlay3" data-i18n="warmup_play_btn">Play</button>
       </div>
 
@@ -6163,8 +6163,8 @@ const TRANSLATIONS = {
     range_result_label:'Your result', range_share_note:'This card is built to share — a Pro account tracks how this number grows every week.',
     range_share_btn:'Share this result', range_restart_btn:'Run it again',
     warmup_title:'Smart Warmup', warmup_sub:"A short warmup shaped by the time of day, how long since you last practised, and your weakest Skill Profile category.",
-    warmup_step1_title:'💋 1. Lip trill siren', warmup_play_btn:'Play', warmup_step2_title:'🎵 2. Hum siren', warmup_step2_sub:'Same glide, hummed "mmm"',
-    warmup_step3_title:'🎹 3. Gentle 5-note scale', warmup_complete_btn:'Mark warmup done',
+    warmup_step1_title:'1. Lip trill siren', warmup_play_btn:'Play', warmup_step2_title:'2. Hum siren', warmup_step2_sub:'Same glide, hummed "mmm"',
+    warmup_step3_title:'3. Gentle 5-note scale', warmup_complete_btn:'Mark warmup done',
     exercises_title:'Daily Exercises', exercises_sub:"Four ways to train pitch and ear. Each scores your voice live, in any octave, at Beginner, Intermediate or Professional.",
     exercises_focus_label:"Today's Recommended Focus", exercises_focus_tag:'ADAPTIVE — RECALCULATED DAILY',
     exercises_focus_desc:"Not a fixed weekly plan: it's worked out again from your Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can get a first score.",
@@ -7290,7 +7290,7 @@ const TRANSLATIONS = {
     warmup_time_midday:'Midday — a standard-length warmup.',
     warmup_time_evening:'Evening — shorter is fine if your voice has already been active today.',
     warmup_genrenote_p1:'Scale below is set to your', warmup_genrenote_p2:'preference.',
-    warmup_glide_prefix:'Gentle glide, low to high and back', warmup_stylescale_suffix:'-style scale',
+    warmup_glide_prefix:'Gentle glide, low to high and back', warmup_stylescale:'{genre}-style scale',
     warmup_defaultpattern:'1-2-3-4-5-4-3-2-1 pattern',
     warmup_completed_prefix:'Warmups completed:', warmup_signin_streaks:'Sign in to track warmup streaks.',
     genre_applied_prefix:'Applied — Smart Warmup and Vibrato feedback now use', genre_applied_suffix:'defaults.',
@@ -7557,8 +7557,8 @@ const TRANSLATIONS = {
     range_result_label:'Votre résultat', range_share_note:'Cette fiche est conçue pour être partagée — un compte Pro suit la progression de ce chiffre chaque semaine.',
     range_share_btn:'Partager ce résultat', range_restart_btn:'Recommencer',
     warmup_title:'Échauffement intelligent', warmup_sub:"Un échauffement court, adapté à l'heure, au temps écoulé depuis votre dernière séance et à votre catégorie la plus faible du Profil de compétences.",
-    warmup_step1_title:'💋 1. Sirène lèvres roulées', warmup_play_btn:'Jouer', warmup_step2_title:'🎵 2. Sirène fredonnée', warmup_step2_sub:'Même glissando, fredonné "mmm"',
-    warmup_step3_title:'🎹 3. Gamme douce à 5 notes', warmup_complete_btn:"Marquer l'échauffement comme fait",
+    warmup_step1_title:'1. Sirène lèvres roulées', warmup_play_btn:'Jouer', warmup_step2_title:'2. Sirène fredonnée', warmup_step2_sub:'Même glissando, fredonné "mmm"',
+    warmup_step3_title:'3. Gamme douce à 5 notes', warmup_complete_btn:"Marquer l'échauffement comme fait",
     exercises_title:'Exercices quotidiens', exercises_sub:"Quatre façons d'entraîner la justesse et l'oreille. Chacune note votre voix en direct, dans n'importe quelle octave, en Débutant, Intermédiaire ou Professionnel.",
     exercises_focus_label:'Focus recommandé du jour', exercises_focus_tag:'ADAPTATIF — RECALCULÉ CHAQUE JOUR',
     exercises_focus_desc:"Pas un plan hebdomadaire figé : il est recalculé à partir de votre Profil de compétences chaque fois que vous ouvrez cet onglet. Les catégories plus faibles reçoivent plus du temps d'aujourd'hui ; celles sans données reçoivent une part de départ équitable pour obtenir un premier score.",
@@ -8684,7 +8684,7 @@ const TRANSLATIONS = {
     warmup_time_midday:'Midi — un échauffement de durée standard.',
     warmup_time_evening:'Soir — plus court convient si votre voix a déjà été active aujourd\'hui.',
     warmup_genrenote_p1:'La gamme ci-dessous est réglée sur votre préférence', warmup_genrenote_p2:'.',
-    warmup_glide_prefix:'Glissando doux, du grave à l\'aigu et retour', warmup_stylescale_suffix:' — gamme de style',
+    warmup_glide_prefix:'Glissando doux, du grave à l\'aigu et retour', warmup_stylescale:'Gamme de style {genre}',
     warmup_defaultpattern:'Motif 1-2-3-4-5-4-3-2-1',
     warmup_completed_prefix:'Échauffements terminés :', warmup_signin_streaks:'Connectez-vous pour suivre vos séries d\'échauffement.',
     genre_applied_prefix:'Appliqué — l\'échauffement intelligent et le retour vibrato utilisent maintenant les réglages par défaut de', genre_applied_suffix:'.',
@@ -8951,8 +8951,8 @@ const TRANSLATIONS = {
     range_result_label:'Tu resultado', range_share_note:'Esta tarjeta está diseñada para compartir — una cuenta Pro rastrea cómo crece este número cada semana.',
     range_share_btn:'Compartir este resultado', range_restart_btn:'Repetirlo',
     warmup_title:'Calentamiento inteligente', warmup_sub:"Un calentamiento corto según la hora del día, el tiempo desde tu última práctica y tu categoría más débil del Perfil de habilidades.",
-    warmup_step1_title:'💋 1. Sirena con labios vibrando', warmup_play_btn:'Reproducir', warmup_step2_title:'🎵 2. Sirena tarareada', warmup_step2_sub:'Mismo deslizamiento, tarareado "mmm"',
-    warmup_step3_title:'🎹 3. Escala suave de 5 notas', warmup_complete_btn:'Marcar calentamiento como hecho',
+    warmup_step1_title:'1. Sirena con labios vibrando', warmup_play_btn:'Reproducir', warmup_step2_title:'2. Sirena tarareada', warmup_step2_sub:'Mismo deslizamiento, tarareado "mmm"',
+    warmup_step3_title:'3. Escala suave de 5 notas', warmup_complete_btn:'Marcar calentamiento como hecho',
     exercises_title:'Ejercicios diarios', exercises_sub:"Cuatro formas de entrenar afinación y oído. Cada una puntúa tu voz en directo, en cualquier octava, en Principiante, Intermedio o Profesional.",
     exercises_focus_label:'Enfoque recomendado de hoy', exercises_focus_tag:'ADAPTATIVO — RECALCULADO A DIARIO',
     exercises_focus_desc:"No es un plan semanal fijo: se vuelve a calcular a partir de tu Perfil de habilidades cada vez que abres esta pestaña. Las categorías más débiles reciben más tiempo hoy; las que aún no tienen datos reciben una parte inicial justa para conseguir una primera puntuación.",
@@ -10078,7 +10078,7 @@ const TRANSLATIONS = {
     warmup_time_midday:'Mediodía — un calentamiento de duración estándar.',
     warmup_time_evening:'Tarde/noche — más corto está bien si tu voz ya ha estado activa hoy.',
     warmup_genrenote_p1:'La escala de abajo está ajustada a tu preferencia', warmup_genrenote_p2:'.',
-    warmup_glide_prefix:'Deslizamiento suave, de grave a agudo y de vuelta', warmup_stylescale_suffix:' — escala de estilo',
+    warmup_glide_prefix:'Deslizamiento suave, de grave a agudo y de vuelta', warmup_stylescale:'Escala de estilo {genre}',
     warmup_defaultpattern:'Patrón 1-2-3-4-5-4-3-2-1',
     warmup_completed_prefix:'Calentamientos completados:', warmup_signin_streaks:'Inicia sesión para seguir tus rachas de calentamiento.',
     genre_applied_prefix:'Aplicado — el Calentamiento inteligente y el feedback de vibrato ahora usan los valores predeterminados de', genre_applied_suffix:'.',
@@ -10345,8 +10345,8 @@ const TRANSLATIONS = {
     range_result_label:'Sonucunuz', range_share_note:'Bu kart paylaşılmak üzere tasarlandı — bir Pro hesap bu sayının her hafta nasıl büyüdüğünü takip eder.',
     range_share_btn:'Bu sonucu paylaş', range_restart_btn:'Tekrar çalıştır',
     warmup_title:'Akıllı Isınma', warmup_sub:"Günün saatine, son pratiğinizden bu yana geçen süreye ve Yetenek Profilinizdeki en zayıf kategoriye göre şekillenen kısa bir ısınma.",
-    warmup_step1_title:'💋 1. Dudak titretme sireni', warmup_play_btn:'Çal', warmup_step2_title:'🎵 2. Mırıldanma sireni', warmup_step2_sub:'Aynı kayma, "mmm" mırıldanarak',
-    warmup_step3_title:'🎹 3. Yumuşak 5 notalı gam', warmup_complete_btn:'Isınmayı tamamlandı olarak işaretle',
+    warmup_step1_title:'1. Dudak titretme sireni', warmup_play_btn:'Çal', warmup_step2_title:'2. Mırıldanma sireni', warmup_step2_sub:'Aynı kayma, "mmm" mırıldanarak',
+    warmup_step3_title:'3. Yumuşak 5 notalı gam', warmup_complete_btn:'Isınmayı tamamlandı olarak işaretle',
     exercises_title:'Günlük Egzersizler', exercises_sub:"Perdeyi ve kulağı çalıştırmanın dört yolu. Her biri sesinizi canlı olarak, hangi oktavda olursa olsun, Başlangıç, Orta veya Profesyonel seviyede puanlar.",
     exercises_focus_label:"Bugünün Önerilen Odağı", exercises_focus_tag:'UYARLANABİLİR — HER GÜN YENİDEN HESAPLANIR',
     exercises_focus_desc:"Sabit bir haftalık plan değil: bu sekmeyi her açtığınızda Yetenek Profilinizden yeniden hesaplanır. Zayıf kategoriler bugünün zamanından daha fazla pay alır; henüz verisi olmayan kategoriler ilk puanlarını alabilmeleri için adil bir başlangıç payı alır.",
@@ -11472,7 +11472,7 @@ const TRANSLATIONS = {
     warmup_time_midday:'Öğlen — standart uzunlukta bir ısınma.',
     warmup_time_evening:'Akşam — sesiniz bugün zaten aktifse daha kısa olması sorun değil.',
     warmup_genrenote_p1:'Aşağıdaki gam,', warmup_genrenote_p2:'tercihinize göre ayarlandı.',
-    warmup_glide_prefix:'Yumuşak kayma, pesten tize ve geri', warmup_stylescale_suffix:' tarzı gam',
+    warmup_glide_prefix:'Yumuşak kayma, pesten tize ve geri', warmup_stylescale:'{genre} tarzı gam',
     warmup_defaultpattern:'1-2-3-4-5-4-3-2-1 örüntüsü',
     warmup_completed_prefix:'Tamamlanan ısınmalar:', warmup_signin_streaks:'Isınma serilerinizi takip etmek için oturum açın.',
     genre_applied_prefix:'Uygulandı — Akıllı Isınma ve Vibrato geri bildirimi artık', genre_applied_suffix:'varsayılanlarını kullanıyor.',
@@ -17300,7 +17300,7 @@ function renderWarmupContext(){
 
   const genreScaleKey = (profile && profile.genre && GENRES[profile.genre]) ? GENRES[profile.genre].warmupScale : 'beginnerPattern';
   document.getElementById('warmupStep3Sub').textContent = (profile && profile.genre)
-    ? `${GENRES[profile.genre].name} ${t('warmup_stylescale_suffix')}`
+    ? t('warmup_stylescale').replace('{genre}', GENRES[profile.genre].name)
     : t('warmup_defaultpattern');
 
   const stepDurEl = sirenDuration;
