@@ -3,7 +3,9 @@
 // Warmup with a genre set, so its step 3 shows the {genre}-style scale. Vocal Lab also with a one-note tier (8 px).
 // Also measures the Vocal Lab fills against their track (3:1 or better, both themes).
 // Out: <out>/<width>-<theme>[-fr]/<shot>.jpg and <out>/sheets/fix.jpg; vocallab-fills.json.
-// Usage: node scripts/design-verify/fixshots.js [--base <git ref>] [--out <dir>]
+// --copy (4a.2): Ear → Voice → Ear's stage at "Sing it back" and at "From memory", its result, the Breath stage and the
+// Smart Warmup genre line, in French and Turkish; sheet <out>/sheets/copy.jpg.
+// Usage: node scripts/design-verify/fixshots.js [--base <git ref>] [--out <dir>] [--copy]
 const fs = require('fs'), path = require('path'), os = require('os');
 const C = require('./common'), S = require('./stage'), T = require('./tools');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -13,6 +15,9 @@ const COMBOS = [['390', 'light', 'en'], ['390', 'dark', 'en'], ['1280', 'light',
 const SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 800 } };
 const FR_ONLY = ['eve-result', 'warmup'];
 const ROWS = ['exercises-idle', 'interval-result', 'scale-result', 'ear-result', 'custom-result', 'eve-result', 'breath-stage', 'breath-result', 'vocallab', 'vocallab-onenote', 'warmup', 'range-result'];
+const COPY = process.argv.includes('--copy');
+const COPY_COMBOS = ['fr', 'tr'].flatMap(l => [['390', 'light', l], ['390', 'dark', l], ['1280', 'light', l]]);
+const COPY_ROWS = ['eve-stage-back', 'eve-stage-memory', 'eve-result', 'breath-stage', 'warmup'];
 const tool = k => T.TOOLS.find(t => t.key === k);
 const center = (page, sel) => page.evaluate(sel => { const e = document.querySelector(sel); if (e && e.getClientRects().length) e.scrollIntoView({ block: 'center' }); }, sel);
 
@@ -58,6 +63,29 @@ async function combo(b, dir, state, w, theme, lang, fills) {
   console.log(`  ${w} ${theme} ${lang}`);
 }
 
+async function copyCombo(b, dir, state, w, theme, lang) {
+  const d = path.join(OUT, `${w}-${theme}-${lang}`); fs.mkdirSync(d, { recursive: true });
+  const { ctx, page } = await C.openPage(b, { dir, theme, viewport: SIZES[w], storageState: state, lang });
+  const shot = async name => { await C.sleep(250); await page.screenshot({ path: path.join(d, `${name}.jpg`), ...Q }); };
+  const note = key => page.waitForFunction(k => document.getElementById('eveStepNote').textContent === t(k), key, { timeout: 20000 }).then(() => true, () => false);
+  try {
+    await C.clearOverlays(page); await S.warmMic(page);
+    const eve = tool('eve'); await eve.open(page); await C.sleep(500);
+    await T.runTake(page, eve, { liveAt: 0, onLive: async () => {
+      if (await note('eve_sing_back')) await shot('eve-stage-back');
+      if (await note('eve_from_memory')) await shot('eve-stage-memory');
+    } });
+    await page.waitForFunction(() => document.body.dataset.house !== 'down', null, { timeout: 4000 }).catch(() => {});
+    await C.sleep(700); await T.restoreRange(page); await center(page, eve.result); await shot('eve-result');
+    await page.evaluate(() => stopAllActiveSessions());
+    await T.toolStates(page, tool('breath'), async name => { if (name === 'breath-stage') await shot(name); });
+    await page.evaluate(() => stopAllActiveSessions());
+    await page.evaluate(() => { profile.genre = 'rock'; }); await C.showPanel(page, 'warmup'); await C.clearOverlays(page);
+    await page.evaluate(() => renderWarmupContext()); await center(page, '#warmupStep3Sub'); await shot('warmup');
+  } finally { await ctx.close(); }
+  console.log(`  ${w} ${theme} ${lang}`);
+}
+
 (async () => {
   const dir = C.buildDir(BASE); fs.mkdirSync(OUT, { recursive: true });
   const b0 = await C.chromium.launch();
@@ -66,6 +94,19 @@ async function combo(b, dir, state, w, theme, lang, fills) {
   S.ensureStimuli(); const b = await S.launchMic(S.STIM.steady); const fills = {};
   try {
     console.log(`== fixshots · ${BASE || 'branch (working copy)'} → ${OUT}`);
+    if (COPY) {
+      for (const [w, theme, lang] of COPY_COMBOS) await copyCombo(b, dir, state, w, theme, lang);
+      const cs = COPY_COMBOS.map(([w, th, l]) => `${w}-${th}-${l}`);
+      const cell = (c, n) => { const f = path.join(OUT, c, `${n}.jpg`); return fs.existsSync(f) ? `<img src="file://${f}" class="w${c.split('-')[0]}">` : '—'; };
+      const html = `<!doctype html><meta charset="utf-8"><style>body{font:14px system-ui;margin:16px;background:#fff;color:#111}
+        table{border-collapse:collapse}th,td{border:1px solid #ccc;padding:6px;vertical-align:top}th{text-align:left;font-weight:600}
+        img.w390{height:420px}img.w1280{height:300px}</style><h1>Phase 4a.2: the copy round in French and Turkish</h1>
+        <table><tr><th></th>${cs.map(c => `<th>${c}</th>`).join('')}</tr>${COPY_ROWS.map(n => `<tr><th>${n}</th>${cs.map(c => `<td>${cell(c, n)}</td>`).join('')}</tr>`).join('')}</table>`;
+      const sd = path.join(OUT, 'sheets'); fs.mkdirSync(sd, { recursive: true }); const f = path.join(sd, 'copy.html'); fs.writeFileSync(f, html);
+      const sp = await (await b.newContext({ viewport: { width: 1400, height: 1000 } })).newPage();
+      await sp.goto('file://' + f); await C.sleep(300); await sp.screenshot({ path: path.join(sd, 'copy.jpg'), fullPage: true, ...Q }); fs.rmSync(f);
+      console.log(`done: ${OUT}`); return;
+    }
     for (const [w, theme, lang] of COMBOS) await combo(b, dir, state, w, theme, lang, fills);
     fs.writeFileSync(path.join(OUT, 'vocallab-fills.json'), JSON.stringify(fills, null, 1));
     for (const [k, v] of Object.entries(fills)) console.log(`  Vocal Lab fills ${k}: ${v.map(f => `${f.ratio}:1 (${f.width}px)`).join(' · ')}`);
