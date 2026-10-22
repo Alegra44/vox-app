@@ -21258,19 +21258,19 @@ async function runEveLoop(){
   eveStatus('Listen closely…');
   playTone(noteToFreq(eveFirstMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
-  if(!eveActive) return;
+  if(!eveActive) return eveStopped();
 
   document.getElementById('eveStepLabel').textContent = 'Step 2 — Sing';
   document.getElementById('eveStepNote').textContent = 'Sing it back';
   eveStatus('Listening…');
   eveFirstResult = await eveSing(eveFirstMidi, true);
-  if(!eveActive) return;
+  if(!eveActive) return eveStopped();
 
   document.getElementById('eveStepLabel').textContent = 'Step 3 — Analyze';
   document.getElementById('eveStepNote').textContent = eveFirstResult.heard ? `${eveFirstResult.accuracy}%` : 'No signal';
   eveStatus(t('eve_status_captured'));
   await new Promise(r=>setTimeout(r, 1200));
-  if(!eveActive) return;
+  if(!eveActive) return eveStopped();
 
   const set = levelCfg().intervals;
   const iv = set[Math.floor(Math.random()*set.length)];
@@ -21283,15 +21283,23 @@ async function runEveLoop(){
   eveStatus(t('eve_status_jump').replace('{interval}', iv.name));
   playTone(noteToFreq(eveSecondMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
-  if(!eveActive) return;
+  if(!eveActive) return eveStopped();
 
   document.getElementById('eveStepLabel').textContent = 'Step 5 — Sing without help';
   document.getElementById('eveStepNote').textContent = 'From memory — no replay';
   eveStatus('Listening…');
   eveSecondResult = await eveSing(eveSecondMidi, false);
-  if(!eveActive) return;
+  if(!eveActive) return eveStopped();
 
   finishEveLoop();
+}
+
+// Stopped mid-loop (stopAllActiveSessions): the card back to idle, its button live again.
+function eveStopped(){
+  document.getElementById('eveRunnerCard').style.display='none';
+  document.getElementById('eveIntro').style.display='';
+  document.getElementById('eveStartBtn').disabled = false;
+  document.getElementById('eveStartLabel').textContent = 'Begin the loop';
 }
 
 function finishEveLoop(){
@@ -21480,7 +21488,7 @@ function fiveStatus(text){ // the button is the stage's status pill
 
 async function runFiveLoop(){
   for(let i=0;i<FIVE_ROUNDS.length;i++){
-    if(!fiveActive) return;
+    if(!fiveActive) return fiveStopped();
     const round = FIVE_ROUNDS[i];
     const targetMidi = fiveBaseMidi + round.offsetSemi;
     // the label: the round's number and its instruction; the target note as before
@@ -21498,6 +21506,14 @@ async function runFiveLoop(){
     await new Promise(r=>setTimeout(r, 500));
   }
   finishFiveWays();
+}
+
+// Stopped mid-session (stopAllActiveSessions): the card back to idle, its button live again.
+function fiveStopped(){
+  document.getElementById('fiveRunnerCard').style.display='none';
+  document.getElementById('fiveIntro').style.display='';
+  document.getElementById('fiveStartBtn').disabled = false;
+  document.getElementById('fiveStartLabel').textContent = 'Begin';
 }
 
 function finishFiveWays(){

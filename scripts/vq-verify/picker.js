@@ -78,7 +78,7 @@ async function sample(side, range) {
       out.drills = drills;
       const five = [], emo = [];
       for (let i = 0; i < 20; i++) {
-        document.getElementById('fiveStartBtn').click(); await new Promise(r => realTO(r, 60)); five.push(fiveBaseMidi); fiveActive = false; await new Promise(r => realTO(r, 60));
+        document.getElementById('fiveStartBtn').click(); await new Promise(r => realTO(r, 60)); five.push(fiveBaseMidi); fiveActive = false; if (typeof fiveStopped === 'function') fiveStopped(); // phase 4a: the start button is disabled while a session runs await new Promise(r => realTO(r, 60));
         document.getElementById('emoStartBtn').click(); await new Promise(r => realTO(r, 60)); emo.push(emoTargetMidi); emoActive = false; await new Promise(r => realTO(r, 60));
       }
       out.five = five; out.emo = emo;
