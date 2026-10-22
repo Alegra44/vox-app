@@ -70,7 +70,12 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    74edf26) built and checked 2026-10-22** (logs/p4a1-checks-2026-10-22T07-06-11): scores within ±2; hooks only the planned
    removal of warmup_stylescale_suffix; contrast 0; Vocal Lab fills ≥ 4.66:1; copyscan 0; house 350–349/1–2, only
    Supabase 503s, a different check each run; stopcheck, picker 93/0, batch1 112/0. review/phase4a-fix (orphan, a522b6f)
-   is ready locally. **Neither branch pushed: the user asked to be asked first. No deploy until the user types "deploy".**
+   is ready locally. 4a.1 approved; **4a.2 copy round** (PHASE4A.md, 2052b45; 3649c35, fixshots --copy 43e4007): breath_target,
+   eve_sing_back / eve_from_memory, fr warmup period; ear_correct had been defined twice (fix 8), so the feedback line is
+   now ear_feedback_correct with master's text; hooks 19/0 (warmup_stylescale_suffix recorded as intended), copyscan 0.
+   Pushed redesign/phase4a and review/phase4a-fix (+ copy/ shots fr, tr). **No deploy until the user types "deploy".**
+   Hard-coded English left (same on master): EVE's step labels "Step 1 — Hear" … "Step 5 — Sing without help",
+   "Listening…" on stage buttons, Breath's level names in LEVEL_CONFIG are keyed but the markup default is English.
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3
