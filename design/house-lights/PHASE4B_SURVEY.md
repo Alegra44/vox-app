@@ -105,8 +105,8 @@ in, the fake mic singing a steady A4.
   `beta_heuristic_tag` "BETA HEURISTIC". Emoji: 🌉 `register_title`. The title says "Register Bridge", the hub says
   "Register Coach".
 - **Broken:** `updateRegisterUI` returns early when `analyser` is unset, and only `initAudio` sets it. Register Coach
-  opens only the register input, so on a fresh page it may show "—" / "Listening…" the whole time. *(Checked in the
-  screenshots, below.)* Leaving the panel while listening (`mode = null`) stops the loop but leaves the button on
+  opens only the register input, so on a fresh page it shows "—" / "Listening…" the whole time you sing (confirmed in
+  the screenshots, below); it works only after another tool has opened the mic in the same page. Leaving the panel while listening (`mode = null`) stops the loop but leaves the button on
   "Listening — tap to stop" with `.listening`. Crossing seconds assume 60 frames a second (a 120 Hz display doubles them).
 
 ### Register Drills (`panel-registerdrills`)
