@@ -187,3 +187,11 @@ Plugged in, steady connection. Before the restart:
    Also add the three 4b items already in HANDOFF: Ear → Voice → Ear's step headers, the hard-coded "Listening…", and Mirror's "No signal at this moment".
    Take screenshots of each tool as it is now (idle, live, and its result if it has one) at 390 Light and Dark and 1280 Light. Put them on review/phase4b-before with one contact sheet.
    Commit the survey on a new branch, redesign/phase4b. Push both branches, then report. I'll write the 4b spec from the survey.
+
+## 4a production approved (user, 2026-10-23, verbatim)
+
+4a production: approved. The 2 light-theme contrast items are the 120 ms lock transition, not a regression.
+
+Before the contrast rerun, fix the check itself (test scripts only): contrast.js should wait until an element has no running CSS transitions or animations (element.getAnimations().length === 0, with a 1 s limit) before measuring it. Rerun contrast (light) on production with that. Expected result: 0 below 3:1, and the same 32 known choir rows between 3 and 4.5.
+
+Then continue with your steps 2–4 as planned: re-take the production screenshots with the longer limit; push review/phase4a-prod; delete the two review branches; update HANDOFF; push master (including the prod.sh and contrast.js changes); then the 4b survey and its screenshots; push redesign/phase4b and review/phase4b-before; report.

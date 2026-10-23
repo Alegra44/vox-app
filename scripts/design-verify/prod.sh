@@ -36,7 +36,7 @@ SUITES=(
   "pageload|5|env PL_LOADS=10 node scripts/vq-verify/pageload.js"
   "states-shots|3|env DV_URL=$P node scripts/design-verify/shots.js --states-only --sizes 390 --out $SHOTS-states"
   "home-shots|2|env DV_URL=$P node scripts/design-verify/shots.js --home-only --sizes 390 --out $SHOTS-home"
-  "shots|2|env DV_URL=$P node scripts/design-verify/shots.js --panels home,train-hub,songs-hub,arcade,you-hub --sizes 390 --no-extras --out $SHOTS"
+  "shots|10|env DV_URL=$P node scripts/design-verify/shots.js --panels home,train-hub,songs-hub,arcade,you-hub --sizes 390 --no-extras --out $SHOTS"
   "modecheck|3|env MC_URL=$P node scripts/audio-verify/modecheck.js"
   "scores|17|node scripts/design-verify/scores.js --base $SCORES_BASE --branch-url $P"
   "stopcheck|2|env DV_URL=$P node scripts/design-verify/stopcheck.js"

@@ -25,8 +25,13 @@ const BASE = arg('--base'), THEMES = (arg('--themes') || (BASE ? 'dark' : 'light
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const JSON_OUT = arg('--json') || path.join(__dirname, 'logs', `contrast-${BASE ? BASE.replace(/\W/g, '_') : 'branch'}-${stamp}.json`);
 
-// Runs in the page: every visible element with its own text inside `root`.
-function measure(rootSel) {
+// Runs in the page: every visible element with its own text inside `root`. It first waits (1 s at most) until nothing
+// inside root, or around it, has a running CSS transition or animation: a colour caught halfway through a 120 ms fade
+// (the take note locking) isn't one the design shows.
+async function measure(rootSel) {
+  const settleIn = [...document.querySelectorAll(rootSel)];
+  const busy = () => document.getAnimations().some(a => { const t = a.effect && a.effect.target; return a.playState === 'running' && t && settleIn.some(r => r.contains(t) || t.contains(r)); });
+  for (const t0 = performance.now(); busy() && performance.now() - t0 < 1000;) await new Promise(r => setTimeout(r, 50));
   const parse = s => { const m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[\s,/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
   const over = (top, bot) => { const a = top[3] + bot[3] * (1 - top[3]); if (!a) return [0, 0, 0, 0]; return [0, 1, 2].map(i => (top[i] * top[3] + bot[i] * bot[3] * (1 - top[3])) / a).concat(a); };
   const lum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
