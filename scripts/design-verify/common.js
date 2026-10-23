@@ -35,10 +35,12 @@ async function showPanel(page, key) {
 const panelKeys = page => page.evaluate(() => [...document.querySelectorAll('.panel')].map(p => p.id.replace(/^panel-/, '')));
 
 // theme: 'light' | 'dark' | 'system' | null (leave the page's default). The device scheme follows the theme unless given.
+// dir may also be a site URL (https://…): that site is opened as it is, like DV_URL, for this page only.
 async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en' } = {}) {
   const ctx = await b.newContext({ viewport, deviceScaleFactor: 1, ...(storageState ? { storageState } : {}),
     colorScheme: scheme || (theme === 'light' ? 'light' : 'dark'), ...(reducedMotion ? { reducedMotion } : {}) });
-  if (!REMOTE) await ctx.route(LOCAL + '**', r => {
+  const site = /^https?:\/\//.test(dir) ? dir : REMOTE;
+  if (!site) await ctx.route(LOCAL + '**', r => {
     const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html', f = path.join(dir, p);
     if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
     r.fulfill({ path: f, contentType: p.endsWith('.js') ? 'text/javascript' : p.endsWith('.css') ? 'text/css' : 'text/html' });
@@ -46,7 +48,7 @@ async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 
   if (theme) await ctx.addInitScript(t => { try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {} }, theme);
   const page = await ctx.newPage(), errors = [];
   page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(PAGE_URL, { waitUntil: 'load' }); await sleep(2500);
+  await page.goto(site || LOCAL, { waitUntil: 'load' }); await sleep(2500);
   if (storageState) await page.waitForFunction(() => { try { return !!profile && !!progress; } catch (e) { return false; } }, null, { timeout: 30000 });
   const ov = page.locator(`#languageSelectOverlay [data-lang="${lang}"]`); if (await ov.isVisible().catch(() => false)) { await ov.click(); await sleep(300); }
   if (lang !== 'en') { await page.evaluate(l => setLanguage(l), lang); await sleep(300); }

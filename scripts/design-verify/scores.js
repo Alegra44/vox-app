@@ -8,6 +8,7 @@
 // type, Breath's overall, seconds held and consistency.
 // Gate: per number, the median of the runs on the branch is within ±2 of master's (text values equal).
 // Usage: node scripts/design-verify/scores.js [--base master] [--runs 3] [--tools interval,scale,…] [--stims steady,sharp]
+//   [--branch-url https://…]: the branch side is that site (production after a deploy) instead of the working copy
 //   [--resume <json>]   (keeps the runs already in that file)
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), T = require('./tools');
@@ -64,11 +65,13 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
 
 (async () => {
   S.ensureStimuli();
-  const dirs = { master: C.buildDir(BASE), branch: C.buildDir(null) };
+  const BRANCH_URL = arg('--branch-url'), dirs = { master: C.buildDir(BASE), branch: BRANCH_URL || C.buildDir(null) };
   const data = arg('--resume') ? JSON.parse(fs.readFileSync(arg('--resume'))) : { base: BASE, runs: RUNS, tools: TOOLS.map(t => t.key), stims: {} };
-  log(`scores ${stamp}  ${BASE} vs branch (working copy)  ${RUNS} runs per side  stimuli ${STIMS.join(', ')}  tools ${TOOLS.map(t => t.key).join(', ')}`);
+  log(`scores ${stamp}  ${BASE} vs branch (${BRANCH_URL || 'working copy'})  ${RUNS} runs per side  stimuli ${STIMS.join(', ')}  tools ${TOOLS.map(t => t.key).join(', ')}`);
   let state;
-  { const b0 = await C.chromium.launch(); const { ctx, page } = await C.openPage(b0, { dir: dirs.branch }); await C.signUp(page, 'dvsc', 'Score Check'); state = await ctx.storageState(); await ctx.close(); await b0.close(); }
+  { const b0 = await C.chromium.launch(); const { ctx, page } = await C.openPage(b0, { dir: dirs.master }); await C.signUp(page, 'dvsc', 'Score Check'); state = await ctx.storageState(); await ctx.close(); await b0.close(); }
+  // the same account on the site: its session is in the local origin's localStorage (same backend)
+  if (BRANCH_URL) state.origins = [...state.origins, ...state.origins.map(o => ({ ...o, origin: new URL(BRANCH_URL).origin }))];
   let fail = 0;
   try {
     for (const stim of STIMS) {

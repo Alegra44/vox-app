@@ -157,3 +157,33 @@ Commit, run hooks (--base master), and take a fixshot of the Interval result and
 Add these to HANDOFF:
 - For phase 4b: Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help"), the hard-coded "Listening…" on stage buttons, and Mirror's "No signal at this moment".
 - For phase 10: on Daily Exercises, the Today's Recommended Focus text is bigger than the page subtitle and its title isn't bold; Smart Warmup's "(3s)" needs a space before the unit, like everywhere else.
+
+---
+
+## 4a production rerun and phase 4b survey (user, 2026-10-23, verbatim)
+
+The first production run (logs/prod-2026-10-22T10-46-51) lost the internet ~15 min in; every suite after house failed in seconds and cv-p10 hung ~19 h.
+
+Plugged in, steady connection. Before the restart:
+
+1. Make the run survive a dropped connection (test scripts only, no app changes):
+   - Before each suite, prod.sh checks it can reach the live site and Supabase (one request each, 10 s limit). If either fails, wait 60 s and retry, up to 5 times. If it still fails, stop the whole run and say so, rather than failing every remaining suite.
+   - Give each suite a time limit: 3× its usual run time, 30 min at most. A suite that hits the limit is stopped and reported as "timed out", and the run carries on.
+   - Commit this on master; push it with the HANDOFF update at the end.
+
+2. Count the leftover test accounts. If the Supabase CLI still can't sign in, tell me exactly what to type and I'll run it myself. Then delete the leftovers, including cv-p9's two.
+
+3. Rerun the full production set against dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg: prod.sh with house, then modecheck, scores.js and stopcheck. Roll back to dpl_6FBgCU661see6RBdPhXoMniCp42s only if a failure repeats on a rerun and isn't a network error or a Supabase 503. If you roll back, report and stop.
+
+4. If it passes: push review/phase4a-prod, delete review/phase4a and review/phase4a-fix, update HANDOFF, count test accounts (0 expected), push.
+
+5. Then carry straight on to a read-only survey for phase 4b. Don't change any app code. For each of the 10 tools (One Take, Mirror, Rhythm, Register Coach, Register Drills, Real-Time Feedback, Vibrato, Voice Quality, Resonance, Emotion Mode), write the following into design/house-lights/PHASE4B_SURVEY.md:
+   - what it measures and how it's scored (function names), and whether it already uses captureAccuracyForTarget / vcTake or has its own loop
+   - its live display and its result: the element IDs, plus anything that doesn't fit the stage + result pattern (meters, charts, replays, multi-step flows)
+   - whether it opens the mic, and whether it calls singingSession today
+   - which verify scripts cover its scores (vibfix, noisegate, loopreal, others), and which tools have none
+   - copy problems in the four languages: §7 words, emoji, hard-coded English
+   - anything broken you notice (note it, don't fix it)
+   Also add the three 4b items already in HANDOFF: Ear → Voice → Ear's step headers, the hard-coded "Listening…", and Mirror's "No signal at this moment".
+   Take screenshots of each tool as it is now (idle, live, and its result if it has one) at 390 Light and Dark and 1280 Light. Put them on review/phase4b-before with one contact sheet.
+   Commit the survey on a new branch, redesign/phase4b. Push both branches, then report. I'll write the 4b spec from the survey.
