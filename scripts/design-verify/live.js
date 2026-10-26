@@ -1,17 +1,23 @@
 // Phase 4b guard (PHASE4B.md §1b): the three live tools (tools4b.js: Register Coach, Live Feedback, Resonance) show the
 // same readings on master and on the branch. Each run: a page signed in (one throwaway account, deleted at exit), the
 // fake mic singing (stage.js: the steady A4, or the same note 40 cents sharp), the tool started through its own button
-// and its readout sampled at 1, 2, 3 and 4 s (tools4b.js readout: Register Coach's note, chest score, zone, pushing and
+// and its readout sampled at 4, 5, 6 and 7 s after the page opened the mic (tools4b.js readout: Register Coach's note, chest score, zone, pushing and
 // clean crossing; Live Feedback's four rows' states and the pitch row's cents; Resonance's zone, steadiness and ripple),
 // then stopped. 3 runs per side, sides alternating, local builds, production backend.
 // Register Coach on master reads nothing on a fresh page (its UI waits for the analyser only initAudio sets), so there
 // the Tuner is started and stopped first in the same page; on the branch it runs on a fresh page (fix 2.8).
+// The fake mic plays its file from the moment the mic opens, and the steady file's tone colour moves (Register Coach's
+// chest score swings between about 15 and 70 over seconds), so the sample times count from getUserMedia, not from Start:
+// both sides read the same part of the file whether the Tuner opened the mic first or the tool did.
 // Gate: per reading and moment, the median on the branch within ±2 of master's (states and notes equal).
 // Usage: node scripts/design-verify/live.js [--base master] [--runs 3] [--tools register,livefeedback,resonance] [--stims steady,sharp]
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), T4 = require('./tools4b');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const BASE = arg('--base') || 'master', RUNS = +(arg('--runs') || 3), TOL = 2, AT = [1000, 2000, 3000, 4000];
+const BASE = arg('--base') || 'master', RUNS = +(arg('--runs') || 3), TOL = 2, AT = [4000, 5000, 6000, 7000]; // ms after the mic opened
+// in the page, before the app: when the mic stream first arrives
+const GUM = () => { const md = navigator.mediaDevices; if (!md) return; const g = md.getUserMedia.bind(md);
+  md.getUserMedia = async c => { const st = await g(c); if (!window.__gumAt) window.__gumAt = performance.now(); return st; }; };
 const ONLY = arg('--tools') ? arg('--tools').split(',') : null, STIMS = (arg('--stims') || 'steady,sharp').split(',');
 const TOOLS = T4.LIVE.filter(t => !ONLY || ONLY.includes(t.key));
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -20,16 +26,16 @@ const logf = fs.createWriteStream(OUT + '.log'); const log = (...a) => { const s
 
 // one tool on a fresh page: [{ at, ...readout }]
 async function oneRun(b, dir, state, tool, side) {
-  const { ctx, page, errors } = await C.openPage(b, { dir, theme: 'light', storageState: state });
+  const { ctx, page, errors } = await C.openPage(b, { dir, theme: 'light', storageState: state, prepare: c => c.addInitScript(GUM) });
   try {
     await C.clearOverlays(page);
     if (tool.key === 'register' && side === 'master') { await S.startTuner(page); await C.sleep(800); await S.stopTuner(page); await C.sleep(500); }
     await tool.open(page); await C.sleep(300);
     await tool.act(page);
     const started = await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 8000 }).then(() => true, () => false);
-    // the readouts at fixed times from the moment the tool is listening
+    // the readouts at fixed times from the moment the mic opened (the fake file's own clock)
     const samples = await page.evaluate(async ({ src, at }) => {
-      const f = new Function('return (' + src + ')()'), t0 = performance.now(), out = [];
+      const f = new Function('return (' + src + ')()'), t0 = window.__gumAt ?? performance.now(), out = [];
       for (const ms of at) { while (performance.now() - t0 < ms) await new Promise(r => setTimeout(r, 5)); out.push({ at: ms, ...f() }); }
       return out;
     }, { src: tool.readout.toString(), at: AT });
