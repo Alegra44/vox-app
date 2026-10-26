@@ -1132,7 +1132,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .breath-meter-fill{height:100%;background:var(--hl-voice);width:0%;transition:width .08s linear;}
 
   /* ---- VIBRATO ANALYZER ---- */
-  .vibrato-wave{width:100%;max-width:480px;display:block;margin:0 auto;}
+  .vibrato-wave{width:100%;display:block;}
   .vibrato-stat-row{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;}
 
   /* ---- SMART WARMUP ---- */
@@ -1544,6 +1544,19 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Vibrato and Voice Quality: the hold stage (the held note and its Hz, the lane centred on it, no meter, the time meter) */
+  .hold-stage .pm-cents{display:none !important;}
+  .vc-stage.is-live.hold-stage .step-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);margin:0;}
+  .vc-stage.is-live #vibratoStartBtn.listening, .vc-stage.is-live #vqStartBtn.listening{opacity:1;}
+  #vibratoResult{text-align:left;}
+  .vibrato-trace{display:grid;gap:var(--hl-s1);}
+  .vibrato-plot{position:relative;margin-left:52px;}
+  .vibrato-plot svg{height:140px;}
+  .vibrato-plot :is(line, polyline){vector-effect:non-scaling-stroke;}
+  .vib-grid{stroke:var(--hl-rule);stroke-width:1;} .vib-zero{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;}
+  .vib-voice{fill:none;stroke:var(--hl-voice);stroke-width:2;stroke-linejoin:round;}
+  .vib-axis{position:absolute;right:calc(100% + var(--hl-s2));top:calc(var(--y) * 1%);transform:translateY(-50%);font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .vib-time{margin-left:52px;}
   /* Register Drills: the target register, the note with its lane and cents meter, the Chest ↔ Head meter, five dots */
   .vc-stage.is-live .drill-target{font-size:var(--hl-t-h3);color:var(--hl-ink);}
   .drill-target:empty{display:none;}
@@ -3609,22 +3622,35 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="vibrato_sub">Hold a note and let natural vibrato happen. Real peak-detection on your live pitch trace over a ~4 second hold, not a preset animation — single-mic tracking makes this an approximation, so treat it as a coaching cue, not a lab measurement.</div>
     </div>
     <div class="tuner-hero-card">
-      <div class="btn-row" style="justify-content:center;margin-bottom:18px;">
-        <button class="mic-btn" id="vibratoStartBtn"><span class="dot-icon"></span><span id="vibratoStartLabel">Hold a note for 4s</span></button>
-      </div>
+      <div class="vc-stage hold-stage" id="vibratoStage">
+      <div class="step-label vc-live-only" data-i18n="hold_one_note">Hold one note</div>
+      <div class="ex-target-note vc-take-note vc-live-only">—</div>
+      <div class="vc-take-live" data-vc-take></div>
+      <div class="vc-time vc-live-only"><div class="hl-meter vc-time-meter" role="meter" aria-valuemin="0" aria-valuemax="100"><i></i></div><span class="vc-time-left"></span></div>
+      <button class="mic-btn vc-take-pill" id="vibratoStartBtn"><span class="dot-icon"></span><span id="vibratoStartLabel" data-i18n="vibrato_start_btn">Hold a note for 4 s</span></button>
       <div class="vl-gauge" id="vlGaugeVibrato" style="display:none;"></div>
-
-      <svg class="vibrato-wave" viewBox="0 0 480 140" id="vibratoWaveSvg">
-        <line x1="0" y1="70" x2="480" y2="70" stroke="var(--hairline)" stroke-width="1"/>
-        <polyline id="vibratoPolyline" fill="none" stroke="var(--teal)" stroke-width="2"/>
-      </svg>
-
-      <div class="vibrato-stat-row">
-        <div class="stat-chip"><div class="label" data-i18n="vibrato_rate_label">Rate</div><div class="val" id="vibratoRateStat">—</div></div>
-        <div class="stat-chip"><div class="label" data-i18n="vibrato_depth_label">Depth</div><div class="val" id="vibratoDepthStat">—</div></div>
-        <div class="stat-chip"><div class="label" data-i18n="vibrato_consistency_label">Consistency</div><div class="val" id="vibratoConsistencyStat">—</div></div>
       </div>
-      <p class="ex-feedback-text" id="vibratoFeedback" style="text-align:center;margin-top:14px;"></p>
+
+      <div class="vc-result" id="vibratoResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-num" id="vibratoRateStat">—</div>
+        <h3 class="hl-h3" id="vibratoRateLabel" data-i18n="vibrato_rate_label">Vibrato rate</h3>
+        <p class="ex-feedback-text hl-coach" id="vibratoFeedback"></p>
+        <div class="vc-result-chart vibrato-trace">
+          <div class="vibrato-plot">
+            <svg class="vibrato-wave" viewBox="0 0 480 140" preserveAspectRatio="none" id="vibratoWaveSvg" aria-hidden="true">
+              <line class="vib-grid" x1="0" x2="480" y1="40" y2="40"/><line class="vib-zero" x1="0" x2="480" y1="70" y2="70"/><line class="vib-grid" x1="0" x2="480" y1="100" y2="100"/>
+              <polyline id="vibratoPolyline" class="vib-voice"/>
+            </svg>
+            <span class="vib-axis" style="--y:28.6">+50 ct</span><span class="vib-axis" style="--y:50">0</span><span class="vib-axis" style="--y:71.4">−50 ct</span>
+          </div>
+          <div class="pm-trace-axis vib-time" aria-hidden="true"><span>0 s</span><span>4 s</span></div>
+        </div>
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="vibrato_depth_label">Depth</span><span id="vibratoDepthStat">—</span></div>
+          <div class="vc-dim"><span data-i18n="vibrato_consistency_label">Consistency</span><span id="vibratoConsistencyStat">—</span></div>
+        </div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="vibrato_measure"></p></details>
+      </div>
     </div>
   </section>
 
@@ -6345,8 +6371,8 @@ const TRANSLATIONS = {
     vq_fine:"These are training estimates from your microphone, not a medical assessment. Mic, room, distance, vowel and pitch all move them, so compare yourself on the same setup, note and vowel. The bands (for example, 20 dB or more reads as clear) are rough guides for this tool, not clinical norms. If hoarseness or breathiness persists, or singing hurts, a voice teacher or voice professional is the right person to ask.",
     vibrato_title:"Vibrato",
     beta_analysis_tag:"Estimate",
-    vibrato_sub:'Hold a note and let natural vibrato happen. Real peak-detection on your live pitch trace over a ~4 second hold, not a preset animation — single-mic tracking makes this an approximation, so treat it as a coaching cue, not a lab measurement.',
-    vibrato_rate_label:'Rate',
+    vibrato_sub:"Hold a note and let your natural vibrato happen.",
+    vibrato_rate_label:"Vibrato rate",
     vibrato_depth_label:'Depth',
     vibrato_consistency_label:'Consistency',
     voicehealth_title:'🩺 Voice Health',
@@ -7656,6 +7682,14 @@ const TRANSLATIONS = {
     drill_reg_head:"Head",
     drill_chest_score:"Chest score",
     drill_measure:"The five notes come from the lower third of your range (Chest) or its upper third (Head). Each plays for 0.6 seconds; listening starts 0.8 seconds after it begins and lasts 1.8 seconds. Pitch accuracy is 100 minus 0.6 times your average distance from the note, in cents, with natural vibrato taken out; readings more than 3 semitones off aren't counted. The chest score reads how bright your tone's harmonics are, from 0 (light, head-like) to 100 (rich, chest-like). A note matches Chest when its average chest score is 50 or more, Head when it's under 50. The big number is the average pitch accuracy of the notes heard.",
+    hold_one_note:"Hold one note",
+    vibrato_start_btn:"Hold a note for 4 s",
+    vibrato_fb_nopitch:"Didn't catch a clear held pitch. Try again, closer to the mic.",
+    vibrato_fb_none:"No clear vibrato: that's expected for a straight tone, or the hold may need to be steadier or longer.",
+    vibrato_fb_inrange:"{rate} Hz is within the commonly cited natural range.",
+    vibrato_fb_outrange:"{rate} Hz is outside the commonly cited natural range (about 5 to 6.5 Hz): not necessarily wrong, just worth noticing.",
+    vibrato_fb_wide:"The depth is quite wide: if it feels forced, try releasing some tension.",
+    vibrato_measure:"Your pitch is read about 60 times a second over a 4-second hold, from the microphone's low-passed pitch path. Readings more than 3 semitones from the middle of the hold are left out (the detector slipping). The rate is 1 over the average time between the peaks of your pitch curve (peaks at least 0.1 seconds apart); consistency is 100 minus 160 times how much those times vary (their standard deviation over their mean). Depth is the median swing from each peak to the troughs either side, halved, and corrected for the detector's averaging. Under 8 cents of depth it isn't counted as vibrato: a straight tone. The trace shows ±100 cents around the hold's average. The natural range commonly cited is about 5 to 6.5 Hz. With one microphone this is an estimate: a coaching cue, not a lab measurement.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7789,8 +7823,8 @@ const TRANSLATIONS = {
     vq_fine:"Ce sont des estimations d’entraînement tirées de votre micro, pas un bilan médical. Le micro, la pièce, la distance, la voyelle et la hauteur les font varier : comparez-vous avec le même matériel, la même note et la même voyelle. Les seuils (par exemple, 20 dB ou plus = clair) sont des repères approximatifs propres à cet outil, pas des normes cliniques. Si un enrouement ou un souffle persiste, ou si chanter fait mal, un professeur de chant ou un professionnel de la voix est la bonne personne à consulter.",
     vibrato_title:"Vibrato",
     beta_analysis_tag:"Estimation",
-    vibrato_sub:'Tenez une note et laissez le vibrato naturel se produire. Vraie détection de crêtes sur votre trace de justesse en direct sur ~4 secondes de tenue, pas une animation préréglée — le suivi mono-micro fait de ceci une approximation, traitez-le comme une indication de coaching, pas une mesure de laboratoire.',
-    vibrato_rate_label:'Fréquence',
+    vibrato_sub:"Tenez une note et laissez venir votre vibrato naturel.",
+    vibrato_rate_label:"Fréquence du vibrato",
     vibrato_depth_label:'Profondeur',
     vibrato_consistency_label:'Régularité',
     voicehealth_title:'🩺 Santé Vocale',
@@ -9100,6 +9134,14 @@ const TRANSLATIONS = {
     drill_reg_head:"Tête",
     drill_chest_score:"Score de poitrine",
     drill_measure:"Les cinq notes viennent du tiers inférieur de votre tessiture (Poitrine) ou de son tiers supérieur (Tête). Chacune joue 0,6 seconde ; l'écoute commence 0,8 seconde après son début et dure 1,8 seconde. La justesse vaut 100 moins 0,6 fois votre écart moyen à la note, en cents, sans le vibrato naturel ; les mesures à plus de 3 demi-tons ne comptent pas. Le score de poitrine lit la brillance des harmoniques de votre timbre, de 0 (léger, de tête) à 100 (riche, de poitrine). Une note correspond à Poitrine quand son score moyen est de 50 ou plus, à Tête quand il est sous 50. Le grand nombre est la justesse moyenne des notes entendues.",
+    hold_one_note:"Tenez une note",
+    vibrato_start_btn:"Tenez une note 4 s",
+    vibrato_fb_nopitch:"Aucune hauteur tenue nette n'a été captée. Réessayez, plus près du micro.",
+    vibrato_fb_none:"Pas de vibrato net : c'est normal pour un son droit, ou la tenue doit être plus stable ou plus longue.",
+    vibrato_fb_inrange:"{rate} Hz est dans la plage naturelle généralement citée.",
+    vibrato_fb_outrange:"{rate} Hz est hors de la plage naturelle généralement citée (environ 5 à 6,5 Hz) : pas forcément faux, mais à remarquer.",
+    vibrato_fb_wide:"L'amplitude est assez large : si elle vous semble forcée, essayez de relâcher un peu.",
+    vibrato_measure:"Votre hauteur est lue environ 60 fois par seconde pendant une tenue de 4 secondes, sur la voie de hauteur filtrée du micro. Les mesures à plus de 3 demi-tons du milieu de la tenue sont écartées (des erreurs du détecteur). La fréquence est 1 divisé par le temps moyen entre les crêtes de votre courbe de hauteur (crêtes espacées d'au moins 0,1 seconde) ; la régularité vaut 100 moins 160 fois la variation de ces temps (leur écart type sur leur moyenne). L'amplitude est l'écart médian entre chaque crête et les creux qui l'entourent, divisé par deux et corrigé de la moyenne du détecteur. Sous 8 cents d'amplitude, ce n'est pas compté comme du vibrato : un son droit. Le tracé montre ±100 cents autour de la moyenne de la tenue. La plage naturelle généralement citée est d'environ 5 à 6,5 Hz. Avec un seul micro, c'est une estimation : un repère de coaching, pas une mesure de laboratoire.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9233,8 +9275,8 @@ const TRANSLATIONS = {
     vq_fine:"Son estimaciones de entrenamiento a partir de tu micrófono, no una evaluación médica. El micrófono, la sala, la distancia, la vocal y la altura las cambian, así que compárate con el mismo equipo, la misma nota y la misma vocal. Los umbrales (por ejemplo, 20 dB o más se lee como claro) son guías aproximadas de esta herramienta, no normas clínicas. Si la ronquera o el aire en la voz persisten, o si cantar duele, un profesor de canto o un profesional de la voz es la persona adecuada a quien consultar.",
     vibrato_title:"Vibrato",
     beta_analysis_tag:"Estimación",
-    vibrato_sub:'Sostén una nota y deja que ocurra el vibrato natural. Detección real de picos en tu trazo de afinación en vivo durante ~4 segundos de sostenido, no una animación preestablecida — el seguimiento con un solo micrófono hace de esto una aproximación, trátalo como una señal de coaching, no una medición de laboratorio.',
-    vibrato_rate_label:'Frecuencia',
+    vibrato_sub:"Sostén una nota y deja que aparezca tu vibrato natural.",
+    vibrato_rate_label:"Frecuencia del vibrato",
     vibrato_depth_label:'Profundidad',
     vibrato_consistency_label:'Consistencia',
     voicehealth_title:'🩺 Salud Vocal',
@@ -10544,6 +10586,14 @@ const TRANSLATIONS = {
     drill_reg_head:"Cabeza",
     drill_chest_score:"Puntuación de pecho",
     drill_measure:"Las cinco notas salen del tercio inferior de tu tesitura (Pecho) o de su tercio superior (Cabeza). Cada una suena 0,6 segundos; la escucha empieza 0,8 segundos después y dura 1,8 segundos. La afinación es 100 menos 0,6 veces tu distancia media a la nota, en cents, sin el vibrato natural; las lecturas a más de 3 semitonos no cuentan. La puntuación de pecho lee el brillo de los armónicos de tu timbre, de 0 (ligero, de cabeza) a 100 (rico, de pecho). Una nota coincide con Pecho cuando su puntuación media es 50 o más, con Cabeza cuando es menor de 50. El número grande es la afinación media de las notas oídas.",
+    hold_one_note:"Sostén una nota",
+    vibrato_start_btn:"Sostén una nota 4 s",
+    vibrato_fb_nopitch:"No se captó una altura sostenida clara. Inténtalo de nuevo, más cerca del micrófono.",
+    vibrato_fb_none:"Sin vibrato claro: es lo esperado en un sonido recto, o el sostenido necesita ser más estable o más largo.",
+    vibrato_fb_inrange:"{rate} Hz está dentro del rango natural citado con frecuencia.",
+    vibrato_fb_outrange:"{rate} Hz está fuera del rango natural citado con frecuencia (unos 5 a 6,5 Hz): no es necesariamente un error, pero conviene notarlo.",
+    vibrato_fb_wide:"La profundidad es bastante amplia: si se siente forzada, intenta soltar algo de tensión.",
+    vibrato_measure:"Tu altura se lee unas 60 veces por segundo durante un sostenido de 4 segundos, desde la vía de afinación filtrada del micrófono. Las lecturas a más de 3 semitonos del centro del sostenido se descartan (fallos del detector). La frecuencia es 1 dividido por el tiempo medio entre los picos de tu curva de altura (picos separados al menos 0,1 segundos); la consistencia es 100 menos 160 veces cuánto varían esos tiempos (su desviación típica sobre su media). La profundidad es la oscilación mediana de cada pico a los valles de cada lado, dividida por dos y corregida por el promedio del detector. Por debajo de 8 cents de profundidad no cuenta como vibrato: un sonido recto. El trazo muestra ±100 cents alrededor de la media del sostenido. El rango natural citado con frecuencia es de unos 5 a 6,5 Hz. Con un solo micrófono es una estimación: una referencia de entrenamiento, no una medición de laboratorio.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10677,8 +10727,8 @@ const TRANSLATIONS = {
     vq_fine:"Bunlar mikrofonunuzdan elde edilen antrenman tahminleridir, tıbbi bir değerlendirme değildir. Mikrofon, oda, mesafe, ünlü ve perde hepsini etkiler; kendinizi aynı düzen, aynı nota ve aynı ünlüyle karşılaştırın. Eşikler (örneğin 20 dB ve üzeri net sayılır) bu araca özgü kaba ölçütlerdir, klinik normlar değildir. Ses kısıklığı ya da nefeslilik sürerse veya şarkı söylemek acı veriyorsa, bir şan öğretmenine ya da ses uzmanına danışmak doğru olur.",
     vibrato_title:"Vibrato",
     beta_analysis_tag:"Tahmin",
-    vibrato_sub:'Bir notayı tutun ve doğal vibratonun oluşmasına izin verin. ~4 saniyelik tutuş boyunca canlı perde izinizde gerçek tepe-algılama, önceden ayarlanmış bir animasyon değil — tek mikrofonlu izleme bunu bir yaklaşım yapar, bunu bir laboratuvar ölçümü değil koçluk ipucu olarak değerlendirin.',
-    vibrato_rate_label:'Hız',
+    vibrato_sub:"Bir notayı tutun ve doğal vibratonuzun gelmesine izin verin.",
+    vibrato_rate_label:"Vibrato hızı",
     vibrato_depth_label:'Derinlik',
     vibrato_consistency_label:'Tutarlılık',
     voicehealth_title:'🩺 Ses Sağlığı',
@@ -11988,6 +12038,14 @@ const TRANSLATIONS = {
     drill_reg_head:"Baş",
     drill_chest_score:"Göğüs puanı",
     drill_measure:"Beş nota, ses aralığınızın alt üçte birinden (Göğüs) ya da üst üçte birinden (Baş) gelir. Her biri 0,6 saniye çalar; dinleme başlangıcından 0,8 saniye sonra başlar ve 1,8 saniye sürer. Perde doğruluğu, doğal vibrato çıkarılarak notaya ortalama uzaklığınızın (sent cinsinden) 0,6 katının 100'den çıkarılmasıdır; 3 yarım tondan uzak ölçümler sayılmaz. Göğüs puanı, sesinizin harmoniklerinin parlaklığını 0'dan (hafif, baş sesi gibi) 100'e (zengin, göğüs sesi gibi) okur. Ortalama göğüs puanı 50 veya üstüyse nota Göğüs ile, 50'nin altındaysa Baş ile eşleşir. Büyük sayı, duyulan notaların ortalama perde doğruluğudur.",
+    hold_one_note:"Bir nota tutun",
+    vibrato_start_btn:"Bir notayı 4 sn tutun",
+    vibrato_fb_nopitch:"Net, tutulan bir perde yakalanamadı. Mikrofona daha yakın tekrar deneyin.",
+    vibrato_fb_none:"Belirgin vibrato yok: düz bir ses için beklenen budur ya da tutuşun daha sabit veya daha uzun olması gerekebilir.",
+    vibrato_fb_inrange:"{rate} Hz, sık belirtilen doğal aralığın içinde.",
+    vibrato_fb_outrange:"{rate} Hz, sık belirtilen doğal aralığın (yaklaşık 5–6,5 Hz) dışında: yanlış olmak zorunda değil, yalnızca dikkat etmeye değer.",
+    vibrato_fb_wide:"Derinlik oldukça geniş: zorlanmış hissettiriyorsa biraz gerginliği bırakmayı deneyin.",
+    vibrato_measure:"Perdeniz, 4 saniyelik tutuş boyunca mikrofonun alçak geçiren perde yolundan saniyede yaklaşık 60 kez okunur. Tutuşun ortasından 3 yarım tondan uzak ölçümler atılır (algılayıcı kaymaları). Hız, perde eğrinizdeki tepeler arasındaki ortalama sürenin tersidir (tepeler en az 0,1 saniye arayla); tutarlılık, bu sürelerin değişiminin (standart sapma bölü ortalama) 160 katının 100'den çıkarılmasıdır. Derinlik, her tepeden iki yanındaki çukurlara olan medyan salınımın yarısıdır ve algılayıcının ortalamasına göre düzeltilir. 8 sentin altındaki derinlik vibrato sayılmaz: düz bir ses. İz, tutuşun ortalaması çevresinde ±100 senti gösterir. Sık belirtilen doğal aralık yaklaşık 5–6,5 Hz'dir. Tek mikrofonla bu bir tahmindir: laboratuvar ölçümü değil, bir koçluk ipucu.",
   },
 };
 let currentLanguage = 'en';
@@ -13181,8 +13239,8 @@ let vibratoActive = false;
 // gain, the pitch read behind a 1.5 kHz low-pass). Tested against a noise-suppressed mic with a 6 Hz ±50 ct vibrato
 // under room noise, ventilation rumble, other voices and hiss: this path was the most accurate in every case (depth
 // within ~2 ct, where the suppressed mic read ±134 with talkers at 0 dB SNR).
-async function captureVibratoTrace(durationMs=4000){
-  const frames = await vqCapture({ms:durationMs, active:()=>vibratoActive, spectrum:false});
+async function captureVibratoTrace(durationMs=4000, onFrame=null){
+  const frames = await vqCapture({ms:durationMs, active:()=>vibratoActive, spectrum:false, onFrame});
   return frames.map(f=>({t:f.t, midi:f.midi}));
 }
 
@@ -13249,17 +13307,24 @@ function analyzeVibrato(samples, windowSec=0){
 }
 const VIBRATO_MIN_CENTS = 8, VIBRATO_MAX_FRAME_GAP_MS = 80;
 
+// The trace on a fixed scale: ±100 cents around the hold's mean (grid at ±50), 0 to 4 seconds across, so a straight tone
+// looks straight (it used to be scaled to its own largest swing).
+const VIBRATO_TRACE_CT = 100, VIBRATO_TRACE_MS = 4000;
 function drawVibratoWave(trace){
   const poly = document.getElementById('vibratoPolyline');
   if(!trace || trace.length<2){ poly.setAttribute('points',''); return; }
-  const maxT = trace[trace.length-1].t;
-  const maxAbsCents = Math.max(20, ...trace.map(s=>Math.abs(s.cents)));
   const pts = trace.map(s=>{
-    const x = (s.t/maxT)*480;
-    const y = 70 - (s.cents/maxAbsCents)*60;
+    const x = Math.min(1, s.t/VIBRATO_TRACE_MS)*480;
+    const y = 70 - Math.max(-1, Math.min(1, s.cents/VIBRATO_TRACE_CT))*60;
     return `${x.toFixed(1)},${y.toFixed(1)}`;
   }).join(' ');
   poly.setAttribute('points', pts);
+}
+// Leaving mid-hold (stopAllActiveSessions): the capture stops, nothing is shown for the cut-short hold, Start is back.
+function vibratoReset(){
+  const btn = document.getElementById('vibratoStartBtn');
+  btn.disabled = false; btn.classList.remove('listening');
+  document.getElementById('vibratoStartLabel').textContent = t('vibrato_start_btn');
 }
 
 document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
@@ -13268,45 +13333,47 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
   vibratoActive = true;
   const btn = document.getElementById('vibratoStartBtn');
   const label = document.getElementById('vibratoStartLabel');
-  btn.classList.add('listening');
+  btn.classList.add('listening'); btn.disabled = true; // the status pill on the stage
   label.textContent = t('action_listening');
-  document.getElementById('vibratoFeedback').textContent = '';
+  document.getElementById('vibratoResult').style.display = 'none';
+  const stage = document.getElementById('vibratoStage');
+  houseSession(()=>vibratoActive, stage); // the 4 s hold (vqCapture feeds the vocal load itself)
+  const H = vcHoldStart(stage, 4000);
 
   let samples;
-  try{ samples = await captureVibratoTrace(4000); }
+  try{ samples = await captureVibratoTrace(4000, (ms, hz)=>vcHoldFrame(H, ms, hz)); }
   catch(e){
     console.error('vibrato capture', e);
-    vibratoActive = false; btn.classList.remove('listening'); label.textContent = 'Hold a note for 4s';
+    vibratoActive = false; vibratoReset();
     showToast(t('vq_mic_needed'), 'warn');
     return;
   }
+  if(!vibratoActive){ vibratoReset(); return; } // left mid-hold
   const result = analyzeVibrato(samples, VQ_PITCH_WIN/audioCtx.sampleRate);
 
   vibratoActive = false;
-  btn.classList.remove('listening');
-  label.textContent = 'Hold a note for 4s';
+  vibratoReset();
+  document.getElementById('vibratoResult').style.display = 'grid';
+  const L = localeForLang();
 
-  if(!result.ok){
-    document.getElementById('vibratoRateStat').textContent='—';
+  if(!result.ok){ // no vibrato found: no big number, the coach line says so
+    vcResultNum(document.getElementById('vibratoRateStat'), null);
     document.getElementById('vibratoDepthStat').textContent='—';
     document.getElementById('vibratoConsistencyStat').textContent='—';
-    document.getElementById('vibratoFeedback').textContent =
-      samples.length<20 ? 'Didn\'t catch a clear held pitch — try again, closer to the mic.'
-      : 'No clear oscillation detected — that\'s expected for a straight tone, or the hold may need to be steadier/longer.';
+    document.getElementById('vibratoFeedback').textContent = t(samples.length<20 ? 'vibrato_fb_nopitch' : 'vibrato_fb_none');
     drawVibratoWave(result.trace);
     registerExerciseCompletion();
     return;
   }
 
-  document.getElementById('vibratoRateStat').textContent = result.rate+' Hz';
+  vcResultNum(document.getElementById('vibratoRateStat'), result.rate.toLocaleString(L, {minimumFractionDigits:1, maximumFractionDigits:1})+' Hz');
   document.getElementById('vibratoDepthStat').textContent = result.depth+' ct';
   document.getElementById('vibratoConsistencyStat').textContent = result.consistency+'%';
   drawVibratoWave(result.trace);
 
-  let fb;
-  if(result.rate<4 || result.rate>7.5) fb = `${result.rate} Hz is outside the commonly-cited natural range (~5–6.5 Hz) — not necessarily wrong, just worth noticing.`;
-  else fb = `${result.rate} Hz is within the commonly-cited natural range.`;
-  if(result.depth>80) fb += ' Depth is quite wide — if it feels forced, try reducing tension.';
+  const rate = result.rate.toLocaleString(L, {minimumFractionDigits:1, maximumFractionDigits:1});
+  let fb = t(result.rate<4 || result.rate>7.5 ? 'vibrato_fb_outrange' : 'vibrato_fb_inrange').replace('{rate}', rate);
+  if(result.depth>80) fb += ' ' + t('vibrato_fb_wide');
   if(profile && profile.genre && GENRES[profile.genre]) fb += ' ' + GENRES[profile.genre].vibratoNote;
   document.getElementById('vibratoFeedback').textContent = fb;
 
@@ -17158,12 +17225,16 @@ function vcTakeStart(stage, target, win){
   return {win, d:'', vib: makeVibratoTolerantLive(), path: lane.querySelector('.pm-lane-voice'), head: lane.querySelector('.pm-lane-head'),
     needle: meter.querySelector('.pm-needle'), read, note};
 }
-function vcTakeFrame(L, ms, cents){ // ms, not t: t() is the translator
-  if(!L) return;
+// The lane only: the voice path and its head (a stage with no target has no meter and no lock: vcHold below).
+function vcLaneFrame(L, ms, cents){
   const x = PM_LANE.x0 + Math.min(1, ms/L.win)*(PM_LANE.x1-PM_LANE.x0), y = pmY(cents);
   L.d += `${L.d ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`;
   L.path.setAttribute('d', L.d);
   L.head.setAttribute('cx', x.toFixed(1)); L.head.setAttribute('cy', y.toFixed(1));
+}
+function vcTakeFrame(L, ms, cents){ // ms, not t: t() is the translator
+  if(!L) return;
+  vcLaneFrame(L, ms, cents);
   const held = L.vib(performance.now(), cents);
   if(held===null) return;
   const c = Math.round(held), on = Math.abs(held) <= 6;
@@ -17198,6 +17269,34 @@ function vcResultNum(el, text){
 function vcFeed(L, draw){
   if(!L || L.err) return;
   try{ draw(); }catch(e){ L.err = true; console.error('stage frame', e); }
+}
+// The hold stage (Vibrato, Voice Quality): there's no target, so the note shown is the one being held (the median of the
+// first HOLD_FIRST_FRAMES pitched frames) with its Hz, the lane is centred on it with no cents meter and no lock, and the
+// time meter runs for the hold. vcHoldStart(stage, ms) returns the handle vcHoldFrame(H, ms, hz) draws on.
+const HOLD_FIRST_FRAMES = 6;
+function vcHoldStart(stage, ms){
+  const H = {stage, ms, first:[], centre:null, lane:null, note:stage.querySelector('.vc-take-note'), hz:stage.querySelector('.pm-hz'), time:stage.querySelector('.vc-time')};
+  H.note.textContent = '—'; H.hz.textContent = '';
+  stage.querySelector('.pm-lane').innerHTML = '';
+  vcTimeMeter(H.time, 0, ms);
+  return H;
+}
+function vcHoldFrame(H, ms, hz){
+  vcFeed(H, ()=>{
+    vcTimeMeter(H.time, ms, H.ms);
+    if(!(hz>0)) return;
+    const midi = 69+12*Math.log2(hz/440);
+    if(H.centre===null){
+      H.first.push({midi, hz});
+      if(H.first.length < HOLD_FIRST_FRAMES) return;
+      const m = H.first.slice().sort((a,b)=>a.midi-b.midi)[HOLD_FIRST_FRAMES>>1];
+      H.centre = Math.round(m.midi);
+      H.lane = vcTakeStart(H.stage, H.centre, H.ms);
+      H.note.textContent = noteNameFromMidi(H.centre);
+      H.hz.textContent = m.hz.toLocaleString(localeForLang(), {minimumFractionDigits:1, maximumFractionDigits:1})+' Hz';
+    }
+    vcLaneFrame(H.lane, ms, (midi-H.centre)*100);
+  });
 }
 // The time meter (.vc-time: .hl-meter.vc-time-meter and .vc-time-left): the elapsed share of a take of `total` ms,
 // labelled with the seconds left.
@@ -19589,6 +19688,7 @@ function stopAllActiveSessions(){
   if(typeof drillStop==='function') drillStop();
   aiDuetActive = false;
   if(typeof vqActive!=='undefined') vqActive = false;
+  if(typeof vibratoActive!=='undefined' && vibratoActive){ vibratoActive = false; vibratoReset(); } // 4b: leaving stops the hold
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof harmonyMemory!=='undefined' && harmonyMemory.active) finishHarmonyMemory(false);
   if(typeof challenge!=='undefined' && challenge.active) finishChallenge(false);
