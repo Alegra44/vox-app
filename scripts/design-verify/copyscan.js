@@ -4,7 +4,9 @@
 // singing the steady A4: every text in each tool's panel at idle, on the stage and with its result (the dynamic copy),
 // plus every TRANSLATIONS value its panel's data-i18n keys point to. Untranslated English shows in every language, so a
 // language's scan also looks for the English words.
-// Usage: node scripts/design-verify/copyscan.js [--lang en] [--tools]
+// Phase 4b (PHASE4B.md §1f): --tools covers the 10 tools with their own displays (tools4b.js) too; --set 4a | 4b | all
+// (the default) picks them.
+// Usage: node scripts/design-verify/copyscan.js [--lang en] [--tools] [--set 4b]
 const C = require('./common'), H = require('./homeStates');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const LANG = arg('--lang') || 'en';
@@ -32,7 +34,7 @@ async function toolsScan() {
         const add = (tx, where) => { n++; if (re.test(tx)) hits.set(tx, (hits.get(tx) || new Set()).add(where)); };
         const grab = sel => page.evaluate(sel => { const out = []; const w = document.createTreeWalker(document.querySelector(sel), NodeFilter.SHOW_TEXT);
           while (w.nextNode()) { const v = w.currentNode.textContent.replace(/\s+/g, ' ').trim(); if (v) out.push(v); } return out; }, sel);
-        for (const tool of T.TOOLS) {
+        for (const tool of require('./tools4b').toolSet().tools) {
           await T.toolStates(page, tool, async (name, root) => { for (const tx of await grab(root)) add(tx, name); });
           // the translations the panel's keys point to (hidden variants included)
           const vals = await page.evaluate(panel => [...new Set([...document.querySelectorAll(`#panel-${panel} [data-i18n]`)].map(e => e.dataset.i18n))].map(k => [k, t(k)]), tool.panel);

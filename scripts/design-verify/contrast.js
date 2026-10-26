@@ -13,11 +13,13 @@
 // Phase 4a (PHASE4A.md §1c): the 14 tools (tools.js) idle, on the stage during a take (the sung ones) and with their
 // result, at 390 and 1280, each with the header and tab bar, the fake mic singing the steady A4. --no-tools skips them;
 // --tools-only measures only them.
+// Phase 4b (PHASE4B.md §1f): the 10 tools with their own displays (tools4b.js) the same way (the live tools idle, on the
+// stage while listening, and stopped). --set 4a | 4b | all (the default) picks the tools.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).
 const path = require('path'), fs = require('fs');
-const C = require('./common'), S = require('./stage'), H = require('./homeStates'), T = require('./tools');
+const C = require('./common'), S = require('./stage'), H = require('./homeStates'), T = require('./tools'), TOOLSET = require('./tools4b').toolSet().tools;
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const TOOLS_ONLY = process.argv.includes('--tools-only'), TOOLS = !process.argv.includes('--no-tools');
 const STATES = !process.argv.includes('--no-states') && !TOOLS_ONLY, HOME = !process.argv.includes('--no-home') && !TOOLS_ONLY;
@@ -145,7 +147,7 @@ async function measureTools(dir, theme, state, panels) {
     try {
       const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state });
       await C.clearOverlays(page); await S.warmMic(page);
-      for (const tool of T.TOOLS) await T.toolStates(page, tool, async (name, root) => {
+      for (const tool of TOOLSET) await T.toolStates(page, tool, async (name, root) => {
         panels[`tool ${w}: ${name}`] = await page.evaluate(measure, `${root}, header.shell-topbar, nav.shell-bottomnav`);
       });
     } finally { await b.close(); }

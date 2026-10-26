@@ -20,6 +20,9 @@
 //   result, at every size and theme (tools/<width>-<theme>/<tool>-<state>.jpg); the Scale Run motion at 390 Light, frames
 //   after its start and after it ends (motion/scale-start-*, scale-stop-*); the sprite icons new in 4a (icons.jpg).
 //   Sheets: sheets/tools.jpg, sheets/scale-motion.jpg. [--no-tools] skips them; [--tools-only] takes only them.
+//   Phase 4b (PHASE4B.md §1f, §4): the 10 tools with their own displays (tools4b.js) the same way (the live tools idle,
+//   on the stage while listening, and stopped); Mirror's replay mid-scrub (<w>-<theme>/mirror-scrub.jpg); the new icon
+//   hl-alert. [--set 4a | 4b | all] (the default) picks the tools (4b alone: no Scale Run motion, only the 4b icon).
 const path = require('path'), fs = require('fs'), os = require('os');
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -34,8 +37,9 @@ const TOOLS_ONLY = process.argv.includes('--tools-only'), TOOLS = !process.argv.
 const STATES = !process.argv.includes('--no-states') && !HOME_ONLY && !TOOLS_ONLY, STATES_ONLY = process.argv.includes('--states-only') || HOME_ONLY || TOOLS_ONLY;
 const H = require('./homeStates');
 const HOME_ROWS = [...H.HOME_STATES, 'coach-signedin', 'coach-signedout'];
-const S = require('./stage'), T = require('./tools');
-const NEW_ICONS = ['hl-fiveways', 'hl-mirror', 'hl-warmup'];
+const S = require('./stage'), T = require('./tools'), TS = require('./tools4b').toolSet();
+const NEW_ICONS = [...(TS.set !== '4b' ? ['hl-fiveways', 'hl-mirror', 'hl-warmup'] : []), ...(TS.set !== '4a' ? ['hl-alert'] : [])];
+const TOOL_ROWS = [...TS.names, ...(TS.set !== '4a' ? ['mirror-scrub'] : [])];
 const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
 const MOTION_MS = [0, 80, 160, 320, 480, 640, 900, 1300];
 const Q = { type: 'jpeg', quality: 85 };
@@ -170,10 +174,16 @@ async function toolShots(dir, state) {
       const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state });
       await C.clearOverlays(page); await S.warmMic(page);
       const d = path.join(OUT, 'tools', `${w}-${theme}`); fs.mkdirSync(d, { recursive: true });
-      for (const tool of T.TOOLS) await T.toolStates(page, tool, async name => { await page.screenshot({ path: path.join(d, `${name}.jpg`), ...Q }); });
+      for (const tool of TS.tools) await T.toolStates(page, tool, async name => { await page.screenshot({ path: path.join(d, `${name}.jpg`), ...Q }); });
+      if (TS.set !== '4a') { // Mirror's replay, scrubbed to the middle of the take (its playhead on the chart)
+        const m = require('./tools4b').byKey('mirror'); await m.open(page); await C.sleep(400); await T.runTake(page, m); await C.sleep(900);
+        await page.evaluate(() => { const sl = document.getElementById('mirrorReplaySlider'); sl.value = String(Math.round(+sl.max * 0.55)); sl.dispatchEvent(new Event('input', { bubbles: true })); sl.scrollIntoView({ block: 'center' }); });
+        await C.sleep(300); await page.screenshot({ path: path.join(d, 'mirror-scrub.jpg'), ...Q }); await T.restoreRange(page);
+      }
     } finally { await b.close(); }
     console.log(`   tools · ${w} · ${theme}`);
   }
+  if (TS.set === '4b') return iconShots(dir);
   // the Scale Run motion, 390 Light: frames after the start, and after the run ends (the house coming up)
   const b = await S.launchMic(S.STIM.steady);
   try {
@@ -189,7 +199,10 @@ async function toolShots(dir, state) {
     await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: 40000 }).catch(() => {});
     await frames('stop');
   } finally { await b.close(); }
-  // the icons new in 4a, at 24 and 48 px, Light and Dark
+  return iconShots(dir);
+}
+// the icons new in 4a and 4b, at 24 and 48 px, Light and Dark
+async function iconShots(dir) {
   { const b2 = await C.chromium.launch();
     try {
       const d = path.join(OUT, 'icons'); fs.mkdirSync(d, { recursive: true });
@@ -264,7 +277,7 @@ async function contactSheets(b, groups) {
   }
   if (fs.existsSync(path.join(OUT, 'tools'))) {
     const tc = cols.filter(c => fs.existsSync(path.join(OUT, 'tools', c)));
-    await sheet('tools', 'the 14 tools: idle, stage, result (signed in)', tc, T.STATE_NAMES.map(n => `<tr><th>${n}</th>${tc.map(c => `<td>${img(path.join(OUT, 'tools', c, n + '.jpg'), c.split('-')[0])}</td>`).join('')}</tr>`).join(''));
+    await sheet('tools', `the Coach tools (${TS.set}): idle, stage, result or stopped (signed in)`, tc, TOOL_ROWS.map(n => `<tr><th>${n}</th>${tc.map(c => `<td>${img(path.join(OUT, 'tools', c, n + '.jpg'), c.split('-')[0])}</td>`).join('')}</tr>`).join(''));
     if (fs.existsSync(path.join(OUT, 'motion', 'scale-start-0000.jpg')))
       await sheet('scale-motion', 'Scale Run motion, 390 Light (ms after the start, and after the run ends)', MOTION_MS.map(String),
         ['start', 'stop'].map(w => `<tr><th>${w}</th>${MOTION_MS.map(ms => `<td>${img(path.join(OUT, 'motion', `scale-${w}-${String(ms).padStart(4, '0')}.jpg`), '390')}</td>`).join('')}</tr>`).join(''));
