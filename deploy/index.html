@@ -1263,29 +1263,23 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .karaoke-note-chip.good{border-color:var(--hl-ok);color:var(--hl-ok);}
   .karaoke-note-chip.bad{border-color:var(--coral);color:var(--coral);}
 
-  /* ---- LIVE FEEDBACK CHECKLIST ---- */
-  .checklist-row{
-    display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--hairline);
-    border-radius:12px;padding:13px 16px;margin-bottom:10px;
-    transition:border-color .3s ease, background .3s ease;
-  }
-  .checklist-row:has(.checklist-icon.good){border-color:var(--hl-ok);background:color-mix(in srgb, var(--hl-ok) 6%, transparent);}
-  .checklist-row:has(.checklist-icon.warn){border-color:var(--coral);background:color-mix(in srgb, var(--coral) 6%, transparent);}
-  .checklist-icon{
-    width:32px;height:32px;border-radius:50%;flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;
-    font-size:15px;font-weight:700;
-    background:var(--surface-raised);border:2px solid var(--hairline);color:var(--muted);
-    transition:background .25s ease, border-color .25s ease, color .25s ease;
-  }
-  .checklist-icon.good{background:color-mix(in srgb, var(--hl-ok) 16%, transparent);border-color:var(--hl-ok);color:var(--hl-ok);}
-  .checklist-icon.warn{background:color-mix(in srgb, var(--coral) 16%, transparent);border-color:var(--coral);color:var(--coral);}
-  @keyframes checklistPulse{ 0%{transform:scale(1);} 40%{transform:scale(1.28);} 100%{transform:scale(1);} }
+  /* ---- LIVE FEEDBACK CHECKLIST (4b: ruled rows; on the stage, big rows) ---- */
+  .lf-rows{display:grid;width:100%;}
+  .checklist-row{display:grid;grid-template-columns:32px 1fr;align-items:center;gap:var(--hl-s3);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .checklist-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:var(--hl-hair) solid transparent;}
+  .checklist-icon.neutral{border-color:var(--hl-rule-strong);}
+  .checklist-icon.good{color:var(--hl-ok);} .checklist-icon.warn{color:var(--hl-warn);}
+  .checklist-icon .hl-icon{width:24px;height:24px;}
+  @keyframes checklistPulse{ 0%{transform:scale(1);} 40%{transform:scale(1.2);} 100%{transform:scale(1);} }
   .checklist-icon.state-pulse{animation:checklistPulse .45s cubic-bezier(.34,1.56,.64,1);}
   @media (prefers-reduced-motion: reduce){ .checklist-icon.state-pulse{animation:none;} }
-  .checklist-icon.neutral{color:var(--muted);}
-  .checklist-text{font-size:13px;color:var(--cream);}
-  .checklist-label{font-size:10px;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);display:block;margin-bottom:2px;}
+  .checklist-label{display:block;font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);font-weight:650;text-transform:uppercase;letter-spacing:0.06em;color:var(--hl-ink-3);}
+  .checklist-text{font-size:var(--hl-t-body);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
+  .vc-stage.is-live .lf-rows{max-width:420px;}
+  .vc-stage.is-live .checklist-row{padding:var(--hl-s4) 0;}
+  .vc-stage.is-live .checklist-text{font-size:var(--hl-t-h3);color:var(--hl-ink);}
+  .lf-stage:not(.is-live) #liveFeedbackStartBtn{margin-top:var(--hl-s5);}
+  #panel-livefeedback .key-card > .hl-measure{margin-top:var(--hl-s5);}
 
   /* ---- 21-DAY JOURNEY ---- */
   .journey-hero{
@@ -3829,15 +3823,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="livefeedback_sub">Fuses Tuner pitch/stability, Breath Trainer's consistency approach, and Register Coach's brightness heuristic into one live checklist. Nasality is deliberately left out — no real detector for it exists.</div>
     </div>
     <div class="key-card">
-      <div class="checklist-row"><div class="checklist-icon neutral" id="lfPitchIcon">○</div><div><span class="checklist-label" data-i18n="livefeedback_pitch_label">Pitch</span><div class="checklist-text" id="lfPitchText">Listening…</div></div></div>
-      <div class="checklist-row"><div class="checklist-icon neutral" id="lfStabilityIcon">○</div><div><span class="checklist-label" data-i18n="livefeedback_stability_label">Stability</span><div class="checklist-text" id="lfStabilityText">Listening…</div></div></div>
-      <div class="checklist-row"><div class="checklist-icon neutral" id="lfBreathIcon">○</div><div><span class="checklist-label" data-i18n="livefeedback_loudness_label">Loudness consistency</span><div class="checklist-text" id="lfBreathText">Listening…</div></div></div>
-      <div class="checklist-row"><div class="checklist-icon neutral" id="lfRegisterIcon">○</div><div><span class="checklist-label" data-i18n="livefeedback_register_label">Register</span><div class="checklist-text" id="lfRegisterText">Listening…</div></div></div>
-
-      <div class="btn-row" style="justify-content:center;margin-top:18px;">
-        <button class="mic-btn" id="liveFeedbackStartBtn"><span class="dot-icon"></span><span id="liveFeedbackStartLabel">Start listening</span></button>
+      <div class="vc-stage lf-stage" id="liveFeedbackStage">
+      <div class="lf-rows" role="status">
+        <div class="checklist-row"><div class="checklist-icon neutral" id="lfPitchIcon" data-state="neutral" aria-hidden="true"></div><div><span class="checklist-label" data-i18n="livefeedback_pitch_label">Pitch</span><div class="checklist-text" id="lfPitchText">—</div></div></div>
+        <div class="checklist-row"><div class="checklist-icon neutral" id="lfStabilityIcon" data-state="neutral" aria-hidden="true"></div><div><span class="checklist-label" data-i18n="livefeedback_stability_label">Stability</span><div class="checklist-text" id="lfStabilityText">—</div></div></div>
+        <div class="checklist-row"><div class="checklist-icon neutral" id="lfBreathIcon" data-state="neutral" aria-hidden="true"></div><div><span class="checklist-label" data-i18n="livefeedback_loudness_label">Loudness consistency</span><div class="checklist-text" id="lfBreathText">—</div></div></div>
+        <div class="checklist-row"><div class="checklist-icon neutral" id="lfRegisterIcon" data-state="neutral" aria-hidden="true"></div><div><span class="checklist-label" data-i18n="livefeedback_register_label">Register</span><div class="checklist-text" id="lfRegisterText">—</div></div></div>
       </div>
+      <button class="mic-btn vc-take-pill" id="liveFeedbackStartBtn"><span class="dot-icon"></span><span id="liveFeedbackStartLabel" data-i18n="register_start_btn">Start listening</span></button>
       <div class="vl-gauge" id="vlGaugeLiveFb" style="display:none;"></div>
+      </div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="livefeedback_measure"></p></details>
     </div>
   </section>
 
@@ -6417,7 +6413,7 @@ const TRANSLATIONS = {
     karaoke_mission_label:'🎵 Song Mission',
     karaoke_bonus_label:'Bonus objectives',
     livefeedback_title:"Live Feedback",
-    livefeedback_sub:'Fuses Tuner pitch/stability, Breath Trainer\'s consistency approach, and Register Coach\'s brightness heuristic into one live checklist. Nasality is deliberately left out — no real detector for it exists.',
+    livefeedback_sub:"Four live checks while you sing: pitch, stability, loudness consistency and register.",
     livefeedback_pitch_label:'Pitch',
     livefeedback_stability_label:'Stability',
     livefeedback_loudness_label:'Loudness consistency',
@@ -7723,6 +7719,16 @@ const TRANSLATIONS = {
     reg_fb_head:"Light, head-dominant tone above the break.",
     mic_needed:"Microphone access is needed. Please allow mic permission and try again.",
     register_measure:"Each frame, the pitch is read from the low-passed path, and a chest score from the brightness of your harmonics: the power-weighted average frequency up to 6 kHz, relative to the pitch, from 0 (light, head-like) to 100 (rich, chest-like). The passaggio is set 60% of the way up your range. Below it you're in chest voice; above it, a chest score of 62 or more reads as pushing chest, 35 or more as mixed voice, under that as head voice. A clean crossing is the time spent above the passaggio without pushing chest; your best is saved. This is a rule-based estimate from one microphone, not a trained model.",
+    lf_in_tune:"In tune",
+    lf_sharp:"Sharp (+{n} ct)",
+    lf_flat:"Flat (−{n} ct)",
+    lf_steady:"Steady",
+    lf_wavering:"Wavering",
+    lf_breath_steady:"Steady breath support",
+    lf_breath_dipping:"Volume dipping",
+    lf_pushing:"Pushing chest: try mixed",
+    lf_balanced:"Balanced tone",
+    livefeedback_measure:"Pitch reads In tune within 8 cents of the nearest note, allowing for natural vibrato. Stability is 100 minus 3 times the spread of your last 30 pitch readings, in cents; 75 or more reads Steady. Loudness consistency is 100 minus 140 times how much your loudness varies over the last 40 voiced readings (its standard deviation over its mean); 65 or more reads as steady breath support. Register reads as pushing chest above 60% of your range with a chest score of 62 or more, the same reading as Register Coach. Nasality isn't measured: there's no reliable detector for it.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7884,7 +7890,7 @@ const TRANSLATIONS = {
     karaoke_mission_label:'🎵 Mission Chanson',
     karaoke_bonus_label:'Objectifs bonus',
     livefeedback_title:"Retour en direct",
-    livefeedback_sub:'Fusionne la justesse/stabilité de l\'Accordeur, l\'approche de régularité de l\'Entraîneur de souffle, et l\'heuristique de luminosité du Coach de registre en une seule liste de contrôle en direct. La nasalité est délibérément exclue — aucun vrai détecteur n\'existe pour elle.',
+    livefeedback_sub:"Quatre vérifications en direct pendant que vous chantez : justesse, stabilité, régularité du volume et registre.",
     livefeedback_pitch_label:'Justesse',
     livefeedback_stability_label:'Stabilité',
     livefeedback_loudness_label:'Régularité du volume',
@@ -9190,6 +9196,16 @@ const TRANSLATIONS = {
     reg_fb_head:"Timbre léger, dominé par la tête, au-dessus du passage.",
     mic_needed:"L'accès au micro est nécessaire. Autorisez le micro et réessayez.",
     register_measure:"À chaque image, la hauteur est lue sur la voie filtrée, et un score de poitrine d'après la brillance de vos harmoniques : la fréquence moyenne pondérée par la puissance jusqu'à 6 kHz, rapportée à la hauteur, de 0 (léger, de tête) à 100 (riche, de poitrine). Le passaggio est placé à 60 % de la hauteur de votre tessiture. En dessous, vous êtes en voix de poitrine ; au-dessus, un score de 62 ou plus se lit comme poitrine forcée, 35 ou plus comme voix mixte, en dessous comme voix de tête. Un passage propre est le temps passé au-dessus du passaggio sans forcer la poitrine ; votre record est enregistré. C'est une estimation à base de règles avec un seul micro, pas un modèle entraîné.",
+    lf_in_tune:"Juste",
+    lf_sharp:"Trop haut (+{n} ct)",
+    lf_flat:"Trop bas (−{n} ct)",
+    lf_steady:"Stable",
+    lf_wavering:"Instable",
+    lf_breath_steady:"Soutien du souffle régulier",
+    lf_breath_dipping:"Le volume faiblit",
+    lf_pushing:"Poitrine forcée : essayez la voix mixte",
+    lf_balanced:"Timbre équilibré",
+    livefeedback_measure:"La justesse est jugée juste à 8 cents ou moins de la note la plus proche, en tenant compte du vibrato naturel. La stabilité vaut 100 moins 3 fois la dispersion de vos 30 dernières mesures de hauteur, en cents ; 75 ou plus se lit Stable. La régularité du volume vaut 100 moins 140 fois la variation de votre volume sur les 40 dernières mesures chantées (écart type sur moyenne) ; 65 ou plus se lit comme un soutien du souffle régulier. Le registre se lit comme poitrine forcée au-dessus de 60 % de votre tessiture avec un score de poitrine de 62 ou plus, la même mesure que le Coach de registre. La nasalité n'est pas mesurée : il n'existe pas de détecteur fiable.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9351,7 +9367,7 @@ const TRANSLATIONS = {
     karaoke_mission_label:'🎵 Misión de Canción',
     karaoke_bonus_label:'Objetivos adicionales',
     livefeedback_title:"Retroalimentación en vivo",
-    livefeedback_sub:'Fusiona la afinación/estabilidad del Afinador, el enfoque de consistencia del Entrenador de respiración, y la heurística de brillo del Coach de registro en una sola lista de verificación en vivo. La nasalidad se deja deliberadamente fuera — no existe un detector real para ella.',
+    livefeedback_sub:"Cuatro comprobaciones en vivo mientras cantas: afinación, estabilidad, consistencia de volumen y registro.",
     livefeedback_pitch_label:'Afinación',
     livefeedback_stability_label:'Estabilidad',
     livefeedback_loudness_label:'Consistencia de volumen',
@@ -10657,6 +10673,16 @@ const TRANSLATIONS = {
     reg_fb_head:"Timbre ligero, de cabeza, por encima del paso.",
     mic_needed:"Se necesita acceso al micrófono. Permite el micrófono e inténtalo de nuevo.",
     register_measure:"En cada fotograma, la altura se lee de la vía filtrada, y una puntuación de pecho a partir del brillo de tus armónicos: la frecuencia media ponderada por la potencia hasta 6 kHz, relativa a la altura, de 0 (ligera, de cabeza) a 100 (rica, de pecho). El passaggio se sitúa al 60 % de la subida de tu rango. Por debajo estás en voz de pecho; por encima, una puntuación de 62 o más se lee como pecho forzado, de 35 o más como voz mixta y, por debajo, como voz de cabeza. Un cruce limpio es el tiempo por encima del passaggio sin forzar el pecho; se guarda tu mejor marca. Es una estimación basada en reglas con un solo micrófono, no un modelo entrenado.",
+    lf_in_tune:"Afinado",
+    lf_sharp:"Por encima (+{n} ct)",
+    lf_flat:"Por debajo (−{n} ct)",
+    lf_steady:"Estable",
+    lf_wavering:"Inestable",
+    lf_breath_steady:"Apoyo de aire estable",
+    lf_breath_dipping:"El volumen baja",
+    lf_pushing:"Pecho forzado: prueba la voz mixta",
+    lf_balanced:"Timbre equilibrado",
+    livefeedback_measure:"La afinación se lee Afinado a 8 cents o menos de la nota más cercana, teniendo en cuenta el vibrato natural. La estabilidad es 100 menos 3 veces la dispersión de tus últimas 30 lecturas de altura, en cents; 75 o más se lee Estable. La consistencia de volumen es 100 menos 140 veces cuánto varía tu volumen en las últimas 40 lecturas cantadas (desviación típica sobre media); 65 o más se lee como apoyo de aire estable. El registro se lee como pecho forzado por encima del 60 % de tu rango con una puntuación de pecho de 62 o más, la misma lectura que el Coach de registro. La nasalidad no se mide: no hay un detector fiable.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10818,7 +10844,7 @@ const TRANSLATIONS = {
     karaoke_mission_label:'🎵 Şarkı Görevi',
     karaoke_bonus_label:'Bonus hedefler',
     livefeedback_title:"Canlı geri bildirim",
-    livefeedback_sub:'Akort Cihazı\'nın perde/kararlılık, Nefes Antrenörü\'nün tutarlılık yaklaşımını ve Register Koçu\'nun parlaklık sezgiselini tek bir canlı kontrol listesinde birleştirir. Genizsilik kasıtlı olarak dışarıda bırakılmıştır — bunun için gerçek bir dedektör yoktur.',
+    livefeedback_sub:"Siz söylerken dört canlı kontrol: perde, kararlılık, ses düzeyi tutarlılığı ve register.",
     livefeedback_pitch_label:'Perde',
     livefeedback_stability_label:'Kararlılık',
     livefeedback_loudness_label:'Ses düzeyi tutarlılığı',
@@ -12124,6 +12150,16 @@ const TRANSLATIONS = {
     reg_fb_head:"Geçişin üstünde hafif, baş ağırlıklı bir ton.",
     mic_needed:"Mikrofon erişimi gerekiyor. Mikrofon iznini verip tekrar deneyin.",
     register_measure:"Her karede perde, alçak geçiren yoldan okunur; göğüs puanı da harmoniklerinizin parlaklığından: 6 kHz'e kadar güçle ağırlıklandırılmış ortalama frekansın perdeye oranı, 0'dan (hafif, baş sesi gibi) 100'e (zengin, göğüs sesi gibi). Passaggio, aralığınızın %60'ına konur. Altında göğüs sesindesiniz; üstünde 62 ve üzeri puan göğüs zorlaması, 35 ve üzeri karışık ses, altı baş sesi olarak okunur. Temiz geçiş, göğsü zorlamadan passaggio'nun üstünde geçen süredir; en iyiniz kaydedilir. Bu, tek mikrofonla kurala dayalı bir tahmindir, eğitilmiş bir model değil.",
+    lf_in_tune:"Akortlu",
+    lf_sharp:"Diyez (+{n} sent)",
+    lf_flat:"Pes (−{n} sent)",
+    lf_steady:"Sabit",
+    lf_wavering:"Dalgalı",
+    lf_breath_steady:"Sabit nefes desteği",
+    lf_breath_dipping:"Ses düzeyi düşüyor",
+    lf_pushing:"Göğüs zorlanıyor: karışık sesi deneyin",
+    lf_balanced:"Dengeli ton",
+    livefeedback_measure:"Perde, doğal vibrato hesaba katılarak en yakın notaya 8 sent veya daha yakınsa Akortlu okunur. Kararlılık, son 30 perde ölçümünüzün yayılımının (sent) 3 katının 100'den çıkarılmasıdır; 75 ve üzeri Sabit okunur. Ses düzeyi tutarlılığı, son 40 sesli ölçümde ses düzeyinizin değişiminin (standart sapma bölü ortalama) 140 katının 100'den çıkarılmasıdır; 65 ve üzeri sabit nefes desteği okunur. Register, aralığınızın %60'ının üstünde ve göğüs puanı 62 veya üzeriyken göğüs zorlaması okunur; Register Koçu ile aynı ölçüm. Genizsilik ölçülmez: bunun için güvenilir bir algılayıcı yok.",
   },
 };
 let currentLanguage = 'en';
@@ -14220,13 +14256,15 @@ let lfCentsBuffer = [];
 let lfVib = makeVibratoTolerantLive(); // "In tune" and "Steady" are judged with natural vibrato taken out (Steady: only when sure)
 let lfRmsBuffer = [];
 
+// A row: hl-check in the ok colour, hl-alert in the warning colour, a hairline ring while listening; the words carry the
+// meaning, never the colour alone.
+const LF_ICON = {good:'<svg class="hl-icon" aria-hidden="true"><use href="#hl-check"/></svg>', warn:'<svg class="hl-icon" aria-hidden="true"><use href="#hl-alert"/></svg>', neutral:''};
 function setChecklistRow(prefix, state, text){
   const iconEl = document.getElementById('lf'+prefix+'Icon');
   const textEl = document.getElementById('lf'+prefix+'Text');
   const prevState = iconEl.dataset.state;
-  iconEl.className = 'checklist-icon '+state;
-  iconEl.textContent = state==='good' ? '✓' : state==='warn' ? '⚠' : '○';
-  textEl.textContent = text;
+  if(prevState!==state){ iconEl.className = 'checklist-icon '+state; iconEl.innerHTML = LF_ICON[state]; }
+  if(textEl.textContent!==text) textEl.textContent = text;
   if(prevState && prevState!==state && state!=='neutral'){
     iconEl.classList.add('state-pulse');
     setTimeout(()=>iconEl.classList.remove('state-pulse'), 480);
@@ -14241,18 +14279,22 @@ async function startLiveFeedback(){
   lfCentsBuffer = [];
   lfRmsBuffer = [];
   lfVib = makeVibratoTolerantLive();
-  document.getElementById('liveFeedbackStartLabel').textContent = 'Stop';
+  document.getElementById('liveFeedbackStartLabel').textContent = t('action_stop');
   document.getElementById('liveFeedbackStartBtn').classList.add('listening');
+  ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral',t('action_listening')));
+  houseSession(()=>lfActive, document.getElementById('liveFeedbackStage')); // Start to Stop (lfLoop feeds the vocal load)
   recordActivity();
   lfLoop();
 }
+// Stop, and leaving (stopAllActiveSessions): the loop ends (it used to keep reading the mic and feeding the vocal load
+// on every other screen), the rows go quiet.
 function stopLiveFeedback(){
   lfActive = false;
   cancelAnimationFrame(lfRafId);
   vlEnd();
-  document.getElementById('liveFeedbackStartLabel').textContent = 'Start listening';
+  document.getElementById('liveFeedbackStartLabel').textContent = t('register_start_btn');
   document.getElementById('liveFeedbackStartBtn').classList.remove('listening');
-  ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral',t('action_listening')));
+  ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral','—'));
 }
 function lfLoop(){
   if(!lfActive) return;
@@ -14266,7 +14308,7 @@ function lfLoop(){
     const inTune = Math.abs(note.cents) <= 8 + vibratoCentreSlack(lfVib.vibratoDepth); // a vibrato note: its centre, allowing for the averaging's leftover
 
     setChecklistRow('Pitch', inTune ? 'good':'warn',
-      inTune ? 'In tune' : `${note.cents>0?'Sharp':'Flat'} (${note.cents>0?'+':''}${note.cents}ct)`);
+      inTune ? t('lf_in_tune') : t(note.cents>0 ? 'lf_sharp' : 'lf_flat').replace('{n}', Math.abs(note.cents)));
 
     lfCentsBuffer.push(lfVib.vibratoSure ? note.cents : freqToNote(freq).cents); // "Steady" forgives only a vibrato the gate is sure of
     if(lfCentsBuffer.length>30) lfCentsBuffer.shift();
@@ -14274,7 +14316,7 @@ function lfLoop(){
       const mean = lfCentsBuffer.reduce((a,b)=>a+b,0)/lfCentsBuffer.length;
       const variance = lfCentsBuffer.reduce((a,b)=>a+(b-mean)*(b-mean),0)/lfCentsBuffer.length;
       const stability = Math.max(0, 100-Math.sqrt(variance)*3);
-      setChecklistRow('Stability', stability>=75?'good':'warn', stability>=75?'Steady':'Wavering');
+      setChecklistRow('Stability', stability>=75?'good':'warn', t(stability>=75?'lf_steady':'lf_wavering'));
     }
 
     if(rms>0.012){
@@ -14286,7 +14328,7 @@ function lfLoop(){
       const variance = lfRmsBuffer.reduce((a,b)=>a+(b-mean)*(b-mean),0)/lfRmsBuffer.length;
       const cov = Math.sqrt(variance)/mean;
       const consistency = Math.max(0, Math.round(100-cov*140));
-      setChecklistRow('Breath', consistency>=65?'good':'warn', consistency>=65?'Steady breath support':'Volume dipping');
+      setChecklistRow('Breath', consistency>=65?'good':'warn', t(consistency>=65?'lf_breath_steady':'lf_breath_dipping'));
     }
 
     if(fr.chest!==null){
@@ -14294,9 +14336,9 @@ function lfLoop(){
       const {lowMidi, highMidi} = registerRangeBounds();
       const passaggioMidi = Math.round(lowMidi + 0.6*(highMidi-lowMidi));
       if(note.midi>=passaggioMidi && chestScore>=62){
-        setChecklistRow('Register','warn','Pushing chest — try mixed');
+        setChecklistRow('Register','warn',t('lf_pushing'));
       } else {
-        setChecklistRow('Register','good','Balanced tone');
+        setChecklistRow('Register','good',t('lf_balanced'));
       }
     }
   } else {
@@ -19793,6 +19835,7 @@ function stopAllActiveSessions(){
   if(typeof drillStop==='function') drillStop();
   aiDuetActive = false;
   if(typeof vqActive!=='undefined') vqActive = false;
+  if(typeof lfActive!=='undefined' && lfActive) stopLiveFeedback();
   if(typeof vibratoActive!=='undefined' && vibratoActive){ vibratoActive = false; vibratoReset(); } // 4b: leaving stops the hold
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
   if(typeof harmonyMemory!=='undefined' && harmonyMemory.active) finishHarmonyMemory(false);
