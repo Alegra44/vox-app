@@ -13,8 +13,9 @@
 //             and its displayed values, flattened to name → value (text values compared equal)
 //   readout   (live tools, in the page) what it shows at this moment, as numbers and states (live.js)
 //   idleOk    (in the page) the tool is back at its starting state: Start enabled, idle labels, cards reset (stopcheck.js)
-// Units in nums: Hz in tenths ("5.6 Hz" → 56), HNR in tenths of a dB, the brightness ratio in hundredths, seconds in
-// tenths: the precision each result shows, so the ±2 gate means 2 of the last digit shown.
+// Units in nums: Hz in tenths ("5.6 Hz" → 56), the brightness ratio in hundredths, seconds in tenths: the precision each
+// result shows, so the ±2 gate means 2 of the last digit shown. HNR in whole dB (same-code runs differ by 0.4 dB on a
+// clean synthetic tone, which reads 84 dB).
 const C = require('./common');
 
 const narrow = (lo, hi) => { // the singer's range (restored by tools.js restoreRange)
@@ -160,7 +161,7 @@ const TOOLS = [
       o['f0 Hz'] = Math.round(r.f0); o.note = midiName(Math.round(r.midi)); o['seconds (0.1)'] = Math.round(r.seconds * 10);
       o['vibrato found'] = r.vib.ok ? 1 : 0;
       if (r.vib.ok) { o['vibrato rate (0.1 Hz)'] = Math.round(r.vib.rate * 10); o['vibrato depth ct'] = r.vib.depth; o['vibrato consistency'] = r.vib.consistency; }
-      if (r.hnr !== null) { o['HNR (0.1 dB)'] = Math.round(r.hnr * 10); o['HNR band'] = r.hnr >= VQ_HNR_CLEAR ? 'clear' : r.hnr >= VQ_HNR_BREATHY ? 'some' : 'breathy'; }
+      if (r.hnr !== null) { o['HNR dB'] = Math.round(r.hnr); o['HNR band'] = r.hnr >= VQ_HNR_CLEAR ? 'clear' : r.hnr >= VQ_HNR_BREATHY ? 'some' : 'breathy'; }
       if (r.centroid !== null) {
         const ratio = Math.round(r.centroid / r.f0 * 100) / 100, [dk, br] = vqBrightBounds(r.f0);
         o['centroid Hz'] = Math.round(r.centroid); o['brightness (0.01×)'] = Math.round(ratio * 100); o['brightness band'] = ratio < dk ? 'dark' : ratio > br ? 'bright' : 'balanced';
