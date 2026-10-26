@@ -1268,6 +1268,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .checklist-row{display:grid;grid-template-columns:32px 1fr;align-items:center;gap:var(--hl-s3);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
   .checklist-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-sizing:border-box;border:var(--hl-hair) solid transparent;}
   .checklist-icon.neutral{border-color:var(--hl-rule-strong);}
+  .lf-stage:not(.is-live) .checklist-icon.neutral{border-color:transparent;} /* on paper the rows are quiet; the ring means listening */
   .checklist-icon.good{color:var(--hl-ok);} .checklist-icon.warn{color:var(--hl-warn);}
   .checklist-icon .hl-icon{width:24px;height:24px;}
   @keyframes checklistPulse{ 0%{transform:scale(1);} 40%{transform:scale(1.2);} 100%{transform:scale(1);} }
@@ -1539,6 +1540,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Resonance: the particle field sized to the stage, the zone big, Steadiness and Ripple small */
+  #resonanceCanvas{display:block;width:100%;max-width:560px;height:auto;aspect-ratio:600/360;max-height:42dvh;object-fit:contain;}
+  .res-zone{font-size:var(--hl-t-h1);font-stretch:var(--hl-w-wide);font-weight:300;line-height:1.1;color:var(--hl-ink);}
+  .res-small{display:flex;gap:var(--hl-s5);font-size:var(--hl-t-small);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
+  .res-small span span:last-child{color:var(--hl-ink-2);}
+  #panel-resonance .tuner-hero-card > .hl-measure{margin-top:var(--hl-s5);}
   /* Register Coach: the bridge fitted to the stage's height (head above, chest below, on stage surfaces), the passaggio
      dashed with its note, the marker in the voice colour with a warning ring while pushing chest */
   .reg-zone{stroke:var(--hl-rule);stroke-width:1;}
@@ -3844,17 +3851,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="resonance_sub">Sing freely — real signals given visual form: amber for chest, cyan for head, violet for mixed voice. Particles contract when your pitch is steady and ripple when it's genuinely oscillating, not a preset animation.</div>
     </div>
     <div class="tuner-hero-card">
-      <canvas id="resonanceCanvas" width="600" height="360" role="img" aria-label="Live resonance particle visualization — color reflects your real chest/head register balance, particle spread reflects your real pitch steadiness" style="width:100%;max-width:520px;display:block;margin:0 auto;border-radius:16px;background:var(--bg);"></canvas>
-      <div class="btn-row" style="justify-content:center;margin-top:16px;">
-        <button class="mic-btn" id="resonanceStartBtn"><span class="dot-icon"></span><span id="resonanceStartLabel">Start</span></button>
+      <div class="vc-stage res-stage" id="resonanceStage">
+      <canvas id="resonanceCanvas" class="vc-live-only" width="600" height="360" role="img" aria-label="Your voice as particles: the colour shows your register, the spread your pitch steadiness"></canvas>
+      <div class="res-zone vc-live-only" id="resRegisterStat">—</div>
+      <div class="res-small vc-live-only">
+        <span><span data-i18n="resonance_steadiness_label">Steadiness</span> <span id="resSteadyStat">—</span></span>
+        <span><span data-i18n="resonance_oscillation_label">Ripple</span> <span id="resOscStat">—</span></span>
       </div>
+      <button class="mic-btn vc-take-pill" id="resonanceStartBtn"><span class="dot-icon"></span><span id="resonanceStartLabel" data-i18n="action_start">Start</span></button>
       <div class="vl-gauge" id="vlGaugeResonance" style="display:none;"></div>
-      <div class="reg-stat-row" style="margin-top:16px;">
-        <div class="stat-chip"><div class="label" data-i18n="resonance_register_label">Register</div><div class="val" id="resRegisterStat">—</div></div>
-        <div class="stat-chip"><div class="label" data-i18n="resonance_steadiness_label">Steadiness</div><div class="val" id="resSteadyStat">—</div></div>
-        <div class="stat-chip"><div class="label" data-i18n="resonance_oscillation_label">Oscillation</div><div class="val" id="resOscStat">—</div></div>
       </div>
-      <p class="fine-print" style="margin-top:14px;" data-i18n="resonance_limits_note">Honest about limits: "oscillation" here is a live proxy (rolling pitch variance + zero-crossing rate), not lab-grade vibrato analysis — for that, see the Vibrato Analyzer, which runs a real peak-detection pass on a captured take.</p>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="resonance_measure"></p><p data-i18n="resonance_limits_note"></p></details>
     </div>
   </section>
 
@@ -6419,11 +6426,11 @@ const TRANSLATIONS = {
     livefeedback_loudness_label:'Loudness consistency',
     livefeedback_register_label:'Register',
     resonance_title:"Resonance Visualizer",
-    resonance_sub:'Sing freely — real signals given visual form: amber for chest, cyan for head, violet for mixed voice. Particles contract when your pitch is steady and ripple when it\'s genuinely oscillating, not a preset animation.',
+    resonance_sub:"Sing freely and see your voice as a field of particles: the colour follows your register (chest, mixed or head), and the particles gather when your pitch is steady and ripple when it moves.",
     resonance_register_label:'Register',
     resonance_steadiness_label:'Steadiness',
-    resonance_oscillation_label:'Oscillation',
-    resonance_limits_note:'Honest about limits: "oscillation" here is a live proxy (rolling pitch variance + zero-crossing rate), not lab-grade vibrato analysis — for that, see the Vibrato Analyzer, which runs a real peak-detection pass on a captured take.',
+    resonance_oscillation_label:"Ripple",
+    resonance_limits_note:"Ripple is a live proxy (the rolling spread of your pitch and how often it crosses its average), not a vibrato analysis: for that, use Vibrato, which finds the peaks of a held note.",
     custom_title:'Build Your Own Challenge',
     custom_sub:"Pick your range, register focus and pace: you get a 6-note sequence, scored the same way as Pitch Match.",
     custom_step1:'1. Note range',
@@ -7729,6 +7736,13 @@ const TRANSLATIONS = {
     lf_pushing:"Pushing chest: try mixed",
     lf_balanced:"Balanced tone",
     livefeedback_measure:"Pitch reads In tune within 8 cents of the nearest note, allowing for natural vibrato. Stability is 100 minus 3 times the spread of your last 30 pitch readings, in cents; 75 or more reads Steady. Loudness consistency is 100 minus 140 times how much your loudness varies over the last 40 voiced readings (its standard deviation over its mean); 65 or more reads as steady breath support. Register reads as pushing chest above 60% of your range with a chest score of 62 or more, the same reading as Register Coach. Nasality isn't measured: there's no reliable detector for it.",
+    res_zone_chest:"Chest",
+    res_zone_mixed:"Mixed",
+    res_zone_head:"Head",
+    res_rippling:"Rippling",
+    res_calm:"Calm",
+    res_canvas_label:"Your voice as particles: the colour shows your register, the spread your pitch steadiness",
+    resonance_measure:"The register comes from the chest score, the same reading as Register Coach (the brightness of your harmonics): 62 or more reads Chest, 35 or more Mixed, under 35 Head. Steadiness is 100 minus 2.2 times the spread of your last 45 pitch readings, in cents (their standard deviation). Ripple counts how often your pitch crosses its average over those readings: 3 or more crossings reads Rippling.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7896,11 +7910,11 @@ const TRANSLATIONS = {
     livefeedback_loudness_label:'Régularité du volume',
     livefeedback_register_label:'Registre',
     resonance_title:"Visualiseur de Résonance",
-    resonance_sub:'Chantez librement — de vrais signaux prenant forme visuelle : ambre pour la poitrine, cyan pour la tête, violet pour la voix mixte. Les particules se contractent quand votre justesse est stable et ondulent quand elle oscille vraiment, pas une animation préréglée.',
+    resonance_sub:"Chantez librement et voyez votre voix comme un nuage de particules : la couleur suit votre registre (poitrine, mixte ou tête), et les particules se resserrent quand votre hauteur est stable et ondulent quand elle bouge.",
     resonance_register_label:'Registre',
     resonance_steadiness_label:'Stabilité',
-    resonance_oscillation_label:'Oscillation',
-    resonance_limits_note:'Honnête sur les limites : « oscillation » ici est un proxy en direct (variance de justesse glissante + taux de passage à zéro), pas une analyse de vibrato de qualité laboratoire — pour cela, voir l\'Analyseur de vibrato, qui exécute une vraie passe de détection de crêtes sur une prise capturée.',
+    resonance_oscillation_label:"Ondulation",
+    resonance_limits_note:"L'ondulation est un indicateur en direct (la dispersion glissante de votre hauteur et la fréquence à laquelle elle croise sa moyenne), pas une analyse du vibrato : pour cela, utilisez Vibrato, qui trouve les crêtes d'une note tenue.",
     custom_title:'Créez Votre Propre Défi',
     custom_sub:"Choisissez votre tessiture, votre registre et votre rythme : vous obtenez une séquence de 6 notes, notée de la même façon que Pitch Match.",
     custom_step1:'1. Plage de notes',
@@ -9206,6 +9220,13 @@ const TRANSLATIONS = {
     lf_pushing:"Poitrine forcée : essayez la voix mixte",
     lf_balanced:"Timbre équilibré",
     livefeedback_measure:"La justesse est jugée juste à 8 cents ou moins de la note la plus proche, en tenant compte du vibrato naturel. La stabilité vaut 100 moins 3 fois la dispersion de vos 30 dernières mesures de hauteur, en cents ; 75 ou plus se lit Stable. La régularité du volume vaut 100 moins 140 fois la variation de votre volume sur les 40 dernières mesures chantées (écart type sur moyenne) ; 65 ou plus se lit comme un soutien du souffle régulier. Le registre se lit comme poitrine forcée au-dessus de 60 % de votre tessiture avec un score de poitrine de 62 ou plus, la même mesure que le Coach de registre. La nasalité n'est pas mesurée : il n'existe pas de détecteur fiable.",
+    res_zone_chest:"Poitrine",
+    res_zone_mixed:"Mixte",
+    res_zone_head:"Tête",
+    res_rippling:"Ondulante",
+    res_calm:"Calme",
+    res_canvas_label:"Votre voix en particules : la couleur montre votre registre, l'étalement la stabilité de votre hauteur",
+    resonance_measure:"Le registre vient du score de poitrine, la même mesure que le Coach de registre (la brillance de vos harmoniques) : 62 ou plus se lit Poitrine, 35 ou plus Mixte, sous 35 Tête. La stabilité vaut 100 moins 2,2 fois la dispersion de vos 45 dernières mesures de hauteur, en cents (leur écart type). L'ondulation compte combien de fois votre hauteur croise sa moyenne sur ces mesures : 3 croisements ou plus se lisent Ondulante.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9373,11 +9394,11 @@ const TRANSLATIONS = {
     livefeedback_loudness_label:'Consistencia de volumen',
     livefeedback_register_label:'Registro',
     resonance_title:"Visualizador de Resonancia",
-    resonance_sub:'Canta libremente — señales reales tomando forma visual: ámbar para pecho, cian para cabeza, violeta para voz mixta. Las partículas se contraen cuando tu afinación es estable y ondulan cuando realmente está oscilando, no una animación preestablecida.',
+    resonance_sub:"Canta libremente y mira tu voz como un campo de partículas: el color sigue tu registro (pecho, mixto o cabeza) y las partículas se juntan cuando tu altura es estable y ondulan cuando se mueve.",
     resonance_register_label:'Registro',
     resonance_steadiness_label:'Estabilidad',
-    resonance_oscillation_label:'Oscilación',
-    resonance_limits_note:'Honestos sobre los límites: "oscilación" aquí es un proxy en vivo (varianza de afinación continua + tasa de cruce por cero), no un análisis de vibrato de grado laboratorio — para eso, ve el Analizador de vibrato, que ejecuta una pasada real de detección de picos en una toma capturada.',
+    resonance_oscillation_label:"Ondulación",
+    resonance_limits_note:"La ondulación es un indicador en vivo (la dispersión móvil de tu altura y cuántas veces cruza su media), no un análisis de vibrato: para eso, usa Vibrato, que encuentra los picos de una nota sostenida.",
     custom_title:'Crea Tu Propio Desafío',
     custom_sub:"Elige tu rango, tu registro y tu ritmo: obtienes una secuencia de 6 notas, puntuada igual que Precisión de nota.",
     custom_step1:'1. Rango de notas',
@@ -10683,6 +10704,13 @@ const TRANSLATIONS = {
     lf_pushing:"Pecho forzado: prueba la voz mixta",
     lf_balanced:"Timbre equilibrado",
     livefeedback_measure:"La afinación se lee Afinado a 8 cents o menos de la nota más cercana, teniendo en cuenta el vibrato natural. La estabilidad es 100 menos 3 veces la dispersión de tus últimas 30 lecturas de altura, en cents; 75 o más se lee Estable. La consistencia de volumen es 100 menos 140 veces cuánto varía tu volumen en las últimas 40 lecturas cantadas (desviación típica sobre media); 65 o más se lee como apoyo de aire estable. El registro se lee como pecho forzado por encima del 60 % de tu rango con una puntuación de pecho de 62 o más, la misma lectura que el Coach de registro. La nasalidad no se mide: no hay un detector fiable.",
+    res_zone_chest:"Pecho",
+    res_zone_mixed:"Mixta",
+    res_zone_head:"Cabeza",
+    res_rippling:"Ondulante",
+    res_calm:"Tranquila",
+    res_canvas_label:"Tu voz en partículas: el color muestra tu registro y la dispersión la estabilidad de tu altura",
+    resonance_measure:"El registro sale de la puntuación de pecho, la misma lectura que el Coach de registro (el brillo de tus armónicos): 62 o más se lee Pecho, 35 o más Mixta, por debajo de 35 Cabeza. La estabilidad es 100 menos 2,2 veces la dispersión de tus últimas 45 lecturas de altura, en cents (su desviación típica). La ondulación cuenta cuántas veces tu altura cruza su media en esas lecturas: 3 cruces o más se leen Ondulante.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10850,11 +10878,11 @@ const TRANSLATIONS = {
     livefeedback_loudness_label:'Ses düzeyi tutarlılığı',
     livefeedback_register_label:'Register',
     resonance_title:"Rezonans Görselleştirici",
-    resonance_sub:'Özgürce söyleyin — gerçek sinyaller görsel forma bürünür: göğüs için kehribar, baş için camgöbeği, karma ses için mor. Perdeniz sabitken parçacıklar büzülür ve gerçekten salınırken dalgalanır, önceden ayarlanmış bir animasyon değil.',
+    resonance_sub:"Özgürce söyleyin ve sesinizi bir parçacık alanı olarak görün: renk register'ınızı izler (göğüs, karışık ya da baş); perdeniz sabitken parçacıklar toplanır, oynadığında dalgalanır.",
     resonance_register_label:'Register',
     resonance_steadiness_label:'Sabitlik',
-    resonance_oscillation_label:'Salınım',
-    resonance_limits_note:'Sınırlar konusunda dürüz: buradaki "salınım" canlı bir vekildir (kayan perde varyansı + sıfır geçiş oranı), laboratuvar kalitesinde vibrato analizi değil — bunun için, yakalanmış bir alım üzerinde gerçek bir tepe-algılama geçişi çalıştıran Vibrato Analizörüne bakın.',
+    resonance_oscillation_label:"Dalgalanma",
+    resonance_limits_note:"Dalgalanma canlı bir göstergedir (perdenizin kayan yayılımı ve ortalamasını ne sıklıkla kestiği), vibrato analizi değildir: bunun için tutulan bir notanın tepelerini bulan Vibrato'yu kullanın.",
     custom_title:'Kendi Meydan Okumanı Oluştur',
     custom_sub:"Aralığınızı, register odağınızı ve temponuzu seçin: Nota Eşleştirme ile aynı şekilde puanlanan 6 notalık bir dizi alırsınız.",
     custom_step1:'1. Nota aralığı',
@@ -12160,6 +12188,13 @@ const TRANSLATIONS = {
     lf_pushing:"Göğüs zorlanıyor: karışık sesi deneyin",
     lf_balanced:"Dengeli ton",
     livefeedback_measure:"Perde, doğal vibrato hesaba katılarak en yakın notaya 8 sent veya daha yakınsa Akortlu okunur. Kararlılık, son 30 perde ölçümünüzün yayılımının (sent) 3 katının 100'den çıkarılmasıdır; 75 ve üzeri Sabit okunur. Ses düzeyi tutarlılığı, son 40 sesli ölçümde ses düzeyinizin değişiminin (standart sapma bölü ortalama) 140 katının 100'den çıkarılmasıdır; 65 ve üzeri sabit nefes desteği okunur. Register, aralığınızın %60'ının üstünde ve göğüs puanı 62 veya üzeriyken göğüs zorlaması okunur; Register Koçu ile aynı ölçüm. Genizsilik ölçülmez: bunun için güvenilir bir algılayıcı yok.",
+    res_zone_chest:"Göğüs",
+    res_zone_mixed:"Karışık",
+    res_zone_head:"Baş",
+    res_rippling:"Dalgalı",
+    res_calm:"Sakin",
+    res_canvas_label:"Parçacıklar olarak sesiniz: renk register'ınızı, yayılım perde kararlılığınızı gösterir",
+    resonance_measure:"Register, Register Koçu ile aynı ölçüm olan göğüs puanından gelir (harmoniklerinizin parlaklığı): 62 ve üzeri Göğüs, 35 ve üzeri Karışık, 35'in altı Baş okunur. Sabitlik, son 45 perde ölçümünüzün yayılımının (sent cinsinden standart sapma) 2,2 katının 100'den çıkarılmasıdır. Dalgalanma, perdenizin bu ölçümlerde ortalamasını kaç kez kestiğini sayar: 3 veya daha fazla kesişim Dalgalı okunur.",
   },
 };
 let currentLanguage = 'en';
@@ -19821,6 +19856,7 @@ function stopAllActiveSessions(){
   bossActive = false;
   bridgeActive = false;
   harmonyActive = false;
+  if(typeof stopResonanceVisualizer==='function' && resonanceActive) stopResonanceVisualizer(); // 4b: the button and readings reset
   resonanceActive = false;
   rhythmActive = false;
   if(typeof rhythmStop==='function') rhythmStop();
@@ -20730,14 +20766,24 @@ function initResonanceParticles(){
 }
 initResonanceParticles();
 
+// The particles' colours come from the tokens (4b, no literals): chest --hl-voice, head --hl-voice-soft, mixed half of
+// each, idle --hl-ink-3; read again whenever the theme changes. Zones as Register Coach's: 62 / 35.
+let resColors = null, resColorsKey = null;
+function resonanceColors(){
+  const key = (document.documentElement.dataset.theme||'')+'|'+matchMedia('(prefers-color-scheme: dark)').matches+'|'+(document.body.dataset.house||'');
+  if(resColors && key===resColorsKey) return resColors;
+  const probe = document.createElement('i'); document.body.appendChild(probe);
+  const rgb = v=>{ probe.style.color = `var(${v})`; return (getComputedStyle(probe).color.match(/[\d.]+/g)||[0,0,0]).slice(0,3).map(Number); };
+  const voice = rgb('--hl-voice'), soft = rgb('--hl-voice-soft'), ink3 = rgb('--hl-ink-3');
+  probe.remove();
+  const css = c=>`rgb(${c.map(Math.round).join(',')})`;
+  resColors = {chest:css(voice), mixed:css(voice.map((v,i)=>(v+soft[i])/2)), head:css(soft), idle:css(ink3)};
+  resColorsKey = key;
+  return resColors;
+}
 function resonanceColorFor(chestScore){
-  // Real 3-stop gradient matching Register Coach's own zone boundaries — cyan (head) / violet (mixed) / amber (chest)
-  const cyan=[79,214,196], violet=[167,139,218], amber=[232,163,61];
-  const t = Math.max(0,Math.min(100,chestScore))/100;
-  let c;
-  if(t<0.5){ const k=t*2; c=[0,1,2].map(i=>Math.round(cyan[i]+(violet[i]-cyan[i])*k)); }
-  else { const k=(t-0.5)*2; c=[0,1,2].map(i=>Math.round(violet[i]+(amber[i]-violet[i])*k)); }
-  return `rgb(${c[0]},${c[1]},${c[2]})`;
+  const c = resonanceColors();
+  return chestScore>=62 ? c.chest : chestScore>=35 ? c.mixed : c.head;
 }
 
 function drawResonanceFrame(steadiness, oscillation, color, active){
@@ -20765,27 +20811,32 @@ function drawResonanceFrame(steadiness, oscillation, color, active){
   });
   ctx.globalAlpha = 1;
 }
-drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);
+drawResonanceFrame(0, 0, resonanceColors().idle, false);
 
 async function startResonanceVisualizer(){
   if(!requireProFeature('Resonance Visualizer')) return;
   if(!await openRegisterInput()) return;
   resonanceActive = true;
   resonanceCentsBuffer = [];
-  document.getElementById('resonanceStartLabel').textContent = 'Stop';
+  document.getElementById('resonanceStartLabel').textContent = t('action_stop');
   document.getElementById('resonanceStartBtn').classList.add('listening');
+  document.getElementById('resonanceCanvas').setAttribute('aria-label', t('res_canvas_label'));
+  houseSession(()=>resonanceActive, document.getElementById('resonanceStage')); // Start to Stop (the loop feeds the vocal load)
+  resonanceL = {};
   resonanceLoop();
 }
+let resonanceL = null;
+// Stop, and leaving (stopAllActiveSessions): the button back to Start, the readings cleared.
 function stopResonanceVisualizer(){
   resonanceActive = false;
   vlEnd();
   cancelAnimationFrame(resonanceRafId);
-  document.getElementById('resonanceStartLabel').textContent = 'Start';
+  document.getElementById('resonanceStartLabel').textContent = t('action_start');
   document.getElementById('resonanceStartBtn').classList.remove('listening');
   document.getElementById('resRegisterStat').textContent = '—';
   document.getElementById('resSteadyStat').textContent = '—';
   document.getElementById('resOscStat').textContent = '—';
-  drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);
+  drawResonanceFrame(0, 0, resonanceColors().idle, false);
 }
 document.getElementById('resonanceStartBtn')?.addEventListener('click', ()=>{
   if(resonanceActive) stopResonanceVisualizer(); else startResonanceVisualizer();
@@ -20814,19 +20865,19 @@ function resonanceLoop(){
       oscillation = Math.max(0, Math.min(100, crossings*9));
     }
     const chestScore = fr.chest ?? 50;
-    const zone = chestScore>=62 ? 'Chest' : chestScore>=35 ? 'Mixed' : 'Head';
+    const zone = chestScore>=62 ? 'res_zone_chest' : chestScore>=35 ? 'res_zone_mixed' : 'res_zone_head';
 
-    document.getElementById('resRegisterStat').textContent = zone;
+    document.getElementById('resRegisterStat').textContent = t(zone);
     document.getElementById('resSteadyStat').textContent = Math.round(steadiness)+'%';
-    document.getElementById('resOscStat').textContent = oscillation>25 ? 'Rippling' : 'Calm';
+    document.getElementById('resOscStat').textContent = t(oscillation>25 ? 'res_rippling' : 'res_calm');
 
-    drawResonanceFrame(steadiness, oscillation, resonanceColorFor(chestScore), true);
+    vcFeed(resonanceL, ()=>drawResonanceFrame(steadiness, oscillation, resonanceColorFor(chestScore), true));
   } else {
     resonanceCentsBuffer = [];
     document.getElementById('resRegisterStat').textContent = '—';
     document.getElementById('resSteadyStat').textContent = '—';
     document.getElementById('resOscStat').textContent = '—';
-    drawResonanceFrame(0, 0, 'rgb(90,84,70)', false);
+    vcFeed(resonanceL, ()=>drawResonanceFrame(0, 0, resonanceColors().idle, false));
   }
 
   resonanceRafId = requestAnimationFrame(resonanceLoop);
