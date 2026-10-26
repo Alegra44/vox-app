@@ -762,9 +762,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vl-break .vl-disclaimer{text-align:left;margin:6px 0 0;max-width:none;}
   .vl-break-close{margin-top:10px;}
 
-  .beta-tag{
-    display:inline-block;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;letter-spacing:0.06em;
-    color:var(--brass);border:1px solid var(--brass-dim);border-radius:999px;padding:2px 9px;margin-left:8px;vertical-align:middle;
+  .beta-tag{ /* "Estimate" (4b): a quiet condensed label after the title, no border */
+    display:inline-block;font-family:var(--hl-font);font-size:var(--hl-t-small);font-stretch:var(--hl-w-condensed);font-weight:500;
+    letter-spacing:0.02em;color:var(--hl-ink-3);margin-left:var(--hl-s2);vertical-align:baseline;
   }
 
   /* ---- CHOIR WORKSPACE ---- */
@@ -1535,6 +1535,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #puzzleGuessRow .ex-type-btn{min-height:var(--hl-touch);border-radius:var(--hl-r2);}
   #puzzleResultCard .step-label{font-size:var(--hl-t-h3);color:var(--hl-ink);text-transform:none;letter-spacing:0;}
 
+  /* ============ HOUSE LIGHTS: TOOLS WITH THEIR OWN DISPLAYS (phase 4b) ============ */
+  /* Shared stage parts: the time meter (the elapsed share of a take, labelled with the seconds left, ink-3) and the
+     Loudness meter (the raw path's level, like Breath's). "Estimate" (was BETA): a quiet condensed label after the title. */
+  .vc-time{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
+  .vc-time-meter{width:100%;--part:var(--hl-ink-3);background:var(--hairline);}
+  .vc-time-left{font-size:var(--hl-t-small);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
+  .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
+  .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
+  .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
 
@@ -1906,6 +1916,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- interface -->
   <symbol id="hl-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 11v5.2"/><path d="M12 7.7v.1"/></symbol>
+  <symbol id="hl-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4v5.4"/><path d="M12 16.2v.1"/></symbol>
   <symbol id="hl-chev" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5"/></symbol>
   <symbol id="hl-close" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
   <symbol id="hl-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
@@ -3403,7 +3414,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- REGISTER COACH PANEL -->
   <section class="panel" id="panel-register">
     <div class="journey-hero">
-      <div class="j-title"><span data-i18n="register_title">🌉 Register Bridge</span><span class="beta-tag" style="margin-left:10px;" data-i18n="beta_heuristic_tag">BETA HEURISTIC</span></div>
+      <div class="j-title"><span data-i18n="register_title">Register Coach</span><span class="beta-tag" data-i18n="beta_heuristic_tag">Estimate</span></div>
       <div class="j-sub" data-i18n="register_sub">Build your bridge across the passaggio — reads the brightness of your vocal harmonics, a rule-based approximation, not a trained model (see PRD §3.2 / §12). Uses your Range Finder range if you've captured it, otherwise assumes A2–C5.</div>
     </div>
     <div class="tuner-hero-card">
@@ -3446,7 +3457,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- REGISTER DRILLS PANEL -->
   <section class="panel" id="panel-registerdrills">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="registerdrills_title">🎯 Register Drills</div>
+      <div class="j-title" data-i18n="registerdrills_title">Register Drills</div>
       <div class="j-sub" data-i18n="registerdrills_sub">Real chest and head voice drills — this doesn't just confine the target note to a range, it verifies your actual spectral brightness during capture, the same real detection used in Register Coach.</div>
     </div>
     <div class="key-card" id="drillPreCard">
@@ -3517,7 +3528,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- VIBRATO ANALYZER PANEL -->
   <section class="panel" id="panel-vibrato">
     <div class="journey-hero">
-      <div class="j-title"><span data-i18n="vibrato_title">🌊 Vibrato</span><span class="beta-tag" style="margin-left:10px;" data-i18n="beta_analysis_tag">BETA ANALYSIS</span></div>
+      <div class="j-title"><span data-i18n="vibrato_title">Vibrato</span><span class="beta-tag" data-i18n="beta_analysis_tag">Estimate</span></div>
       <div class="j-sub" data-i18n="vibrato_sub">Hold a note and let natural vibrato happen. Real peak-detection on your live pitch trace over a ~4 second hold, not a preset animation — single-mic tracking makes this an approximation, so treat it as a coaching cue, not a lab measurement.</div>
     </div>
     <div class="tuner-hero-card">
@@ -3543,7 +3554,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- VOICE QUALITY PANEL -->
   <section class="panel" id="panel-voicequality">
     <div class="journey-hero">
-      <div class="j-title"><span data-i18n="vq_title">🔬 Voice Quality</span><span class="beta-tag" style="margin-left:10px;" data-i18n="beta_analysis_tag">BETA ANALYSIS</span></div>
+      <div class="j-title"><span data-i18n="vq_title">Voice Quality</span><span class="beta-tag" data-i18n="beta_analysis_tag">Estimate</span></div>
       <div class="j-sub" data-i18n="vq_sub">Hold one comfortable note on an open vowel ("ah") for 4 seconds.</div>
     </div>
     <div class="tuner-hero-card">
@@ -3693,7 +3704,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- LIVE FEEDBACK PANEL -->
   <section class="panel" id="panel-livefeedback">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="livefeedback_title">⚡ Real-Time Feedback</div>
+      <div class="j-title" data-i18n="livefeedback_title">Live Feedback</div>
       <div class="j-sub" data-i18n="livefeedback_sub">Fuses Tuner pitch/stability, Breath Trainer's consistency approach, and Register Coach's brightness heuristic into one live checklist. Nasality is deliberately left out — no real detector for it exists.</div>
     </div>
     <div class="key-card">
@@ -3712,7 +3723,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- RESONANCE VISUALIZER PANEL -->
   <section class="panel" id="panel-resonance">
     <div class="journey-hero">
-      <div class="j-title"><span data-i18n="resonance_title">🎨 Resonance Visualizer</span><span class="beta-tag" style="margin-left:10px;" data-i18n="beta_heuristic_tag">BETA HEURISTIC</span></div>
+      <div class="j-title"><span data-i18n="resonance_title">Resonance Visualizer</span><span class="beta-tag" data-i18n="beta_heuristic_tag">Estimate</span></div>
       <div class="j-sub" data-i18n="resonance_sub">Sing freely — real signals given visual form: amber for chest, cyan for head, violet for mixed voice. Particles contract when your pitch is steady and ripple when it's genuinely oscillating, not a preset animation.</div>
     </div>
     <div class="tuner-hero-card">
@@ -3793,7 +3804,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- RHYTHM TRAINER PANEL -->
   <section class="panel" id="panel-rhythm">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="rhythm_title">🥁 Rhythm Trainer</div>
+      <div class="j-title" data-i18n="rhythm_title">Rhythm Trainer</div>
       <div class="j-sub" data-i18n="rhythm_sub">Genuinely different from every other tool here — this measures WHEN you sing, not pitch. Real onset detection against a real metronome, not a fixed animation.</div>
     </div>
 
@@ -3899,7 +3910,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- ONE TAKE CHALLENGE PANEL -->
   <section class="panel" id="panel-onetake">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="onetake_title">🔥 One Take Challenge</div>
+      <div class="j-title" data-i18n="onetake_title">One Take Challenge</div>
       <div class="j-sub" data-i18n="onetake_sub">One real attempt per day. No restarting once you begin, no live pitch guide while you sing, no correction. Just you, one note, one honest result.</div>
     </div>
 
@@ -4075,7 +4086,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- MIRROR MODE PANEL -->
   <section class="panel" id="panel-mirror">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="mirror_title">🪞 Mirror Mode</div>
+      <div class="j-title" data-i18n="mirror_title">Mirror Mode</div>
       <div class="j-sub" data-i18n="mirror_sub">The AI sings a real 4-note phrase inside your captured range — you echo it, and your real captured contour overlays the reference so you can see exactly where you diverged.</div>
     </div>
     <div class="tuner-hero-card">
@@ -4111,7 +4122,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- EMOTION MODE PANEL -->
   <section class="panel" id="panel-emotionmode">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="emotionmode_title">🎭 Emotion Mode</div>
+      <div class="j-title" data-i18n="emotionmode_title">Emotion Mode</div>
       <div class="j-sub" data-i18n="emotionmode_sub">Same note, two real intentions — this app never judges which "felt" more tender or powerful, only what's genuinely measurable: real dynamic range, real loudness, and real pitch stability, compared honestly between your two takes.</div>
     </div>
 
@@ -6154,7 +6165,7 @@ const TRANSLATIONS = {
     tool_register_drills:'Register Drills', tool_vocal_lab:'Vocal Lab', tool_breath_trainer:'Breath Trainer', tool_exercises:'Exercises',
     tool_custom_challenge:'Custom Challenge', tool_rhythm_trainer:'Rhythm Trainer', tool_ear_voice_ear:'Ear → Voice → Ear',
     tool_five_ways:'Sing It 5 Ways', tool_one_take:'One Take Challenge', tool_vocal_puzzle:'Vocal Puzzle', tool_hear_mistake:'Can You Hear Your Mistake?',
-    tool_vibrato:'Vibrato', tool_live_feedback:'Live Feedback', tool_resonance:'Resonance Visualizer', tool_mirror:'Mirror Mode',
+    tool_vibrato:'Vibrato', tool_live_feedback:"Live Feedback", tool_resonance:'Resonance Visualizer', tool_mirror:'Mirror Mode',
     tool_emotion_mode:'Emotion Mode', tool_genre_coach:'Genre Coach', tool_warmup:'Warmup',
     tuner_title:'🎯 Live Tuner', tuner_sub:"Sing a note. The ring closes as you approach the pitch and locks when you're on it.",
     tuner_result_label:"Average stability", pm_result_label:"Pitch accuracy", pm_live_on:"On the note", pm_live_flat:"{n} cents flat", pm_live_sharp:"{n} cents sharp", measure_summary:"How this is measured", tuner_measure:"Stability is 100 minus three times how much your pitch wavers, in cents, over its last 30 readings (about half a second). This number is the average for the whole time you sang. The ring locks when you're within 6 cents of the note.", pm_measure:"Accuracy is 100 minus your average distance from the note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. Natural vibrato counts as its centre, not as an error.",
@@ -6179,13 +6190,13 @@ const TRANSLATIONS = {
     exercises_difficulty_label:"What this level asks of you",
     exercises_difficulty_desc:"Not one Easy / Medium / Hard label: five dimensions, each taken from the settings your current level uses, not a separate rating.",
     exercises_tab_pitch:'Pitch Match', exercises_tab_interval:'Interval Match', exercises_tab_scale:'Scale Run', exercises_tab_ear:'Ear Training',
-    register_title:'🌉 Register Bridge',
-    beta_heuristic_tag:'BETA HEURISTIC',
+    register_title:"Register Coach",
+    beta_heuristic_tag:"Estimate",
     register_sub:'Build your bridge across the passaggio — reads the brightness of your vocal harmonics, a rule-based approximation, not a trained model (see PRD §3.2 / §12). Uses your Range Finder range if you\'ve captured it, otherwise assumes A2–C5.',
     register_note_label:'Note',
     register_chest_label:'Chest character',
     register_crossing_label:'Clean crossing',
-    registerdrills_title:'🎯 Register Drills',
+    registerdrills_title:"Register Drills",
     registerdrills_sub:'Real chest and head voice drills — this doesn\'t just confine the target note to a range, it verifies your actual spectral brightness during capture, the same real detection used in Register Coach.',
     registerdrills_chest_btn:'Chest Voice',
     registerdrills_head_btn:'Head Voice',
@@ -6197,7 +6208,7 @@ const TRANSLATIONS = {
     breath_consistency_label:'Consistency',
     // Voice Quality (phase 1)
     tool_voice_quality:"Voice Quality",
-    vq_title:"🔬 Voice Quality",
+    vq_title:"Voice Quality",
     vq_sub:"Hold one comfortable note on an open vowel (\"ah\") for 4 seconds. Three estimates come from your live microphone signal: vibrato, breathiness and brightness. They are training cues, not a lab or medical measurement.",
     vq_start_btn:"Hold a note for 4s",
     vq_listening:"Listening…",
@@ -6221,8 +6232,8 @@ const TRANSLATIONS = {
     vq_bright_bright:"Brighter, more forward tone: strong upper harmonics.",
     vq_how:"How it's measured: vibrato is the timing of the peaks in your pitch trace and the swing of each cycle (± cents). Breathiness compares the energy at your harmonics with the noise floor between them, up to 5 kHz, as a harmonics-to-noise ratio (higher = clearer). Brightness is the spectral centroid, the energy-weighted average frequency up to 6 kHz; it's also shown as a multiple of your pitch, because it rises with the note. Noise suppression is off for this measurement so breath noise isn't filtered out.",
     vq_fine:"These are training estimates from your microphone, not a medical assessment. Mic, room, distance, vowel and pitch all move them, so compare yourself on the same setup, note and vowel. The bands (for example, 20 dB or more reads as clear) are rough guides for this tool, not clinical norms. If hoarseness or breathiness persists, or singing hurts, a voice teacher or voice professional is the right person to ask.",
-    vibrato_title:'🌊 Vibrato',
-    beta_analysis_tag:'BETA ANALYSIS',
+    vibrato_title:"Vibrato",
+    beta_analysis_tag:"Estimate",
     vibrato_sub:'Hold a note and let natural vibrato happen. Real peak-detection on your live pitch trace over a ~4 second hold, not a preset animation — single-mic tracking makes this an approximation, so treat it as a coaching cue, not a lab measurement.',
     vibrato_rate_label:'Rate',
     vibrato_depth_label:'Depth',
@@ -6250,13 +6261,13 @@ const TRANSLATIONS = {
     karaoke_timing_label:'Timing',
     karaoke_mission_label:'🎵 Song Mission',
     karaoke_bonus_label:'Bonus objectives',
-    livefeedback_title:'⚡ Real-Time Feedback',
+    livefeedback_title:"Live Feedback",
     livefeedback_sub:'Fuses Tuner pitch/stability, Breath Trainer\'s consistency approach, and Register Coach\'s brightness heuristic into one live checklist. Nasality is deliberately left out — no real detector for it exists.',
     livefeedback_pitch_label:'Pitch',
     livefeedback_stability_label:'Stability',
     livefeedback_loudness_label:'Loudness consistency',
     livefeedback_register_label:'Register',
-    resonance_title:'🎨 Resonance Visualizer',
+    resonance_title:"Resonance Visualizer",
     resonance_sub:'Sing freely — real signals given visual form: amber for chest, cyan for head, violet for mixed voice. Particles contract when your pitch is steady and ripple when it\'s genuinely oscillating, not a preset animation.',
     resonance_register_label:'Register',
     resonance_steadiness_label:'Steadiness',
@@ -6278,7 +6289,7 @@ const TRANSLATIONS = {
     custom_complete_label:'Challenge complete',
     custom_result_desc:"Average across your sequence",
     custom_rebuild_btn:'Build another',
-    rhythm_title:'🥁 Rhythm Trainer',
+    rhythm_title:"Rhythm Trainer",
     rhythm_sub:'Genuinely different from every other tool here — this measures WHEN you sing, not pitch. Real onset detection against a real metronome, not a fixed animation.',
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Slow — 70 BPM',
@@ -6300,7 +6311,7 @@ const TRANSLATIONS = {
     fiveways_intro_desc:"Five rounds on the same note, each a different challenge.",
     fiveways_results_label:"Average across the five rounds",
     fiveways_try_again_btn:'Try again',
-    onetake_title:'🔥 One Take Challenge',
+    onetake_title:"One Take Challenge",
     onetake_sub:'One real attempt per day. No restarting once you begin, no live pitch guide while you sing, no correction. Just you, one note, one honest result.',
     onetake_result_label:'Today\'s one take',
     onetake_expression_note:'Expression isn\'t shown — no reliable real detector exists for it anywhere in this app, and this challenge won\'t fake one just to fill a fourth number.',
@@ -6337,7 +6348,7 @@ const TRANSLATIONS = {
     pd_direction_label:'Today\'s real direction',
     pd_report_label:'Performance Report',
     pd_expression_note:'Expression isn\'t scored here — no reliable real detector exists for it anywhere in this app, same honest limit as everywhere else.',
-    mirror_title:'🪞 Mirror Mode',
+    mirror_title:"Mirror Mode",
     mirror_sub:'The AI sings a real 4-note phrase inside your captured range — you echo it, and your real captured contour overlays the reference so you can see exactly where you diverged.',
     mirror_ai_phrase:'AI phrase',
     mirror_your_echo:'Your echo',
@@ -6347,7 +6358,7 @@ const TRANSLATIONS = {
     mirror_target_label:'Target',
     mirror_yousang_label:'You sang',
     mirror_deviation_label:'Deviation',
-    emotionmode_title:'🎭 Emotion Mode',
+    emotionmode_title:"Emotion Mode",
     emotionmode_sub:'Same note, two real intentions — this app never judges which "felt" more tender or powerful, only what\'s genuinely measurable: real dynamic range, real loudness, and real pitch stability, compared honestly between your two takes.',
     emotionmode_pick_label:'Pick two intentions to compare',
     emotion_tender:'❤️ Tender',
@@ -7488,6 +7499,12 @@ const TRANSLATIONS = {
     breath_score_label:"Score",
     breath_measure:"The timer runs from the moment you start. It stops when you tap stop, or by itself after 0.6 seconds of silence once you've sung for a moment. The target is 12, 18 or 24 seconds at {beg}, {int} or {pro}. Consistency is 100 minus 140 times how much your loudness varies (its standard deviation over its mean) while you sing. The score is 60% the time held against the target (up to 100) and 40% consistency. A hold under 2 seconds isn't recorded.",
     puzzle_wrong_note:"The wrong note was Note {n} ({note}).",
+    eve_stage_step1:"Step 1 — Hear",
+    eve_stage_step2:"Step 2 — Sing",
+    eve_stage_step3:"Step 3 — Analyze",
+    eve_stage_step4:"Step 4 — Hear again (harder)",
+    eve_stage_step5:"Step 5 — Sing without help",
+    stage_seconds_left:"{n} s left",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7552,7 +7569,7 @@ const TRANSLATIONS = {
     tool_register_drills:'Exercices de registre', tool_vocal_lab:'Labo vocal', tool_breath_trainer:'Entraîneur de souffle', tool_exercises:'Exercices',
     tool_custom_challenge:'Défi personnalisé', tool_rhythm_trainer:'Entraîneur de rythme', tool_ear_voice_ear:'Oreille → Voix → Oreille',
     tool_five_ways:'Chantez-le de 5 façons', tool_one_take:'Défi en une prise', tool_vocal_puzzle:'Puzzle vocal', tool_hear_mistake:'Entendez-vous votre erreur ?',
-    tool_vibrato:'Vibrato', tool_live_feedback:'Retour en direct', tool_resonance:'Visualiseur de résonance', tool_mirror:'Mode miroir',
+    tool_vibrato:'Vibrato', tool_live_feedback:"Retour en direct", tool_resonance:'Visualiseur de résonance', tool_mirror:'Mode miroir',
     tool_emotion_mode:'Mode émotion', tool_genre_coach:'Coach de genre', tool_warmup:'Échauffement',
     tuner_title:'🎯 Accordeur en direct', tuner_sub:"Chantez une note. L'anneau se referme à mesure que vous approchez de la note et se verrouille quand vous y êtes.",
     tuner_result_label:"Stabilité moyenne", pm_result_label:"Justesse", pm_live_on:"Sur la note", pm_live_flat:"{n} cents trop bas", pm_live_sharp:"{n} cents trop haut", measure_summary:"Comment c'est mesuré", tuner_measure:"La stabilité vaut 100 moins trois fois l'écart de votre hauteur, en cents, sur ses 30 dernières mesures (environ une demi-seconde). Ce chiffre est la moyenne de tout le temps où vous avez chanté. L'anneau se verrouille quand vous êtes à moins de 6 cents de la note.", pm_measure:"La justesse vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. Un vibrato naturel compte pour son centre, pas comme une erreur.",
@@ -7577,13 +7594,13 @@ const TRANSLATIONS = {
     exercises_difficulty_label:"Ce que ce niveau vous demande",
     exercises_difficulty_desc:"Pas une simple étiquette Facile / Moyen / Difficile : cinq dimensions, chacune tirée des réglages qu'utilise votre niveau actuel, pas une note à part.",
     exercises_tab_pitch:'Précision de note', exercises_tab_interval:"Reconnaissance d'intervalles", exercises_tab_scale:'Gamme', exercises_tab_ear:"Entraînement de l'oreille",
-    register_title:'🌉 Pont de Registre',
-    beta_heuristic_tag:'HEURISTIQUE BÊTA',
+    register_title:"Coach de registre",
+    beta_heuristic_tag:"Estimation",
     register_sub:'Construisez votre pont à travers le passaggio — lit la luminosité de vos harmoniques vocales, une approximation basée sur des règles, pas un modèle entraîné (voir PRD §3.2 / §12). Utilise votre tessiture du Détecteur de tessiture si vous l\'avez capturée, sinon suppose A2–C5.',
     register_note_label:'Note',
     register_chest_label:'Caractère de poitrine',
     register_crossing_label:'Passage propre',
-    registerdrills_title:'🎯 Exercices de Registre',
+    registerdrills_title:"Exercices de Registre",
     registerdrills_sub:'De vrais exercices de voix de poitrine et de tête — ceci ne se contente pas de confiner la note cible à une plage, cela vérifie votre vraie luminosité spectrale pendant la capture, la même détection réelle utilisée dans le Coach de registre.',
     registerdrills_chest_btn:'Voix de poitrine',
     registerdrills_head_btn:'Voix de tête',
@@ -7595,7 +7612,7 @@ const TRANSLATIONS = {
     breath_consistency_label:'Régularité',
     // Voice Quality (phase 1)
     tool_voice_quality:"Qualité vocale",
-    vq_title:"🔬 Qualité vocale",
+    vq_title:"Qualité vocale",
     vq_sub:"Tenez une note confortable sur une voyelle ouverte (« a ») pendant 4 secondes. Trois estimations viennent du signal de votre micro en direct : vibrato, souffle et brillance. Ce sont des repères d’entraînement, pas une mesure de laboratoire ni une mesure médicale.",
     vq_start_btn:"Tenez une note 4 s",
     vq_listening:"Écoute…",
@@ -7619,8 +7636,8 @@ const TRANSLATIONS = {
     vq_bright_bright:"Son plus brillant et projeté : harmoniques aiguës marquées.",
     vq_how:"Comment c’est mesuré : le vibrato est le rythme des crêtes de votre tracé de hauteur et l’amplitude de chaque cycle (± cents). Le souffle compare l’énergie de vos harmoniques au bruit de fond qui les sépare, jusqu’à 5 kHz, sous forme de rapport harmoniques/bruit (plus élevé = plus clair). La brillance est le centroïde spectral, la fréquence moyenne pondérée par l’énergie jusqu’à 6 kHz ; elle est aussi affichée en multiple de votre hauteur, car elle monte avec la note. La réduction de bruit est désactivée pour cette mesure afin de ne pas filtrer le bruit du souffle.",
     vq_fine:"Ce sont des estimations d’entraînement tirées de votre micro, pas un bilan médical. Le micro, la pièce, la distance, la voyelle et la hauteur les font varier : comparez-vous avec le même matériel, la même note et la même voyelle. Les seuils (par exemple, 20 dB ou plus = clair) sont des repères approximatifs propres à cet outil, pas des normes cliniques. Si un enrouement ou un souffle persiste, ou si chanter fait mal, un professeur de chant ou un professionnel de la voix est la bonne personne à consulter.",
-    vibrato_title:'🌊 Vibrato',
-    beta_analysis_tag:'ANALYSE BÊTA',
+    vibrato_title:"Vibrato",
+    beta_analysis_tag:"Estimation",
     vibrato_sub:'Tenez une note et laissez le vibrato naturel se produire. Vraie détection de crêtes sur votre trace de justesse en direct sur ~4 secondes de tenue, pas une animation préréglée — le suivi mono-micro fait de ceci une approximation, traitez-le comme une indication de coaching, pas une mesure de laboratoire.',
     vibrato_rate_label:'Fréquence',
     vibrato_depth_label:'Profondeur',
@@ -7648,13 +7665,13 @@ const TRANSLATIONS = {
     karaoke_timing_label:'Rythme',
     karaoke_mission_label:'🎵 Mission Chanson',
     karaoke_bonus_label:'Objectifs bonus',
-    livefeedback_title:'⚡ Retour en Temps Réel',
+    livefeedback_title:"Retour en direct",
     livefeedback_sub:'Fusionne la justesse/stabilité de l\'Accordeur, l\'approche de régularité de l\'Entraîneur de souffle, et l\'heuristique de luminosité du Coach de registre en une seule liste de contrôle en direct. La nasalité est délibérément exclue — aucun vrai détecteur n\'existe pour elle.',
     livefeedback_pitch_label:'Justesse',
     livefeedback_stability_label:'Stabilité',
     livefeedback_loudness_label:'Régularité du volume',
     livefeedback_register_label:'Registre',
-    resonance_title:'🎨 Visualiseur de Résonance',
+    resonance_title:"Visualiseur de Résonance",
     resonance_sub:'Chantez librement — de vrais signaux prenant forme visuelle : ambre pour la poitrine, cyan pour la tête, violet pour la voix mixte. Les particules se contractent quand votre justesse est stable et ondulent quand elle oscille vraiment, pas une animation préréglée.',
     resonance_register_label:'Registre',
     resonance_steadiness_label:'Stabilité',
@@ -7676,7 +7693,7 @@ const TRANSLATIONS = {
     custom_complete_label:'Défi terminé',
     custom_result_desc:"Moyenne sur votre séquence",
     custom_rebuild_btn:'En créer un autre',
-    rhythm_title:'🥁 Entraîneur de Rythme',
+    rhythm_title:"Entraîneur de Rythme",
     rhythm_sub:'Vraiment différent de tous les autres outils ici — ceci mesure QUAND vous chantez, pas la justesse. Vraie détection d\'attaque contre un vrai métronome, pas une animation fixe.',
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Lent — 70 BPM',
@@ -7698,7 +7715,7 @@ const TRANSLATIONS = {
     fiveways_intro_desc:"Cinq manches sur la même note, chacune un défi différent.",
     fiveways_results_label:"Moyenne sur les cinq manches",
     fiveways_try_again_btn:'Réessayer',
-    onetake_title:'🔥 Défi en Une Prise',
+    onetake_title:"Défi en Une Prise",
     onetake_sub:'Une vraie tentative par jour. Pas de redémarrage une fois commencé, pas de guide de justesse en direct pendant que vous chantez, pas de correction. Juste vous, une note, un résultat honnête.',
     onetake_result_label:'La prise du jour',
     onetake_expression_note:'L\'expression n\'est pas affichée — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, et ce défi n\'en simulera pas un juste pour remplir un quatrième chiffre.',
@@ -7735,7 +7752,7 @@ const TRANSLATIONS = {
     pd_direction_label:'La vraie direction du jour',
     pd_report_label:'Rapport de Performance',
     pd_expression_note:'L\'expression n\'est pas notée ici — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, même limite honnête que partout ailleurs.',
-    mirror_title:'🪞 Mode Miroir',
+    mirror_title:"Mode Miroir",
     mirror_sub:'L\'IA chante une vraie phrase de 4 notes dans votre tessiture capturée — vous la répétez, et votre vrai contour capturé se superpose à la référence pour que vous puissiez voir exactement où vous avez divergé.',
     mirror_ai_phrase:'Phrase de l\'IA',
     mirror_your_echo:'Votre écho',
@@ -7745,7 +7762,7 @@ const TRANSLATIONS = {
     mirror_target_label:'Cible',
     mirror_yousang_label:'Vous avez chanté',
     mirror_deviation_label:'Écart',
-    emotionmode_title:'🎭 Mode Émotion',
+    emotionmode_title:"Mode Émotion",
     emotionmode_sub:'Même note, deux vraies intentions — cette application ne juge jamais laquelle « ressentait » plus de tendresse ou de puissance, seulement ce qui est vraiment mesurable : vraie plage dynamique, vrai volume, et vraie stabilité de justesse, comparés honnêtement entre vos deux prises.',
     emotionmode_pick_label:'Choisissez deux intentions à comparer',
     emotion_tender:'❤️ Tendre',
@@ -8886,6 +8903,12 @@ const TRANSLATIONS = {
     breath_score_label:"Score",
     breath_measure:"Le chrono démarre dès que vous commencez. Il s'arrête quand vous appuyez sur stop, ou tout seul après 0,6 seconde de silence une fois que vous avez chanté un moment. L'objectif est de 12, 18 ou 24 secondes en {beg}, {int} ou {pro}. La régularité vaut 100 moins 140 fois la variation de votre volume (son écart type rapporté à sa moyenne) pendant que vous chantez. Le score compte pour 60 % le temps tenu face à l'objectif (jusqu'à 100) et pour 40 % la régularité. Une tenue de moins de 2 secondes n'est pas enregistrée.",
     puzzle_wrong_note:"La note incorrecte était la note {n} ({note}).",
+    eve_stage_step1:"Étape 1 — Écouter",
+    eve_stage_step2:"Étape 2 — Chanter",
+    eve_stage_step3:"Étape 3 — Analyser",
+    eve_stage_step4:"Étape 4 — Réécouter (plus difficile)",
+    eve_stage_step5:"Étape 5 — Chanter sans aide",
+    stage_seconds_left:"Encore {n} s",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -8950,7 +8973,7 @@ const TRANSLATIONS = {
     tool_register_drills:'Ejercicios de registro', tool_vocal_lab:'Laboratorio vocal', tool_breath_trainer:'Entrenador de respiración', tool_exercises:'Ejercicios',
     tool_custom_challenge:'Desafío personalizado', tool_rhythm_trainer:'Entrenador de ritmo', tool_ear_voice_ear:'Oído → Voz → Oído',
     tool_five_ways:'Cántalo de 5 formas', tool_one_take:'Desafío de una toma', tool_vocal_puzzle:'Rompecabezas vocal', tool_hear_mistake:'¿Puedes oír tu error?',
-    tool_vibrato:'Vibrato', tool_live_feedback:'Retroalimentación en vivo', tool_resonance:'Visualizador de resonancia', tool_mirror:'Modo espejo',
+    tool_vibrato:'Vibrato', tool_live_feedback:"Retroalimentación en vivo", tool_resonance:'Visualizador de resonancia', tool_mirror:'Modo espejo',
     tool_emotion_mode:'Modo emoción', tool_genre_coach:'Coach de género', tool_warmup:'Calentamiento',
     tuner_title:'🎯 Afinador en vivo', tuner_sub:'Canta una nota. El anillo se cierra a medida que te acercas a la nota y se fija cuando la alcanzas.',
     tuner_result_label:"Estabilidad media", pm_result_label:"Precisión de afinación", pm_live_on:"En la nota", pm_live_flat:"{n} cents por debajo", pm_live_sharp:"{n} cents por encima", measure_summary:"Cómo se mide", tuner_measure:"La estabilidad es 100 menos tres veces cuánto oscila tu afinación, en cents, en sus últimas 30 lecturas (alrededor de medio segundo). Este número es la media de todo el tiempo que cantaste. El anillo se fija cuando estás a 6 cents o menos de la nota.", pm_measure:"La precisión es 100 menos tu distancia media a la nota, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. El vibrato natural cuenta como su centro, no como un error.",
@@ -8975,13 +8998,13 @@ const TRANSLATIONS = {
     exercises_difficulty_label:"Lo que te pide este nivel",
     exercises_difficulty_desc:"No es una sola etiqueta Fácil / Medio / Difícil: cinco dimensiones, cada una tomada de los ajustes que usa tu nivel actual, no una calificación aparte.",
     exercises_tab_pitch:'Precisión de nota', exercises_tab_interval:'Reconocimiento de intervalos', exercises_tab_scale:'Escala', exercises_tab_ear:'Entrenamiento auditivo',
-    register_title:'🌉 Puente de Registro',
-    beta_heuristic_tag:'HEURÍSTICA BETA',
+    register_title:"Coach de registro",
+    beta_heuristic_tag:"Estimación",
     register_sub:'Construye tu puente a través del passaggio — lee el brillo de tus armónicos vocales, una aproximación basada en reglas, no un modelo entrenado (ver PRD §3.2 / §12). Usa tu rango del Buscador de rango si lo has capturado, si no, asume A2–C5.',
     register_note_label:'Nota',
     register_chest_label:'Carácter de pecho',
     register_crossing_label:'Cruce limpio',
-    registerdrills_title:'🎯 Ejercicios de Registro',
+    registerdrills_title:"Ejercicios de Registro",
     registerdrills_sub:'Ejercicios reales de voz de pecho y cabeza — esto no solo confina la nota objetivo a un rango, verifica tu brillo espectral real durante la captura, la misma detección real usada en el Coach de registro.',
     registerdrills_chest_btn:'Voz de pecho',
     registerdrills_head_btn:'Voz de cabeza',
@@ -8993,7 +9016,7 @@ const TRANSLATIONS = {
     breath_consistency_label:'Consistencia',
     // Voice Quality (phase 1)
     tool_voice_quality:"Calidad vocal",
-    vq_title:"🔬 Calidad vocal",
+    vq_title:"Calidad vocal",
     vq_sub:"Sostén una nota cómoda en una vocal abierta («a») durante 4 segundos. Tres estimaciones salen de la señal de tu micrófono en vivo: vibrato, aire en la voz y brillo. Son referencias de entrenamiento, no una medición de laboratorio ni médica.",
     vq_start_btn:"Sostén una nota 4 s",
     vq_listening:"Escuchando…",
@@ -9017,8 +9040,8 @@ const TRANSLATIONS = {
     vq_bright_bright:"Tono más brillante y proyectado: armónicos agudos marcados.",
     vq_how:"Cómo se mide: el vibrato es el ritmo de los picos de tu trazo de afinación y la oscilación de cada ciclo (± cents). El aire en la voz compara la energía de tus armónicos con el ruido de fondo entre ellos, hasta 5 kHz, como relación armónicos/ruido (más alto = más claro). El brillo es el centroide espectral, la frecuencia media ponderada por la energía hasta 6 kHz; también se muestra como múltiplo de tu altura, porque sube con la nota. La supresión de ruido está desactivada en esta medición para no filtrar el ruido del aire.",
     vq_fine:"Son estimaciones de entrenamiento a partir de tu micrófono, no una evaluación médica. El micrófono, la sala, la distancia, la vocal y la altura las cambian, así que compárate con el mismo equipo, la misma nota y la misma vocal. Los umbrales (por ejemplo, 20 dB o más se lee como claro) son guías aproximadas de esta herramienta, no normas clínicas. Si la ronquera o el aire en la voz persisten, o si cantar duele, un profesor de canto o un profesional de la voz es la persona adecuada a quien consultar.",
-    vibrato_title:'🌊 Vibrato',
-    beta_analysis_tag:'ANÁLISIS BETA',
+    vibrato_title:"Vibrato",
+    beta_analysis_tag:"Estimación",
     vibrato_sub:'Sostén una nota y deja que ocurra el vibrato natural. Detección real de picos en tu trazo de afinación en vivo durante ~4 segundos de sostenido, no una animación preestablecida — el seguimiento con un solo micrófono hace de esto una aproximación, trátalo como una señal de coaching, no una medición de laboratorio.',
     vibrato_rate_label:'Frecuencia',
     vibrato_depth_label:'Profundidad',
@@ -9046,13 +9069,13 @@ const TRANSLATIONS = {
     karaoke_timing_label:'Ritmo',
     karaoke_mission_label:'🎵 Misión de Canción',
     karaoke_bonus_label:'Objetivos adicionales',
-    livefeedback_title:'⚡ Retroalimentación en Tiempo Real',
+    livefeedback_title:"Retroalimentación en vivo",
     livefeedback_sub:'Fusiona la afinación/estabilidad del Afinador, el enfoque de consistencia del Entrenador de respiración, y la heurística de brillo del Coach de registro en una sola lista de verificación en vivo. La nasalidad se deja deliberadamente fuera — no existe un detector real para ella.',
     livefeedback_pitch_label:'Afinación',
     livefeedback_stability_label:'Estabilidad',
     livefeedback_loudness_label:'Consistencia de volumen',
     livefeedback_register_label:'Registro',
-    resonance_title:'🎨 Visualizador de Resonancia',
+    resonance_title:"Visualizador de Resonancia",
     resonance_sub:'Canta libremente — señales reales tomando forma visual: ámbar para pecho, cian para cabeza, violeta para voz mixta. Las partículas se contraen cuando tu afinación es estable y ondulan cuando realmente está oscilando, no una animación preestablecida.',
     resonance_register_label:'Registro',
     resonance_steadiness_label:'Estabilidad',
@@ -9074,7 +9097,7 @@ const TRANSLATIONS = {
     custom_complete_label:'Desafío completado',
     custom_result_desc:"Promedio de tu secuencia",
     custom_rebuild_btn:'Crear otro',
-    rhythm_title:'🥁 Entrenador de Ritmo',
+    rhythm_title:"Entrenador de Ritmo",
     rhythm_sub:'Genuinamente diferente de cualquier otra herramienta aquí — esto mide CUÁNDO cantas, no la afinación. Detección real de ataque contra un metrónomo real, no una animación fija.',
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Lento — 70 BPM',
@@ -9096,7 +9119,7 @@ const TRANSLATIONS = {
     fiveways_intro_desc:"Cinco rondas sobre la misma nota, cada una un desafío distinto.",
     fiveways_results_label:"Media de las cinco rondas",
     fiveways_try_again_btn:'Intentar de nuevo',
-    onetake_title:'🔥 Desafío de Una Toma',
+    onetake_title:"Desafío de Una Toma",
     onetake_sub:'Un intento real por día. Sin reiniciar una vez que comienzas, sin guía de afinación en vivo mientras cantas, sin corrección. Solo tú, una nota, un resultado honesto.',
     onetake_result_label:'La toma de hoy',
     onetake_expression_note:'La expresión no se muestra — no existe un detector real confiable para ella en ninguna parte de esta app, y este desafío no simulará uno solo para llenar un cuarto número.',
@@ -9133,7 +9156,7 @@ const TRANSLATIONS = {
     pd_direction_label:'La dirección real de hoy',
     pd_report_label:'Informe de Actuación',
     pd_expression_note:'La expresión no se puntúa aquí — no existe un detector real confiable para ella en ninguna parte de esta app, el mismo límite honesto que en todas partes.',
-    mirror_title:'🪞 Modo Espejo',
+    mirror_title:"Modo Espejo",
     mirror_sub:'La IA canta una frase real de 4 notas dentro de tu rango capturado — la repites, y tu contorno real capturado se superpone a la referencia para que puedas ver exactamente dónde divergiste.',
     mirror_ai_phrase:'Frase de la IA',
     mirror_your_echo:'Tu eco',
@@ -9143,7 +9166,7 @@ const TRANSLATIONS = {
     mirror_target_label:'Objetivo',
     mirror_yousang_label:'Cantaste',
     mirror_deviation_label:'Desviación',
-    emotionmode_title:'🎭 Modo Emoción',
+    emotionmode_title:"Modo Emoción",
     emotionmode_sub:'Misma nota, dos intenciones reales — esta app nunca juzga cuál "se sintió" más tierna o poderosa, solo lo que es genuinamente medible: rango dinámico real, volumen real, y estabilidad de afinación real, comparados honestamente entre tus dos tomas.',
     emotionmode_pick_label:'Elige dos intenciones para comparar',
     emotion_tender:'❤️ Tierno',
@@ -10284,6 +10307,12 @@ const TRANSLATIONS = {
     breath_score_label:"Puntuación",
     breath_measure:"El cronómetro corre desde que empiezas. Se detiene cuando pulsas parar, o solo tras 0,6 segundos de silencio una vez que has cantado un momento. El objetivo es de 12, 18 o 24 segundos en {beg}, {int} o {pro}. La regularidad es 100 menos 140 veces cuánto varía tu volumen (su desviación típica sobre su media) mientras cantas. La puntuación es un 60 % el tiempo sostenido frente al objetivo (hasta 100) y un 40 % la regularidad. Una nota de menos de 2 segundos no se registra.",
     puzzle_wrong_note:"La nota incorrecta era la nota {n} ({note}).",
+    eve_stage_step1:"Paso 1 — Escuchar",
+    eve_stage_step2:"Paso 2 — Cantar",
+    eve_stage_step3:"Paso 3 — Analizar",
+    eve_stage_step4:"Paso 4 — Escuchar de nuevo (más difícil)",
+    eve_stage_step5:"Paso 5 — Cantar sin ayuda",
+    stage_seconds_left:"Quedan {n} s",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10348,7 +10377,7 @@ const TRANSLATIONS = {
     tool_register_drills:'Register Egzersizleri', tool_vocal_lab:'Vokal Laboratuvarı', tool_breath_trainer:'Nefes Antrenörü', tool_exercises:'Egzersizler',
     tool_custom_challenge:'Özel Meydan Okuma', tool_rhythm_trainer:'Ritim Antrenörü', tool_ear_voice_ear:'Kulak → Ses → Kulak',
     tool_five_ways:'5 Şekilde Söyle', tool_one_take:'Tek Çekim Meydan Okuması', tool_vocal_puzzle:'Vokal Bulmaca', tool_hear_mistake:'Hatanı Duyabiliyor musun?',
-    tool_vibrato:'Vibrato', tool_live_feedback:'Canlı Geri Bildirim', tool_resonance:'Rezonans Görselleştirici', tool_mirror:'Ayna Modu',
+    tool_vibrato:'Vibrato', tool_live_feedback:"Canlı geri bildirim", tool_resonance:'Rezonans Görselleştirici', tool_mirror:'Ayna Modu',
     tool_emotion_mode:'Duygu Modu', tool_genre_coach:'Tür Koçu', tool_warmup:'Isınma',
     tuner_title:'🎯 Canlı Akort Cihazı', tuner_sub:'Bir nota söyleyin. Notaya yaklaştıkça halka kapanır, tam üzerindeyken kilitlenir.',
     tuner_result_label:"Ortalama kararlılık", pm_result_label:"Perde doğruluğu", pm_live_on:"Tam notada", pm_live_flat:"{n} sent pes", pm_live_sharp:"{n} sent diyez", measure_summary:"Nasıl ölçülüyor", tuner_measure:"Kararlılık, perdenizin son 30 ölçümde (yaklaşık yarım saniye) sent cinsinden ne kadar dalgalandığının üç katının 100'den çıkarılmasıyla bulunur. Bu sayı, şarkı söylediğiniz sürenin tamamının ortalamasıdır. Notaya 6 sent yaklaştığınızda halka kilitlenir.", pm_measure:"Doğruluk, 100'den notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
@@ -10373,13 +10402,13 @@ const TRANSLATIONS = {
     exercises_difficulty_label:"Bu seviyenin sizden istedikleri",
     exercises_difficulty_desc:"Tek bir Kolay / Orta / Zor etiketi değil: her biri mevcut seviyenizin kullandığı ayarlardan alınan beş boyut, ayrı bir derecelendirme değil.",
     exercises_tab_pitch:'Nota Eşleştirme', exercises_tab_interval:'Aralık Eşleştirme', exercises_tab_scale:'Gam Çalışması', exercises_tab_ear:'Kulak Eğitimi',
-    register_title:'🌉 Register Köprüsü',
-    beta_heuristic_tag:'BETA SEZGİSEL',
+    register_title:"Register Koçu",
+    beta_heuristic_tag:"Tahmin",
     register_sub:'Passaggio boyunca köprünüzü kurun — vokal harmoniklerinizin parlaklığını okur, eğitilmiş bir model değil kural tabanlı bir yaklaşımdır (bkz. PRD §3.2 / §12). Yakaladıysanız Ses Aralığı Bulucu aralığınızı kullanır, aksi halde A2–C5 varsayar.',
     register_note_label:'Nota',
     register_chest_label:'Göğüs karakteri',
     register_crossing_label:'Temiz geçiş',
-    registerdrills_title:'🎯 Register Egzersizleri',
+    registerdrills_title:"Register Egzersizleri",
     registerdrills_sub:'Gerçek göğüs ve baş sesi egzersizleri — bu sadece hedef notayı bir aralığa sınırlamaz, yakalama sırasında gerçek spektral parlaklığınızı doğrular, Register Koçu\'nda kullanılan aynı gerçek algılama.',
     registerdrills_chest_btn:'Göğüs Sesi',
     registerdrills_head_btn:'Baş Sesi',
@@ -10391,7 +10420,7 @@ const TRANSLATIONS = {
     breath_consistency_label:'Tutarlılık',
     // Voice Quality (phase 1)
     tool_voice_quality:"Ses Kalitesi",
-    vq_title:"🔬 Ses Kalitesi",
+    vq_title:"Ses Kalitesi",
     vq_sub:"Rahat bir notayı açık bir ünlüyle (\"a\") 4 saniye tutun. Canlı mikrofon sinyalinizden üç tahmin çıkarılır: vibrato, nefeslilik ve parlaklık. Bunlar antrenman ipuçlarıdır; laboratuvar ya da tıbbi ölçüm değildir.",
     vq_start_btn:"Bir notayı 4 sn tutun",
     vq_listening:"Dinleniyor…",
@@ -10415,8 +10444,8 @@ const TRANSLATIONS = {
     vq_bright_bright:"Daha parlak, öne çıkan ses: güçlü üst harmonikler.",
     vq_how:"Nasıl ölçülür: vibrato, perde izinizdeki tepelerin zamanlaması ve her döngünün salınımıdır (± sent). Nefeslilik, harmoniklerinizdeki enerjiyi aralarındaki gürültü tabanıyla 5 kHz'e kadar karşılaştırır ve harmonik/gürültü oranı olarak verir (yüksek = daha net). Parlaklık, 6 kHz'e kadar enerjiyle ağırlıklandırılmış ortalama frekans olan spektral ağırlık merkezidir; notayla birlikte yükseldiği için perdenizin katı olarak da gösterilir. Nefes gürültüsü filtrelenmesin diye bu ölçümde gürültü bastırma kapalıdır.",
     vq_fine:"Bunlar mikrofonunuzdan elde edilen antrenman tahminleridir, tıbbi bir değerlendirme değildir. Mikrofon, oda, mesafe, ünlü ve perde hepsini etkiler; kendinizi aynı düzen, aynı nota ve aynı ünlüyle karşılaştırın. Eşikler (örneğin 20 dB ve üzeri net sayılır) bu araca özgü kaba ölçütlerdir, klinik normlar değildir. Ses kısıklığı ya da nefeslilik sürerse veya şarkı söylemek acı veriyorsa, bir şan öğretmenine ya da ses uzmanına danışmak doğru olur.",
-    vibrato_title:'🌊 Vibrato',
-    beta_analysis_tag:'BETA ANALİZ',
+    vibrato_title:"Vibrato",
+    beta_analysis_tag:"Tahmin",
     vibrato_sub:'Bir notayı tutun ve doğal vibratonun oluşmasına izin verin. ~4 saniyelik tutuş boyunca canlı perde izinizde gerçek tepe-algılama, önceden ayarlanmış bir animasyon değil — tek mikrofonlu izleme bunu bir yaklaşım yapar, bunu bir laboratuvar ölçümü değil koçluk ipucu olarak değerlendirin.',
     vibrato_rate_label:'Hız',
     vibrato_depth_label:'Derinlik',
@@ -10444,13 +10473,13 @@ const TRANSLATIONS = {
     karaoke_timing_label:'Zamanlama',
     karaoke_mission_label:'🎵 Şarkı Görevi',
     karaoke_bonus_label:'Bonus hedefler',
-    livefeedback_title:'⚡ Gerçek Zamanlı Geri Bildirim',
+    livefeedback_title:"Canlı geri bildirim",
     livefeedback_sub:'Akort Cihazı\'nın perde/kararlılık, Nefes Antrenörü\'nün tutarlılık yaklaşımını ve Register Koçu\'nun parlaklık sezgiselini tek bir canlı kontrol listesinde birleştirir. Genizsilik kasıtlı olarak dışarıda bırakılmıştır — bunun için gerçek bir dedektör yoktur.',
     livefeedback_pitch_label:'Perde',
     livefeedback_stability_label:'Kararlılık',
     livefeedback_loudness_label:'Ses düzeyi tutarlılığı',
     livefeedback_register_label:'Register',
-    resonance_title:'🎨 Rezonans Görselleştirici',
+    resonance_title:"Rezonans Görselleştirici",
     resonance_sub:'Özgürce söyleyin — gerçek sinyaller görsel forma bürünür: göğüs için kehribar, baş için camgöbeği, karma ses için mor. Perdeniz sabitken parçacıklar büzülür ve gerçekten salınırken dalgalanır, önceden ayarlanmış bir animasyon değil.',
     resonance_register_label:'Register',
     resonance_steadiness_label:'Sabitlik',
@@ -10472,7 +10501,7 @@ const TRANSLATIONS = {
     custom_complete_label:'Meydan okuma tamamlandı',
     custom_result_desc:"Dizinizin ortalaması",
     custom_rebuild_btn:'Başka bir tane oluştur',
-    rhythm_title:'🥁 Ritim Antrenörü',
+    rhythm_title:"Ritim Antrenörü",
     rhythm_sub:'Buradaki diğer her araçtan gerçekten farklı — bu, NE ZAMAN söylediğinizi ölçer, perdeyi değil. Sabit bir animasyon değil, gerçek bir metronoma karşı gerçek başlangıç algılama.',
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Yavaş — 70 BPM',
@@ -10494,7 +10523,7 @@ const TRANSLATIONS = {
     fiveways_intro_desc:"Aynı nota üzerinde, her biri farklı bir zorluk olan beş tur.",
     fiveways_results_label:"Beş turun ortalaması",
     fiveways_try_again_btn:'Tekrar dene',
-    onetake_title:'🔥 Tek Çekim Meydan Okuması',
+    onetake_title:"Tek Çekim Meydan Okuması",
     onetake_sub:'Günde bir gerçek deneme. Başladıktan sonra yeniden başlatma yok, şarkı söylerken canlı perde rehberi yok, düzeltme yok. Sadece siz, bir nota, bir dürüst sonuç.',
     onetake_result_label:'Bugünün tek çekimi',
     onetake_expression_note:'İfade gösterilmez — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur ve bu meydan okuma dördüncü bir sayıyı doldurmak için birini sahtelemeyecektir.',
@@ -10531,7 +10560,7 @@ const TRANSLATIONS = {
     pd_direction_label:'Bugünün gerçek yönergesi',
     pd_report_label:'Performans Raporu',
     pd_expression_note:'İfade burada puanlanmaz — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur, her yerdeki aynı dürüst sınır.',
-    mirror_title:'🪞 Ayna Modu',
+    mirror_title:"Ayna Modu",
     mirror_sub:'Yapay zeka, yakalanmış aralığınız içinde gerçek bir 4 nota cümlesi söyler — onu yankılarsınız ve gerçek yakalanmış konturunuz referansın üzerine biner, böylece nerede ayrıldığınızı tam olarak görebilirsiniz.',
     mirror_ai_phrase:'Yapay zeka cümlesi',
     mirror_your_echo:'Yankınız',
@@ -10541,7 +10570,7 @@ const TRANSLATIONS = {
     mirror_target_label:'Hedef',
     mirror_yousang_label:'Söylediğiniz',
     mirror_deviation_label:'Sapma',
-    emotionmode_title:'🎭 Duygu Modu',
+    emotionmode_title:"Duygu Modu",
     emotionmode_sub:'Aynı nota, iki gerçek niyet — bu uygulama hangisinin daha hassas veya güçlü "hissettirdiğine" asla karar vermez, sadece gerçekten ölçülebilir olanı: gerçek dinamik aralık, gerçek ses düzeyi ve gerçek perde kararlılığı, iki çekiminiz arasında dürüstçe karşılaştırılır.',
     emotionmode_pick_label:'Karşılaştırmak için iki niyet seçin',
     emotion_tender:'❤️ Hassas',
@@ -11682,6 +11711,12 @@ const TRANSLATIONS = {
     breath_score_label:"Puan",
     breath_measure:"Süre, başladığınız anda işlemeye başlar. Dur'a dokunduğunuzda ya da bir süre söyledikten sonra 0,6 saniyelik sessizlikte kendiliğinden durur. Hedef {beg} seviyesinde 12, {int} seviyesinde 18, {pro} seviyesinde 24 saniyedir. Tutarlılık, söylerken ses yüksekliğinizin ne kadar değiştiğinin (standart sapmasının ortalamasına oranı) 140 katının 100'den çıkarılmasıdır. Puan, hedefe göre tutulan sürenin (en fazla 100) %60'ı ve tutarlılığın %40'ıdır. 2 saniyeden kısa tutuşlar kaydedilmez.",
     puzzle_wrong_note:"Yanlış nota {n}. notaydı ({note}).",
+    eve_stage_step1:"Adım 1 — Dinle",
+    eve_stage_step2:"Adım 2 — Söyle",
+    eve_stage_step3:"Adım 3 — Analiz",
+    eve_stage_step4:"Adım 4 — Yeniden dinle (daha zor)",
+    eve_stage_step5:"Adım 5 — Yardımsız söyle",
+    stage_seconds_left:"{n} sn kaldı",
   },
 };
 let currentLanguage = 'en';
@@ -12403,7 +12438,7 @@ function chestScoreFromPower(pw, binHz, f0){
 function updateRegisterUI(freq, chestScore){
   if(!freq || freq<50 || freq>1200 || !analyser){
     document.getElementById('regLabel').textContent='—';
-    document.getElementById('regFeedback').textContent='Listening…';
+    document.getElementById('regFeedback').textContent=t('action_listening');
     document.getElementById('regFeedback').className='reg-feedback';
     document.getElementById('regNoteStat').textContent='—';
     document.getElementById('regChestScoreStat').textContent='—';
@@ -12963,7 +12998,7 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('vibratoStartBtn');
   const label = document.getElementById('vibratoStartLabel');
   btn.classList.add('listening');
-  label.textContent = 'Listening…';
+  label.textContent = t('action_listening');
   document.getElementById('vibratoFeedback').textContent = '';
 
   let samples;
@@ -13063,7 +13098,8 @@ function vqBrightBounds(f0){
   return [ratio(VQ_BRIGHT_DARK_DB_OCT), ratio(VQ_BRIGHT_BRIGHT_DB_OCT)];
 }
 // ms: hold length; active: stops the capture early when it turns false; spectrum: false skips HNR and centroid.
-async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={}){
+// onFrame(ms, hz): each frame's time and pitch (hz ≤ 0: none) for the stage, drawing only (the first error is logged).
+async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true, onFrame=null}={}){
   await warmupGate();
   await initAudioOnly();
   const g = await micGraph(), an = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser(); // the one stream: the spectrum on the raw path, pitch on the pitch path
@@ -13073,7 +13109,7 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={})
   g.pitch.connect(pitchAn);
   const sr = audioCtx.sampleRate, binHz = sr/VQ_FFT, time = new Float32Array(VQ_PITCH_WIN), spec = new Float32Array(an.frequencyBinCount), raw = new Float32Array(VQ_FFT);
   const frames = [], t0 = audioCtx.currentTime;
-  let lastT = -1;
+  let lastT = -1, frameErr = false;
   try{
     await new Promise(resolve=>{
       (function frame(){
@@ -13089,6 +13125,7 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true}={})
             if(spectrum) an.getFloatFrequencyData(spec);
             frames.push({t, f0, midi:69+12*Math.log2(f0/440), hnr:spectrum ? vqHnr(spec, binHz, f0) : null, centroid:spectrum ? vqCentroid(spec, binHz) : null});
           }
+          if(onFrame){ try{ onFrame(t, f0>60 && f0<1400 ? f0 : -1); }catch(e){ if(!frameErr){ frameErr = true; console.error('onFrame', e); } } }
         }
         if(t>=ms) return resolve();
         requestAnimationFrame(frame);
@@ -13773,7 +13810,7 @@ function stopLiveFeedback(){
   vlEnd();
   document.getElementById('liveFeedbackStartLabel').textContent = 'Start listening';
   document.getElementById('liveFeedbackStartBtn').classList.remove('listening');
-  ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral','Listening…'));
+  ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral',t('action_listening')));
 }
 function lfLoop(){
   if(!lfActive) return;
@@ -13821,7 +13858,7 @@ function lfLoop(){
       }
     }
   } else {
-    ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral','Listening…'));
+    ['Pitch','Stability','Breath','Register'].forEach(p=>setChecklistRow(p,'neutral',t('action_listening')));
   }
 
   lfRafId = requestAnimationFrame(lfLoop);
@@ -16885,6 +16922,30 @@ function vcResultNum(el, text){
   el.classList.toggle('vc-result-none', text===null);
 }
 
+// 4b: the stage parts of the tools with their own loops. A loop feeds its stage through vcFeed: drawing only, read-only,
+// never part of the measurement; the first error per take is logged (L is the take's handle, any object).
+function vcFeed(L, draw){
+  if(!L || L.err) return;
+  try{ draw(); }catch(e){ L.err = true; console.error('stage frame', e); }
+}
+// The time meter (.vc-time: .hl-meter.vc-time-meter and .vc-time-left): the elapsed share of a take of `total` ms,
+// labelled with the seconds left.
+function vcTimeMeter(box, ms, total){
+  if(!box) return;
+  const pct = Math.max(0, Math.min(100, ms/total*100)), left = Math.max(0, Math.ceil((total-ms)/1000));
+  const m = box.querySelector('.vc-time-meter'), lab = box.querySelector('.vc-time-left');
+  m.style.setProperty('--val', pct.toFixed(1)+'%'); m.setAttribute('aria-valuenow', Math.round(pct));
+  const txt = t('stage_seconds_left').replace('{n}', left.toLocaleString(localeForLang()));
+  if(lab.textContent!==txt){ lab.textContent = txt; m.setAttribute('aria-valuetext', txt); }
+}
+// The Loudness meter (.vc-level-wrap: .vc-level-label and .hl-meter.vc-level): the raw buffer's level, −60 to 0 dBFS, as Breath's (display only).
+function vcLevelMeter(m, raw){
+  if(!m) return;
+  const rms = raw ? computeRMS(raw) : 0, db = rms>0 ? 20*Math.log10(rms) : -60, pct = Math.max(0, Math.min(100, (db+60)/60*100));
+  m.style.setProperty('--val', pct.toFixed(0)+'%'); m.setAttribute('aria-valuenow', pct.toFixed(0));
+  if(!m.hasAttribute('aria-label') || m.dataset.lang!==currentLanguage){ m.setAttribute('aria-label', t('breath_level_label')); m.dataset.lang = currentLanguage; }
+}
+
 // Pitch Match on vcTake
 let pmLane = null;
 function pmLaneStart(target, win){ pmLane = vcTakeStart(document.getElementById('pitchStage'), target, win); }
@@ -19275,13 +19336,17 @@ document.querySelectorAll('[data-enter-panel]').forEach(btn=>{
   btn.addEventListener('click', ()=>enterPanel(btn.dataset.enterPanel));
 });
 
-const SHELL_SECTION_MAP = {
+const SHELL_SECTION_MAP = { // every panel to the hub it's opened from (4b: the Coach tools that were missing kept Home lit)
   'home':'home', 'train-hub':'train', 'songs-hub':'songs', 'you-hub':'you',
-  'tuner':'train','key':'train','range':'train','register':'train','breath':'train',
-  'exercises':'train','vibrato':'train','voicequality':'train','livefeedback':'train','genre':'train','warmup':'train',
+  'tuner':'train','key':'train','range':'train','register':'train','breath':'train','exercises':'train','vibrato':'train',
+  'voicequality':'train','livefeedback':'train','genre':'train','warmup':'train','registerdrills':'train','resonance':'train',
+  'custom':'train','rhythm':'train','earvoiceear':'train','fiveways':'train','onetake':'train','vocalpuzzle':'train',
+  'hearmistake':'train','mirror':'train','emotionmode':'train','vocallab':'train',
   'choir':'songs','partrehearsal':'songs','choirpassport':'songs','staykey':'songs','karaoke':'songs','emotion':'songs',
+  'studio':'songs','aiduet':'songs','performancedirector':'songs',
   'arcade':'world',
-  'journey':'you','dashboard':'you','voicehealth':'you','pricing':'you',
+  'journey':'you','dashboard':'you','voicehealth':'you','pricing':'you','records':'you','profile':'you','teacher':'you',
+  'passport':'you','feedback':'you',
 };
 function syncShellNavHighlight(panelKey){
   const section = SHELL_SECTION_MAP[panelKey];
@@ -20787,7 +20852,7 @@ function updateMirrorReplayScrub(t){
     document.getElementById('mirrorReplayDeviation').textContent = `${cents>0?'+':''}${cents} cents ${cents===0?'(dead on)':(cents>0?'sharp':'flat')}`;
   } else {
     document.getElementById('mirrorReplayYou').textContent = '—';
-    document.getElementById('mirrorReplayDeviation').textContent = 'No signal at this moment';
+    document.getElementById('mirrorReplayDeviation').textContent = t('take_not_heard');
   }
 
   const svg = document.getElementById('mirrorCompareSvg');
@@ -21309,7 +21374,7 @@ async function runEveLoop(){
   const {lowMidi, highMidi} = registerRangeBounds();
 
   eveFirstMidi = lowMidi + Math.floor(Math.random()*Math.max(1,(highMidi-lowMidi+1)));
-  document.getElementById('eveStepLabel').textContent = 'Step 1 — Hear';
+  document.getElementById('eveStepLabel').textContent = t('eve_stage_step1');
   document.getElementById('eveStepNote').textContent = '♪';
   document.getElementById('eveStepNote').classList.remove('vc-not-heard');
   eveStatus('Listen closely…');
@@ -21317,13 +21382,13 @@ async function runEveLoop(){
   await new Promise(r=>setTimeout(r, 1300));
   if(!eveActive) return eveStopped();
 
-  document.getElementById('eveStepLabel').textContent = 'Step 2 — Sing';
+  document.getElementById('eveStepLabel').textContent = t('eve_stage_step2');
   document.getElementById('eveStepNote').textContent = t('eve_sing_back');
   eveStatus('Listening…');
   eveFirstResult = await eveSing(eveFirstMidi, true);
   if(!eveActive) return eveStopped();
 
-  document.getElementById('eveStepLabel').textContent = 'Step 3 — Analyze';
+  document.getElementById('eveStepLabel').textContent = t('eve_stage_step3');
   document.getElementById('eveStepNote').textContent = eveFirstResult.heard ? `${eveFirstResult.accuracy}%` : t('take_not_heard');
   document.getElementById('eveStepNote').classList.toggle('vc-not-heard', !eveFirstResult.heard);
   eveStatus(t('eve_status_captured'));
@@ -21336,7 +21401,7 @@ async function runEveLoop(){
   let candidate = eveFirstMidi + dir*iv.semi;
   if(candidate<lowMidi || candidate>highMidi) candidate = eveFirstMidi - dir*iv.semi;
   eveSecondMidi = Math.max(lowMidi, Math.min(highMidi, candidate));
-  document.getElementById('eveStepLabel').textContent = 'Step 4 — Hear again (harder)';
+  document.getElementById('eveStepLabel').textContent = t('eve_stage_step4');
   document.getElementById('eveStepNote').textContent = '♪';
   document.getElementById('eveStepNote').classList.remove('vc-not-heard');
   eveStatus(t('eve_status_jump').replace('{interval}', iv.name));
@@ -21344,7 +21409,7 @@ async function runEveLoop(){
   await new Promise(r=>setTimeout(r, 1300));
   if(!eveActive) return eveStopped();
 
-  document.getElementById('eveStepLabel').textContent = 'Step 5 — Sing without help';
+  document.getElementById('eveStepLabel').textContent = t('eve_stage_step5');
   document.getElementById('eveStepNote').textContent = t('eve_from_memory');
   eveStatus('Listening…');
   eveSecondResult = await eveSing(eveSecondMidi, false);
