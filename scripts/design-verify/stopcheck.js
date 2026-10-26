@@ -4,6 +4,7 @@
 // 2.6 s after its start (Mirror also at 4.4 s, during the echo; 0.8 and 2.6 s are in its phrase). Expected: the house up,
 // no marks; no mic loop left running (no autoCorrelate, readRegisterFrame or vlFeed call in the 5 s on Home from 1 s
 // after leaving: a timer left behind, like Mirror's echo, fires in that time) and today's vocal load not growing
+// (counted once the stopped session has closed: its own total lands in vlDay when it ends, which isn't growth)
 // (vlDay.load the same at both ends); back on the tool, its starting state (tools4b.js idleOk) and Start working (it
 // starts again). One Take: the take left midway saves nothing (no take stored for today) and today's take is still
 // available. Usage: node scripts/design-verify/stopcheck.js [--base <git ref>] [--only4b] [--tools onetake,mirror,…]
@@ -25,13 +26,14 @@ async function leaveChecks(page, log) {
       await tool.act(page); await C.sleep(at);
       await page.evaluate(() => document.querySelector('.snb-item[data-shell="home"]').click());
       await C.sleep(1000);
+      await page.waitForFunction(() => vlRun === null, null, { timeout: 6000 }).catch(() => {}); await C.sleep(1500); // the stopped session closes
       const a = await page.evaluate(() => ({ ...window.__cnt, load: vlDay.load }));
       await C.sleep(5000);
       const z = await page.evaluate(() => ({ ...window.__cnt, load: vlDay.load, house: document.body.dataset.house,
         marks: document.querySelectorAll('.is-live, .is-staged, [data-offstage], [data-stage-path]').length,
         onetake: typeof progress !== 'undefined' && progress ? { saved: !!(progress.oneTakeHistory && progress.oneTakeHistory[todayStr()]), last: progress.oneTakeLastDate === todayStr() } : null }));
       const calls = { autoCorrelate: z.ac - a.ac, readRegisterFrame: z.reg - a.reg, vlFeed: z.vl - a.vl };
-      const loop = !calls.autoCorrelate && !calls.readRegisterFrame && !calls.vlFeed, load = z.load === a.load;
+      const loop = !calls.autoCorrelate && !calls.readRegisterFrame && !calls.vlFeed, load = Math.abs(z.load - a.load) < 1e-6;
       // back on the tool: its starting state, and Start works
       await C.showPanel(page, tool.panel); await C.clearOverlays(page); await C.sleep(400);
       const idle = await page.evaluate(`(${tool.idleOk})()`);
