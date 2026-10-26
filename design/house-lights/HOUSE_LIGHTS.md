@@ -1,4 +1,19 @@
-# House Lights: the VoxCoach design system (v1.6)
+# House Lights: the VoxCoach design system (v1.7)
+
+v1.7 (2026-10-26, phase 4b, spec `PHASE4B.md`): (a) every tool that opens the mic gets a stage, take tools and live tools
+alike; (b) live tools (no take: Register Coach, Live Feedback, Resonance) go down on Start and up on Stop, and have no
+result; (c) a tool that already feeds vocal load itself (`vlFeed` / `vlEnd`) takes `houseSession`, not `singingSession`,
+so the load isn't counted twice; (d) where the lights should go down earlier than an existing `singingSession` call, a
+`houseSession` does the lighting and `singingSession` stays where it is, so the load is unchanged; (e) "Estimate" (fr
+"Estimation", es "Estimación", tr "Tahmin") replaces the BETA HEURISTIC / BETA ANALYSIS tags: a quiet ink-3 condensed label
+after the title, no border, the limits in `hl-measure`; (f) decisions: every panel maps to its hub in `SHELL_SECTION_MAP`;
+two new shared stage parts, the time meter (`.hl-meter`, elapsed share of the take, labelled with the seconds left, ink-3)
+and the "Loudness" level meter; a tool with its own loop feeds the stage from it read-only, in try/catch, logging the first
+error (`vqCapture` takes `opts.onFrame(ms, hz)` too); a new icon `hl-alert` (circle with an exclamation mark) for
+warnings, and no ⚠ ✓ ○ ✅ characters in these tools; "Listening…" comes from `action_listening`; titles lose their emoji;
+"Register Bridge" becomes "Register Coach" and "Real-Time Feedback" becomes "Live Feedback"; a result with no score
+(Voice Quality's three readings, Emotion Mode's comparison of two takes) has no big number; red (`--hl-miss`) on a stage
+marks recording (One Take); a trace without a target (Vibrato) uses a fixed scale so a straight tone looks straight.
 
 v1.6 (2026-10-21, phase 4a, spec `PHASE4A.md`): the shared take stage and result, `vcTake` (generalised from Pitch Match:
 target note and Hz, the lane with neighbour-note grid lines, the cents meter, the readout, the lock at |c| ≤ 6, the status
@@ -253,7 +268,7 @@ time. Phases start only after `wip/noise-gate` and `warmup` are merged into mast
    as reusable patterns, applied first to the Tuner and Pitch Match only.
 3. **Home and the Coach tab.**
 4. **Vocal Coach tools**, one group at a time, onto the singing and results layouts. 4a (v1.6): the 14 tools on `vcTake`
-   and paper; 4b: the 10 tools with their own displays.
+   and paper; 4b (v1.7): the 10 tools with their own displays, each on its own stage.
 5. **Choir World:** song page sub-navigation, rehearsal stage, Song Lab with X-Ray lightbox and
    Microscope, the mixer as channel strips.
 6. **Performance:** Studio as the stage; the Performance Report.

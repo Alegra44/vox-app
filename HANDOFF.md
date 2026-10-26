@@ -10,7 +10,7 @@ on a decision, and how to set the machine up again. It contains no secrets.
 |---|---|---|
 | `master` | Everything that is live, through House Lights phase 4a (merge 296d530, dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg, 2026-10-22; before it the single mic stream, dpl_6FBgCU661see6RBdPhXoMniCp42s) | Matches production |
 | `redesign/phase4a` | House Lights phase 4a and fix rounds 4a.1–4a.3 (spec `design/house-lights/PHASE4A.md`) | Merged (296d530) and live 2026-10-22. Closed |
-| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`), no app changes | Waiting for the user's 4b spec |
+| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Building since 2026-10-26; no merge or deploy before the user reviews the screenshots |
 | `review/phase4b-before` | Orphan branch, no code: the 10 phase 4b tools as they are now (idle, live, result; 390 Light/Dark, 1280 Light) | For the user to look at; delete after |
 | `review/phase4a-prod` | Orphan branch, no code: production screenshots after the phase 4a deploy (the 14 tools, hubs, states, Home; 390, Light/Dark) | For the user to look at; delete after |
 | `feat/single-stream` | Item 3: C3 + F2 single mic stream (spec `design/audio/BUILD.md`) | Merged (7bfc47a) and live 2026-10-21. Closed |
@@ -65,7 +65,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Supabase before each suite (5 tries, then stops) and limits each suite to 3× its usual minutes (30 max); contrast.js waits
    for running transitions (1 s max) before measuring. Copy table `design/house-lights/PHASE4A_COPY.md`.
    **Phase 4b (the 10 tools with their own displays): survey** `design/house-lights/PHASE4B_SURVEY.md` on
-   `redesign/phase4b`, shots on `review/phase4b-before`; the user writes the spec from it. Also for 4b:
+   `redesign/phase4b`, shots on `review/phase4b-before`. **Spec verbatim `design/house-lights/PHASE4B.md` (2026-10-26):
+   building on `redesign/phase4b`**; no merge or deploy before the user reviews the screenshots; rollback target
+   dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg; AC power only, one verify script at a time. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
