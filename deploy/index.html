@@ -1544,6 +1544,22 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Mirror: the contour chart (the phrase in ink-3 with its note names, the echo in the voice colour, a playhead) */
+  .mirror-step{font-size:var(--hl-t-h3);color:var(--hl-ink);}
+  .mirror-chart{position:relative;width:100%;max-width:520px;}
+  .mirror-chart svg{display:block;width:100%;height:160px;}
+  .mirror-chart :is(line, polyline){vector-effect:non-scaling-stroke;}
+  .mirror-ref{stroke:var(--hl-ink-3);stroke-width:4;stroke-linecap:round;}
+  .mirror-you{fill:none;stroke:var(--hl-voice);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;filter:var(--hl-glow);}
+  .mirror-playhead{stroke:var(--hl-ink-2);stroke-width:1.5;stroke-dasharray:3 3;}
+  .mirror-notes span{position:absolute;left:calc(var(--x) * 1%);top:calc(var(--y) * 1% - 20px);transform:translateX(-50%);font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
+  .mirror-legend{display:flex;justify-content:center;gap:var(--hl-s5);font-size:var(--hl-t-small);color:var(--hl-ink-2);}
+  .vc-result .mirror-legend{justify-content:flex-start;}
+  .mirror-legend > span{display:inline-flex;align-items:center;gap:var(--hl-s2);}
+  .mirror-sw{display:inline-block;width:16px;height:3px;border-radius:2px;}
+  .mirror-sw-ref{background:var(--hl-ink-3);} .mirror-sw-you{background:var(--hl-voice);}
+  #mirrorReplayCard{gap:var(--hl-s2);}
+  #mirrorResultCard{text-align:left;}
   /* One Take: no lane, no meter (no pitch guide is the point); the recording mark in --hl-miss (red is for recording) */
   .onetake-rec{display:inline-flex;align-items:center;gap:var(--hl-s2);margin:0;font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);}
   .onetake-rec[hidden]{display:none;}
@@ -4113,31 +4129,39 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="mirror_sub">The AI sings a real 4-note phrase inside your captured range — you echo it, and your real captured contour overlays the reference so you can see exactly where you diverged.</div>
     </div>
     <div class="tuner-hero-card">
-      <svg id="mirrorCompareSvg" viewBox="0 0 400 140" style="width:100%;max-width:480px;display:block;margin:0 auto;background:var(--bg);border-radius:12px;"></svg>
-      <div class="dual-score-row" style="justify-content:center;gap:20px;margin-top:10px;">
-        <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);"><span style="width:14px;height:3px;background:var(--brass-dim);display:inline-block;border-radius:2px;"></span><span data-i18n="mirror_ai_phrase">AI phrase</span></span>
-        <span style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);"><span style="width:14px;height:3px;background:var(--teal);display:inline-block;border-radius:2px;"></span><span data-i18n="mirror_your_echo">Your echo</span></span>
+      <div class="vc-stage mirror-stage" id="mirrorStage">
+      <div class="mirror-step vc-live-only" id="mirrorStepLabel"></div>
+      <div class="mirror-chart vc-live-only" id="mirrorStageChart">
+        <svg id="mirrorCompareSvg" viewBox="0 0 400 160" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+        <div class="mirror-notes" aria-hidden="true"></div>
       </div>
-      <p class="desc" id="mirrorStatus" style="text-align:center;margin-top:14px;min-height:20px;"></p>
-      <button class="mic-btn" id="mirrorPlayBtn" style="margin-top:6px;"><span class="dot-icon"></span>Play a new phrase</button>
+      <div class="vc-live-only"><div class="mirror-legend" aria-hidden="true"><span><i class="mirror-sw mirror-sw-ref"></i><span data-i18n="mirror_ai_phrase">Phrase</span></span><span><i class="mirror-sw mirror-sw-you"></i><span data-i18n="mirror_your_echo">You</span></span></div></div>
+      <p class="vc-visually-hidden" id="mirrorStatus" role="status"></p>
+      <button class="mic-btn vc-take-pill" id="mirrorPlayBtn"><span class="dot-icon"></span><span id="mirrorPlayLabel" data-i18n="mirror_play_btn">Play a new phrase</span></button>
       <div class="vl-gauge" id="vlGaugeMirror" style="display:none;"></div>
-
-      <div class="ex-result" id="mirrorResultCard" style="display:none;text-align:center;margin-top:20px;">
-        <div class="ex-accuracy" id="mirrorResultAcc">—</div>
-        <div class="ex-feedback-text" data-i18n="mirror_result_desc">how closely your real echo tracked the reference phrase</div>
       </div>
 
-      <div id="mirrorReplayCard" style="display:none;margin-top:20px;">
-        <div class="step-label" data-i18n="mirror_replay_label">🔍 Voice Replay — scrub through your real take</div>
-        <input type="range" id="mirrorReplaySlider" min="0" max="2800" value="0" step="10" style="width:100%;margin:14px 0;accent-color:var(--teal);">
-        <div class="reg-stat-row">
-          <div class="stat-chip"><div class="label" data-i18n="mirror_time_label">Time</div><div class="val" id="mirrorReplayTime">0.00s</div></div>
-          <div class="stat-chip"><div class="label" data-i18n="mirror_target_label">Target</div><div class="val" id="mirrorReplayTarget">—</div></div>
+      <div class="vc-result" id="mirrorResultCard" role="status" aria-live="polite" style="display:none;">
+        <div class="ex-accuracy vc-result-num" id="mirrorResultAcc">—</div>
+        <h3 class="hl-h3" data-i18n="mirror_result_desc">Echo accuracy</h3>
+        <p class="ex-feedback-text hl-coach" id="mirrorCoach"></p>
+        <div class="mirror-chart" id="mirrorResultChart">
+          <svg id="mirrorResultSvg" viewBox="0 0 400 160" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+          <div class="mirror-notes" aria-hidden="true"></div>
         </div>
-        <div class="reg-stat-row" style="margin-top:10px;">
-          <div class="stat-chip"><div class="label" data-i18n="mirror_yousang_label">You sang</div><div class="val" id="mirrorReplayYou">—</div></div>
-          <div class="stat-chip"><div class="label" data-i18n="mirror_deviation_label">Deviation</div><div class="val" id="mirrorReplayDeviation">—</div></div>
+        <div id="mirrorReplayCard" style="display:none;">
+          <label class="vc-chart-label" for="mirrorReplaySlider" data-i18n="mirror_replay_label">Replay: scrub through your take</label>
+          <input type="range" class="hl-fader" id="mirrorReplaySlider" min="0" max="2800" value="0" step="10">
+          <div class="vc-result-dims mirror-replay-rows">
+            <div class="vc-dim"><span data-i18n="mirror_time_label">Time</span><span id="mirrorReplayTime">0.00 s</span></div>
+            <div class="vc-dim"><span data-i18n="mirror_target_label">Phrase</span><span id="mirrorReplayTarget">—</span></div>
+            <div class="vc-dim"><span data-i18n="mirror_yousang_label">You</span><span id="mirrorReplayYou">—</span></div>
+            <div class="vc-dim"><span data-i18n="mirror_deviation_label">Off by</span><span id="mirrorReplayDeviation">—</span></div>
+          </div>
         </div>
+        <div class="mirror-legend" aria-hidden="true"><span><i class="mirror-sw mirror-sw-ref"></i><span data-i18n="mirror_ai_phrase">Phrase</span></span><span><i class="mirror-sw mirror-sw-you"></i><span data-i18n="mirror_your_echo">You</span></span></div>
+        <div class="vc-result-dims" id="mirrorNoteRows"></div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="mirror_measure"></p></details>
       </div>
     </div>
   </section>
@@ -6372,15 +6396,15 @@ const TRANSLATIONS = {
     pd_report_label:'Performance Report',
     pd_expression_note:'Expression isn\'t scored here — no reliable real detector exists for it anywhere in this app, same honest limit as everywhere else.',
     mirror_title:"Mirror Mode",
-    mirror_sub:'The AI sings a real 4-note phrase inside your captured range — you echo it, and your real captured contour overlays the reference so you can see exactly where you diverged.',
-    mirror_ai_phrase:'AI phrase',
-    mirror_your_echo:'Your echo',
-    mirror_result_desc:'how closely your real echo tracked the reference phrase',
-    mirror_replay_label:'🔍 Voice Replay — scrub through your real take',
+    mirror_sub:"A 4-note phrase from your range plays; you echo it, and your contour is drawn over the phrase so you can see where you drifted.",
+    mirror_ai_phrase:"Phrase",
+    mirror_your_echo:"You",
+    mirror_result_desc:"Echo accuracy",
+    mirror_replay_label:"Replay: scrub through your take",
     mirror_time_label:'Time',
-    mirror_target_label:'Target',
-    mirror_yousang_label:'You sang',
-    mirror_deviation_label:'Deviation',
+    mirror_target_label:"Phrase",
+    mirror_yousang_label:"You",
+    mirror_deviation_label:"Off by",
     emotionmode_title:"Emotion Mode",
     emotionmode_sub:'Same note, two real intentions — this app never judges which "felt" more tender or powerful, only what\'s genuinely measurable: real dynamic range, real loudness, and real pitch stability, compared honestly between your two takes.',
     emotionmode_pick_label:'Pick two intentions to compare',
@@ -7542,6 +7566,17 @@ const TRANSLATIONS = {
     onetake_next:"Your next take: tomorrow",
     onetake_notheard:"No clear pitch was caught on today's take. It still counts as today's attempt; come back tomorrow.",
     onetake_measure:"Today's note comes from the lower middle of your range and stays the same all day. It plays once; 1.3 seconds after it starts, 6 seconds of listening begin. Pitch accuracy is 100 minus 0.6 times your average distance from the note, in cents, with natural vibrato taken out; readings more than 3 semitones away aren't counted. Stability is 100 minus 3 times the spread of your pitch (its standard deviation, in cents). Timing is 100 minus the share of the 6 seconds that passed before your voice came in.",
+    mirror_play_btn:"Play a new phrase",
+    mirror_step_listen:"Listen",
+    mirror_step_turn:"Your turn",
+    mirror_status_listen:"Listen to the phrase.",
+    mirror_status_turn:"Your turn: echo what you heard.",
+    mirror_off_on:"On the note",
+    mirror_off_sharp_ct:"{n} ct sharp",
+    mirror_off_flat_ct:"{n} ct flat",
+    mirror_off_sharp_st:"{n} semitones sharp",
+    mirror_off_flat_st:"{n} semitones flat",
+    mirror_measure:"The phrase is 4 synthesised notes from your range, each up to 4 semitones from the one before, 0.7 seconds each. 0.4 seconds after it ends, 2.8 seconds of listening begin. Each moment of your echo is compared with the phrase note at the same point (0.7 seconds a note). Echo accuracy is 100 minus 0.6 times your average distance from those notes, in cents, with natural vibrato taken out; each note's score uses the same formula on its own 0.7 seconds.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7790,15 +7825,15 @@ const TRANSLATIONS = {
     pd_report_label:'Rapport de Performance',
     pd_expression_note:'L\'expression n\'est pas notée ici — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, même limite honnête que partout ailleurs.',
     mirror_title:"Mode Miroir",
-    mirror_sub:'L\'IA chante une vraie phrase de 4 notes dans votre tessiture capturée — vous la répétez, et votre vrai contour capturé se superpose à la référence pour que vous puissiez voir exactement où vous avez divergé.',
-    mirror_ai_phrase:'Phrase de l\'IA',
-    mirror_your_echo:'Votre écho',
-    mirror_result_desc:'à quel point votre vrai écho a suivi la phrase de référence',
-    mirror_replay_label:'🔍 Replay Vocal — parcourez votre vraie prise',
+    mirror_sub:"Une phrase de 4 notes de votre tessiture est jouée ; vous la répétez, et votre contour se dessine sur la phrase pour voir où vous avez dévié.",
+    mirror_ai_phrase:"Phrase",
+    mirror_your_echo:"Vous",
+    mirror_result_desc:"Précision de l'écho",
+    mirror_replay_label:"Réécoute : parcourez votre prise",
     mirror_time_label:'Temps',
-    mirror_target_label:'Cible',
-    mirror_yousang_label:'Vous avez chanté',
-    mirror_deviation_label:'Écart',
+    mirror_target_label:"Phrase",
+    mirror_yousang_label:"Vous",
+    mirror_deviation_label:"Écart",
     emotionmode_title:"Mode Émotion",
     emotionmode_sub:'Même note, deux vraies intentions — cette application ne juge jamais laquelle « ressentait » plus de tendresse ou de puissance, seulement ce qui est vraiment mesurable : vraie plage dynamique, vrai volume, et vraie stabilité de justesse, comparés honnêtement entre vos deux prises.',
     emotionmode_pick_label:'Choisissez deux intentions à comparer',
@@ -8960,6 +8995,17 @@ const TRANSLATIONS = {
     onetake_next:"Votre prochaine prise : demain",
     onetake_notheard:"Aucune hauteur claire n'a été captée sur la prise du jour. Elle compte quand même comme la tentative du jour ; revenez demain.",
     onetake_measure:"La note du jour vient du bas-milieu de votre tessiture et reste la même toute la journée. Elle joue une fois ; 1,3 seconde après son début, 6 secondes d'écoute commencent. La justesse vaut 100 moins 0,6 fois votre écart moyen à la note, en cents, sans le vibrato naturel ; les mesures à plus de 3 demi-tons ne comptent pas. La stabilité vaut 100 moins 3 fois la dispersion de votre hauteur (son écart type, en cents). L'entrée vaut 100 moins la part des 6 secondes écoulée avant que votre voix n'entre.",
+    mirror_play_btn:"Jouer une nouvelle phrase",
+    mirror_step_listen:"Écoutez",
+    mirror_step_turn:"À vous",
+    mirror_status_listen:"Écoutez la phrase.",
+    mirror_status_turn:"À vous : répétez ce que vous avez entendu.",
+    mirror_off_on:"Sur la note",
+    mirror_off_sharp_ct:"{n} ct trop haut",
+    mirror_off_flat_ct:"{n} ct trop bas",
+    mirror_off_sharp_st:"{n} demi-tons trop haut",
+    mirror_off_flat_st:"{n} demi-tons trop bas",
+    mirror_measure:"La phrase compte 4 notes synthétisées de votre tessiture, chacune à 4 demi-tons au plus de la précédente, 0,7 seconde chacune. 0,4 seconde après sa fin, 2,8 secondes d'écoute commencent. Chaque instant de votre écho est comparé à la note de la phrase au même moment (0,7 seconde par note). La précision de l'écho vaut 100 moins 0,6 fois votre écart moyen à ces notes, en cents, sans le vibrato naturel ; le score de chaque note utilise la même formule sur ses 0,7 seconde.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9208,15 +9254,15 @@ const TRANSLATIONS = {
     pd_report_label:'Informe de Actuación',
     pd_expression_note:'La expresión no se puntúa aquí — no existe un detector real confiable para ella en ninguna parte de esta app, el mismo límite honesto que en todas partes.',
     mirror_title:"Modo Espejo",
-    mirror_sub:'La IA canta una frase real de 4 notas dentro de tu rango capturado — la repites, y tu contorno real capturado se superpone a la referencia para que puedas ver exactamente dónde divergiste.',
-    mirror_ai_phrase:'Frase de la IA',
-    mirror_your_echo:'Tu eco',
-    mirror_result_desc:'qué tan de cerca tu eco real siguió la frase de referencia',
-    mirror_replay_label:'🔍 Repetición de Voz — navega por tu toma real',
+    mirror_sub:"Suena una frase de 4 notas de tu tesitura; la repites, y tu contorno se dibuja sobre la frase para que veas dónde te desviaste.",
+    mirror_ai_phrase:"Frase",
+    mirror_your_echo:"Tú",
+    mirror_result_desc:"Precisión del eco",
+    mirror_replay_label:"Repetición: recorre tu toma",
     mirror_time_label:'Tiempo',
-    mirror_target_label:'Objetivo',
-    mirror_yousang_label:'Cantaste',
-    mirror_deviation_label:'Desviación',
+    mirror_target_label:"Frase",
+    mirror_yousang_label:"Tú",
+    mirror_deviation_label:"Desviación",
     emotionmode_title:"Modo Emoción",
     emotionmode_sub:'Misma nota, dos intenciones reales — esta app nunca juzga cuál "se sintió" más tierna o poderosa, solo lo que es genuinamente medible: rango dinámico real, volumen real, y estabilidad de afinación real, comparados honestamente entre tus dos tomas.',
     emotionmode_pick_label:'Elige dos intenciones para comparar',
@@ -10378,6 +10424,17 @@ const TRANSLATIONS = {
     onetake_next:"Tu próxima toma: mañana",
     onetake_notheard:"No se captó una afinación clara en la toma de hoy. Cuenta igualmente como el intento de hoy; vuelve mañana.",
     onetake_measure:"La nota de hoy sale de la parte media baja de tu tesitura y es la misma todo el día. Suena una vez; 1,3 segundos después de empezar, comienzan 6 segundos de escucha. La afinación es 100 menos 0,6 veces tu distancia media a la nota, en cents, sin el vibrato natural; las lecturas a más de 3 semitonos no cuentan. La estabilidad es 100 menos 3 veces la dispersión de tu altura (su desviación típica, en cents). La entrada es 100 menos la parte de los 6 segundos que pasó antes de que entrara tu voz.",
+    mirror_play_btn:"Reproducir una frase nueva",
+    mirror_step_listen:"Escucha",
+    mirror_step_turn:"Tu turno",
+    mirror_status_listen:"Escucha la frase.",
+    mirror_status_turn:"Tu turno: repite lo que oíste.",
+    mirror_off_on:"En la nota",
+    mirror_off_sharp_ct:"{n} ct por encima",
+    mirror_off_flat_ct:"{n} ct por debajo",
+    mirror_off_sharp_st:"{n} semitonos por encima",
+    mirror_off_flat_st:"{n} semitonos por debajo",
+    mirror_measure:"La frase tiene 4 notas sintetizadas de tu tesitura, cada una a 4 semitonos como mucho de la anterior, 0,7 segundos cada una. 0,4 segundos después de que termina, comienzan 2,8 segundos de escucha. Cada momento de tu eco se compara con la nota de la frase en el mismo punto (0,7 segundos por nota). La precisión del eco es 100 menos 0,6 veces tu distancia media a esas notas, en cents, sin el vibrato natural; la puntuación de cada nota usa la misma fórmula en sus 0,7 segundos.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10626,15 +10683,15 @@ const TRANSLATIONS = {
     pd_report_label:'Performans Raporu',
     pd_expression_note:'İfade burada puanlanmaz — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur, her yerdeki aynı dürüst sınır.',
     mirror_title:"Ayna Modu",
-    mirror_sub:'Yapay zeka, yakalanmış aralığınız içinde gerçek bir 4 nota cümlesi söyler — onu yankılarsınız ve gerçek yakalanmış konturunuz referansın üzerine biner, böylece nerede ayrıldığınızı tam olarak görebilirsiniz.',
-    mirror_ai_phrase:'Yapay zeka cümlesi',
-    mirror_your_echo:'Yankınız',
-    mirror_result_desc:'gerçek yankınızın referans cümleyi ne kadar yakından takip ettiği',
-    mirror_replay_label:'🔍 Ses Tekrarı — gerçek çekiminizde gezinin',
+    mirror_sub:"Aralığınızdan 4 notalık bir cümle çalar; onu tekrarlarsınız ve konturunuz cümlenin üzerine çizilir, böylece nerede kaydığınızı görürsünüz.",
+    mirror_ai_phrase:"Cümle",
+    mirror_your_echo:"Siz",
+    mirror_result_desc:"Yankı doğruluğu",
+    mirror_replay_label:"Tekrar: çekiminizde gezinin",
     mirror_time_label:'Zaman',
-    mirror_target_label:'Hedef',
-    mirror_yousang_label:'Söylediğiniz',
-    mirror_deviation_label:'Sapma',
+    mirror_target_label:"Cümle",
+    mirror_yousang_label:"Siz",
+    mirror_deviation_label:"Sapma",
     emotionmode_title:"Duygu Modu",
     emotionmode_sub:'Aynı nota, iki gerçek niyet — bu uygulama hangisinin daha hassas veya güçlü "hissettirdiğine" asla karar vermez, sadece gerçekten ölçülebilir olanı: gerçek dinamik aralık, gerçek ses düzeyi ve gerçek perde kararlılığı, iki çekiminiz arasında dürüstçe karşılaştırılır.',
     emotionmode_pick_label:'Karşılaştırmak için iki niyet seçin',
@@ -11796,6 +11853,17 @@ const TRANSLATIONS = {
     onetake_next:"Bir sonraki çekiminiz: yarın",
     onetake_notheard:"Bugünün çekiminde net bir perde yakalanamadı. Yine de bugünün denemesi sayılır; yarın tekrar gelin.",
     onetake_measure:"Bugünün notası ses aralığınızın alt-orta kısmından gelir ve gün boyu aynı kalır. Bir kez çalar; başladıktan 1,3 saniye sonra 6 saniyelik dinleme başlar. Perde doğruluğu, doğal vibrato çıkarılarak notaya ortalama uzaklığınızın (sent cinsinden) 0,6 katının 100'den çıkarılmasıdır; 3 yarım tondan uzak ölçümler sayılmaz. Kararlılık, perdenizin yayılımının (sent cinsinden standart sapma) 3 katının 100'den çıkarılmasıdır. Zamanlama, sesiniz girmeden önce geçen sürenin 6 saniyeye oranının 100'den çıkarılmasıdır.",
+    mirror_play_btn:"Yeni bir cümle çal",
+    mirror_step_listen:"Dinleyin",
+    mirror_step_turn:"Sıra sizde",
+    mirror_status_listen:"Cümleyi dinleyin.",
+    mirror_status_turn:"Sıra sizde: duyduğunuzu tekrarlayın.",
+    mirror_off_on:"Tam notada",
+    mirror_off_sharp_ct:"{n} sent diyez",
+    mirror_off_flat_ct:"{n} sent pes",
+    mirror_off_sharp_st:"{n} yarım ton diyez",
+    mirror_off_flat_st:"{n} yarım ton pes",
+    mirror_measure:"Cümle, aralığınızdan sentezlenmiş 4 notadır; her biri bir öncekinden en fazla 4 yarım ton uzakta ve 0,7 saniyedir. Bittikten 0,4 saniye sonra 2,8 saniyelik dinleme başlar. Yankınızın her anı, cümlenin aynı andaki notasıyla karşılaştırılır (nota başına 0,7 saniye). Yankı doğruluğu, doğal vibrato çıkarılarak bu notalara ortalama uzaklığınızın (sent cinsinden) 0,6 katının 100'den çıkarılmasıdır; her notanın puanı aynı formülü kendi 0,7 saniyesinde kullanır.",
   },
 };
 let currentLanguage = 'en';
@@ -19386,6 +19454,7 @@ function stopAllActiveSessions(){
   resonanceActive = false;
   rhythmActive = false;
   mirrorActive = false;
+  if(typeof mirrorStop==='function') mirrorStop();
   riftActive = false;
   eveActive = false;
   emoActive = false;
@@ -20817,40 +20886,84 @@ function generateMirrorPhrase(){
   }
   return notes;
 }
-function drawMirrorComparison(){
-  const svg = document.getElementById('mirrorCompareSvg');
-  if(!svg) return;
-  const W=400, H=140;
-  let refPath = '';
-  mirrorPhrase.forEach((midi,i)=>{
-    const x1=(i/4)*W, x2=((i+1)/4)*W, y=mirrorMidiToY(midi,H);
-    refPath += `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="var(--brass-dim)" stroke-width="4" stroke-linecap="round"/>`;
-  });
-  let userPath = '';
-  if(mirrorUserTrace.length>1){
-    const pts = mirrorUserTrace.map(p=>{
-      const x=(p.t/MIRROR_TOTAL_MS)*W, y=mirrorMidiToY(p.midi,H);
-      return `${x.toFixed(1)},${y.toFixed(1)}`;
-    }).join(' ');
-    userPath = `<polyline points="${pts}" fill="none" stroke="var(--teal)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+// The contour chart (4b): time across the phrase's 2.8 s, pitch up the side over the range, the phrase's four notes in
+// ink-3 with their names (HTML, so they stay 12 px), the echo in the voice colour, a playhead (ms) when given. The stage
+// has one (#mirrorStageChart: the phrase with its playhead, then the echo drawn live), the result another
+// (#mirrorResultChart: the replay's playhead is #mirrorReplayPlayhead).
+const MIRROR_W = 400, MIRROR_H = 160, MIRROR_PAD = 24;
+const mirrorY = midi=>MIRROR_PAD + mirrorMidiToY(midi, MIRROR_H-2*MIRROR_PAD);
+let mirrorPlayheadMs = null, mirrorReplayMs = null;
+function drawMirrorChart(box, playheadMs){
+  if(!box) return;
+  const svg = box.querySelector('svg'), names = box.querySelector('.mirror-notes'), W = MIRROR_W;
+  let g = mirrorPhrase.map((midi,i)=>{ const y = mirrorY(midi).toFixed(1); return `<line class="mirror-ref" x1="${(i/4*W+8).toFixed(1)}" x2="${((i+1)/4*W-8).toFixed(1)}" y1="${y}" y2="${y}"/>`; }).join('');
+  if(mirrorUserTrace.length>1) g += `<polyline class="mirror-you" points="${mirrorUserTrace.map(p=>`${(p.t/MIRROR_TOTAL_MS*W).toFixed(1)},${mirrorY(p.midi).toFixed(1)}`).join(' ')}"/>`;
+  if(playheadMs!==null && playheadMs!==undefined){
+    const x = (Math.min(1, playheadMs/MIRROR_TOTAL_MS)*W).toFixed(1);
+    g += `<line class="mirror-playhead"${box.id==='mirrorResultChart' ? ' id="mirrorReplayPlayhead"' : ''} x1="${x}" x2="${x}" y1="0" y2="${MIRROR_H}"/>`;
   }
-  svg.innerHTML = refPath+userPath;
+  svg.innerHTML = g;
+  const sig = mirrorPhrase.join(',')+'|'+mirrorMinMidi+'-'+mirrorMaxMidi;
+  if(names.dataset.sig!==sig){
+    names.innerHTML = mirrorPhrase.map((m,i)=>`<span style="--x:${((i+0.5)/4*100).toFixed(1)};--y:${(mirrorY(m)/MIRROR_H*100).toFixed(1)}">${noteNameFromMidi(m)}</span>`).join('');
+    names.dataset.sig = sig;
+  }
+}
+function drawMirrorComparison(){
+  drawMirrorChart(document.getElementById('mirrorStageChart'), mirrorPlayheadMs);
+  drawMirrorChart(document.getElementById('mirrorResultChart'), mirrorReplayMs);
 }
 drawMirrorComparison();
 
+// Play stays disabled from the phrase's start until the echo ends; the house is down for both (houseSession), the
+// vocal load counts the echo (singingSession, where it always was).
+let mirrorEchoTimer = null, mirrorPhraseRaf = null, mirrorL = null;
+function mirrorPill(text){ document.getElementById('mirrorPlayLabel').textContent = text; }
+function mirrorReset(){
+  const btn = document.getElementById('mirrorPlayBtn');
+  btn.disabled = false;
+  mirrorPill(t('mirror_play_btn'));
+  document.getElementById('mirrorStepLabel').textContent = '';
+  document.getElementById('mirrorStatus').textContent = '';
+}
+// Leaving (stopAllActiveSessions): the timer that starts the echo is cancelled, Play is back.
+function mirrorStop(){
+  clearTimeout(mirrorEchoTimer); mirrorEchoTimer = null;
+  cancelAnimationFrame(mirrorPhraseRaf); cancelAnimationFrame(mirrorRafId);
+  mirrorActive = false; mirrorPlayheadMs = null;
+  mirrorReset();
+}
 document.getElementById('mirrorPlayBtn')?.addEventListener('click', async ()=>{
+  const btn = document.getElementById('mirrorPlayBtn');
+  if(btn.disabled) return;
   if(!requireProFeature('Mirror Mode')) return;
-  await initAudio();
+  btn.disabled = true;
+  if(!await initAudio()){ mirrorReset(); return; }
+  if(!btn.disabled) return; // left while the mic opened
   mirrorPhrase = generateMirrorPhrase();
-  mirrorUserTrace = [];
+  mirrorUserTrace = []; mirrorL = {};
   document.getElementById('mirrorResultCard').style.display='none';
-  document.getElementById('mirrorStatus').textContent = 'Listen…';
-  drawMirrorComparison();
+  const stage = document.getElementById('mirrorStage'), stageChart = document.getElementById('mirrorStageChart');
+  houseSession(()=>btn.disabled, stage);
+  document.getElementById('mirrorStepLabel').textContent = t('mirror_step_listen');
+  document.getElementById('mirrorStatus').textContent = t('mirror_status_listen');
+  mirrorPill(t('ex_listen_ref'));
   mirrorPhrase.forEach((midi,i)=>{
     playTone(noteToFreq(midi), (MIRROR_NOTE_MS/1000)*0.85, i*(MIRROR_NOTE_MS/1000));
   });
-  setTimeout(()=>{
-    document.getElementById('mirrorStatus').textContent = 'Your turn — echo what you heard';
+  // the playhead across the phrase as it plays (MIRROR_NOTE_MS a note)
+  const t0 = performance.now();
+  (function tick(){
+    const ms = performance.now()-t0;
+    mirrorPlayheadMs = ms < MIRROR_TOTAL_MS ? ms : null;
+    vcFeed(mirrorL, ()=>drawMirrorChart(stageChart, mirrorPlayheadMs));
+    if(mirrorPlayheadMs!==null && btn.disabled) mirrorPhraseRaf = requestAnimationFrame(tick);
+  })();
+  mirrorEchoTimer = setTimeout(()=>{
+    mirrorEchoTimer = null;
+    document.getElementById('mirrorStepLabel').textContent = t('mirror_step_turn');
+    document.getElementById('mirrorStatus').textContent = t('mirror_status_turn');
+    mirrorPill(t('action_listening'));
     startMirrorEcho();
   }, MIRROR_TOTAL_MS+400);
 });
@@ -20859,7 +20972,7 @@ function startMirrorEcho(){
   mirrorEchoStartTime = performance.now();
   mirrorUserTrace = [];
   mirrorEchoLoop();
-  singingSession(()=>mirrorActive);
+  singingSession(()=>mirrorActive, document.getElementById('mirrorStage'));
 }
 function mirrorEchoLoop(){
   if(!mirrorActive) return;
@@ -20871,14 +20984,13 @@ function mirrorEchoLoop(){
     const midi = 69+12*Math.log2(freq/440);
     mirrorUserTrace.push({t:elapsed, midi});
   }
-  drawMirrorComparison();
+  vcFeed(mirrorL, ()=>drawMirrorChart(document.getElementById('mirrorStageChart'), null));
   mirrorRafId = requestAnimationFrame(mirrorEchoLoop);
 }
 function finishMirrorEcho(){
   mirrorActive = false;
   cancelAnimationFrame(mirrorRafId);
-  document.getElementById('mirrorStatus').textContent = '';
-  drawMirrorComparison();
+  mirrorReset();
 
   let totalCentsAbs=0, count=0;
   const byNote = [[],[],[],[]];
@@ -20886,26 +20998,33 @@ function finishMirrorEcho(){
     const noteIdx = Math.min(3, Math.floor(p.t/MIRROR_NOTE_MS));
     byNote[noteIdx].push({t:p.t, c:(p.midi-mirrorPhrase[noteIdx])*100});
   });
-  byNote.forEach(pts=>vibratoTolerantCents(pts).forEach(c=>{ totalCentsAbs += Math.abs(c); count++; })); // natural vibrato isn't a pitch error
+  const perNote = byNote.map(pts=>{ // each note's own score, the same formula on its part (display)
+    const c = vibratoTolerantCents(pts); // natural vibrato isn't a pitch error
+    c.forEach(x=>{ totalCentsAbs += Math.abs(x); count++; });
+    return c.length ? Math.max(0, Math.round(100 - c.reduce((a,x)=>a+Math.abs(x),0)/c.length*0.6)) : null;
+  });
   const avgCents = count>0 ? totalCentsAbs/count : 999;
   const accuracy = count>0 ? Math.max(0, Math.round(100-avgCents*0.6)) : 0;
 
-  document.getElementById('mirrorResultCard').style.display='block';
-  const accEl = document.getElementById('mirrorResultAcc');
-  accEl.textContent = accuracy+'%';
-  accEl.className = 'ex-accuracy '+accuracyClass(accuracy);
+  document.getElementById('mirrorResultCard').style.display='grid';
+  vcResultNum(document.getElementById('mirrorResultAcc'), count>0 ? accuracy+'%' : null);
+  document.getElementById('mirrorCoach').textContent = accuracyFeedback(accuracy, count>0);
+  document.getElementById('mirrorNoteRows').innerHTML = perNote.map((acc,i)=>
+    `<div class="vc-dim"><span>${i+1} · ${noteNameFromMidi(mirrorPhrase[i])}</span><span${acc===null ? ' class="vc-not-heard"' : ''}>${acc===null ? t('take_not_heard') : acc+'%'}</span></div>`).join('');
 
   if(count>0){ recordSkillScore('pitch', accuracy); }
   registerExerciseCompletion();
 
+  mirrorReplayMs = null;
   if(mirrorUserTrace.length>0){
-    document.getElementById('mirrorReplayCard').style.display='block';
+    document.getElementById('mirrorReplayCard').style.display='grid';
     const slider = document.getElementById('mirrorReplaySlider');
     slider.max = MIRROR_TOTAL_MS;
     slider.value = 0;
     updateMirrorReplayScrub(0);
   } else {
     document.getElementById('mirrorReplayCard').style.display='none';
+    drawMirrorComparison();
   }
 }
 function mirrorFindNearestTracePoint(t){
@@ -20917,32 +21036,33 @@ function mirrorFindNearestTracePoint(t){
   }
   return {point:best, distMs:bestDist};
 }
-function updateMirrorReplayScrub(t){
-  const noteIdx = Math.max(0, Math.min(3, Math.floor(t/MIRROR_NOTE_MS)));
+// "Off by": within ±6 ct on the note; under 100 ct in cents; from 100 ct in semitones (one decimal)
+function mirrorOffBy(cents){
+  const a = Math.abs(cents), L = localeForLang();
+  if(a<=6) return t('mirror_off_on');
+  if(a<100) return t(cents>0 ? 'mirror_off_sharp_ct' : 'mirror_off_flat_ct').replace('{n}', a);
+  return t(cents>0 ? 'mirror_off_sharp_st' : 'mirror_off_flat_st').replace('{n}', (a/100).toLocaleString(L, {minimumFractionDigits:1, maximumFractionDigits:1}));
+}
+function updateMirrorReplayScrub(ms){
+  const noteIdx = Math.max(0, Math.min(3, Math.floor(ms/MIRROR_NOTE_MS)));
   const targetMidi = mirrorPhrase[noteIdx];
-  document.getElementById('mirrorReplayTime').textContent = (t/1000).toFixed(2)+'s';
+  document.getElementById('mirrorReplayTime').textContent = (ms/1000).toLocaleString(localeForLang(), {minimumFractionDigits:2, maximumFractionDigits:2})+' s';
   document.getElementById('mirrorReplayTarget').textContent = noteNameFromMidi(targetMidi);
 
-  const nearest = mirrorFindNearestTracePoint(t);
+  const nearest = mirrorFindNearestTracePoint(ms);
   if(nearest && nearest.distMs < 150){
     const sungMidi = Math.round(nearest.point.midi);
     document.getElementById('mirrorReplayYou').textContent = noteNameFromMidi(sungMidi);
-    const cents = Math.round((nearest.point.midi-targetMidi)*100);
-    document.getElementById('mirrorReplayDeviation').textContent = `${cents>0?'+':''}${cents} cents ${cents===0?'(dead on)':(cents>0?'sharp':'flat')}`;
+    document.getElementById('mirrorReplayDeviation').textContent = mirrorOffBy(Math.round((nearest.point.midi-targetMidi)*100));
   } else {
     document.getElementById('mirrorReplayYou').textContent = '—';
     document.getElementById('mirrorReplayDeviation').textContent = t('take_not_heard');
   }
 
-  const svg = document.getElementById('mirrorCompareSvg');
-  const x = (t/MIRROR_TOTAL_MS)*400;
-  let playhead = document.getElementById('mirrorReplayPlayhead');
-  if(!playhead && svg){
-    svg.insertAdjacentHTML('beforeend', `<line id="mirrorReplayPlayhead" x1="${x.toFixed(1)}" y1="0" x2="${x.toFixed(1)}" y2="140" stroke="var(--cream)" stroke-width="2" stroke-dasharray="3 3"/>`);
-  } else if(playhead){
-    playhead.setAttribute('x1', x.toFixed(1));
-    playhead.setAttribute('x2', x.toFixed(1));
-  }
+  const slider = document.getElementById('mirrorReplaySlider');
+  slider.style.setProperty('--val', (Math.min(1, ms/MIRROR_TOTAL_MS)*100).toFixed(1)+'%');
+  mirrorReplayMs = ms;
+  drawMirrorChart(document.getElementById('mirrorResultChart'), ms);
 }
 document.getElementById('mirrorReplaySlider')?.addEventListener('input', (e)=>{
   updateMirrorReplayScrub(Number(e.target.value));
