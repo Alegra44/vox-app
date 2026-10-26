@@ -3857,7 +3857,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="tuner-hero-card">
       <div class="vc-stage res-stage" id="resonanceStage">
       <canvas id="resonanceCanvas" class="vc-live-only" width="600" height="360" role="img" aria-label="Your voice as particles: the colour shows your register, the spread your pitch steadiness"></canvas>
-      <div class="res-zone vc-live-only" id="resRegisterStat">—</div>
+      <div class="res-zone vc-live-only"><span class="vc-visually-hidden" data-i18n="resonance_register_label">Register</span> <span id="resRegisterStat">—</span></div>
       <div class="res-small vc-live-only">
         <span><span data-i18n="resonance_steadiness_label">Steadiness</span> <span id="resSteadyStat">—</span></span>
         <span><span data-i18n="resonance_oscillation_label">Ripple</span> <span id="resOscStat">—</span></span>
@@ -20833,11 +20833,10 @@ function resonanceColors(){
   const key = (document.documentElement.dataset.theme||'')+'|'+matchMedia('(prefers-color-scheme: dark)').matches+'|'+(document.body.dataset.house||'');
   if(resColors && key===resColorsKey) return resColors;
   const probe = document.createElement('i'); document.body.appendChild(probe);
-  const rgb = v=>{ probe.style.color = `var(${v})`; return (getComputedStyle(probe).color.match(/[\d.]+/g)||[0,0,0]).slice(0,3).map(Number); };
-  const voice = rgb('--hl-voice'), soft = rgb('--hl-voice-soft'), ink3 = rgb('--hl-ink-3');
+  const col = v=>{ probe.style.color = v; return getComputedStyle(probe).color; }; // the browser resolves the token (and the mix)
+  resColors = {chest:col('var(--hl-voice)'), mixed:col('color-mix(in srgb, var(--hl-voice) 50%, var(--hl-voice-soft))'),
+    head:col('var(--hl-voice-soft)'), idle:col('var(--hl-ink-3)')};
   probe.remove();
-  const css = c=>`rgb(${c.map(Math.round).join(',')})`;
-  resColors = {chest:css(voice), mixed:css(voice.map((v,i)=>(v+soft[i])/2)), head:css(soft), idle:css(ink3)};
   resColorsKey = key;
   return resColors;
 }
