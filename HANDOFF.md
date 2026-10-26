@@ -73,6 +73,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    - Mirror's "No signal at this moment".
    **For phase 10:** on Daily Exercises, the Today's Recommended Focus text is bigger than the page subtitle and its title
    isn't bold; Smart Warmup's "(3s)" needs a space before the unit, like everywhere else.
+   **Later accuracy item (from 4b 2.4, out of scope there):** Rhythm (and the Entrance and Cutoff Trainers, which share its
+   onset timing) doesn't compensate output or input latency: clicks are scheduled on the audio clock and onsets timed with
+   `performance.now()`, so the speaker's and the microphone's delay land in every offset as "late".
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3

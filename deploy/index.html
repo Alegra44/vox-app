@@ -1544,6 +1544,31 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Rhythm: the tempo, the count-in dots, the eight beat dots (the current one ringed); the result's beat chart */
+  .vc-stage.is-live .rhythm-tempo{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .rhythm-countin{display:flex;align-items:center;gap:var(--hl-s3);font-size:var(--hl-t-small);color:var(--hl-ink-2);}
+  .rhythm-cdots{display:inline-flex;gap:var(--hl-s2);}
+  .rhythm-cdots i{width:8px;height:8px;border-radius:50%;border:1px solid var(--hl-ink-3);}
+  .rhythm-cdots i.on{background:var(--hl-ink);border-color:var(--hl-ink);}
+  .vc-stage.is-live .rhythm-beat-dots{margin-top:0;}
+  #rhythmBeatDots .scale-dot.current{border-color:var(--hl-ink);color:var(--hl-ink);box-shadow:0 0 0 3px var(--hl-rule-strong);}
+  #rhythmResultCard .vc-result{margin-top:0;padding-top:0;border-top:0;}
+  .rhythm-chart{display:grid;gap:var(--hl-s1);}
+  .rhythm-plot{position:relative;height:150px;margin-left:56px;}
+  .rhythm-plot svg{position:absolute;inset:0;width:100%;height:100%;}
+  .rhythm-plot line{vector-effect:non-scaling-stroke;}
+  .rhythm-zero{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;}
+  .rhythm-edge{stroke:var(--hl-rule);stroke-width:1;}
+  .rhythm-axis{font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .rhythm-plot .rhythm-axis{position:absolute;right:calc(100% + var(--hl-s2));transform:translateY(-50%);}
+  .rhythm-axis-top{top:6%;} .rhythm-axis-mid{top:50%;} .rhythm-axis-bot{top:94%;}
+  .rhythm-dot, .rhythm-miss{position:absolute;left:calc(var(--x) * 1%);width:12px;height:12px;border-radius:50%;transform:translate(-50%, -50%);}
+  .rhythm-dot{top:calc(var(--y) * 1%);background:var(--hl-voice);}
+  .rhythm-missrow{position:relative;height:24px;margin-left:56px;}
+  .rhythm-missrow .rhythm-axis{position:absolute;right:calc(100% + var(--hl-s2));top:50%;transform:translateY(-50%);}
+  .rhythm-miss{top:50%;border:1.5px solid var(--hl-ink-3);box-sizing:border-box;}
+  .rhythm-beats{position:relative;height:16px;margin-left:56px;}
+  .rhythm-beats span{position:absolute;left:calc(var(--x) * 1%);transform:translateX(-50%);font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   /* Mirror: the contour chart (the phrase in ink-3 with its note names, the echo in the voice colour, a playhead) */
   .mirror-step{font-size:var(--hl-t-h3);color:var(--hl-ink);}
   .mirror-chart{position:relative;width:100%;max-width:520px;}
@@ -3832,25 +3857,35 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <div class="key-card" id="rhythmBuilderCard">
-      <div class="step-label" data-i18n="rhythm_tempo_label">Tempo</div>
-      <div class="ex-type-row" id="rhythmTempoRow" style="margin:10px 0 20px;">
+      <div class="vc-stage rhythm-stage" id="rhythmStage">
+      <div class="step-label vc-paper-only" data-i18n="rhythm_tempo_label">Tempo</div>
+      <div class="ex-type-row vc-paper-only" id="rhythmTempoRow" style="margin:10px 0 20px;">
         <button class="ex-type-btn" data-rhythm-tempo="slow" data-i18n="rhythm_slow_btn" aria-pressed="false">Slow — 70 BPM</button>
         <button class="ex-type-btn active" data-rhythm-tempo="medium" data-i18n="rhythm_medium_btn" aria-pressed="true">Medium — 100 BPM</button>
         <button class="ex-type-btn" data-rhythm-tempo="fast" data-i18n="rhythm_fast_btn" aria-pressed="false">Fast — 130 BPM</button>
       </div>
-      <p class="desc" style="margin-bottom:16px;" data-i18n="rhythm_desc">A 2-beat count-in, then 8 real scored beats. Sing, tap, or say "ta" right on each click — any sound works, this only measures timing, not pitch.</p>
+      <p class="desc vc-paper-only" style="margin-bottom:16px;" data-i18n="rhythm_desc">A 2-beat count-in, then 8 scored beats. Sing, tap or say "ta" right on each click: any sound works, this measures timing only, not pitch.</p>
+      <div class="rhythm-tempo vc-live-only" id="rhythmTempoNow"></div>
+      <div class="rhythm-countin vc-live-only" id="rhythmCountIn"><span data-i18n="rhythm_countin">Count-in</span><span class="rhythm-cdots" aria-hidden="true"><i></i><i></i></span></div>
       <div class="rhythm-beat-dots" id="rhythmBeatDots"></div>
-      <button class="mic-btn" id="rhythmStartBtn" style="margin-top:20px;"><span class="dot-icon"></span><span id="rhythmStartLabel" data-i18n="action_start">Start</span></button>
-      <p class="fine-print" id="rhythmLiveStatus" style="margin-top:12px;"></p>
+      <button class="mic-btn vc-take-pill" id="rhythmStartBtn" style="margin-top:20px;"><span class="dot-icon"></span><span id="rhythmStartLabel" data-i18n="action_start">Start</span></button>
+      <p class="fine-print" id="rhythmLiveStatus" role="status" style="margin-top:12px;"></p>
       <div class="vl-gauge" id="vlGaugeRhythm" style="display:none;"></div>
+      </div>
     </div>
 
-    <div class="key-card" id="rhythmResultCard" style="display:none;margin-top:16px;text-align:center;">
-      <div class="step-label" data-i18n="rhythm_result_label">Timing result</div>
-      <div class="ex-accuracy" id="rhythmResultAvg" style="margin-top:10px;">—</div>
-      <div class="ex-feedback-text" data-i18n="rhythm_result_desc">average timing accuracy across 8 real beats</div>
-      <div id="rhythmResultRows" style="margin-top:16px;text-align:left;"></div>
-      <button class="ghost-btn" id="rhythmRetryBtn" style="margin-top:16px;" data-i18n="rhythm_retry_btn">Try again</button>
+    <div class="key-card" id="rhythmResultCard" style="display:none;margin-top:16px;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="vc-result-meta" data-i18n="rhythm_result_label">Timing result</div>
+      <div class="ex-accuracy vc-result-num" id="rhythmResultAvg">—</div>
+      <h3 class="hl-h3" data-i18n="rhythm_result_desc">Average timing accuracy</h3>
+      <p class="ex-feedback-text hl-coach" id="rhythmCoach"></p>
+      <div class="rhythm-chart" id="rhythmChart" role="img"></div>
+      <div class="vc-result-dims"><div class="vc-dim"><span data-i18n="rhythm_caught_label">Beats caught</span><span id="rhythmCaught">—</span></div></div>
+      <div class="vc-result-dims" id="rhythmResultRows"></div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="rhythm_measure"></p></details>
+      <button class="ghost-btn" id="rhythmRetryBtn" data-i18n="rhythm_retry_btn">Try again</button>
+      </div>
     </div>
   </section>
 
@@ -6337,14 +6372,14 @@ const TRANSLATIONS = {
     custom_result_desc:"Average across your sequence",
     custom_rebuild_btn:'Build another',
     rhythm_title:"Rhythm Trainer",
-    rhythm_sub:'Genuinely different from every other tool here — this measures WHEN you sing, not pitch. Real onset detection against a real metronome, not a fixed animation.',
+    rhythm_sub:"This one measures when you sing, not pitch: your onsets against a metronome.",
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Slow — 70 BPM',
     rhythm_medium_btn:'Medium — 100 BPM',
     rhythm_fast_btn:'Fast — 130 BPM',
-    rhythm_desc:'A 2-beat count-in, then 8 real scored beats. Sing, tap, or say "ta" right on each click — any sound works, this only measures timing, not pitch.',
+    rhythm_desc:"A 2-beat count-in, then 8 scored beats. Sing, tap or say \"ta\" right on each click: any sound works, this measures timing only, not pitch.",
     rhythm_result_label:'Timing result',
-    rhythm_result_desc:'average timing accuracy across 8 real beats',
+    rhythm_result_desc:"Average timing accuracy",
     rhythm_retry_btn:'Try again',
     eve_title:'Ear → Voice → Ear',
     eve_sub:"A 5-step loop: hear a note, sing it back, see your score, hear a harder one, then sing that one from memory, with no replay just before. Scored the same way as Pitch Match.",
@@ -7296,7 +7331,7 @@ const TRANSLATIONS = {
     ear_play_chord:'▶ Play chord', ear_play_progression:'▶ Play progression', ear_play_interval:'▶ Play interval',
     ear_feedback_correct:'Correct!', ear_thatwas_template:'That was {name}.', ear_thatwas_a:'a ',
     rhythm_running:'Running…', rhythm_beat_label:'Beat', rhythm_missed:'Missed',
-    rhythm_listen_instructions:'Listen for 2 clicks, then sing on each of the next 8…',
+    rhythm_listen_instructions:"Sing on each click",
     five_round_originalkey:'Original key', five_round_semitoneup:'One semitone higher', five_round_semitonedown:'One semitone lower',
     five_round_headvoice:'Same note — head voice', five_round_mixedvoice:'Same note — mixed voice',
     five_instr_naturally:'Sing it naturally', five_instr_halfstepup:'Sing it a half-step up', five_instr_halfstepdown:'Sing it a half-step down',
@@ -7577,6 +7612,14 @@ const TRANSLATIONS = {
     mirror_off_sharp_st:"{n} semitones sharp",
     mirror_off_flat_st:"{n} semitones flat",
     mirror_measure:"The phrase is 4 synthesised notes from your range, each up to 4 semitones from the one before, 0.7 seconds each. 0.4 seconds after it ends, 2.8 seconds of listening begin. Each moment of your echo is compared with the phrase note at the same point (0.7 seconds a note). Echo accuracy is 100 minus 0.6 times your average distance from those notes, in cents, with natural vibrato taken out; each note's score uses the same formula on its own 0.7 seconds.",
+    rhythm_countin:"Count-in",
+    rhythm_caught_label:"Beats caught",
+    rhythm_ms_late:"{n} ms late",
+    rhythm_ms_early:"{n} ms early",
+    rhythm_ms_on:"On the beat",
+    rhythm_none:"No onset was caught on a beat. Sing, tap or say \"ta\" right on each click.",
+    rhythm_chart_label:"Each beat's timing: above the line late, below early",
+    rhythm_measure:"Two count-in clicks, then 8 scored clicks at 70, 100 or 130 beats a minute. Each time your loudness rises past the onset level, that onset goes to the nearest scored beat not yet caught, if it's within half a beat of it. A beat scores 100 minus 0.6 times how far off it was, in milliseconds (above the line late, below it early); the result is the average of the beats caught. A beat with no onset is missed and left out of the average. The delay of your speaker and microphone isn't taken out.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7766,14 +7809,14 @@ const TRANSLATIONS = {
     custom_result_desc:"Moyenne sur votre séquence",
     custom_rebuild_btn:'En créer un autre',
     rhythm_title:"Entraîneur de Rythme",
-    rhythm_sub:'Vraiment différent de tous les autres outils ici — ceci mesure QUAND vous chantez, pas la justesse. Vraie détection d\'attaque contre un vrai métronome, pas une animation fixe.',
+    rhythm_sub:"Celui-ci mesure quand vous chantez, pas la justesse : vos attaques face à un métronome.",
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Lent — 70 BPM',
     rhythm_medium_btn:'Moyen — 100 BPM',
     rhythm_fast_btn:'Rapide — 130 BPM',
-    rhythm_desc:'Un décompte de 2 temps, puis 8 vrais temps notés. Chantez, tapez, ou dites "ta" juste sur chaque clic — n\'importe quel son fonctionne, ceci ne mesure que le rythme, pas la justesse.',
+    rhythm_desc:"Un décompte de 2 temps, puis 8 temps notés. Chantez, tapez ou dites « ta » juste sur chaque clic : tout son convient, seul le rythme est mesuré, pas la justesse.",
     rhythm_result_label:'Résultat de rythme',
-    rhythm_result_desc:'précision de rythme moyenne sur 8 vrais temps',
+    rhythm_result_desc:"Précision rythmique moyenne",
     rhythm_retry_btn:'Réessayer',
     eve_title:'Oreille → Voix → Oreille',
     eve_sub:"Une boucle en 5 étapes : entendre une note, la rechanter, voir votre score, en entendre une plus difficile, puis la chanter de mémoire, sans réécoute juste avant. Notée de la même façon que Pitch Match.",
@@ -8725,7 +8768,7 @@ const TRANSLATIONS = {
     ear_play_chord:'▶ Jouer l\'accord', ear_play_progression:'▶ Jouer la progression', ear_play_interval:'▶ Jouer l\'intervalle',
     ear_feedback_correct:'Correct !', ear_thatwas_template:'C\'était {name}.', ear_thatwas_a:'un ',
     rhythm_running:'En cours…', rhythm_beat_label:'Temps', rhythm_missed:'Manqué',
-    rhythm_listen_instructions:'Écoutez 2 clics, puis chantez sur chacun des 8 suivants…',
+    rhythm_listen_instructions:"Chantez sur chaque clic",
     five_round_originalkey:'Tonalité d\'origine', five_round_semitoneup:'Un demi-ton plus haut', five_round_semitonedown:'Un demi-ton plus bas',
     five_round_headvoice:'Même note — voix de tête', five_round_mixedvoice:'Même note — voix mixte',
     five_instr_naturally:'Chantez-la naturellement', five_instr_halfstepup:'Chantez-la un demi-ton plus haut', five_instr_halfstepdown:'Chantez-la un demi-ton plus bas',
@@ -9006,6 +9049,14 @@ const TRANSLATIONS = {
     mirror_off_sharp_st:"{n} demi-tons trop haut",
     mirror_off_flat_st:"{n} demi-tons trop bas",
     mirror_measure:"La phrase compte 4 notes synthétisées de votre tessiture, chacune à 4 demi-tons au plus de la précédente, 0,7 seconde chacune. 0,4 seconde après sa fin, 2,8 secondes d'écoute commencent. Chaque instant de votre écho est comparé à la note de la phrase au même moment (0,7 seconde par note). La précision de l'écho vaut 100 moins 0,6 fois votre écart moyen à ces notes, en cents, sans le vibrato naturel ; le score de chaque note utilise la même formule sur ses 0,7 seconde.",
+    rhythm_countin:"Décompte",
+    rhythm_caught_label:"Temps captés",
+    rhythm_ms_late:"{n} ms en retard",
+    rhythm_ms_early:"{n} ms en avance",
+    rhythm_ms_on:"Sur le temps",
+    rhythm_none:"Aucune attaque n’a été captée sur un temps. Chantez, tapez ou dites « ta » juste sur chaque clic.",
+    rhythm_chart_label:"Le timing de chaque temps : au-dessus de la ligne en retard, en dessous en avance",
+    rhythm_measure:"Deux clics de décompte, puis 8 clics notés à 70, 100 ou 130 temps par minute. Chaque fois que votre volume dépasse le seuil d'attaque, cette attaque va au temps noté le plus proche pas encore capté, s'il est à moins d'un demi-temps. Un temps vaut 100 moins 0,6 fois son écart, en millisecondes (au-dessus de la ligne en retard, en dessous en avance) ; le résultat est la moyenne des temps captés. Un temps sans attaque est manqué et ne compte pas dans la moyenne. Le délai de votre haut-parleur et de votre micro n'est pas retiré.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9195,14 +9246,14 @@ const TRANSLATIONS = {
     custom_result_desc:"Promedio de tu secuencia",
     custom_rebuild_btn:'Crear otro',
     rhythm_title:"Entrenador de Ritmo",
-    rhythm_sub:'Genuinamente diferente de cualquier otra herramienta aquí — esto mide CUÁNDO cantas, no la afinación. Detección real de ataque contra un metrónomo real, no una animación fija.',
+    rhythm_sub:"Este mide cuándo cantas, no la afinación: tus ataques frente a un metrónomo.",
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Lento — 70 BPM',
     rhythm_medium_btn:'Medio — 100 BPM',
     rhythm_fast_btn:'Rápido — 130 BPM',
-    rhythm_desc:'Un conteo de 2 tiempos, luego 8 tiempos reales puntuados. Canta, toca, o di "ta" justo en cada clic — cualquier sonido funciona, esto solo mide el ritmo, no la afinación.',
+    rhythm_desc:"Un conteo de 2 tiempos y luego 8 tiempos puntuados. Canta, da un toque o di «ta» justo en cada clic: sirve cualquier sonido, solo se mide el ritmo, no la afinación.",
     rhythm_result_label:'Resultado de ritmo',
-    rhythm_result_desc:'precisión de ritmo promedio en 8 tiempos reales',
+    rhythm_result_desc:"Precisión rítmica media",
     rhythm_retry_btn:'Intentar de nuevo',
     eve_title:'Oído → Voz → Oído',
     eve_sub:"Un ciclo de 5 pasos: oye una nota, cántala, mira tu puntuación, oye una más difícil y cántala de memoria, sin volver a oírla justo antes. Se puntúa igual que Precisión de nota.",
@@ -10154,7 +10205,7 @@ const TRANSLATIONS = {
     ear_play_chord:'▶ Reproducir acorde', ear_play_progression:'▶ Reproducir progresión', ear_play_interval:'▶ Reproducir intervalo',
     ear_feedback_correct:'¡Correcto!', ear_thatwas_template:'Eso era {name}.', ear_thatwas_a:'un ',
     rhythm_running:'En curso…', rhythm_beat_label:'Tiempo', rhythm_missed:'Perdido',
-    rhythm_listen_instructions:'Escucha 2 clics, luego canta en cada uno de los siguientes 8…',
+    rhythm_listen_instructions:"Canta en cada clic",
     five_round_originalkey:'Tono original', five_round_semitoneup:'Un semitono más alto', five_round_semitonedown:'Un semitono más bajo',
     five_round_headvoice:'Misma nota — voz de cabeza', five_round_mixedvoice:'Misma nota — voz mixta',
     five_instr_naturally:'Cántala naturalmente', five_instr_halfstepup:'Cántala medio tono más alto', five_instr_halfstepdown:'Cántala medio tono más bajo',
@@ -10435,6 +10486,14 @@ const TRANSLATIONS = {
     mirror_off_sharp_st:"{n} semitonos por encima",
     mirror_off_flat_st:"{n} semitonos por debajo",
     mirror_measure:"La frase tiene 4 notas sintetizadas de tu tesitura, cada una a 4 semitonos como mucho de la anterior, 0,7 segundos cada una. 0,4 segundos después de que termina, comienzan 2,8 segundos de escucha. Cada momento de tu eco se compara con la nota de la frase en el mismo punto (0,7 segundos por nota). La precisión del eco es 100 menos 0,6 veces tu distancia media a esas notas, en cents, sin el vibrato natural; la puntuación de cada nota usa la misma fórmula en sus 0,7 segundos.",
+    rhythm_countin:"Conteo",
+    rhythm_caught_label:"Tiempos captados",
+    rhythm_ms_late:"{n} ms tarde",
+    rhythm_ms_early:"{n} ms antes",
+    rhythm_ms_on:"En el tiempo",
+    rhythm_none:"No se captó ningún ataque en un tiempo. Canta, da un toque o di «ta» justo en cada clic.",
+    rhythm_chart_label:"El tiempo de cada pulso: por encima de la línea tarde, por debajo antes",
+    rhythm_measure:"Dos clics de conteo y luego 8 clics puntuados a 70, 100 o 130 pulsos por minuto. Cada vez que tu volumen supera el umbral de ataque, ese ataque va al tiempo puntuado más cercano aún no captado, si está a menos de medio tiempo. Un tiempo puntúa 100 menos 0,6 veces su desvío, en milisegundos (por encima de la línea tarde, por debajo antes); el resultado es la media de los tiempos captados. Un tiempo sin ataque es perdido y no cuenta en la media. No se descuenta el retardo de tu altavoz y tu micrófono.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10624,14 +10683,14 @@ const TRANSLATIONS = {
     custom_result_desc:"Dizinizin ortalaması",
     custom_rebuild_btn:'Başka bir tane oluştur',
     rhythm_title:"Ritim Antrenörü",
-    rhythm_sub:'Buradaki diğer her araçtan gerçekten farklı — bu, NE ZAMAN söylediğinizi ölçer, perdeyi değil. Sabit bir animasyon değil, gerçek bir metronoma karşı gerçek başlangıç algılama.',
+    rhythm_sub:"Bu, perdeyi değil ne zaman söylediğinizi ölçer: bir metronoma karşı girişleriniz.",
     rhythm_tempo_label:'Tempo',
     rhythm_slow_btn:'Yavaş — 70 BPM',
     rhythm_medium_btn:'Orta — 100 BPM',
     rhythm_fast_btn:'Hızlı — 130 BPM',
-    rhythm_desc:'2 vuruşluk bir sayım, ardından 8 gerçek puanlı vuruş. Her tıklamada tam üzerinde şarkı söyleyin, vurun veya "ta" deyin — herhangi bir ses işe yarar, bu sadece zamanlamayı ölçer, perdeyi değil.',
+    rhythm_desc:"2 vuruşluk bir sayım, ardından 8 puanlı vuruş. Her tıklamada tam üstüne söyleyin, vurun ya da \"ta\" deyin: her ses olur, yalnızca zamanlama ölçülür, perde değil.",
     rhythm_result_label:'Zamanlama sonucu',
-    rhythm_result_desc:'8 gerçek vuruş boyunca ortalama zamanlama doğruluğu',
+    rhythm_result_desc:"Ortalama zamanlama doğruluğu",
     rhythm_retry_btn:'Tekrar dene',
     eve_title:'Kulak → Ses → Kulak',
     eve_sub:"5 adımlı bir döngü: bir nota duyun, geri söyleyin, puanınızı görün, daha zor bir nota duyun, sonra onu hemen öncesinde tekrar dinlemeden hafızadan söyleyin. Nota Eşleştirme ile aynı şekilde puanlanır.",
@@ -11583,7 +11642,7 @@ const TRANSLATIONS = {
     ear_play_chord:'▶ Akoru çal', ear_play_progression:'▶ İlerlemeyi çal', ear_play_interval:'▶ Aralığı çal',
     ear_feedback_correct:'Doğru!', ear_thatwas_template:'Bu {name} idi.', ear_thatwas_a:'bir ',
     rhythm_running:'Çalışıyor…', rhythm_beat_label:'Vuruş', rhythm_missed:'Kaçırıldı',
-    rhythm_listen_instructions:'2 tıklama dinleyin, sonra sonraki 8\'in her birinde şarkı söyleyin…',
+    rhythm_listen_instructions:"Her tıklamada söyleyin",
     five_round_originalkey:'Orijinal ton', five_round_semitoneup:'Bir yarım ton yukarı', five_round_semitonedown:'Bir yarım ton aşağı',
     five_round_headvoice:'Aynı nota — baş sesi', five_round_mixedvoice:'Aynı nota — karma ses',
     five_instr_naturally:'Doğal bir şekilde söyleyin', five_instr_halfstepup:'Yarım ton yukarı söyleyin', five_instr_halfstepdown:'Yarım ton aşağı söyleyin',
@@ -11864,6 +11923,14 @@ const TRANSLATIONS = {
     mirror_off_sharp_st:"{n} yarım ton diyez",
     mirror_off_flat_st:"{n} yarım ton pes",
     mirror_measure:"Cümle, aralığınızdan sentezlenmiş 4 notadır; her biri bir öncekinden en fazla 4 yarım ton uzakta ve 0,7 saniyedir. Bittikten 0,4 saniye sonra 2,8 saniyelik dinleme başlar. Yankınızın her anı, cümlenin aynı andaki notasıyla karşılaştırılır (nota başına 0,7 saniye). Yankı doğruluğu, doğal vibrato çıkarılarak bu notalara ortalama uzaklığınızın (sent cinsinden) 0,6 katının 100'den çıkarılmasıdır; her notanın puanı aynı formülü kendi 0,7 saniyesinde kullanır.",
+    rhythm_countin:"Sayım",
+    rhythm_caught_label:"Yakalanan vuruşlar",
+    rhythm_ms_late:"{n} ms geç",
+    rhythm_ms_early:"{n} ms erken",
+    rhythm_ms_on:"Tam vuruşta",
+    rhythm_none:"Hiçbir vuruşta giriş yakalanamadı. Her tıklamada tam üstüne söyleyin, vurun ya da \"ta\" deyin.",
+    rhythm_chart_label:"Her vuruşun zamanlaması: çizginin üstü geç, altı erken",
+    rhythm_measure:"İki sayım tıklaması, ardından dakikada 70, 100 ya da 130 vuruşta 8 puanlı tıklama. Ses düzeyiniz giriş eşiğini her aştığında o giriş, henüz yakalanmamış en yakın puanlı vuruşa gider; yarım vuruştan yakınsa. Bir vuruş, sapmasının (milisaniye cinsinden) 0,6 katının 100'den çıkarılmasıyla puanlanır (çizginin üstü geç, altı erken); sonuç yakalanan vuruşların ortalamasıdır. Girişi olmayan vuruş kaçırılmış sayılır ve ortalamaya girmez. Hoparlörünüzün ve mikrofonunuzun gecikmesi çıkarılmaz.",
   },
 };
 let currentLanguage = 'en';
@@ -19453,6 +19520,7 @@ function stopAllActiveSessions(){
   harmonyActive = false;
   resonanceActive = false;
   rhythmActive = false;
+  if(typeof rhythmStop==='function') rhythmStop();
   mirrorActive = false;
   if(typeof mirrorStop==='function') mirrorStop();
   riftActive = false;
@@ -20765,18 +20833,29 @@ document.querySelectorAll('#rhythmTempoRow .ex-type-btn').forEach(btn=>{
   });
 });
 
+// The eight beat dots: the current one ringed, each caught beat good / mid / low from its accuracy (accuracyClass).
 function renderRhythmDots(activeIdx){
   const wrap = document.getElementById('rhythmBeatDots');
   if(!wrap) return;
-  wrap.innerHTML = Array.from({length:8}, (_,i)=>{
+  const html = Array.from({length:8}, (_,i)=>{
     const r = rhythmResults[i];
     let cls = 'scale-dot';
     if(i===activeIdx) cls += ' current';
-    else if(r && r.claimed) cls += r.accuracy>=70 ? ' done-good' : ' done-mid';
+    else if(r && r.claimed) cls += ' done-'+accuracyClass(r.accuracy);
     return `<div class="${cls}">${i+1}</div>`;
   }).join('');
+  if(wrap.innerHTML!==html) wrap.innerHTML = html;
 }
 renderRhythmDots(-1);
+let rhythmCountInTs = []; // the two count-in clicks (display: the count-in dots light as they play)
+// Leaving mid-run (stopAllActiveSessions): Start is back, the stage at rest.
+function rhythmStop(){
+  cancelAnimationFrame(rhythmRafId);
+  document.getElementById('rhythmStartBtn').disabled = false;
+  document.getElementById('rhythmStartLabel').textContent = t('action_start');
+  document.getElementById('rhythmLiveStatus').textContent = '';
+  rhythmResults = []; renderRhythmDots(-1);
+}
 
 document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Rhythm Trainer')) return;
@@ -20794,6 +20873,9 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   const totalBeats = 10; // 2 unscored count-in beats + 8 real scored beats
   const allBeatTimestamps = Array.from({length:totalBeats}, (_,i)=> t0 + i*beatMs);
   rhythmBeatTimestamps = allBeatTimestamps.slice(2);
+  rhythmCountInTs = allBeatTimestamps.slice(0, 2);
+  document.getElementById('rhythmTempoNow').textContent = t('rhythm_'+rhythmTempo+'_btn');
+  document.querySelectorAll('#rhythmCountIn .rhythm-cdots i').forEach(d=>d.classList.remove('on'));
 
   allBeatTimestamps.forEach((ts,i)=>{
     const delaySec = Math.max(0, (ts-performance.now())/1000);
@@ -20803,15 +20885,17 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
 
   document.getElementById('rhythmLiveStatus').textContent = t('rhythm_listen_instructions');
   renderRhythmDots(-1);
+  rhythmL = {};
   rhythmOnsetLoop(beatMs);
-  singingSession(()=>rhythmActive);
+  singingSession(()=>rhythmActive, document.getElementById('rhythmStage')); // the count-in to the last beat
 });
+let rhythmL = null;
 
 function rhythmOnsetLoop(beatMs){
   if(!rhythmActive) return;
   const now = performance.now();
   const lastBeatEnd = rhythmBeatTimestamps[7] + beatMs*0.6;
-  if(now > lastBeatEnd){ finishRhythmTrainer(); return; }
+  if(now > lastBeatEnd){ finishRhythmTrainer(beatMs); return; }
 
   const rms = computeRMS(readRawMic());
   const isVoiced = rms > ONSET_RMS_THRESHOLD;
@@ -20828,12 +20912,29 @@ function rhythmOnsetLoop(beatMs){
 
   let nearestIdx = rhythmBeatTimestamps.findIndex(ts => now < ts+beatMs*0.5);
   if(nearestIdx<0) nearestIdx = 7;
-  renderRhythmDots(nearestIdx);
+  vcFeed(rhythmL, ()=>{
+    renderRhythmDots(now < rhythmBeatTimestamps[0]-beatMs*0.5 ? -1 : nearestIdx);
+    document.querySelectorAll('#rhythmCountIn .rhythm-cdots i').forEach((d,i)=>d.classList.toggle('on', now >= rhythmCountInTs[i]));
+  });
 
   rhythmRafId = requestAnimationFrame(()=>rhythmOnsetLoop(beatMs));
 }
 
-function finishRhythmTrainer(){
+// The beat chart: the 8 beats across; each caught beat a voice-colour dot, its offset up (late) or down (early) from the
+// dashed zero line, to ± half a beat; a missed beat an ink-3 ring on the row under the chart, labelled Missed.
+function drawRhythmChart(box, beatMs){
+  const half = beatMs/2, x = i=>(6 + i*(88/7)).toFixed(2), y = off=>(50 - Math.max(-1, Math.min(1, off/half))*44).toFixed(2);
+  const n = Math.round(half).toLocaleString(localeForLang());
+  box.innerHTML = '<div class="rhythm-plot"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line class="rhythm-zero" x1="0" x2="100" y1="50" y2="50"/>'
+    + '<line class="rhythm-edge" x1="0" x2="100" y1="6" y2="6"/><line class="rhythm-edge" x1="0" x2="100" y1="94" y2="94"/></svg>'
+    + `<span class="rhythm-axis rhythm-axis-top">+${n} ms</span><span class="rhythm-axis rhythm-axis-mid">0</span><span class="rhythm-axis rhythm-axis-bot">−${n} ms</span>`
+    + rhythmResults.map((r,i)=>r.claimed ? `<i class="rhythm-dot" style="--x:${x(i)};--y:${y(r.offsetMs)}"></i>` : '').join('') + '</div>'
+    + `<div class="rhythm-missrow"><span class="rhythm-axis">${t('rhythm_missed')}</span>`
+    + rhythmResults.map((r,i)=>r.claimed ? '' : `<i class="rhythm-miss" style="--x:${x(i)}"></i>`).join('') + '</div>'
+    + `<div class="rhythm-beats" aria-hidden="true">${rhythmResults.map((r,i)=>`<span style="--x:${x(i)}">${i+1}</span>`).join('')}</div>`;
+  box.setAttribute('aria-label', t('rhythm_chart_label'));
+}
+function finishRhythmTrainer(beatMs = 60000/RHYTHM_BPM[rhythmTempo]){
   rhythmActive = false;
   cancelAnimationFrame(rhythmRafId);
   document.getElementById('rhythmStartBtn').disabled = false;
@@ -20844,11 +20945,13 @@ function finishRhythmTrainer(){
   const claimed = rhythmResults.filter(r=>r.claimed);
   const avg = claimed.length ? Math.round(claimed.reduce((a,b)=>a+b.accuracy,0)/claimed.length) : 0;
   document.getElementById('rhythmResultCard').style.display='block';
-  const avgEl = document.getElementById('rhythmResultAvg');
-  avgEl.textContent = avg+'%';
-  avgEl.className = 'ex-accuracy '+accuracyClass(avg);
+  vcResultNum(document.getElementById('rhythmResultAvg'), claimed.length ? avg+'%' : null); // no beat caught: no number
+  document.getElementById('rhythmCoach').textContent = claimed.length ? accuracyFeedback(avg, true) : t('rhythm_none');
+  document.getElementById('rhythmCaught').textContent = `${claimed.length} ${t('word_of')} 8`;
+  drawRhythmChart(document.getElementById('rhythmChart'), beatMs);
+  const ms = n=>t(n>0 ? 'rhythm_ms_late' : n<0 ? 'rhythm_ms_early' : 'rhythm_ms_on').replace('{n}', Math.abs(n));
   document.getElementById('rhythmResultRows').innerHTML = rhythmResults.map((r,i)=>
-    `<div class="record-row"><span class="record-label">${t('rhythm_beat_label')} ${i+1}</span><span class="record-val${!r.claimed?' untracked':''}">${r.claimed ? (r.offsetMs>=0?'+':'')+r.offsetMs+'ms · '+r.accuracy+'%' : t('rhythm_missed')}</span></div>`
+    `<div class="vc-dim"><span>${t('rhythm_beat_label')} ${i+1}</span><span${!r.claimed ? ' class="vc-not-heard"' : ''}>${r.claimed ? ms(r.offsetMs)+' · '+r.accuracy+'%' : t('rhythm_missed')}</span></div>`
   ).join('');
 
   if(claimed.length){ recordSkillScore('agility', avg); }

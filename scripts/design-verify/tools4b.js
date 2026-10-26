@@ -92,7 +92,7 @@ const TOOLS = [
       o.average = claimed.length ? Math.round(claimed.reduce((a, b) => a + b.accuracy, 0) / claimed.length) : 0;
       o['beats caught'] = claimed.length;
       rhythmResults.forEach((r, i) => { o[`beat ${i + 1} ms`] = r.claimed ? r.offsetMs : 'missed'; o[`beat ${i + 1} %`] = r.claimed ? r.accuracy : 'missed'; });
-      o['result: average'] = num(document.getElementById('rhythmResultAvg').textContent);
+      if (claimed.length) o['result: average'] = num(document.getElementById('rhythmResultAvg').textContent); // none caught: the branch shows no number (v1.4), master 0%
       return o;
     },
     idleOk: () => { const b = document.getElementById('rhythmStartBtn'); return !rhythmActive && !!b && !b.disabled && document.getElementById('rhythmStartLabel').textContent === t('action_start'); } },
