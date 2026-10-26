@@ -3,6 +3,9 @@
 // it is clicked in turn; the tab bar's active tab (.snb-item.active, aria-current="page") must be that hub's. Coach has
 // 23 tool buttons. World is left out: its only [data-enter-panel] buttons open Choir World, a Songs panel. A panel
 // listed in two hubs is reported (its tab can match only one).
+// Second pass: each of those panels opened from Home (enterPanel, as Home's cards and links open tools) must light its
+// hub's tab too. From the hub itself the hub's tab is already lit, so only this pass shows a missing SHELL_SECTION_MAP
+// entry (on master, Home stayed lit on most Coach tools).
 // Usage: node scripts/design-verify/navcheck.js [--base <git ref>]
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -31,6 +34,20 @@ const HUBS = [['train', 'train-hub', 'Coach'], ['songs', 'songs-hub', 'Songs'], 
       const ok = !wrong.length && keys.length > 0 && (shell !== 'train' || keys.length === 23);
       ok ? pass++ : fail++;
       console.log(`  ${ok ? '✓' : '✗'} ${name}: ${keys.length} tool buttons, each highlights ${name}${wrong.length ? ` · wrong: ${wrong.join(', ')}` : ''}`);
+    }
+    // from Home
+    for (const [shell, panel, name] of HUBS) {
+      const keys = Object.entries(seen).filter(([, hubs]) => hubs.includes(name) && hubs.length === 1).map(([k]) => k), wrong = [];
+      for (const k of keys) {
+        await page.evaluate(() => document.querySelector('.snb-item[data-shell="home"]').click()); await C.sleep(400);
+        await page.evaluate(k => enterPanel(k), k); await C.sleep(400); await C.clearOverlays(page);
+        const st = await page.evaluate(() => { const a = document.querySelector('.snb-item.active'); return a ? a.dataset.shell : null; });
+        await page.evaluate(() => stopAllActiveSessions());
+        if (st !== shell) wrong.push(`${k} → ${st}`);
+      }
+      const ok = !wrong.length && keys.length > 0;
+      ok ? pass++ : fail++;
+      console.log(`  ${ok ? '✓' : '✗'} from Home: ${keys.length} ${name} panels, each highlights ${name}${wrong.length ? ` · wrong: ${wrong.join(', ')}` : ''}`);
     }
     const twice = Object.entries(seen).filter(([, hubs]) => hubs.length > 1);
     if (twice.length) console.log(`  (in two hubs, so one tab can't match: ${twice.map(([k, h]) => `${k} (${h.join(', ')})`).join('; ')})`);
