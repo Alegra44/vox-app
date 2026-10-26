@@ -1544,6 +1544,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Register Drills: the target register, the note with its lane and cents meter, the Chest ↔ Head meter, five dots */
+  .vc-stage.is-live .drill-target{font-size:var(--hl-t-h3);color:var(--hl-ink);}
+  .drill-target:empty{display:none;}
+  .drill-reg{display:none;}
+  .vc-stage.is-live .drill-reg{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
+  .drill-reg-ends{display:flex;justify-content:space-between;font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .drill-reg[data-target="chest"] .drill-reg-chest, .drill-reg[data-target="head"] .drill-reg-head{color:var(--hl-ink);font-weight:600;}
+  .drill-reg-meter{position:relative;overflow:visible;--part:var(--hl-voice);background:var(--hairline);}
+  .drill-reg-meter::after{content:"";position:absolute;left:50%;top:-4px;bottom:-4px;width:1px;background:var(--hl-ink-3);} /* the line between them: a chest score of 50 */
+  .vc-stage.is-live #drillDots{margin-top:0;}
+  #drillDots .scale-dot.current{border-color:var(--hl-ink);color:var(--hl-ink);box-shadow:0 0 0 3px var(--hl-rule-strong);}
+  .drill-mark{vertical-align:-3px;margin-left:var(--hl-s1);}
+  .drill-mark.is-match{color:var(--hl-ok);} .drill-mark.is-drift{color:var(--hl-ink-3);}
+  #drillResultCard .vc-result{margin-top:0;padding-top:0;border-top:0;}
   /* Rhythm: the tempo, the count-in dots, the eight beat dots (the current one ringed); the result's beat chart */
   .vc-stage.is-live .rhythm-tempo{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
   .rhythm-countin{display:flex;align-items:center;gap:var(--hl-s3);font-size:var(--hl-t-small);color:var(--hl-ink-2);}
@@ -3509,24 +3523,39 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="registerdrills_sub">Real chest and head voice drills — this doesn't just confine the target note to a range, it verifies your actual spectral brightness during capture, the same real detection used in Register Coach.</div>
     </div>
     <div class="key-card" id="drillPreCard">
-      <div class="ex-type-row" id="drillModeRow">
+      <div class="vc-stage drill-stage" id="drillStage">
+      <div class="ex-type-row vc-paper-only" id="drillModeRow">
         <button class="ex-type-btn active" data-drill-mode="chest" data-i18n="registerdrills_chest_btn" aria-pressed="true">Chest Voice</button>
         <button class="ex-type-btn" data-drill-mode="head" data-i18n="registerdrills_head_btn" aria-pressed="false">Head Voice</button>
       </div>
-      <p class="desc" id="drillModeNote" style="margin:14px 0;"></p>
-      <button class="mic-btn" id="drillStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Start Chest Voice drill</button>
-    </div>
-    <div class="key-card" id="drillRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="drillStepLabel">Note 1 of 5</div>
-      <div class="chord-label-display" id="drillNote" style="margin-top:10px;">—</div>
-      <p class="desc" id="drillStatus" style="margin-top:10px;"></p>
+      <p class="desc vc-paper-only" id="drillModeNote" style="margin:14px 0;"></p>
+      <div class="vc-take-runner" id="drillRunnerCard" style="display:none;">
+        <div class="step-label" id="drillStepLabel">Note 1 of 5</div>
+        <div class="drill-target" id="drillTargetLabel"></div>
+        <div class="ex-target-note vc-take-note" id="drillNote">—</div>
+        <div class="vc-take-live" data-vc-take></div>
+        <div class="drill-reg" id="drillReg" data-target="chest">
+          <div class="drill-reg-ends" aria-hidden="true"><span class="drill-reg-chest" data-i18n="drill_reg_chest">Chest</span><span class="drill-reg-head" data-i18n="drill_reg_head">Head</span></div>
+          <div class="hl-meter drill-reg-meter" id="drillRegMeter" role="meter" aria-valuemin="0" aria-valuemax="100"><i></i></div>
+        </div>
+        <div class="scale-dots" id="drillDots" aria-hidden="true"></div>
+        <p class="vc-visually-hidden" id="drillStatus" role="status"></p>
+      </div>
+      <button class="mic-btn vc-take-pill" id="drillStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="drillStartLabel">Start Chest Voice drill</span></button>
       <div class="vl-gauge" id="vlGaugeDrill" style="display:none;"></div>
+      </div>
     </div>
     <div class="key-card" id="drillResultCard" style="display:none;">
-      <div class="step-label" style="text-align:center;" data-i18n="registerdrills_results_label">Real results</div>
-      <div id="drillResultRows" style="margin-top:14px;"></div>
-      <p class="fine-print" id="drillResultNote" style="margin-top:12px;"></p>
-      <button class="ghost-btn" id="drillRetryBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="registerdrills_retry_btn">Try again</button>
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="vc-result-meta" data-i18n="registerdrills_results_label">Drill results</div>
+      <div class="ex-accuracy vc-result-num" id="drillResultAvg">—</div>
+      <h3 class="hl-h3" data-i18n="drill_avg_label">Average pitch accuracy</h3>
+      <p class="ex-feedback-text hl-coach" id="drillResultNote"></p>
+      <div class="vc-result-dims"><div class="vc-dim"><span data-i18n="drill_matched_label">Register matched</span><span id="drillMatched">—</span></div></div>
+      <div class="vc-result-dims" id="drillResultRows"></div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="drill_measure"></p></details>
+      <button class="ghost-btn" id="drillRetryBtn" data-i18n="registerdrills_retry_btn">Try again</button>
+      </div>
     </div>
   </section>
 
@@ -6279,10 +6308,10 @@ const TRANSLATIONS = {
     register_chest_label:'Chest character',
     register_crossing_label:'Clean crossing',
     registerdrills_title:"Register Drills",
-    registerdrills_sub:'Real chest and head voice drills — this doesn\'t just confine the target note to a range, it verifies your actual spectral brightness during capture, the same real detection used in Register Coach.',
+    registerdrills_sub:"Chest and head voice drills: besides the note, each one checks the brightness of your tone while you sing, the same reading Register Coach uses.",
     registerdrills_chest_btn:'Chest Voice',
     registerdrills_head_btn:'Head Voice',
-    registerdrills_results_label:'Real results',
+    registerdrills_results_label:"Drill results",
     registerdrills_retry_btn:'Try again',
     breath_title:'Breath Control',
     breath_sub:"Hold an \"Ah\" as long and as steadily as you can. Measures how long you hold it and how even your loudness stays; the timer stops by itself when your breath runs out and you go quiet.",
@@ -7338,12 +7367,12 @@ const TRANSLATIONS = {
     five_instr_headvoice:'Deliberately switch to head voice', five_instr_mixedvoice:'Deliberately switch to mixed voice',
     five_round_prefix:'Round', five_round_of5:'of 5', five_listenfirst:"Listen first…",
     drill_chestvoice:'Chest Voice', drill_headvoice:'Head Voice',
-    drill_note_chest:'Five real notes from the lower third of your range — sing with real chest-dominant resonance, not just the right pitch.',
-    drill_note_head:'Five real notes from the upper third of your range — sing with real head-dominant resonance, not just the right pitch.',
+    drill_note_chest:"Five notes from the lower third of your range. Sing them with a chest-dominant tone, not only the right pitch.",
+    drill_note_head:"Five notes from the upper third of your range. Sing them with a head-dominant tone, not only the right pitch.",
     drill_start_template:'Start {voice} drill', drill_note_label:'Note',
     drill_matched:'matched', drill_drifted:'drifted',
-    drill_result_template:'{matched} of {total} notes genuinely matched {register}-dominant resonance — average pitch accuracy {avg}%.',
-    drill_notenoughsignal:'Not enough signal captured this round.',
+    drill_result_template:"{matched} of {total} notes matched {register} resonance; average pitch accuracy {avg}%.",
+    drill_notenoughsignal:"Not enough signal was caught this round. Try again a little louder or closer to the mic.",
     word_of:'of',
     pd_cue_verse:'Stay relaxed — save your energy, let the story unfold.',
     pd_cue_prechorus:'Start building — let the intensity climb toward the chorus.',
@@ -7620,6 +7649,13 @@ const TRANSLATIONS = {
     rhythm_none:"No onset was caught on a beat. Sing, tap or say \"ta\" right on each click.",
     rhythm_chart_label:"Each beat's timing: above the line late, below early",
     rhythm_measure:"Two count-in clicks, then 8 scored clicks at 70, 100 or 130 beats a minute. Each time your loudness rises past the onset level, that onset goes to the nearest scored beat not yet caught, if it's within half a beat of it. A beat scores 100 minus 0.6 times how far off it was, in milliseconds (above the line late, below it early); the result is the average of the beats caught. A beat with no onset is missed and left out of the average. The delay of your speaker and microphone isn't taken out.",
+    action_listen:"Listen",
+    drill_avg_label:"Average pitch accuracy",
+    drill_matched_label:"Register matched",
+    drill_reg_chest:"Chest",
+    drill_reg_head:"Head",
+    drill_chest_score:"Chest score",
+    drill_measure:"The five notes come from the lower third of your range (Chest) or its upper third (Head). Each plays for 0.6 seconds; listening starts 0.8 seconds after it begins and lasts 1.8 seconds. Pitch accuracy is 100 minus 0.6 times your average distance from the note, in cents, with natural vibrato taken out; readings more than 3 semitones off aren't counted. The chest score reads how bright your tone's harmonics are, from 0 (light, head-like) to 100 (rich, chest-like). A note matches Chest when its average chest score is 50 or more, Head when it's under 50. The big number is the average pitch accuracy of the notes heard.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7716,10 +7752,10 @@ const TRANSLATIONS = {
     register_chest_label:'Caractère de poitrine',
     register_crossing_label:'Passage propre',
     registerdrills_title:"Exercices de Registre",
-    registerdrills_sub:'De vrais exercices de voix de poitrine et de tête — ceci ne se contente pas de confiner la note cible à une plage, cela vérifie votre vraie luminosité spectrale pendant la capture, la même détection réelle utilisée dans le Coach de registre.',
+    registerdrills_sub:"Des exercices de voix de poitrine et de tête : en plus de la note, chacun vérifie la brillance de votre timbre pendant que vous chantez, la même mesure que le Coach de registre.",
     registerdrills_chest_btn:'Voix de poitrine',
     registerdrills_head_btn:'Voix de tête',
-    registerdrills_results_label:'Résultats réels',
+    registerdrills_results_label:"Résultats de l'exercice",
     registerdrills_retry_btn:'Réessayer',
     breath_title:'Contrôle du souffle',
     breath_sub:"Tenez un « Ah » aussi longtemps et aussi régulièrement que possible. Mesure combien de temps vous le tenez et la régularité de votre volume ; le chrono s'arrête tout seul quand votre souffle s'épuise et que vous vous taisez.",
@@ -8775,12 +8811,12 @@ const TRANSLATIONS = {
     five_instr_headvoice:'Passez délibérément en voix de tête', five_instr_mixedvoice:'Passez délibérément en voix mixte',
     five_round_prefix:'Round', five_round_of5:'sur 5', five_listenfirst:"Écoutez d'abord…",
     drill_chestvoice:'Voix de poitrine', drill_headvoice:'Voix de tête',
-    drill_note_chest:'Cinq vraies notes du tiers inférieur de votre tessiture — chantez avec une vraie résonance dominante de poitrine, pas seulement la bonne note.',
-    drill_note_head:'Cinq vraies notes du tiers supérieur de votre tessiture — chantez avec une vraie résonance dominante de tête, pas seulement la bonne note.',
+    drill_note_chest:"Cinq notes du tiers inférieur de votre tessiture. Chantez-les avec un timbre dominé par la poitrine, pas seulement à la bonne hauteur.",
+    drill_note_head:"Cinq notes du tiers supérieur de votre tessiture. Chantez-les avec un timbre dominé par la tête, pas seulement à la bonne hauteur.",
     drill_start_template:'Démarrer l\'exercice {voice}', drill_note_label:'Note',
     drill_matched:'correspondu', drill_drifted:'dérivé',
-    drill_result_template:'{matched} des {total} notes ont vraiment correspondu à une résonance dominante {register} — précision moyenne de justesse {avg} %.',
-    drill_notenoughsignal:'Signal insuffisant capté ce tour-ci.',
+    drill_result_template:"{matched} notes sur {total} ont correspondu à la résonance {register} ; justesse moyenne {avg} %.",
+    drill_notenoughsignal:"Pas assez de signal capté ce tour-ci. Réessayez un peu plus fort ou plus près du micro.",
     word_of:'sur',
     pd_cue_verse:'Restez détendu — économisez votre énergie, laissez l\'histoire se dérouler.',
     pd_cue_prechorus:'Commencez à monter — laissez l\'intensité grimper vers le refrain.',
@@ -9057,6 +9093,13 @@ const TRANSLATIONS = {
     rhythm_none:"Aucune attaque n’a été captée sur un temps. Chantez, tapez ou dites « ta » juste sur chaque clic.",
     rhythm_chart_label:"Le timing de chaque temps : au-dessus de la ligne en retard, en dessous en avance",
     rhythm_measure:"Deux clics de décompte, puis 8 clics notés à 70, 100 ou 130 temps par minute. Chaque fois que votre volume dépasse le seuil d'attaque, cette attaque va au temps noté le plus proche pas encore capté, s'il est à moins d'un demi-temps. Un temps vaut 100 moins 0,6 fois son écart, en millisecondes (au-dessus de la ligne en retard, en dessous en avance) ; le résultat est la moyenne des temps captés. Un temps sans attaque est manqué et ne compte pas dans la moyenne. Le délai de votre haut-parleur et de votre micro n'est pas retiré.",
+    action_listen:"Écoutez",
+    drill_avg_label:"Justesse moyenne",
+    drill_matched_label:"Registre atteint",
+    drill_reg_chest:"Poitrine",
+    drill_reg_head:"Tête",
+    drill_chest_score:"Score de poitrine",
+    drill_measure:"Les cinq notes viennent du tiers inférieur de votre tessiture (Poitrine) ou de son tiers supérieur (Tête). Chacune joue 0,6 seconde ; l'écoute commence 0,8 seconde après son début et dure 1,8 seconde. La justesse vaut 100 moins 0,6 fois votre écart moyen à la note, en cents, sans le vibrato naturel ; les mesures à plus de 3 demi-tons ne comptent pas. Le score de poitrine lit la brillance des harmoniques de votre timbre, de 0 (léger, de tête) à 100 (riche, de poitrine). Une note correspond à Poitrine quand son score moyen est de 50 ou plus, à Tête quand il est sous 50. Le grand nombre est la justesse moyenne des notes entendues.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9153,10 +9196,10 @@ const TRANSLATIONS = {
     register_chest_label:'Carácter de pecho',
     register_crossing_label:'Cruce limpio',
     registerdrills_title:"Ejercicios de Registro",
-    registerdrills_sub:'Ejercicios reales de voz de pecho y cabeza — esto no solo confina la nota objetivo a un rango, verifica tu brillo espectral real durante la captura, la misma detección real usada en el Coach de registro.',
+    registerdrills_sub:"Ejercicios de voz de pecho y de cabeza: además de la nota, cada uno comprueba el brillo de tu timbre mientras cantas, la misma lectura que usa el Coach de registro.",
     registerdrills_chest_btn:'Voz de pecho',
     registerdrills_head_btn:'Voz de cabeza',
-    registerdrills_results_label:'Resultados reales',
+    registerdrills_results_label:"Resultados del ejercicio",
     registerdrills_retry_btn:'Intentar de nuevo',
     breath_title:'Control de respiración',
     breath_sub:"Sostén un \"Ah\" tanto tiempo y tan estable como puedas. Mide cuánto lo sostienes y lo uniforme que se mantiene tu volumen; el cronómetro se detiene solo cuando se te acaba el aire y te callas.",
@@ -10212,12 +10255,12 @@ const TRANSLATIONS = {
     five_instr_headvoice:'Cambia deliberadamente a voz de cabeza', five_instr_mixedvoice:'Cambia deliberadamente a voz mixta',
     five_round_prefix:'Ronda', five_round_of5:'de 5', five_listenfirst:"Escucha primero…",
     drill_chestvoice:'Voz de pecho', drill_headvoice:'Voz de cabeza',
-    drill_note_chest:'Cinco notas reales del tercio inferior de tu registro — canta con una verdadera resonancia dominante de pecho, no solo la nota correcta.',
-    drill_note_head:'Cinco notas reales del tercio superior de tu registro — canta con una verdadera resonancia dominante de cabeza, no solo la nota correcta.',
+    drill_note_chest:"Cinco notas del tercio inferior de tu tesitura. Cántalas con un timbre de pecho, no solo con la afinación correcta.",
+    drill_note_head:"Cinco notas del tercio superior de tu tesitura. Cántalas con un timbre de cabeza, no solo con la afinación correcta.",
     drill_start_template:'Empezar ejercicio de {voice}', drill_note_label:'Nota',
     drill_matched:'coincidió', drill_drifted:'derivó',
-    drill_result_template:'{matched} de {total} notas coincidieron genuinamente con resonancia dominante de {register} — precisión de afinación media {avg}%.',
-    drill_notenoughsignal:'No se captó suficiente señal en esta ronda.',
+    drill_result_template:"{matched} de {total} notas coincidieron con la resonancia de {register}; afinación media {avg}%.",
+    drill_notenoughsignal:"No se captó suficiente señal en esta ronda. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     word_of:'de',
     pd_cue_verse:'Mantente relajado — ahorra tu energía, deja que la historia se despliegue.',
     pd_cue_prechorus:'Empieza a construir — deja que la intensidad suba hacia el estribillo.',
@@ -10494,6 +10537,13 @@ const TRANSLATIONS = {
     rhythm_none:"No se captó ningún ataque en un tiempo. Canta, da un toque o di «ta» justo en cada clic.",
     rhythm_chart_label:"El tiempo de cada pulso: por encima de la línea tarde, por debajo antes",
     rhythm_measure:"Dos clics de conteo y luego 8 clics puntuados a 70, 100 o 130 pulsos por minuto. Cada vez que tu volumen supera el umbral de ataque, ese ataque va al tiempo puntuado más cercano aún no captado, si está a menos de medio tiempo. Un tiempo puntúa 100 menos 0,6 veces su desvío, en milisegundos (por encima de la línea tarde, por debajo antes); el resultado es la media de los tiempos captados. Un tiempo sin ataque es perdido y no cuenta en la media. No se descuenta el retardo de tu altavoz y tu micrófono.",
+    action_listen:"Escucha",
+    drill_avg_label:"Afinación media",
+    drill_matched_label:"Registro logrado",
+    drill_reg_chest:"Pecho",
+    drill_reg_head:"Cabeza",
+    drill_chest_score:"Puntuación de pecho",
+    drill_measure:"Las cinco notas salen del tercio inferior de tu tesitura (Pecho) o de su tercio superior (Cabeza). Cada una suena 0,6 segundos; la escucha empieza 0,8 segundos después y dura 1,8 segundos. La afinación es 100 menos 0,6 veces tu distancia media a la nota, en cents, sin el vibrato natural; las lecturas a más de 3 semitonos no cuentan. La puntuación de pecho lee el brillo de los armónicos de tu timbre, de 0 (ligero, de cabeza) a 100 (rico, de pecho). Una nota coincide con Pecho cuando su puntuación media es 50 o más, con Cabeza cuando es menor de 50. El número grande es la afinación media de las notas oídas.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10590,10 +10640,10 @@ const TRANSLATIONS = {
     register_chest_label:'Göğüs karakteri',
     register_crossing_label:'Temiz geçiş',
     registerdrills_title:"Register Egzersizleri",
-    registerdrills_sub:'Gerçek göğüs ve baş sesi egzersizleri — bu sadece hedef notayı bir aralığa sınırlamaz, yakalama sırasında gerçek spektral parlaklığınızı doğrular, Register Koçu\'nda kullanılan aynı gerçek algılama.',
+    registerdrills_sub:"Göğüs ve baş sesi egzersizleri: notanın yanında her biri, siz söylerken sesinizin parlaklığını da ölçer; Register Koçu'nun kullandığı ölçümün aynısı.",
     registerdrills_chest_btn:'Göğüs Sesi',
     registerdrills_head_btn:'Baş Sesi',
-    registerdrills_results_label:'Gerçek sonuçlar',
+    registerdrills_results_label:"Egzersiz sonuçları",
     registerdrills_retry_btn:'Tekrar dene',
     breath_title:'Nefes Kontrolü',
     breath_sub:"Bir \"Ah\" sesini olabildiğince uzun ve sabit tutun. Ne kadar tuttuğunuzu ve ses yüksekliğinizin ne kadar dengeli kaldığını ölçer; nefesiniz bitip sustuğunuzda süre kendiliğinden durur.",
@@ -11649,12 +11699,12 @@ const TRANSLATIONS = {
     five_instr_headvoice:'Bilinçli olarak baş sesine geçin', five_instr_mixedvoice:'Bilinçli olarak karma sese geçin',
     five_round_prefix:'Tur', five_round_of5:'/ 5', five_listenfirst:"Önce dinleyin…",
     drill_chestvoice:'Göğüs Sesi', drill_headvoice:'Baş Sesi',
-    drill_note_chest:'Ses aralığınızın alt üçte birinden beş gerçek nota — sadece doğru perde değil, gerçek göğüs baskın rezonansıyla söyleyin.',
-    drill_note_head:'Ses aralığınızın üst üçte birinden beş gerçek nota — sadece doğru perde değil, gerçek baş baskın rezonansıyla söyleyin.',
+    drill_note_chest:"Ses aralığınızın alt üçte birinden beş nota. Onları yalnızca doğru perdede değil, göğüs ağırlıklı bir tonla söyleyin.",
+    drill_note_head:"Ses aralığınızın üst üçte birinden beş nota. Onları yalnızca doğru perdede değil, baş ağırlıklı bir tonla söyleyin.",
     drill_start_template:'{voice} alıştırmasını başlat', drill_note_label:'Nota',
     drill_matched:'eşleşti', drill_drifted:'kaydı',
-    drill_result_template:'{total} notadan {matched} tanesi gerçekten {register} baskın rezonansla eşleşti — ortalama perde doğruluğu %{avg}.',
-    drill_notenoughsignal:'Bu turda yeterli sinyal alınamadı.',
+    drill_result_template:"{total} notadan {matched} tanesi {register} rezonansıyla eşleşti; ortalama perde doğruluğu %{avg}.",
+    drill_notenoughsignal:"Bu turda yeterli sinyal yakalanamadı. Biraz daha yüksek sesle ya da mikrofona daha yakın tekrar deneyin.",
     word_of:'/',
     pd_cue_verse:'Rahat kalın — enerjinizi koruyun, hikayenin açılmasına izin verin.',
     pd_cue_prechorus:'Yükselmeye başlayın — yoğunluğun nakarata doğru tırmanmasına izin verin.',
@@ -11931,6 +11981,13 @@ const TRANSLATIONS = {
     rhythm_none:"Hiçbir vuruşta giriş yakalanamadı. Her tıklamada tam üstüne söyleyin, vurun ya da \"ta\" deyin.",
     rhythm_chart_label:"Her vuruşun zamanlaması: çizginin üstü geç, altı erken",
     rhythm_measure:"İki sayım tıklaması, ardından dakikada 70, 100 ya da 130 vuruşta 8 puanlı tıklama. Ses düzeyiniz giriş eşiğini her aştığında o giriş, henüz yakalanmamış en yakın puanlı vuruşa gider; yarım vuruştan yakınsa. Bir vuruş, sapmasının (milisaniye cinsinden) 0,6 katının 100'den çıkarılmasıyla puanlanır (çizginin üstü geç, altı erken); sonuç yakalanan vuruşların ortalamasıdır. Girişi olmayan vuruş kaçırılmış sayılır ve ortalamaya girmez. Hoparlörünüzün ve mikrofonunuzun gecikmesi çıkarılmaz.",
+    action_listen:"Dinleyin",
+    drill_avg_label:"Ortalama perde doğruluğu",
+    drill_matched_label:"Eşleşen register",
+    drill_reg_chest:"Göğüs",
+    drill_reg_head:"Baş",
+    drill_chest_score:"Göğüs puanı",
+    drill_measure:"Beş nota, ses aralığınızın alt üçte birinden (Göğüs) ya da üst üçte birinden (Baş) gelir. Her biri 0,6 saniye çalar; dinleme başlangıcından 0,8 saniye sonra başlar ve 1,8 saniye sürer. Perde doğruluğu, doğal vibrato çıkarılarak notaya ortalama uzaklığınızın (sent cinsinden) 0,6 katının 100'den çıkarılmasıdır; 3 yarım tondan uzak ölçümler sayılmaz. Göğüs puanı, sesinizin harmoniklerinin parlaklığını 0'dan (hafif, baş sesi gibi) 100'e (zengin, göğüs sesi gibi) okur. Ortalama göğüs puanı 50 veya üstüyse nota Göğüs ile, 50'nin altındaysa Baş ile eşleşir. Büyük sayı, duyulan notaların ortalama perde doğruluğudur.",
   },
 };
 let currentLanguage = 'en';
@@ -19529,6 +19586,7 @@ function stopAllActiveSessions(){
   fiveActive = false;
   oneTakeActive = false;
   drillActive = false;
+  if(typeof drillStop==='function') drillStop();
   aiDuetActive = false;
   if(typeof vqActive!=='undefined') vqActive = false;
   if(typeof timingTrainer!=='undefined' && timingTrainer.active) finishTimingTrainer();
@@ -22574,56 +22632,91 @@ function updateDrillPreCopy(){
   document.getElementById('drillModeNote').textContent = drillMode==='chest'
     ? t('drill_note_chest')
     : t('drill_note_head');
-  document.getElementById('drillStartBtn').innerHTML = `<span class="dot-icon"></span>${t('drill_start_template').replace('{voice}', label)}`;
+  document.getElementById('drillStartLabel').textContent = t('drill_start_template').replace('{voice}', label);
 }
 updateDrillPreCopy();
 
 document.getElementById('drillStartBtn')?.addEventListener('click', async ()=>{
+  const btn = document.getElementById('drillStartBtn');
+  if(btn.disabled) return;
   if(!requireProFeature('Register Drills')) return;
   if(!await openRegisterInput()) return;
   drillActive = true;
   drillResults = [];
-  document.getElementById('drillPreCard').style.display='none';
+  btn.disabled = true; // the status pill on the stage
   document.getElementById('drillResultCard').style.display='none';
   document.getElementById('drillRunnerCard').style.display='block';
+  houseSession(()=>drillActive, document.getElementById('drillStage')); // all five notes (its own frames feed the vocal load)
   runDrillSequence();
 });
+// Leaving mid-drill (stopAllActiveSessions): the cards back to the start, Start live again.
+function drillStop(){
+  drillRun++;
+  document.getElementById('drillRunnerCard').style.display='none';
+  document.getElementById('drillPreCard').style.display='block';
+  document.getElementById('drillStartBtn').disabled = false;
+  updateDrillPreCopy();
+}
+let drillRun = 0; // a drill stopped and started again doesn't carry on the old one
+function drillDots(current){
+  document.getElementById('drillDots').innerHTML = Array.from({length:DRILL_NOTE_COUNT}, (_,i)=>{
+    const r = drillResults[i];
+    return `<div class="scale-dot${i===current ? ' current' : r && r.heard ? ' done-'+accuracyClass(r.pitchAcc) : ''}">${i+1}</div>`;
+  }).join('');
+}
+// The Chest ↔ Head meter: the live chest score (0 head-like … 100 chest-like) filled from the Chest end
+function drillRegMeter(chest){
+  const m = document.getElementById('drillRegMeter'), v = Math.max(0, Math.min(100, Math.round(chest)));
+  m.style.setProperty('--val', v+'%'); m.setAttribute('aria-valuenow', v);
+}
 
 async function runDrillSequence(){
+  const run = ++drillRun, live = ()=>drillActive && run===drillRun;
+  const stage = document.getElementById('drillStage'), label = document.getElementById('drillStartLabel'), L = {};
+  const status = s=>{ document.getElementById('drillStatus').textContent = s; label.textContent = s; };
+  const reg = document.getElementById('drillReg');
+  reg.dataset.target = drillMode;
+  document.getElementById('drillRegMeter').setAttribute('aria-label', t('drill_chest_score'));
+  document.getElementById('drillTargetLabel').textContent = drillMode==='chest' ? t('drill_chestvoice') : t('drill_headvoice');
   const {lowMidi, highMidi} = registerRangeBounds();
   const span = highMidi-lowMidi;
   const zoneLow = drillMode==='chest' ? lowMidi : lowMidi + Math.round(span*0.66);
   const zoneHigh = drillMode==='chest' ? lowMidi + Math.round(span*0.34) : highMidi;
 
   for(let i=0;i<DRILL_NOTE_COUNT;i++){
-    if(!drillActive) return;
+    if(!live()) return;
     const targetMidi = pickNote('drill', zoneLow, zoneHigh);
     document.getElementById('drillStepLabel').textContent = `${t('drill_note_label')} ${i+1} ${t('word_of')} ${DRILL_NOTE_COUNT}`;
     document.getElementById('drillNote').textContent = noteNameFromMidi(targetMidi);
-    document.getElementById('drillStatus').textContent = t('action_listen');
+    drillDots(i);
+    const lane = vcTakeStart(stage, targetMidi, DRILL_CAPTURE_MS);
+    status(t('action_listen'));
     playTone(noteToFreq(targetMidi), 0.6, 0);
     await new Promise(r=>setTimeout(r, 800));
-    if(!drillActive) return;
-    document.getElementById('drillStatus').textContent = t('action_listening');
+    if(!live()) return;
+    status(t('action_listening'));
 
     const centsBuf = [];
     const chestBuf = [];
     const start = performance.now();
     await new Promise(resolve=>{
       function frame(){
-        if(!drillActive){ resolve(); return; }
+        if(!live()){ resolve(); return; }
         const fr = readRegisterFrame(), freq = fr.freq;
         vlFeed(freq, fr.raw);
         if(freq>0){
           const cents = centsFromTarget(freq, targetMidi);
           if(cents!==null && Math.abs(cents)<300) centsBuf.push({t:performance.now()-start, c:cents});
           if(fr.chest!==null) chestBuf.push(fr.chest);
+          vcFeed(L, ()=>{ if(cents!==null) vcTakeFrame(lane, performance.now()-start, cents); if(fr.chest!==null) drillRegMeter(fr.chest); });
         }
         const t = performance.now()-start;
         if(t < DRILL_CAPTURE_MS) requestAnimationFrame(frame); else resolve();
       }
       frame();
     });
+    vcTakeEnd(lane);
+    if(!live()) return;
 
     let pitchAcc=0, avgChest=null, registerMatch=false;
     if(centsBuf.length>0){
@@ -22635,9 +22728,11 @@ async function runDrillSequence(){
       registerMatch = drillMode==='chest' ? avgChest>=50 : avgChest<50;
     }
     drillResults.push({midi:targetMidi, pitchAcc, avgChest, registerMatch, heard: centsBuf.length>0});
-    document.getElementById('drillStatus').textContent = centsBuf.length>0 ? `${pitchAcc}% ${t('skill_pitch')}` : t('boss_no_signal');
+    status(centsBuf.length>0 ? `${pitchAcc}% ${t('skill_pitch')}` : t('take_not_heard'));
+    drillDots(-1);
     await new Promise(r=>setTimeout(r, 400));
   }
+  if(!live()) return;
   finishDrillSequence();
 }
 
@@ -22645,19 +22740,27 @@ function finishDrillSequence(){
   drillActive = false;
   vlEnd();
   document.getElementById('drillRunnerCard').style.display='none';
+  document.getElementById('drillStartBtn').disabled = false;
+  updateDrillPreCopy();
   document.getElementById('drillResultCard').style.display='block';
+  // each note: its pitch score and the register it read as (chest score 50 or more: Chest), with the match mark
+  const mark = ok=>`<svg class="hl-icon hl-icon--s drill-mark ${ok ? 'is-match' : 'is-drift'}" aria-hidden="true"><use href="#${ok ? 'hl-check' : 'hl-close'}"/></svg><span class="vc-visually-hidden">${t(ok ? 'drill_matched' : 'drill_drifted')}</span>`;
   document.getElementById('drillResultRows').innerHTML = drillResults.map((r,i)=>
-    `<div class="record-row"><span class="record-label">${t('drill_note_label')} ${i+1} (${noteNameFromMidi(r.midi)})</span><span class="record-val${!r.heard?' untracked':''}">${r.heard ? `${r.pitchAcc}% · ${r.registerMatch?'✅ '+t('drill_matched'):'⚠️ '+t('drill_drifted')}` : t('boss_no_signal')}</span></div>`
+    `<div class="vc-dim"><span>${i+1} · ${noteNameFromMidi(r.midi)}</span><span${!r.heard ? ' class="vc-not-heard"' : ''}>${r.heard
+      ? `${r.pitchAcc}%${r.avgChest!==null ? ` · ${t(r.avgChest>=50 ? 'drill_reg_chest' : 'drill_reg_head')} ${mark(r.registerMatch)}` : ''}` : t('take_not_heard')}</span></div>`
   ).join('');
   const heard = drillResults.filter(r=>r.heard);
   const matchedCount = heard.filter(r=>r.registerMatch).length;
+  document.getElementById('drillMatched').textContent = `${matchedCount} ${t('word_of')} ${DRILL_NOTE_COUNT}`;
   if(heard.length>0){
     const avgPitch = Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length);
+    vcResultNum(document.getElementById('drillResultAvg'), avgPitch+'%');
     document.getElementById('drillResultNote').textContent = t('drill_result_template')
       .replace('{matched}', matchedCount).replace('{total}', heard.length)
       .replace('{register}', drillMode==='chest'?t('drill_chestvoice'):t('drill_headvoice')).replace('{avg}', avgPitch);
     if(profile) recordSkillScore('pitch', avgPitch);
   } else {
+    vcResultNum(document.getElementById('drillResultAvg'), null);
     document.getElementById('drillResultNote').textContent = t('drill_notenoughsignal');
   }
   registerExerciseCompletion();
@@ -22665,6 +22768,7 @@ function finishDrillSequence(){
 document.getElementById('drillRetryBtn')?.addEventListener('click', ()=>{
   document.getElementById('drillResultCard').style.display='none';
   document.getElementById('drillPreCard').style.display='block';
+  document.getElementById('drillRunnerCard').style.display='none';
 });
 
 /* ---------------- Unified Progress (real multi-series trend from the existing weeklyLog, no new tracking system) ---------------- */
