@@ -32,8 +32,11 @@ const TOOLS = [
     open: async page => {
       await C.showPanel(page, 'onetake'); await C.clearOverlays(page);
       await page.evaluate(`(${narrow})(69, 69)`);
-      // today's take not taken yet on this page (scores.js also gives every run a fresh account)
-      await page.evaluate(() => { if (progress) { progress.oneTakeLastDate = null; progress.oneTakeHistory = {}; } renderOneTakeGate(); });
+      // today's take not taken yet (scores.js also gives every run a fresh account). saveProgress merges the server's row
+      // back into memory when its PATCH returns, so a save still in flight from an earlier take would bring today's take
+      // back: let those land, then reset and save the reset (a throwaway test account).
+      await C.sleep(1200);
+      await page.evaluate(async () => { if (progress) { progress.oneTakeLastDate = null; progress.oneTakeHistory = {}; if (profile) await saveProgress(); } renderOneTakeGate(); });
     },
     act: page => clickId(page, 'oneTakeStartBtn'),
     busy: () => oneTakeActive,
