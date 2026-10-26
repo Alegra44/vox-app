@@ -4239,6 +4239,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <svg id="mirrorResultSvg" viewBox="0 0 400 160" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
           <div class="mirror-notes" aria-hidden="true"></div>
         </div>
+        <div class="mirror-legend" aria-hidden="true"><span><i class="mirror-sw mirror-sw-ref"></i><span data-i18n="mirror_ai_phrase">Phrase</span></span><span><i class="mirror-sw mirror-sw-you"></i><span data-i18n="mirror_your_echo">You</span></span></div>
         <div id="mirrorReplayCard" style="display:none;">
           <label class="vc-chart-label" for="mirrorReplaySlider" data-i18n="mirror_replay_label">Replay: scrub through your take</label>
           <input type="range" class="hl-fader" id="mirrorReplaySlider" min="0" max="2800" value="0" step="10">
@@ -4249,7 +4250,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <div class="vc-dim"><span data-i18n="mirror_deviation_label">Off by</span><span id="mirrorReplayDeviation">—</span></div>
           </div>
         </div>
-        <div class="mirror-legend" aria-hidden="true"><span><i class="mirror-sw mirror-sw-ref"></i><span data-i18n="mirror_ai_phrase">Phrase</span></span><span><i class="mirror-sw mirror-sw-you"></i><span data-i18n="mirror_your_echo">You</span></span></div>
         <div class="vc-result-dims" id="mirrorNoteRows"></div>
         <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="mirror_measure"></p></details>
       </div>
@@ -21152,7 +21152,7 @@ function generateMirrorPhrase(){
 // has one (#mirrorStageChart: the phrase with its playhead, then the echo drawn live), the result another
 // (#mirrorResultChart: the replay's playhead is #mirrorReplayPlayhead).
 const MIRROR_W = 400, MIRROR_H = 160, MIRROR_PAD = 24;
-const mirrorY = midi=>MIRROR_PAD + mirrorMidiToY(midi, MIRROR_H-2*MIRROR_PAD);
+const mirrorY = midi=>mirrorMaxMidi>mirrorMinMidi ? MIRROR_PAD + mirrorMidiToY(midi, MIRROR_H-2*MIRROR_PAD) : MIRROR_H/2; // a one-note range: the middle
 let mirrorPlayheadMs = null, mirrorReplayMs = null;
 function drawMirrorChart(box, playheadMs){
   if(!box) return;
