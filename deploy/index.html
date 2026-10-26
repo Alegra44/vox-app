@@ -1544,6 +1544,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* One Take: no lane, no meter (no pitch guide is the point); the recording mark in --hl-miss (red is for recording) */
+  .onetake-rec{display:inline-flex;align-items:center;gap:var(--hl-s2);margin:0;font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);}
+  .onetake-rec[hidden]{display:none;}
+  .onetake-rec-dot{width:10px;height:10px;border-radius:50%;background:var(--hl-miss);}
+  @media (prefers-reduced-motion: no-preference){ .onetake-rec-dot{animation:hl-rec-blink 1.2s ease-in-out infinite;} }
+  @keyframes hl-rec-blink{ 50%{opacity:.35;} }
+  #oneTakeGateText{margin:0 0 var(--hl-s4);}
 
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
@@ -3915,21 +3922,37 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <div class="key-card" id="oneTakePreCard">
-      <p class="desc" id="oneTakeGateText" style="margin-bottom:16px;"></p>
-      <button class="mic-btn" id="oneTakeStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Begin today's one take</button>
-    </div>
-
-    <div class="key-card" id="oneTakeRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="oneTakeStepLabel">Listen once</div>
-      <div class="chord-label-display" id="oneTakeNote" style="margin-top:10px;">—</div>
-      <p class="desc" id="oneTakeStatus" style="margin-top:10px;"></p>
+      <div class="vc-stage onetake-stage" id="oneTakeStage">
+      <p class="desc vc-paper-only" id="oneTakeGateText"></p>
+      <div class="vc-take-runner" id="oneTakeRunnerCard" style="display:none;">
+        <div class="step-label" id="oneTakeStepLabel">Listen once</div>
+        <div class="ex-target-note vc-take-note" id="oneTakeNote">—</div>
+        <div class="vc-time" id="oneTakeTime"><div class="hl-meter vc-time-meter" role="meter" aria-valuemin="0" aria-valuemax="100"><i></i></div><span class="vc-time-left"></span></div>
+        <p class="onetake-rec" id="oneTakeRec" hidden><span class="onetake-rec-dot" aria-hidden="true"></span><span data-i18n="onetake_recording">Recording</span></p>
+        <p class="vc-visually-hidden" id="oneTakeStatus" role="status"></p>
+      </div>
+      <button class="mic-btn vc-take-pill" id="oneTakeStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="oneTakeStartLabel" data-i18n="onetake_start_btn">Begin today's one take</span></button>
       <div class="vl-gauge" id="vlGaugeOneTake" style="display:none;"></div>
+      </div>
     </div>
 
-    <div class="key-card" id="oneTakeResultCard" role="status" aria-live="polite" style="display:none;">
-      <div class="step-label" style="text-align:center;" data-i18n="onetake_result_label">Today's one take</div>
-      <div id="oneTakeResultRows" style="margin-top:14px;"></div>
-      <p class="fine-print" style="margin-top:12px;" data-i18n="onetake_expression_note">Expression isn't shown — no reliable real detector exists for it anywhere in this app, and this challenge won't fake one just to fill a fourth number.</p>
+    <div class="key-card" id="oneTakeResultCard" style="display:none;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="vc-result-meta" data-i18n="onetake_result_label">Today's one take</div>
+      <div class="ex-accuracy vc-result-num" id="oneTakePitchVal">—</div>
+      <h3 class="hl-h3" data-i18n="onetake_pitch_label">Pitch accuracy</h3>
+      <p class="ex-feedback-text hl-coach" id="oneTakeCoach"></p>
+      <div class="vc-result-chart pm-trace-box" id="oneTakeTraceBox" style="display:none;">
+        <svg class="pm-trace" viewBox="0 0 320 104" preserveAspectRatio="none" role="img" aria-hidden="true"></svg>
+        <div class="pm-trace-axis" aria-hidden="true"><span>0 s</span><span class="pm-trace-end"></span></div>
+      </div>
+      <div class="vc-result-dims" id="oneTakeResultRows">
+        <div class="vc-dim"><span data-i18n="onetake_stability_label">Stability</span><span id="oneTakeStabilityVal">—</span></div>
+        <div class="vc-dim"><span data-i18n="onetake_timing_label">Timing</span><span id="oneTakeTimingVal">—</span></div>
+      </div>
+      <p class="vc-result-meta" data-i18n="onetake_next">Your next take: tomorrow</p>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p id="oneTakeMeasure"></p><p data-i18n="onetake_expression_note">Expression isn't scored: there's no reliable way to measure it.</p></details>
+      </div>
     </div>
   </section>
 
@@ -6312,9 +6335,9 @@ const TRANSLATIONS = {
     fiveways_results_label:"Average across the five rounds",
     fiveways_try_again_btn:'Try again',
     onetake_title:"One Take Challenge",
-    onetake_sub:'One real attempt per day. No restarting once you begin, no live pitch guide while you sing, no correction. Just you, one note, one honest result.',
+    onetake_sub:"One attempt a day. Once you begin there's no restarting, no pitch guide while you sing and no correction: one note, one result.",
     onetake_result_label:'Today\'s one take',
-    onetake_expression_note:'Expression isn\'t shown — no reliable real detector exists for it anywhere in this app, and this challenge won\'t fake one just to fill a fourth number.',
+    onetake_expression_note:"Expression isn't scored: there's no reliable way to measure it.",
     vocalpuzzle_title:'Vocal Puzzle',
     vocalpuzzle_sub:"Four notes from a scale, one of them wrong. Trains your ear to catch a mistake, not just match a pitch.",
     vocalpuzzle_intro_desc:'Listen to 4 notes. One doesn\'t belong. Which one?',
@@ -7505,6 +7528,20 @@ const TRANSLATIONS = {
     eve_stage_step4:"Step 4 — Hear again (harder)",
     eve_stage_step5:"Step 5 — Sing without help",
     stage_seconds_left:"{n} s left",
+    onetake_gate:"One take. No restarting, no pitch guide, no correction. You get one attempt today; come back tomorrow for another.",
+    onetake_signin:"Sign in to start your daily one take.",
+    onetake_start_btn:"Begin today's one take",
+    onetake_step_listen:"Listen once",
+    onetake_step_sing:"Your one take",
+    onetake_status_listen:"It plays once, no repeats.",
+    onetake_status_sing:"Sing now. No live feedback: this is your one take.",
+    onetake_recording:"Recording",
+    onetake_pitch_label:"Pitch accuracy",
+    onetake_stability_label:"Stability",
+    onetake_timing_label:"Timing",
+    onetake_next:"Your next take: tomorrow",
+    onetake_notheard:"No clear pitch was caught on today's take. It still counts as today's attempt; come back tomorrow.",
+    onetake_measure:"Today's note comes from the lower middle of your range and stays the same all day. It plays once; 1.3 seconds after it starts, 6 seconds of listening begin. Pitch accuracy is 100 minus 0.6 times your average distance from the note, in cents, with natural vibrato taken out; readings more than 3 semitones away aren't counted. Stability is 100 minus 3 times the spread of your pitch (its standard deviation, in cents). Timing is 100 minus the share of the 6 seconds that passed before your voice came in.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7716,9 +7753,9 @@ const TRANSLATIONS = {
     fiveways_results_label:"Moyenne sur les cinq manches",
     fiveways_try_again_btn:'Réessayer',
     onetake_title:"Défi en Une Prise",
-    onetake_sub:'Une vraie tentative par jour. Pas de redémarrage une fois commencé, pas de guide de justesse en direct pendant que vous chantez, pas de correction. Juste vous, une note, un résultat honnête.',
+    onetake_sub:"Une tentative par jour. Une fois commencé, pas de redémarrage, pas de guide de justesse pendant que vous chantez, pas de correction : une note, un résultat.",
     onetake_result_label:'La prise du jour',
-    onetake_expression_note:'L\'expression n\'est pas affichée — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, et ce défi n\'en simulera pas un juste pour remplir un quatrième chiffre.',
+    onetake_expression_note:"L'expression n'est pas notée : il n'existe pas de moyen fiable de la mesurer.",
     vocalpuzzle_title:'Puzzle Vocal',
     vocalpuzzle_sub:"Quatre notes d'une gamme, dont une incorrecte. Entraîne votre oreille à repérer une erreur, pas seulement à reproduire une hauteur.",
     vocalpuzzle_intro_desc:'Écoutez 4 notes. Une n\'a pas sa place. Laquelle ?',
@@ -8909,6 +8946,20 @@ const TRANSLATIONS = {
     eve_stage_step4:"Étape 4 — Réécouter (plus difficile)",
     eve_stage_step5:"Étape 5 — Chanter sans aide",
     stage_seconds_left:"Encore {n} s",
+    onetake_gate:"Une seule prise. Pas de redémarrage, pas de guide de justesse, pas de correction. Vous avez une tentative aujourd'hui ; revenez demain pour la suivante.",
+    onetake_signin:"Connectez-vous pour commencer votre prise du jour.",
+    onetake_start_btn:"Commencer la prise du jour",
+    onetake_step_listen:"Écoutez une fois",
+    onetake_step_sing:"Votre prise unique",
+    onetake_status_listen:"Elle ne joue qu'une fois, sans répétition.",
+    onetake_status_sing:"Chantez maintenant. Pas de retour en direct : c'est votre prise unique.",
+    onetake_recording:"Enregistrement",
+    onetake_pitch_label:"Justesse",
+    onetake_stability_label:"Stabilité",
+    onetake_timing_label:"Entrée",
+    onetake_next:"Votre prochaine prise : demain",
+    onetake_notheard:"Aucune hauteur claire n'a été captée sur la prise du jour. Elle compte quand même comme la tentative du jour ; revenez demain.",
+    onetake_measure:"La note du jour vient du bas-milieu de votre tessiture et reste la même toute la journée. Elle joue une fois ; 1,3 seconde après son début, 6 secondes d'écoute commencent. La justesse vaut 100 moins 0,6 fois votre écart moyen à la note, en cents, sans le vibrato naturel ; les mesures à plus de 3 demi-tons ne comptent pas. La stabilité vaut 100 moins 3 fois la dispersion de votre hauteur (son écart type, en cents). L'entrée vaut 100 moins la part des 6 secondes écoulée avant que votre voix n'entre.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9120,9 +9171,9 @@ const TRANSLATIONS = {
     fiveways_results_label:"Media de las cinco rondas",
     fiveways_try_again_btn:'Intentar de nuevo',
     onetake_title:"Desafío de Una Toma",
-    onetake_sub:'Un intento real por día. Sin reiniciar una vez que comienzas, sin guía de afinación en vivo mientras cantas, sin corrección. Solo tú, una nota, un resultado honesto.',
+    onetake_sub:"Un intento al día. Una vez que empiezas no hay reinicio, ni guía de afinación mientras cantas, ni corrección: una nota, un resultado.",
     onetake_result_label:'La toma de hoy',
-    onetake_expression_note:'La expresión no se muestra — no existe un detector real confiable para ella en ninguna parte de esta app, y este desafío no simulará uno solo para llenar un cuarto número.',
+    onetake_expression_note:"La expresión no se puntúa: no hay una forma fiable de medirla.",
     vocalpuzzle_title:'Rompecabezas Vocal',
     vocalpuzzle_sub:"Cuatro notas de una escala, una de ellas incorrecta. Entrena tu oído para detectar un error, no solo para igualar una afinación.",
     vocalpuzzle_intro_desc:'Escucha 4 notas. Una no pertenece. ¿Cuál?',
@@ -10313,6 +10364,20 @@ const TRANSLATIONS = {
     eve_stage_step4:"Paso 4 — Escuchar de nuevo (más difícil)",
     eve_stage_step5:"Paso 5 — Cantar sin ayuda",
     stage_seconds_left:"Quedan {n} s",
+    onetake_gate:"Una sola toma. Sin reinicio, sin guía de afinación, sin corrección. Tienes un intento hoy; vuelve mañana para otro.",
+    onetake_signin:"Inicia sesión para empezar tu toma del día.",
+    onetake_start_btn:"Empezar la toma de hoy",
+    onetake_step_listen:"Escucha una vez",
+    onetake_step_sing:"Tu toma única",
+    onetake_status_listen:"Suena una vez, sin repetición.",
+    onetake_status_sing:"Canta ahora. Sin indicaciones en vivo: esta es tu toma única.",
+    onetake_recording:"Grabando",
+    onetake_pitch_label:"Afinación",
+    onetake_stability_label:"Estabilidad",
+    onetake_timing_label:"Entrada",
+    onetake_next:"Tu próxima toma: mañana",
+    onetake_notheard:"No se captó una afinación clara en la toma de hoy. Cuenta igualmente como el intento de hoy; vuelve mañana.",
+    onetake_measure:"La nota de hoy sale de la parte media baja de tu tesitura y es la misma todo el día. Suena una vez; 1,3 segundos después de empezar, comienzan 6 segundos de escucha. La afinación es 100 menos 0,6 veces tu distancia media a la nota, en cents, sin el vibrato natural; las lecturas a más de 3 semitonos no cuentan. La estabilidad es 100 menos 3 veces la dispersión de tu altura (su desviación típica, en cents). La entrada es 100 menos la parte de los 6 segundos que pasó antes de que entrara tu voz.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10524,9 +10589,9 @@ const TRANSLATIONS = {
     fiveways_results_label:"Beş turun ortalaması",
     fiveways_try_again_btn:'Tekrar dene',
     onetake_title:"Tek Çekim Meydan Okuması",
-    onetake_sub:'Günde bir gerçek deneme. Başladıktan sonra yeniden başlatma yok, şarkı söylerken canlı perde rehberi yok, düzeltme yok. Sadece siz, bir nota, bir dürüst sonuç.',
+    onetake_sub:"Günde bir deneme. Başladıktan sonra yeniden başlatma, şarkı söylerken perde rehberi ve düzeltme yok: bir nota, bir sonuç.",
     onetake_result_label:'Bugünün tek çekimi',
-    onetake_expression_note:'İfade gösterilmez — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur ve bu meydan okuma dördüncü bir sayıyı doldurmak için birini sahtelemeyecektir.',
+    onetake_expression_note:"İfade puanlanmaz: onu ölçmenin güvenilir bir yolu yok.",
     vocalpuzzle_title:'Vokal Bulmaca',
     vocalpuzzle_sub:"Bir gamdan dört nota, biri yanlış. Kulağınızı yalnızca bir perdeyi eşleştirmeye değil, bir hatayı yakalamaya çalıştırır.",
     vocalpuzzle_intro_desc:'4 nota dinleyin. Biri uymuyor. Hangisi?',
@@ -11717,6 +11782,20 @@ const TRANSLATIONS = {
     eve_stage_step4:"Adım 4 — Yeniden dinle (daha zor)",
     eve_stage_step5:"Adım 5 — Yardımsız söyle",
     stage_seconds_left:"{n} sn kaldı",
+    onetake_gate:"Tek çekim. Yeniden başlatma, perde rehberi ve düzeltme yok. Bugün bir deneme hakkınız var; bir sonraki için yarın gelin.",
+    onetake_signin:"Günlük tek çekiminize başlamak için giriş yapın.",
+    onetake_start_btn:"Bugünün tek çekimine başla",
+    onetake_step_listen:"Bir kez dinleyin",
+    onetake_step_sing:"Tek çekiminiz",
+    onetake_status_listen:"Bir kez çalar, tekrar yok.",
+    onetake_status_sing:"Şimdi söyleyin. Canlı geri bildirim yok: bu sizin tek çekiminiz.",
+    onetake_recording:"Kaydediliyor",
+    onetake_pitch_label:"Perde doğruluğu",
+    onetake_stability_label:"Kararlılık",
+    onetake_timing_label:"Zamanlama",
+    onetake_next:"Bir sonraki çekiminiz: yarın",
+    onetake_notheard:"Bugünün çekiminde net bir perde yakalanamadı. Yine de bugünün denemesi sayılır; yarın tekrar gelin.",
+    onetake_measure:"Bugünün notası ses aralığınızın alt-orta kısmından gelir ve gün boyu aynı kalır. Bir kez çalar; başladıktan 1,3 saniye sonra 6 saniyelik dinleme başlar. Perde doğruluğu, doğal vibrato çıkarılarak notaya ortalama uzaklığınızın (sent cinsinden) 0,6 katının 100'den çıkarılmasıdır; 3 yarım tondan uzak ölçümler sayılmaz. Kararlılık, perdenizin yayılımının (sent cinsinden standart sapma) 3 katının 100'den çıkarılmasıdır. Zamanlama, sesiniz girmeden önce geçen sürenin 6 saniyeye oranının 100'den çıkarılmasıdır.",
   },
 };
 let currentLanguage = 'en';
@@ -21670,7 +21749,7 @@ document.getElementById('fiveRetryBtn')?.addEventListener('click', ()=>{
 });
 
 /* ---------------- One Take Challenge (real daily gate, one real irreversible capture) ---------------- */
-let oneTakeActive = false;
+let oneTakeActive = false, oneTakeRun = 0; // oneTakeRun: a take stopped and started again doesn't carry on the old one
 const ONE_TAKE_DURATION_MS = 6000;
 
 function renderOneTakeGate(){
@@ -21681,9 +21760,11 @@ function renderOneTakeGate(){
   const runnerCard = document.getElementById('oneTakeRunnerCard');
   if(!gateText) return;
   runnerCard.style.display = 'none';
+  startBtn.disabled = false;
+  document.getElementById('oneTakeStartLabel').textContent = t('onetake_start_btn');
 
   if(!profile){
-    gateText.textContent = 'Sign in to start your daily one take.';
+    gateText.textContent = t('onetake_signin');
     startBtn.style.display = 'none';
     resultCard.style.display = 'none';
     preCard.style.display = 'block';
@@ -21692,20 +21773,29 @@ function renderOneTakeGate(){
 
   const today = todayStr();
   if(progress.oneTakeLastDate === today && progress.oneTakeHistory && progress.oneTakeHistory[today]){
+    // today's take is done: its result, on paper, for the rest of the day
     preCard.style.display = 'none';
     resultCard.style.display = 'block';
-    const r = progress.oneTakeHistory[today];
-    document.getElementById('oneTakeResultRows').innerHTML = r.heard
-      ? `<div class="record-row"><span class="record-label">Pitch</span><span class="record-val">${r.pitch}%</span></div>
-         <div class="record-row"><span class="record-label">Stability</span><span class="record-val">${r.stability}%</span></div>
-         <div class="record-row"><span class="record-label">Timing</span><span class="record-val">${r.timing}%</span></div>`
-      : `<p class="desc" style="color:var(--muted);">No clear pitch was captured on today's take — it still counts as today's attempt. Come back tomorrow.</p>`;
+    renderOneTakeResult(progress.oneTakeHistory[today], null);
   } else {
     preCard.style.display = 'block';
     resultCard.style.display = 'none';
-    gateText.textContent = "ONE TAKE. No restarting. No pitch guide. No correction. You get one real attempt today — come back tomorrow for another.";
+    gateText.textContent = t('onetake_gate');
     startBtn.style.display = 'inline-flex';
   }
+}
+// The result: Pitch (the stored score) big, the coach line, the trace (samples: this take's own frames, only right
+// after it; not stored), Stability and Timing.
+function renderOneTakeResult(r, samples){
+  vcResultNum(document.getElementById('oneTakePitchVal'), r.heard ? r.pitch+'%' : null);
+  document.getElementById('oneTakeCoach').textContent = r.heard ? accuracyFeedback(r.pitch, true) : t('onetake_notheard');
+  [['oneTakeStabilityVal', r.stability], ['oneTakeTimingVal', r.timing]].forEach(([id, v])=>{
+    const el = document.getElementById(id);
+    el.textContent = r.heard ? v+'%' : t('take_not_heard');
+    el.classList.toggle('vc-not-heard', !r.heard);
+  });
+  vcTakeTrace(document.getElementById('oneTakeTraceBox'), r.heard && samples && samples.length ? samples.map(s=>({t:s.t, cents:s.c})) : null, ONE_TAKE_DURATION_MS);
+  document.getElementById('oneTakeMeasure').textContent = t('onetake_measure');
 }
 
 document.getElementById('oneTakeStartBtn')?.addEventListener('click', async ()=>{
@@ -21714,32 +21804,46 @@ document.getElementById('oneTakeStartBtn')?.addEventListener('click', async ()=>
   const today = todayStr();
   if(progress.oneTakeLastDate === today){ renderOneTakeGate(); return; }
   oneTakeActive = true;
-  document.getElementById('oneTakePreCard').style.display = 'none';
   document.getElementById('oneTakeRunnerCard').style.display = 'block';
-  singingSession(()=>oneTakeActive);
+  singingSession(()=>oneTakeActive, document.getElementById('oneTakeStage'));
   runOneTake();
 });
+// Ended by leaving (stopAllActiveSessions) before the 6 s were up: nothing is saved, today's take is still available.
+function oneTakeStopped(){
+  document.getElementById('oneTakeRec').hidden = true;
+  renderOneTakeGate();
+}
 
 async function runOneTake(){
   const {lo, hi} = comfortBounds();
   const targetMidi = dailyNote('onetake', lo, hi); // the same note all day: a take is compared with today's other takes
 
-  document.getElementById('oneTakeStepLabel').textContent = 'Listen once';
+  const run = ++oneTakeRun, live = ()=>oneTakeActive && run===oneTakeRun;
+  const btn = document.getElementById('oneTakeStartBtn'), label = document.getElementById('oneTakeStartLabel');
+  const time = document.getElementById('oneTakeTime'), rec = document.getElementById('oneTakeRec'), L = {};
+  btn.disabled = true; // the status pill on the stage
+  document.getElementById('oneTakeStepLabel').textContent = t('onetake_step_listen');
   document.getElementById('oneTakeNote').textContent = noteNameFromMidi(targetMidi);
-  document.getElementById('oneTakeStatus').textContent = 'This plays once — no repeats.';
+  document.getElementById('oneTakeStatus').textContent = t('onetake_status_listen');
+  label.textContent = t('ex_listen_ref');
+  rec.hidden = true;
+  vcTimeMeter(time, 0, ONE_TAKE_DURATION_MS);
   playTone(noteToFreq(targetMidi), 0.9, 0);
   await new Promise(r=>setTimeout(r, 1300));
+  if(!live()){ if(run===oneTakeRun) oneTakeStopped(); return; }
 
-  document.getElementById('oneTakeStepLabel').textContent = 'Recording your one take';
-  document.getElementById('oneTakeNote').textContent = '●';
-  document.getElementById('oneTakeStatus').textContent = 'Sing now — no live feedback shown, this is your one real take.';
+  // the take: today's note stays up (a name, not a pitch guide), the time meter runs, the recording mark shows
+  document.getElementById('oneTakeStepLabel').textContent = t('onetake_step_sing');
+  document.getElementById('oneTakeStatus').textContent = t('onetake_status_sing');
+  label.textContent = t('ex_sing_now');
+  rec.hidden = false;
 
   const samples = [];
   let onsetTime = null;
   const start = performance.now();
   await new Promise(resolve=>{
     function frame(){
-      if(!oneTakeActive){ resolve(); return; }
+      if(!live()){ resolve(); return; }
       analyser.getFloatTimeDomainData(dataArray);
       const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
       const t = performance.now()-start;
@@ -21748,6 +21852,7 @@ async function runOneTake(){
         const cents = centsFromTarget(freq, targetMidi);
         if(cents!==null && Math.abs(cents)<300) samples.push({t, c:cents});
       }
+      vcFeed(L, ()=>vcTimeMeter(time, t, ONE_TAKE_DURATION_MS));
       if(t < ONE_TAKE_DURATION_MS){
         requestAnimationFrame(frame);
       } else {
@@ -21756,6 +21861,8 @@ async function runOneTake(){
     }
     frame();
   });
+  rec.hidden = true;
+  if(!live()){ if(run===oneTakeRun) oneTakeStopped(); return; } // left midway: not today's take
 
   let pitch=0, stability=0, timing=0;
   if(samples.length>0){
@@ -21771,10 +21878,10 @@ async function runOneTake(){
     timing = Math.max(0, Math.round(100-latenessRatio*100));
   }
 
-  finishOneTake(pitch, stability, timing, samples.length>0);
+  finishOneTake(pitch, stability, timing, samples.length>0, samples);
 }
 
-function finishOneTake(pitch, stability, timing, heard){
+function finishOneTake(pitch, stability, timing, heard, samples){
   oneTakeActive = false;
   const today = todayStr();
   if(profile){
@@ -21786,6 +21893,7 @@ function finishOneTake(pitch, stability, timing, heard){
   }
   registerExerciseCompletion();
   renderOneTakeGate();
+  if(profile) renderOneTakeResult({pitch, stability, timing, heard}, samples); // with this take's trace
 }
 
 /* ---------------- Vocal Puzzle (real scale sequence, one genuinely wrong note) ---------------- */
