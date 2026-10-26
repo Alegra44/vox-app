@@ -543,7 +543,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live #breathTimerVal{font-size:var(--hl-t-display) !important;}
   .breath-level{width:100%;max-width:280px;--part:var(--hl-voice);background:var(--hairline);} /* the empty track: the vocal-load bar's, so it shows on the dark stage */
   .breath-level-label{width:100%;max-width:280px;font-size:var(--hl-t-small);color:var(--hl-ink-3);margin-bottom:var(--hl-s1);}
-  .vc-stage.is-live #breathStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);} /* Stop: the neutral active look of the other stages; the voice colour is for starting */
+  .vc-stage.is-live :is(#regMicBtn, #liveFeedbackStartBtn, #resonanceStartBtn).listening, .vc-stage.is-live #breathStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);} /* Stop: the neutral active look of the other stages; the voice colour is for starting */
   #breathResult .vc-dim .ex-accuracy{font-size:inherit;font-weight:400;font-stretch:normal;color:var(--hl-ink);}
   .range-sofar{width:100%;max-width:320px;}
   .result-card.vc-result{text-align:left;}
@@ -738,15 +738,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   .bridge-wrap{display:flex;flex-direction:column;align-items:center;}
   .bridge-svg{width:100%;max-width:200px;}
-  .bridge-zone-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;letter-spacing:0.06em;}
+  .bridge-zone-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:12px;fill:var(--hl-ink-3);}
 
   .reg-readout{text-align:center;}
-  .reg-label{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:34px;margin-bottom:6px;transition:color .15s ease;}
-  .reg-label.chest{color:var(--brass);}
-  .reg-label.mixed{color:var(--hl-ink-2);}
-  .reg-label.head{color:var(--teal);}
-  .reg-feedback{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13.5px;color:var(--muted);min-height:20px;}
-  .reg-feedback.warn{color:var(--coral);}
+  .reg-label{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:300;font-size:var(--hl-t-h1);line-height:1.1;color:var(--hl-ink);}
+  .reg-feedback{font-size:var(--hl-t-small);color:var(--hl-ink-2);min-height:1.4em;max-width:32ch;margin:0 auto;}
+  .reg-feedback.warn{color:var(--hl-ink);} /* the words carry it; the marker's ring is the warning colour */
 
   .reg-stat-row{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap;}
   .vl-gauge{margin:14px auto 0;max-width:260px;}
@@ -1548,6 +1545,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Register Coach: the bridge fitted to the stage's height (head above, chest below, on stage surfaces), the passaggio
+     dashed with its note, the marker in the voice colour with a warning ring while pushing chest */
+  .reg-zone{stroke:var(--hl-rule);stroke-width:1;}
+  .reg-zone-head{fill:var(--hl-raised);} .reg-zone-chest{fill:var(--hl-sunk);}
+  .reg-pass{stroke:var(--hl-ink-3);stroke-width:1.5;stroke-dasharray:4 3;}
+  .reg-marker{fill:var(--hl-voice);stroke:transparent;stroke-width:3;transition:cy .1s linear, stroke .15s ease;}
+  .reg-marker.is-pushing{stroke:var(--hl-warn);}
+  .vc-stage.is-live.reg-stage .bridge-svg{width:auto;max-width:none;height:clamp(180px, calc(100dvh - 520px), 320px);overflow:visible;}
+  .reg-stage .reg-readout{display:grid;justify-items:center;gap:var(--hl-s3);width:100%;}
+  .reg-stage:not(.is-live) .reg-readout{justify-items:stretch;text-align:left;}
+  .reg-stage:not(.is-live) #regMicBtn{justify-self:start;}
+  .reg-stats{width:100%;max-width:320px;}
+  .vc-stage.is-live .reg-stats .vc-dim{padding:var(--hl-s2) 0;}
+  #panel-register .tuner-hero-card > .hl-measure{margin-top:var(--hl-s5);}
   /* Vibrato and Voice Quality: the hold stage (the held note and its Hz, the lane centred on it, no meter, the time meter) */
   .hold-stage .pm-cents{display:none !important;}
   .vc-stage.is-live.hold-stage .step-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);margin:0;}
@@ -3497,39 +3508,38 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="register_sub">Build your bridge across the passaggio — reads the brightness of your vocal harmonics, a rule-based approximation, not a trained model (see PRD §3.2 / §12). Uses your Range Finder range if you've captured it, otherwise assumes A2–C5.</div>
     </div>
     <div class="tuner-hero-card">
-      <div class="register-layout">
-        <div class="bridge-wrap">
-          <svg class="bridge-svg" viewBox="0 0 160 320" id="bridgeSvg">
-            <rect id="headZoneRect" x="55" y="10" width="50" height="140" rx="10" fill="color-mix(in srgb, var(--teal) 10%, transparent)" stroke="var(--hairline)"/>
-            <rect id="chestZoneRect" x="55" y="150" width="50" height="160" rx="10" fill="color-mix(in srgb, var(--brass) 10%, transparent)" stroke="var(--hairline)"/>
-            <line id="passaggioLine" x1="40" y1="150" x2="120" y2="150" stroke="var(--brass-dim)" stroke-width="1.5" stroke-dasharray="4 3"/>
-            <text class="bridge-zone-label" x="80" y="30" text-anchor="middle" fill="var(--teal)">HEAD</text>
-            <text class="bridge-zone-label" x="80" y="300" text-anchor="middle" fill="var(--brass)">CHEST</text>
-            <text class="bridge-zone-label" x="128" y="153" fill="var(--muted)" font-size="8">passaggio</text>
-            <circle id="pitchMarker" cx="80" cy="230" r="9" fill="var(--brass)" style="filter:none; transition: cy .1s linear, fill .15s ease, filter .2s ease;"/>
+      <div class="vc-stage reg-stage" id="registerStage">
+        <div class="bridge-wrap vc-live-only">
+          <svg class="bridge-svg" viewBox="0 0 160 320" id="bridgeSvg" aria-hidden="true">
+            <rect id="headZoneRect" class="reg-zone reg-zone-head" x="40" y="10" width="80" height="140" rx="10"/>
+            <rect id="chestZoneRect" class="reg-zone reg-zone-chest" x="40" y="150" width="80" height="160" rx="10"/>
+            <line id="passaggioLine" class="reg-pass" x1="28" y1="150" x2="132" y2="150"/>
+            <text class="bridge-zone-label" id="regHeadText" x="34" y="84" text-anchor="end">Head</text>
+            <text class="bridge-zone-label" id="regChestText" x="34" y="234" text-anchor="end">Chest</text>
+            <text class="bridge-zone-label reg-pass-label" id="regPassText" x="136" y="154"></text>
+            <circle id="pitchMarker" class="reg-marker" cx="80" cy="230" r="9"/>
           </svg>
         </div>
-
         <div class="reg-readout">
-          <div class="reg-label chest" id="regLabel">—</div>
-          <div class="reg-feedback" id="regFeedback">Tap start and slide from a low note up to a high one.</div>
-
-          <button class="mic-btn" id="regMicBtn" style="margin-top:22px;">
-            <span class="dot-icon"></span><span id="regMicBtnLabel">Start listening</span>
-          </button>
-
-          <div class="reg-stat-row">
-            <div class="stat-chip"><div class="label" data-i18n="register_note_label">Note</div><div class="val" id="regNoteStat">—</div></div>
-            <div class="stat-chip"><div class="label" data-i18n="register_chest_label">Chest character</div><div class="val" id="regChestScoreStat">—</div></div>
-            <div class="stat-chip"><div class="label" data-i18n="register_crossing_label">Clean crossing</div><div class="val" id="regBridgeStat">0.0s</div></div>
+          <div class="reg-label vc-live-only" id="regLabel">—</div>
+          <div class="reg-feedback vc-live-only" id="regFeedback">Listening…</div>
+          <div class="vc-result-dims reg-stats">
+            <div class="vc-dim vc-live-only"><span data-i18n="register_note_label">Note</span><span id="regNoteStat">—</span></div>
+            <div class="vc-dim"><span><span class="vc-live-only" data-i18n="register_crossing_label">Clean crossing</span><span class="vc-paper-only" data-i18n="register_last_crossing">Last crossing</span></span><span id="regBridgeStat">0.0 s</span></div>
+            <div class="vc-dim vc-paper-only"><span data-i18n="register_best_label">Best</span><span id="regBestStat">—</span></div>
+            <span class="vc-visually-hidden"><span data-i18n="register_chest_label">Chest character</span> <span id="regChestScoreStat">—</span></span>
           </div>
-          <p class="fine-print" id="regBestStat" style="text-align:center;margin-top:14px;">Best clean crossing saved: —</p>
+          <p class="fine-print vc-paper-only" id="regSigninNote" data-i18n="registercoach_signin_beststat" hidden>Sign in to save your best crossing across sessions.</p>
+          <button class="mic-btn vc-take-pill" id="regMicBtn">
+            <span class="dot-icon"></span><span id="regMicBtnLabel" data-i18n="register_start_btn">Start listening</span>
+          </button>
           <div class="vl-gauge" id="vlGauge" role="meter" aria-labelledby="vlGaugeLabel" aria-valuemin="0" aria-valuemax="100" style="display:none;">
             <div class="vl-gauge-head"><span id="vlGaugeLabel" data-i18n="vl_gauge_label">Vocal load today</span><span class="vl-gauge-val" id="vlGaugeVal">—</span></div>
             <div class="vl-gauge-track"><div class="vl-gauge-fill" id="vlGaugeFill"></div></div>
           </div>
         </div>
       </div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="register_measure"></p></details>
     </div>
   </section>
 
@@ -5632,7 +5642,7 @@ async function initAudio(opts){
     dataArray = new Float32Array(analyser.fftSize);
     return true;
   }catch(e){
-    showToast('Microphone access is needed for this demo. Please allow mic permission and try again.', 'warn');
+    showToast(t('mic_needed'), 'warn');
     return false;
   }
 }
@@ -6337,7 +6347,7 @@ const TRANSLATIONS = {
     exercises_tab_pitch:'Pitch Match', exercises_tab_interval:'Interval Match', exercises_tab_scale:'Scale Run', exercises_tab_ear:'Ear Training',
     register_title:"Register Coach",
     beta_heuristic_tag:"Estimate",
-    register_sub:'Build your bridge across the passaggio — reads the brightness of your vocal harmonics, a rule-based approximation, not a trained model (see PRD §3.2 / §12). Uses your Range Finder range if you\'ve captured it, otherwise assumes A2–C5.',
+    register_sub:"Slide from a low note up to a high one and see where your voice crosses the passaggio, the break between chest and head voice. It reads the brightness of your harmonics, and uses your Range Finder range if you've captured one (otherwise A2–C5).",
     register_note_label:'Note',
     register_chest_label:'Chest character',
     register_crossing_label:'Clean crossing',
@@ -7699,6 +7709,20 @@ const TRANSLATIONS = {
     vibrato_fb_wide:"The depth is quite wide: if it feels forced, try releasing some tension.",
     vibrato_measure:"Your pitch is read about 60 times a second over a 4-second hold, from the microphone's low-passed pitch path. Readings more than 3 semitones from the middle of the hold are left out (the detector slipping). The rate is 1 over the average time between the peaks of your pitch curve (peaks at least 0.1 seconds apart); consistency is 100 minus 160 times how much those times vary (their standard deviation over their mean). Depth is the median swing from each peak to the troughs either side, halved, and corrected for the detector's averaging. Under 8 cents of depth it isn't counted as vibrato: a straight tone. The trace shows ±100 cents around the hold's average. The natural range commonly cited is about 5 to 6.5 Hz. With one microphone this is an estimate: a coaching cue, not a lab measurement.",
     vq_fine_more:"Mic, room, distance, vowel and pitch all move them, so compare yourself on the same setup, note and vowel. The bands (for example, 20 dB or more reads as clear) are rough guides for this tool, not clinical norms. If hoarseness or breathiness persists, or singing hurts, a voice teacher or voice professional is the right person to ask.",
+    register_start_btn:"Start listening",
+    register_last_crossing:"Last crossing",
+    register_best_label:"Best",
+    registercoach_nobest:"No best yet",
+    reg_label_chest:"Chest voice",
+    reg_label_pushing:"Pushing chest",
+    reg_label_mixed:"Mixed voice",
+    reg_label_head:"Head voice",
+    reg_fb_chest:"Comfortably below your passaggio.",
+    reg_fb_pushing:"You're carrying chest voice past the break: try lightening into mixed.",
+    reg_fb_mixed:"A blended tone crossing the bridge.",
+    reg_fb_head:"Light, head-dominant tone above the break.",
+    mic_needed:"Microphone access is needed. Please allow mic permission and try again.",
+    register_measure:"Each frame, the pitch is read from the low-passed path, and a chest score from the brightness of your harmonics: the power-weighted average frequency up to 6 kHz, relative to the pitch, from 0 (light, head-like) to 100 (rich, chest-like). The passaggio is set 60% of the way up your range. Below it you're in chest voice; above it, a chest score of 62 or more reads as pushing chest, 35 or more as mixed voice, under that as head voice. A clean crossing is the time spent above the passaggio without pushing chest; your best is saved. This is a rule-based estimate from one microphone, not a trained model.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7790,7 +7814,7 @@ const TRANSLATIONS = {
     exercises_tab_pitch:'Précision de note', exercises_tab_interval:"Reconnaissance d'intervalles", exercises_tab_scale:'Gamme', exercises_tab_ear:"Entraînement de l'oreille",
     register_title:"Coach de registre",
     beta_heuristic_tag:"Estimation",
-    register_sub:'Construisez votre pont à travers le passaggio — lit la luminosité de vos harmoniques vocales, une approximation basée sur des règles, pas un modèle entraîné (voir PRD §3.2 / §12). Utilise votre tessiture du Détecteur de tessiture si vous l\'avez capturée, sinon suppose A2–C5.',
+    register_sub:"Glissez d'une note grave à une note aiguë et voyez où votre voix franchit le passaggio, la zone de passage entre voix de poitrine et voix de tête. La mesure lit la brillance de vos harmoniques et utilise votre tessiture du Détecteur de tessiture si vous l'avez capturée (sinon A2–C5).",
     register_note_label:'Note',
     register_chest_label:'Caractère de poitrine',
     register_crossing_label:'Passage propre',
@@ -9152,6 +9176,20 @@ const TRANSLATIONS = {
     vibrato_fb_wide:"L'amplitude est assez large : si elle vous semble forcée, essayez de relâcher un peu.",
     vibrato_measure:"Votre hauteur est lue environ 60 fois par seconde pendant une tenue de 4 secondes, sur la voie de hauteur filtrée du micro. Les mesures à plus de 3 demi-tons du milieu de la tenue sont écartées (des erreurs du détecteur). La fréquence est 1 divisé par le temps moyen entre les crêtes de votre courbe de hauteur (crêtes espacées d'au moins 0,1 seconde) ; la régularité vaut 100 moins 160 fois la variation de ces temps (leur écart type sur leur moyenne). L'amplitude est l'écart médian entre chaque crête et les creux qui l'entourent, divisé par deux et corrigé de la moyenne du détecteur. Sous 8 cents d'amplitude, ce n'est pas compté comme du vibrato : un son droit. Le tracé montre ±100 cents autour de la moyenne de la tenue. La plage naturelle généralement citée est d'environ 5 à 6,5 Hz. Avec un seul micro, c'est une estimation : un repère de coaching, pas une mesure de laboratoire.",
     vq_fine_more:"Le micro, la pièce, la distance, la voyelle et la hauteur les font varier : comparez-vous avec le même matériel, la même note et la même voyelle. Les seuils (par exemple, 20 dB ou plus = clair) sont des repères approximatifs propres à cet outil, pas des normes cliniques. Si un enrouement ou un souffle persiste, ou si chanter fait mal, un professeur de chant ou un professionnel de la voix est la bonne personne à consulter.",
+    register_start_btn:"Commencer l'écoute",
+    register_last_crossing:"Dernier passage",
+    register_best_label:"Record",
+    registercoach_nobest:"Pas encore de record",
+    reg_label_chest:"Voix de poitrine",
+    reg_label_pushing:"Poitrine forcée",
+    reg_label_mixed:"Voix mixte",
+    reg_label_head:"Voix de tête",
+    reg_fb_chest:"Confortablement sous votre passaggio.",
+    reg_fb_pushing:"Vous portez la voix de poitrine au-delà du passage : essayez d'alléger vers la voix mixte.",
+    reg_fb_mixed:"Un timbre mixte qui franchit le passage.",
+    reg_fb_head:"Timbre léger, dominé par la tête, au-dessus du passage.",
+    mic_needed:"L'accès au micro est nécessaire. Autorisez le micro et réessayez.",
+    register_measure:"À chaque image, la hauteur est lue sur la voie filtrée, et un score de poitrine d'après la brillance de vos harmoniques : la fréquence moyenne pondérée par la puissance jusqu'à 6 kHz, rapportée à la hauteur, de 0 (léger, de tête) à 100 (riche, de poitrine). Le passaggio est placé à 60 % de la hauteur de votre tessiture. En dessous, vous êtes en voix de poitrine ; au-dessus, un score de 62 ou plus se lit comme poitrine forcée, 35 ou plus comme voix mixte, en dessous comme voix de tête. Un passage propre est le temps passé au-dessus du passaggio sans forcer la poitrine ; votre record est enregistré. C'est une estimation à base de règles avec un seul micro, pas un modèle entraîné.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9243,7 +9281,7 @@ const TRANSLATIONS = {
     exercises_tab_pitch:'Precisión de nota', exercises_tab_interval:'Reconocimiento de intervalos', exercises_tab_scale:'Escala', exercises_tab_ear:'Entrenamiento auditivo',
     register_title:"Coach de registro",
     beta_heuristic_tag:"Estimación",
-    register_sub:'Construye tu puente a través del passaggio — lee el brillo de tus armónicos vocales, una aproximación basada en reglas, no un modelo entrenado (ver PRD §3.2 / §12). Usa tu rango del Buscador de rango si lo has capturado, si no, asume A2–C5.',
+    register_sub:"Desliza de una nota grave a una aguda y mira dónde cruza tu voz el passaggio, el paso entre la voz de pecho y la de cabeza. Lee el brillo de tus armónicos y usa tu rango del Buscador de rango si lo has capturado (si no, A2–C5).",
     register_note_label:'Nota',
     register_chest_label:'Carácter de pecho',
     register_crossing_label:'Cruce limpio',
@@ -10605,6 +10643,20 @@ const TRANSLATIONS = {
     vibrato_fb_wide:"La profundidad es bastante amplia: si se siente forzada, intenta soltar algo de tensión.",
     vibrato_measure:"Tu altura se lee unas 60 veces por segundo durante un sostenido de 4 segundos, desde la vía de afinación filtrada del micrófono. Las lecturas a más de 3 semitonos del centro del sostenido se descartan (fallos del detector). La frecuencia es 1 dividido por el tiempo medio entre los picos de tu curva de altura (picos separados al menos 0,1 segundos); la consistencia es 100 menos 160 veces cuánto varían esos tiempos (su desviación típica sobre su media). La profundidad es la oscilación mediana de cada pico a los valles de cada lado, dividida por dos y corregida por el promedio del detector. Por debajo de 8 cents de profundidad no cuenta como vibrato: un sonido recto. El trazo muestra ±100 cents alrededor de la media del sostenido. El rango natural citado con frecuencia es de unos 5 a 6,5 Hz. Con un solo micrófono es una estimación: una referencia de entrenamiento, no una medición de laboratorio.",
     vq_fine_more:"El micrófono, la sala, la distancia, la vocal y la altura las cambian, así que compárate con el mismo equipo, la misma nota y la misma vocal. Los umbrales (por ejemplo, 20 dB o más se lee como claro) son guías aproximadas de esta herramienta, no normas clínicas. Si la ronquera o el aire en la voz persisten, o si cantar duele, un profesor de canto o un profesional de la voz es la persona adecuada a quien consultar.",
+    register_start_btn:"Empezar a escuchar",
+    register_last_crossing:"Último cruce",
+    register_best_label:"Mejor",
+    registercoach_nobest:"Aún sin récord",
+    reg_label_chest:"Voz de pecho",
+    reg_label_pushing:"Pecho forzado",
+    reg_label_mixed:"Voz mixta",
+    reg_label_head:"Voz de cabeza",
+    reg_fb_chest:"Cómodamente por debajo de tu passaggio.",
+    reg_fb_pushing:"Llevas la voz de pecho más allá del paso: intenta aligerar hacia la voz mixta.",
+    reg_fb_mixed:"Un timbre mezclado cruzando el puente.",
+    reg_fb_head:"Timbre ligero, de cabeza, por encima del paso.",
+    mic_needed:"Se necesita acceso al micrófono. Permite el micrófono e inténtalo de nuevo.",
+    register_measure:"En cada fotograma, la altura se lee de la vía filtrada, y una puntuación de pecho a partir del brillo de tus armónicos: la frecuencia media ponderada por la potencia hasta 6 kHz, relativa a la altura, de 0 (ligera, de cabeza) a 100 (rica, de pecho). El passaggio se sitúa al 60 % de la subida de tu rango. Por debajo estás en voz de pecho; por encima, una puntuación de 62 o más se lee como pecho forzado, de 35 o más como voz mixta y, por debajo, como voz de cabeza. Un cruce limpio es el tiempo por encima del passaggio sin forzar el pecho; se guarda tu mejor marca. Es una estimación basada en reglas con un solo micrófono, no un modelo entrenado.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10696,7 +10748,7 @@ const TRANSLATIONS = {
     exercises_tab_pitch:'Nota Eşleştirme', exercises_tab_interval:'Aralık Eşleştirme', exercises_tab_scale:'Gam Çalışması', exercises_tab_ear:'Kulak Eğitimi',
     register_title:"Register Koçu",
     beta_heuristic_tag:"Tahmin",
-    register_sub:'Passaggio boyunca köprünüzü kurun — vokal harmoniklerinizin parlaklığını okur, eğitilmiş bir model değil kural tabanlı bir yaklaşımdır (bkz. PRD §3.2 / §12). Yakaladıysanız Ses Aralığı Bulucu aralığınızı kullanır, aksi halde A2–C5 varsayar.',
+    register_sub:"Pes bir notadan tiz bir notaya kayın ve sesinizin göğüs ile baş sesi arasındaki geçişi, passaggio'yu nerede aştığını görün. Harmoniklerinizin parlaklığını okur; yakaladıysanız Ses Aralığı Bulucu aralığınızı kullanır (yoksa A2–C5).",
     register_note_label:'Nota',
     register_chest_label:'Göğüs karakteri',
     register_crossing_label:'Temiz geçiş',
@@ -12058,6 +12110,20 @@ const TRANSLATIONS = {
     vibrato_fb_wide:"Derinlik oldukça geniş: zorlanmış hissettiriyorsa biraz gerginliği bırakmayı deneyin.",
     vibrato_measure:"Perdeniz, 4 saniyelik tutuş boyunca mikrofonun alçak geçiren perde yolundan saniyede yaklaşık 60 kez okunur. Tutuşun ortasından 3 yarım tondan uzak ölçümler atılır (algılayıcı kaymaları). Hız, perde eğrinizdeki tepeler arasındaki ortalama sürenin tersidir (tepeler en az 0,1 saniye arayla); tutarlılık, bu sürelerin değişiminin (standart sapma bölü ortalama) 160 katının 100'den çıkarılmasıdır. Derinlik, her tepeden iki yanındaki çukurlara olan medyan salınımın yarısıdır ve algılayıcının ortalamasına göre düzeltilir. 8 sentin altındaki derinlik vibrato sayılmaz: düz bir ses. İz, tutuşun ortalaması çevresinde ±100 senti gösterir. Sık belirtilen doğal aralık yaklaşık 5–6,5 Hz'dir. Tek mikrofonla bu bir tahmindir: laboratuvar ölçümü değil, bir koçluk ipucu.",
     vq_fine_more:"Mikrofon, oda, mesafe, ünlü ve perde hepsini etkiler; kendinizi aynı düzen, aynı nota ve aynı ünlüyle karşılaştırın. Eşikler (örneğin 20 dB ve üzeri net sayılır) bu araca özgü kaba ölçütlerdir, klinik normlar değildir. Ses kısıklığı ya da nefeslilik sürerse veya şarkı söylemek acı veriyorsa, bir şan öğretmenine ya da ses uzmanına danışmak doğru olur.",
+    register_start_btn:"Dinlemeye başla",
+    register_last_crossing:"Son geçiş",
+    register_best_label:"En iyi",
+    registercoach_nobest:"Henüz en iyi yok",
+    reg_label_chest:"Göğüs sesi",
+    reg_label_pushing:"Göğüs zorlanıyor",
+    reg_label_mixed:"Karışık ses",
+    reg_label_head:"Baş sesi",
+    reg_fb_chest:"Passaggio'nuzun rahatça altında.",
+    reg_fb_pushing:"Göğüs sesini geçişin ötesine taşıyorsunuz: karışık sese doğru hafiflemeyi deneyin.",
+    reg_fb_mixed:"Köprüyü geçen karışık bir ton.",
+    reg_fb_head:"Geçişin üstünde hafif, baş ağırlıklı bir ton.",
+    mic_needed:"Mikrofon erişimi gerekiyor. Mikrofon iznini verip tekrar deneyin.",
+    register_measure:"Her karede perde, alçak geçiren yoldan okunur; göğüs puanı da harmoniklerinizin parlaklığından: 6 kHz'e kadar güçle ağırlıklandırılmış ortalama frekansın perdeye oranı, 0'dan (hafif, baş sesi gibi) 100'e (zengin, göğüs sesi gibi). Passaggio, aralığınızın %60'ına konur. Altında göğüs sesindesiniz; üstünde 62 ve üzeri puan göğüs zorlaması, 35 ve üzeri karışık ses, altı baş sesi olarak okunur. Temiz geçiş, göğsü zorlamadan passaggio'nun üstünde geçen süredir; en iyiniz kaydedilir. Bu, tek mikrofonla kurala dayalı bir tahmindir, eğitilmiş bir model değil.",
   },
 };
 let currentLanguage = 'en';
@@ -12702,6 +12768,11 @@ function drawBridgeZones(){
   document.getElementById('chestZoneRect').setAttribute('height', bottomY-passY);
   const line = document.getElementById('passaggioLine');
   line.setAttribute('y1', passY); line.setAttribute('y2', passY);
+  const pt = document.getElementById('regPassText');
+  if(pt){ pt.setAttribute('y', passY+4); pt.textContent = noteNameFromMidi(passaggioMidi); }
+  const ht = document.getElementById('regHeadText'), ct = document.getElementById('regChestText');
+  if(ht){ ht.textContent = t('drill_reg_head'); ht.setAttribute('y', (topY+passY)/2+4); } // beside each zone, clear of the marker
+  if(ct){ ct.textContent = t('drill_reg_chest'); ct.setAttribute('y', (passY+bottomY)/2+4); }
 }
 
 function midiToY(midi, lowMidi, highMidi, topY, bottomY){
@@ -12733,7 +12804,7 @@ async function openRegisterInput({quiet=false}={}){ // quiet: no toast if it fai
       regIn.idle = setInterval(()=>{ if(regIn && performance.now()-regIn.lastRead > REG_IDLE_MS) closeRegisterInput(); }, 500);
       return true;
     }catch(e){
-      if(!quiet) showToast('Microphone access is needed for this demo. Please allow mic permission and try again.', 'warn');
+      if(!quiet) showToast(t('mic_needed'), 'warn');
       return false;
     }finally{ regOpening = null; }
   })();
@@ -12776,14 +12847,21 @@ function chestScoreFromPower(pw, binHz, f0){
   return Math.max(0, Math.min(100, ((magRatio-1.5)/(5.5-1.5))*100));
 }
 
+// 4b: the readout needs only the register input (it used to wait for `analyser`, which only initAudio sets, so on a
+// fresh page Register Coach showed nothing). A clean crossing is timed by the clock (performance.now()), not frames ÷ 60:
+// it starts at the frame before the first clean one, so N clean frames at 60 Hz read N/60 s as before.
+let bridgeStartAt = null, regLastFrameAt = null, bestBridgeMs = 0;
 function updateRegisterUI(freq, chestScore){
-  if(!freq || freq<50 || freq>1200 || !analyser){
+  const now = performance.now(), prevFrameAt = regLastFrameAt;
+  regLastFrameAt = now;
+  if(!freq || freq<50 || freq>1200){
     document.getElementById('regLabel').textContent='—';
     document.getElementById('regFeedback').textContent=t('action_listening');
-    document.getElementById('regFeedback').className='reg-feedback';
+    document.getElementById('regFeedback').className='reg-feedback vc-live-only';
     document.getElementById('regNoteStat').textContent='—';
     document.getElementById('regChestScoreStat').textContent='—';
-    bridgeFrameCount = 0;
+    document.getElementById('pitchMarker').classList.remove('is-pushing');
+    bridgeFrameCount = 0; bridgeStartAt = null;
     return;
   }
 
@@ -12796,22 +12874,23 @@ function updateRegisterUI(freq, chestScore){
 
   let zone, label, feedback, feedbackWarn=false;
   if(!aboveBreak){
-    zone='chest'; label='Chest voice'; feedback='Comfortably below your passaggio.';
+    zone='chest'; label=t('reg_label_chest'); feedback=t('reg_fb_chest');
   } else if(chestScore >= 62){
-    zone='chest'; label='Pushing chest'; feedback='Sounds like you\'re carrying chest voice past the break — try lightening into mixed.'; feedbackWarn=true;
+    zone='chest'; label=t('reg_label_pushing'); feedback=t('reg_fb_pushing'); feedbackWarn=true;
   } else if(chestScore >= 35){
-    zone='mixed'; label='Mixed voice'; feedback='Nice — that\'s a blended tone crossing the bridge.';
+    zone='mixed'; label=t('reg_label_mixed'); feedback=t('reg_fb_mixed');
   } else {
-    zone='head'; label='Head voice'; feedback='Light, head-dominant tone above the break.';
+    zone='head'; label=t('reg_label_head'); feedback=t('reg_fb_head');
   }
 
   const regLabelEl = document.getElementById('regLabel');
   regLabelEl.textContent = label;
-  regLabelEl.className = 'reg-label '+zone;
+  regLabelEl.className = 'reg-label vc-live-only '+zone;
   const fbEl = document.getElementById('regFeedback');
   fbEl.textContent = feedback;
-  fbEl.className = 'reg-feedback'+(feedbackWarn?' warn':'');
+  fbEl.className = 'reg-feedback vc-live-only'+(feedbackWarn?' warn':'');
 
+  // the marker: the voice colour, with a warning ring while pushing chest past the break
   const marker = document.getElementById('pitchMarker');
   const wasMixed = marker.dataset.zone === 'mixed';
   if(zone==='mixed' && !wasMixed){
@@ -12819,31 +12898,27 @@ function updateRegisterUI(freq, chestScore){
     setTimeout(()=>marker.classList.remove('marker-pulse'), 700);
   }
   marker.dataset.zone = zone;
-
-  // marker position + color
+  marker.classList.toggle('is-pushing', feedbackWarn);
   const {lowMidi, highMidi} = {lowMidi:window._regLow, highMidi:window._regHigh};
-  const y = midiToY(note.midi, lowMidi, highMidi, 10, 310);
-  marker.setAttribute('cy', y);
-  const markerColor = zone==='chest' ? getComputedStyle(document.documentElement).getPropertyValue('--brass')
-                    : zone==='head' ? getComputedStyle(document.documentElement).getPropertyValue('--teal')
-                    : getComputedStyle(document.documentElement).getPropertyValue('--hl-ink-2');
-  marker.setAttribute('fill', markerColor.trim());
+  marker.setAttribute('cy', midiToY(note.midi, lowMidi, highMidi, 10, 310));
 
   // bridge streak: clean crossing = above passaggio AND not "pushing chest"
   if(aboveBreak && zone!=='chest'){
     bridgeFrameCount++;
+    if(bridgeStartAt===null) bridgeStartAt = prevFrameAt ?? now-1000/60;
   } else {
-    if(bridgeFrameCount > bestBridgeFrames) bestBridgeFrames = bridgeFrameCount;
-    bridgeFrameCount = 0;
+    bridgeFrameCount = 0; bridgeStartAt = null;
   }
-  const liveSeconds = (Math.max(bridgeFrameCount,bestBridgeFrames)/60).toFixed(1);
-  document.getElementById('regBridgeStat').textContent = (bridgeFrameCount/60).toFixed(1)+'s';
+  const curMs = bridgeStartAt===null ? 0 : now-bridgeStartAt;
+  document.getElementById('regBridgeStat').textContent = regSeconds(curMs/1000);
 
-  if(bridgeFrameCount > bestBridgeFrames){
-    bestBridgeFrames = bridgeFrameCount;
-    maybeSaveBestBridge(bestBridgeFrames/60);
+  if(curMs > bestBridgeMs){
+    bestBridgeMs = curMs;
+    bestBridgeFrames = Math.round(curMs*60/1000); // kept for anything that reads it
+    maybeSaveBestBridge(bestBridgeMs/1000);
   }
 }
+const regSeconds = s=>s.toLocaleString(localeForLang(), {minimumFractionDigits:1, maximumFractionDigits:1})+' s';
 
 async function maybeSaveBestBridge(seconds){
   if(!profile) return;
@@ -12857,14 +12932,17 @@ async function maybeSaveBestBridge(seconds){
     if(hadPriorBest) triggerNewRecord(t('record_popup_bridge_crossing'), progress.bestBridgeSeconds+'s', `+${Math.round(delta*10)/10}s ${t('record_delta_suffix')}`);
   }
 }
+// Best (paper): your saved best; signed in with none yet, its own line; signed out, the sign-in line under the rows.
 function updateBestBridgeLabel(){
   const el = document.getElementById('regBestStat');
   if(!el) return;
+  const signin = document.getElementById('regSigninNote');
   if(profile && progress && progress.bestBridgeSeconds){
-    el.textContent = `${t('registercoach_beststat_p1')} ${progress.bestBridgeSeconds}s`;
+    el.textContent = regSeconds(progress.bestBridgeSeconds);
   } else {
-    el.textContent = t('registercoach_signin_beststat');
+    el.textContent = profile ? t('registercoach_nobest') : '—';
   }
+  if(signin) signin.hidden = !!profile;
 }
 
 /* ---------------- Vocal Load Dosimetry: Register Coach pilot (phase 3a) ---------------- */
@@ -13069,6 +13147,16 @@ async function vlSidecar(isActive){
   tick();
 }
 
+function regReset(){
+  document.getElementById('regMicBtn').classList.remove('listening');
+  document.getElementById('regMicBtnLabel').textContent = t('register_start_btn');
+}
+// Leaving while listening (stopAllActiveSessions sets mode = null): the button back to Start.
+function regStop(){
+  if(!document.getElementById('regMicBtn').classList.contains('listening')) return;
+  vlEnd();
+  regReset();
+}
 document.getElementById('regMicBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('regMicBtn');
   const label = document.getElementById('regMicBtnLabel');
@@ -13076,18 +13164,19 @@ document.getElementById('regMicBtn').addEventListener('click', async ()=>{
     mode=null;
     cancelAnimationFrame(rafId);
     vlEnd();
-    btn.classList.remove('listening');
-    label.textContent='Start listening';
+    regReset();
     return;
   }
   if(!requireProFeature('Register Coach')) return;
   const ok = await openRegisterInput();
   if(!ok) return;
   drawBridgeZones();
-  bridgeFrameCount = 0;
+  bridgeFrameCount = 0; bridgeStartAt = null; regLastFrameAt = null;
+  document.getElementById('regBridgeStat').textContent = regSeconds(0);
   mode='register';
   btn.classList.add('listening');
-  label.textContent='Listening — tap to stop';
+  label.textContent=t('action_stop');
+  houseSession(()=>mode==='register', document.getElementById('registerStage')); // Start to Stop (loop() feeds the vocal load)
   cancelAnimationFrame(rafId);
   loop();
   recordActivity();
@@ -19684,6 +19773,7 @@ function stopAllActiveSessions(){
   // next animation frame naturally — no new loop logic invented here.
   if(typeof rafId!=='undefined' && rafId){ cancelAnimationFrame(rafId); rafId=null; }
   if(typeof mode!=='undefined') mode=null;
+  if(typeof regStop==='function') regStop();
   karaokeActive = false;
   gliderActive = false;
   bossActive = false;
