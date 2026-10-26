@@ -1540,6 +1540,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-level-wrap{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .vc-level{width:100%;--part:var(--hl-voice);background:var(--hairline);}
   .vc-level-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Emotion Mode: the intentions as chips on paper; on the stage the take, the note, the Loudness and time meters */
+  .emo-chips{display:flex;flex-wrap:wrap;gap:var(--hl-s2);margin:var(--hl-s3) 0 var(--hl-s4);}
+  #emoPickNote{margin:0 0 var(--hl-s4);}
+  #emoResultCard .vc-result{margin-top:0;padding-top:0;border-top:0;}
   /* Resonance: the particle field sized to the stage, the zone big, Steadiness and Ripple small */
   #resonanceCanvas{display:block;width:100%;max-width:560px;height:auto;aspect-ratio:600/360;max-height:42dvh;object-fit:contain;}
   .res-zone{font-size:var(--hl-t-h1);font-stretch:var(--hl-w-wide);font-weight:300;line-height:1.1;color:var(--hl-ink);}
@@ -4285,30 +4289,37 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <div class="key-card" id="emoPreCard">
-      <div class="step-label" data-i18n="emotionmode_pick_label">Pick two intentions to compare</div>
-      <div class="ex-type-row" id="emoIntentRow" style="margin:10px 0 20px;flex-wrap:wrap;">
-        <button class="ex-type-btn active" data-emo="tender" data-i18n="emotion_tender" aria-pressed="true">❤️ Tender</button>
-        <button class="ex-type-btn" data-emo="powerful" data-i18n="emotion_powerful" aria-pressed="false">🔥 Powerful</button>
-        <button class="ex-type-btn" data-emo="vulnerable" data-i18n="emotion_vulnerable" aria-pressed="false">😔 Vulnerable</button>
-        <button class="ex-type-btn" data-emo="confident" data-i18n="emotion_confident" aria-pressed="false">😎 Confident</button>
-        <button class="ex-type-btn" data-emo="dramatic" data-i18n="emotion_dramatic" aria-pressed="false">😱 Dramatic</button>
+      <div class="vc-stage emo-stage" id="emoStage">
+      <div class="step-label vc-paper-only" data-i18n="emotionmode_pick_label">Pick the intention for your first take</div>
+      <div class="emo-chips vc-paper-only" id="emoIntentRow" role="group">
+        <button class="hl-chip" data-emo="tender" data-i18n="emotion_tender" aria-pressed="true">Tender</button>
+        <button class="hl-chip" data-emo="powerful" data-i18n="emotion_powerful" aria-pressed="false">Powerful</button>
+        <button class="hl-chip" data-emo="vulnerable" data-i18n="emotion_vulnerable" aria-pressed="false">Vulnerable</button>
+        <button class="hl-chip" data-emo="confident" data-i18n="emotion_confident" aria-pressed="false">Confident</button>
+        <button class="hl-chip" data-emo="dramatic" data-i18n="emotion_dramatic" aria-pressed="false">Dramatic</button>
       </div>
-      <p class="fine-print" id="emoPickNote" style="margin-bottom:16px;">Selected: Tender</p>
-      <button class="mic-btn" id="emoStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Begin — sing it Tender first</button>
-    </div>
-
-    <div class="key-card" id="emoRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="emoRunnerLabel">Take 1 — Tender</div>
-      <div class="chord-label-display" id="emoRunnerNote" style="margin-top:10px;">—</div>
-      <p class="desc" id="emoRunnerStatus" style="margin-top:10px;"></p>
+      <p class="fine-print vc-paper-only" id="emoPickNote">Selected: Tender</p>
+      <div class="vc-take-runner" id="emoRunnerCard" style="display:none;">
+        <div class="step-label" id="emoRunnerLabel">Take 1 of 2 · Tender</div>
+        <div class="ex-target-note vc-take-note" id="emoRunnerNote">—</div>
+        <div class="vc-level-wrap"><div class="vc-level-label" data-i18n="breath_level_label" aria-hidden="true">Loudness</div><div class="hl-meter vc-level" id="emoLevel" role="meter" aria-valuemin="0" aria-valuemax="100"><i></i></div></div>
+        <div class="vc-time" id="emoTime"><div class="hl-meter vc-time-meter" role="meter" aria-valuemin="0" aria-valuemax="100"><i></i></div><span class="vc-time-left"></span></div>
+        <p class="vc-visually-hidden" id="emoRunnerStatus" role="status"></p>
+      </div>
+      <button class="mic-btn vc-take-pill" id="emoStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="emoStartLabel">Begin: sing it Tender first</span></button>
       <div class="vl-gauge" id="vlGaugeEmo" style="display:none;"></div>
+      </div>
     </div>
 
-    <div class="key-card" id="emoResultCard" role="status" aria-live="polite" style="display:none;">
-      <div class="step-label" style="text-align:center;" data-i18n="emotionmode_differences_label">Real, measured differences</div>
-      <div id="emoResultRows" style="margin-top:14px;"></div>
-      <p class="fine-print" id="emoResultNote" style="margin-top:12px;"></p>
-      <button class="ghost-btn" id="emoRetryBtn" style="margin-top:16px;width:100%;justify-content:center;" data-i18n="emotionmode_retry_btn">Try two different intentions</button>
+    <div class="key-card" id="emoResultCard" style="display:none;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="vc-result-meta" data-i18n="emotionmode_differences_label">Measured differences</div>
+      <h3 class="hl-h3" id="emoResultHead"></h3>
+      <div class="vc-result-dims" id="emoResultRows"></div>
+      <p class="ex-feedback-text hl-coach" id="emoResultNote"></p>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="emo_measure"></p></details>
+      <button class="ghost-btn" id="emoRetryBtn" data-i18n="emotionmode_retry_btn">Try two different intentions</button>
+      </div>
     </div>
   </section>
 
@@ -6517,14 +6528,14 @@ const TRANSLATIONS = {
     mirror_yousang_label:"You",
     mirror_deviation_label:"Off by",
     emotionmode_title:"Emotion Mode",
-    emotionmode_sub:'Same note, two real intentions — this app never judges which "felt" more tender or powerful, only what\'s genuinely measurable: real dynamic range, real loudness, and real pitch stability, compared honestly between your two takes.',
-    emotionmode_pick_label:'Pick two intentions to compare',
-    emotion_tender:'❤️ Tender',
-    emotion_powerful:'🔥 Powerful',
-    emotion_vulnerable:'😔 Vulnerable',
-    emotion_confident:'😎 Confident',
-    emotion_dramatic:'😱 Dramatic',
-    emotionmode_differences_label:'Real, measured differences',
+    emotionmode_sub:"The same note, sung with two intentions. Nothing judges which felt more tender or powerful: only what can be measured is compared between your two takes, dynamic range, loudness and pitch stability.",
+    emotionmode_pick_label:"Pick the intention for your first take",
+    emotion_tender:"Tender",
+    emotion_powerful:"Powerful",
+    emotion_vulnerable:"Vulnerable",
+    emotion_confident:"Confident",
+    emotion_dramatic:"Dramatic",
+    emotionmode_differences_label:"Measured differences",
     emotionmode_retry_btn:'Try two different intentions',
     vocallab_title:'Vocal Lab',
     vocallab_sub:"Not one range number but three. A note you hit once isn't the same as a note you can rely on. Every tier comes from your captured attempts.",
@@ -7743,6 +7754,18 @@ const TRANSLATIONS = {
     res_calm:"Calm",
     res_canvas_label:"Your voice as particles: the colour shows your register, the spread your pitch steadiness",
     resonance_measure:"The register comes from the chest score, the same reading as Register Coach (the brightness of your harmonics): 62 or more reads Chest, 35 or more Mixed, under 35 Head. Steadiness is 100 minus 2.2 times the spread of your last 45 pitch readings, in cents (their standard deviation). Ripple counts how often your pitch crosses its average over those readings: 3 or more crossings reads Rippling.",
+    emo_selected:"Selected: {name}",
+    emo_begin:"Begin: sing it {name} first",
+    emo_take:"Take {n} of 2 · {name}",
+    emo_sing_as:"Sing this note: {name}.",
+    emo_compared:"{b} compared with {a}",
+    emo_dyn_label:"Dynamic range",
+    emo_loud_label:"Loudness",
+    emo_stab_label:"Pitch stability",
+    emo_points:"{n} points",
+    emo_note:"Neither take is right or wrong: this shows what changed between them.",
+    emo_notenough:"There wasn't enough signal on one of the takes to compare them. Try again a little louder or closer to the mic.",
+    emo_measure:"One note from the lower middle of your range, sung twice: first with your intention, then with another picked at random. Each take plays the note for 0.6 seconds, then listens for 3 seconds from 0.9 seconds after it starts. Dynamic range is your loudest moment minus your quietest (of the moments above the silence level); loudness is your average level; pitch stability is 100 minus 3 times the spread of your pitch, in cents, with natural vibrato taken out. Each row shows the second take against the first: as a percentage for dynamic range and loudness, in points for stability. Emotion itself isn't judged: only these three are measured.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8001,14 +8024,14 @@ const TRANSLATIONS = {
     mirror_yousang_label:"Vous",
     mirror_deviation_label:"Écart",
     emotionmode_title:"Mode Émotion",
-    emotionmode_sub:'Même note, deux vraies intentions — cette application ne juge jamais laquelle « ressentait » plus de tendresse ou de puissance, seulement ce qui est vraiment mesurable : vraie plage dynamique, vrai volume, et vraie stabilité de justesse, comparés honnêtement entre vos deux prises.',
-    emotionmode_pick_label:'Choisissez deux intentions à comparer',
-    emotion_tender:'❤️ Tendre',
-    emotion_powerful:'🔥 Puissant',
-    emotion_vulnerable:'😔 Vulnérable',
-    emotion_confident:'😎 Confiant',
-    emotion_dramatic:'😱 Dramatique',
-    emotionmode_differences_label:'Vraies différences mesurées',
+    emotionmode_sub:"La même note, chantée avec deux intentions. Rien ne juge laquelle était la plus tendre ou la plus puissante : seul ce qui se mesure est comparé entre vos deux prises, plage dynamique, volume et stabilité de la hauteur.",
+    emotionmode_pick_label:"Choisissez l'intention de votre première prise",
+    emotion_tender:"Tendre",
+    emotion_powerful:"Puissant",
+    emotion_vulnerable:"Vulnérable",
+    emotion_confident:"Confiant",
+    emotion_dramatic:"Dramatique",
+    emotionmode_differences_label:"Différences mesurées",
     emotionmode_retry_btn:'Essayer deux intentions différentes',
     vocallab_title:'Labo Vocal',
     vocallab_sub:"Pas un chiffre de tessiture, mais trois. Une note atteinte une fois n'est pas une note sur laquelle vous pouvez compter. Chaque niveau vient de vos tentatives enregistrées.",
@@ -9227,6 +9250,18 @@ const TRANSLATIONS = {
     res_calm:"Calme",
     res_canvas_label:"Votre voix en particules : la couleur montre votre registre, l'étalement la stabilité de votre hauteur",
     resonance_measure:"Le registre vient du score de poitrine, la même mesure que le Coach de registre (la brillance de vos harmoniques) : 62 ou plus se lit Poitrine, 35 ou plus Mixte, sous 35 Tête. La stabilité vaut 100 moins 2,2 fois la dispersion de vos 45 dernières mesures de hauteur, en cents (leur écart type). L'ondulation compte combien de fois votre hauteur croise sa moyenne sur ces mesures : 3 croisements ou plus se lisent Ondulante.",
+    emo_selected:"Choisi : {name}",
+    emo_begin:"Commencer : d'abord {name}",
+    emo_take:"Prise {n} sur 2 · {name}",
+    emo_sing_as:"Chantez cette note : {name}.",
+    emo_compared:"{b} comparé à {a}",
+    emo_dyn_label:"Plage dynamique",
+    emo_loud_label:"Volume",
+    emo_stab_label:"Stabilité de la hauteur",
+    emo_points:"{n} points",
+    emo_note:"Aucune prise n'est juste ou fausse : ceci montre ce qui a changé entre elles.",
+    emo_notenough:"Il n'y avait pas assez de signal sur l'une des prises pour les comparer. Réessayez un peu plus fort ou plus près du micro.",
+    emo_measure:"Une note du bas-milieu de votre tessiture, chantée deux fois : d'abord avec votre intention, puis avec une autre tirée au hasard. Chaque prise joue la note 0,6 seconde, puis écoute 3 secondes à partir de 0,9 seconde après son début. La plage dynamique est votre moment le plus fort moins le plus faible (parmi ceux au-dessus du seuil de silence) ; le volume est votre niveau moyen ; la stabilité de la hauteur vaut 100 moins 3 fois la dispersion de votre hauteur, en cents, sans le vibrato naturel. Chaque ligne montre la deuxième prise face à la première : en pourcentage pour la plage dynamique et le volume, en points pour la stabilité. L'émotion elle-même n'est pas jugée : seules ces trois mesures le sont.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9485,14 +9520,14 @@ const TRANSLATIONS = {
     mirror_yousang_label:"Tú",
     mirror_deviation_label:"Desviación",
     emotionmode_title:"Modo Emoción",
-    emotionmode_sub:'Misma nota, dos intenciones reales — esta app nunca juzga cuál "se sintió" más tierna o poderosa, solo lo que es genuinamente medible: rango dinámico real, volumen real, y estabilidad de afinación real, comparados honestamente entre tus dos tomas.',
-    emotionmode_pick_label:'Elige dos intenciones para comparar',
-    emotion_tender:'❤️ Tierno',
-    emotion_powerful:'🔥 Poderoso',
-    emotion_vulnerable:'😔 Vulnerable',
-    emotion_confident:'😎 Confiado',
-    emotion_dramatic:'😱 Dramático',
-    emotionmode_differences_label:'Diferencias reales medidas',
+    emotionmode_sub:"La misma nota, cantada con dos intenciones. Nada juzga cuál sonó más tierna o poderosa: solo se compara lo que se puede medir entre tus dos tomas, rango dinámico, volumen y estabilidad de la altura.",
+    emotionmode_pick_label:"Elige la intención de tu primera toma",
+    emotion_tender:"Tierno",
+    emotion_powerful:"Poderoso",
+    emotion_vulnerable:"Vulnerable",
+    emotion_confident:"Confiado",
+    emotion_dramatic:"Dramático",
+    emotionmode_differences_label:"Diferencias medidas",
     emotionmode_retry_btn:'Prueba dos intenciones diferentes',
     vocallab_title:'Laboratorio Vocal',
     vocallab_sub:"No un número de rango, sino tres. Una nota que alcanzas una vez no es una nota en la que puedes confiar. Cada nivel sale de tus intentos registrados.",
@@ -10711,6 +10746,18 @@ const TRANSLATIONS = {
     res_calm:"Tranquila",
     res_canvas_label:"Tu voz en partículas: el color muestra tu registro y la dispersión la estabilidad de tu altura",
     resonance_measure:"El registro sale de la puntuación de pecho, la misma lectura que el Coach de registro (el brillo de tus armónicos): 62 o más se lee Pecho, 35 o más Mixta, por debajo de 35 Cabeza. La estabilidad es 100 menos 2,2 veces la dispersión de tus últimas 45 lecturas de altura, en cents (su desviación típica). La ondulación cuenta cuántas veces tu altura cruza su media en esas lecturas: 3 cruces o más se leen Ondulante.",
+    emo_selected:"Elegida: {name}",
+    emo_begin:"Empezar: primero {name}",
+    emo_take:"Toma {n} de 2 · {name}",
+    emo_sing_as:"Canta esta nota: {name}.",
+    emo_compared:"{b} comparado con {a}",
+    emo_dyn_label:"Rango dinámico",
+    emo_loud_label:"Volumen",
+    emo_stab_label:"Estabilidad de la altura",
+    emo_points:"{n} puntos",
+    emo_note:"Ninguna toma es correcta o incorrecta: esto muestra qué cambió entre ellas.",
+    emo_notenough:"No hubo suficiente señal en una de las tomas para compararlas. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
+    emo_measure:"Una nota de la parte media baja de tu tesitura, cantada dos veces: primero con tu intención y luego con otra elegida al azar. Cada toma hace sonar la nota 0,6 segundos y luego escucha 3 segundos desde 0,9 segundos después de empezar. El rango dinámico es tu momento más fuerte menos el más suave (de los que superan el umbral de silencio); el volumen es tu nivel medio; la estabilidad de la altura es 100 menos 3 veces la dispersión de tu altura, en cents, sin el vibrato natural. Cada fila muestra la segunda toma frente a la primera: en porcentaje para el rango dinámico y el volumen, en puntos para la estabilidad. La emoción en sí no se juzga: solo se miden estas tres cosas.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10969,14 +11016,14 @@ const TRANSLATIONS = {
     mirror_yousang_label:"Siz",
     mirror_deviation_label:"Sapma",
     emotionmode_title:"Duygu Modu",
-    emotionmode_sub:'Aynı nota, iki gerçek niyet — bu uygulama hangisinin daha hassas veya güçlü "hissettirdiğine" asla karar vermez, sadece gerçekten ölçülebilir olanı: gerçek dinamik aralık, gerçek ses düzeyi ve gerçek perde kararlılığı, iki çekiminiz arasında dürüstçe karşılaştırılır.',
-    emotionmode_pick_label:'Karşılaştırmak için iki niyet seçin',
-    emotion_tender:'❤️ Hassas',
-    emotion_powerful:'🔥 Güçlü',
-    emotion_vulnerable:'😔 Kırılgan',
-    emotion_confident:'😎 Kendinden Emin',
-    emotion_dramatic:'😱 Dramatik',
-    emotionmode_differences_label:'Gerçek, ölçülen farklar',
+    emotionmode_sub:"Aynı nota, iki niyetle söylenir. Hangisinin daha hassas ya da güçlü hissettirdiğine bakılmaz: iki çekiminiz arasında yalnızca ölçülebilen karşılaştırılır; dinamik aralık, ses düzeyi ve perde kararlılığı.",
+    emotionmode_pick_label:"İlk çekiminizin niyetini seçin",
+    emotion_tender:"Hassas",
+    emotion_powerful:"Güçlü",
+    emotion_vulnerable:"Kırılgan",
+    emotion_confident:"Kendinden Emin",
+    emotion_dramatic:"Dramatik",
+    emotionmode_differences_label:"Ölçülen farklar",
     emotionmode_retry_btn:'İki farklı niyet deneyin',
     vocallab_title:'Vokal Laboratuvarı',
     vocallab_sub:"Tek bir aralık sayısı değil, üç. Bir kez ulaştığınız nota, güvenebileceğiniz bir nota değildir. Her katman kaydedilen denemelerinizden gelir.",
@@ -12195,6 +12242,18 @@ const TRANSLATIONS = {
     res_calm:"Sakin",
     res_canvas_label:"Parçacıklar olarak sesiniz: renk register'ınızı, yayılım perde kararlılığınızı gösterir",
     resonance_measure:"Register, Register Koçu ile aynı ölçüm olan göğüs puanından gelir (harmoniklerinizin parlaklığı): 62 ve üzeri Göğüs, 35 ve üzeri Karışık, 35'in altı Baş okunur. Sabitlik, son 45 perde ölçümünüzün yayılımının (sent cinsinden standart sapma) 2,2 katının 100'den çıkarılmasıdır. Dalgalanma, perdenizin bu ölçümlerde ortalamasını kaç kez kestiğini sayar: 3 veya daha fazla kesişim Dalgalı okunur.",
+    emo_selected:"Seçilen: {name}",
+    emo_begin:"Başla: önce {name}",
+    emo_take:"Çekim {n}/2 · {name}",
+    emo_sing_as:"Bu notayı söyleyin: {name}.",
+    emo_compared:"{a} ile karşılaştırıldığında {b}",
+    emo_dyn_label:"Dinamik aralık",
+    emo_loud_label:"Ses düzeyi",
+    emo_stab_label:"Perde kararlılığı",
+    emo_points:"{n} puan",
+    emo_note:"Hiçbir çekim doğru ya da yanlış değil: bu, aralarında neyin değiştiğini gösterir.",
+    emo_notenough:"Karşılaştırmak için çekimlerden birinde yeterli sinyal yoktu. Biraz daha yüksek sesle ya da mikrofona daha yakın tekrar deneyin.",
+    emo_measure:"Ses aralığınızın alt-orta kısmından bir nota, iki kez söylenir: önce sizin niyetinizle, sonra rastgele seçilen bir başkasıyla. Her çekim notayı 0,6 saniye çalar, ardından başlangıçtan 0,9 saniye sonra 3 saniye dinler. Dinamik aralık, en yüksek anınız eksi en sessiz anınızdır (sessizlik eşiğinin üstündeki anlar arasında); ses düzeyi ortalama seviyenizdir; perde kararlılığı, doğal vibrato çıkarılarak perdenizin yayılımının (sent) 3 katının 100'den çıkarılmasıdır. Her satır ikinci çekimi birinciye göre gösterir: dinamik aralık ve ses düzeyi için yüzde, kararlılık için puan. Duygunun kendisi değerlendirilmez: yalnızca bu üçü ölçülür.",
   },
 };
 let currentLanguage = 'en';
@@ -19865,6 +19924,7 @@ function stopAllActiveSessions(){
   riftActive = false;
   eveActive = false;
   emoActive = false;
+  if(typeof emoStop==='function') emoStop();
   fiveActive = false;
   oneTakeActive = false;
   drillActive = false;
@@ -22660,65 +22720,88 @@ document.getElementById('studioRecordBtn')?.addEventListener('click', async ()=>
 });
 
 /* ---------------- Emotion Mode (real comparative dynamics/stability, no fabricated emotion judgment) ---------------- */
-const EMOTION_LABELS = {tender:'❤️ Tender', powerful:'🔥 Powerful', vulnerable:'😔 Vulnerable', confident:'😎 Confident', dramatic:'😱 Dramatic'};
+// The five intentions' names, keyed (4b: no emoji)
+const EMOTION_LABELS = {get tender(){return t('emotion_tender');}, get powerful(){return t('emotion_powerful');}, get vulnerable(){return t('emotion_vulnerable');},
+  get confident(){return t('emotion_confident');}, get dramatic(){return t('emotion_dramatic');}};
 let emoFirstIntent = 'tender';
 let emoActive = false;
 let emoSecondIntent = null;
 let emoTargetMidi = null;
 let emoResults = [];
+let emoRun = 0; // a session stopped and started again doesn't carry on the old one
 const EMO_CAPTURE_MS = 3000;
 
-document.querySelectorAll('#emoIntentRow .ex-type-btn').forEach(btn=>{
+function renderEmoPick(){
+  const name = EMOTION_LABELS[emoFirstIntent];
+  document.getElementById('emoPickNote').textContent = t('emo_selected').replace('{name}', name);
+  document.getElementById('emoStartLabel').textContent = t('emo_begin').replace('{name}', name);
+}
+document.querySelectorAll('#emoIntentRow [data-emo]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#emoIntentRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    document.querySelectorAll('#emoIntentRow [data-emo]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     emoFirstIntent = btn.dataset.emo;
-    const plain = EMOTION_LABELS[emoFirstIntent].replace(/^\S+\s/,'');
-    document.getElementById('emoPickNote').textContent = `Selected: ${plain}`;
-    document.getElementById('emoStartBtn').innerHTML = `<span class="dot-icon"></span>Begin — sing it ${plain} first`;
+    renderEmoPick();
   });
 });
+renderEmoPick();
 
+// Leaving mid-take (stopAllActiveSessions): the cards back to the start, Start live again.
+function emoStop(){
+  emoRun++;
+  document.getElementById('emoRunnerCard').style.display = 'none';
+  document.getElementById('emoPreCard').style.display = 'block';
+  document.getElementById('emoStartBtn').disabled = false;
+  renderEmoPick();
+}
 document.getElementById('emoStartBtn')?.addEventListener('click', async ()=>{
+  const btn = document.getElementById('emoStartBtn');
+  if(btn.disabled) return;
   if(!requireProFeature('Emotion Mode')) return;
   await initAudio();
   emoActive = true;
+  const run = ++emoRun, live = ()=>emoActive && run===emoRun;
   const {lo, hi} = comfortBounds();
   emoTargetMidi = pickNote('emo', lo, hi);
   const others = Object.keys(EMOTION_LABELS).filter(k=>k!==emoFirstIntent);
   emoSecondIntent = others[Math.floor(Math.random()*others.length)];
   emoResults = [];
 
-  document.getElementById('emoPreCard').style.display = 'none';
+  btn.disabled = true; // the status pill on the stage
   document.getElementById('emoResultCard').style.display = 'none';
   document.getElementById('emoRunnerCard').style.display = 'block';
-  singingSession(()=>emoActive);
+  document.getElementById('emoLevel').setAttribute('aria-label', t('breath_level_label'));
+  singingSession(()=>emoActive, document.getElementById('emoStage')); // both takes
 
-  await runEmoRound(emoFirstIntent, 1);
-  if(!emoActive) return;
-  await runEmoRound(emoSecondIntent, 2);
-  if(!emoActive) return;
+  await runEmoRound(emoFirstIntent, 1, live);
+  if(!live()){ if(run===emoRun) emoStop(); return; }
+  await runEmoRound(emoSecondIntent, 2, live);
+  if(!live()){ if(run===emoRun) emoStop(); return; }
   finishEmoMode();
 });
 
-async function runEmoRound(intentKey, roundNum){
-  document.getElementById('emoRunnerLabel').textContent = `Take ${roundNum} — ${EMOTION_LABELS[intentKey]}`;
+async function runEmoRound(intentKey, roundNum, live = ()=>emoActive){
+  const name = EMOTION_LABELS[intentKey], pill = document.getElementById('emoStartLabel'), L = {};
+  const time = document.getElementById('emoTime'), level = document.getElementById('emoLevel');
+  document.getElementById('emoRunnerLabel').textContent = t('emo_take').replace('{n}', roundNum).replace('{name}', name);
   document.getElementById('emoRunnerNote').textContent = noteNameFromMidi(emoTargetMidi);
-  const plain = EMOTION_LABELS[intentKey].replace(/^\S+\s/,'');
-  document.getElementById('emoRunnerStatus').textContent = `Sing this note as ${plain} as you genuinely can.`;
+  document.getElementById('emoRunnerStatus').textContent = t('emo_sing_as').replace('{name}', name);
+  pill.textContent = t('ex_listen_ref');
+  vcTimeMeter(time, 0, EMO_CAPTURE_MS); vcLevelMeter(level, null);
   playTone(noteToFreq(emoTargetMidi), 0.6, 0);
   await new Promise(r=>setTimeout(r, 900));
-  document.getElementById('emoRunnerStatus').textContent = 'Recording…';
+  if(!live()) return;
+  pill.textContent = t('onetake_recording');
 
   const rmsSamples = [];
   const centsSamples = [];
   const start = performance.now();
   await new Promise(resolve=>{
     function frame(){
-      if(!emoActive){ resolve(); return; }
+      if(!live()){ resolve(); return; }
       analyser.getFloatTimeDomainData(dataArray);
-      const rms = computeRMS(readRawMic());
+      const raw = readRawMic(), rms = computeRMS(raw);
       const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
       if(rms>0.008) rmsSamples.push(rms);
       if(freq>0){
@@ -22726,6 +22809,7 @@ async function runEmoRound(intentKey, roundNum){
         if(cents!==null && Math.abs(cents)<400) centsSamples.push({t:performance.now()-start, c:cents});
       }
       const t = performance.now()-start;
+      vcFeed(L, ()=>{ vcLevelMeter(level, raw); vcTimeMeter(time, t, EMO_CAPTURE_MS); });
       if(t < EMO_CAPTURE_MS) requestAnimationFrame(frame); else resolve();
     }
     frame();
@@ -22745,23 +22829,29 @@ async function runEmoRound(intentKey, roundNum){
   emoResults.push({intent:intentKey, dynamicRange, avgLoudness, stability, heard: rmsSamples.length>0});
 }
 
+// No big number: two takes compared, no score. The heading names them; each row the second take against the first.
 function finishEmoMode(){
   emoActive = false;
   document.getElementById('emoRunnerCard').style.display = 'none';
+  document.getElementById('emoStartBtn').disabled = false;
+  renderEmoPick();
   document.getElementById('emoResultCard').style.display = 'block';
 
   const [a,b] = emoResults;
+  const signed = n=>(n>=0 ? '+' : '−')+Math.abs(n);
+  const row = (label, val)=>`<div class="vc-dim"><span>${label}</span><span>${val}</span></div>`;
   const rows = [];
+  document.getElementById('emoResultHead').textContent = t('emo_compared').replace('{b}', EMOTION_LABELS[b.intent]).replace('{a}', EMOTION_LABELS[a.intent]);
   if(a.heard && b.heard){
     const dynDeltaPct = a.dynamicRange>0 ? Math.round(((b.dynamicRange-a.dynamicRange)/a.dynamicRange)*100) : 0;
     const loudDeltaPct = a.avgLoudness>0 ? Math.round(((b.avgLoudness-a.avgLoudness)/a.avgLoudness)*100) : 0;
     const stabDelta = Math.round(b.stability-a.stability);
-    rows.push(`<div class="record-row"><span class="record-label">Dynamic range</span><span class="record-val">${EMOTION_LABELS[b.intent]} was ${dynDeltaPct>=0?'+':''}${dynDeltaPct}% vs ${EMOTION_LABELS[a.intent]}</span></div>`);
-    rows.push(`<div class="record-row"><span class="record-label">Loudness</span><span class="record-val">${EMOTION_LABELS[b.intent]} was ${loudDeltaPct>=0?'+':''}${loudDeltaPct}% vs ${EMOTION_LABELS[a.intent]}</span></div>`);
-    rows.push(`<div class="record-row"><span class="record-label">Pitch stability</span><span class="record-val">${EMOTION_LABELS[b.intent]} was ${stabDelta>=0?'+':''}${stabDelta} points vs ${EMOTION_LABELS[a.intent]}</span></div>`);
-    document.getElementById('emoResultNote').textContent = 'Neither take is "correct" — this just shows what genuinely changed between them.';
+    rows.push(row(t('emo_dyn_label'), signed(dynDeltaPct)+'%'));
+    rows.push(row(t('emo_loud_label'), signed(loudDeltaPct)+'%'));
+    rows.push(row(t('emo_stab_label'), t('emo_points').replace('{n}', signed(stabDelta))));
+    document.getElementById('emoResultNote').textContent = t('emo_note');
   } else {
-    rows.push(`<p class="desc" style="color:var(--muted);">Not enough signal on at least one take to compare honestly.</p>`);
+    document.getElementById('emoResultNote').textContent = t('emo_notenough');
   }
   document.getElementById('emoResultRows').innerHTML = rows.join('');
   if(profile) registerExerciseCompletion();

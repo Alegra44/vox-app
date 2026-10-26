@@ -79,7 +79,7 @@ async function sample(side, range) {
       const five = [], emo = [];
       for (let i = 0; i < 20; i++) {
         document.getElementById('fiveStartBtn').click(); await new Promise(r => realTO(r, 60)); five.push(fiveBaseMidi); fiveActive = false; if (typeof fiveStopped === 'function') fiveStopped(); // phase 4a: the start button is disabled while a session runs await new Promise(r => realTO(r, 60));
-        document.getElementById('emoStartBtn').click(); await new Promise(r => realTO(r, 60)); emo.push(emoTargetMidi); emoActive = false; await new Promise(r => realTO(r, 60));
+        document.getElementById('emoStartBtn').click(); await new Promise(r => realTO(r, 60)); emo.push(emoTargetMidi); emoActive = false; if (typeof emoStop === 'function') emoStop(); // phase 4b: the start button is disabled while a session runs await new Promise(r => realTO(r, 60));
       }
       out.five = five; out.emo = emo;
       const oneTake = async () => { runOneTake().catch(() => {}); await new Promise(r => realTO(r, 60)); const n = document.getElementById('oneTakeNote').textContent; oneTakeActive = false; await new Promise(r => realTO(r, 40)); return n; };
