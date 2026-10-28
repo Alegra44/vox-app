@@ -22,7 +22,7 @@
 //   Sheets: sheets/tools.jpg, sheets/scale-motion.jpg. [--no-tools] skips them; [--tools-only] takes only them.
 //   Phase 4b (PHASE4B.md §1f, §4): the 10 tools with their own displays (tools4b.js) the same way (the live tools idle,
 //   on the stage while listening, and stopped); Mirror's replay mid-scrub (<w>-<theme>/mirror-scrub.jpg); the new icon
-//   hl-alert. [--set 4a | 4b | all] (the default) picks the tools (4b alone: no Scale Run motion, only the 4b icon).
+//   hl-alert; Rhythm's result with every beat sung (rhythm-result-onbeat, the synthetic mic). [--set 4a | 4b | all] (the default) picks the tools (4b alone: no Scale Run motion, only the 4b icon).
 const path = require('path'), fs = require('fs'), os = require('os');
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -39,7 +39,8 @@ const H = require('./homeStates');
 const HOME_ROWS = [...H.HOME_STATES, 'coach-signedin', 'coach-signedout'];
 const S = require('./stage'), T = require('./tools'), TS = require('./tools4b').toolSet();
 const NEW_ICONS = [...(TS.set !== '4b' ? ['hl-fiveways', 'hl-mirror', 'hl-warmup'] : []), ...(TS.set !== '4a' ? ['hl-alert'] : [])];
-const TOOL_ROWS = [...TS.names, ...(TS.set !== '4a' ? ['mirror-scrub'] : [])];
+const TOOL_ROWS = [...TS.names, ...(TS.set !== '4a' ? ['mirror-scrub', 'rhythm-result-onbeat'] : [])];
+const ONBEAT_ONLY = process.argv.includes('--onbeat-only'); // just rhythm-result-onbeat (with --tools-only; the sheet redrawn from what's in --out)
 const STATE_ORDER = ['tuner-idle', 'tuner-live-unlocked', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'pitch-result-noheard', 'breath-live', 'warmup-overlay'];
 const MOTION_MS = [0, 80, 160, 320, 480, 640, 900, 1300];
 const Q = { type: 'jpeg', quality: 85 };
@@ -168,6 +169,7 @@ async function stateShots(dir, state) {
 
 async function toolShots(dir, state) {
   S.ensureStimuli();
+  if (ONBEAT_ONLY) return rhythmOnbeatShots(dir, state);
   for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) {
     const b = await S.launchMic(S.STIM.steady);
     try {
@@ -183,6 +185,7 @@ async function toolShots(dir, state) {
     } finally { await b.close(); }
     console.log(`   tools · ${w} · ${theme}`);
   }
+  if (TS.set !== '4a') await rhythmOnbeatShots(dir, state);
   if (TS.set === '4b') return iconShots(dir);
   // the Scale Run motion, 390 Light: frames after the start, and after the run ends (the house coming up)
   const b = await S.launchMic(S.STIM.steady);
@@ -200,6 +203,23 @@ async function toolShots(dir, state) {
     await frames('stop');
   } finally { await b.close(); }
   return iconShots(dir);
+}
+// Rhythm's result with the beats caught (the fake mic's steady note has no onsets): the synthetic mic sings each beat
+// (synthmic.js, as scores.js's onbeat stimulus), every size and theme (tools/<width>-<theme>/rhythm-result-onbeat.jpg)
+async function rhythmOnbeatShots(dir, state) {
+  const SYN = require('./synthmic'), r = require('./tools4b').byKey('rhythm');
+  for (const theme of THEMES) for (const [w, viewport] of Object.entries(SIZES)) {
+    const b = await SYN.launch();
+    try {
+      const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state, prepare: c => SYN.attach(c, S.STIM.steady, { level: 0 }) });
+      await C.clearOverlays(page); await r.open(page); await C.sleep(400);
+      await r.act(page); await page.waitForFunction(`!(${r.busy})()`, null, { timeout: r.timeout }).catch(() => {}); await C.sleep(900);
+      await page.evaluate(() => document.getElementById('rhythmResultCard').scrollIntoView({ block: 'start' })); await C.sleep(300);
+      const d = path.join(OUT, 'tools', `${w}-${theme}`); fs.mkdirSync(d, { recursive: true });
+      await page.screenshot({ path: path.join(d, 'rhythm-result-onbeat.jpg'), ...Q });
+      note(`rhythm onbeat ${w} ${theme}: ${await page.evaluate(() => rhythmResults.filter(x => x.claimed).length)} of 8 beats caught`);
+    } finally { await b.close(); }
+  }
 }
 // the icons new in 4a and 4b, at 24 and 48 px, Light and Dark
 async function iconShots(dir) {
