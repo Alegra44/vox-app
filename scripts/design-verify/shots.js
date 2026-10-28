@@ -214,7 +214,8 @@ async function rhythmOnbeatShots(dir, state) {
       const { page } = await C.openPage(b, { dir, theme, viewport, storageState: state, prepare: c => SYN.attach(c, S.STIM.steady, { level: 0 }) });
       await C.clearOverlays(page); await r.open(page); await C.sleep(400);
       await r.act(page); await page.waitForFunction(`!(${r.busy})()`, null, { timeout: r.timeout }).catch(() => {}); await C.sleep(900);
-      await page.evaluate(() => document.getElementById('rhythmResultCard').scrollIntoView({ block: 'start' })); await C.sleep(300);
+      // the stage settles back to paper after the take: scroll until the card stays under the header
+      let top = null; for (let i = 0; i < 10; i++) { top = await page.evaluate(() => { const c = document.getElementById('rhythmResultCard'), h = document.querySelector('header')?.getBoundingClientRect().bottom || 0; scrollBy({ top: c.getBoundingClientRect().top - h - 8, behavior: 'instant' }); return Math.round(c.getBoundingClientRect().top - h); }); await C.sleep(400); if (Math.abs(top - 8) <= 2) break; }
       const d = path.join(OUT, 'tools', `${w}-${theme}`); fs.mkdirSync(d, { recursive: true });
       await page.screenshot({ path: path.join(d, 'rhythm-result-onbeat.jpg'), ...Q });
       note(`rhythm onbeat ${w} ${theme}: ${await page.evaluate(() => rhythmResults.filter(x => x.claimed).length)} of 8 beats caught`);
