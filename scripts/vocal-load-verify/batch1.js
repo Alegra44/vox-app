@@ -217,15 +217,16 @@ async function feature(page, f, label, { target } = {}) {
   const rows = await waitRows(rowsSeen + 1);
   const mine = rows.slice(rowsSeen); rowsSeen = rows.length;
   check('stored: exactly 1 new session, ended', mine.length === 1 && mine[0].ended === true, JSON.stringify(mine));
+  if (mine.length !== 1) console.log('     page:', JSON.stringify(await page.evaluate(() => ({ vlRun: vlRun && { ready: vlRun.ready, ending: vlRun.ending, frames: vlRun.buffer.length, idleMs: vlRun.lastFrame === null ? null : Math.round(performance.now() - vlRun.lastFrame) }, vlDay, profile: !!profile, regIn: !!regIn }))), 'rows', JSON.stringify(rowsDb().map(r => r.active_seconds + (r.ended ? '' : ' open'))));
   const a = Number(mine[0]?.active_seconds), l = Number(mine[0]?.load);
   // the register input opens after the feature starts (~0.4 s of silence into a running AudioContext) and the last
   // ~0.25 s hold can land either side of the stop, so active time sits a little under how long the feature listened
   check(`active seconds ≈ time the feature listened (${on.listened.toFixed(2)} s, −1.8/+0.3)`, a >= on.listened - 1.8 && a <= on.listened + 0.3, `${a.toFixed(3)} s`);
   check(`stored load = active × ${TONE.rate.toFixed(6)} (hand), within 0.5%`, Math.abs(l - a * TONE.rate) <= 0.005 * a * TONE.rate, `stored ${l.toFixed(4)} vs hand ${(a * TONE.rate).toFixed(4)}`);
-  check(`pitch stored ≈ ${TONE.midi}`, Math.abs(mine[0].p5_midi - TONE.midi) < 0.2 && Math.abs(mine[0].p95_midi - TONE.midi) < 0.2, `p5 ${Number(mine[0].p5_midi).toFixed(3)}, p95 ${Number(mine[0].p95_midi).toFixed(3)}`);
+  check(`pitch stored ≈ ${TONE.midi}`, !!mine[0] && Math.abs(mine[0].p5_midi - TONE.midi) < 0.2 && Math.abs(mine[0].p95_midi - TONE.midi) < 0.2, `p5 ${Number(mine[0]?.p5_midi).toFixed(3)}, p95 ${Number(mine[0]?.p95_midi).toFixed(3)}`);
   // (a 1.6 s capture can be over before today's state has come back from the server, so not for Pitch Match)
   if (f !== 'pitch') check('gauge moved while the feature ran', m.pct > totalLoad / BUDGET * 100, `mid-run ${m.pct.toFixed(4)}% vs before ${(totalLoad / BUDGET * 100).toFixed(4)}%`);
-  totalLoad += l;
+  totalLoad += l || 0;
   g = await gauge(page, GAUGES[f]);
   const p = totalLoad / BUDGET * 100;
   check('gauge = today\'s stored total / 6800', Math.abs(g.pct - p) < 1e-6 && g.val === shown(p, 'en') && g.aria === g.val, `"${g.val}" pct ${g.pct.toFixed(6)} vs ${p.toFixed(6)}`);
