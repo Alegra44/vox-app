@@ -35,8 +35,13 @@ const TOOLS = [
       // today's take not taken yet (scores.js also gives every run a fresh account). saveProgress merges the server's row
       // back into memory when its PATCH returns, so a save still in flight from an earlier take would bring today's take
       // back: let those land, then reset and save the reset (a throwaway test account).
-      await C.sleep(1200);
-      await page.evaluate(async () => { if (progress) { progress.oneTakeLastDate = null; progress.oneTakeHistory = {}; if (profile) await saveProgress(); } renderOneTakeGate(); });
+      // (a save landing after the reset still brings it back: the reset is checked and redone until it holds)
+      for (let i = 0; i < 4; i++) {
+        await C.sleep(1200);
+        await page.evaluate(async () => { if (progress) { progress.oneTakeLastDate = null; progress.oneTakeHistory = {}; if (profile) await saveProgress(); } renderOneTakeGate(); });
+        await C.sleep(600);
+        if (await page.evaluate(() => !progress || !progress.oneTakeLastDate)) break;
+      }
     },
     act: page => clickId(page, 'oneTakeStartBtn'),
     busy: () => oneTakeActive,
