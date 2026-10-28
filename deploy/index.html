@@ -1580,6 +1580,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* Register Drills: the target register, the note with its lane and cents meter, the Chest ↔ Head meter, five dots */
   .vc-stage.is-live .drill-target{font-size:var(--hl-t-h3);color:var(--hl-ink);}
   .drill-target:empty{display:none;}
+  #drillStage.is-live, #drillStage .vc-take-runner[style*="block"]{gap:var(--hl-s3);} #drillStage .pm-lane{max-height:min(220px, 30dvh);} /* two more rows than a take (the Chest ↔ Head meter, the dots): Start stays in view at 1280×800 */
   .drill-reg{display:none;}
   .vc-stage.is-live .drill-reg{display:grid;gap:var(--hl-s1);width:100%;max-width:280px;}
   .drill-reg-ends{display:flex;justify-content:space-between;font-size:var(--hl-t-small);color:var(--hl-ink-3);}
@@ -12886,11 +12887,13 @@ function drawBridgeZones(){
   const {lowMidi, highMidi} = registerRangeBounds();
   const passaggioMidi = Math.round(lowMidi + 0.6*(highMidi-lowMidi));
   window._passaggioMidi = passaggioMidi;
-  window._regLow = lowMidi;
-  window._regHigh = highMidi;
+  // a range of under two semitones (a one-note Range Finder result) is drawn as the octave around its passaggio
+  const narrow = highMidi-lowMidi < 2, drawLow = narrow ? passaggioMidi-6 : lowMidi, drawHigh = narrow ? passaggioMidi+6 : highMidi;
+  window._regLow = drawLow;
+  window._regHigh = drawHigh;
 
   const topY=10, bottomY=310;
-  const passY = midiToY(passaggioMidi, lowMidi, highMidi, topY, bottomY);
+  const passY = midiToY(passaggioMidi, drawLow, drawHigh, topY, bottomY);
 
   document.getElementById('headZoneRect').setAttribute('y', topY);
   document.getElementById('headZoneRect').setAttribute('height', passY-topY);
@@ -23040,6 +23043,7 @@ document.getElementById('drillStartBtn')?.addEventListener('click', async ()=>{
 // Leaving mid-drill (stopAllActiveSessions): the cards back to the start, Start live again.
 function drillStop(){
   drillRun++;
+  if(document.getElementById('drillRunnerCard').style.display==='block') vlEnd(); // mid-drill only (this runs on every navigation)
   document.getElementById('drillRunnerCard').style.display='none';
   document.getElementById('drillPreCard').style.display='block';
   document.getElementById('drillStartBtn').disabled = false;
