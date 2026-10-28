@@ -10,11 +10,13 @@
 // chest score swings between about 15 and 70 over seconds), so the sample times count from getUserMedia, not from Start:
 // both sides read the same part of the file whether the Tuner opened the mic first or the tool did.
 // Gate: per reading and moment, the median on the branch within ±2 of master's (states and notes equal).
-// Usage: node scripts/design-verify/live.js [--base master] [--runs 3] [--tools register,livefeedback,resonance] [--stims steady,sharp]
+// Both stimuli turn quiet and dark at 5.7–6.4 s (and again near 7.5 s): a sample inside that change is tens of ms
+// from a very different reading; --at picks other times (ms after the mic opened).
+// Usage: node scripts/design-verify/live.js [--base master] [--runs 3] [--at 4000,5000,6000,7000] [--tools register,livefeedback,resonance] [--stims steady,sharp]
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), T4 = require('./tools4b');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const BASE = arg('--base') || 'master', RUNS = +(arg('--runs') || 3), TOL = 2, AT = [4000, 5000, 6000, 7000]; // ms after the mic opened
+const BASE = arg('--base') || 'master', RUNS = +(arg('--runs') || 3), TOL = 2, AT = (arg('--at') || '4000,5000,6000,7000').split(',').map(Number); // ms after the mic opened
 // in the page, before the app: when the mic stream first arrives
 const GUM = () => { const md = navigator.mediaDevices; if (!md) return; const g = md.getUserMedia.bind(md);
   md.getUserMedia = async c => { const st = await g(c); if (!window.__gumAt) window.__gumAt = performance.now(); return st; }; };
