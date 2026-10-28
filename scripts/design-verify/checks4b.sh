@@ -4,18 +4,22 @@
 # app-wide ones. Logs: scripts/design-verify/logs/checks4b-<stamp>/<suite>.log; progress.txt (suite, exit code, minutes).
 # A failing suite is re-run on master afterwards and classified (Regression / Already failing / expected change).
 # AC power only: before each suite the run waits while the Mac is on battery. A suite silent for WATCHDOG minutes is killed.
+# The master build is served on :8766 for the suites that take a URL ($M).
 # Usage: bash scripts/design-verify/checks4b.sh [first suite]     ONLY="scores live" bash …   (just those, in this order)
 cd "$(dirname "$0")/../.."
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/checks4b-$STAMP; mkdir -p "$OUT"
 L=http://localhost:8765/
 WATCHDOG=${WATCHDOG:-20}
 (cd deploy && exec python3 -m http.server 8765 >/dev/null 2>&1) & SRV=$!
-trap 'kill $SRV 2>/dev/null' EXIT
+MDIR=$(node -e "console.log(require('./scripts/design-verify/common').buildDir('master'))"); M=http://localhost:8766/
+(cd "$MDIR" && exec python3 -m http.server 8766 >/dev/null 2>&1) & MSRV=$!
+trap 'kill $SRV $MSRV 2>/dev/null' EXIT
 T4=onetake,mirror,rhythm,registerdrills,vibrato,voicequality,emotionmode
 SUITES=(
   "hooks|node scripts/design-verify/hooks.js --base master"
   "scores|node scripts/design-verify/scores.js --tools $T4 --runs 3"
   "scores-aa-rhythm|node scripts/design-verify/scores.js --tools rhythm --stims onbeat,late60 --runs 3 --branch-ref master"
+  "scores-aa-emotion|node scripts/design-verify/scores.js --tools emotionmode --stims louder --runs 3 --branch-ref master"
   "live|node scripts/design-verify/live.js --runs 3"
   "house|node scripts/design-verify/house.js"
   "stopcheck|node scripts/design-verify/stopcheck.js"
@@ -24,6 +28,10 @@ SUITES=(
   "batch3a|node scripts/vocal-load-verify/batch3a.js"
   "batch3b|node scripts/vocal-load-verify/batch3b.js"
   "batch3c|node scripts/vocal-load-verify/batch3c.js"
+  "batch2-master|node scripts/vocal-load-verify/batch2.js $M"
+  "batch3a-master|node scripts/vocal-load-verify/batch3a.js $M"
+  "batch3b-master|node scripts/vocal-load-verify/batch3b.js $M"
+  "batch3c-master|node scripts/vocal-load-verify/batch3c.js $M"
   "contrast|node scripts/design-verify/contrast.js --tools-only --set 4b"
   "navcheck|node scripts/design-verify/navcheck.js"
   "navcheck-master|node scripts/design-verify/navcheck.js --base master"
