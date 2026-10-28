@@ -311,7 +311,7 @@ async function contactSheets(b, groups) {
 
 (async () => {
   const dir = C.buildDir(BASE);
-  fs.rmSync(OUT, { recursive: true, force: true }); fs.mkdirSync(OUT, { recursive: true });
+  if (!ONBEAT_ONLY) fs.rmSync(OUT, { recursive: true, force: true }); fs.mkdirSync(OUT, { recursive: true }); // --onbeat-only adds to an earlier run's
   const b = await C.chromium.launch();
   try {
     console.log(`== shots · ${C.REMOTE || BASE || 'branch (working copy)'} → ${OUT}`);
@@ -335,7 +335,7 @@ async function contactSheets(b, groups) {
     if (HOME) await homeShots(b, dir, state);
     if (TOOLS) await toolShots(dir, state);
     await contactSheets(b, groups);
-    fs.writeFileSync(path.join(OUT, 'notes.txt'), log.join('\n') + '\n');
+    fs[ONBEAT_ONLY ? 'appendFileSync' : 'writeFileSync'](path.join(OUT, 'notes.txt'), log.join('\n') + '\n');
     console.log(`done: ${OUT}`);
   } finally { await b.close(); C.cleanup(); }
 })();
