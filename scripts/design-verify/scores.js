@@ -19,6 +19,11 @@
 // the range master shows when run against itself (the A/A run, both sides master: RHYTHM_AA, or --aa <scores json> to
 // take it from another A/A run). Its per-beat values are reported, not gated (they move by one frame, 16.7 ms, between
 // runs whatever the build). Without an A/A range for a stimulus (steady, sharp: no beat caught) the ±2 gate stays.
+// 4b.2 (the user's review of 4b.1): the values that move by more than ±2 between master's own runs (Mirror's per-note
+// values, Voice Quality's centroid, every Emotion Mode value with the louder stimulus, Register Drills' per-note values:
+// SPREAD) are gated by master's own range instead, where a master run is more than ±2 from master's median: the
+// branch's median within master's min–max. Where master's runs agree within ±2 the ±2 gate stays.
+// --alternate: master, branch, master, branch… (by default the sides swap order each run: m b, b m, m b…).
 // Usage: node scripts/design-verify/scores.js [--base master] [--runs 3] [--tools interval,scale,…] [--stims steady,sharp]
 //   [--branch-url https://…]: the branch side is that site (production after a deploy) instead of the working copy
 //   [--branch-ref <git ref>]: the branch side is that ref's build (--branch-ref master: an A/A run, the noise floor)
@@ -49,6 +54,10 @@ const TOL = 2;
 // master 83/86/87, branch 82/84/84; late60 master 44/44/48, branch 48/52/48)
 let RHYTHM_AA = { onbeat: [82, 87], late60: [44, 52] };
 const RHYTHM_GATED = ['average', 'result: average'], RHYTHM_REPORTED = /^beat \d/;
+// tool → stimulus → the value names gated by master's own range when it is wider than ±2 (4b.2)
+const SPREAD = { mirror: { '*': /^note \d/ }, voicequality: { '*': /^centroid Hz$/ }, emotionmode: { louder: /./ }, registerdrills: { '*': /^note \d/ } };
+const spreadOf = (key, stim, n) => { const t = SPREAD[key]; const re = t && (t[stim] || t['*']); return !!re && re.test(n); };
+const ALTERNATE = process.argv.includes('--alternate');
 
 // a take's numbers, flattened to name → value
 function flatten(tool, r) {
@@ -125,7 +134,7 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
       const tools = toolsFor(stim); if (!tools.length) continue;
       const b = SYNTH[stim] ? await SYN.launch() : await S.launchMic(stimFile(stim));
       try {
-        for (let k = 0; k < RUNS; k++) for (const side of k % 2 ? ['branch', 'master'] : ['master', 'branch']) {
+        for (let k = 0; k < RUNS; k++) for (const side of k % 2 && !ALTERNATE ? ['branch', 'master'] : ['master', 'branch']) {
           if (st[side].length > k) continue;
           const t0 = Date.now(); const r = await oneRun(b, dirs[side], tools.some(t => t.fresh) ? onSite(await freshState(dirs.master)) : state, tools, stim);
           st[side].push(r);
@@ -144,11 +153,15 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
           const m = median(data.stims[stim].master.map(r => r[tool.key].nums[n])), b = median(data.stims[stim].branch.map(r => r[tool.key].nums[n]));
           const aa = tool.key === 'rhythm' && RHYTHM_AA[stim];
           const reported = tool.key === 'rhythm' && RHYTHM_REPORTED.test(n), byRange = aa && RHYTHM_GATED.includes(n);
+          const mv = data.stims[stim].master.map(r => r[tool.key].nums[n]).filter(x => typeof x === 'number');
+          const mr = mv.length ? [Math.min(...mv), Math.max(...mv)] : null;
+          const bySpread = !byRange && typeof m === 'number' && spreadOf(tool.key, stim, n) && mv.some(x => Math.abs(x - m) > TOL);
           const ok = reported ? true : byRange ? b !== null && b >= aa[0] && b <= aa[1]
+            : bySpread ? typeof b === 'number' && b >= mr[0] && b <= mr[1]
             : typeof m === 'string' || typeof b === 'string' ? m === b : (m === null && b === null) || (m !== null && b !== null && Math.abs(b - m) <= TOL);
           if (!ok) fail++;
           const runs = s => data.stims[stim][s].map(r => r[tool.key].nums[n] ?? '—').join('/');
-          const how = reported ? '  [reported]' : byRange ? `  [A/A range ${aa[0]}–${aa[1]}]` : '';
+          const how = reported ? '  [reported]' : byRange ? `  [A/A range ${aa[0]}–${aa[1]}]` : bySpread ? `  [master's range ${mr[0]}–${mr[1]}]` : '';
           log(`   ${reported ? '·' : ok ? '✓' : '✗'} ${n.padEnd(26)} ${String(m ?? '—').padStart(7)} → ${String(b ?? '—').padEnd(7)} (master ${runs('master')}; branch ${runs('branch')})${how}`);
         }
         const notDone = ['master', 'branch'].flatMap(s => data.stims[stim][s].map((r, i) => r[tool.key].done && r[tool.key].started ? null : `${s} #${i + 1}`)).filter(Boolean);
@@ -156,7 +169,7 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
       }
     }
   } finally {
-    log(`\nGATE: ${fail ? fail + ' differences beyond the gate' : 'every gated value within its gate'} (±${TOL}; Rhythm's average within the A/A range ${JSON.stringify(RHYTHM_AA)}, its per-beat values reported)`);
+    log(`\nGATE: ${fail ? fail + ' differences beyond the gate' : 'every gated value within its gate'} (±${TOL}; Rhythm's average within the A/A range ${JSON.stringify(RHYTHM_AA)}, its per-beat values reported; master's own range where it is wider than ±2 on ${Object.keys(SPREAD).join(', ')})`);
     log(`log: ${path.relative(C.ROOT, OUT)}.log  json: ${path.relative(C.ROOT, OUT)}.json`);
     process.exitCode = fail ? 1 : 0;
     C.cleanup();

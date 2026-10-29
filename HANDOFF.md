@@ -89,7 +89,12 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    rerun `-14-08-05`): hooks 19/0; live within ±2 (Resonance by range); copyscan 0 in 4 languages; stopcheck all pass;
    contrast 0; house 629–630 of 631 (the failures Supabase 503 / CORS console errors); scores: Rhythm's average inside
    the A/A range, and each run 3–6 single values beyond ±2, different ones each run, on values where master's own three
-   runs spread wider (e.g. Mirror note 2 master 76/79/79). In the spec too:
+   runs spread wider (e.g. Mirror note 2 master 76/79/79). **4b.2 (the user's review, PHASE4B.md):** network failures don't count for
+   batch1; scores.js gates the values whose master runs spread wider than ±2 (Mirror and Register Drills per-note,
+   Voice Quality centroid, Emotion Mode louder) by master's own range. **Later fixes, noted by the user:** the
+   vocal-load save has no retry, so a session whose save fails is lost (same code on master): retry with back-off and
+   keep unsaved sessions on the device until the server confirms. And look into the frequent Supabase 503s (batch1,
+   house and the checks all hit them on 2026-10-29). In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
