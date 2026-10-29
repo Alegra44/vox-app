@@ -8,7 +8,7 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 | Branch | What it is | Status |
 |---|---|---|
-| `master` | Everything that is live, through House Lights phase 4a (merge 296d530, dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg, 2026-10-22; before it the single mic stream, dpl_6FBgCU661see6RBdPhXoMniCp42s) | Matches production |
+| `master` | Everything through House Lights phase 4b (merge ffa49b1, 2026-10-29) | **Ahead of production**: 4b was deployed (dpl_FjTuxeuo8kehTKyepm2wKSEHtR5g) and rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg (phase 4a) after stopcheck failed twice on production; see phase 4b below |
 | `redesign/phase4a` | House Lights phase 4a and fix rounds 4a.1–4a.3 (spec `design/house-lights/PHASE4A.md`) | Merged (296d530) and live 2026-10-22. Closed |
 | `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Built and checked, pushed 2026-10-29 (1f06e2e and the HANDOFF commit); waiting for the user's screenshot review. No merge or deploy before it |
 | `review/phase4b-fix` | Orphan branch, no code: the 4b.1 fixed screens and `sheets/fix.jpg` | For the user's review |
@@ -94,7 +94,14 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Voice Quality centroid, Emotion Mode louder) by master's own range. **Later fixes, noted by the user:** the
    vocal-load save has no retry, so a session whose save fails is lost (same code on master): retry with back-off and
    keep unsaved sessions on the device until the server confirms. And look into the frequent Supabase 503s (batch1,
-   house and the checks all hit them on 2026-10-29). In the spec too:
+   house and the checks all hit them on 2026-10-29). **Deploy 2026-10-29/30:** merged (ffa49b1), deployed dpl_FjTuxeuo8kehTKyepm2wKSEHtR5g,
+   production checks (logs `scripts/design-verify/logs/prod-2026-10-29T16-07-15`, reruns `prod-2026-10-29T19-48-56`): every
+   suite passed except cv-modalz (a page timeout; passed on its rerun), scores4b (one Voice Quality centroid value out
+   of its gate each run, a different stimulus each time) and stopcheck: the first run hit prod.sh's 6-minute limit (now
+   7 × 3), the rerun failed 2 of 24 cases (today's vocal load grew after leaving Register Coach at 2.6 s, 72.44 → 74.44,
+   and Live Feedback at 0.8 s, 74.44 → 82.85, with no mic calls and no page errors; vlDay changes from the server only at
+   sign-in, so a session still closing, not the network). **Rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg** per step 4.
+   The review branches are kept (step 5 not done). Next: find why a session closed late on production. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".

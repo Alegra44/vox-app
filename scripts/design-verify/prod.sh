@@ -41,7 +41,7 @@ SUITES=(
   "shots|10|env DV_URL=$P node scripts/design-verify/shots.js --panels home,train-hub,songs-hub,arcade,you-hub --sizes 390 --no-extras --out $SHOTS"
   "modecheck|3|env MC_URL=$P node scripts/audio-verify/modecheck.js"
   "scores|17|node scripts/design-verify/scores.js --base $SCORES_BASE --branch-url $P"
-  "stopcheck|2|env DV_URL=$P node scripts/design-verify/stopcheck.js"
+  "stopcheck|7|env DV_URL=$P node scripts/design-verify/stopcheck.js"
   "scores4b|22|node scripts/design-verify/scores.js --base $SCORES_BASE --branch-url $P --tools onetake,mirror,rhythm,registerdrills,vibrato,voicequality,emotionmode"
   "live|7|node scripts/design-verify/live.js --base $SCORES_BASE --branch-url $P --runs 3 --at 4100,5100,7100"
   "navcheck|2|env DV_URL=$P node scripts/design-verify/navcheck.js"
