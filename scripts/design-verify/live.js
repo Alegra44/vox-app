@@ -10,6 +10,8 @@
 // chest score swings between about 15 and 70 over seconds), so the sample times count from getUserMedia, not from Start:
 // both sides read the same part of the file whether the Tuner opened the mic first or the tool did.
 // Gate: per reading and moment, the median on the branch within ±2 of master's (states and notes equal).
+// 4b.1 (the user's decision 2): Resonance's ripple and steadiness are compared by the range of the three runs: the
+// branch's min–max overlaps master's (±2). Ripple moves in steps of 9 and flips between values on master itself.
 // Both stimuli turn quiet and dark at 5.7–6.4 s (and again near 7.5 s): a sample inside that change is tens of ms
 // from a very different reading; --at picks other times (ms after the mic opened).
 // Usage: node scripts/design-verify/live.js [--base master] [--runs 3] [--at 4000,5000,6000,7000] [--tools register,livefeedback,resonance] [--stims steady,sharp]
@@ -20,6 +22,7 @@ const BASE = arg('--base') || 'master', RUNS = +(arg('--runs') || 3), TOL = 2, A
 // in the page, before the app: when the mic stream first arrives
 const GUM = () => { const md = navigator.mediaDevices; if (!md) return; const g = md.getUserMedia.bind(md);
   md.getUserMedia = async c => { const st = await g(c); if (!window.__gumAt) window.__gumAt = performance.now(); return st; }; };
+const RANGED = ['ripple', 'steadiness']; // Resonance's, compared by range (4b.1)
 const ONLY = arg('--tools') ? arg('--tools').split(',') : null, STIMS = (arg('--stims') || 'steady,sharp').split(',');
 const TOOLS = T4.LIVE.filter(t => !ONLY || ONLY.includes(t.key));
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
@@ -77,9 +80,12 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
       for (const [i, at] of AT.entries()) for (const n of names) {
         const vals = s => st[s].map(r => r.samples[i] ? r.samples[i][n] : null);
         const m = median(vals('master')), b = median(vals('branch'));
-        const ok = typeof m === 'string' || typeof b === 'string' ? m === b : (m === null && b === null) || (m !== null && b !== null && Math.abs(b - m) <= TOL);
+        const byRange = tool.key === 'resonance' && RANGED.includes(n), num = s => vals(s).filter(v => typeof v === 'number');
+        const span = s => num(s).length ? [Math.min(...num(s)), Math.max(...num(s))] : null, mr = byRange && span('master'), br = byRange && span('branch');
+        const ok = byRange ? (!mr && !br) || (!!mr && !!br && br[0] <= mr[1] + TOL && br[1] >= mr[0] - TOL)
+          : typeof m === 'string' || typeof b === 'string' ? m === b : (m === null && b === null) || (m !== null && b !== null && Math.abs(b - m) <= TOL);
         if (!ok) fail++;
-        log(`   ${ok ? '✓' : '✗'} ${(at / 1000 + ' s ' + n).padEnd(26)} ${String(m ?? '—').padStart(7)} → ${String(b ?? '—').padEnd(7)} (master ${vals('master').map(v => v ?? '—').join('/')}; branch ${vals('branch').map(v => v ?? '—').join('/')})`);
+        log(`   ${ok ? '✓' : '✗'} ${(at / 1000 + ' s ' + n).padEnd(26)} ${String(m ?? '—').padStart(7)} → ${String(b ?? '—').padEnd(7)} (master ${vals('master').map(v => v ?? '—').join('/')}; branch ${vals('branch').map(v => v ?? '—').join('/')})${byRange ? `  [ranges ${mr ? mr.join('–') : '—'} / ${br ? br.join('–') : '—'}]` : ''}`);
       }
       const bad = ['master', 'branch'].flatMap(s => st[s].map((r, i) => r.started && r.stopped ? null : `${s} #${i + 1}`)).filter(Boolean);
       if (bad.length) { fail++; log(`   ✗ did not start or stop: ${bad.join(', ')}`); }
