@@ -76,7 +76,17 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    on master too; house 4b 284/0; stopcheck all pass (master 13 fail); vocal load equal to master on 34 tools (worst
    0.18); contrast 0; navcheck pass (master fails, the expected change); vibfix 0 regressions (2 already failing on
    master), noisegate 160/160; batch1: a tool's stored session sometimes missing (branch 2 of 4 runs, master 2 of 2;
-   unexplained). Copy table `design/house-lights/PHASE4B_COPY.md`. In the spec too:
+   unexplained). Copy table `design/house-lights/PHASE4B_COPY.md`.
+   **4b.1 (the user's review, verbatim in PHASE4B.md, 6aaac33), in progress 2026-10-29:** done: vltrace.js + batch1-alt.sh
+   (2ce8506), screen fixes 4–9 (261d513), Rhythm gated on its average (3fa9fdf), Resonance by range (4490b88), hooks 19/0.
+   batch1 5 + 5 alternating (logs `scripts/vocal-load-verify/logs/batch1-alt-2026-10-29T09-36-08`): no vlEnd ended a
+   session it didn't open, on either side, so no ownership change. Runs 2–3 on both sides were cut short by Supabase
+   timeouts (db queries, a page open). Completed runs: master 4 of 4 pass; branch 3 runs, 2 with one missing row each,
+   both explained by the trace: the session ended on time and the write failed (`Request failed: 503`, `Failed to
+   fetch`); the vl* functions and vocal-load-store.js are identical on both sides. Left: checks (checks4b.sh ONLY="hooks
+   house contrast copyscan stopcheck live scores"), shots.js --set 4b --tools-only + fixsheet.js → orphan
+   review/phase4b-fix, secret check, push redesign/phase4b and review/phase4b-fix, report, stop. No deploy until the user
+   types "deploy" (steps in PHASE4B.md 4b.1). In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
