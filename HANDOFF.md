@@ -10,7 +10,8 @@ on a decision, and how to set the machine up again. It contains no secrets.
 |---|---|---|
 | `master` | Everything that is live, through House Lights phase 4a (merge 296d530, dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg, 2026-10-22; before it the single mic stream, dpl_6FBgCU661see6RBdPhXoMniCp42s) | Matches production |
 | `redesign/phase4a` | House Lights phase 4a and fix rounds 4a.1–4a.3 (spec `design/house-lights/PHASE4A.md`) | Merged (296d530) and live 2026-10-22. Closed |
-| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Building since 2026-10-26; no merge or deploy before the user reviews the screenshots |
+| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Built and checked, pushed 2026-10-29 (1f06e2e and the HANDOFF commit); waiting for the user's screenshot review. No merge or deploy before it |
+| `review/phase4b` | Orphan branch, no code: the 10 tools after 4b (idle, stage, result or stopped; 390 and 1280, Light and Dark; Mirror scrubbed, Rhythm with every beat sung, hl-alert, `sheets/tools.jpg`) | For the user's review |
 | `review/phase4b-before` | Orphan branch, no code: the 10 phase 4b tools as they are now (idle, live, result; 390 Light/Dark, 1280 Light) | For the user to look at; delete after |
 | `review/phase4a-prod` | Orphan branch, no code: production screenshots after the phase 4a deploy (the 14 tools, hubs, states, Home; 390, Light/Dark) | For the user to look at; delete after |
 | `feat/single-stream` | Item 3: C3 + F2 single mic stream (spec `design/audio/BUILD.md`) | Merged (7bfc47a) and live 2026-10-21. Closed |
@@ -66,8 +67,16 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    for running transitions (1 s max) before measuring. Copy table `design/house-lights/PHASE4A_COPY.md`.
    **Phase 4b (the 10 tools with their own displays): survey** `design/house-lights/PHASE4B_SURVEY.md` on
    `redesign/phase4b`, shots on `review/phase4b-before`. **Spec verbatim `design/house-lights/PHASE4B.md` (2026-10-26):
-   building on `redesign/phase4b`**; no merge or deploy before the user reviews the screenshots; rollback target
-   dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg; AC power only, one verify script at a time. In the spec too:
+   built on `redesign/phase4b` (2.1–2.12, follow-up 4278e4f), checked, pushed 2026-10-29 with the screenshots on
+   `review/phase4b`**; no merge or deploy before the user reviews them; rollback target dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg;
+   AC power only, one verify script at a time. Checks (logs `scripts/design-verify/logs/checks4b-2026-10-26T15-01-32`,
+   `-2026-10-28T16-02-57`, `-2026-10-28T19-19-03`): hooks 19/0; scores.js within ±2 on every take tool except Rhythm's
+   per-beat values (±1 frame, 16.7 ms, between runs whatever the build: the A/A misses the same way); live.js Register
+   Coach and Live Feedback equal at the file's steady moments (`--at`), Resonance's ripple moves in steps of 9 and flips
+   on master too; house 4b 284/0; stopcheck all pass (master 13 fail); vocal load equal to master on 34 tools (worst
+   0.18); contrast 0; navcheck pass (master fails, the expected change); vibfix 0 regressions (2 already failing on
+   master), noisegate 160/160; batch1: a tool's stored session sometimes missing (branch 2 of 4 runs, master 2 of 2;
+   unexplained). Copy table `design/house-lights/PHASE4B_COPY.md`. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
