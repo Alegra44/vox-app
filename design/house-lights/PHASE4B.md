@@ -223,3 +223,12 @@ WHEN I TYPE "deploy"
 3. Production checks: prod.sh (with house), modecheck, scores.js, stopcheck, live.js, navcheck, livevq. Space them out and delete the test accounts afterwards.
 4. A failing check runs once more. If it fails again and isn't a network error or a Supabase 503, roll back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg and report.
 5. Push review/phase4b-prod with the production screenshots; delete review/phase4b, review/phase4b-fix and review/phase4b-before; update HANDOFF.
+
+## 4b.2: the user's review of 4b.1 (2026-10-29, verbatim)
+
+4b.1 review: approved.
+
+- batch1: accepted. Every failure has a trace showing the session ended correctly and the save then hit a network error (503 / Failed to fetch). Network failures don't count. Add to HANDOFF: the vocal-load save has no retry, so a session whose save fails is lost (same code on master). That's a later fix: retry with back-off, keep unsaved sessions on the device until the server confirms. Also note to look into the frequent Supabase 503s.
+- scores.js: values whose own master-vs-master spread is wider than ±2 are gated by that spread instead: the branch median must fall inside master's range. Record this in scores.js with the values it applies to (Mirror per-note, Voice Quality centroid, Emotion Mode "louder", Register Drills per-note).
+
+Before deploy step 1: run Emotion Mode alone with the louder stimulus, 5 runs per side, alternating master and branch. If the branch's dynamic-range median is inside master's own range over those runs, continue with the five deploy steps in PHASE4B.md. If it's lower than master's range, stop and report without merging.
