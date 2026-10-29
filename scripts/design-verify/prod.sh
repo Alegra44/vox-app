@@ -9,6 +9,8 @@
 #   of the last merge) and stopcheck, and made the run survive a dropped connection:
 #   - before each suite the site and Supabase must answer (one request each, 10 s; a 5xx or no answer fails): on a failure
 #     wait 60 s and retry, up to 5 times; still failing → the run stops with "STOPPED: … unreachable" in progress.txt
+#   phase 4b added scores4b (the 4b take tools), live (Register Coach, Live Feedback, Resonance, SCORES_BASE vs the
+#   site), navcheck, livevq and tools-shots (the 4b tools at 390 and 1280, Light and Dark)
 #   - each suite has a limit of 3× its usual minutes (the number after its name), 30 min at most; one that hits it is
 #     stopped and logged "timed out", and the run carries on)
 cd "$(dirname "$0")/../.."
@@ -40,6 +42,11 @@ SUITES=(
   "modecheck|3|env MC_URL=$P node scripts/audio-verify/modecheck.js"
   "scores|17|node scripts/design-verify/scores.js --base $SCORES_BASE --branch-url $P"
   "stopcheck|2|env DV_URL=$P node scripts/design-verify/stopcheck.js"
+  "scores4b|22|node scripts/design-verify/scores.js --base $SCORES_BASE --branch-url $P --tools onetake,mirror,rhythm,registerdrills,vibrato,voicequality,emotionmode"
+  "live|7|node scripts/design-verify/live.js --base $SCORES_BASE --branch-url $P --runs 3 --at 4100,5100,7100"
+  "navcheck|2|env DV_URL=$P node scripts/design-verify/navcheck.js"
+  "livevq|3|node scripts/vq-verify/livevq.js $P"
+  "tools-shots|20|env DV_URL=$P node scripts/design-verify/shots.js --tools-only --set 4b --out $SHOTS-tools"
 )
 reachable() { local u c; for u in "$P" "$SB/auth/v1/health"; do
   c=$(curl -s -o /dev/null -m 10 -w '%{http_code}' "$u"); [[ $c =~ ^[1-4][0-9][0-9]$ ]] || { echo "$u → ${c:-no answer}"; return 1; }; done; }

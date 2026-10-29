@@ -14,7 +14,8 @@
 // branch's min–max overlaps master's (±2). Ripple moves in steps of 9 and flips between values on master itself.
 // Both stimuli turn quiet and dark at 5.7–6.4 s (and again near 7.5 s): a sample inside that change is tens of ms
 // from a very different reading; --at picks other times (ms after the mic opened).
-// Usage: node scripts/design-verify/live.js [--base master] [--runs 3] [--at 4000,5000,6000,7000] [--tools register,livefeedback,resonance] [--stims steady,sharp]
+// [--branch-url https://…]: the branch side is that site (production after a deploy) instead of the working copy.
+// Usage: node scripts/design-verify/live.js [--base master] [--branch-url https://…] [--runs 3] [--at 4000,5000,6000,7000] [--tools register,livefeedback,resonance] [--stims steady,sharp]
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), T4 = require('./tools4b');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -54,10 +55,12 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
 
 (async () => {
   S.ensureStimuli();
-  const dirs = { master: C.buildDir(BASE), branch: C.buildDir(null) };
-  log(`live ${stamp}  ${BASE} vs branch (working copy)  ${RUNS} runs per side  stimuli ${STIMS.join(', ')}  tools ${TOOLS.map(t => t.key).join(', ')}  samples at ${AT.join(', ')} ms`);
+  const BRANCH_URL = arg('--branch-url'), dirs = { master: C.buildDir(BASE), branch: BRANCH_URL || C.buildDir(null) };
+  log(`live ${stamp}  ${BASE} vs branch (${BRANCH_URL || 'working copy'})  ${RUNS} runs per side  stimuli ${STIMS.join(', ')}  tools ${TOOLS.map(t => t.key).join(', ')}  samples at ${AT.join(', ')} ms`);
   let state;
   { const b0 = await C.chromium.launch(); const { ctx, page } = await C.openPage(b0, { dir: dirs.master }); await C.signUp(page, 'dvlive', 'Live Check'); state = await ctx.storageState(); await ctx.close(); await b0.close(); }
+  // the same account on the site: its session is in the local origin's localStorage (same backend)
+  if (BRANCH_URL) state.origins = [...state.origins, ...state.origins.map(o => ({ ...o, origin: new URL(BRANCH_URL).origin }))];
   const data = {}; let fail = 0;
   try {
     for (const stim of STIMS) {
