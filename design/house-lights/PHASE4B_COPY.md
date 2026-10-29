@@ -1,7 +1,8 @@
 # Phase 4b copy table (master → redesign/phase4b)
 
 Every TRANSLATIONS key whose text differs from master, in en, fr, es and tr (— = the key does not exist on that side).
-150 keys: 52 rewritten, 98 new, 0 removed (by English). copyscan.js --tools --set 4b: 0 texts with a §7 word in all four languages (one French hit, "fausse" in Emotion Mode's coach line, reworded before this table).
+151 keys: 52 rewritten, 99 new, 0 removed (by English). copyscan.js --tools --set 4b: 0 texts with a §7 word in all four languages (one French hit, "fausse" in Emotion Mode's coach line, reworded before this table).
+4b.1: `resonance_oscillation_label` is Movement (its values agree with it: fr Ondulant, es Tranquilo); `vq_result_head` is new (Voice Quality's result heading). Rhythm and Emotion Mode's stage pills use `action_listening`; `rhythm_running` is kept, unused (hooks.js: no master key removed). Rebuilt from both files.
 
 | key | lang | master | branch |
 |---|---|---|---|
@@ -439,14 +440,14 @@ Every TRANSLATIONS key whose text differs from master, in en, fr, es and tr (—
 |  | tr | 🎯 Register Egzersizleri | Register Egzersizleri |
 | `res_calm` | en | — | Calm |
 |  | fr | — | Calme |
-|  | es | — | Tranquila |
+|  | es | — | Tranquilo |
 |  | tr | — | Sakin |
 | `res_canvas_label` | en | — | Your voice as particles: the colour shows your register, the spread your pitch steadiness |
 |  | fr | — | Votre voix en particules : la couleur montre votre registre, l'étalement la stabilité de votre hauteur |
 |  | es | — | Tu voz en partículas: el color muestra tu registro y la dispersión la estabilidad de tu altura |
 |  | tr | — | Parçacıklar olarak sesiniz: renk register'ınızı, yayılım perde kararlılığınızı gösterir |
 | `res_rippling` | en | — | Rippling |
-|  | fr | — | Ondulante |
+|  | fr | — | Ondulant |
 |  | es | — | Ondulante |
 |  | tr | — | Dalgalı |
 | `res_zone_chest` | en | — | Chest |
@@ -469,10 +470,10 @@ Every TRANSLATIONS key whose text differs from master, in en, fr, es and tr (—
 |  | fr | — | Le registre vient du score de poitrine, la même mesure que le Coach de registre (la brillance de vos harmoniques) : 62 ou plus se lit Poitrine, 35 ou plus Mixte, sous 35 Tête. La stabilité vaut 100 moins 2,2 fois la dispersion de vos 45 dernières mesures de hauteur, en cents (leur écart type). L'ondulation compte combien de fois votre hauteur croise sa moyenne sur ces mesures : 3 croisements ou plus se lisent Ondulante. |
 |  | es | — | El registro sale de la puntuación de pecho, la misma lectura que el Coach de registro (el brillo de tus armónicos): 62 o más se lee Pecho, 35 o más Mixta, por debajo de 35 Cabeza. La estabilidad es 100 menos 2,2 veces la dispersión de tus últimas 45 lecturas de altura, en cents (su desviación típica). La ondulación cuenta cuántas veces tu altura cruza su media en esas lecturas: 3 cruces o más se leen Ondulante. |
 |  | tr | — | Register, Register Koçu ile aynı ölçüm olan göğüs puanından gelir (harmoniklerinizin parlaklığı): 62 ve üzeri Göğüs, 35 ve üzeri Karışık, 35'in altı Baş okunur. Sabitlik, son 45 perde ölçümünüzün yayılımının (sent cinsinden standart sapma) 2,2 katının 100'den çıkarılmasıdır. Dalgalanma, perdenizin bu ölçümlerde ortalamasını kaç kez kestiğini sayar: 3 veya daha fazla kesişim Dalgalı okunur. |
-| `resonance_oscillation_label` | en | Oscillation | Ripple |
-|  | fr | Oscillation | Ondulation |
-|  | es | Oscilación | Ondulación |
-|  | tr | Salınım | Dalgalanma |
+| `resonance_oscillation_label` | en | Oscillation | Movement |
+|  | fr | Oscillation | Mouvement |
+|  | es | Oscilación | Movimiento |
+|  | tr | Salınım | Hareket |
 | `resonance_sub` | en | Sing freely — real signals given visual form: amber for chest, cyan for head, violet for mixed voice. Particles contract when your pitch is steady and ripple when it's genuinely oscillating, not a preset animation. | Sing freely and see your voice as a field of particles: the colour follows your register (chest, mixed or head), and the particles gather when your pitch is steady and ripple when it moves. |
 |  | fr | Chantez librement — de vrais signaux prenant forme visuelle : ambre pour la poitrine, cyan pour la tête, violet pour la voix mixte. Les particules se contractent quand votre justesse est stable et ondulent quand elle oscille vraiment, pas une animation préréglée. | Chantez librement et voyez votre voix comme un nuage de particules : la couleur suit votre registre (poitrine, mixte ou tête), et les particules se resserrent quand votre hauteur est stable et ondulent quand elle bouge. |
 |  | es | Canta libremente — señales reales tomando forma visual: ámbar para pecho, cian para cabeza, violeta para voz mixta. Las partículas se contraen cuando tu afinación es estable y ondulan cuando realmente está oscilando, no una animación preestablecida. | Canta libremente y mira tu voz como un campo de partículas: el color sigue tu registro (pecho, mixto o cabeza) y las partículas se juntan cuando tu altura es estable y ondulan cuando se mueve. |
@@ -593,6 +594,10 @@ Every TRANSLATIONS key whose text differs from master, in en, fr, es and tr (—
 |  | fr | Comment c’est mesuré : le vibrato est le rythme des crêtes de votre tracé de hauteur et l’amplitude de chaque cycle (± cents). Le souffle compare l’énergie de vos harmoniques au bruit de fond qui les sépare, jusqu’à 5 kHz, sous forme de rapport harmoniques/bruit (plus élevé = plus clair). La brillance est le centroïde spectral, la fréquence moyenne pondérée par l’énergie jusqu’à 6 kHz ; elle est aussi affichée en multiple de votre hauteur, car elle monte avec la note. La réduction de bruit est désactivée pour cette mesure afin de ne pas filtrer le bruit du souffle. | Le vibrato est le rythme des crêtes de votre tracé de hauteur et l’amplitude de chaque cycle (± cents). Le souffle compare l’énergie de vos harmoniques au bruit de fond qui les sépare, jusqu’à 5 kHz, sous forme de rapport harmoniques/bruit (plus élevé = plus clair). La brillance est le centroïde spectral, la fréquence moyenne pondérée par l’énergie jusqu’à 6 kHz ; elle est aussi affichée en multiple de votre hauteur, car elle monte avec la note. La réduction de bruit est désactivée pour cette mesure afin de ne pas filtrer le bruit du souffle. |
 |  | es | Cómo se mide: el vibrato es el ritmo de los picos de tu trazo de afinación y la oscilación de cada ciclo (± cents). El aire en la voz compara la energía de tus armónicos con el ruido de fondo entre ellos, hasta 5 kHz, como relación armónicos/ruido (más alto = más claro). El brillo es el centroide espectral, la frecuencia media ponderada por la energía hasta 6 kHz; también se muestra como múltiplo de tu altura, porque sube con la nota. La supresión de ruido está desactivada en esta medición para no filtrar el ruido del aire. | El vibrato es el ritmo de los picos de tu trazo de afinación y la oscilación de cada ciclo (± cents). El aire en la voz compara la energía de tus armónicos con el ruido de fondo entre ellos, hasta 5 kHz, como relación armónicos/ruido (más alto = más claro). El brillo es el centroide espectral, la frecuencia media ponderada por la energía hasta 6 kHz; también se muestra como múltiplo de tu altura, porque sube con la nota. La supresión de ruido está desactivada en esta medición para no filtrar el ruido del aire. |
 |  | tr | Nasıl ölçülür: vibrato, perde izinizdeki tepelerin zamanlaması ve her döngünün salınımıdır (± sent). Nefeslilik, harmoniklerinizdeki enerjiyi aralarındaki gürültü tabanıyla 5 kHz'e kadar karşılaştırır ve harmonik/gürültü oranı olarak verir (yüksek = daha net). Parlaklık, 6 kHz'e kadar enerjiyle ağırlıklandırılmış ortalama frekans olan spektral ağırlık merkezidir; notayla birlikte yükseldiği için perdenizin katı olarak da gösterilir. Nefes gürültüsü filtrelenmesin diye bu ölçümde gürültü bastırma kapalıdır. | Vibrato, perde izinizdeki tepelerin zamanlaması ve her döngünün salınımıdır (± sent). Nefeslilik, harmoniklerinizdeki enerjiyi aralarındaki gürültü tabanıyla 5 kHz'e kadar karşılaştırır ve harmonik/gürültü oranı olarak verir (yüksek = daha net). Parlaklık, 6 kHz'e kadar enerjiyle ağırlıklandırılmış ortalama frekans olan spektral ağırlık merkezidir; notayla birlikte yükseldiği için perdenizin katı olarak da gösterilir. Nefes gürültüsü filtrelenmesin diye bu ölçümde gürültü bastırma kapalıdır. |
+| `vq_result_head` | en | — | Your tone |
+|  | fr | — | Votre timbre |
+|  | es | — | Tu timbre |
+|  | tr | — | Ses tınınız |
 | `vq_start_btn` | en | Hold a note for 4s | Hold a note for 4 s |
 |  | fr | Tenez une note 4 s | Tenez une note 4 s |
 |  | es | Sostén una nota 4 s | Sostén una nota 4 s |

@@ -1552,8 +1552,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-resonance .tuner-hero-card > .hl-measure{margin-top:var(--hl-s5);}
   /* Register Coach: the bridge fitted to the stage's height (head above, chest below, on stage surfaces), the passaggio
      dashed with its note, the marker in the voice colour with a warning ring while pushing chest */
-  .reg-zone{stroke:var(--hl-rule);stroke-width:1;}
-  .reg-zone-head{fill:var(--hl-raised);} .reg-zone-chest{fill:var(--hl-sunk);}
+  .reg-zone{fill:var(--hl-raised);stroke:var(--hl-rule-strong);stroke-width:var(--hl-hair);vector-effect:non-scaling-stroke;} /* both zones the one stage surface with a hairline edge (sunk is the stage's own black) */
   .reg-pass{stroke:var(--hl-ink-3);stroke-width:1.5;stroke-dasharray:4 3;}
   .reg-marker{fill:var(--hl-voice);stroke:transparent;stroke-width:3;transition:cy .1s linear, stroke .15s ease;}
   .reg-marker.is-pushing{stroke:var(--hl-warn);}
@@ -1601,25 +1600,25 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live .rhythm-beat-dots{margin-top:0;}
   #rhythmBeatDots .scale-dot.current{border-color:var(--hl-ink);color:var(--hl-ink);box-shadow:0 0 0 3px var(--hl-rule-strong);}
   #rhythmResultCard .vc-result{margin-top:0;padding-top:0;border-top:0;}
-  .rhythm-chart{display:grid;gap:var(--hl-s1);}
-  .rhythm-plot{position:relative;height:150px;margin-left:56px;}
+  .rhythm-chart{display:grid;grid-template-columns:max-content 1fr;column-gap:var(--hl-s2);row-gap:var(--hl-s1);align-items:center;}
+  .rhythm-plot{position:relative;height:150px;grid-column:2;grid-row:1;}
+  /* the three labels centred on the top edge (6%), the zero line and the bottom edge (94%) of the 150 px plot */
+  .rhythm-axis-col{grid-column:1;grid-row:1;height:150px;box-sizing:border-box;padding:1px 0;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;}
+  .rhythm-miss-label{grid-column:1;grid-row:2;justify-self:end;}
   .rhythm-plot svg{position:absolute;inset:0;width:100%;height:100%;}
   .rhythm-plot line{vector-effect:non-scaling-stroke;}
   .rhythm-zero{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;}
   .rhythm-edge{stroke:var(--hl-rule);stroke-width:1;}
   .rhythm-axis{font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .rhythm-plot .rhythm-axis{position:absolute;right:calc(100% + var(--hl-s2));transform:translateY(-50%);}
-  .rhythm-axis-top{top:6%;} .rhythm-axis-mid{top:50%;} .rhythm-axis-bot{top:94%;}
   .rhythm-dot, .rhythm-miss{position:absolute;left:calc(var(--x) * 1%);width:12px;height:12px;border-radius:50%;transform:translate(-50%, -50%);}
   .rhythm-dot{top:calc(var(--y) * 1%);background:var(--hl-voice);}
-  .rhythm-missrow{position:relative;height:24px;margin-left:56px;}
-  .rhythm-missrow .rhythm-axis{position:absolute;right:calc(100% + var(--hl-s2));top:50%;transform:translateY(-50%);}
+  .rhythm-missrow{position:relative;height:24px;grid-column:2;grid-row:2;}
   .rhythm-miss{top:50%;border:1.5px solid var(--hl-ink-3);box-sizing:border-box;}
-  .rhythm-beats{position:relative;height:16px;margin-left:56px;}
+  .rhythm-beats{position:relative;height:16px;grid-column:2;grid-row:3;}
   .rhythm-beats span{position:absolute;left:calc(var(--x) * 1%);transform:translateX(-50%);font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
   /* Mirror: the contour chart (the phrase in ink-3 with its note names, the echo in the voice colour, a playhead) */
   .mirror-step{font-size:var(--hl-t-h3);color:var(--hl-ink);}
-  .mirror-chart{position:relative;width:100%;max-width:520px;}
+  .mirror-chart{position:relative;width:100%;} /* the full width of its card or stage, like the other traces (4b.1) */
   .mirror-chart svg{display:block;width:100%;height:160px;}
   .mirror-chart :is(line, polyline){vector-effect:non-scaling-stroke;}
   .mirror-ref{stroke:var(--hl-ink-3);stroke-width:4;stroke-linecap:round;}
@@ -3690,6 +3689,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="vl-gauge" id="vlGaugeVq" style="display:none;"></div>
       </div>
       <div class="vc-result" id="vqResult" role="status" aria-live="polite" style="display:none;">
+        <h3 class="hl-h3" data-i18n="vq_result_head">Your tone</h3>
         <p class="vc-result-meta" id="vqNote"></p>
         <div class="vq-rows">
           <div class="vq-row"><div class="vq-row-head"><span class="label" data-i18n="vq_vib_label">Vibrato</span><span class="val" id="vqVibVal">—</span></div><p class="vq-read" id="vqVibRead"></p></div>
@@ -3861,7 +3861,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="res-zone vc-live-only"><span class="vc-visually-hidden" data-i18n="resonance_register_label">Register</span> <span id="resRegisterStat">—</span></div>
       <div class="res-small vc-live-only">
         <span><span data-i18n="resonance_steadiness_label">Steadiness</span> <span id="resSteadyStat">—</span></span>
-        <span><span data-i18n="resonance_oscillation_label">Ripple</span> <span id="resOscStat">—</span></span>
+        <span><span data-i18n="resonance_oscillation_label">Movement</span> <span id="resOscStat">—</span></span>
       </div>
       <button class="mic-btn vc-take-pill" id="resonanceStartBtn"><span class="dot-icon"></span><span id="resonanceStartLabel" data-i18n="action_start">Start</span></button>
       <div class="vl-gauge" id="vlGaugeResonance" style="display:none;"></div>
@@ -6441,7 +6441,7 @@ const TRANSLATIONS = {
     resonance_sub:"Sing freely and see your voice as a field of particles: the colour follows your register (chest, mixed or head), and the particles gather when your pitch is steady and ripple when it moves.",
     resonance_register_label:'Register',
     resonance_steadiness_label:'Steadiness',
-    resonance_oscillation_label:"Ripple",
+    resonance_oscillation_label:"Movement",
     resonance_limits_note:"Ripple is a live proxy (the rolling spread of your pitch and how often it crosses its average), not a vibrato analysis: for that, use Vibrato, which finds the peaks of a held note.",
     custom_title:'Build Your Own Challenge',
     custom_sub:"Pick your range, register focus and pace: you get a 6-note sequence, scored the same way as Pitch Match.",
@@ -7767,6 +7767,7 @@ const TRANSLATIONS = {
     emo_note:"Neither take is right or wrong: this shows what changed between them.",
     emo_notenough:"There wasn't enough signal on one of the takes to compare them. Try again a little louder or closer to the mic.",
     emo_measure:"One note from the lower middle of your range, sung twice: first with your intention, then with another picked at random. Each take plays the note for 0.6 seconds, then listens for 3 seconds from 0.9 seconds after it starts. Dynamic range is your loudest moment minus your quietest (of the moments above the silence level); loudness is your average level; pitch stability is 100 minus 3 times the spread of your pitch, in cents, with natural vibrato taken out. Each row shows the second take against the first: as a percentage for dynamic range and loudness, in points for stability. Emotion itself isn't judged: only these three are measured.",
+    vq_result_head:"Your tone",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -7937,7 +7938,7 @@ const TRANSLATIONS = {
     resonance_sub:"Chantez librement et voyez votre voix comme un nuage de particules : la couleur suit votre registre (poitrine, mixte ou tête), et les particules se resserrent quand votre hauteur est stable et ondulent quand elle bouge.",
     resonance_register_label:'Registre',
     resonance_steadiness_label:'Stabilité',
-    resonance_oscillation_label:"Ondulation",
+    resonance_oscillation_label:"Mouvement",
     resonance_limits_note:"L'ondulation est un indicateur en direct (la dispersion glissante de votre hauteur et la fréquence à laquelle elle croise sa moyenne), pas une analyse du vibrato : pour cela, utilisez Vibrato, qui trouve les crêtes d'une note tenue.",
     custom_title:'Créez Votre Propre Défi',
     custom_sub:"Choisissez votre tessiture, votre registre et votre rythme : vous obtenez une séquence de 6 notes, notée de la même façon que Pitch Match.",
@@ -9247,7 +9248,7 @@ const TRANSLATIONS = {
     res_zone_chest:"Poitrine",
     res_zone_mixed:"Mixte",
     res_zone_head:"Tête",
-    res_rippling:"Ondulante",
+    res_rippling:"Ondulant",
     res_calm:"Calme",
     res_canvas_label:"Votre voix en particules : la couleur montre votre registre, l'étalement la stabilité de votre hauteur",
     resonance_measure:"Le registre vient du score de poitrine, la même mesure que le Coach de registre (la brillance de vos harmoniques) : 62 ou plus se lit Poitrine, 35 ou plus Mixte, sous 35 Tête. La stabilité vaut 100 moins 2,2 fois la dispersion de vos 45 dernières mesures de hauteur, en cents (leur écart type). L'ondulation compte combien de fois votre hauteur croise sa moyenne sur ces mesures : 3 croisements ou plus se lisent Ondulante.",
@@ -9263,6 +9264,7 @@ const TRANSLATIONS = {
     emo_note:"Aucune prise n'est meilleure que l'autre : ceci montre ce qui a changé entre elles.",
     emo_notenough:"Il n'y avait pas assez de signal sur l'une des prises pour les comparer. Réessayez un peu plus fort ou plus près du micro.",
     emo_measure:"Une note du bas-milieu de votre tessiture, chantée deux fois : d'abord avec votre intention, puis avec une autre tirée au hasard. Chaque prise joue la note 0,6 seconde, puis écoute 3 secondes à partir de 0,9 seconde après son début. La plage dynamique est votre moment le plus fort moins le plus faible (parmi ceux au-dessus du seuil de silence) ; le volume est votre niveau moyen ; la stabilité de la hauteur vaut 100 moins 3 fois la dispersion de votre hauteur, en cents, sans le vibrato naturel. Chaque ligne montre la deuxième prise face à la première : en pourcentage pour la plage dynamique et le volume, en points pour la stabilité. L'émotion elle-même n'est pas jugée : seules ces trois mesures le sont.",
+    vq_result_head:"Votre timbre",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9433,7 +9435,7 @@ const TRANSLATIONS = {
     resonance_sub:"Canta libremente y mira tu voz como un campo de partículas: el color sigue tu registro (pecho, mixto o cabeza) y las partículas se juntan cuando tu altura es estable y ondulan cuando se mueve.",
     resonance_register_label:'Registro',
     resonance_steadiness_label:'Estabilidad',
-    resonance_oscillation_label:"Ondulación",
+    resonance_oscillation_label:"Movimiento",
     resonance_limits_note:"La ondulación es un indicador en vivo (la dispersión móvil de tu altura y cuántas veces cruza su media), no un análisis de vibrato: para eso, usa Vibrato, que encuentra los picos de una nota sostenida.",
     custom_title:'Crea Tu Propio Desafío',
     custom_sub:"Elige tu rango, tu registro y tu ritmo: obtienes una secuencia de 6 notas, puntuada igual que Precisión de nota.",
@@ -10744,7 +10746,7 @@ const TRANSLATIONS = {
     res_zone_mixed:"Mixta",
     res_zone_head:"Cabeza",
     res_rippling:"Ondulante",
-    res_calm:"Tranquila",
+    res_calm:"Tranquilo",
     res_canvas_label:"Tu voz en partículas: el color muestra tu registro y la dispersión la estabilidad de tu altura",
     resonance_measure:"El registro sale de la puntuación de pecho, la misma lectura que el Coach de registro (el brillo de tus armónicos): 62 o más se lee Pecho, 35 o más Mixta, por debajo de 35 Cabeza. La estabilidad es 100 menos 2,2 veces la dispersión de tus últimas 45 lecturas de altura, en cents (su desviación típica). La ondulación cuenta cuántas veces tu altura cruza su media en esas lecturas: 3 cruces o más se leen Ondulante.",
     emo_selected:"Elegida: {name}",
@@ -10759,6 +10761,7 @@ const TRANSLATIONS = {
     emo_note:"Ninguna toma es correcta o incorrecta: esto muestra qué cambió entre ellas.",
     emo_notenough:"No hubo suficiente señal en una de las tomas para compararlas. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     emo_measure:"Una nota de la parte media baja de tu tesitura, cantada dos veces: primero con tu intención y luego con otra elegida al azar. Cada toma hace sonar la nota 0,6 segundos y luego escucha 3 segundos desde 0,9 segundos después de empezar. El rango dinámico es tu momento más fuerte menos el más suave (de los que superan el umbral de silencio); el volumen es tu nivel medio; la estabilidad de la altura es 100 menos 3 veces la dispersión de tu altura, en cents, sin el vibrato natural. Cada fila muestra la segunda toma frente a la primera: en porcentaje para el rango dinámico y el volumen, en puntos para la estabilidad. La emoción en sí no se juzga: solo se miden estas tres cosas.",
+    vq_result_head:"Tu timbre",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -10929,7 +10932,7 @@ const TRANSLATIONS = {
     resonance_sub:"Özgürce söyleyin ve sesinizi bir parçacık alanı olarak görün: renk register'ınızı izler (göğüs, karışık ya da baş); perdeniz sabitken parçacıklar toplanır, oynadığında dalgalanır.",
     resonance_register_label:'Register',
     resonance_steadiness_label:'Sabitlik',
-    resonance_oscillation_label:"Dalgalanma",
+    resonance_oscillation_label:"Hareket",
     resonance_limits_note:"Dalgalanma canlı bir göstergedir (perdenizin kayan yayılımı ve ortalamasını ne sıklıkla kestiği), vibrato analizi değildir: bunun için tutulan bir notanın tepelerini bulan Vibrato'yu kullanın.",
     custom_title:'Kendi Meydan Okumanı Oluştur',
     custom_sub:"Aralığınızı, register odağınızı ve temponuzu seçin: Nota Eşleştirme ile aynı şekilde puanlanan 6 notalık bir dizi alırsınız.",
@@ -12255,6 +12258,7 @@ const TRANSLATIONS = {
     emo_note:"Hiçbir çekim doğru ya da yanlış değil: bu, aralarında neyin değiştiğini gösterir.",
     emo_notenough:"Karşılaştırmak için çekimlerden birinde yeterli sinyal yoktu. Biraz daha yüksek sesle ya da mikrofona daha yakın tekrar deneyin.",
     emo_measure:"Ses aralığınızın alt-orta kısmından bir nota, iki kez söylenir: önce sizin niyetinizle, sonra rastgele seçilen bir başkasıyla. Her çekim notayı 0,6 saniye çalar, ardından başlangıçtan 0,9 saniye sonra 3 saniye dinler. Dinamik aralık, en yüksek anınız eksi en sessiz anınızdır (sessizlik eşiğinin üstündeki anlar arasında); ses düzeyi ortalama seviyenizdir; perde kararlılığı, doğal vibrato çıkarılarak perdenizin yayılımının (sent) 3 katının 100'den çıkarılmasıdır. Her satır ikinci çekimi birinciye göre gösterir: dinamik aralık ve ses düzeyi için yüzde, kararlılık için puan. Duygunun kendisi değerlendirilmez: yalnızca bu üçü ölçülür.",
+    vq_result_head:"Ses tınınız",
   },
 };
 let currentLanguage = 'en';
@@ -13033,7 +13037,9 @@ function updateRegisterUI(freq, chestScore){
   marker.dataset.zone = zone;
   marker.classList.toggle('is-pushing', feedbackWarn);
   const {lowMidi, highMidi} = {lowMidi:window._regLow, highMidi:window._regHigh};
-  marker.setAttribute('cy', midiToY(note.midi, lowMidi, highMidi, 10, 310));
+  // its centre held inside the zones (radius 9 and the 3 px ring clear of the 10–310 edges), never on the top edge
+  const MR = 9 + 3;
+  marker.setAttribute('cy', Math.max(10 + MR, Math.min(310 - MR, midiToY(note.midi, lowMidi, highMidi, 10, 310))));
 
   // bridge streak: clean crossing = above passaggio AND not "pushing chest"
   if(aboveBreak && zone!=='chest'){
@@ -21284,7 +21290,7 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   rhythmResults = Array.from({length:8}, ()=>({claimed:false, offsetMs:null, accuracy:0}));
   document.getElementById('rhythmResultCard').style.display='none';
   document.getElementById('rhythmStartBtn').disabled = true;
-  document.getElementById('rhythmStartLabel').textContent = t('rhythm_running');
+  document.getElementById('rhythmStartLabel').textContent = t('action_listening');
 
   const bpm = RHYTHM_BPM[rhythmTempo];
   const beatMs = 60000/bpm;
@@ -21346,9 +21352,10 @@ function drawRhythmChart(box, beatMs){
   const n = Math.round(half).toLocaleString(localeForLang());
   box.innerHTML = '<div class="rhythm-plot"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line class="rhythm-zero" x1="0" x2="100" y1="50" y2="50"/>'
     + '<line class="rhythm-edge" x1="0" x2="100" y1="6" y2="6"/><line class="rhythm-edge" x1="0" x2="100" y1="94" y2="94"/></svg>'
-    + `<span class="rhythm-axis rhythm-axis-top">+${n} ms</span><span class="rhythm-axis rhythm-axis-mid">0</span><span class="rhythm-axis rhythm-axis-bot">−${n} ms</span>`
     + rhythmResults.map((r,i)=>r.claimed ? `<i class="rhythm-dot" style="--x:${x(i)};--y:${y(r.offsetMs)}"></i>` : '').join('') + '</div>'
-    + `<div class="rhythm-missrow"><span class="rhythm-axis">${t('rhythm_missed')}</span>`
+    // the axis in words beside it (its column as wide as the longest label in the language): late up, early down
+    + `<div class="rhythm-axis-col" aria-hidden="true"><span class="rhythm-axis">${t('rhythm_ms_late').replace('{n}', n)}</span><span class="rhythm-axis">${t('rhythm_ms_on')}</span><span class="rhythm-axis">${t('rhythm_ms_early').replace('{n}', n)}</span></div>`
+    + `<span class="rhythm-axis rhythm-miss-label">${t('rhythm_missed')}</span><div class="rhythm-missrow">`
     + rhythmResults.map((r,i)=>r.claimed ? '' : `<i class="rhythm-miss" style="--x:${x(i)}"></i>`).join('') + '</div>'
     + `<div class="rhythm-beats" aria-hidden="true">${rhythmResults.map((r,i)=>`<span style="--x:${x(i)}">${i+1}</span>`).join('')}</div>`;
   box.setAttribute('aria-label', t('rhythm_chart_label'));
@@ -22794,7 +22801,7 @@ async function runEmoRound(intentKey, roundNum, live = ()=>emoActive){
   playTone(noteToFreq(emoTargetMidi), 0.6, 0);
   await new Promise(r=>setTimeout(r, 900));
   if(!live()) return;
-  pill.textContent = t('onetake_recording');
+  pill.textContent = t('action_listening');
 
   const rmsSamples = [];
   const centsSamples = [];
