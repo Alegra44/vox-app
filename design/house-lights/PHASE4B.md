@@ -177,3 +177,49 @@ g) navcheck (in home.js or new): opening each of the 23 Coach tools from the Coa
 
 5. REPORT, then stop
 - Commits; the scores.js and live.js tables; house, stopcheck and contrast results; the suite table; the copy table; anything that didn't fit the pattern.
+
+---
+
+## 4b.1 (the user's review, 2026-10-29, verbatim)
+
+Phase 4b review: approved after a short fix round (4b.1). Write this into PHASE4B.md as "4b.1" and commit it first. AC power, one script at a time.
+
+YOUR DECISIONS
+1. Rhythm: accepted. Gate the average only, against the range master shows when run against itself. Per-beat values are reported, not gated (they move by one frame, 16.7 ms). Record this in scores.js.
+2. Resonance: accepted. Ripple and steadiness are compared by the range of three runs.
+3. batch1: not accepted yet. The branch adds vlEnd() to four stop paths, and vlEnd() ends whatever session is open, not its own, so a 4b path ending another tool's session is plausible. Before the merge:
+   a) Add a test-only trace: a small in-memory ring buffer of every vlStart / vlEnd, with its caller and the run it ended. No console logging (that hid the failure last time). batch1 dumps the buffer when a session doesn't arrive.
+   b) Run batch1 5 times on master and 5 on the branch, alternating.
+   c) If the trace shows any vlEnd ending a session it didn't start, on either side, fix it with ownership:
+      - vlStart returns its run, and each caller ends only its own: vlEnd(run) does nothing if vlRun isn't that run.
+      - The idle timeout and vlSidecar's clean-up of a leftover session still end whatever is open.
+      - Then check that the batch2 and batch3a–c loads equal master ±2, and run batch1 5 more times on the branch.
+   Gate: the branch fails no more often than master, and every failure has a trace that explains it.
+
+SCREEN FIXES
+4. Register Coach stage: the chest zone is the same black as the stage, so it disappears. Give both zones the same visible stage surface with a hairline edge. Clamp the marker's centre inside the zones, so it never sits on the diagram's top edge.
+5. Mirror at 1280: the chart is about 60% of the card's width. Stretch it to the full width, like the other traces, on the stage and in the result.
+6. Rhythm's beat chart: label the axis in words, in four languages: "300 ms late" at the top, "On the beat" at 0, "300 ms early" at the bottom.
+7. Stage pills say "Listening…" (action_listening) while a tool listens: Rhythm's "Running…" and Emotion Mode's "Recording" change. One Take keeps its red Recording mark, since that one really is the recording. Grep scripts/ first; if a script matches "Running…", change the script and the copy in one commit.
+8. Resonance: "Ripple Rippling" says it twice. The label becomes "Movement" (fr "Mouvement", es "Movimiento", tr "Hareket"); the values stay Rippling / Calm.
+9. Voice Quality's result has no heading. Add an h3 "Your tone" (fr "Votre timbre", es "Tu timbre", tr "Ses tınınız") above the measured-on line, like Emotion Mode's heading.
+
+CHECKS
+hooks, house (the 4b tools), contrast, copyscan, stopcheck, live.js (Resonance by range), scores.js (Rhythm by average), and the batch1 work in 3.
+
+SCREENSHOTS
+On review/phase4b-fix, with one sheet:
+- Register Coach stage at 390 and 1280, Light and Dark
+- Mirror result at 1280
+- Rhythm result (on-beat) at 390
+- Rhythm and Emotion Mode stages at 390
+- Resonance stage
+- Voice Quality result
+Run the secret check, push redesign/phase4b and review/phase4b-fix, report, and stop. No deploy until I type "deploy".
+
+WHEN I TYPE "deploy"
+1. Merge redesign/phase4b into master with --no-ff, secret check, push.
+2. From deploy/: npx vercel@62.2.0 deploy --prod --yes --scope alegra1122. Retry once if it says "Not authorized".
+3. Production checks: prod.sh (with house), modecheck, scores.js, stopcheck, live.js, navcheck, livevq. Space them out and delete the test accounts afterwards.
+4. A failing check runs once more. If it fails again and isn't a network error or a Supabase 503, roll back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg and report.
+5. Push review/phase4b-prod with the production screenshots; delete review/phase4b, review/phase4b-fix and review/phase4b-before; update HANDOFF.
