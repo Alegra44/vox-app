@@ -11,6 +11,7 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `master` | Everything that is live, through House Lights phase 4a (merge 296d530, dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg, 2026-10-22; before it the single mic stream, dpl_6FBgCU661see6RBdPhXoMniCp42s) | Matches production |
 | `redesign/phase4a` | House Lights phase 4a and fix rounds 4a.1–4a.3 (spec `design/house-lights/PHASE4A.md`) | Merged (296d530) and live 2026-10-22. Closed |
 | `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Built and checked, pushed 2026-10-29 (1f06e2e and the HANDOFF commit); waiting for the user's screenshot review. No merge or deploy before it |
+| `review/phase4b-fix` | Orphan branch, no code: the 4b.1 fixed screens and `sheets/fix.jpg` | For the user's review |
 | `review/phase4b` | Orphan branch, no code: the 10 tools after 4b (idle, stage, result or stopped; 390 and 1280, Light and Dark; Mirror scrubbed, Rhythm with every beat sung, hl-alert, `sheets/tools.jpg`) | For the user's review |
 | `review/phase4b-before` | Orphan branch, no code: the 10 phase 4b tools as they are now (idle, live, result; 390 Light/Dark, 1280 Light) | For the user to look at; delete after |
 | `review/phase4a-prod` | Orphan branch, no code: production screenshots after the phase 4a deploy (the 14 tools, hubs, states, Home; 390, Light/Dark) | For the user to look at; delete after |
@@ -77,16 +78,18 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    0.18); contrast 0; navcheck pass (master fails, the expected change); vibfix 0 regressions (2 already failing on
    master), noisegate 160/160; batch1: a tool's stored session sometimes missing (branch 2 of 4 runs, master 2 of 2;
    unexplained). Copy table `design/house-lights/PHASE4B_COPY.md`.
-   **4b.1 (the user's review, verbatim in PHASE4B.md, 6aaac33), in progress 2026-10-29:** done: vltrace.js + batch1-alt.sh
-   (2ce8506), screen fixes 4–9 (261d513), Rhythm gated on its average (3fa9fdf), Resonance by range (4490b88), hooks 19/0.
-   batch1 5 + 5 alternating (logs `scripts/vocal-load-verify/logs/batch1-alt-2026-10-29T09-36-08`): no vlEnd ended a
-   session it didn't open, on either side, so no ownership change. Runs 2–3 on both sides were cut short by Supabase
-   timeouts (db queries, a page open). Completed runs: master 4 of 4 pass; branch 3 runs, 2 with one missing row each,
-   both explained by the trace: the session ended on time and the write failed (`Request failed: 503`, `Failed to
-   fetch`); the vl* functions and vocal-load-store.js are identical on both sides. Left: checks (checks4b.sh ONLY="hooks
-   house contrast copyscan stopcheck live scores"), shots.js --set 4b --tools-only + fixsheet.js → orphan
-   review/phase4b-fix, secret check, push redesign/phase4b and review/phase4b-fix, report, stop. No deploy until the user
-   types "deploy" (steps in PHASE4B.md 4b.1). In the spec too:
+   **4b.1 (the user's review, verbatim in PHASE4B.md, 6aaac33), built, checked and pushed 2026-10-29 with the fixed
+   screens on `review/phase4b-fix` (`sheets/fix.jpg`); no deploy until the user types "deploy" (steps in PHASE4B.md
+   4b.1).** vltrace.js + batch1-alt.sh (2ce8506), screen fixes 4–9 (261d513), Rhythm gated on its average (3fa9fdf),
+   Resonance by range (4490b88). batch1 5 + 5 alternating (logs `scripts/vocal-load-verify/logs/batch1-alt-2026-10-29T09-36-08`):
+   no vlEnd ended a session it didn't open, on either side, so no ownership change. Runs 2–3 on both sides cut short by
+   Supabase timeouts; completed runs: master 4 of 4 pass, branch 1 of 3 (the other 2 each one missing row, explained by
+   the trace: the session ended on time and its write failed, 503 / Failed to fetch; the vl* code and
+   vocal-load-store.js are identical on both sides). Checks (logs `scripts/design-verify/logs/checks4b-2026-10-29T11-55-03`,
+   rerun `-14-08-05`): hooks 19/0; live within ±2 (Resonance by range); copyscan 0 in 4 languages; stopcheck all pass;
+   contrast 0; house 629–630 of 631 (the failures Supabase 503 / CORS console errors); scores: Rhythm's average inside
+   the A/A range, and each run 3–6 single values beyond ±2, different ones each run, on values where master's own three
+   runs spread wider (e.g. Mirror note 2 master 76/79/79). In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
