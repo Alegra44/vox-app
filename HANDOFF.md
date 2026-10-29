@@ -10,7 +10,9 @@ on a decision, and how to set the machine up again. It contains no secrets.
 |---|---|---|
 | `master` | Everything that is live, through House Lights phase 4a (merge 296d530, dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg, 2026-10-22; before it the single mic stream, dpl_6FBgCU661see6RBdPhXoMniCp42s) | Matches production |
 | `redesign/phase4a` | House Lights phase 4a and fix rounds 4a.1–4a.3 (spec `design/house-lights/PHASE4A.md`) | Merged (296d530) and live 2026-10-22. Closed |
-| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`), no app changes | Waiting for the user's 4b spec |
+| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Built and checked, pushed 2026-10-29 (1f06e2e and the HANDOFF commit); waiting for the user's screenshot review. No merge or deploy before it |
+| `review/phase4b-fix` | Orphan branch, no code: the 4b.1 fixed screens and `sheets/fix.jpg` | For the user's review |
+| `review/phase4b` | Orphan branch, no code: the 10 tools after 4b (idle, stage, result or stopped; 390 and 1280, Light and Dark; Mirror scrubbed, Rhythm with every beat sung, hl-alert, `sheets/tools.jpg`) | For the user's review |
 | `review/phase4b-before` | Orphan branch, no code: the 10 phase 4b tools as they are now (idle, live, result; 390 Light/Dark, 1280 Light) | For the user to look at; delete after |
 | `review/phase4a-prod` | Orphan branch, no code: production screenshots after the phase 4a deploy (the 14 tools, hubs, states, Home; 390, Light/Dark) | For the user to look at; delete after |
 | `feat/single-stream` | Item 3: C3 + F2 single mic stream (spec `design/audio/BUILD.md`) | Merged (7bfc47a) and live 2026-10-21. Closed |
@@ -65,12 +67,42 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    Supabase before each suite (5 tries, then stops) and limits each suite to 3× its usual minutes (30 max); contrast.js waits
    for running transitions (1 s max) before measuring. Copy table `design/house-lights/PHASE4A_COPY.md`.
    **Phase 4b (the 10 tools with their own displays): survey** `design/house-lights/PHASE4B_SURVEY.md` on
-   `redesign/phase4b`, shots on `review/phase4b-before`; the user writes the spec from it. Also for 4b:
+   `redesign/phase4b`, shots on `review/phase4b-before`. **Spec verbatim `design/house-lights/PHASE4B.md` (2026-10-26):
+   built on `redesign/phase4b` (2.1–2.12, follow-up 4278e4f), checked, pushed 2026-10-29 with the screenshots on
+   `review/phase4b`**; no merge or deploy before the user reviews them; rollback target dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg;
+   AC power only, one verify script at a time. Checks (logs `scripts/design-verify/logs/checks4b-2026-10-26T15-01-32`,
+   `-2026-10-28T16-02-57`, `-2026-10-28T19-19-03`): hooks 19/0; scores.js within ±2 on every take tool except Rhythm's
+   per-beat values (±1 frame, 16.7 ms, between runs whatever the build: the A/A misses the same way); live.js Register
+   Coach and Live Feedback equal at the file's steady moments (`--at`), Resonance's ripple moves in steps of 9 and flips
+   on master too; house 4b 284/0; stopcheck all pass (master 13 fail); vocal load equal to master on 34 tools (worst
+   0.18); contrast 0; navcheck pass (master fails, the expected change); vibfix 0 regressions (2 already failing on
+   master), noisegate 160/160; batch1: a tool's stored session sometimes missing (branch 2 of 4 runs, master 2 of 2;
+   unexplained). Copy table `design/house-lights/PHASE4B_COPY.md`.
+   **4b.1 (the user's review, verbatim in PHASE4B.md, 6aaac33), built, checked and pushed 2026-10-29 with the fixed
+   screens on `review/phase4b-fix` (`sheets/fix.jpg`); no deploy until the user types "deploy" (steps in PHASE4B.md
+   4b.1).** vltrace.js + batch1-alt.sh (2ce8506), screen fixes 4–9 (261d513), Rhythm gated on its average (3fa9fdf),
+   Resonance by range (4490b88). batch1 5 + 5 alternating (logs `scripts/vocal-load-verify/logs/batch1-alt-2026-10-29T09-36-08`):
+   no vlEnd ended a session it didn't open, on either side, so no ownership change. Runs 2–3 on both sides cut short by
+   Supabase timeouts; completed runs: master 4 of 4 pass, branch 1 of 3 (the other 2 each one missing row, explained by
+   the trace: the session ended on time and its write failed, 503 / Failed to fetch; the vl* code and
+   vocal-load-store.js are identical on both sides). Checks (logs `scripts/design-verify/logs/checks4b-2026-10-29T11-55-03`,
+   rerun `-14-08-05`): hooks 19/0; live within ±2 (Resonance by range); copyscan 0 in 4 languages; stopcheck all pass;
+   contrast 0; house 629–630 of 631 (the failures Supabase 503 / CORS console errors); scores: Rhythm's average inside
+   the A/A range, and each run 3–6 single values beyond ±2, different ones each run, on values where master's own three
+   runs spread wider (e.g. Mirror note 2 master 76/79/79). **4b.2 (the user's review, PHASE4B.md):** network failures don't count for
+   batch1; scores.js gates the values whose master runs spread wider than ±2 (Mirror and Register Drills per-note,
+   Voice Quality centroid, Emotion Mode louder) by master's own range. **Later fixes, noted by the user:** the
+   vocal-load save has no retry, so a session whose save fails is lost (same code on master): retry with back-off and
+   keep unsaved sessions on the device until the server confirms. And look into the frequent Supabase 503s (batch1,
+   house and the checks all hit them on 2026-10-29). In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
    **For phase 10:** on Daily Exercises, the Today's Recommended Focus text is bigger than the page subtitle and its title
    isn't bold; Smart Warmup's "(3s)" needs a space before the unit, like everywhere else.
+   **Later accuracy item (from 4b 2.4, out of scope there):** Rhythm (and the Entrance and Cutoff Trainers, which share its
+   onset timing) doesn't compensate output or input latency: clicks are scheduled on the audio clock and onsets timed with
+   `performance.now()`, so the speaker's and the microphone's delay land in every offset as "late".
 4. **Item 3**, the per-feature single-stream mic migration: before redesign phase 4 (Coach tools). **Step 1 (investigation) in
    progress since 2026-10-13 on `exp/single-stream`**, spec `design/audio/SPEC.md`; the user chooses the design after it.
    Measured 2026-10-14: `design/audio/STREAMS.md` (inventory), `design/audio/SINGLE_STREAM.md` (results, C3

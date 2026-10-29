@@ -159,12 +159,23 @@ const readTake = (page, tool) => page.evaluate(({ display, key }) => {
 }, { display: tool.display.toString(), key: tool.key });
 
 // The review states of a tool (contrast.js, shots.js): <key>-idle, then for a sung tool <key>-stage (mid-take, at its
-// liveAt) and <key>-result (the house up again, the result in view); for a paper tool <key>-result (after its action).
+// liveAt) and <key>-result (the house up again, the result in view); for a paper tool <key>-result (after its action);
+// for a live tool (tools4b.js) <key>-stage (listening, at its liveAt) and <key>-stopped (after Stop).
 // onState(name, rootSelector) is awaited at each.
 async function toolStates(page, tool, onState) {
   await tool.open(page); await C.sleep(500);
   if (tool.idle) { await page.evaluate(sel => { const e = document.querySelector(sel); if (e && e.getClientRects().length) e.scrollIntoView({ block: 'center' }); }, tool.idle); await C.sleep(250); }
   await onState(`${tool.key}-idle`, `#panel-${tool.panel}`);
+  if (tool.live) { // a live tool (tools4b.js): Start, its stage while it listens, Stop, shown stopped
+    await tool.act(page);
+    await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 8000 }).catch(() => {});
+    await C.sleep(tool.liveAt || 1200); await onState(`${tool.key}-stage`, `#panel-${tool.panel}`);
+    await tool.stop(page);
+    await page.waitForFunction(() => document.body.dataset.house !== 'down', null, { timeout: 4000 }).catch(() => {});
+    await C.sleep(700);
+    await page.evaluate(() => window.scrollTo(0, 0)); await C.sleep(250);
+    return onState(`${tool.key}-stopped`, `#panel-${tool.panel}`);
+  }
   if (tool.sung) {
     await runTake(page, tool, { liveAt: tool.liveAt || 1200, onLive: () => onState(`${tool.key}-stage`, `#panel-${tool.panel}`) });
     await page.waitForFunction(() => document.body.dataset.house !== 'down', null, { timeout: 4000 }).catch(() => {});

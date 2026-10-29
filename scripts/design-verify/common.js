@@ -36,7 +36,8 @@ const panelKeys = page => page.evaluate(() => [...document.querySelectorAll('.pa
 
 // theme: 'light' | 'dark' | 'system' | null (leave the page's default). The device scheme follows the theme unless given.
 // dir may also be a site URL (https://…): that site is opened as it is, like DV_URL, for this page only.
-async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en' } = {}) {
+// prepare(ctx) is awaited before the page opens (extra routes and init scripts: synthmic.js).
+async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en', prepare } = {}) {
   const ctx = await b.newContext({ viewport, deviceScaleFactor: 1, ...(storageState ? { storageState } : {}),
     colorScheme: scheme || (theme === 'light' ? 'light' : 'dark'), ...(reducedMotion ? { reducedMotion } : {}) });
   const site = /^https?:\/\//.test(dir) ? dir : REMOTE;
@@ -45,6 +46,7 @@ async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 
     if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
     r.fulfill({ path: f, contentType: p.endsWith('.js') ? 'text/javascript' : p.endsWith('.css') ? 'text/css' : 'text/html' });
   });
+  if (prepare) await prepare(ctx);
   if (theme) await ctx.addInitScript(t => { try { t === 'system' ? localStorage.removeItem('theme') : localStorage.setItem('theme', t); } catch (e) {} }, theme);
   const page = await ctx.newPage(), errors = [];
   page.on('pageerror', e => errors.push(String(e)));
