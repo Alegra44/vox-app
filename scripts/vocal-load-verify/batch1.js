@@ -16,6 +16,7 @@ const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db, cleanup, sweep } = require('../choir-verify/testAccounts');
 sweep('vlb'); // backstop for accounts left before testAccounts.js kept a ledger
+const VT = require('./vltrace');
 const URL_ = process.argv[2], LOCAL = 'http://localhost:8765/', DEPLOY = path.resolve(__dirname, '../../deploy');
 const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -58,7 +59,7 @@ const INIT = () => {
 async function openPage(b, { signedIn = true, ua } = {}) {
   const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 }, ...(ua ? { userAgent: ua } : {}), ...(signedIn && auth ? { storageState: auth } : {}) });
   if (!URL_) await ctx.route(LOCAL + '**', r => { const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html'; r.fulfill({ path: path.join(DEPLOY, p), contentType: p.endsWith('.js') ? 'text/javascript' : 'text/html' }); });
-  await ctx.addInitScript(INIT);
+  await ctx.addInitScript(INIT); await ctx.addInitScript(VT.INIT);
   const page = await ctx.newPage(), errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error' && /vocal load/i.test(m.text())) errors.push(m.text()); });
@@ -189,6 +190,7 @@ async function waitRows(n) {
 }
 
 let rowsSeen = 0, totalLoad = 0;
+const TRACE = [], TRACE_FILE = process.env.VLB_TRACE || null; // 4b.1: the per-feature traces, as JSON
 const ONLY = process.env.VLB_ONLY ? process.env.VLB_ONLY.split(',') : null; // debugging: run only these features
 async function feature(page, f, label, { target } = {}) {
   if (ONLY && !ONLY.includes(f)) return;
@@ -217,6 +219,10 @@ async function feature(page, f, label, { target } = {}) {
   const rows = await waitRows(rowsSeen + 1);
   const mine = rows.slice(rowsSeen); rowsSeen = rows.length;
   check('stored: exactly 1 new session, ended', mine.length === 1 && mine[0].ended === true, JSON.stringify(mine));
+  // 4b.1: the vocal-load trace of this feature (every start / end / write), kept for every feature; printed when the row is missing
+  const tr = await VT.take(page); TRACE.push({ feature: label, ok: mine.length === 1, events: tr });
+  if (TRACE_FILE) fs.writeFileSync(TRACE_FILE, JSON.stringify(TRACE));
+  if (mine.length !== 1) console.log('     trace:\n' + VT.format(tr));
   if (mine.length !== 1) console.log('     page:', JSON.stringify(await page.evaluate(() => ({ vlRun: vlRun && { ready: vlRun.ready, ending: vlRun.ending, frames: vlRun.buffer.length, idleMs: vlRun.lastFrame === null ? null : Math.round(performance.now() - vlRun.lastFrame) }, vlDay, profile: !!profile, regIn: !!regIn }))), 'rows', JSON.stringify(rowsDb().map(r => r.active_seconds + (r.ended ? '' : ' open'))));
   const a = Number(mine[0]?.active_seconds), l = Number(mine[0]?.load);
   // the register input opens after the feature starts (~0.4 s of silence into a running AudioContext) and the last
