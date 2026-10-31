@@ -101,7 +101,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    7 × 3), the rerun failed 2 of 24 cases (today's vocal load grew after leaving Register Coach at 2.6 s, 72.44 → 74.44,
    and Live Feedback at 0.8 s, 74.44 → 82.85, with no mic calls and no page errors; vlDay changes from the server only at
    sign-in, so a session still closing, not the network). **Rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg** per step 4.
-   The review branches are kept (step 5 not done). Next: find why a session closed late on production. In the spec too:
+   The review branches are kept (step 5 not done). **4b.3 (2026-10-31, spec verbatim in PHASE4B.md):** investigate the two
+   hypotheses (A start/leave race, B late finalisation), fix on `fix/4b-leave` (start tokens; stopcheck checks vlFeed calls and
+   loop flags), checks, push, report, stop; then merge and redeploy with the five steps. Phase 5a waits until 4b is live. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
