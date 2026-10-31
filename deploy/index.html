@@ -5610,6 +5610,11 @@ async function micOpen(){
     .then(st=>{ micStream = st; return st; }).finally(()=>{ micOpening = null; });
   return micOpening;
 }
+// Leaving (stopAllActiveSessions) bumps startGen. A start that awaits (the mic opening, a backing pad) before it sets its
+// active flag takes the value first and returns after each await if it changed, so a start still opening when you left
+// doesn't begin on the next screen (4b.3: until then the loop ran there with no stage, reading the mic and feeding the
+// vocal load).
+let startGen = 0;
 // The graph on audioCtx (the caller creates it), built once. micG.pitch and micG.raw are the two paths' ends: a reader
 // connects its own analyser to one and disconnects it from there when done; nothing else in the graph changes. A
 // reopened stream only swaps the source.
@@ -5793,8 +5798,9 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
     return;
   }
   if(!requireProFeature('Tuner')) return;
+  const tok = startGen;
   const ok = await initAudio();
-  if(!ok) return;
+  if(!ok || tok!==startGen) return;
   sessionStabilityReadings = [];
   tunerSessionStartTime = performance.now();
   document.getElementById('tunerResult').style.display = 'none'; document.getElementById('tunerStage').classList.remove('vc-has-result');
@@ -5827,8 +5833,9 @@ function showStep(id){
 
 document.getElementById('rangeStartBtn').addEventListener('click', async ()=>{
   if(!requireProFeature('Range Finder')) return;
+  const tok = startGen;
   const ok = await initAudio();
-  if(!ok) return;
+  if(!ok || tok!==startGen) return;
   mode='rangeLow';
   cancelAnimationFrame(rafId);
   loop();
@@ -13307,8 +13314,9 @@ document.getElementById('regMicBtn').addEventListener('click', async ()=>{
     return;
   }
   if(!requireProFeature('Register Coach')) return;
+  const tok = startGen;
   const ok = await openRegisterInput();
-  if(!ok) return;
+  if(!ok || tok!==startGen) return;
   drawBridgeZones();
   bridgeFrameCount = 0; bridgeStartAt = null; regLastFrameAt = null;
   document.getElementById('regBridgeStat').textContent = regSeconds(0);
@@ -13355,7 +13363,9 @@ function updateBreathTargetLabel(){
 
 async function startBreathHold(){
   if(blockExercise()) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   breathActive = true;
   breathStartTime = performance.now();
   breathRmsSamples = [];
@@ -13570,6 +13580,7 @@ function vibratoReset(){
 document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
   if(vibratoActive) return;
   if(blockExercise()) return;
+  const tok = startGen;
   vibratoActive = true;
   const btn = document.getElementById('vibratoStartBtn');
   const label = document.getElementById('vibratoStartLabel');
@@ -13588,6 +13599,7 @@ document.getElementById('vibratoStartBtn').addEventListener('click', async ()=>{
     showToast(t('vq_mic_needed'), 'warn');
     return;
   }
+  if(tok!==startGen && vibratoActive) return; // left, then started again: that hold owns the button
   if(!vibratoActive){ vibratoReset(); return; } // left mid-hold
   const result = analyzeVibrato(samples, VQ_PITCH_WIN/audioCtx.sampleRate);
 
@@ -13678,6 +13690,7 @@ function vqBrightBounds(f0){
 // ms: hold length; active: stops the capture early when it turns false; spectrum: false skips HNR and centroid.
 // onFrame(ms, hz): each frame's time and pitch (hz ≤ 0: none) for the stage, drawing only (the first error is logged).
 async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true, onFrame=null}={}){
+  const tok = startGen; // left (and maybe started again) while the mic opened: this capture doesn't run
   await warmupGate();
   await initAudioOnly();
   const g = await micGraph(), an = audioCtx.createAnalyser(), pitchAn = audioCtx.createAnalyser(); // the one stream: the spectrum on the raw path, pitch on the pitch path
@@ -13691,7 +13704,7 @@ async function vqCapture({ms=VQ_HOLD_MS, active=()=>vqActive, spectrum=true, onF
   try{
     await new Promise(resolve=>{
       (function frame(){
-        if(!active()) return resolve();
+        if(!active() || tok!==startGen) return resolve();
         const t = (audioCtx.currentTime - t0)*1000; // the audio clock, which the analysed samples follow
         if(t!==lastT){
           lastT = t;
@@ -13765,6 +13778,7 @@ function renderVoiceQuality(){
 document.getElementById('vqStartBtn').addEventListener('click', async ()=>{
   if(vqActive) return;
   if(blockExercise()) return;
+  const tok = startGen;
   vqActive = true;
   const btn = document.getElementById('vqStartBtn');
   btn.classList.add('listening'); btn.disabled = true; // the status pill on the stage
@@ -13776,6 +13790,7 @@ document.getElementById('vqStartBtn').addEventListener('click', async ()=>{
   let frames = null;
   try{ frames = await vqCapture({onFrame:(ms, hz)=>vcHoldFrame(H, ms, hz)}); }
   catch(e){ console.error('voice quality capture', e); showToast(t('vq_mic_needed'), 'warn'); }
+  if(tok!==startGen && vqActive) return; // left, then started again: that hold owns the button
   const done = vqActive && frames; // not when the mic failed or you navigated away mid-hold
   vqActive = false;
   btn.classList.remove('listening'); btn.disabled = false;
@@ -13901,8 +13916,11 @@ let stayKeyVib = makeVibratoTolerantLive(); // each frame is judged with natural
 
 async function startStayInKey(){
   if(!requireProFeature('Stay in Key')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   const t0 = await playBackingPad(false);
+  if(tok!==startGen) return;
   const ring = document.getElementById('stayKeyRingFill');
   if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hairline)'; }
   stayKeyActive = true;
@@ -13992,8 +14010,11 @@ let emotionRmsSamples = [];
 
 async function startEmotionalSinging(){
   if(!requireProFeature('Emotional Singing')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   await playBackingPad(false);
+  if(tok!==startGen) return;
   emotionActive = true;
   emotionStartTime = performance.now();
   emotionCentsSamples = [];
@@ -14202,9 +14223,12 @@ let karaokeResults = [];
 
 async function startKaraoke(){
   if(!requireProFeature('Karaoke Coach')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   buildKaraokeRoll();
   await playBackingPad(false);
+  if(tok!==startGen) return;
   karaokeActive = true;
   karaokeStartTime = performance.now();
   karaokeCurrentIdx = -1;
@@ -14377,7 +14401,8 @@ function setChecklistRow(prefix, state, text){
 
 async function startLiveFeedback(){
   if(!requireProFeature('Real-Time Feedback')) return;
-  if(!await openRegisterInput()) return;
+  const tok = startGen;
+  if(!await openRegisterInput() || tok!==startGen) return;
   lfActive = true;
   lfCentsBuffer = [];
   lfRmsBuffer = [];
@@ -15359,7 +15384,8 @@ function scheduleRehearsalCountIn(){
 
 async function startTimingTrainer(){
   if(!requireChoirWorld('Entrance & Cutoff Trainer')) return;
-  if(!await initAudio()) return;
+  const tok = startGen;
+  if(!await initAudio() || tok!==startGen) return;
   if(harmonyMemory.active) finishHarmonyMemory(false);
   if(challenge.active) finishChallenge(false);
   if(partRehearsal.active) stopPartRehearsal();
@@ -15576,7 +15602,8 @@ function renderHarmonyMemory(){
 
 async function startHarmonyMemory(){
   if(!requireChoirWorld('Harmony Memory')) return;
-  if(!await initAudio()) return;
+  const tok = startGen;
+  if(!await initAudio() || tok!==startGen) return;
   if(timingTrainer.active) finishTimingTrainer();
   if(challenge.active) finishChallenge(false);
   if(partRehearsal.active) stopPartRehearsal();
@@ -15802,7 +15829,8 @@ function chaosEventText(e){
 
 async function startChallenge(kind){
   if(!requireChoirWorld({boss:'Choir Bosses', chaos:'Chaos Mode', ladder:'Tempo/Key Ladder'}[kind])) return;
-  if(!await initAudio()) return;
+  const tok = startGen;
+  if(!await initAudio() || tok!==startGen) return;
   if(timingTrainer.active) finishTimingTrainer();
   if(harmonyMemory.active) finishHarmonyMemory(false);
   if(challenge.active) finishChallenge(false);
@@ -16119,7 +16147,9 @@ async function ycRecord(part){
   if(!requireChoirWorld('Your Choir')) return;
   if(yourChoir.recording) return;
   if(yourChoir.playing || choirIsPlaying) stopChoir();
+  const tok = startGen;
   if(!await initAudio() || typeof MediaRecorder==='undefined'){ ycSetStatus(t('yc_failed')); return; }
+  if(tok!==startGen) return;
   ensureChoirGainNodes();
   partRehearsal.active = false; // workspace mixing rules (Mute/Solo) apply
   const song = currentSongId, takes = ycTakes(song);
@@ -17589,7 +17619,8 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('pitchListenBtn');
   btn.disabled = true;
   document.getElementById('pitchAgainBtn').style.display='none';
-  if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  const tok = startGen;
+  if(!await initAudio() || tok!==startGen){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
   const stage = document.getElementById('pitchStage'), win = LISTEN_WINDOW_MS[exerciseLevel];
   houseSession(()=>btn.disabled, stage); // the whole take is on stage: reference, cue and singing
   pmLaneStart(target, win);
@@ -17680,7 +17711,8 @@ document.getElementById('intervalListenBtn').addEventListener('click', async ()=
   const btn = document.getElementById('intervalListenBtn');
   btn.disabled = true;
   document.getElementById('intervalAgainBtn').style.display='none';
-  if(!await initAudio()){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
+  const tok = startGen;
+  if(!await initAudio() || tok!==startGen){ btn.disabled = false; btn.textContent=t('action_listenscore'); return; }
   const stage = document.getElementById('intervalStage'), win = LISTEN_WINDOW_MS[exerciseLevel];
   houseSession(()=>btn.disabled, stage); // the whole take is on stage: reference, cue and singing
   const lane = vcTakeStart(stage, target, win);
@@ -18758,7 +18790,9 @@ function gliderPitchToY(freq, H){
 }
 async function startGlider(){
   if(!requireProFeature('Vocal Journey')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   gliderComputeDifficulty();
   document.getElementById('gliderAdaptiveNote').textContent = gliderFocusLabel;
   const modeCfg = GLIDER_MODES[gliderMode];
@@ -19134,8 +19168,11 @@ document.querySelectorAll('#bossDifficultyRow .ex-type-btn').forEach(btn=>{
 async function startBoss(){
   if(!requireProFeature('Karaoke Boss Battle')) return;
   bossUsesRegisterInput = BOSS_TYPES[selectedBossType].key==='register';
+  const tok = startGen;
   if(bossUsesRegisterInput){ if(!await openRegisterInput()) return; } else await initAudio();
+  if(tok!==startGen) return;
   await playBackingPad(false);
+  if(tok!==startGen) return;
   bossActive=true; bossStartTime=performance.now(); bossHealth=100; playerHealth=100; bossCurrentIdx=-1; bossCentsBuf=[]; bossNoteResults=[];
   bossRmsBuf=[]; bossChestBuf=[]; bossNoteOnsetTime=null; bossNoteWindowStart=performance.now();
   document.getElementById('bossGameOver').style.display='none';
@@ -19400,7 +19437,8 @@ const BRIDGE_LANE_Y={chest:180, head:60};
 
 async function startBridgeRunner(){
   if(!requireProFeature('Register Runner')) return;
-  if(!await openRegisterInput()) return;
+  const tok = startGen;
+  if(!await openRegisterInput() || tok!==startGen) return;
   bridgeActive=true; bridgeScroll=0; bridgeLane='chest'; bridgeLives=3; bridgeScoreVal=0; bridgeObstacles=[]; bridgeLastSpawnWorldX=400;
   document.getElementById('bridgeGameOver').style.display='none';
   document.getElementById('bridgeStartLabel').textContent='Running — tap to stop';
@@ -19559,7 +19597,9 @@ const HARMONY_LEVEL_MIX = {1:0, 2:0.25, 3:0.55, 4:0.85, 5:0.85};
 
 async function startHarmonyArena(){
   if(!requireProFeature('Harmony Arena')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   ensureChoirGainNodes();
   const ribbon0 = document.getElementById('harmonyRibbonShape');
   if(ribbon0){ ribbon0.style.transform = 'translateY(0px) rotate(0deg)'; ribbon0.setAttribute('fill','var(--hairline)'); }
@@ -19916,6 +19956,7 @@ function stopAllActiveSessions(){
   // real-time capture loop silently running in the background. Setting each flag
   // false lets that tool's own existing "if(!xxxActive) return;" guard halt its
   // next animation frame naturally — no new loop logic invented here.
+  startGen++; // a start still awaiting doesn't go on
   if(typeof rafId!=='undefined' && rafId){ cancelAnimationFrame(rafId); rafId=null; }
   if(typeof mode!=='undefined') mode=null;
   if(typeof regStop==='function') regStop();
@@ -20883,7 +20924,8 @@ drawResonanceFrame(0, 0, resonanceColors().idle, false);
 
 async function startResonanceVisualizer(){
   if(!requireProFeature('Resonance Visualizer')) return;
-  if(!await openRegisterInput()) return;
+  const tok = startGen;
+  if(!await openRegisterInput() || tok!==startGen) return;
   resonanceActive = true;
   resonanceCentsBuffer = [];
   document.getElementById('resonanceStartLabel').textContent = t('action_stop');
@@ -21284,7 +21326,9 @@ function rhythmStop(){
 
 document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Rhythm Trainer')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   rhythmActive = true;
   rhythmWasVoiced = false;
   rhythmResults = Array.from({length:8}, ()=>({claimed:false, offsetMs:null, accuracy:0}));
@@ -21627,7 +21671,9 @@ function riftParamsFor(type){
 document.getElementById('riftStartBtn')?.addEventListener('click', async ()=>{
   if(riftActive){ finishRift(); return; }
   if(!requireProFeature('The Vocal Rift')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   riftActive = true;
   riftStartTime = performance.now();
   riftRounds = [];
@@ -22072,7 +22118,9 @@ let eveFirstResult = null, eveSecondResult = null;
 
 document.getElementById('eveStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Ear → Voice → Ear')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   eveActive = true;
   document.getElementById('evePreCard').style.display='block'; // the loop runs on its stage, in this card
   document.getElementById('eveIntro').style.display='none';
@@ -22323,7 +22371,9 @@ const FIVE_ROUNDS = [
 
 document.getElementById('fiveStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Sing It 5 Ways')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   fiveActive = true;
   fiveResults = [];
   const {lo, hi} = comfortBounds(1, 1); // the rounds also sing a semitone either side
@@ -22449,7 +22499,9 @@ function renderOneTakeResult(r, samples){
 
 document.getElementById('oneTakeStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('One Take Challenge')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   const today = todayStr();
   if(progress.oneTakeLastDate === today){ renderOneTakeGate(); return; }
   oneTakeActive = true;
@@ -22618,7 +22670,9 @@ function playHmPair(){
 }
 document.getElementById('hmStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature("Can You Hear Your Mistake?")) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   generateHmRound();
   document.getElementById('hmPreCard').style.display = 'none';
   document.getElementById('hmSingCard').style.display = 'none';
@@ -22695,7 +22749,9 @@ function renderStudioTakes(){
 }
 document.getElementById('studioRecordBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Studio Mode')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   document.getElementById('studioMicStatus').textContent = (typeof analyser!=='undefined' && analyser) ? t('studio_mic_connected') : t('studio_mic_notconnected');
 
   const takes = (profile && progress.studioTakes) || [];
@@ -22768,7 +22824,9 @@ document.getElementById('emoStartBtn')?.addEventListener('click', async ()=>{
   const btn = document.getElementById('emoStartBtn');
   if(btn.disabled) return;
   if(!requireProFeature('Emotion Mode')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   emoActive = true;
   const run = ++emoRun, live = ()=>emoActive && run===emoRun;
   const {lo, hi} = comfortBounds();
@@ -22897,7 +22955,9 @@ function renderPdBriefing(){
 
 document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Performance Director')) return;
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   pdActive = true;
   pdStartTime = performance.now();
   pdCurrentIdx = -1;
@@ -23038,7 +23098,8 @@ document.getElementById('drillStartBtn')?.addEventListener('click', async ()=>{
   const btn = document.getElementById('drillStartBtn');
   if(btn.disabled) return;
   if(!requireProFeature('Register Drills')) return;
-  if(!await openRegisterInput()) return;
+  const tok = startGen;
+  if(!await openRegisterInput() || tok!==startGen) return;
   drillActive = true;
   drillResults = [];
   btn.disabled = true; // the status pill on the stage
@@ -23276,7 +23337,9 @@ document.getElementById('aiDuetStartBtn')?.addEventListener('click', async ()=>{
     document.getElementById('aiDuetStartBtn').innerHTML = '<span class="dot-icon"></span>Start singing with AI';
     return;
   }
+  const tok = startGen;
   await initAudio();
+  if(tok!==startGen) return;
   Object.keys(choirState).forEach(part=>{
     choirState[part].muted = (part===aiDuetSelectedPart);
     choirState[part].solo = false;
