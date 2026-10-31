@@ -254,3 +254,19 @@ Fix, on a branch fix/4b-leave from master, one commit each:
 
 Checks: stopcheck (locally with the slowed input, and the normal run), house, hooks, the batch2 and batch3a–c loads equal to master ±2, scores4b, live.js.
 Then run the secret check, push fix/4b-leave, report, and stop. After my review you merge into master and we redeploy with the same five steps (rollback target dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg). The user runs the Vercel deploy line themselves.
+
+### 4b.3 additions (the user, 2026-10-31, verbatim)
+
+4b.3: direction approved (B explains the two production failures; A is a real race worth fixing). Two additions before the checks:
+
+1. A start must never cancel itself. Where a start path intentionally runs stopAllActiveSessions or enterPanel (the pre-session warm-up gate, the Today's focus / Coach start buttons that open a tool and start it, "Sing it again", anything else), capture startGen after that step, not before. List every such path in the report.
+
+2. Fix A touches about 30 tools, so add to the checks:
+   - warm-up entries and tracking (the gate path)
+   - home.js (the start buttons)
+   - batch1, picker
+   - scores.js for the 4a tools
+   - vibfix and noisegate (regress mode against master)
+   - vq.js (vqCapture)
+   - the cv-* choir suites already in prod.sh
+   One at a time, as before. Failures are rerun on master and classified.

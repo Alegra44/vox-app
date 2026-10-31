@@ -103,7 +103,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    sign-in, so a session still closing, not the network). **Rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg** per step 4.
    The review branches are kept (step 5 not done). **4b.3 (2026-10-31, spec verbatim in PHASE4B.md):** investigate the two
    hypotheses (A start/leave race, B late finalisation), fix on `fix/4b-leave` (start tokens; stopcheck checks vlFeed calls and
-   loop flags), checks, push, report, stop; then merge and redeploy with the five steps. Phase 5a waits until 4b is live. In the spec too:
+   loop flags), checks, push, report, stop; additions: a start never cancels itself (startGen taken after any
+   stopAllActiveSessions/enterPanel the start path runs itself, every such path listed), and more checks (warm-up, home.js, batch1,
+   picker, scores 4a, vibfix/noisegate regress, vq.js, the cv-* suites); then merge and redeploy with the five steps. Phase 5a waits until 4b is live. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
