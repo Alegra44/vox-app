@@ -270,3 +270,13 @@ Then run the secret check, push fix/4b-leave, report, and stop. After my review 
    - vq.js (vqCapture)
    - the cv-* choir suites already in prod.sh
    One at a time, as before. Failures are rerun on master and classified.
+
+### 4b.3 approval and redeploy (the user, 2026-11-01, verbatim)
+
+4b.3 approved.
+
+1. Merge fix/4b-leave into master with --no-ff, run the secret check, push. Then stop and wait: the user will run the Vercel deploy line themselves.
+2. When the Vercel output shows the new deployment, carry on without waiting: production checks (prod.sh with house, modecheck, scores.js, scores4b, stopcheck with the trace check, live.js, navcheck, livevq), plus the Emotion Mode louder check, 5 runs per side against the previous deployment, if it hasn't run on production yet. Same rollback rule: a failure that repeats on rerun and isn't a network error or a Supabase 503 → roll back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg and report.
+3. If it passes: push review/phase4b-prod with the production screenshots; delete review/phase4b, review/phase4b-fix and review/phase4b-before; update HANDOFF.
+4. The vq one-off: find the first page error on that load in the vq log (the vqActive message is only the knock-on effect of an earlier failure). If it's a script or CDN that failed to load, add to HANDOFF as a later item: the app should show an error and a retry when a required script fails to load, instead of half-starting.
+5. Then start phase 5a from my spec in your notes (the Choir World test scripts, branch tests/choir-verify). Report when 5a is done, and stop.

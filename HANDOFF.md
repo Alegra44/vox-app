@@ -112,8 +112,9 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    `logs/checks4b3-2026-10-31T08-01-00` (+ `reruns/`): all pass; the 4 failures were rerun and classified (house: Supabase 503,
    house master 631/0 and branch 630/1 only from it; batch3b: a 503 on the first save, rerun 179/0; batch3a-master: Supabase CLI
    then a timeout, rerun 168/1 with a master-only gauge timing miss on Hear Yourself Improve; vq: a TDZ on `vqActive` on one
-   page load, reruns on the branch clean and matching master). Loads: 34 features compared, max gap 0.125. Next: the user's
-   review, then merge and the five deploy steps (the user runs the vercel line). In the spec too:
+   page load, reruns on the branch clean and matching master). Loads: 34 features compared, max gap 0.125. **Approved 2026-11-01** (verbatim in
+   PHASE4B.md): merged --no-ff into master; next the user runs the vercel line, then prod checks (+ Emotion louder 5+5 if not
+   yet run on prod), review/phase4b-prod shots, delete the old review branches, the vq one-off's first page error, then 5a. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
