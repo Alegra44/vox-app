@@ -10,7 +10,8 @@
 #   - before each suite the site and Supabase must answer (one request each, 10 s; a 5xx or no answer fails): on a failure
 #     wait 60 s and retry, up to 5 times; still failing → the run stops with "STOPPED: … unreachable" in progress.txt
 #   phase 4b added scores4b (the 4b take tools), live (Register Coach, Live Feedback, Resonance, SCORES_BASE vs the
-#   site), navcheck, livevq and tools-shots (the 4b tools at 390 and 1280, Light and Dark)
+#   site), navcheck, livevq and tools-shots (the 4b tools at 390 and 1280, Light and Dark); phase 5a made the choir
+#   group (ONLY="choir", or by name: cv-desc … cv-yc), every Choir World script, with its own test account
 #   - each suite has a limit of 3× its usual minutes (the number after its name), 30 min at most; one that hits it is
 #     stopped and logged "timed out", and the run carries on)
 cd "$(dirname "$0")/../.."
@@ -28,10 +29,6 @@ SUITES=(
   "warmup-entries|17|node scripts/warmup-verify/entries.js $P"
   "warmup-tracking|3|node scripts/warmup-verify/tracking.js $P"
   "levelup|1|node scripts/levelup-verify/levelup.js $P"
-  "cv-live7|2|node scripts/choir-verify/live7.js $P"
-  "cv-modalz|1|node scripts/choir-verify/modalz.js $P"
-  "cv-p9|9|node scripts/choir-verify/p9.js $P"
-  "cv-p10|11|node scripts/choir-verify/p10.js all $P"
   "listenwin|2|env LW_URL=$P node scripts/vq-verify/listenwin.js"
   "picker|2|env PK_URL=$P node scripts/vq-verify/picker.js"
   "glider-courses|5|node scripts/glider-verify/courses.js $P"
@@ -47,9 +44,34 @@ SUITES=(
   "navcheck|2|env DV_URL=$P node scripts/design-verify/navcheck.js"
   "livevq|3|node scripts/vq-verify/livevq.js $P"
   "tools-shots|20|env DV_URL=$P node scripts/design-verify/shots.js --tools-only --set 4b --out $SHOTS-tools"
+  # the choir group (phase 5a): every Choir World script, each signs up and deletes its own test account
+  "cv-desc|1|node scripts/choir-verify/desc.js $P"
+  "cv-shot|1|node scripts/choir-verify/shot.js $P"
+  "cv-verify|2|node scripts/choir-verify/verify.js all $P"
+  "cv-fix|2|node scripts/choir-verify/fix.js $P"
+  "cv-s6fr|1|node scripts/choir-verify/s6fr.js $P"
+  "cv-live|1|node scripts/choir-verify/live.js $P"
+  "cv-live5|2|node scripts/choir-verify/live5.js $P"
+  "cv-live6|2|node scripts/choir-verify/live6.js $P"
+  "cv-live7|2|node scripts/choir-verify/live7.js $P"
+  "cv-live9|2|node scripts/choir-verify/live9.js $P"
+  "cv-modalz|1|node scripts/choir-verify/modalz.js $P"
+  "cv-p5|5|node scripts/choir-verify/p5.js all $P"
+  "cv-p7|3|node scripts/choir-verify/p7.js all $P"
+  "cv-p7signed|3|node scripts/choir-verify/p7signed.js $P"
+  "cv-p8|7|node scripts/choir-verify/p8.js all $P"
+  "cv-p9|9|node scripts/choir-verify/p9.js $P"
+  "cv-p10|11|node scripts/choir-verify/p10.js all $P"
+  "cv-paywall|1|node scripts/choir-verify/paywall.js $P"
+  "cv-peaks|4|node scripts/choir-verify/peaks.js $P"
+  "cv-timing|2|node scripts/choir-verify/timing.js $P"
+  "cv-yc|7|node scripts/choir-verify/yc.js $P"
 )
 reachable() { local u c; for u in "$P" "$SB/auth/v1/health"; do
   c=$(curl -s -o /dev/null -m 10 -w '%{http_code}' "$u"); [[ $c =~ ^[1-4][0-9][0-9]$ ]] || { echo "$u → ${c:-no answer}"; return 1; }; done; }
+CHOIR="cv-desc cv-shot cv-verify cv-fix cv-s6fr cv-live cv-live5 cv-live6 cv-live7 cv-live9 cv-modalz cv-p5 cv-p7 cv-p7signed cv-p8 cv-p9 cv-p10 cv-paywall cv-peaks cv-timing cv-yc"
+ONLY=$(echo " $ONLY " | sed "s/ choir / $CHOIR /") # ONLY="choir": the choir group
+ONLY=${ONLY# }; ONLY=${ONLY% }
 for s in "${SUITES[@]}"; do
   name=${s%%|*}; rest=${s#*|}; usual=${rest%%|*}; cmd=${rest#*|}
   if [ -n "$ONLY" ]; then case " $ONLY " in *" $name "*) ;; *) continue;; esac; fi
