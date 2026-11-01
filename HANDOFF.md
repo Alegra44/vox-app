@@ -338,6 +338,23 @@ Spec: `design/house-lights/PHASE3.md` (phase 3 and 3.1, verbatim). Approved by t
   warmup-entries 52/0, levelup 45/0, cv-p9 exit 0, cv-p10 exit 0 (7 MATCH); test accounts 0 left.
 - Known flake: cv-p9 can time out at sign-up (backend); it passed on both re-runs.
 
+### Phase 5a, the Choir World test scripts (`tests/choir-verify`): IN PROGRESS, paused 2026-11-01 ~17:45 IST
+Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no app changes.
+- Done: before-inventory (`scripts/choir-verify/logs/5a-before-2026-11-01T07-34`: desc, paywall pass; shot, verify, live,
+  live5, live6 fail fast signed out; fix, s6fr, p5, p7, peaks, timing hang; live7, live9, modalz, p7signed, p9, p10, yc
+  run; p8 can't start, no accounts file). Fixes e37d96c: `harness.js` (own tracked account per script, step and overall
+  limits, cleanup however it ends), p8 makes its own tier accounts. Smoke run (`logs/5a-smoke-10-35`): 19/21; yc (a step
+  call inside browser code) and p9 (5 play-throughs under one 150 s step) fixed in e37d96c. Choir group in suites.sh and
+  prod.sh (ca06314, `ONLY="choir"`, limit 3× usual minutes, 30 at most).
+- Running when paused: the 3 counted runs, `logs/5a-runs-11-48` (scratchpad cv_runner.py; yc #1 and p9 #1 passed).
+  If it was interrupted, rerun the missing ones (each script 3 times, one at a time, never alongside another verify
+  script). Pass = exit 0, no "FAILED (", no page errors, no MISMATCH, paywall bad: 0.
+- Left: classify failures (network/503, script or app; don't fix the app), set the usual minutes in suites.sh/prod.sh
+  from the run times, secret check, push, report table (script, checks, before, after, run time), STOP.
+- For the report: timing.js measures entrance/cutoff errors of about -1.2 to -1.7 s (maxAbs 1692 ms) on live: a check
+  that may be wrong for today's app, or an app finding; report, don't rewrite. p7's label "(signed out, so nothing is
+  sent)" is outdated now it signs in. Most scripts print values rather than a verdict.
+
 ## Waiting on the user (don't start without a go-ahead)
 
 - **Stripe / billing:** payments are still simulated. Billing columns and `trial_start_date` are server-only
