@@ -7,9 +7,17 @@
 //    step's name. Every wait in a script is inside a step, so every wait has a limit.
 //  - A failure (a stalled step, the overall limit, an uncaught error) prints "FAILED (<script>): <why>", closes the
 //    browsers, deletes the accounts and exits 1. finish() closes the browsers and deletes the accounts on success.
+//  - Choir regress mode (5a.1): with CV_JSON=<file> set, everything the script prints (its measurements, as it has always
+//    printed them) is also written to that file as JSON when it exits, however it exits: { script, args, exit, lines }.
+//    choircompare.js reads the numbers and the words out of those lines; nothing a script measures changes.
 const { chromium } = require('playwright');
 const { track, cleanup } = require('./testAccounts');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+if (process.env.CV_JSON) {
+  const lines = [], fs = require('fs'), keep = f => (...a) => { lines.push(require('util').format(...a)); f(...a); };
+  console.log = keep(console.log); console.error = keep(console.error);
+  process.on('exit', code => fs.writeFileSync(process.env.CV_JSON, JSON.stringify({ script: NAME || require('path').basename(process.argv[1], '.js'), args: process.argv.slice(2), exit: code, lines }, null, 1)));
+}
 const browsers = [];
 let NAME = '', current = 'starting', stepTimer = null, overallTimer = null, ended = false;
 
