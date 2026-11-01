@@ -2,16 +2,17 @@
 // action (Choir Boss start) and on the basic mixer (MUTE Alto) for an expired trial and a Teacher plan, then the
 // paywall text. Flags a space before a full stop, and whether the trial-ended Choir World sentence names the plan.
 // Usage: node scripts/choir-verify/paywall.js [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {
-  const b = await chromium.launch();
+  H.start('paywall');
+  const b = await H.launch();
   const p = await b.newPage({ viewport: { width: 1280, height: 900 } });
   const errors = []; p.on('pageerror', e => errors.push(String(e)));
-  await p.goto(url, { waitUntil: 'load' }); await sleep(3000);
-  const lang = p.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) await lang.click();
+  H.step('load'); await p.goto(url, { waitUntil: 'load' }); await sleep(3000);
+  await H.signUp(p, 'cvpaywall'); // signed in; each case then sets its stand-in profile on top, as before
   const ev = (f, a) => p.evaluate(f, a);
   const cases = {
     expired: () => { profile = { trialStartDate: new Date(Date.now() - 30 * 864e5).toISOString(), subscriptionPlan: null }; },
@@ -20,6 +21,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
   let bad = 0;
   for (const [name, setup] of Object.entries(cases)) {
     for (const lg of ['en', 'fr', 'es', 'tr']) {
+      H.step(`${name} ${lg}`);
       await ev(setup); await ev(l => { setLanguage(l); applyChoirWorldGateUI(); }, lg); await sleep(200);
       for (const [what, panel, sel] of [['boss', 'partrehearsal', '#cbStartBtn'], ['mixer', 'choir', '#muteAlto']]) {
         await ev(pn => { enterPanel(pn); document.body.classList.remove('cw-locked'); }, panel); await sleep(300);
@@ -35,5 +37,5 @@ const url = process.argv[2] || 'http://localhost:8765/';
     }
   }
   console.log('bad:', bad, 'page errors:', errors);
-  await b.close();
+  await H.finish();
 })();

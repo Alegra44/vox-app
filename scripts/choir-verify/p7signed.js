@@ -5,7 +5,7 @@
 // Then reads the stored row straight from the DB (npx supabase db query --linked) as an independent check,
 // before the account is deleted at exit.
 // Usage: node scripts/choir-verify/p7signed.js [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
@@ -17,6 +17,7 @@ async function openPage(browser, errors) {
   const page = await ctx.newPage();
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  H.step('load (p7signed.js:20)', 180);
   await page.goto(url, { waitUntil: 'load' });
   await sleep(3000);
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]');
@@ -36,7 +37,9 @@ async function auth(page, mode) {
 }
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('p7signed', { limitMin: 10 });
+  H.step('launch');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const errors = [];
   const page = await openPage(browser, errors);
   const patches = [];
@@ -70,24 +73,30 @@ async function auth(page, mode) {
     });
     analyser = an;
   }, plan);
-  const waitDone = () => ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); });
+  const waitDone = () => (H.step('until the run ends', 150), ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); }));
   // wait until no PATCH has arrived for 1.5 s (a run can trigger more than one save)
   const waitPatches = async () => { let n = -1; while (n !== patches.length) { n = patches.length; await sleep(1500); } };
   const inTune = Array.from({ length: 8 }, () => ({ c: 0 }));
 
+  H.step('Harmony Memory stage 1, all in tune (p7signed.js:78)', 180);
   console.log('\n== Harmony Memory stage 1, all in tune');
+  H.step('Harmony Memory run 1: start (p7signed.js:79)', 150);
   await ev(async () => { document.getElementById('hmemStartBtn').click(); while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
   await standIn(inTune); await waitDone(); await waitPatches();
   console.log('run:', JSON.stringify(await ev(() => ({ score: harmonyMemory.lastRun.score, passed: harmonyMemory.lastRun.passed }))));
 
+  H.step('Boss 1 (Drowner), all in tune (p7signed.js:83)', 180);
   console.log('== Boss 1 (Drowner), all in tune');
   await ev(() => { chSel.boss = 0; renderChoirBosses(); });
+  H.step('boss run 2: start (p7signed.js:85)', 150);
   await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
   await standIn(inTune); await waitDone(); await waitPatches();
   console.log('run:', JSON.stringify(await ev(() => ({ score: challenge.lastRun.boss.score, passed: challenge.lastRun.boss.passed }))));
 
+  H.step('Boss 2 (Drifter), silent from chord 2 (p7signed.js:89)', 180);
   console.log('== Boss 2 (Drifter), silent from chord 2');
   await ev(() => { chSel.boss = 1; renderChoirBosses(); });
+  H.step('boss run 3: start (p7signed.js:91)', 150);
   await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
   await standIn([{ c: 0 }, null, null, null, null, null, null, null]); await waitDone(); await waitPatches();
   console.log('run:', JSON.stringify(await ev(() => ({ score: challenge.lastRun.boss.score, passed: challenge.lastRun.boss.passed }))));
@@ -95,6 +104,7 @@ async function auth(page, mode) {
 
   // jsonb stores object keys in its own order, so equality is also checked with keys sorted (the "keys sorted" columns)
   const canon = v => JSON.stringify(v, (k, x) => x && typeof x === 'object' && !Array.isArray(x) ? Object.fromEntries(Object.keys(x).sort().map(q => [q, x[q]])) : x);
+  H.step('PATCH /me/progress calls (p7signed.js:98)', 180);
   console.log('\n== PATCH /me/progress calls:', patches.length);
   patches.forEach((p, i) => console.log(`#${i + 1} HTTP ${p.status} | sent==returned: ${JSON.stringify(p.sent) === JSON.stringify(p.got)} (keys sorted: ${canon(p.sent) === canon(p.got)}) | returned parts.hymn.Alto:`,
     JSON.stringify(p.got && p.got.parts && p.got.parts.hymn && p.got.parts.hymn.Alto), '| log', (p.got && p.got.log || []).length, '| runs', (p.got && p.got.runs || []).length));
@@ -102,6 +112,7 @@ async function auth(page, mode) {
   console.log('\nclient final choir_readiness:\n' + JSON.stringify(clientFinal, null, 1));
   console.log('readiness card:', await ev(() => rdRows.innerText.replace(/\s+/g, ' ')));
 
+  H.step('Second device: new context, empty localStorage, sign in to t (p7signed.js:105)', 180);
   console.log('\n== Second device: new context, empty localStorage, sign in to the same account');
   const page2 = await openPage(browser, errors);
   await auth(page2, 'signin');
@@ -112,9 +123,10 @@ async function auth(page, mode) {
   await page2.evaluate(() => { enterPanel('partrehearsal'); selectSong('hymn'); renderReadiness(); });
   console.log('device 2 readiness card:', await page2.evaluate(() => rdRows.innerText.replace(/\s+/g, ' ')));
 
+  H.step('database read/write (p7signed.js:115)', 150);
   const row = db(`select choir_readiness from public.user_progress where user_id = '${uid}'`)[0];
   console.log('DB row == device 1 final:', JSON.stringify(row.choir_readiness) === JSON.stringify(clientFinal), '| keys sorted:', canon(row.choir_readiness) === canon(clientFinal), '|', JSON.stringify(row.choir_readiness).slice(0, 300));
   console.log('\nUSER_ID', uid);
   console.log('page errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

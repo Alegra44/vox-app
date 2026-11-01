@@ -4,16 +4,19 @@
 // forced visible (body class removed, as a user could in devtools) so the clicks reach the real buttons:
 // nothing may start and the Choir paywall (or sign-in prompt) must open instead. For unlocked tiers the same
 // clicks must really start each run.
-// Usage: node scripts/choir-verify/p8.js <accounts.json> [tiers comma-separated|all] [url] [langs]
-//   accounts.json: {"monthly": {"email", "password"}, ...}; the tier "signedout" needs no account.
-const { chromium } = require('playwright');
+// Usage: node scripts/choir-verify/p8.js [tiers comma-separated|all] [url] [langs]
+//   Each tier but "signedout" gets its own fresh account (signed up through the auth modal, harness.js), with its plan
+//   set in public.users (PLANS); the accounts are deleted when the run ends (testAccounts.js), pass or fail.
+const H = require('./harness'); // its own test accounts, time limits, cleanup however it ends (PHASE5A.md)
+const { db } = require('./testAccounts');
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
-const fs = require('fs');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const accounts = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
-const tiers = !process.argv[3] || process.argv[3] === 'all' ? ['signedout', ...Object.keys(accounts)] : process.argv[3].split(',');
-const url = process.argv[4] || 'http://localhost:8765/';
-const langs = (process.argv[5] || '').split(',').filter(Boolean);
+// trial: inside the 21-day trial; the paid plans with the trial over, so the plan alone decides; expired: no plan, trial over
+const PLANS = { trial: [null, 0], monthly: ['monthly', 30], yearly: ['yearly', 30], teacher: ['teacher', 30], choir: ['choir', 30], expired: [null, 30] };
+const tiers = !process.argv[2] || process.argv[2] === 'all' ? ['signedout', ...Object.keys(PLANS)] : process.argv[2].split(',');
+const url = process.argv[3] || 'http://localhost:8765/';
+const langs = (process.argv[4] || '').split(',').filter(Boolean);
+const accounts = {};
 
 const ACTIONS = [
   // [label, panel, selector, "did it start?" check]
@@ -31,8 +34,19 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
      if (timingTrainer.active) finishTimingTrainer(); if (harmonyMemory.active) finishHarmonyMemory(false); if (challenge.active) finishChallenge(false); if (partRehearsal.active) stopPartRehearsal(); if (yourChoir.recording || yourChoir.playing) ycStop(); if (partRehearsal.acappella) setAcappella(false); if (choirIsPlaying) stopChoir(); } catch (e) {} };
 
 (async () => {
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('p8', { limitMin: 15 }); // 7 tiers × 9 real clicks, plus an account per tier: about 8 min
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  for (const tier of tiers.filter(t => t !== 'signedout')) { // the accounts, signed up and given their plans first
+    const ctx = await b.newContext({ viewport: { width: 1280, height: 900 } }), p = await ctx.newPage();
+    H.step(`account for ${tier}: load`); await p.goto(url, { waitUntil: 'load' }); await sleep(3000);
+    accounts[tier] = await H.signUp(p, `cvp8-${tier}`);
+    const uid = await p.evaluate(async () => (await sb.auth.getSession()).data.session.user.id);
+    const [plan, ago] = PLANS[tier]; H.step(`account for ${tier}: plan in the database`, 150);
+    db(`update public.users set subscription_plan = ${plan ? `'${plan}'` : 'null'}, trial_start_date = current_date - ${ago} where id = '${uid}'`);
+    await ctx.close();
+  }
   for (const tier of tiers) {
+    H.step(`${tier}: sign in and state`);
     const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });
     const p = await ctx.newPage();
     const errors = [];
@@ -58,6 +72,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
     const goSongs = async () => { await p.locator('.snb-item[data-shell="songs"]').click(); await sleep(400); };
     const openHub = async panel => { await goSongs(); const btn = p.locator(`#panel-songs-hub [data-enter-panel="${panel}"]`).first(); /* the Choir World card (phase 9) comes first */ await btn.scrollIntoViewIfNeeded(); await btn.click(); await sleep(700); };
 
+    H.step(`${tier}: what a real user sees`);
     // --- what a real user sees
     await goSongs();
     console.log('Songs hub, "I Am the Part" card:', JSON.stringify(await ev(() => document.querySelector('#panel-songs-hub [data-enter-panel="partrehearsal"]').closest('.hub-category-card').innerText.replace(/\s+/g, ' '))));
@@ -82,6 +97,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
     // --- every Choir World action, by real click
     console.log(st.locked ? 'Actions (gated cards forced visible first):' : 'Actions:');
     for (const [label, panel, sel, startedExpr] of ACTIONS) {
+      H.step(`${tier}: ${label}`);
       await ev(STOP_ALL);
       await ev(pn => { enterPanel(pn); if (pn === 'choir') renderSonicXray(); }, panel);
       await sleep(400);
@@ -116,6 +132,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
     }
 
     for (const lg of (st.locked ? langs : [])) {
+      H.step(`${tier}: ${lg} text`);
       await ev(l => setLanguage(l), lg); await sleep(300);
       await openHub('partrehearsal');
       if (lg === langs[0]) await p.locator('#cwPreviewRehearsal').screenshot({ path: require('os').tmpdir() + `/p8-preview-${tier}-${lg}.png` });
@@ -133,5 +150,5 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
     console.log('page errors:', errors);
     await ctx.close();
   }
-  await b.close();
+  await H.finish();
 })();

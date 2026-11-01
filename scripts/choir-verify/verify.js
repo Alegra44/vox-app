@@ -1,17 +1,19 @@
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const which = process.argv[2] || 'all';
+const which = process.argv[2] || 'all', url = process.argv[3] || 'http://localhost:8765/';
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('verify');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await browser.newContext({ permissions: ['microphone'] });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await page.goto('http://localhost:8765/', { waitUntil: 'load' });
+  H.step('load'); await page.goto(url, { waitUntil: 'load' });
   await sleep(3000);
+  await H.signUp(page, 'cvverify'); H.step('setup');
   const ev = (f, a) => page.evaluate(f, a);
   await ev(() => { localStorage.removeItem('harmonyMemoryBest'); enterPanel('partrehearsal'); });
   await sleep(500);
@@ -28,6 +30,7 @@ const which = process.argv[2] || 'all';
     // Unlock everything for the gain survey, then restore.
     await ev(() => localStorage.setItem('harmonyMemoryBest', JSON.stringify({ hymn: { Alto: [100, 100, 100, 100, 100] } })));
     for (let s = 0; s < 6; s++) {
+      H.step(`gates: stage ${s + 1}`);
       await ev(s => { harmonyMemory.stage = s; renderHarmonyMemory(); }, s);
       await ev(() => startHarmonyMemory());
       const cnt = await ev(() => document.getElementById('hmemStatus').textContent);
@@ -38,11 +41,12 @@ const which = process.argv[2] || 'all';
       await ev(() => finishHarmonyMemory(false));
       await sleep(200);
     }
+    H.step('gates: after stop');
     console.log('after stop: level', await ev(() => partRehearsal.level), 'acappella', await ev(() => partRehearsal.acappella), 'memory', await ev(() => partRehearsal.memory));
   }
 
   if (which === 'all' || which === 'ref') {
-    console.log('== Stage 6 starting-note reference');
+    H.step('ref: stage 6 starting note'); console.log('== Stage 6 starting-note reference');
     await ev(() => { window.__tones = []; const orig = playTone; window.playTone = function (f, d, del, v) { __tones.push({ f: +f.toFixed(2), d: +d.toFixed(3), atSongT: +(audioCtx.currentTime + del - choirStartCtxTime).toFixed(3), v }); return orig.apply(this, arguments); }; });
     await ev(() => localStorage.setItem('harmonyMemoryBest', JSON.stringify({ hymn: { Alto: [100, 100, 100, 100, 100] } })));
     await ev(async () => { harmonyMemory.stage = 5; renderHarmonyMemory(); await startHarmonyMemory(); });
@@ -55,11 +59,13 @@ const which = process.argv[2] || 'all';
   }
 
   if (which === 'all' || which === 'breath') {
+    H.step('breath: Breath Map rows');
     for (const song of ['hymn', 'ballad']) {
       await ev(s => { selectSong(s); renderPartRehearsal(); }, song);
       const d = await ev(() => ({ summary: bmSummary.textContent, shape: bmShape.textContent, rows: [...document.querySelectorAll('#bmRows .record-row')].map(r => r.textContent.replace(/\s+/g, ' ').trim()), final: document.querySelector('#bmRows .fine-print').textContent }));
       console.log(`== Breath Map ${song}`); console.log(JSON.stringify(d, null, 1));
     }
+    H.step('breath: silent runs in the Alto audio');
     // Measure real silence in the Alto GainNode output while the hymn plays (Stage 1 = guide at full).
     await ev(async () => { selectSong('hymn'); await initAudioOnly(); ensureChoirGainNodes(); });
     await ev(() => {
@@ -89,7 +95,7 @@ const which = process.argv[2] || 'all';
   }
 
   if (which === 'all' || which === 'score') {
-    console.log('== Scoring with injected stand-in mic (hymn Alto, stage 1)');
+    H.step('score: stage 1 with the stand-in singer'); console.log('== Scoring with injected stand-in mic (hymn Alto, stage 1)');
     await ev(() => { localStorage.removeItem('harmonyMemoryBest'); selectSong('hymn'); harmonyMemory.lastRun = null; harmonyMemory.stage = 0; renderPartRehearsal(); });
     console.log('Hear the Mistake button still its own:', await ev(async () => { document.getElementById('hmStartBtn').click(); await new Promise(r => setTimeout(r, 300)); const r = harmonyMemory.active; stopAllActiveSessions(); return 'harmonyMemory.active=' + r; }));
     await ev(() => enterPanel('partrehearsal'));
@@ -115,7 +121,7 @@ const which = process.argv[2] || 'all';
     await sleep(400);
     const r = await ev(() => ({ active: harmonyMemory.active, run: harmonyMemory.lastRun, results: document.getElementById('hmemResults').innerText, stored: localStorage.getItem('harmonyMemoryBest'), nextStage: harmonyMemory.stage, stages: [...document.querySelectorAll('#hmemStages [data-hm-stage]')].map(b => b.disabled ? 'locked' : 'open') }));
     console.log(JSON.stringify(r, null, 1));
-    console.log('== Switch to tr after results');
+    H.step('score: language switches'); console.log('== Switch to tr after results');
     console.log(await ev(async () => { await setLanguage('tr'); return { results: document.getElementById('hmemResults').innerText, desc: document.getElementById('hmemDesc').textContent, stageDesc: document.getElementById('hmemStageDesc').textContent, bm: bmSummary.textContent, live: bmLive.textContent }; }));
     console.log('== Switch to es');
     console.log(await ev(async () => { await setLanguage('es'); return { results: document.getElementById('hmemResults').innerText.slice(0, 200), stages: document.getElementById('hmemStages').innerText.replace(/\s+/g, ' ') }; }));
@@ -123,5 +129,5 @@ const which = process.argv[2] || 'all';
   }
 
   console.log('page errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

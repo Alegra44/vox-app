@@ -2,21 +2,23 @@
 // A stand-in singer (oscillator → the app's pitch analyser) sings known offsets and entry delays per chord,
 // then the report and the "Why?" panels are compared with the injected values and with the raw frames.
 // Usage: node scripts/choir-verify/p7.js [report|why|ready|i18n|all] [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const which = process.argv[2] || 'all';
 const url = process.argv[3] || 'http://localhost:8765/';
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('p7');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await browser.newContext({ permissions: ['microphone'] });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error' && !/progress (load|save) error|Not signed in/.test(m.text())) errors.push(m.text()); });
-  await page.goto(url, { waitUntil: 'load' });
+  H.step('load'); await page.goto(url, { waitUntil: 'load' });
   await sleep(3000);
+  await H.signUp(page, 'cvp7'); H.step('setup');
   const ev = (f, a) => page.evaluate(f, a);
   await ev(() => { ['choirChallengeBest', 'harmonyMemoryBest', 'rehearsalPasses'].forEach(k => localStorage.removeItem(k)); enterPanel('partrehearsal'); });
   await sleep(500);
@@ -36,7 +38,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
     });
     analyser = an;
   }, plan);
-  const waitDone = () => ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); });
+  const waitDone = () => (H.step('until the run ends', 150), ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); }));
 
   // Independent recomputation from the raw frames the run stored (same formulas, written out again here).
   const independent = run => ev(r => {
@@ -61,6 +63,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
 
   if (which === 'all' || which === 'report' || which === 'why') {
     console.log('== Harmony Memory stage 1, Demo Hymn Alto, stand-in plan:', JSON.stringify(PLAN));
+    H.step('Harmony Memory stage 1 run', 150);
     await ev(async () => { document.getElementById('hmemStartBtn').click(); while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
     await standIn(PLAN);
     await waitDone();
@@ -83,6 +86,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
 
     console.log('\n== Boss 1 (Drowner): in tune except chord 2 (−70¢) → 7/8 wins');
     await ev(() => { chSel.boss = 0; renderChoirBosses(); });
+    H.step('boss run 1', 150);
     await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
     await standIn([{ c: 0 }, { c: -70 }, { c: 0 }, { c: 0 }, { c: 0 }, { c: 0 }, { c: 0 }, { c: 0 }]);
     await waitDone();
@@ -93,6 +97,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
     console.log('Why? chord 2:\n' + await ev(() => document.querySelector('#cbResults [data-why-detail="1"]').innerText));
 
     console.log('\n== Boss 2 (Drifter) lost early: silent from chord 2');
+    H.step('boss run 2', 150);
     await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
     await standIn([{ c: 0 }, null, null, null, null, null, null, null]);
     await waitDone();
@@ -105,6 +110,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
     console.log(await ev(() => rdRows.innerText));
     console.log('choir_readiness object:', JSON.stringify(await ev(() => progress.choirReadiness && { parts: progress.choirReadiness.parts, log: progress.choirReadiness.log, runs: progress.choirReadiness.runs.length })));
 
+    H.step('rehearsal play-throughs', 240); // three passes of the song (~27 s each)
     console.log('\n== A full rehearsal play-through at level 1, then one interrupted by a level change');
     await ev(() => { setRehearsalLevel(0); });
     const passes = async () => ev(() => localStorage.getItem('rehearsalPasses'));
@@ -120,6 +126,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
     console.log('after a clean pass at level 2:', await passes());
     await ev(() => stopPartRehearsal());
 
+    H.step('status rules');
     console.log('\n== Status rules, from stored bests (Alto) and a second part');
     await ev(() => {
       localStorage.setItem('harmonyMemoryBest', JSON.stringify({ hymn: { Alto: [100, 100, 88, 75, 75], Tenor: [50] } }));
@@ -135,6 +142,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
   }
 
   if (which === 'all' || which === 'i18n') {
+    H.step('i18n');
     await ev(() => { window.__realProfile = profile; profile = profile || { name: 'test' }; enterPanel('choirpassport'); });
     for (const lang of ['fr', 'es', 'tr', 'en']) {
       await ev(l => setLanguage(l), lang);
@@ -153,5 +161,5 @@ const url = process.argv[3] || 'http://localhost:8765/';
   }
 
   console.log('\npage errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

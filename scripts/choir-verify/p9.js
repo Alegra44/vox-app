@@ -13,7 +13,7 @@
 // Plans are set with `npx supabase db query --linked` (no client path sets subscription_plan). Both accounts are
 // deleted when the script exits (testAccounts.js), pass or fail.
 // Usage: node scripts/choir-verify/p9.js [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { track, db } = require('./testAccounts'); // deletes the accounts this run creates when it exits
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -28,6 +28,7 @@ async function openPage(browser, errors) {
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error' && !/progress (load|save) error|Not signed in/.test(m.text())) errors.push(m.text()); });
   page.on('requestfailed', r => errors.push(`request failed: ${r.url().slice(0, 90)} (${r.failure() && r.failure().errorText})`));
+  H.step('load (p9.js:31)', 180);
   await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]');
   if (await lang.isVisible()) { await lang.click(); await sleep(300); }
@@ -61,7 +62,9 @@ async function view(page, label) {
 }
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('p9', { limitMin: 20 });
+  H.step('launch');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const errors = [];
   const page = await openPage(browser, errors);
   const ev = (f, a) => page.evaluate(f, a);
@@ -77,6 +80,7 @@ async function view(page, label) {
 
   const uidA = await auth(page, A, 'signup');
   console.log('account A', A.email, uidA);
+  H.step('database read/write (p9.js:80)', 150);
   db(`update public.users set day1_start_date = current_date where id = '${uidA}'`); // so the Journey shows its in-progress view
   await ev(async () => { await loadProfile(); ['choirChallengeBest', 'harmonyMemoryBest', 'rehearsalPasses', 'yourChoirTakes'].forEach(k => localStorage.removeItem(k)); });
   await view(page, 'A (trial), before any Choir World run');
@@ -91,7 +95,7 @@ async function view(page, label) {
     run.notes.forEach(nt => { const on = choirStartCtxTime + nt.start; osc.frequency.setValueAtTime(noteToFreq(nt.midi), on); g.gain.setValueAtTime(sil ? 0 : 0.3, on); g.gain.setValueAtTime(0, choirStartCtxTime + nt.end - 0.01); });
     analyser = an;
   }, !!silent);
-  const waitDone = () => ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); });
+  const waitDone = () => (H.step('until the run ends', 150), ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); }));
   const after = async (label, before) => {
     await waitPatches(before);
     const s = await ev(() => ({ toasts: __toasts.splice(0), firsts: Object.keys(progress.choirReadiness.firsts || {}), alto: rdStored('hymn', 'Alto') && rdStored('hymn', 'Alto').status,
@@ -102,6 +106,7 @@ async function view(page, label) {
   const hm = async (stage, silent) => {
     const before = patches.length;
     await ev(s => { harmonyMemory.stage = s; renderPartRehearsal(); }, stage);
+    H.step(`Harmony Memory stage ${stage + 1} run`, 150);
     await ev(async () => { document.getElementById('hmemStartBtn').click(); while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
     await standIn(silent); await waitDone();
     await after(`HM stage ${stage + 1} (${JSON.stringify(await ev(() => ({ score: harmonyMemory.lastRun.score, passed: harmonyMemory.lastRun.passed })))})`, before);
@@ -109,11 +114,13 @@ async function view(page, label) {
   const boss = async (slot, silent) => {
     const before = patches.length;
     await ev(s => { chSel.boss = s; renderChoirBosses(); }, slot);
+    H.step(`Boss ${slot + 1} run`, 150);
     await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
     await standIn(silent); await waitDone();
     await after(`Boss ${slot + 1} (${JSON.stringify(await ev(() => ({ score: challenge.lastRun.boss.score, passed: challenge.lastRun.boss.passed })))})`, before);
   };
 
+  H.step('Runs on Demo Hymn, Alto (p9.js:117)', 180);
   console.log('\n== Runs on Demo Hymn, Alto');
   // Failed runs first: the part has readiness data but is still Learning, and nothing may unlock
   await hm(0, true);
@@ -134,6 +141,7 @@ async function view(page, label) {
   });
   let before = patches.length;
   await page.locator('#ycParts [data-yc-rec="Alto"]').click();
+  H.step('Your Choir take: until it ends', 150);
   await ev(async () => { while (!yourChoir.recording) await new Promise(r => setTimeout(r, 20)); while (yourChoir.recording) await new Promise(r => setTimeout(r, 50)); });
   await after(`Your Choir take (${await txt(page, '#ycStatus')})`, before);
 
@@ -141,8 +149,10 @@ async function view(page, label) {
   await ev(() => enterPanel('partrehearsal'));
   before = patches.length;
   for (let L = 0; L < 5; L++) {
+    H.step(`rehearsal level ${L + 1} play-through`, 150);
     await ev(async l => { setRehearsalLevel(l); await startPartRehearsal(0); const s0 = choirStartCtxTime; while (choirStartCtxTime === s0) await new Promise(r => setTimeout(r, 50)); stopPartRehearsal(); }, L);
   }
+  H.step('after the level play-throughs', 120);
   await after(`5 level play-throughs (levels ${JSON.stringify(await ev(() => rdInputs('hymn', 'Alto').levels))})`, before);
   for (let s = 1; s < 5; s++) await hm(s);
   await view(page, 'A before the last qualifying run (Boss 2)');
@@ -159,6 +169,7 @@ async function view(page, label) {
   for (const lg of ['fr', 'es', 'tr', 'en']) { await ev(l => setLanguage(l), lg); await sleep(300); await view(page, `A in ${lg}`); }
 
   // ---- the stored row, independently
+  H.step('database read/write (p9.js:162)', 150);
   const row = db(`select choir_readiness->'firsts' as firsts, choir_readiness->'parts'->'hymn'->'Alto' as alto, choir_readiness->'ycTakes' as yc, notified_achievements from public.user_progress where user_id = '${uidA}'`)[0];
   console.log('\nDB row:', JSON.stringify(row));
 
@@ -166,15 +177,18 @@ async function view(page, label) {
   const errors2 = [];
   const page2 = await openPage(browser, errors2);
   await auth(page2, A, 'signin');
+  H.step('Second device, empty localStorage (p9.js:169)', 180);
   console.log('\n== Second device, empty localStorage:', JSON.stringify(await page2.evaluate(() => ['choirChallengeBest', 'harmonyMemoryBest', 'rehearsalPasses'].map(k => localStorage.getItem(k)))));
   const d2 = await view(page2, 'A on device 2');
   console.log('device 2 Home card == device 1 (en):', d2.home.text === final.home.text);
   await page2.context().close();
 
   // ---- A locked: Monthly, trial over
+  H.step('database read/write (p9.js:175)', 150);
   db(`update public.users set subscription_plan = 'monthly', trial_start_date = current_date - 30 where id = '${uidA}'`);
   const page3 = await openPage(browser, errors);
   await auth(page3, A, 'signin');
+  H.step('A locked (p9.js:178)', 180);
   console.log('\n== A locked:', JSON.stringify(await page3.evaluate(() => ({ tier: currentTier(), inTrial: isInTrial(), choirWorld: hasChoirWorldAccess(), locked: document.body.classList.contains('cw-locked') }))));
   await view(page3, 'A locked (Monthly, trial over, readiness from the trial)');
   await goHome(page3);
@@ -189,6 +203,7 @@ async function view(page, label) {
   const page4 = await openPage(browser, errors);
   const uidB = await auth(page4, B, 'signup');
   console.log('\naccount B', B.email, uidB);
+  H.step('database read/write (p9.js:192)', 150);
   db(`update public.users set subscription_plan = 'teacher', trial_start_date = current_date - 30, day1_start_date = current_date where id = '${uidB}'`);
   await page4.context().close();
   const page5 = await openPage(browser, errors);
@@ -198,5 +213,5 @@ async function view(page, label) {
 
   console.log('\nUSER_IDS', uidA, uidB);
   console.log('page errors:', errors, errors2);
-  await browser.close();
+  await H.finish();
 })();

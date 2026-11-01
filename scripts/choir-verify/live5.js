@@ -1,13 +1,14 @@
 // Live click-through on production for Phase 5: fight the Drowner (with a true-peak tap on the choir
 // output), switch to French, check the boss names, then run one Chaos Mode session and read its results.
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), crypto = require('crypto');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';
 const SHOTS = require('os').tmpdir() + '/';
 (async () => {
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('live5');
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });
   const p = await ctx.newPage();
   const errors = [];
@@ -15,7 +16,7 @@ const SHOTS = require('os').tmpdir() + '/';
   p.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
   await p.addInitScript(() => { localStorage.setItem('language', 'en'); localStorage.removeItem('choirChallengeBest'); });
 
-  const resp = await p.goto(URL, { waitUntil: 'load' });
+  H.step('load'); const resp = await p.goto(URL, { waitUntil: 'load' });
   const liveHtml = await resp.text();
   const local = fs.readFileSync(require('path').join(__dirname, '../../deploy/index.html'), 'utf8');
   const h = s => crypto.createHash('sha256').update(s).digest('hex').slice(0, 16);
@@ -38,6 +39,7 @@ const SHOTS = require('os').tmpdir() + '/';
     analyser = an;
   }, offs);
 
+  await H.signUp(p, 'cvlive5'); H.step('Songs → I Am the Part');
   // Real clicks: bottom nav Songs -> "I Am the Part" -> Alto.
   await p.locator('.shell-nav button, nav button').filter({ hasText: 'Songs' }).first().click();
   await sleep(600);
@@ -47,6 +49,7 @@ const SHOTS = require('os').tmpdir() + '/';
   console.log('panel active:', await ev(() => document.getElementById('panel-partrehearsal').classList.contains('active')));
   await p.locator('#rehearsalPartRow [data-rh-part="Alto"]').click();
 
+  H.step('Drowner fight');
   // == Drowner fight
   await p.locator('#cbBosses [data-cb-boss="0"]').click();
   const fight = p.locator('#cbStartBtn');
@@ -69,6 +72,7 @@ const SHOTS = require('os').tmpdir() + '/';
   console.log('Drowner output peak:', JSON.stringify(await ev(() => ({ peak: +__pk.max.toFixed(3), peakDbfs: +(20 * Math.log10(__pk.max)).toFixed(2), samplesOver1: __pk.over, samples: __pk.n, rmsDbfs: +(10 * Math.log10(__pk.sq / __pk.n)).toFixed(2), trimAfter: choirOutNode.gain.value }))));
   console.log('Drowner result:', (await ev(() => cbResults.innerText)).split('\n').slice(0, 6).join(' | '));
 
+  H.step('French boss names');
   // == French, via the real language buttons if one is on screen, else the same setLanguage() they call.
   const frBtn = p.locator('[data-profile-lang="fr"]:visible, [data-lang="fr"]:visible').first();
   if (await frBtn.count()) { await frBtn.click(); console.log('switched to fr by clicking a language button'); }
@@ -78,6 +82,7 @@ const SHOTS = require('os').tmpdir() + '/';
   console.log('FR boss card:', JSON.stringify(await ev(() => ({ title: document.querySelector('#choirBossCard .step-label').textContent, desc: document.getElementById('cbBossDesc').textContent, button: cbStartLabel.textContent, bars: cbBossHpText.textContent + ' / ' + cbLivesText.textContent, result: cbResults.innerText.split('\n').slice(0, 6).join(' | ') }))));
   await p.locator('#choirBossCard').screenshot({ path: SHOTS + 'live-fr-bosses.png' });
 
+  H.step('Chaos Mode run in French');
   // == One Chaos Mode session, in French: in tune on calm chords, +90 cents on chaos chords.
   const cx = p.locator('#cxStartBtn');
   await cx.scrollIntoViewIfNeeded();
@@ -95,5 +100,5 @@ const SHOTS = require('os').tmpdir() + '/';
   await p.locator('#chaosCard').screenshot({ path: SHOTS + 'live-fr-chaos.png' });
   console.log('shots in', SHOTS);
   console.log('page errors:', errors);
-  await b.close();
+  await H.finish();
 })();

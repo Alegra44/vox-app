@@ -3,7 +3,7 @@
 // the run ended, when the achievement toast appeared (and whether it is on screen) and when the progress save
 // was sent and returned, to show the toast does not wait for the save. The account is deleted at exit.
 // Usage: node scripts/choir-verify/live9.js [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), path = require('path');
 const { track, db } = require('./testAccounts');
@@ -12,15 +12,18 @@ const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';
 const email = track(`voxcoach-live9-${Date.now()}@example.com`), password = 'L9-' + Math.random().toString(36).slice(2) + '!x9';
 
 (async () => {
+  H.start('live9', { limitMin: 10 });
+  H.step('launch');
   const html = await (await fetch(URL + '?v=' + Date.now())).text();
   const local = fs.readFileSync(path.join(__dirname, '../../deploy/index.html'), 'utf8');
   console.log('live HTML identical to deploy/index.html:', html === local, `(${html.length} bytes)`);
 
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const p = await (await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } })).newPage();
   const errors = [];
   p.on('pageerror', e => errors.push(String(e)));
   const ev = (f, a) => p.evaluate(f, a);
+  H.step('load (live9.js:24)', 180);
   await p.goto(URL, { waitUntil: 'load' }); await sleep(3000);
   const lang = p.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) await lang.click();
 
@@ -46,6 +49,7 @@ const email = track(`voxcoach-live9-${Date.now()}@example.com`), password = 'L9-
     enterPanel('partrehearsal'); selectSong('hymn'); setRehearsalPart('Alto'); chSel.boss = 0; renderChoirBosses();
   });
   await p.locator('#cbStartBtn').click();
+  H.step('boss run 1: start (live9.js:49)', 150);
   await ev(async () => { while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
   await ev(() => { // stand-in singer: every note of the Alto line, in tune
     const osc = audioCtx.createOscillator(), g = audioCtx.createGain(), an = audioCtx.createAnalyser();
@@ -53,6 +57,7 @@ const email = track(`voxcoach-live9-${Date.now()}@example.com`), password = 'L9-
     challenge.notes.forEach(nt => { osc.frequency.setValueAtTime(noteToFreq(nt.midi), choirStartCtxTime + nt.start); g.gain.setValueAtTime(0.3, choirStartCtxTime + nt.start); g.gain.setValueAtTime(0, choirStartCtxTime + nt.end - 0.01); });
     analyser = an;
   });
+  H.step('run 1: until it ends (live9.js:56)', 150);
   const ended = await ev(async () => { while (challenge.active) await new Promise(r => setTimeout(r, 5)); return performance.now(); });
   const onScreen = await ev(() => [...document.querySelectorAll('#appToastWrap .app-toast')].map(e => e.textContent));
   await sleep(6000);
@@ -63,8 +68,9 @@ const email = track(`voxcoach-live9-${Date.now()}@example.com`), password = 'L9-
   console.log('toast(s) on screen at the moment the run ended:', JSON.stringify(onScreen));
   t.toasts.forEach(x => console.log(`toast ${rel(x.at)} after the run ended: ${x.m}`));
   t.saves.forEach((s, i) => console.log(`save #${i + 1}: sent ${rel(s.sent)}, returned ${rel(s.back)} (HTTP ${s.status})`));
+  H.step('database read/write (live9.js:66)', 150);
   const row = db(`select choir_readiness->'firsts'->'bossWin' as boss_win, notified_achievements from public.user_progress where user_id = '${uid}'`)[0];
   console.log('DB row:', JSON.stringify(row));
   console.log('page errors:', errors);
-  await b.close();
+  await H.finish();
 })();

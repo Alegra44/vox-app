@@ -1,20 +1,23 @@
 // Phase 3: Entrance and Cutoff Trainer scoring with a stand-in singer whose note edges are scheduled at
 // known offsets from the real targets; the measured offsets should match to within a few ms.
 // Usage: node scripts/choir-verify/timing.js [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const OFFSETS_MS = [0, 60, -50, 20, -120, 100, 0, 35];
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('timing');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const page = await (await browser.newContext({ permissions: ['microphone'] })).newPage();
   await page.addInitScript(() => localStorage.setItem('language', 'en'));
   const errors = []; page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
+  H.step('load'); await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
+  await H.signUp(page, 'cvtiming');
   const ev = (f, a) => page.evaluate(f, a);
   await ev(() => { enterPanel('partrehearsal'); selectSong('hymn'); setRehearsalPart('Alto'); });
   for (const mode of ['entrance', 'cutoff']) {
+    H.step(`${mode} run`, 150);
     await ev(m => document.querySelector(`#ttModeRow [data-tt-mode="${m}"]`).click(), mode);
     await ev(async () => { document.getElementById('ttStartBtn').click(); while (!(timingTrainer.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
     await ev(([m, offs]) => {
@@ -33,5 +36,5 @@ const OFFSETS_MS = [0, 60, -50, 20, -120, 100, 0, 35];
     console.log(`${mode}: injected ${JSON.stringify(OFFSETS_MS)} measured ${JSON.stringify(got)} error ms ${JSON.stringify(err)} maxAbs ${Math.max(...err.map(e => e === 'miss' ? Infinity : Math.abs(e)))}`);
   }
   console.log('page errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

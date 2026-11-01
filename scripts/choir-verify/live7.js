@@ -5,7 +5,7 @@
 // Also reads the stored row straight from the DB (npx supabase db query --linked) before the account is
 // deleted at exit.
 // Usage: node scripts/choir-verify/live7.js [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), path = require('path');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -18,7 +18,9 @@ const PLAN = [
 ];
 
 (async () => {
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('live7', { limitMin: 10 });
+  H.step('launch');
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 720 } });
   const p = await ctx.newPage();
   const errors = [], patches = [];
@@ -31,6 +33,7 @@ const PLAN = [
   });
   const ev = (f, a) => p.evaluate(f, a);
 
+  H.step('load (live7.js:34)', 180);
   const resp = await p.goto(URL, { waitUntil: 'load' });
   const live = await resp.text(), local = fs.readFileSync(path.join(__dirname, '../../deploy/index.html'), 'utf8');
   console.log('live HTML', live === local ? 'IDENTICAL to deploy/index.html' : `DIFFERENT (live ${live.length} B, local ${local.length} B)`);
@@ -57,6 +60,7 @@ const PLAN = [
   await ev(() => { selectSong('hymn'); setRehearsalPart('Alto'); setRehearsalLevel(0); harmonyMemory.stage = 0; renderPartRehearsal(); });
   await p.locator('#hmemStartBtn').scrollIntoViewIfNeeded();
   await p.locator('#hmemStartBtn').click();
+  H.step('Harmony Memory run 1: start (live7.js:60)', 150);
   await ev(async () => { while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
   await ev(pl => {
     const osc = audioCtx.createOscillator(), g = audioCtx.createGain(), an = audioCtx.createAnalyser();
@@ -69,6 +73,7 @@ const PLAN = [
     });
     analyser = an;
   }, PLAN);
+  H.step('run 1: until it ends (live7.js:72)', 150);
   await ev(async () => { while (harmonyMemory.active) await new Promise(r => setTimeout(r, 50)); });
   let n = -1; while (n !== patches.length) { n = patches.length; await sleep(1500); }
 
@@ -86,6 +91,7 @@ const PLAN = [
         entryMs: r.firstVoiced[i] === null ? null : Math.round(r.firstVoiced[i] * 1000), noteMs: Math.round((nt.end - nt.start) * 1000), verdict: judged[i].held ? 'held' : judged[i].heard ? 'off' : 'not heard', app: r.results[i].held ? 'held' : r.results[i].heard ? 'off' : 'not heard' })),
     };
   });
+  H.step('Harmony Memory stage 1, plan (live7.js:89)', 180);
   console.log('\n== Harmony Memory stage 1, plan', JSON.stringify(PLAN));
   console.table(ind.perNote);
   console.log('independent:', JSON.stringify({ held: ind.held, n: ind.n, score: ind.score, heard: ind.heard, pitch: ind.pitch, timing: ind.timing }));
@@ -97,7 +103,8 @@ const PLAN = [
   console.log('\nPATCH /me/progress:', JSON.stringify(patches));
   console.log('client choir_readiness:', JSON.stringify(await ev(() => progress.choirReadiness)));
   console.log('readiness card (Alto):', await ev(() => document.querySelector('[data-rd-part="Alto"]').innerText.replace(/\s+/g, ' ')));
+  H.step('database read/write (live7.js:100)', 150);
   console.log('DB row choir_readiness:', JSON.stringify(db(`select choir_readiness from public.user_progress where user_id = '${uid}'`)[0]));
   console.log('\nUSER_ID', uid, '| screenshot', require('os').tmpdir() + '\\live7-report.png', '| page errors:', errors);
-  await b.close();
+  await H.finish();
 })();
