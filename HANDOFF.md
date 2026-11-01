@@ -338,7 +338,7 @@ Spec: `design/house-lights/PHASE3.md` (phase 3 and 3.1, verbatim). Approved by t
   warmup-entries 52/0, levelup 45/0, cv-p9 exit 0, cv-p10 exit 0 (7 MATCH); test accounts 0 left.
 - Known flake: cv-p9 can time out at sign-up (backend); it passed on both re-runs.
 
-### Phase 5a, the Choir World test scripts (`tests/choir-verify`): DONE 2026-11-01, waiting for the user's read
+### Phase 5a, the Choir World test scripts (`tests/choir-verify`): DONE 2026-11-01; 5a.1 in progress 2026-11-02
 Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no app changes.
 - Before (`scripts/choir-verify/logs/5a-before-2026-11-01T07-34`): desc, paywall pass; shot, verify, live, live5, live6
   fail fast signed out; fix, s6fr, p5, p7, peaks, timing hang (killed at 20 min); live7, live9, modalz, p7signed, p9,
@@ -355,7 +355,16 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   Trainer reads `readRawMic()` (`micG.rawAn`), so it hears the fake mic's beep. The other scripts' stand-ins feed pitch,
   which still reads `analyser` (p9: silent 0, sung 100). p7's label "(signed out, so nothing is sent)" is outdated.
   Most scripts print values rather than a verdict.
-- Next: phase 5 (the Choir World redesign), after the user has read the 5a report.
+- 5a.1 (approved 2026-11-01, verbatim in PHASE5A.md): timing.js's stand-in enters through getUserMedia (every note now
+  reads +20/+21 ms, the known output/input latency item; 3/3 identical); p7's line fixed. Choir regress mode:
+  `scripts/choir-verify/choirregress.sh <branch|working> [base]` (master's and the branch's build in the same run, 3
+  runs per side, base :8766, branch :8767) and `choircompare.js` (medians, ±2 or master's A/A range from
+  `aa-ranges.json`). The A/A proof (master against itself) writes `aa-ranges.json`.
+- **The choir group is opt-in** (`ONLY=choir` or `WITH_CHOIR=1`; not in a default suites.sh/prod.sh run any more, which
+  used to include cv-live7, cv-modalz, cv-p9 and cv-p10). **Required for phases 5, 6 and 10**, with choirregress.sh as
+  the gate.
+- Then: merge tests/choir-verify (no deploy: test code only), and the phase 5 survey on redesign/phase5
+  (PHASE5_SURVEY.md, shots5.js → review/phase5-before).
 
 ## Waiting on the user (don't start without a go-ahead)
 
