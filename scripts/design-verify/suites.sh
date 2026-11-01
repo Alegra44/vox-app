@@ -3,7 +3,8 @@
 # Logs: scripts/design-verify/logs/suites-<stamp>/<suite>.log; progress: .../progress.txt (suite, exit code, minutes).
 # A suite that fails is re-run on master afterwards (suites-master.sh) to classify it Regression or Already failing.
 # listenwin / picker / loopback compare against master themselves (*_BEFORE=master); vibfix and noisegate run regress mode.
-# The choir group (phase 5a): cv-live runs against production (it checks the live HTML equals deploy/index.html, so it
+# The choir group (phase 5a), opt-in: ONLY="choir", or WITH_CHOIR=1 for everything plus the group. Required for phases
+# 5, 6 and 10 (with choirregress.sh, the choir gate). cv-live runs against production (it checks the live HTML equals deploy/index.html, so it
 # can only pass after a deploy); p8.js makes its own tier accounts. Choir suites carry a usual run time: 3× it (30 min at
 # most) is their limit, on top of the idle watchdog.
 # Single stream (2026-10-15): also modecheck (three engines), vlcompare, regfix against master, Voice Quality (vq, livevq,
@@ -81,6 +82,7 @@ for s in "${SUITES[@]}"; do
   name=${s%%|*}; cmd=${s#*|}; usual=; case $cmd in *"|"*) usual=${cmd##*|}; cmd=${cmd%|*};; esac
   [ "$started" = 0 ] && [ "$name" = "$1" ] && started=1; [ "$started" = 0 ] && continue
   if [ -n "$ONLY" ]; then case " $ONLY " in *" $name "*) ;; *) continue;; esac; fi
+  case $name in cv-*) [ -z "$ONLY" ] && [ -z "$WITH_CHOIR" ] && continue;; esac # the choir group is opt-in
   while pmset -g batt | head -1 | grep -q "Battery Power"; do echo "$(date -u +%H:%M:%S) on battery: waiting for AC before $name" >> "$OUT/progress.txt"; sleep 300; done
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name" >> "$OUT/progress.txt"
   $cmd > "$OUT/$name.log" 2>&1 & PID=$!

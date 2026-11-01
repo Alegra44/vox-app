@@ -11,7 +11,8 @@
 #     wait 60 s and retry, up to 5 times; still failing → the run stops with "STOPPED: … unreachable" in progress.txt
 #   phase 4b added scores4b (the 4b take tools), live (Register Coach, Live Feedback, Resonance, SCORES_BASE vs the
 #   site), navcheck, livevq and tools-shots (the 4b tools at 390 and 1280, Light and Dark); phase 5a made the choir
-#   group (ONLY="choir", or by name: cv-desc … cv-yc), every Choir World script, with its own test account
+#   group, opt-in (ONLY="choir", WITH_CHOIR=1 for everything plus the group, or by name: cv-desc … cv-yc): every Choir
+#   World script, with its own test account. Required for phases 5, 6 and 10 (with choirregress.sh, the choir gate)
 #   - each suite has a limit of 3× its usual minutes (the number after its name), 30 min at most; one that hits it is
 #     stopped and logged "timed out", and the run carries on)
 cd "$(dirname "$0")/../.."
@@ -75,6 +76,7 @@ ONLY=${ONLY# }; ONLY=${ONLY% }
 for s in "${SUITES[@]}"; do
   name=${s%%|*}; rest=${s#*|}; usual=${rest%%|*}; cmd=${rest#*|}
   if [ -n "$ONLY" ]; then case " $ONLY " in *" $name "*) ;; *) continue;; esac; fi
+  case $name in cv-*) [ -z "$ONLY" ] && [ -z "$WITH_CHOIR" ] && continue;; esac # the choir group is opt-in
   tries=0; while ! why=$(reachable); do
     tries=$((tries+1)); echo "$(date -u +%H:%M:%S) unreachable before $name ($why), try $tries of 5" >> "$OUT/progress.txt"
     if [ $tries -ge 5 ]; then echo "$(date -u +%H:%M:%S) STOPPED: the site or Supabase unreachable 5 times before $name" >> "$OUT/progress.txt"; exit 2; fi
