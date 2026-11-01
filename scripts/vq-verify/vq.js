@@ -25,10 +25,16 @@ async function withMic(file, fn) {
     await ctx.route('http://localhost:8765/', r => r.fulfill({ path: path.join(ROOT, 'deploy/index.html'), contentType: 'text/html' }));
     const page = await ctx.newPage();
     const errors = []; page.on('pageerror', e => errors.push(String(e)));
+    // a script that fails to load leaves the page half-started (later errors are only its knock-on): log it when a case throws
+    const failed = []; page.on('requestfailed', r => failed.push(`${r.url()} ${r.failure() && r.failure().errorText}`));
+    page.on('response', r => { if (r.status() >= 400) failed.push(`${r.url()} ${r.status()}`); });
     await page.goto('http://localhost:8765/', { waitUntil: 'load' }); await page.waitForTimeout(2500);
     const lang = page.locator('#languageSelectOverlay [data-lang="en"]');
     if (await lang.isVisible()) await lang.click();
-    const out = await fn(page);
+    let out;
+    try { out = await fn(page); } catch (e) {
+      console.log('  this page load: page errors', errors, '| failed requests', failed); throw e;
+    }
     if (errors.length) console.log('  page errors:', errors);
     return out;
   } finally { await browser.close(); }

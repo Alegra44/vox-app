@@ -113,8 +113,15 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    house master 631/0 and branch 630/1 only from it; batch3b: a 503 on the first save, rerun 179/0; batch3a-master: Supabase CLI
    then a timeout, rerun 168/1 with a master-only gauge timing miss on Hear Yourself Improve; vq: a TDZ on `vqActive` on one
    page load, reruns on the branch clean and matching master). Loads: 34 features compared, max gap 0.125. **Approved 2026-11-01** (verbatim in
-   PHASE4B.md): merged --no-ff into master; next the user runs the vercel line, then prod checks (+ Emotion louder 5+5 if not
-   yet run on prod), review/phase4b-prod shots, delete the old review branches, the vq one-off's first page error, then 5a. In the spec too:
+   PHASE4B.md): merged --no-ff into master (5ff44f3, f33c6ca). **Phase 4b is live: dpl_BvNJh8hz89bSLfWzbAqHS15G85zs** (the user
+   deployed 2026-11-01; index.html = master). Prod checks `logs/prod-2026-11-01T05-47-24` (base fc2ed85 = the previous deployment's
+   build; a first run was cut by a Wi-Fi drop): house 629/2 (both Supabase 503s), modecheck, scores, stopcheck (25/25, the
+   late finishes allowed), scores4b, live, navcheck, livevq all pass. Emotion louder 5+5 vs fc2ed85: first run dynamic range
+   median 103 vs master 98–102 (readings are bimodal, ~99 or ~102–103), rerun 99 vs master 99–103, passes; no rollback.
+   Screenshots on orphan `review/phase4b-prod` (132); review/phase4b, -fix, -before deleted. vq one-off: the log has no first
+   page error (vq.js printed page errors only after a case passed); vq.js now logs the page errors and failed requests of a
+   page load whose case throws. If a run shows a script or CDN failing to load: add the later item (an error and a retry
+   when a required script fails to load, instead of half-starting). Next: Phase 5a. In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".
