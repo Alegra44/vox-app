@@ -106,7 +106,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
   }
 
   if (which === 'all' || which === 'ready') {
-    console.log('\n== Readiness after those runs (signed out, so nothing is sent):');
+    console.log('\n== Readiness after those runs (signed in with its own test account, so they are saved to it):');
     console.log(await ev(() => rdRows.innerText));
     console.log('choir_readiness object:', JSON.stringify(await ev(() => progress.choirReadiness && { parts: progress.choirReadiness.parts, log: progress.choirReadiness.log, runs: progress.choirReadiness.runs.length })));
 
