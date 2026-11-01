@@ -101,7 +101,19 @@ Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope
    7 × 3), the rerun failed 2 of 24 cases (today's vocal load grew after leaving Register Coach at 2.6 s, 72.44 → 74.44,
    and Live Feedback at 0.8 s, 74.44 → 82.85, with no mic calls and no page errors; vlDay changes from the server only at
    sign-in, so a session still closing, not the network). **Rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg** per step 4.
-   The review branches are kept (step 5 not done). Next: find why a session closed late on production. In the spec too:
+   The review branches are kept (step 5 not done). **4b.3 (2026-10-31, spec verbatim in PHASE4B.md):** investigate the two
+   hypotheses (A start/leave race, B late finalisation), fix on `fix/4b-leave` (start tokens; stopcheck checks vlFeed calls and
+   loop flags), checks, push, report, stop; additions: a start never cancels itself (startGen taken after any
+   stopAllActiveSessions/enterPanel the start path runs itself, every such path listed), and more checks (warm-up, home.js, batch1,
+   picker, scores 4a, vibfix/noisegate regress, vq.js, the cv-* suites); then merge and redeploy with the five steps. Phase 5a waits until 4b is live.
+   **4b.3 result (2026-11-01, pushed, awaiting the user's review):** both production failures are B (deferred finishes, 0 mic
+   calls on Home; reproduced with `--slow-state 4000`, finishes 2.2–5.6 s after the end); A is real (`--slow-input 2000`: master
+   7/21 fail with 187–300 mic loop calls on Home, fix 21/21). Fix A 9a132ab, fix B (stopcheck) 9ae5b25. Checks
+   `logs/checks4b3-2026-10-31T08-01-00` (+ `reruns/`): all pass; the 4 failures were rerun and classified (house: Supabase 503,
+   house master 631/0 and branch 630/1 only from it; batch3b: a 503 on the first save, rerun 179/0; batch3a-master: Supabase CLI
+   then a timeout, rerun 168/1 with a master-only gauge timing miss on Hear Yourself Improve; vq: a TDZ on `vqActive` on one
+   page load, reruns on the branch clean and matching master). Loads: 34 features compared, max gap 0.125. Next: the user's
+   review, then merge and the five deploy steps (the user runs the vercel line). In the spec too:
    - Ear → Voice → Ear's English step headers ("Step 1 — Hear" … "Step 5 — Sing without help").
    - The hard-coded "Listening…" on stage buttons and statuses.
    - Mirror's "No signal at this moment".

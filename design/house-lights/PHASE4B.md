@@ -232,3 +232,41 @@ WHEN I TYPE "deploy"
 - scores.js: values whose own master-vs-master spread is wider than ±2 are gated by that spread instead: the branch median must fall inside master's range. Record this in scores.js with the values it applies to (Mirror per-note, Voice Quality centroid, Emotion Mode "louder", Register Drills per-note).
 
 Before deploy step 1: run Emotion Mode alone with the louder stimulus, 5 runs per side, alternating master and branch. If the branch's dynamic-range median is inside master's own range over those runs, continue with the five deploy steps in PHASE4B.md. If it's lower than master's range, stop and report without merging.
+
+## 4b.3: leaving a tool on production (2026-10-31, verbatim)
+
+Context: the 4b deploy (dpl_FjTuxeuo8kehTKyepm2wKSEHtR5g) was rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg after stopcheck failed
+twice on production (vocal load grew after leaving Register Coach at 2.6 s and Live Feedback at 0.8 s). The user chose: investigate,
+then the fix, then 4b goes live again. Phase 5a waits until 4b is live.
+
+Two hypotheses to test first. Both fit "no mic calls, no page errors":
+A) A start/leave race. startLiveFeedback and Register Coach's start handler both await openRegisterInput() and only then set lfActive / mode and start their loops. If you leave while that await is pending, stopAllActiveSessions finds nothing active; then the await resolves and the loop starts on the next screen, reading the mic and feeding vocal load with no stage (so nothing dims and nothing shows). On production the await can take longer than locally, which would explain why only production failed. Other start functions may have the same shape: any await before the active flag is set.
+B) Late finalisation, not growth. vlEnd() on a run whose server state hasn't arrived (r.ready false) only marks it ending, and vlFinish adds the session to the total when the server answers. If that lands inside stopcheck's 5 s window on Home, the gauge rises once by the session's own load, even though nothing is being fed. Register Coach's +2.0 after 2.6 s looks like B; Live Feedback's +8.4 after 0.8 s looks like A.
+
+Investigation (no app change):
+- Extend the test-only ring buffer from 4b.1: count vlFeed calls after leaving, with the active panel at each call.
+- Reproduce locally with the register input's opening slowed down (a test-only delay, or CDP network throttling), leaving at 0.8 s and 2.6 s. Also read the trace from the page on production.
+- Report which hypothesis explains each failure.
+
+Fix, on a branch fix/4b-leave from master, one commit each:
+- A: every start function that awaits before setting its active flag takes a start token, like vlSidecar's gen. stopAllActiveSessions bumps the token, and after each await the start returns if the token changed. Cover Live Feedback, Register Coach, Resonance, Register Drills, Vibrato, Voice Quality, and any other tool with the same shape.
+- B: stopcheck checks the right thing. After leaving, no vlFeed call happens (from the trace) and the loop flags are off. The gauge may still settle once from a session that ended before you left; record that as allowed.
+
+Checks: stopcheck (locally with the slowed input, and the normal run), house, hooks, the batch2 and batch3a–c loads equal to master ±2, scores4b, live.js.
+Then run the secret check, push fix/4b-leave, report, and stop. After my review you merge into master and we redeploy with the same five steps (rollback target dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg). The user runs the Vercel deploy line themselves.
+
+### 4b.3 additions (the user, 2026-10-31, verbatim)
+
+4b.3: direction approved (B explains the two production failures; A is a real race worth fixing). Two additions before the checks:
+
+1. A start must never cancel itself. Where a start path intentionally runs stopAllActiveSessions or enterPanel (the pre-session warm-up gate, the Today's focus / Coach start buttons that open a tool and start it, "Sing it again", anything else), capture startGen after that step, not before. List every such path in the report.
+
+2. Fix A touches about 30 tools, so add to the checks:
+   - warm-up entries and tracking (the gate path)
+   - home.js (the start buttons)
+   - batch1, picker
+   - scores.js for the 4a tools
+   - vibfix and noisegate (regress mode against master)
+   - vq.js (vqCapture)
+   - the cv-* choir suites already in prod.sh
+   One at a time, as before. Failures are rerun on master and classified.

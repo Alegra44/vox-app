@@ -3,14 +3,30 @@
 // Phase 4b (PHASE4B.md §1d): the 10 tools with their own displays (tools4b.js), each left through the Home tab 0.8 s and
 // 2.6 s after its start (Mirror also at 4.4 s, during the echo; 0.8 and 2.6 s are in its phrase). Expected: the house up,
 // no marks; no mic loop left running (no autoCorrelate, readRegisterFrame or vlFeed call in the 5 s on Home from 1 s
-// after leaving: a timer left behind, like Mirror's echo, fires in that time) and today's vocal load not growing
-// (counted once the stopped session has closed: its own total lands in vlDay when it ends, which isn't growth)
-// (vlDay.load the same at both ends); back on the tool, its starting state (tools4b.js idleOk) and Start working (it
+// after leaving: a timer left behind, like Mirror's echo, fires in that time); back on the tool, its starting state (tools4b.js idleOk) and Start working (it
 // starts again). One Take: the take left midway saves nothing (no take stored for today) and today's take is still
 // available. Usage: node scripts/design-verify/stopcheck.js [--base <git ref>] [--only4b] [--tools onetake,mirror,…]
-const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b');
+// 4b.3 (PHASE4B.md): the vocal load is checked from the trace (vocal-load-verify/vltrace.js), not from the gauge: from the
+// moment of leaving to the end of the 5 s on Home, no vlFeed call, and every loop flag off (no session open). The gauge
+// may still settle once from a session that ended by the time you left: vlEnd defers a session whose server state hasn't
+// arrived, and it lands in today's total when the server answers (seconds later on a slow server). That is recorded as
+// allowed; any other change of vlDay fails, and so does a session finishing twice.
+// Test-only switches: --trace prints each case's trace; --slow-input <ms> delays every mic opener (initAudio,
+// openRegisterInput, vqCapture, through warmupGate) by that much (a slow mic open, hypothesis A); --slow-state <ms>
+// delays the vocal-load state GET (/me/vocal-load?day=…) by that much (a slow server, hypothesis B).
+const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b'), VT = require('../vocal-load-verify/vltrace');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const ONLY4B = process.argv.includes('--only4b'), ONLY = arg('--tools') ? arg('--tools').split(',') : null;
+const TRACE = process.argv.includes('--trace'), SLOW_INPUT = Number(arg('--slow-input')) || 0, SLOW_STATE = Number(arg('--slow-state')) || 0;
+const prepare = async ctx => {
+  await ctx.addInitScript(VT.INIT);
+  // warmupGate() is the first await of every mic opener (initAudio, openRegisterInput, vqCapture): delaying it delays them all
+  if (SLOW_INPUT) await ctx.addInitScript(ms => document.addEventListener('DOMContentLoaded', () => {
+    const gate = warmupGate;
+    window.warmupGate = async function () { await new Promise(r => setTimeout(r, ms)); return gate.apply(this, arguments); };
+  }), SLOW_INPUT);
+  if (SLOW_STATE) await ctx.route(u => /\/me\/vocal-load\?day=/.test(u.href), async r => { await C.sleep(SLOW_STATE); r.continue().catch(() => {}); });
+};
 // in the page: counts the calls a running mic loop makes
 const COUNTERS = () => {
   if (window.__cnt) return; window.__cnt = { ac: 0, reg: 0, vl: 0 };
@@ -23,17 +39,31 @@ async function leaveChecks(page, log) {
   for (const tool of T4.TOOLS.filter(t => !ONLY || ONLY.includes(t.key))) {
     for (const at of tool.key === 'mirror' ? [800, 2600, 4400] : [800, 2600]) {
       await tool.open(page); await C.sleep(500);
+      await VT.take(page); await VT.mark(page, `start ${tool.name}`);
       await tool.act(page); await C.sleep(at);
-      await page.evaluate(() => document.querySelector('.snb-item[data-shell="home"]').click());
+      const left = await page.evaluate(() => { // the mark and the click in one task: no frame of the tool between them
+        window.__vlTrace.push({ op: 'mark', label: 'leave', t: Math.round(performance.now()) });
+        document.querySelector('.snb-item[data-shell="home"]').click(); return vlDay.load;
+      });
       await C.sleep(1000);
       await page.waitForFunction(() => vlRun === null, null, { timeout: 6000 }).catch(() => {}); await C.sleep(1500); // the stopped session closes
       const a = await page.evaluate(() => ({ ...window.__cnt, load: vlDay.load }));
       await C.sleep(5000);
       const z = await page.evaluate(() => ({ ...window.__cnt, load: vlDay.load, house: document.body.dataset.house,
+        flags: ['mode', 'lfActive', 'resonanceActive', 'drillActive', 'vibratoActive', 'vqActive', 'rhythmActive', 'mirrorActive', 'emoActive',
+          'oneTakeActive', 'eveActive', 'fiveActive', 'vlRun'].filter(k => { try { const v = eval(k); return v !== null && v !== false && v !== undefined; } catch (e) { return false; } }),
         marks: document.querySelectorAll('.is-live, .is-staged, [data-offstage], [data-stage-path]').length,
         onetake: typeof progress !== 'undefined' && progress ? { saved: !!(progress.oneTakeHistory && progress.oneTakeHistory[todayStr()]), last: progress.oneTakeLastDate === todayStr() } : null }));
       const calls = { autoCorrelate: z.ac - a.ac, readRegisterFrame: z.reg - a.reg, vlFeed: z.vl - a.vl };
-      const loop = !calls.autoCorrelate && !calls.readRegisterFrame && !calls.vlFeed, load = Math.abs(z.load - a.load) < 1e-6;
+      await VT.mark(page, 'window ends'); const tr = await VT.take(page);
+      const li = tr.findIndex(e => e.op === 'mark' && e.label === 'leave'), after = tr.slice(li + 1);
+      const feeds = after.filter(e => e.op === 'feed'), fedAfter = feeds.map(e => `${e.n} on ${e.panel}`).join(', ') || 'none';
+      // the gauge: each change after leaving is a session that started before you left finishing once
+      const before = new Set(tr.slice(0, li).filter(e => e.op === 'start').map(e => e.run)), fin = after.filter(e => e.op === 'finish');
+      const settleOk = fin.every(e => before.has(e.run)) && new Set(fin.map(e => e.run)).size === fin.length
+        && Math.abs(z.load - (fin.length ? fin[fin.length - 1].load : left)) < 0.01;
+      const settled = fin.map(e => `#${e.run} ${e.deferred ? `${e.after} ms after its end` : 'at its end'} ${e.before} → ${e.load}`).join(', ') || 'none';
+      const loop = !calls.autoCorrelate && !calls.readRegisterFrame && !calls.vlFeed && !feeds.length && !z.flags.length && settleOk;
       // back on the tool: its starting state, and Start works
       await C.showPanel(page, tool.panel); await C.clearOverlays(page); await C.sleep(400);
       const idle = await page.evaluate(`(${tool.idleOk})()`);
@@ -41,10 +71,12 @@ async function leaveChecks(page, log) {
       const again = await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 6000 }).then(() => true, () => false);
       await page.evaluate(() => stopAllActiveSessions()); await C.sleep(tool.key === 'mirror' ? 4500 : 3500);
       const ot = tool.key === 'onetake' ? !z.onetake.saved && !z.onetake.last : true;
-      const pass = z.house === 'up' && !z.marks && loop && load && idle && again && ot;
+      const pass = z.house === 'up' && !z.marks && loop && idle && again && ot;
       if (!pass) bad++;
-      log(`${pass ? '✓' : '✗'} ${tool.name} left at ${at} ms: house ${z.house}, marks ${z.marks} · mic loop calls on Home ${JSON.stringify(calls)} · vocal load ${a.load} → ${z.load}`
+      log(`${pass ? '✓' : '✗'} ${tool.name} left at ${at} ms: house ${z.house}, marks ${z.marks} · mic loop calls on Home ${JSON.stringify(calls)}`
+        + ` · vlFeed after leaving ${fedAfter} · flags on ${z.flags.join(', ') || 'none'} · vocal load ${left.toFixed(2)} → ${z.load.toFixed(2)}, settled (allowed) ${settled}${settleOk ? '' : ' NOT EXPLAINED'}`
         + ` · back: starting state ${idle}, starts again ${again}${tool.key === 'onetake' ? ` · take saved ${z.onetake.saved}, today used ${z.onetake.last}` : ''}`);
+      if (TRACE || !pass) log(VT.format(tr));
     }
     await T.restoreRange(page);
   }
@@ -57,7 +89,7 @@ async function leaveChecks(page, log) {
   const state = await ctx.storageState(); await ctx.close(); await b0.close();
   S.ensureStimuli(); const b = await S.launchMic(S.STIM.steady); let bad = 0;
   try {
-    const { page } = await C.openPage(b, { dir, theme: 'light', storageState: state });
+    const { page } = await C.openPage(b, { dir, theme: 'light', storageState: state, prepare });
     await C.clearOverlays(page); await S.warmMic(page);
     for (const [key, btn, label, flag] of ONLY4B ? [] : [['eve', 'eveStartBtn', 'eveStartLabel', 'eveActive'], ['five', 'fiveStartBtn', 'fiveStartLabel', 'fiveActive']]) {
       for (const at of [800, 2600]) {
