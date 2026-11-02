@@ -6,7 +6,8 @@
 # Both builds are served locally (base :8766, branch :8767) against the production backend; each script signs up and
 # deletes its own test account. Within a run the side that goes first alternates (base first on odd runs). AC power only:
 # before each script the run waits while the Mac is on battery. Before each script Supabase must answer (5 tries, 60 s
-# apart, else STOPPED). Each script has a limit of 3× its usual minutes (30 at most).
+# apart, else STOPPED). Each script has a limit of 3× its usual minutes (30 at most). A run that fails signing up its test
+# account or on a network error (it measured nothing) is kept as .failed and run once more.
 # Usage: [ONLY="cv-p9 cv-yc"] [RUNS=3] bash scripts/choir-verify/choirregress.sh <branch ref | working> [base ref, default master]
 #        PROOF=1 bash scripts/choir-verify/choirregress.sh master   the A/A proof: writes scripts/choir-verify/aa-ranges.json
 cd "$(dirname "$0")/../.."
@@ -33,6 +34,7 @@ runone() { # side n name usual args
   local tries=0; while ! reachable; do tries=$((tries+1)); echo "$(date -u +%H:%M:%S) Supabase unreachable before $name, try $tries of 5" >> "$OUT/progress.txt"
     [ $tries -ge 5 ] && { echo "$(date -u +%H:%M:%S) STOPPED: Supabase unreachable 5 times" >> "$OUT/progress.txt"; exit 2; }; sleep 60; done
   limit=$(( usual * 3 )); [ $limit -gt 30 ] && limit=30
+  local attempt; for attempt in 1 2; do
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $side $name #$n" >> "$OUT/progress.txt"
   CV_JSON="$OUT/$side/$name-$n.json" node scripts/choir-verify/$name.js $args $url > "$OUT/$side/$name-$n.log" 2>&1 & pid=$!
   ( sleep $(( limit * 60 )); kill -0 $pid 2>/dev/null && touch "$OUT/.timedout" && kill -TERM $pid; sleep 15; kill -KILL $pid 2>/dev/null ) & dog=$!
@@ -40,6 +42,11 @@ runone() { # side n name usual args
   if [ -f "$OUT/.timedout" ]; then rm -f "$OUT/.timedout"; res="timed out after $limit min"; else res="exit $rc"; fi
   echo "$(date -u +%H:%M:%S) done  $side $name #$n $res ($(( ($(date +%s)-t0)/60 )) min)" >> "$OUT/progress.txt"
   sleep 30
+  # a run that failed signing up its test account or on a network error measured nothing: it's kept (.failed) and run once more
+  [ "$res" != "exit 0" ] && [ $attempt = 1 ] && grep -qE 'at Object\.signUp|net::ERR_' "$OUT/$side/$name-$n.log" || break
+  mv "$OUT/$side/$name-$n.log" "$OUT/$side/$name-$n.failed.log"; mv "$OUT/$side/$name-$n.json" "$OUT/$side/$name-$n.failed" 2>/dev/null
+  echo "$(date -u +%H:%M:%S) $side $name #$n failed at sign-up or on the network before measuring: running it once more" >> "$OUT/progress.txt"
+  done
 }
 for n in $(seq 1 $RUNS); do
   for s in "${SCRIPTS[@]}"; do

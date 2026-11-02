@@ -360,6 +360,18 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   `scripts/choir-verify/choirregress.sh <branch|working> [base]` (master's and the branch's build in the same run, 3
   runs per side, base :8766, branch :8767) and `choircompare.js` (medians, ±2 or master's A/A range from
   `aa-ranges.json`). The A/A proof (master against itself) writes `aa-ranges.json`.
+- A/A proof 2026-11-02 (logs/regress-2026-11-01T19-01-40, master 34bf80d both sides, 3 runs each, 7 h): raw, 7 of 21
+  scripts "moved". Causes, all fixed in the comparer: lines that come a different number of times per run (Chaos
+  Mode's random chords, verify's arrays of varying length) were lined up by occurrence, so they're now counted as
+  variable and not compared; times of day and Turkish dates are masked; failed runs are left out of the numbers. Two
+  runs failed signing up (p5 branch #1, live6 base #2: auth timeout, nothing measured): choirregress.sh now keeps such
+  a run as .failed and runs it once more. What's left is real noise and goes into aa-ranges.json: timing 17–20 ms,
+  p5 onset 5–16 ms, yc VU ±4, live9 network save times, random Chaos scores. A 10 ms shift in timing still fails.
+  Independent check (not circular): `ONLY="live5 live6 live7 live9 p5 p7 timing yc" RUNS=3 choirregress.sh master`,
+  started 08:00 IST, ~2.7 h, gated by those ranges; it must pass before the merge.
+- Not committed yet, kept in the working tree: `scripts/design-verify/shots5.js` (phase 5 screenshots, not yet run) and
+  `design/house-lights/.phase5-wip/` (the survey draft PHASE5_SURVEY.md with `__MASTER__`/`__SHOTNOTES__` to fill, and
+  the copy checker cwcopy.py with its outputs). Both go to redesign/phase5.
 - **The choir group is opt-in** (`ONLY=choir` or `WITH_CHOIR=1`; not in a default suites.sh/prod.sh run any more, which
   used to include cv-live7, cv-modalz, cv-p9 and cv-p10). **Required for phases 5, 6 and 10**, with choirregress.sh as
   the gate.
