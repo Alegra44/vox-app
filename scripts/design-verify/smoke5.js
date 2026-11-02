@@ -18,6 +18,12 @@ const OUT = process.argv[2], W = +(process.argv[3] || 390), THEME = process.argv
       trainers: async () => { await page.evaluate(() => cwShowTab('trainers')); await shot('trainers'); },
       hm: async () => { await page.evaluate(() => cwOpenTrainer('hm')); await shot('trainer-hm'); },
       yourchoir: async () => { await page.evaluate(() => cwShowTab('yourchoir')); await shot('yourchoir'); },
+      play: async () => { await page.evaluate(() => { cwShowTab('rehearse'); localStorage.setItem('cwHearMe', '0'); renderHearButton(); document.getElementById('rehearsalPlayBtn').click(); });
+        await C.sleep(6000); console.log('  house', await page.evaluate(() => document.body.dataset.house)); await shot('play', false);
+        await page.evaluate(() => document.getElementById('rehearsalStopBtn').click()); await C.sleep(1500); },
+      playhear: async () => { await page.evaluate(() => { cwShowTab('rehearse'); localStorage.setItem('cwHearMe', '1'); renderHearButton(); document.getElementById('rehearsalPlayBtn').click(); });
+        await C.sleep(7000); console.log('  house', await page.evaluate(() => document.body.dataset.house), 'voice points', await page.evaluate(() => cwVoice.length)); await shot('playhear', false);
+        await page.evaluate(() => document.getElementById('rehearsalStopBtn').click()); await C.sleep(1500); },
       passport: async () => { await page.evaluate(() => cwShowTab('passport')); await shot('passport'); },
     };
     for (const [k, f] of Object.entries(STATES)) if (!ONLY || ONLY.includes(k)) await f();

@@ -1685,6 +1685,52 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-song-list .hl-item, .cw-trainer-list .hl-item{grid-template-columns:minmax(0,1fr) auto;}
   .cw-song-list .hl-item-title, .cw-trainer-list .hl-item-title{display:block;}
   .cw-song-list .hl-item-meta, .cw-trainer-list .hl-item-meta{display:block;margin-top:2px;}
+  /* 2.2 Rehearse: the five lanes */
+  .rh-roll-wrap.cw-lanes-wrap{overflow:visible;border:0;border-radius:0;background:none;margin-top:0;}
+  svg.cw-lanes{display:block;width:100%;min-width:0;overflow:visible;font-family:var(--hl-font);}
+  .cw-lane rect{fill:var(--part);opacity:.32;}
+  .cw-lane.is-mine rect{opacity:1;cursor:pointer;}
+  .cw-lane-label{fill:var(--hl-ink-3);font-size:11px;text-anchor:end;}
+  .cw-lane-label.is-mine{fill:var(--hl-ink);font-weight:600;}
+  .cw-sec-line{stroke:var(--hl-rule);stroke-width:1;}
+  .cw-sec-box{fill:none;stroke:var(--hl-ink-3);stroke-width:1;}
+  .cw-sec-label{fill:var(--hl-ink-2);font-size:11px;font-weight:600;text-anchor:middle;}
+  .cw-breath{fill:none;stroke:var(--hl-ink-2);stroke-width:1.5;stroke-linecap:round;}
+  .cw-playhead{stroke:var(--hl-ink);stroke-width:1.5;opacity:0;}
+  .cw-curnote{fill:var(--hl-ink);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .cw-voice{fill:none;stroke:var(--hl-voice);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+  /* the rehearsal's controls; on the stage the lanes fill its width */
+  .cw-stage{display:grid;gap:var(--hl-s3);margin-top:var(--hl-s3);}
+  .cw-stage.is-live{width:100%;display:flex;}
+  .cw-stage.is-live > *{width:100%;}
+  .cw-transport{display:flex;align-items:center;gap:var(--hl-s3);flex-wrap:wrap;}
+  .cw-stage.is-live .cw-transport{justify-content:center;}
+  .hl-key[data-key="hear"]{--led:var(--hl-voice);}
+  .cw-cue{margin:0;font-size:var(--hl-t-small);color:var(--hl-ink-2);min-height:1.4em;text-align:center;}
+  .cw-cue.now{color:var(--hl-ink);font-weight:600;}
+  #harmonyVisionBox.hv-box{background:none;border:0;padding:0;margin:0;}
+  .hv-line{margin:0;font-size:var(--hl-t-small);color:var(--hl-ink-2);line-height:1.45;}
+  .hv-line .hv-label{color:var(--hl-ink-3);text-transform:uppercase;letter-spacing:.06em;font-size:11px;font-weight:600;margin-right:var(--hl-s1);}
+  .hv-line b, .hv-line .hv-iv{color:var(--hl-ink);font-weight:600;}
+  .cw-stage.is-live .hv-line{text-align:center;}
+  .cw-stage.is-live ~ .rh-notes{display:none;}
+  /* the part chooser and A Cappella */
+  .cw-parts{display:flex;width:100%;box-sizing:border-box;margin:var(--hl-s2) 0 var(--hl-s3);}
+  .cw-parts button{flex:1 1 0;min-width:0;padding:0 var(--hl-s1);}
+  /* the guide level: a fader with five detents, the level buttons as its labels under it */
+  .cw-level-fader{margin-top:var(--hl-s2);width:80%;margin-left:10%;} /* its five detents over the centres of the five labels */
+  #rehearsalLevels.cw-level-labels{display:grid;grid-template-columns:repeat(5, minmax(0,1fr));gap:var(--hl-s1);margin-top:var(--hl-s1);}
+  #rehearsalLevels .rh-level{background:none;border:0;padding:var(--hl-s1) 0;min-height:var(--hl-touch);text-align:center;display:grid;align-content:start;gap:2px;color:var(--hl-ink-3);box-shadow:none;}
+  #rehearsalLevels .rh-level .rh-level-pct, #rehearsalLevels .rh-level .rh-level-bar{display:none;}
+  #rehearsalLevels .rh-level .rh-level-num{font-size:11px;color:inherit;}
+  #rehearsalLevels .rh-level .rh-level-name{font-size:11px;line-height:1.25;color:inherit;font-weight:500;overflow-wrap:anywhere;hyphens:auto;}
+  #rehearsalLevels .rh-level.active{color:var(--hl-ink);}
+  #rehearsalLevels .rh-level.active .rh-level-name{font-weight:700;}
+  /* readiness: your part on one row, the five parts folded */
+  .cw-ready-mine{display:grid;gap:var(--hl-s1);margin:var(--hl-s2) 0 var(--hl-s3);}
+  .cw-ready-head, .cw-ready-next{margin:0;}
+  .cw-ready-head{display:flex;align-items:center;gap:var(--hl-s2);font-size:var(--hl-t-body);color:var(--hl-ink);}
+  .cw-ready-next{font-size:var(--hl-t-small);color:var(--hl-ink-2);}
 
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
@@ -4649,53 +4695,67 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <div class="key-card" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rehearsal_choose_part">Choose your part</div>
-      <div class="ex-type-row" id="rehearsalPartRow" style="margin:10px 0 12px;flex-wrap:wrap;">
-        <button class="ex-type-btn" data-rh-part="Soprano" aria-pressed="false" data-part-name="Soprano">Soprano</button>
-        <button class="ex-type-btn" data-rh-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
-        <button class="ex-type-btn active" data-rh-part="Alto" aria-pressed="true" data-part-name="Alto">Alto</button>
-        <button class="ex-type-btn" data-rh-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
-        <button class="ex-type-btn" data-rh-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
+      <div class="hl-seg cw-parts" id="rehearsalPartRow" role="group">
+        <button type="button" data-rh-part="Soprano" aria-pressed="false" data-part-name="Soprano">Soprano</button>
+        <button type="button" data-rh-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
+        <button type="button" class="active" data-rh-part="Alto" aria-pressed="true" data-part-name="Alto">Alto</button>
+        <button type="button" data-rh-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
+        <button type="button" data-rh-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
       </div>
-      <p class="fine-print"><span id="rehearsalSongLabel">Demo Hymn (C Major)</span> — <button class="link-btn" data-enter-panel="choir" data-i18n="rehearsal_change_song">change song</button></p>
-      <button class="ghost-btn" id="acappellaBtn" aria-pressed="false" style="margin-top:12px;">🎧 A Cappella</button>
+      <p class="fine-print cw-hidden"><span id="rehearsalSongLabel">Demo Hymn (C Major)</span> — <button class="link-btn" data-enter-panel="choir" data-i18n="rehearsal_change_song">change song</button></p>
+      <button class="hl-key" id="acappellaBtn" data-key="acappella" aria-pressed="false" type="button">A Cappella</button>
       <p class="fine-print" style="margin-top:6px;" data-i18n="ac_desc">Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.</p>
     </div>
 
     <div class="key-card" id="readinessCard" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rd_title">📈 Readiness</div>
-      <p class="desc" id="rdDesc" style="margin:6px 0 4px;"></p>
-      <p class="fine-print" id="rdRule" style="margin-bottom:10px;"></p>
-      <div id="rdRows"></div>
-      <p class="fine-print" id="rdSyncNote" style="margin-top:10px;"></p>
-      <button class="ghost-btn" data-enter-panel="choirpassport" style="margin-top:12px;" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
+      <div class="cw-ready-mine" id="rdMine"></div>
+      <details class="hl-measure cw-ready-more">
+        <summary><span data-i18n="rd_all_parts">All five parts</span><svg class="hl-icon vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary>
+        <p class="desc" id="rdDesc" style="margin:6px 0 4px;"></p>
+        <p class="fine-print" id="rdRule" style="margin-bottom:10px;"></p>
+        <div id="rdRows"></div>
+        <p class="fine-print" id="rdSyncNote" style="margin-top:10px;"></p>
+        <button class="ghost-btn" data-enter-panel="choirpassport" style="margin-top:12px;" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
+      </details>
     </div>
 
     <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-cw-sec="rehearse" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.</div>
 
     <div class="key-card rh-hide-ac" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rehearsal_levels_label">Rehearsal level</div>
-      <div class="rh-levels" id="rehearsalLevels" role="group"></div>
+      <label class="vc-visually-hidden" for="rehearsalLevelFader" data-i18n="rehearsal_guide_level_label">Guide level</label>
+      <input type="range" class="hl-fader cw-level-fader" id="rehearsalLevelFader" min="0" max="4" step="1" value="0" list="rehearsalLevelTicks">
+      <datalist id="rehearsalLevelTicks"><option value="0"></option><option value="1"></option><option value="2"></option><option value="3"></option><option value="4"></option></datalist>
+      <div class="rh-levels cw-level-labels" id="rehearsalLevels" role="group"></div>
       <p class="desc" id="rehearsalLevelDesc" style="margin:4px 0 12px;"></p>
-      <div class="transport-row" style="margin:0;">
+      <div class="transport-row vc-visually-hidden" style="margin:0;">
         <button class="ghost-btn" id="rehearsalPrevBtn" data-i18n="rehearsal_prev_btn">← Previous level</button>
         <button class="ghost-btn" id="rehearsalNextBtn" data-i18n="rehearsal_next_btn">Next level →</button>
       </div>
-      <div class="rh-gain-readout">
-        <div class="fine-print" data-i18n="rehearsal_live_gain_label">Live guide gain — read from the real audio GainNode</div>
-        <div class="rh-gain-val"><span id="rehearsalGainValue">—</span><small id="rehearsalGainTarget"></small></div>
-        <div class="vu-meter-track"><div class="vu-meter-fill" id="rehearsalGuideVu"></div></div>
-      </div>
+      <details class="hl-measure">
+        <summary><span data-i18n="rehearsal_gain_measure">How the guide level is set</span><svg class="hl-icon vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary>
+        <div class="rh-gain-readout">
+          <div class="fine-print" data-i18n="rehearsal_live_gain_label">Live guide gain — read from the real audio GainNode</div>
+          <div class="rh-gain-val"><span id="rehearsalGainValue">—</span><small id="rehearsalGainTarget"></small></div>
+          <div class="hl-meter"><i class="vu-meter-fill" id="rehearsalGuideVu"></i></div>
+        </div>
+      </details>
     </div>
 
     <div class="key-card" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rehearsal_yourline_label">Your line — real notes &amp; timing</div>
       <p class="fine-print rh-hide-ac" style="margin:6px 0 0;" data-i18n="rehearsal_roll_desc">Bold bars are your part's actual notes; faint bars are the other parts, still audible for context.</p>
-      <div class="transport-row">
-        <button class="solid-btn teal" id="rehearsalPlayBtn">▶ Play</button>
-        <button class="ghost-btn" id="rehearsalStopBtn" data-i18n="rehearsal_stop_btn">Stop</button>
+      <div class="vc-stage cw-stage" id="rehearsalStage">
+        <div class="rh-roll-wrap cw-lanes-wrap rh-hide-ac"><svg id="rehearsalRoll" class="cw-lanes" aria-hidden="true"></svg></div>
+        <div class="hv-box rh-hide-ac" id="harmonyVisionBox"></div>
+        <p class="cw-cue vc-live-only" id="rehearsalBreathCue" aria-live="polite"></p>
+        <div class="cw-transport">
+          <button class="hl-transport hl-transport--primary" id="rehearsalPlayBtn" type="button"><svg class="hl-icon" aria-hidden="true"><use href="#hl-play"/></svg><span class="vc-visually-hidden" id="rehearsalPlayLabel">Play</span></button>
+          <button class="hl-transport hl-transport--s" id="rehearsalStopBtn" type="button"><svg class="hl-icon" aria-hidden="true"><use href="#hl-stop"/></svg><span class="vc-visually-hidden" data-i18n="rehearsal_stop_btn">Stop</span></button>
+          <button class="hl-key" id="rehearsalHearBtn" data-key="hear" type="button" aria-pressed="false" data-i18n="rehearsal_hear_btn">Hear me</button>
+        </div>
       </div>
-      <div class="hv-box rh-hide-ac" id="harmonyVisionBox"></div>
-      <div class="rh-roll-wrap rh-hide-ac"><svg id="rehearsalRoll" aria-hidden="true"></svg></div>
       <div class="rh-notes rh-hide-ac" id="rehearsalNotes"></div>
     </div>
 
@@ -6892,6 +6952,13 @@ const TRANSLATIONS = {
     rd_local_only:"You're not signed in, so readiness isn't saved to an account. Harmony Memory and Boss scores stay on this device.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Choir World",
+    rehearsal_hear_btn:"Hear me",
+    rehearsal_pause_btn:"Pause",
+    rehearsal_guide_level_label:"Guide level",
+    rehearsal_gain_measure:"How the guide level is set",
+    ac_key:"A Cappella",
+    rd_all_parts:"All five parts",
+    cw_lane_you:"you",
     cw_open_btn:"Open Choir World",
     cw_landing_title:"Choir World",
     cw_landing_sub:"Rehearse one part while the rest of the choir sings around you.",
@@ -8412,6 +8479,13 @@ const TRANSLATIONS = {
     rd_local_only:"Vous n'êtes pas connecté·e : la préparation n'est pas enregistrée sur un compte. Les scores de Mémoire harmonique et des Boss restent sur cet appareil.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Monde Chorale",
+    rehearsal_hear_btn:"M'entendre",
+    rehearsal_pause_btn:"Pause",
+    rehearsal_guide_level_label:"Niveau du guide",
+    rehearsal_gain_measure:"Comment le niveau du guide est réglé",
+    ac_key:"A cappella",
+    rd_all_parts:"Les cinq voix",
+    cw_lane_you:"vous",
     cw_open_btn:"Ouvrir Monde Chorale",
     cw_landing_title:"Monde Chorale",
     cw_landing_sub:"Répétez une voix pendant que le reste du chœur chante autour de vous.",
@@ -9932,6 +10006,13 @@ const TRANSLATIONS = {
     rd_local_only:"No has iniciado sesión, así que la preparación no se guarda en una cuenta. Las puntuaciones de Memoria armónica y de Jefes se quedan en este dispositivo.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Mundo Coral",
+    rehearsal_hear_btn:"Escucharme",
+    rehearsal_pause_btn:"Pausa",
+    rehearsal_guide_level_label:"Nivel de la guía",
+    rehearsal_gain_measure:"Cómo se ajusta el nivel de la guía",
+    ac_key:"A capela",
+    rd_all_parts:"Las cinco voces",
+    cw_lane_you:"tú",
     cw_open_btn:"Abrir Mundo Coral",
     cw_landing_title:"Mundo Coral",
     cw_landing_sub:"Ensaya una voz mientras el resto del coro canta a tu alrededor.",
@@ -11452,6 +11533,13 @@ const TRANSLATIONS = {
     rd_local_only:"Giriş yapmadınız, bu yüzden hazırlık bir hesaba kaydedilmiyor. Armoni Hafızası ve Boss puanları bu cihazda kalır.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Koro Dünyası",
+    rehearsal_hear_btn:"Beni duy",
+    rehearsal_pause_btn:"Duraklat",
+    rehearsal_guide_level_label:"Rehber seviyesi",
+    rehearsal_gain_measure:"Rehber seviyesi nasıl ayarlanır",
+    ac_key:"A Cappella",
+    rd_all_parts:"Beş partinin hepsi",
+    cw_lane_you:"siz",
     cw_open_btn:"Koro Dünyası'nı aç",
     cw_landing_title:"Koro Dünyası",
     cw_landing_sub:"Koronun geri kalanı çevrenizde söylerken bir partiyi çalışın.",
@@ -15004,6 +15092,10 @@ function renderRehearsalLevels(){
       <span class="rh-level-bar"><span style="width:${pct}%"></span></span>
     </button>`;
   }).join('');
+  const fader = document.getElementById('rehearsalLevelFader');
+  fader.value = cur; fader.style.setProperty('--val', (cur/(REHEARSAL_LEVELS.length-1)*100)+'%');
+  fader.setAttribute('aria-valuetext', `${t('rehearsal_level_word')} ${cur+1}/5 · ${t('rehearsal_level_'+REHEARSAL_LEVELS[cur].key)}`);
+  fader.disabled = harmonyMemory.active || challenge.active;
   document.getElementById('rehearsalLevelDesc').textContent = t('rehearsal_level_'+REHEARSAL_LEVELS[cur].key+'_desc');
   document.getElementById('rehearsalPrevBtn').disabled = cur===0;
   document.getElementById('rehearsalNextBtn').disabled = cur===REHEARSAL_LEVELS.length-1;
@@ -15012,36 +15104,8 @@ function renderRehearsalLevels(){
 }
 
 function renderRehearsalRoll(){
-  const svg = document.getElementById('rehearsalRoll');
-  const parts = Object.keys(SONG.parts);
-  const sel = partRehearsal.part;
-  const n = SONG.parts[sel].notes.length;
-  const chordDur = songChordDurMs()/1000;
-  const all = parts.flatMap(p=>SONG.parts[p].notes);
-  const lo = Math.min(...all)-2, hi = Math.max(...all)+2;
-  const colW = 100, rowH = 6, top = 24;
-  const W = n*colW, H = top + (hi-lo)*rowH + 8;
-  const y = midi => top + (hi-midi)*rowH;
-  let html = '';
-  for(let i=0;i<n;i++){
-    html += `<line x1="${i*colW}" y1="0" x2="${i*colW}" y2="${H}" style="stroke:var(--hairline);stroke-width:1"/>`;
-    html += `<text x="${i*colW+4}" y="15" style="fill:var(--muted);font:10px var(--hl-font);font-variant-numeric:tabular-nums">${(i*chordDur).toFixed(1)}s</text>`;
-  }
-  // other parts first (visually secondary), selected part drawn last on top
-  parts.filter(p=>p!==sel).forEach(p=>{
-    SONG.parts[p].notes.forEach((m,i)=>{
-      html += `<rect x="${i*colW+3}" y="${y(m)-1.5}" width="${colW*0.94-6}" height="3" rx="1.5" style="fill:${PART_COLORS[p]};opacity:0.3"/>`;
-    });
-  });
-  SONG.parts[sel].notes.forEach((m,i)=>{
-    html += `<rect class="rh-sel-note" data-idx="${i}" x="${i*colW+3}" y="${y(m)-7}" width="${colW*0.94-6}" height="14" rx="4" style="fill:${PART_COLORS[sel]}"/>`;
-    html += `<text x="${i*colW+9}" y="${y(m)+4}" style="fill:var(--on-part);font:bold 11px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${midiName(m)}</text>`;
-  });
-  html += `<line id="rehearsalPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0"/>`;
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.style.minWidth = (n*64)+'px';
-  svg.innerHTML = html;
-
+  renderCwLanes(document.getElementById('rehearsalRoll'), {tap:true});
+  const sel = partRehearsal.part, chordDur = songChordDurMs()/1000;
   document.getElementById('rehearsalNotes').innerHTML = SONG.parts[sel].notes.map((m,i)=>`
     <div class="rh-note" data-idx="${i}" style="--part-color:${PART_COLORS[sel]};">
       <b>${midiName(m)}</b>
@@ -15050,6 +15114,85 @@ function renderRehearsalRoll(){
       ${sel==='Lead' ? '' : `<span class="rh-note-iv">${intervalVsLead(sel,i).short}</span>`}
     </div>`).join('');
   syncRehearsalCursor(partRehearsal.active && choirIsPlaying ? null : rehearsalCursorIdx);
+}
+
+/* ---- The five lanes (phase 5, House Lights v1.8) ---- */
+// Soprano, Lead, Alto, Tenor, Bass top to bottom in their part colours; your part bold in a taller lane, the others
+// faint; the song's sections as rehearsal marks (A, B…); Breath Map's breath points on your lane; the playhead, the
+// current note named on your lane, and your voice (when the mic is listening) drawn on your lane. Drawn at the svg's
+// own width (redrawn when that changes), so text stays its size at every width. One static draw per song, part and
+// width (renderCwLanes); each frame only moves the playhead, the note name and the voice (cwLanesFrame).
+const CW_LANES = ['Soprano','Lead','Alto','Tenor','Bass'];
+const CW_LANE_MINE = 58, CW_LANE_OTHER = 18, CW_LANE_GAP = 6, CW_LANE_TOP = 26, CW_LANE_GUTTER = 66; // the gutter: the lane names
+let cwVoice = []; // [{t: song seconds, midi}], the current run's voice (display only)
+function cwVoiceReset(){ cwVoice = []; }
+function cwVoicePush(songT, f){ if(f>0) cwVoice.push({t:songT, midi:69 + 12*Math.log2(f/440)}); }
+function cwLaneGeom(part){
+  let y = CW_LANE_TOP; const lanes = {};
+  CW_LANES.forEach(p=>{
+    const h = p===part ? CW_LANE_MINE : CW_LANE_OTHER, notes = SONG.parts[p].notes;
+    lanes[p] = {y, h, lo:Math.min(...notes)-(p===part ? 2 : 0), hi:Math.max(...notes)+(p===part ? 2 : 0)};
+    y += h + CW_LANE_GAP;
+  });
+  return {lanes, H:y};
+}
+const cwLaneY = (ln, midi, bar)=>{ const pad = bar/2 + 2, span = Math.max(1, ln.hi-ln.lo);
+  return ln.y + pad + (ln.hi - Math.max(ln.lo, Math.min(ln.hi, midi)))/span*(ln.h - 2*pad); };
+function renderCwLanes(svg, opts={}){
+  if(!svg) return;
+  const w = Math.round(svg.getBoundingClientRect().width) || svg.__cwW || 358;
+  const part = partRehearsal.part, n = SONG.parts.Lead.notes.length, colW = (w-CW_LANE_GUTTER)/n, {lanes, H} = cwLaneGeom(part);
+  const key = [currentSongId, SONG.tempo, SONG.key, part, w, currentLanguage].join('|');
+  svg.__cwW = w; svg.__cwKey = key; svg.__cwGeo = {lanes, colW, n, H};
+  let html = '';
+  getSongSections().forEach((sec, k)=>{
+    const x = sec.indices[0]*colW;
+    html += `<line class="cw-sec-line" x1="${x}" x2="${x}" y1="18" y2="${H-CW_LANE_GAP}"/><rect class="cw-sec-box" x="${x+1}" y="1" width="16" height="16" rx="2"/><text class="cw-sec-label" x="${x+9}" y="13">${String.fromCharCode(65+k)}</text>`;
+  });
+  CW_LANES.forEach(p=>{
+    const ln = lanes[p], mine = p===part, bar = mine ? 10 : 4;
+    html += `<g class="cw-lane${mine ? ' is-mine' : ''}" data-part="${p}" style="--part:${PART_COLORS[p]}">`;
+    SONG.parts[p].notes.forEach((m,i)=>{
+      html += `<rect${mine ? ` class="rh-sel-note" data-idx="${i}"` : ''} x="${i*colW+1}" y="${cwLaneY(ln, m, bar)-bar/2}" width="${Math.max(2, colW*CHOIR_NOTE_FRACTION-2)}" height="${bar}" rx="${bar/2}"/>`;
+    });
+    html += `</g><text class="cw-lane-label${mine ? ' is-mine' : ''}" x="${w-2}" y="${ln.y+ln.h/2+4}">${mine ? `${partName(p)} · ${t('cw_lane_you')}` : partName(p)}</text>`;
+  });
+  const mineLane = lanes[part];
+  breathMapData(part).pts.forEach(pt=>{
+    const x = (pt.from+pt.to)/2/(songChordDurMs()/1000)*colW;
+    html += `<path class="cw-breath" d="M${x-3} ${mineLane.y+1} q3 4 0 8"/>`;
+  });
+  html += `<path class="cw-voice" d=""/><text class="cw-curnote" x="0" y="${mineLane.y+12}"></text><line class="cw-playhead" x1="0" x2="0" y1="18" y2="${H-CW_LANE_GAP}"/>`;
+  svg.setAttribute('viewBox', `0 0 ${w} ${H}`);
+  svg.setAttribute('height', H);
+  svg.innerHTML = html;
+  if(!svg.__cwObs && window.ResizeObserver){ // drawn again at its new width (paper ↔ stage, rotation)
+    svg.__cwObs = new ResizeObserver(()=>{ const nw = Math.round(svg.getBoundingClientRect().width); if(nw && nw!==svg.__cwW) renderCwLanes(svg); });
+    svg.__cwObs.observe(svg);
+  }
+}
+// One frame: every lanes svg on screen follows the song clock (null: the playhead and note name go away).
+function cwLanesFrame(songT){
+  const part = partRehearsal.part, chordDur = songChordDurMs()/1000;
+  document.querySelectorAll('svg.cw-lanes').forEach(svg=>{
+    if(!svg.getClientRects().length || !svg.__cwGeo) return;
+    if(svg.__cwKey!==[currentSongId, SONG.tempo, SONG.key, part, svg.__cwW, currentLanguage].join('|')) renderCwLanes(svg);
+    const {lanes, colW, n} = svg.__cwGeo, ln = lanes[part];
+    const ph = svg.querySelector('.cw-playhead'), cur = svg.querySelector('.cw-curnote'), voice = svg.querySelector('.cw-voice');
+    if(songT===null || songT<0){ ph.style.opacity = '0'; cur.textContent = ''; if(songT===null) voice.setAttribute('d', ''); return; }
+    const x = Math.min(n*colW, songT/chordDur*colW), idx = Math.min(n-1, Math.floor(songT/chordDur));
+    ph.setAttribute('x1', x); ph.setAttribute('x2', x); ph.style.opacity = '1';
+    const midi = SONG.parts[part].notes[idx], ny = cwLaneY(ln, midi, 10);
+    cur.textContent = midiName(midi);
+    cur.setAttribute('x', Math.min(idx*colW+2, n*colW-30)); cur.setAttribute('y', Math.max(ln.y+9, ny-8));
+    let d = '', last = null;
+    for(const v of cwVoice){
+      const vx = v.t/chordDur*colW, vy = cwLaneY(ln, v.midi, 0);
+      d += (last===null || v.t-last>0.25 ? 'M' : 'L') + vx.toFixed(1) + ' ' + vy.toFixed(1) + ' '; // a gap in the voice is a gap in the line
+      last = v.t;
+    }
+    voice.setAttribute('d', d);
+  });
 }
 
 // Harmony Vision: which chord is "now" — the live playhead while playing, the tapped note when stopped.
@@ -15064,18 +15207,14 @@ function renderHarmonyVision(idx){
   const box = document.getElementById('harmonyVisionBox');
   if(!box) return;
   const part = partRehearsal.part;
-  const chordDur = songChordDurMs()/1000;
-  const where = `${t('rehearsal_chord_word')} ${idx+1} · ${(idx*chordDur).toFixed(1)}s · ${SONG.chordLabels[idx]||''}`;
+  const where = `${t('rehearsal_chord_word')} ${idx+1} · ${SONG.chordLabels[idx]||''}`;
   if(part==='Lead'){
-    box.innerHTML = `<div class="hv-label">${t('hv_title')}</div><div class="hv-main">${t('hv_is_lead')}</div><div class="hv-sub">${where}</div>`;
+    box.innerHTML = `<p class="hv-line"><span class="hv-label">${t('hv_title')}</span> ${where} · ${t('hv_is_lead')}</p>`;
     return;
   }
   const iv = intervalVsLead(part, idx);
   box.dataset.semis = iv.semis; // real value, exposed for verification
-  box.innerHTML = `<div class="hv-label">${t('hv_title')}</div>
-    <div class="hv-main">${iv.text}</div>
-    <div class="hv-sub">${iv.name} · ${partName(part)} ${midiName(SONG.parts[part].notes[idx])} ↔ ${partName('Lead')} ${midiName(SONG.parts.Lead.notes[idx])} · ${where}</div>
-    <div class="hv-sub" style="margin-top:4px;">${t('hv_hint')}</div>`;
+  box.innerHTML = `<p class="hv-line"><span class="hv-label">${t('hv_title')}</span> ${where} · ${partName(part)} <b>${midiName(SONG.parts[part].notes[idx])}</b> · <span class="hv-iv">${iv.text}</span> <span class="hv-ivname">(${iv.name})</span></p>`;
 }
 
 function renderPartRehearsal(){
@@ -15083,12 +15222,13 @@ function renderPartRehearsal(){
   const part = partRehearsal.part;
   document.getElementById('rehearsalTitle').textContent = rehearsalTitleText(part);
   document.getElementById('rehearsalSongLabel').textContent = `${SONG.name} (${SONG.key})`;
-  document.querySelectorAll('#rehearsalPartRow .ex-type-btn').forEach(b=>{
+  document.querySelectorAll('#rehearsalPartRow [data-rh-part]').forEach(b=>{
     const on = b.dataset.rhPart===part;
     b.classList.toggle('active', on);
     b.setAttribute('aria-pressed', on?'true':'false');
   });
-  document.getElementById('rehearsalPlayBtn').textContent = partRehearsal.active && choirIsPlaying ? t('rehearsal_playing_btn') : t('rehearsal_play_btn');
+  setRehearsalPlayBtn(partRehearsal.active && choirIsPlaying);
+  renderHearButton();
   renderRehearsalLevels();
   renderRehearsalRoll();
   renderTimingTrainerIntro();
@@ -15111,12 +15251,11 @@ function renderRehearseEntryChips(){
 function resetPartRehearsalPlayUI(){
   if(partRehearsalRaf) cancelAnimationFrame(partRehearsalRaf);
   partRehearsalRaf = null;
-  const ph = document.getElementById('rehearsalPlayhead');
-  if(ph) ph.style.opacity = '0';
+  cwLanesFrame(null);
   syncRehearsalCursor(rehearsalCursorIdx); // keep Harmony Vision on the last real position
-  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_play_btn');
+  setRehearsalPlayBtn(false);
   document.getElementById('rehearsalGainValue').textContent = '—';
-  document.getElementById('rehearsalGuideVu').style.width = '0%';
+  document.getElementById('rehearsalGuideVu').style.setProperty('--val', '0%');
   updateBreathLive(null);
 }
 
@@ -15130,12 +15269,8 @@ function runPartRehearsalAnim(){
     const songT = audioCtx.currentTime - choirStartCtxTime;
     const elapsed = Math.max(0, songT);
     updateBreathLive(songT);
-    const W = n*100;
-    const ph = document.getElementById('rehearsalPlayhead');
-    if(ph){
-      const x = Math.min(W, (elapsed/chordDur)*100);
-      ph.setAttribute('x1', x); ph.setAttribute('x2', x); ph.style.opacity = '0.85';
-    }
+    if(partRehearsal.run && partRehearsal.run.hear) cwHearFrame(songT);
+    cwLanesFrame(songT);
     const idx = Math.min(n-1, Math.floor(elapsed/chordDur));
     if(idx!==lastIdx || !document.querySelector('#rehearsalNotes .rh-note.current')){
       rehearsalCursorIdx = idx;
@@ -15149,28 +15284,69 @@ function runPartRehearsalAnim(){
     analyser.getByteTimeDomainData(buf);
     let sumSq=0;
     for(let i=0;i<buf.length;i++){ const v=(buf[i]-128)/128; sumSq += v*v; }
-    document.getElementById('rehearsalGuideVu').style.width = Math.min(100, Math.round(Math.sqrt(sumSq/buf.length)*150))+'%';
+    document.getElementById('rehearsalGuideVu').style.setProperty('--val', Math.min(100, Math.round(Math.sqrt(sumSq/buf.length)*150))+'%');
     partRehearsalRaf = requestAnimationFrame(step);
   }
   partRehearsalRaf = requestAnimationFrame(step);
 }
 
+// Rehearsal playback lights the stage (houseSession from Play until Stop or the end). With "Hear me" on it also opens the
+// mic and draws your voice on your lane: display only (no score; readiness doesn't change), counted as vocal load
+// (singingSession). With it off there is no mic, as before.
 async function startPartRehearsal(startIdx=0){
   if(!requireChoirWorld('I Am the Part')) return;
+  const hear = cwHearOn();
+  if(hear){ const tok = startGen; if(!await initAudio() || tok!==startGen) return; }
   partRehearsal.active = true;
+  const run = partRehearsal.run = {hear};
+  cwVoiceReset();
   rdStartPass(startIdx);
   await playChoir({loop:true, startIdx, onLoopEnd:rdPassEnded});
-  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  if(partRehearsal.run!==run) return; // stopped while starting
+  setRehearsalPlayBtn(true);
   runPartRehearsalAnim();
+  const stage = document.getElementById('rehearsalStage'), live = ()=>partRehearsal.run===run && partRehearsal.active && choirIsPlaying;
+  if(hear) singingSession(live, stage); else houseSession(live, stage);
 }
 
 function stopPartRehearsal(){
   partRehearsal.active = false;
+  partRehearsal.run = null;
   if(choirIsPlaying) stopChoir();
   resetPartRehearsalPlayUI();
 }
+// Hear me: one pitch reading a frame from the shared mic analyser, drawn on your lane (a loop restart starts a new line)
+function cwHearFrame(songT){
+  if(!analyser || !dataArray) return;
+  if(cwVoice.length && songT < cwVoice[cwVoice.length-1].t - 1) cwVoiceReset();
+  if(songT<0) return;
+  analyser.getFloatTimeDomainData(dataArray);
+  cwVoicePush(songT, autoCorrelate(dataArray, audioCtx.sampleRate));
+}
+// "Hear me" is remembered on this device; until it has been set, it's on once the mic permission is granted.
+const CW_HEAR_KEY = 'cwHearMe';
+let cwHearDefault = false;
+function cwHearOn(){ let v = null; try{ v = localStorage.getItem(CW_HEAR_KEY); }catch(e){} return v===null ? cwHearDefault : v==='1'; }
+function renderHearButton(){ const b = document.getElementById('rehearsalHearBtn'); if(b) b.setAttribute('aria-pressed', cwHearOn() ? 'true' : 'false'); }
+try{ navigator.permissions && navigator.permissions.query({name:'microphone'}).then(st=>{ cwHearDefault = st.state==='granted'; renderHearButton(); }).catch(()=>{}); }catch(e){}
+document.getElementById('rehearsalHearBtn').addEventListener('click', ()=>{
+  if(partRehearsal.active && choirIsPlaying) return; // set before Play; a play-through keeps what it started with
+  try{ localStorage.setItem(CW_HEAR_KEY, cwHearOn() ? '0' : '1'); }catch(e){}
+  renderHearButton();
+});
+// The transport: play/pause (pause keeps your place: play again goes on from that chord) and stop (back to chord 1)
+function setRehearsalPlayBtn(playing){
+  const b = document.getElementById('rehearsalPlayBtn');
+  b.querySelector('use').setAttribute('href', playing ? '#hl-pause' : '#hl-play');
+  document.getElementById('rehearsalPlayLabel').textContent = t(playing ? 'rehearsal_pause_btn' : 'rehearsal_play_btn');
+  b.setAttribute('aria-pressed', playing ? 'true' : 'false');
+}
 
-document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{ if(!timingTrainer.active && !harmonyMemory.active && !challenge.active && !(partRehearsal.active && choirIsPlaying)) startPartRehearsal(); });
+document.getElementById('rehearsalPlayBtn').addEventListener('click', ()=>{
+  if(timingTrainer.active || harmonyMemory.active || challenge.active) return;
+  if(partRehearsal.active && choirIsPlaying) stopPartRehearsal(); // pause: the cursor stays on the chord you were on
+  else startPartRehearsal(rehearsalCursorIdx);
+});
 // Tap a note (chip or roll bar): inspect it in Harmony Vision; if playing, jump playback there too.
 function onRehearsalNoteTap(e){
   const el = e.target.closest('[data-idx]');
@@ -15187,9 +15363,10 @@ document.getElementById('rehearsalStopBtn').addEventListener('click', ()=>{
   if(timingTrainer.active) finishTimingTrainer();
   else if(harmonyMemory.active) finishHarmonyMemory(false);
   else if(challenge.active) finishChallenge(false);
-  else stopPartRehearsal();
+  else { stopPartRehearsal(); rehearsalCursorIdx = 0; syncRehearsalCursor(0); }
 });
 document.getElementById('rehearsalPrevBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level-1));
+document.getElementById('rehearsalLevelFader').addEventListener('input', e=>setRehearsalLevel(+e.target.value));
 document.getElementById('rehearsalNextBtn').addEventListener('click', ()=>setRehearsalLevel(partRehearsal.level+1));
 document.getElementById('rehearsalLevels').addEventListener('click', (e)=>{
   const btn = e.target.closest('[data-rh-level]');
@@ -15429,7 +15606,7 @@ function setAcappella(on){
 }
 function renderAcappellaButton(){
   const btn = document.getElementById('acappellaBtn');
-  btn.textContent = t(partRehearsal.acappella ? 'ac_btn_on' : 'ac_btn_off');
+  btn.textContent = t('ac_key');
   btn.setAttribute('aria-pressed', partRehearsal.acappella ? 'true' : 'false');
 }
 document.getElementById('acappellaBtn').addEventListener('click', ()=>{ if(!harmonyMemory.active && !challenge.active) setAcappella(!partRehearsal.acappella); });
@@ -15561,7 +15738,7 @@ async function startTimingTrainer(){
   const beat = 60/SONG.tempo;
   await playChoir({loop:false, leadIn:beat*4});
   timingTrainer.clicks = scheduleRehearsalCountIn();
-  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  setRehearsalPlayBtn(true);
   runPartRehearsalAnim();
   timingTrainer.stopTicker = await startAudioTicker(timingTrainerTick);
   singingSession(()=>timingTrainer.active);
@@ -15673,6 +15850,7 @@ function updateBreathLive(songT){
   const ph = document.getElementById('bmPlayhead');
   if(songT===null){
     live.textContent = t('bm_live_idle'); live.classList.remove('now');
+    const cue = document.getElementById('rehearsalBreathCue'); if(cue){ cue.textContent = ''; cue.classList.remove('now'); }
     if(ph) ph.style.opacity = '0';
     bmLiveState = '';
     return;
@@ -15687,7 +15865,8 @@ function updateBreathLive(songT){
     else if(next) text = t('bm_live_next_tpl').replace('{k}', next.k).replace('{s}', (next.from-songT).toFixed(1));
     else text = t('bm_live_last');
   }
-  if(text!==bmLiveState){ live.textContent = text; live.classList.toggle('now', now); bmLiveState = text; }
+  if(text!==bmLiveState){ live.textContent = text; live.classList.toggle('now', now); bmLiveState = text;
+    const cue = document.getElementById('rehearsalBreathCue'); if(cue){ cue.textContent = text; cue.classList.toggle('now', now); } }
   if(ph){
     const xx = Math.max(0, Math.min(tl.n*100, songT/tl.chordDur*100));
     ph.setAttribute('x1', xx); ph.setAttribute('x2', xx); ph.style.opacity = songT<0 ? '0' : '0.85';
@@ -15784,7 +15963,7 @@ async function startHarmonyMemory(){
   const clicks = scheduleRehearsalCountIn();
   // Stage 6: your starting note sounds over the first three count-in beats, then nothing plays.
   if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime)); // a reference: it ends a beat before singing starts
-  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  setRehearsalPlayBtn(true);
   runPartRehearsalAnim();
   harmonyMemory.raf = requestAnimationFrame(hmTick);
   singingSession(()=>harmonyMemory.active);
@@ -16029,7 +16208,7 @@ async function startChallenge(kind){
   const clicks = scheduleRehearsalCountIn();
   // The Silence: your starting note sounds over the first three count-in beats, then nothing plays.
   if(cfg.memory) playTone(noteToFreq(notes[0].midi), beat*3-0.1, Math.max(0, choirStartCtxTime + clicks[0] - audioCtx.currentTime)); // a reference: it ends a beat before singing starts
-  document.getElementById('rehearsalPlayBtn').textContent = t('rehearsal_playing_btn');
+  setRehearsalPlayBtn(true);
   runPartRehearsalAnim();
   challenge.raf = requestAnimationFrame(chTick);
   singingSession(()=>challenge.active);
@@ -16801,8 +16980,23 @@ function rdDetailText(inp){
     .replace('{h}', inp.hmPassed).replace('{H}', HM_STAGES.length).replace('{b}', inp.bossesBeaten).replace('{B}', CH_BOSSES.length)
     .replace('{w}', inp.wins).replace('{x}', inp.losses);
 }
+// What's next for a part to reach Ready (the Home card's line too)
+function cwNextText(inp, status){
+  return status==='learning' ? t('home_cw_next_learning_tpl').replace('{dl}', RD_DEVELOPING.levels)
+    : status==='developing' ? t('home_cw_next_developing_tpl')
+      .replace('{l}', Math.min(inp.levels.length, RD_READY.levels)).replace('{L}', RD_READY.levels)
+      .replace('{h}', Math.min(inp.hmPassed, RD_READY.hm)).replace('{H}', RD_READY.hm)
+      .replace('{b}', Math.min(inp.bossesBeaten, RD_READY.bosses)).replace('{B}', RD_READY.bosses)
+    : t('home_cw_next_ready');
+}
 function renderReadiness(){
   const box = document.getElementById('rdRows');
+  const mine = document.getElementById('rdMine');
+  if(mine){
+    const inp = rdInputs(currentSongId, partRehearsal.part), st = rdStatus(inp);
+    mine.innerHTML = `<p class="cw-ready-head"><b>${partName(partRehearsal.part)}</b> <span class="rd-status ${st}">${t('rd_status_'+st)}</span></p>
+      <p class="cw-ready-next">${cwNextText(inp, st)}</p>`;
+  }
   if(box){
     document.getElementById('rdDesc').textContent = t('rd_desc');
     document.getElementById('rdRule').textContent = t('rd_rule_tpl')
@@ -17012,12 +17206,7 @@ function renderHomeChoirCard(){
     return;
   }
   const {song, part, inp, status} = focus;
-  const next = status==='learning' ? t('home_cw_next_learning_tpl').replace('{dl}', RD_DEVELOPING.levels)
-    : status==='developing' ? t('home_cw_next_developing_tpl')
-      .replace('{l}', Math.min(inp.levels.length, RD_READY.levels)).replace('{L}', RD_READY.levels)
-      .replace('{h}', Math.min(inp.hmPassed, RD_READY.hm)).replace('{H}', RD_READY.hm)
-      .replace('{b}', Math.min(inp.bossesBeaten, RD_READY.bosses)).replace('{B}', RD_READY.bosses)
-    : t('home_cw_next_ready');
+  const next = cwNextText(inp, status);
   const delta = cwDeltaText(song, part, inp);
   card.innerHTML = `<div class="step-label hl-label">${label} <span class="rd-status ${status}">${t('rd_status_'+status)}</span></div>
     ${h(t('home_cw_status_'+status+'_tpl').replace('{part}', partName(part)))}
