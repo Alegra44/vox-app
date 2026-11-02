@@ -15,6 +15,7 @@ const OUT = process.argv[2], W = +(process.argv[3] || 390), THEME = process.argv
       landing: async () => { await page.evaluate(() => { showShellSection('songs'); document.querySelector('[data-cw-landing]').click(); }); await shot('landing'); },
       rehearse: async () => { await page.evaluate(() => cwShowTab('rehearse')); await shot('rehearse'); },
       songlab: async () => { await page.evaluate(() => cwShowTab('songlab')); await shot('songlab'); },
+      microscope: async () => { await page.evaluate(() => { cwShowTab('songlab'); microscope.t = 4; renderSonicXray(); document.getElementById('sonicXrayCard').scrollIntoView({ block: 'start' }); }); await shot('microscope', false); },
       trainers: async () => { await page.evaluate(() => cwShowTab('trainers')); await shot('trainers'); },
       hm: async () => { await page.evaluate(() => cwOpenTrainer('hm')); await shot('trainer-hm'); },
       yourchoir: async () => { await page.evaluate(() => cwShowTab('yourchoir')); await shot('yourchoir'); },

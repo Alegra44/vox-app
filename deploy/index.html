@@ -1731,6 +1731,69 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-ready-head, .cw-ready-next{margin:0;}
   .cw-ready-head{display:flex;align-items:center;gap:var(--hl-s2);font-size:var(--hl-t-body);color:var(--hl-ink);}
   .cw-ready-next{font-size:var(--hl-t-small);color:var(--hl-ink-2);}
+  /* 2.3 Song Lab: the score header */
+  .cw-score{display:grid;gap:var(--hl-s1);margin:0 0 var(--hl-s5);}
+  .cw-score-meta{margin:0;font-size:var(--hl-t-body);color:var(--hl-ink);font-variant-numeric:tabular-nums;}
+  .cw-score-traits{display:flex;flex-wrap:wrap;gap:0 var(--hl-s2);font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
+  .cw-score-traits > span + span::before{content:"·";margin-right:var(--hl-s2);color:var(--hl-ink-3);}
+  .cw-quiet{margin:0;font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* Song DNA: four ink bars; the difficult moments as rows */
+  .cw-dna-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--hl-s1) var(--hl-s3);align-items:baseline;padding:var(--hl-s2) 0;}
+  .cw-dna-label{font-size:var(--hl-t-small);color:var(--hl-ink-2);}
+  .cw-dna-val{font-size:var(--hl-t-small);color:var(--hl-ink);font-variant-numeric:tabular-nums;}
+  .cw-dna-bar{grid-column:1 / -1;}
+  .cw-dna-bar > i{background:var(--hl-ink);}
+  .cw-moment{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:var(--hl-s3);padding:var(--hl-s2) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .cw-flame{width:18px;height:18px;color:var(--hl-ink-2);}
+  .cw-moment-text{font-size:var(--hl-t-small);color:var(--hl-ink);}
+  .cw-moment-time{font-variant-numeric:tabular-nums;color:var(--hl-ink-2);}
+  .cw-moment-btn{grid-column:2;justify-self:start;}
+  @media (min-width:768px){ .cw-moment{grid-template-columns:auto minmax(0,1fr) auto;} .cw-moment-btn{grid-column:auto;} }
+  /* Song Lab is one card: the cards inside it (Song DNA, X-Ray) are its sections, not cards in a card */
+  #panel-choir[data-cw-tab="songlab"] .key-card .key-card{background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;box-shadow:none;padding:var(--hl-s5) 0 0;margin:var(--hl-s5) 0 0 !important;}
+  /* the mixer: one channel strip per part, rows at 390, vertical strips from 768 */
+  .cw-mixer{display:grid;gap:0;margin:var(--hl-s3) 0;}
+  .track-row.cw-strip{display:grid;grid-template-columns:5.5em minmax(0,1fr) auto;grid-template-areas:"name fader keys" "vu vu vu";align-items:center;gap:var(--hl-s1) var(--hl-s3);
+    padding:var(--hl-s2) 0;margin:0;background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;}
+  .cw-strip-name{grid-area:name;display:flex;align-items:center;gap:var(--hl-s2);font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink);min-width:0;}
+  .cw-strip-name .swatch{width:8px;height:8px;border-radius:50%;flex:none;}
+  .cw-strip-vu{grid-area:vu;}
+  .cw-strip-vu > i{background:var(--part);}
+  .cw-strip .hl-fader{grid-area:fader;}
+  .cw-strip-keys{grid-area:keys;display:flex;gap:var(--hl-s2);}
+  .cw-strip .hl-key[data-key="solo"]{--led:var(--part);}
+  @media (min-width:768px){
+    .cw-mixer{grid-template-columns:repeat(5, minmax(0,1fr));gap:var(--hl-s3);}
+    .track-row.cw-strip{grid-template-columns:1fr;grid-template-areas:"name" "vu" "fader" "keys";justify-items:center;border:var(--hl-hair) solid var(--hl-rule);border-radius:var(--hl-r2);padding:var(--hl-s3) var(--hl-s2);}
+    .cw-strip-keys{flex-direction:column;align-items:stretch;width:100%;}
+    .cw-strip-vu{width:100%;}
+  }
+  .cw-mixer-transport{margin:var(--hl-s3) 0 var(--hl-s4);}
+  .cw-mixer-transport .transport-progress{flex:1 1 120px;margin:0;}
+  .cw-mixer-transport .transport-progress > i{display:block;height:100%;width:0%;background:var(--hl-ink-2);}
+  .cw-chips{display:flex;flex-wrap:wrap;gap:var(--hl-s2);}
+  .cw-chips .hl-chip.active-part{border-color:var(--hl-ink);color:var(--hl-ink);}
+  /* Sonic X-Ray: a dark lightbox inset on paper (its own data-house="down"; the house doesn't change) */
+  .cw-lightbox{background:var(--hl-bg);color:var(--hl-ink);border-radius:var(--hl-r2);padding:var(--hl-s3);overflow-x:auto;margin-top:var(--hl-s2);}
+  .cw-lightbox .xray-svg{display:block;}
+  .xray-sec-hit{fill:transparent;cursor:pointer;}
+  .xray-sec-box{fill:none;stroke:var(--hl-ink-3);stroke-width:1;pointer-events:none;}
+  .xray-sec-letter{fill:var(--hl-ink);font:600 12px var(--hl-font);text-anchor:middle;pointer-events:none;}
+  .xray-sec-name{fill:var(--hl-ink-2);font:11px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none;}
+  .xray-part{fill:var(--hl-ink-2);font:10px var(--hl-font);pointer-events:none;}
+  .xray-notename{fill:var(--hl-bg);font:700 9.5px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none;}
+  .xray-moment{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;pointer-events:none;}
+  .xray-flame{color:var(--hl-ink);fill:none;stroke:currentColor;pointer-events:none;}
+  .xray-cursor{stroke:var(--hl-voice);stroke-width:2;pointer-events:none;}
+  .xray-playhead{stroke:var(--hl-ink);stroke-width:2;pointer-events:none;}
+  /* Music Microscope: fits its column; at 390 one row per part on two lines, "vs Lead" a column from 768 */
+  @media (max-width:767px){
+    .mx-table thead{display:none;}
+    .mx-table, .mx-table tbody{display:block;width:100%;}
+    .mx-table tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2px var(--hl-s3);padding:var(--hl-s2) 0;border-bottom:var(--hl-hair) solid var(--hl-rule);}
+    .mx-table td{display:block;padding:0;border:0;min-width:0;overflow-wrap:anywhere;}
+    .mx-table td:nth-child(5){display:none;}
+  }
 
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
@@ -4546,14 +4609,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <div class="key-card" style="margin-top:16px;" data-cw-sec="songlab">
-      <div class="step-label"><span data-i18n="choir_practicetrack_label">Practice Track</span><span class="mock-tag" data-i18n="choir_synthdemo_tag">SYNTHESIZED DEMO</span></div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 4px;" id="choirTrackTitle">Demo Hymn — C Major (I–V–vi–IV)</h2>
-      <p class="desc" style="margin-bottom:20px;" data-i18n="choir_track_desc">
+      <div class="step-label cw-hidden"><span data-i18n="choir_practicetrack_label">Practice Track</span><span class="mock-tag" data-i18n="choir_synthdemo_tag">SYNTHESIZED DEMO</span></div>
+      <div class="cw-score">
+        <h2 class="vc-visually-hidden" id="choirTrackTitle">Demo Hymn — C Major (I–V–vi–IV)</h2>
+        <p class="cw-score-meta" id="cwScoreMeta"></p>
+        <div class="cw-score-traits" id="songDifficultyBox"></div>
+        <p class="cw-quiet" data-i18n="choir_synth_line">A synthesised demo arrangement.</p>
+      </div>
+      <p class="desc cw-hidden" style="margin-bottom:20px;" data-i18n="choir_track_desc">
         Real launch content is a licensed, pre-separated multi-track catalog (PRD §3.3) — live AI part separation for arbitrary uploads stays out of scope for the reasons in PRD §9.
         This demo uses original, royalty-free progressions, synthesized live, so mute/solo/volume genuinely work per part rather than simulating the UI.
       </p>
 
-      <div class="warmup-context" id="songDifficultyBox" style="margin-bottom:20px;"></div>
 
       <div class="key-card" id="songDnaCard" style="margin-bottom:20px;">
         <div class="step-label" data-i18n="choir_songdna_label">🧬 Song DNA</div>
@@ -4563,78 +4630,81 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div id="songDnaMoments" style="margin-top:10px;"></div>
       </div>
 
+      <div class="cw-mixer" id="cwMixer">
+      <div class="track-row cw-strip" data-part="Soprano" style="--part-color:var(--hl-sop);--part:var(--hl-sop);">
+        <div class="cw-strip-name"><span class="swatch" style="background:var(--hl-sop);"></span><span data-part-name="Soprano">Soprano</span></div>
+        <div class="hl-meter cw-strip-vu"><i class="vu-meter-fill" id="vuSoprano"></i></div>
+        <input type="range" class="hl-fader track-slider" id="volSoprano" data-part="Soprano" min="0" max="100" value="65" style="--val:65%;">
+        <div class="cw-strip-keys">
+          <button class="hl-key track-toggle" id="muteSoprano" data-key="mute" data-part="Soprano" aria-pressed="false" type="button" data-i18n="choir_mute_btn">MUTE</button>
+          <button class="hl-key track-toggle" id="soloSoprano" data-key="solo" data-part="Soprano" aria-pressed="false" type="button" data-i18n="choir_solo_btn">SOLO</button>
+        </div>
+      </div>
+
+      <div class="track-row cw-strip" data-part="Lead" style="--part-color:var(--hl-lead);--part:var(--hl-lead);">
+        <div class="cw-strip-name"><span class="swatch" style="background:var(--hl-lead);"></span><span data-part-name="Lead">Lead</span></div>
+        <div class="hl-meter cw-strip-vu"><i class="vu-meter-fill" id="vuLead"></i></div>
+        <input type="range" class="hl-fader track-slider" id="volLead" data-part="Lead" min="0" max="100" value="85" style="--val:85%;">
+        <div class="cw-strip-keys">
+          <button class="hl-key track-toggle" id="muteLead" data-key="mute" data-part="Lead" aria-pressed="false" type="button" data-i18n="choir_mute_btn">MUTE</button>
+          <button class="hl-key track-toggle" id="soloLead" data-key="solo" data-part="Lead" aria-pressed="false" type="button" data-i18n="choir_solo_btn">SOLO</button>
+        </div>
+      </div>
+      <div class="track-row cw-strip" data-part="Alto" style="--part-color:var(--hl-alto);--part:var(--hl-alto);">
+        <div class="cw-strip-name"><span class="swatch" style="background:var(--hl-alto);"></span><span data-part-name="Alto">Alto</span></div>
+        <div class="hl-meter cw-strip-vu"><i class="vu-meter-fill" id="vuAlto"></i></div>
+        <input type="range" class="hl-fader track-slider" id="volAlto" data-part="Alto" min="0" max="100" value="70" style="--val:70%;">
+        <div class="cw-strip-keys">
+          <button class="hl-key track-toggle" id="muteAlto" data-key="mute" data-part="Alto" aria-pressed="false" type="button" data-i18n="choir_mute_btn">MUTE</button>
+          <button class="hl-key track-toggle" id="soloAlto" data-key="solo" data-part="Alto" aria-pressed="false" type="button" data-i18n="choir_solo_btn">SOLO</button>
+        </div>
+      </div>
+      <div class="track-row cw-strip" data-part="Tenor" style="--part-color:var(--hl-ten);--part:var(--hl-ten);">
+        <div class="cw-strip-name"><span class="swatch" style="background:var(--hl-ten);"></span><span data-part-name="Tenor">Tenor</span></div>
+        <div class="hl-meter cw-strip-vu"><i class="vu-meter-fill" id="vuTenor"></i></div>
+        <input type="range" class="hl-fader track-slider" id="volTenor" data-part="Tenor" min="0" max="100" value="70" style="--val:70%;">
+        <div class="cw-strip-keys">
+          <button class="hl-key track-toggle" id="muteTenor" data-key="mute" data-part="Tenor" aria-pressed="false" type="button" data-i18n="choir_mute_btn">MUTE</button>
+          <button class="hl-key track-toggle" id="soloTenor" data-key="solo" data-part="Tenor" aria-pressed="false" type="button" data-i18n="choir_solo_btn">SOLO</button>
+        </div>
+      </div>
+      <div class="track-row cw-strip" data-part="Bass" style="--part-color:var(--hl-bass);--part:var(--hl-bass);">
+        <div class="cw-strip-name"><span class="swatch" style="background:var(--hl-bass);"></span><span data-part-name="Bass">Bass</span></div>
+        <div class="hl-meter cw-strip-vu"><i class="vu-meter-fill" id="vuBass"></i></div>
+        <input type="range" class="hl-fader track-slider" id="volBass" data-part="Bass" min="0" max="100" value="75" style="--val:75%;">
+        <div class="cw-strip-keys">
+          <button class="hl-key track-toggle" id="muteBass" data-key="mute" data-part="Bass" aria-pressed="false" type="button" data-i18n="choir_mute_btn">MUTE</button>
+          <button class="hl-key track-toggle" id="soloBass" data-key="solo" data-part="Bass" aria-pressed="false" type="button" data-i18n="choir_solo_btn">SOLO</button>
+        </div>
+      </div>
+
+      </div>
+      <div class="cw-transport cw-mixer-transport">
+        <button class="hl-transport hl-transport--primary" id="choirPlayBtn" type="button"><svg class="hl-icon" aria-hidden="true"><use href="#hl-play"/></svg><span class="vc-visually-hidden" id="choirPlayLabel" data-i18n="choir_play_btn">Play</span></button>
+        <button class="hl-transport hl-transport--s" id="choirStopBtn" type="button"><svg class="hl-icon" aria-hidden="true"><use href="#hl-stop"/></svg><span class="vc-visually-hidden" data-i18n="choir_stop_btn">Stop</span></button>
+        <button class="hl-key" id="choirLoopKey" data-key="loop" aria-pressed="true" type="button" data-i18n="choir_loop_btn">Loop</button>
+        <input type="checkbox" id="choirLoopCheck" checked class="vc-visually-hidden" tabindex="-1" aria-hidden="true">
+        <div class="transport-progress hl-meter"><i class="fill" id="choirProgressFill"></i></div>
+      </div>
+
+      <p class="fine-print" style="margin-bottom:6px;" data-i18n="choir_quick_line">Quick practice: one part solo, the others softly for context.</p>
+      <div class="practice-chip-row cw-chips">
+        <button class="hl-chip practice-chip" data-practice-part="Soprano" aria-pressed="false" type="button">Practice: Soprano</button>
+        <button class="hl-chip practice-chip" data-practice-part="Lead" aria-pressed="false" type="button">Practice: Lead</button>
+        <button class="hl-chip practice-chip" data-practice-part="Alto" aria-pressed="false" type="button">Practice: Alto</button>
+        <button class="hl-chip practice-chip" data-practice-part="Tenor" aria-pressed="false" type="button">Practice: Tenor</button>
+        <button class="hl-chip practice-chip" data-practice-part="Bass" aria-pressed="false" type="button">Practice: Bass</button>
+        <button class="hl-chip practice-chip" id="practiceClearBtn" type="button" data-i18n="choir_allparts_btn">All parts (clear solo)</button>
+      </div>
+
       <div class="key-card cw-gated" id="sonicXrayCard" style="margin-bottom:20px;">
         <div class="step-label" data-i18n="xray_title">🩻 Sonic X-Ray</div>
         <p class="fine-print" style="margin:6px 0 4px;" data-i18n="xray_desc">All 5 parts across the song's real timeline, drawn from the exact note schedule the mixer plays. Tap a section to jump playback there; tap anywhere on the parts to put that moment under the Music Microscope.</p>
         <p class="fine-print" style="margin:0 0 8px;" data-i18n="xray_dna_legend">🔥 = a Song DNA difficult moment</p>
-        <div class="rh-roll-wrap"><svg id="xraySvg" class="xray-svg"></svg></div>
+        <div class="cw-lightbox" data-house="down"><svg id="xraySvg" class="xray-svg"></svg></div>
 
         <div class="step-label" style="margin-top:18px;" data-i18n="mx_title">🔬 Music Microscope</div>
         <div id="microscopeBody" style="margin-top:8px;"></div>
-      </div>
-
-      <div class="track-row" style="--part-color:var(--hl-sop);">
-        <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--hl-sop);"></span><span data-part-name="Soprano">Soprano</span></div>
-          <div class="vu-meter-track"><div class="vu-meter-fill" id="vuSoprano"></div></div>
-        </div>
-        <input type="range" class="track-slider" id="volSoprano" min="0" max="100" value="65">
-        <button class="track-toggle" id="muteSoprano" data-part="Soprano" data-i18n="choir_mute_btn">MUTE</button>
-        <button class="track-toggle" id="soloSoprano" data-part="Soprano" data-i18n="choir_solo_btn">SOLO</button>
-      </div>
-
-      <div class="track-row" style="--part-color:var(--hl-lead);">
-        <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--hl-lead);"></span><span data-part-name="Lead">Lead</span></div>
-          <div class="vu-meter-track"><div class="vu-meter-fill" id="vuLead"></div></div>
-        </div>
-        <input type="range" class="track-slider" id="volLead" min="0" max="100" value="85">
-        <button class="track-toggle" id="muteLead" data-part="Lead" data-i18n="choir_mute_btn">MUTE</button>
-        <button class="track-toggle" id="soloLead" data-part="Lead" data-i18n="choir_solo_btn">SOLO</button>
-      </div>
-      <div class="track-row" style="--part-color:var(--hl-alto);">
-        <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--hl-alto);"></span><span data-part-name="Alto">Alto</span></div>
-          <div class="vu-meter-track"><div class="vu-meter-fill" id="vuAlto"></div></div>
-        </div>
-        <input type="range" class="track-slider" id="volAlto" min="0" max="100" value="70">
-        <button class="track-toggle" id="muteAlto" data-part="Alto" data-i18n="choir_mute_btn">MUTE</button>
-        <button class="track-toggle" id="soloAlto" data-part="Alto" data-i18n="choir_solo_btn">SOLO</button>
-      </div>
-      <div class="track-row" style="--part-color:var(--hl-ten);">
-        <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--hl-ten);"></span><span data-part-name="Tenor">Tenor</span></div>
-          <div class="vu-meter-track"><div class="vu-meter-fill" id="vuTenor"></div></div>
-        </div>
-        <input type="range" class="track-slider" id="volTenor" min="0" max="100" value="70">
-        <button class="track-toggle" id="muteTenor" data-part="Tenor" data-i18n="choir_mute_btn">MUTE</button>
-        <button class="track-toggle" id="soloTenor" data-part="Tenor" data-i18n="choir_solo_btn">SOLO</button>
-      </div>
-      <div class="track-row" style="--part-color:var(--hl-bass);">
-        <div class="track-name-wrap">
-          <div class="track-name"><span class="swatch" style="background:var(--hl-bass);"></span><span data-part-name="Bass">Bass</span></div>
-          <div class="vu-meter-track"><div class="vu-meter-fill" id="vuBass"></div></div>
-        </div>
-        <input type="range" class="track-slider" id="volBass" min="0" max="100" value="75">
-        <button class="track-toggle" id="muteBass" data-part="Bass" data-i18n="choir_mute_btn">MUTE</button>
-        <button class="track-toggle" id="soloBass" data-part="Bass" data-i18n="choir_solo_btn">SOLO</button>
-      </div>
-
-      <div class="transport-row">
-        <button class="solid-btn teal" id="choirPlayBtn">▶ Play</button>
-        <button class="ghost-btn" id="choirStopBtn">Stop</button>
-        <div class="transport-progress"><div class="fill" id="choirProgressFill"></div></div>
-        <label class="loop-check"><input type="checkbox" id="choirLoopCheck" checked> Loop</label>
-      </div>
-
-      <p class="fine-print" style="margin-bottom:6px;">Quick practice — solos one part, brings the rest down softly for context:</p>
-      <div class="practice-chip-row">
-        <button class="practice-chip" data-practice-part="Soprano">Practice: Soprano</button>
-        <button class="practice-chip" data-practice-part="Lead">Practice: Lead</button>
-        <button class="practice-chip" data-practice-part="Alto">Practice: Alto</button>
-        <button class="practice-chip" data-practice-part="Tenor">Practice: Tenor</button>
-        <button class="practice-chip" data-practice-part="Bass">Practice: Bass</button>
-        <button class="practice-chip" id="practiceClearBtn" data-i18n="choir_allparts_btn">All parts (clear solo)</button>
       </div>
 
       <p class="fine-print cw-gated cw-hidden" style="margin:18px 0 6px;" data-i18n="choir_rehearse_label">Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:</p>
@@ -6952,6 +7022,16 @@ const TRANSLATIONS = {
     rd_local_only:"You're not signed in, so readiness isn't saved to an account. Harmony Memory and Boss scores stay on this device.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Choir World",
+    choir_synth_line:"A synthesised demo arrangement: each part is its own voice, so the faders, Mute and Solo act on that part alone.",
+    choir_play_btn:"Play",
+    choir_playing_btn:"Playing",
+    choir_stop_btn:"Stop",
+    choir_loop_btn:"Loop",
+    choir_quick_line:"Quick practice: one part solo, the others softly for context.",
+    choir_volume_tpl:"{part} volume",
+    choir_track_title_tpl:"{song} — {key} ({n} chords)",
+    rehearsal_song_label_tpl:"{song} ({key})",
+    songdifficulty_stars_tpl:"{n} of 5",
     rehearsal_hear_btn:"Hear me",
     rehearsal_pause_btn:"Pause",
     rehearsal_guide_level_label:"Guide level",
@@ -8479,6 +8559,16 @@ const TRANSLATIONS = {
     rd_local_only:"Vous n'êtes pas connecté·e : la préparation n'est pas enregistrée sur un compte. Les scores de Mémoire harmonique et des Boss restent sur cet appareil.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Monde Chorale",
+    choir_synth_line:"Un arrangement de démonstration synthétisé : chaque voix est jouée à part, donc les curseurs, Muet et Solo n'agissent que sur elle.",
+    choir_play_btn:"Lecture",
+    choir_playing_btn:"Lecture en cours",
+    choir_stop_btn:"Arrêt",
+    choir_loop_btn:"Boucle",
+    choir_quick_line:"Pratique rapide : une voix en solo, les autres doucement pour le contexte.",
+    choir_volume_tpl:"Volume {part}",
+    choir_track_title_tpl:"{song} — {key} ({n} accords)",
+    rehearsal_song_label_tpl:"{song} ({key})",
+    songdifficulty_stars_tpl:"{n} sur 5",
     rehearsal_hear_btn:"M'entendre",
     rehearsal_pause_btn:"Pause",
     rehearsal_guide_level_label:"Niveau du guide",
@@ -10006,6 +10096,16 @@ const TRANSLATIONS = {
     rd_local_only:"No has iniciado sesión, así que la preparación no se guarda en una cuenta. Las puntuaciones de Memoria armónica y de Jefes se quedan en este dispositivo.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Mundo Coral",
+    choir_synth_line:"Un arreglo de demostración sintetizado: cada voz suena por separado, así que los deslizadores, Silenciar y Solo actúan solo sobre ella.",
+    choir_play_btn:"Reproducir",
+    choir_playing_btn:"Reproduciendo",
+    choir_stop_btn:"Detener",
+    choir_loop_btn:"Bucle",
+    choir_quick_line:"Práctica rápida: una voz en solo, las demás suaves como contexto.",
+    choir_volume_tpl:"Volumen de {part}",
+    choir_track_title_tpl:"{song} — {key} ({n} acordes)",
+    rehearsal_song_label_tpl:"{song} ({key})",
+    songdifficulty_stars_tpl:"{n} de 5",
     rehearsal_hear_btn:"Escucharme",
     rehearsal_pause_btn:"Pausa",
     rehearsal_guide_level_label:"Nivel de la guía",
@@ -11533,6 +11633,16 @@ const TRANSLATIONS = {
     rd_local_only:"Giriş yapmadınız, bu yüzden hazırlık bir hesaba kaydedilmiyor. Armoni Hafızası ve Boss puanları bu cihazda kalır.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Koro Dünyası",
+    choir_synth_line:"Sentezlenmiş bir demo düzenlemesi: her parti ayrı çalınır, bu yüzden sürgüler, Sessiz ve Solo yalnızca o partiyi etkiler.",
+    choir_play_btn:"Çal",
+    choir_playing_btn:"Çalıyor",
+    choir_stop_btn:"Durdur",
+    choir_loop_btn:"Döngü",
+    choir_quick_line:"Hızlı çalışma: bir parti solo, diğerleri bağlam için kısık.",
+    choir_volume_tpl:"{part} ses düzeyi",
+    choir_track_title_tpl:"{song} — {key} ({n} akor)",
+    rehearsal_song_label_tpl:"{song} ({key})",
+    songdifficulty_stars_tpl:"5 üzerinden {n}",
     rehearsal_hear_btn:"Beni duy",
     rehearsal_pause_btn:"Duraklat",
     rehearsal_guide_level_label:"Rehber seviyesi",
@@ -14889,7 +14999,7 @@ async function playChoir(opts={}){
 
   choirEndCtxTime = choirStartCtxTime + SONG.parts.Lead.notes.length*chordDur;
   choirIsPlaying = true;
-  document.getElementById('choirPlayBtn').textContent = '⏸ Playing…';
+  setChoirPlayBtn(true);
 
   if(choirLoopTimeout) choirLoopTimeout();
   const loopOn = opts.loop ?? document.getElementById('choirLoopCheck').checked;
@@ -14900,7 +15010,7 @@ async function playChoir(opts={}){
       playChoir({...opts, startIdx:0});
     });
   } else {
-    choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{ choirIsPlaying=false; document.getElementById('choirPlayBtn').textContent='▶ Play'; });
+    choirLoopTimeout = atAudioTime(choirEndCtxTime, ()=>{ choirIsPlaying=false; setChoirPlayBtn(false); });
   }
 
   runChoirProgressAnim();
@@ -14920,7 +15030,7 @@ function stopChoir(){
   stopChoirOscillatorsOnly();
   if(choirLoopTimeout) choirLoopTimeout();
   choirIsPlaying = false;
-  document.getElementById('choirPlayBtn').textContent = '▶ Play';
+  setChoirPlayBtn(false);
   document.getElementById('choirProgressFill').style.width = '0%';
   if(choirProgressRaf) cancelAnimationFrame(choirProgressRaf);
   Object.keys(SONG.parts).forEach(part=>{
@@ -14962,7 +15072,28 @@ function runChoirProgressAnim(){
   choirProgressRaf = requestAnimationFrame(step);
 }
 
-document.getElementById('choirPlayBtn').addEventListener('click', ()=>{ if(!choirIsPlaying){ partRehearsal.active = false; playChoir(); } });
+document.getElementById('choirPlayBtn').addEventListener('click', ()=>{ if(!choirIsPlaying){ partRehearsal.active = false; playChoir(); } else if(!partRehearsal.active && !yourChoir.recording) stopChoir(); });
+function setChoirPlayBtn(playing){
+  const b = document.getElementById('choirPlayBtn');
+  b.querySelector('use').setAttribute('href', playing ? '#hl-pause' : '#hl-play');
+  document.getElementById('choirPlayLabel').textContent = t(playing ? 'choir_playing_btn' : 'choir_play_btn');
+  b.setAttribute('aria-pressed', playing ? 'true' : 'false');
+}
+// The strips show choirState: Mute and Solo in aria-pressed (their LEDs), each fader's fill (--val), the quick practice chips
+function cwMixerSync(){
+  ['Soprano','Lead','Alto','Tenor','Bass'].forEach(p=>{
+    const st = choirState[p], vol = document.getElementById('vol'+p);
+    if(!st || !vol) return;
+    document.getElementById('mute'+p).setAttribute('aria-pressed', st.muted ? 'true' : 'false');
+    document.getElementById('solo'+p).setAttribute('aria-pressed', st.solo ? 'true' : 'false');
+    vol.style.setProperty('--val', vol.value+'%');
+    vol.setAttribute('aria-label', t('choir_volume_tpl').replace('{part}', partName(p)));
+  });
+  document.querySelectorAll('.practice-chip[data-practice-part]').forEach(c=>c.setAttribute('aria-pressed', c.classList.contains('active-part') ? 'true' : 'false'));
+  const loop = document.getElementById('choirLoopCheck');
+  document.getElementById('choirLoopKey').setAttribute('aria-pressed', loop.checked ? 'true' : 'false');
+}
+document.getElementById('choirLoopKey').addEventListener('click', ()=>{ const c = document.getElementById('choirLoopCheck'); c.checked = !c.checked; cwMixerSync(); });
 document.getElementById('choirStopBtn').addEventListener('click', ()=>{ if(yourChoir.recording) ycStop(); else stopChoir(); });
 
 ['Soprano','Lead','Alto','Tenor','Bass'].forEach(part=>{
@@ -14970,12 +15101,14 @@ document.getElementById('choirStopBtn').addEventListener('click', ()=>{ if(yourC
     if(!hasChoirAccess()){ e.target.value = Math.round(choirState[part].volume*100); return; }
     choirState[part].volume = e.target.value/100;
     updateAllChoirGains();
+    cwMixerSync();
   });
   document.getElementById('mute'+part).addEventListener('click', ()=>{
     if(!requireChoirFeature('Per-part mixing')) return;
     choirState[part].muted = !choirState[part].muted;
     document.getElementById('mute'+part).classList.toggle('on-mute', choirState[part].muted);
     updateAllChoirGains();
+    cwMixerSync();
   });
   document.getElementById('solo'+part).addEventListener('click', ()=>{
     if(!requireChoirFeature('Per-part mixing')) return;
@@ -15007,6 +15140,7 @@ function syncPracticeChipHighlight(){
     const part = chip.dataset.practicePart;
     chip.classList.toggle('active-part', choirState[part] && choirState[part].solo && Object.keys(choirState).filter(p=>choirState[p].solo).length===1);
   });
+  cwMixerSync();
 }
 
 document.querySelectorAll('.practice-chip[data-practice-part]').forEach(chip=>{
@@ -15221,7 +15355,7 @@ function renderPartRehearsal(){
   if(!SONG.parts[partRehearsal.part]) partRehearsal.part = 'Alto';
   const part = partRehearsal.part;
   document.getElementById('rehearsalTitle').textContent = rehearsalTitleText(part);
-  document.getElementById('rehearsalSongLabel').textContent = `${SONG.name} (${SONG.key})`;
+  document.getElementById('rehearsalSongLabel').textContent = t('rehearsal_song_label_tpl').replace('{song}', songTitle(currentSongId)).replace('{key}', SONG.key);
   document.querySelectorAll('#rehearsalPartRow [data-rh-part]').forEach(b=>{
     const on = b.dataset.rhPart===part;
     b.classList.toggle('active', on);
@@ -15429,30 +15563,30 @@ function renderSonicXray(){
   const H = XRAY_SEC_H + parts.length*XRAY_ROW_H + 4;
   const x = s => (s/tl.total)*XRAY_W;
   let html = '';
-  getSongSections().forEach(sec=>{
+  getSongSections().forEach((sec, k)=>{
     const s0 = sec.indices[0]*tl.chordDur, s1 = (sec.indices[sec.indices.length-1]+1)*tl.chordDur;
-    html += `<g class="xray-sec" data-sec-start="${sec.indices[0]}"><rect x="${x(s0)+1}" y="2" width="${x(s1)-x(s0)-2}" height="${XRAY_SEC_H-8}" rx="6" style="fill:var(--surface-raised);stroke:var(--hairline)"/>`
-      + `<text x="${x(s0)+8}" y="${XRAY_SEC_H/2+2}" style="fill:var(--cream);font:600 11px var(--hl-font);pointer-events:none">▶ ${sectionLabel(sec.name)} · ${s0.toFixed(1)}s</text></g>`;
+    html += `<g class="xray-sec" data-sec-start="${sec.indices[0]}"><rect class="xray-sec-hit" x="${x(s0)+1}" y="2" width="${x(s1)-x(s0)-2}" height="${XRAY_SEC_H-8}"/><rect class="xray-sec-box" x="${x(s0)+2}" y="3" width="20" height="20" rx="2"/>`
+      + `<text class="xray-sec-letter" x="${x(s0)+12}" y="18">${String.fromCharCode(65+k)}</text><text class="xray-sec-name" x="${x(s0)+28}" y="18">${sectionLabel(sec.name)} · ${s0.toFixed(1)} s</text></g>`;
   });
   parts.forEach((p,r)=>{
     const y0 = XRAY_SEC_H + r*XRAY_ROW_H;
     const notes = tl.parts[p];
     const lo = Math.min(...notes.map(nt=>nt.midi)), hi = Math.max(...notes.map(nt=>nt.midi));
-    html += `<text x="4" y="${y0+11}" style="fill:var(--muted);font:10px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${partName(p)}</text>`;
+    html += `<text class="xray-part" x="4" y="${y0+11}">${partName(p)}</text>`;
     notes.forEach(nt=>{
       const rel = hi===lo ? 0.5 : (nt.midi-lo)/(hi-lo); // contour within this part's own real range
       const y = y0 + 15 + (1-rel)*10;
-      html += `<rect class="xray-note" data-part="${p}" data-idx="${nt.idx}" x="${x(nt.start)}" y="${y}" width="${x(nt.end)-x(nt.start)}" height="11" rx="3" style="fill:${PART_COLORS[p]};opacity:0.85"/>`
-        + `<text x="${x(nt.start)+3}" y="${y+8.5}" style="fill:var(--on-part);font:bold 8.5px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${midiName(nt.midi)}</text>`;
+      html += `<rect class="xray-note" data-part="${p}" data-idx="${nt.idx}" x="${x(nt.start)}" y="${y}" width="${x(nt.end)-x(nt.start)}" height="13" rx="3" style="fill:${PART_COLORS[p]}"/>`
+        + `<text class="xray-notename" x="${x(nt.start)+3}" y="${y+10}">${midiName(nt.midi)}</text>`;
     });
   });
   computeSongDnaMoments().forEach(m=>{
     const mx = x(m.time/1000);
-    html += `<line x1="${mx}" y1="${XRAY_SEC_H-4}" x2="${mx}" y2="${H}" style="stroke:var(--coral);stroke-width:1;stroke-dasharray:3 3;pointer-events:none"/>`
-      + `<text x="${mx+2}" y="${XRAY_SEC_H+8}" style="font-size:10px;pointer-events:none">🔥</text>`;
+    html += `<line class="xray-moment" x1="${mx}" y1="${XRAY_SEC_H-4}" x2="${mx}" y2="${H}"/>`
+      + `<use class="xray-flame" href="#hl-flame" x="${mx+2}" y="${XRAY_SEC_H-3}" width="12" height="12"/>`;
   });
-  html += `<line id="xrayCursor" x1="0" y1="${XRAY_SEC_H-4}" x2="0" y2="${H}" style="stroke:var(--teal);stroke-width:2;opacity:0;pointer-events:none"/>`
-    + `<line id="xrayPlayhead" x1="0" y1="0" x2="0" y2="${H}" style="stroke:var(--cream);stroke-width:2;opacity:0;pointer-events:none"/>`;
+  html += `<line id="xrayCursor" class="xray-cursor" x1="0" y1="${XRAY_SEC_H-4}" x2="0" y2="${H}" style="opacity:0"/>`
+    + `<line id="xrayPlayhead" class="xray-playhead" x1="0" y1="0" x2="0" y2="${H}" style="opacity:0"/>`;
   svg.setAttribute('viewBox', `0 0 ${XRAY_W} ${H}`);
   svg.style.minWidth = Math.max(640, tl.n*70)+'px';
   svg.innerHTML = html;
@@ -17323,7 +17457,15 @@ function renderCwTrainerList(){
     <span><span class="hl-item-title">${name}</span><span class="hl-item-meta">${status}</span></span>
     <span class="hl-item-end">${b===undefined ? '' : b===null ? t('hm_not_tried') : t('cw_tr_best_tpl').replace('{s}', b)}<svg class="hl-icon" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>`).join('');
 }
+// Song Lab's score header: the title from the song's keys, its key · level · chords line (the song's tag)
+function cwRenderScore(){
+  const s = SONGS[currentSongId], title = document.getElementById('choirTrackTitle'), meta = document.getElementById('cwScoreMeta');
+  if(title) title.textContent = t('choir_track_title_tpl').replace('{song}', songTitle(currentSongId)).replace('{key}', s.key).replace('{n}', s.chordLabels.length);
+  if(meta) meta.textContent = t('choir_song_'+currentSongId+'_tag');
+}
 function renderCwStructure(){
+  cwRenderScore();
+  cwMixerSync();
   document.querySelectorAll('[data-cw-head]').forEach(head=>{
     const tab = head.closest('section.panel').dataset.cwTab;
     head.innerHTML = tab && tab!=='landing' ? cwSongHeadHtml(tab) : '';
@@ -18639,7 +18781,6 @@ function renderSongDifficulty(){
   const maxJump = Math.max(...jumps);
   const starsRaw = 1 + (span/24)*2 + (maxJump/12)*2; // rough: range span + biggest leap
   const stars = Math.max(1, Math.min(5, Math.round(starsRaw)));
-  const starDisplay = '★'.repeat(stars) + '☆'.repeat(5-stars);
 
   let recommendedFor = t('songdifficulty_alllevels');
   const range = userRange();
@@ -18648,7 +18789,7 @@ function renderSongDifficulty(){
     else recommendedFor = t('songdifficulty_outsiderange');
   }
 
-  box.innerHTML = `${t('songdifficulty_difficulty')}: <strong style="color:var(--brass);">${starDisplay}</strong> &nbsp;·&nbsp; ${t('songdifficulty_highest')}: ${noteNameFromMidi(highest)} &nbsp;·&nbsp; ${t('songdifficulty_lowest')}: ${noteNameFromMidi(lowest)} &nbsp;·&nbsp; ${recommendedFor}`;
+  box.innerHTML = `<span>${t('songdifficulty_difficulty')} ${t('songdifficulty_stars_tpl').replace('{n}', stars)}</span><span>${t('songdifficulty_highest')} ${noteNameFromMidi(highest)}</span><span>${t('songdifficulty_lowest')} ${noteNameFromMidi(lowest)}</span><span>${recommendedFor}</span>`;
   renderSongDna(leadNotes, lowest, highest, jumps, maxJump);
 }
 // Song DNA's real difficult moments, computed from the Lead line. Shared by Song DNA and Sonic X-Ray.
@@ -18660,11 +18801,11 @@ function computeSongDnaMoments(){
   const chordDurMs = songChordDurMs();
   const moments = [];
   const highestIdx = leadNotes.indexOf(leadHighest);
-  moments.push({icon:'🔥', label:`${t('songdna_highsustained')} (${noteNameFromMidi(leadHighest)})`, time: highestIdx*chordDurMs, midi: leadHighest});
+  moments.push({label:`${t('songdna_highsustained')} (${noteNameFromMidi(leadHighest)})`, time: highestIdx*chordDurMs, midi: leadHighest});
 
   const maxJumpIdx = jumps.indexOf(maxJump);
   if(maxJumpIdx>=0){
-    moments.push({icon:'🔥', label:`${t('songdna_bigjump')} — ${noteNameFromMidi(leadNotes[maxJumpIdx])} ${t('songdna_to')} ${noteNameFromMidi(leadNotes[maxJumpIdx+1])} (${maxJump} ${t('songdna_semitones')})`, time:(maxJumpIdx+1)*chordDurMs, midi: leadNotes[maxJumpIdx+1]});
+    moments.push({label:`${t('songdna_bigjump')} — ${noteNameFromMidi(leadNotes[maxJumpIdx])} ${t('songdna_to')} ${noteNameFromMidi(leadNotes[maxJumpIdx+1])} (${maxJump} ${t('songdna_semitones')})`, time:(maxJumpIdx+1)*chordDurMs, midi: leadNotes[maxJumpIdx+1]});
   }
 
   let longestRunLen=0, longestRunStart=0, curRunLen=0, curRunStart=0;
@@ -18678,7 +18819,7 @@ function computeSongDnaMoments(){
     }
   }
   if(longestRunLen>=2){
-    moments.push({icon:'🔥', label:`${t('songdna_descending')} (${longestRunLen+1} ${t('songdna_notes')})`, time:longestRunStart*chordDurMs, midi: leadNotes[longestRunStart]});
+    moments.push({label:`${t('songdna_descending')} (${longestRunLen+1} ${t('songdna_notes')})`, time:longestRunStart*chordDurMs, midi: leadNotes[longestRunStart]});
   }
 
   moments.sort((a,b)=>a.time-b.time);
@@ -18704,18 +18845,15 @@ function renderSongDna(leadNotes, lowest, highest, jumps, maxJump){
     {label:t('songdna_register'), pct: Math.round((nearPassaggioCount/leadNotes.length)*100)},
   ];
   dimWrap.innerHTML = dims.map(d=>`
-    <div class="vlab-row">
-      <div class="vlab-row-label">${d.label} <span class="vlab-row-notes">${d.pct}%</span></div>
-      <div class="vlab-track"><div class="vlab-fill" style="left:0%;width:${d.pct}%;background:var(--teal);"></div></div>
-    </div>
-  `).join('');
+    <div class="cw-dna-row"><span class="cw-dna-label">${d.label}</span><span class="cw-dna-val">${d.pct}%</span>
+      <div class="hl-meter cw-dna-bar"><i style="--val:${d.pct}%"></i></div></div>`).join('');
 
   const moments = computeSongDnaMoments();
   momentsWrap.innerHTML = moments.length>0
     ? moments.map((m,i)=>{
         const totalSec = Math.round(m.time/1000);
         const mm = Math.floor(totalSec/60), ss = String(totalSec%60).padStart(2,'0');
-        return `<div class="record-row"><span class="record-label">${m.icon} ${mm}:${ss} — ${m.label}</span><button class="ghost-btn" data-song-dna-practice="${m.midi}" style="padding:4px 12px;font-size:11px;">${t('songdna_practicethis')}</button></div>`;
+        return `<div class="cw-moment"><svg class="hl-icon cw-flame" aria-hidden="true"><use href="#hl-flame"/></svg><span class="cw-moment-text"><span class="cw-moment-time">${mm}:${ss}</span> ${m.label}</span><button class="hl-btn hl-btn--quiet cw-moment-btn" data-song-dna-practice="${m.midi}" type="button">${t('songdna_practicethis')}</button></div>`;
       }).join('')
     : `<p class="desc" style="color:var(--muted);">${t('songdna_shortsong')}</p>`;
 
@@ -18814,7 +18952,7 @@ function levelForXp(xp){
 const ACHIEVEMENTS = [
   {id:'first_note', icon:'🎯', get name(){return t('achievement_first_note');}, check:()=>
     ['pitchScores','agilityScores','breathScores'].some(k=>(progress[k]||[]).some(v=>v>=95))},
-  {id:'streak7', icon:'🔥', get name(){return t('achievement_streak7');}, check:()=>(progress.streak||0)>=7},
+  {id:'streak7', get name(){return t('achievement_streak7');}, check:()=>(progress.streak||0)>=7},
   {id:'key_change', icon:'🎹', get name(){return t('achievement_key_change');}, check:()=>!!progress.usedKeyRecommendation},
   {id:'harmony', icon:'🎤', get name(){return t('achievement_harmony');}, check:()=>!!progress.usedChoirSolo},
   {id:'sustain10', icon:'💨', get name(){return t('achievement_sustain10');}, check:()=>(progress.bestBreathDuration||0)>=10},
@@ -20215,7 +20353,7 @@ const SKILL_TREE_NODES = [
     isUnlocked:()=>(progress.bestBridgeSeconds||0)>=3,
     reqText:()=>t('skilltree_req_headvoice'),
     progressText:()=>`${t('skilltree_bestcrossing')}: ${progress.bestBridgeSeconds||0}s / 3s`},
-  {id:'chestvoice', get label(){return t('skilltree_label_chestvoice');},  icon:'🔥', x:290, y:250, requires:['agility'],
+  {id:'chestvoice', get label(){return t('skilltree_label_chestvoice');},  x:290, y:250, requires:['agility'],
     isUnlocked:()=>{ const s=computeSkillProfile(); return s.breath!==null && s.breath>=60; },
     reqText:()=>t('skilltree_req_chestvoice'),
     progressText:()=>{ const s=computeSkillProfile(); return s.breath!==null ? `${t('skilltree_current')}: ${s.breath}% / 60%` : t('skilltree_prog_chestvoice'); }},
@@ -21282,7 +21420,7 @@ function selectSong(id){
   currentSongId = id;
   SONG = SONGS[id];
   const s = SONG;
-  document.getElementById('choirTrackTitle').textContent = `${s.name} — ${s.key} (${s.chordLabels.length} chords)`;
+  cwRenderScore();
   if(typeof renderSongDifficulty==='function') renderSongDifficulty();
   if(typeof renderSonicXray==='function'){ microscope.t = null; renderSonicXray(); }
   if(typeof renderReadiness==='function') renderReadiness();
