@@ -1673,6 +1673,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-subnav::-webkit-scrollbar{display:none;}
   .cw-subnav-wrap{min-width:0;}
   .cw-subnav button{flex:1 0 auto;white-space:nowrap;padding:0 var(--hl-s2);}
+  @media (max-width:479px){ /* 2.6: text tabs that scroll sideways; the edge that overflows fades */
+    .cw-subnav.hl-seg{border:0;border-radius:0;padding:0;gap:var(--hl-s4);border-bottom:var(--hl-hair) solid var(--hl-rule);}
+    .cw-subnav.hl-seg button{flex:0 0 auto;padding:0;border-radius:0;background:none;color:var(--hl-ink-2);border-bottom:2px solid transparent;}
+    .cw-subnav.hl-seg button[aria-selected="true"]{background:none;color:var(--hl-ink);border-bottom-color:var(--hl-ink);}
+    .cw-subnav[data-fade~="end"]{-webkit-mask-image:linear-gradient(to right, black calc(100% - 32px), transparent);mask-image:linear-gradient(to right, black calc(100% - 32px), transparent);}
+    .cw-subnav[data-fade~="start"]{-webkit-mask-image:linear-gradient(to left, black calc(100% - 32px), transparent);mask-image:linear-gradient(to left, black calc(100% - 32px), transparent);}
+    .cw-subnav[data-fade~="start"][data-fade~="end"]{-webkit-mask-image:linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);mask-image:linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);}
+  }
   @media (max-width:959px){
     .cw-subnav-wrap{position:sticky;top:56px;z-index:30;background:var(--hl-bg);padding:var(--hl-s2) 0;margin:0 calc(-1 * var(--hl-s4));padding-left:var(--hl-s4);padding-right:var(--hl-s4);}
   }
@@ -1695,14 +1703,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-sec-line{stroke:var(--hl-rule);stroke-width:1;}
   .cw-sec-box{fill:none;stroke:var(--hl-ink-3);stroke-width:1;}
   .cw-sec-label{fill:var(--hl-ink-2);font-size:11px;font-weight:600;text-anchor:middle;}
-  .cw-breath{fill:none;stroke:var(--hl-ink-2);stroke-width:1.5;stroke-linecap:round;}
+  .cw-breath{fill:var(--hl-ink-3);font:700 15px var(--hl-font);}
   .cw-playhead{stroke:var(--hl-ink);stroke-width:1.5;opacity:0;}
   .cw-curnote{fill:var(--hl-ink);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;}
   .cw-voice{fill:none;stroke:var(--hl-voice);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
   /* the rehearsal's controls; on the stage the lanes fill its width */
   .cw-stage{display:grid;gap:var(--hl-s3);margin-top:var(--hl-s3);}
   .cw-stage.is-live{width:100%;display:flex;}
-  .cw-stage.is-live > *{width:100%;}
+  .cw-stage.is-live{max-width:760px;}
+  .cw-stage.is-live > .cw-lanes-wrap, .cw-stage.is-live > svg.cw-lanes, .cw-stage.is-live > .hv-box, .cw-stage.is-live > .cw-cue{width:100%;align-self:stretch;}
   .cw-transport{display:flex;align-items:center;gap:var(--hl-s3);flex-wrap:wrap;}
   .cw-stage.is-live .cw-transport{justify-content:center;}
   .hl-key[data-key="hear"]{--led:var(--hl-voice);}
@@ -1723,7 +1732,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #rehearsalLevels .rh-level{background:none;border:0;padding:var(--hl-s1) 0;min-height:var(--hl-touch);text-align:center;display:grid;align-content:start;gap:2px;color:var(--hl-ink-3);box-shadow:none;}
   #rehearsalLevels .rh-level .rh-level-pct, #rehearsalLevels .rh-level .rh-level-bar{display:none;}
   #rehearsalLevels .rh-level .rh-level-num{font-size:11px;color:inherit;}
-  #rehearsalLevels .rh-level .rh-level-name{font-size:11px;line-height:1.25;color:inherit;font-weight:500;overflow-wrap:anywhere;hyphens:auto;}
+  #rehearsalLevels .rh-level .rh-level-name{font-size:11px;line-height:1.25;color:inherit;font-weight:500;overflow-wrap:normal;hyphens:none;}
+  #rehearsalLevels .rh-level .rh-level-n{display:none;font-size:var(--hl-t-small);font-variant-numeric:tabular-nums;}
+  .cw-level-now{display:none;margin:var(--hl-s2) 0 0;font-size:var(--hl-t-body);font-weight:600;color:var(--hl-ink);}
+  @media (max-width:767px){ /* 2.6: the numbers 1–5 under the ticks; the current level named under the fader */
+    #rehearsalLevels .rh-level .rh-level-num, #rehearsalLevels .rh-level .rh-level-name{display:none;}
+    #rehearsalLevels .rh-level .rh-level-n{display:block;}
+    #rehearsalLevels .rh-level{min-height:var(--hl-touch);align-content:center;}
+    .cw-level-now{display:block;}
+  }
   #rehearsalLevels .rh-level.active{color:var(--hl-ink);}
   #rehearsalLevels .rh-level.active .rh-level-name{font-weight:700;}
   /* readiness: your part on one row, the five parts folded */
@@ -1777,24 +1794,25 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-dna-val{font-size:var(--hl-t-small);color:var(--hl-ink);font-variant-numeric:tabular-nums;}
   .cw-dna-bar{grid-column:1 / -1;}
   .cw-dna-bar > i{background:var(--hl-ink);}
-  .cw-moment{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:var(--hl-s3);padding:var(--hl-s2) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .cw-moment{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--hl-s3);padding:var(--hl-s2) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
   .cw-flame{width:18px;height:18px;color:var(--hl-ink-2);}
   .cw-moment-text{font-size:var(--hl-t-small);color:var(--hl-ink);}
   .cw-moment-time{font-variant-numeric:tabular-nums;color:var(--hl-ink-2);}
-  .cw-moment-btn{grid-column:2;justify-self:start;}
-  @media (min-width:768px){ .cw-moment{grid-template-columns:auto minmax(0,1fr) auto;} .cw-moment-btn{grid-column:auto;} }
+  .cw-moment-btn{justify-self:end;min-height:36px;padding:0 var(--hl-s3);font-size:var(--hl-t-small);}
   /* Song Lab is one card: the cards inside it (Song DNA, X-Ray) are its sections, not cards in a card */
   #panel-choir[data-cw-tab="songlab"] .key-card .key-card{background:none;border:0;border-top:var(--hl-hair) solid var(--hl-rule);border-radius:0;box-shadow:none;padding:var(--hl-s5) 0 0;margin:var(--hl-s5) 0 0 !important;}
   /* the mixer: one channel strip per part, rows at 390, vertical strips from 768 */
   .cw-mixer{display:grid;gap:0;margin:var(--hl-s3) 0;}
-  .track-row.cw-strip{display:grid;grid-template-columns:5.5em minmax(0,1fr) auto;grid-template-areas:"name fader keys" "vu vu vu";align-items:center;gap:var(--hl-s1) var(--hl-s3);
+  .track-row.cw-strip{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"name vu" "fader keys";align-items:center;gap:var(--hl-s1) var(--hl-s3);
     padding:var(--hl-s2) 0;margin:0;background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;}
   .cw-strip-name{grid-area:name;display:flex;align-items:center;gap:var(--hl-s2);font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink);min-width:0;}
   .cw-strip-name .swatch{width:8px;height:8px;border-radius:50%;flex:none;}
-  .cw-strip-vu{grid-area:vu;}
+  .cw-strip-vu{grid-area:vu;width:96px;align-self:center;}
   .cw-strip-vu > i{background:var(--part);}
   .cw-strip .hl-fader{grid-area:fader;}
-  .cw-strip-keys{grid-area:keys;display:flex;gap:var(--hl-s2);}
+  .cw-strip-keys{grid-area:keys;display:flex;gap:var(--hl-s1);}
+  .cw-strip .hl-key{width:44px;min-width:44px;height:36px;padding:0;font-size:10px;letter-spacing:.02em;}
+  .cw-pass-head{display:grid;gap:var(--hl-s2);margin-bottom:var(--hl-s4);}
   .cw-strip .hl-key[data-key="solo"]{--led:var(--part);}
   @media (min-width:768px){
     .cw-mixer{grid-template-columns:repeat(5, minmax(0,1fr));gap:var(--hl-s3);}
@@ -4571,7 +4589,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- CHOIR PASSPORT PANEL (Choir World phase 7) -->
   <section class="panel" id="panel-choirpassport">
     <div class="cw-songhead" data-cw-head data-cw-sec="passport"></div>
-    <div class="journey-hero">
+    <div class="cw-pass-head" data-cw-sec="passport">
+      <h2 class="hl-h2" data-i18n="cp_title">Choir Passport</h2>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="cp_sub">Your ensemble identity in one place.</p></details>
+    </div>
+    <div class="journey-hero" data-cw-sec="hidden">
       <div class="j-title" data-i18n="cp_title">Choir Passport</div>
       <div class="j-sub" data-i18n="cp_sub">Your ensemble identity in one place. Every field comes from runs you've actually done in Choir World. Nothing new is measured and nothing is filled in to cover a gap.</div>
     </div>
@@ -4837,6 +4859,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <input type="range" class="hl-fader cw-level-fader" id="rehearsalLevelFader" min="0" max="4" step="1" value="0" list="rehearsalLevelTicks">
       <datalist id="rehearsalLevelTicks"><option value="0"></option><option value="1"></option><option value="2"></option><option value="3"></option><option value="4"></option></datalist>
       <div class="rh-levels cw-level-labels" id="rehearsalLevels" role="group"></div>
+      <p class="cw-level-now" id="rehearsalLevelNow"></p>
       <p class="desc" id="rehearsalLevelDesc" style="margin:4px 0 12px;"></p>
       <div class="transport-row vc-visually-hidden" style="margin:0;">
         <button class="ghost-btn" id="rehearsalPrevBtn" data-i18n="rehearsal_prev_btn">← Previous level</button>
@@ -15311,6 +15334,7 @@ function renderRehearsalLevels(){
     const pct = Math.round(lv.guide*100);
     const pctLabel = pct===0 ? t('rehearsal_noguide') : `${pct}% ${t('rehearsal_guide_word')}`;
     return `<button class="rh-level${i===cur?' active':''}${i<cur?' passed':''}" data-rh-level="${i}" aria-pressed="${i===cur}">
+      <span class="rh-level-n" aria-hidden="true">${i+1}</span>
       <span class="rh-level-num">${t('rehearsal_level_word')} ${i+1}/5</span>
       <span class="rh-level-name">${t('rehearsal_level_'+lv.key)}</span>
       <span class="rh-level-pct">${pctLabel}</span>
@@ -15321,6 +15345,7 @@ function renderRehearsalLevels(){
   fader.value = cur; fader.style.setProperty('--val', (cur/(REHEARSAL_LEVELS.length-1)*100)+'%');
   fader.setAttribute('aria-valuetext', `${t('rehearsal_level_word')} ${cur+1}/5 · ${t('rehearsal_level_'+REHEARSAL_LEVELS[cur].key)}`);
   fader.disabled = harmonyMemory.active || challenge.active;
+  document.getElementById('rehearsalLevelNow').textContent = `${t('rehearsal_level_word')} ${cur+1} · ${t('rehearsal_level_'+REHEARSAL_LEVELS[cur].key)}`;
   document.getElementById('rehearsalLevelDesc').textContent = t('rehearsal_level_'+REHEARSAL_LEVELS[cur].key+'_desc');
   document.getElementById('rehearsalPrevBtn').disabled = cur===0;
   document.getElementById('rehearsalNextBtn').disabled = cur===REHEARSAL_LEVELS.length-1;
@@ -15353,10 +15378,11 @@ let cwVoice = []; // [{t: song seconds, midi}], the current run's voice (display
 let cwLanePart = null; // the part the lanes make bold, when it isn't the rehearsal's (a Your Choir take)
 function cwVoiceReset(){ cwVoice = []; }
 function cwVoicePush(songT, f){ if(f>0) cwVoice.push({t:songT, midi:69 + 12*Math.log2(f/440)}); }
-function cwLaneGeom(part){
+function cwLaneGeom(part, w=0){
+  const k = w>=600 ? 1.45 : 1; // wide: taller lanes
   let y = CW_LANE_TOP; const lanes = {};
   CW_LANES.forEach(p=>{
-    const h = p===part ? CW_LANE_MINE : CW_LANE_OTHER, notes = SONG.parts[p].notes;
+    const h = Math.round((p===part ? CW_LANE_MINE : CW_LANE_OTHER)*k), notes = SONG.parts[p].notes;
     lanes[p] = {y, h, lo:Math.min(...notes)-(p===part ? 2 : 0), hi:Math.max(...notes)+(p===part ? 2 : 0)};
     y += h + CW_LANE_GAP;
   });
@@ -15367,7 +15393,7 @@ const cwLaneY = (ln, midi, bar)=>{ const pad = bar/2 + 2, span = Math.max(1, ln.
 function renderCwLanes(svg, opts={}){
   if(!svg) return;
   const w = Math.round(svg.getBoundingClientRect().width) || svg.__cwW || 358;
-  const part = cwLanePart || partRehearsal.part, n = SONG.parts.Lead.notes.length, colW = (w-CW_LANE_GUTTER)/n, {lanes, H} = cwLaneGeom(part);
+  const part = cwLanePart || partRehearsal.part, n = SONG.parts.Lead.notes.length, colW = (w-CW_LANE_GUTTER)/n, {lanes, H} = cwLaneGeom(part, w);
   const key = [currentSongId, SONG.tempo, SONG.key, part, w, currentLanguage].join('|');
   svg.__cwW = w; svg.__cwKey = key; svg.__cwGeo = {lanes, colW, n, H};
   let html = '';
@@ -15386,7 +15412,7 @@ function renderCwLanes(svg, opts={}){
   const mineLane = lanes[part];
   breathMapData(part).pts.forEach(pt=>{
     const x = (pt.from+pt.to)/2/(songChordDurMs()/1000)*colW;
-    html += `<path class="cw-breath" d="M${x-3} ${mineLane.y+1} q3 4 0 8"/>`;
+    html += `<text class="cw-breath" x="${x}" y="${mineLane.y-1}" text-anchor="middle">’</text>`; // the breath mark
   });
   html += `<path class="cw-voice" d=""/><text class="cw-curnote" x="0" y="${mineLane.y+12}"></text><line class="cw-playhead"${svg.id==='rehearsalRoll' ? ' id="rehearsalPlayhead"' : ''} x1="0" x2="0" y1="18" y2="${H-CW_LANE_GAP}"/>`;
   svg.setAttribute('viewBox', `0 0 ${w} ${H}`);
@@ -17575,12 +17601,26 @@ function cwRenderScore(){
   if(title) title.textContent = t('choir_track_title_tpl').replace('{song}', songTitle(currentSongId)).replace('{key}', s.key).replace('{n}', s.chordLabels.length);
   if(meta) meta.textContent = t('choir_song_'+currentSongId+'_tag');
 }
+// The sub-nav as scrolling text tabs (under 480 px): the current tab in view, a fade on each edge that overflows
+function cwSubnavFade(nav){
+  const f = [];
+  if(nav.scrollLeft > 2) f.push('start');
+  if(nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 2) f.push('end');
+  nav.dataset.fade = f.join(' ');
+}
 function renderCwStructure(){
   cwRenderScore();
   cwMixerSync();
   document.querySelectorAll('[data-cw-head]').forEach(head=>{
     const tab = head.closest('section.panel').dataset.cwTab;
     head.innerHTML = tab && tab!=='landing' ? cwSongHeadHtml(tab) : '';
+    const nav = head.querySelector('.cw-subnav');
+    if(nav){
+      const cur = nav.querySelector('[aria-selected="true"]');
+      if(cur && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = Math.max(0, cur.offsetLeft - (nav.clientWidth - cur.offsetWidth)/2);
+      cwSubnavFade(nav);
+      nav.addEventListener('scroll', ()=>cwSubnavFade(nav), {passive:true});
+    }
   });
   renderCwLanding();
   renderCwTrainerList();
@@ -18965,7 +19005,7 @@ function renderSongDna(leadNotes, lowest, highest, jumps, maxJump){
     ? moments.map((m,i)=>{
         const totalSec = Math.round(m.time/1000);
         const mm = Math.floor(totalSec/60), ss = String(totalSec%60).padStart(2,'0');
-        return `<div class="cw-moment"><svg class="hl-icon cw-flame" aria-hidden="true"><use href="#hl-flame"/></svg><span class="cw-moment-text"><span class="cw-moment-time">${mm}:${ss}</span> ${m.label}</span><button class="hl-btn hl-btn--quiet cw-moment-btn" data-song-dna-practice="${m.midi}" type="button">${t('songdna_practicethis')}</button></div>`;
+        return `<div class="cw-moment"><svg class="hl-icon cw-flame" aria-hidden="true"><use href="#hl-flame"/></svg><span class="cw-moment-text"><span class="cw-moment-time">${mm}:${ss}</span> ${m.label}</span><button class="hl-btn cw-moment-btn" data-song-dna-practice="${m.midi}" type="button">${t('songdna_practicethis')}</button></div>`;
       }).join('')
     : `<p class="desc" style="color:var(--muted);">${t('songdna_shortsong')}</p>`;
 

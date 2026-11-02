@@ -391,6 +391,9 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - Part 1 (2.1–2.3) pushed 2026-11-02 12:10 IST: review/phase5-part1 (9409169), redesign/phase5 3e05d9a. The user
   approved the structure and added 2.6 (seven fixes, verbatim in PHASE5.md), built after 2.5 and before the checks; the
   final screenshots include its screens.
+- Built 2026-11-02: 2.4 and 2.5 in one commit (eaaee8f; their edits interleave), 2.6 next. Still to do: the checks
+  (PHASE5.md §3, one at a time; choirregress is ~7 h), final screenshots (shots5after.js --set final, plus the 2.6
+  screens), push redesign/phase5 and review/phase5, report.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
