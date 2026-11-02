@@ -1,30 +1,33 @@
 // Phase 5 checks: Choir Bosses, Chaos Mode, Tempo/Key Ladder.
 // Usage: node scripts/choir-verify/p5.js [fx|score|i18n|all] [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const which = process.argv[2] || 'all';
 const url = process.argv[3] || 'http://localhost:8765/';
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('p5');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await browser.newContext({ permissions: ['microphone'] });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-  await page.goto(url, { waitUntil: 'load' });
+  H.step('load'); await page.goto(url, { waitUntil: 'load' });
   await sleep(3000);
+  await H.signUp(page, 'cvp5'); H.step('setup');
   const ev = (f, a) => page.evaluate(f, a);
   await ev(() => { localStorage.removeItem('choirChallengeBest'); enterPanel('partrehearsal'); });
   await sleep(500);
   await ev(() => { selectSong('hymn'); setRehearsalPart('Alto'); setRehearsalLevel(0); });
 
   const waitSongT = async sec => { for (;;) { const t = await ev(() => audioCtx.currentTime - choirStartCtxTime); if (t >= sec) return t; await sleep(Math.max(10, (sec - t) * 1000 - 30)); } };
-  const start = async (kind) => ev(async k => {
+  let runs = 0; // each run is its own step: a run that never starts or never ends fails with its name
+  const start = async (kind) => (H.step(`${kind} run ${++runs}`, 150), ev(async k => {
     document.getElementById({ boss: 'cbStartBtn', chaos: 'cxStartBtn', ladder: 'tkStartBtn' }[k]).click();
     while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20));
-  }, kind);
+  }, kind));
   // Real measurement taps: a 4096-sample analyser after each part's mixer GainNode; pitch via the app's autoCorrelate.
   const installTaps = () => ev(async () => {
     await initAudioOnly(); ensureChoirGainNodes();
@@ -136,6 +139,7 @@ const url = process.argv[3] || 'http://localhost:8765/';
   }
 
   if (which === 'all' || which === 'i18n') {
+    H.step('i18n');
     for (const lang of ['fr', 'es', 'tr', 'en']) {
       console.log(`\n== ${lang}`);
       console.log(await ev(async l => { await setLanguage(l); return { cb: cbDesc.textContent, boss: document.getElementById('cbBossDesc').textContent, bosses: cbBosses.innerText.replace(/\s+/g, ' '), bars: cbBossHpText.textContent + ' / ' + cbLivesText.textContent, cx: cxDesc.textContent, cxBest: cxBest.textContent, tk: tkDesc.textContent, rung: tkRungDesc.textContent, rungs: tkRungs.innerText.replace(/\s+/g, ' '), start: [cbStartLabel, cxStartLabel, tkStartLabel].map(e => e.textContent), results: cxResults.innerText.slice(0, 160) }; }, lang));
@@ -143,5 +147,5 @@ const url = process.argv[3] || 'http://localhost:8765/';
   }
 
   console.log('\npage errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

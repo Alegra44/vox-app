@@ -1,16 +1,18 @@
 // Stage 6 (From memory) with a French switch mid-run. Usage: node s6fr.js <url>
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('s6fr');
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await b.newContext({ permissions: ['microphone'] });
   const p = await ctx.newPage();
   const errors = [];
   p.on('pageerror', e => errors.push(String(e)));
   await p.addInitScript(() => localStorage.setItem('language', 'en'));
-  await p.goto(url); await sleep(3500);
+  H.step('load'); await p.goto(url); await sleep(3500);
+  await H.signUp(p, 'cvs6fr');
   const ev = (f, a) => p.evaluate(f, a);
   const songT = () => ev(() => audioCtx.currentTime - choirStartCtxTime);
   const waitSongT = async s => { for (;;) { const t = await songT(); if (t >= s) return; await sleep(Math.max(10, (s - t) * 1000 - 30)); } };
@@ -29,6 +31,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
       breathCue: document.getElementById('bmLive').textContent,
     };
   });
+  H.step('stage 6 run with a French switch');
   await ev(() => { localStorage.setItem('harmonyMemoryBest', JSON.stringify({ hymn: { Alto: [100, 100, 100, 100, 100] } })); enterPanel('partrehearsal'); setRehearsalPart('Alto'); });
   await sleep(300);
   await ev(() => document.querySelector('#hmemStages [data-hm-stage="5"]').click());
@@ -42,5 +45,5 @@ const url = process.argv[2] || 'http://localhost:8765/';
   await waitSongT(27.1); await sleep(300);
   console.log('after finish', JSON.stringify(await ev(() => ({ active: harmonyMemory.active, memoryFlag: partRehearsal.memory, acappella: partRehearsal.acappella, result: document.getElementById('hmemResults').innerText.split('\n').slice(0, 6) }))));
   console.log('page errors:', errors);
-  await b.close();
+  await H.finish();
 })();

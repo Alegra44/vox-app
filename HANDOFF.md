@@ -338,6 +338,49 @@ Spec: `design/house-lights/PHASE3.md` (phase 3 and 3.1, verbatim). Approved by t
   warmup-entries 52/0, levelup 45/0, cv-p9 exit 0, cv-p10 exit 0 (7 MATCH); test accounts 0 left.
 - Known flake: cv-p9 can time out at sign-up (backend); it passed on both re-runs.
 
+### Phase 5a, the Choir World test scripts (`tests/choir-verify`): DONE 2026-11-01; 5a.1 in progress 2026-11-02
+Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no app changes.
+- Before (`scripts/choir-verify/logs/5a-before-2026-11-01T07-34`): desc, paywall pass; shot, verify, live, live5, live6
+  fail fast signed out; fix, s6fr, p5, p7, peaks, timing hang (killed at 20 min); live7, live9, modalz, p7signed, p9,
+  p10, yc run; p8 can't start (no accounts file).
+- Fixes (e37d96c): `harness.js`, an own tracked test account per script, a limit per step and overall (10 min; p8 15,
+  yc 15, p9 20, p10 25: their usual 6–11 min), cleanup however it ends; p8 makes its own tier accounts. Smoke
+  (`logs/5a-smoke-10-35`) 19/21, both failures script bugs, fixed.
+- Counted runs (`logs/5a-runs-11-48`): 63/63 pass (each script 3/3). Pass = exit 0, no "FAILED (", no page errors, no
+  MISMATCH, paywall bad: 0. A home-Wi-Fi drop failed desc/shot/verify #1 (ERR_INTERNET_DISCONNECTED, `network-drop/`);
+  rerun.
+- Choir group in suites.sh and prod.sh (`ONLY="choir"`, limit 3× the usual minutes, 30 at most).
+- Reported, not rewritten: timing.js runs to the end but its own check fails (errors ~1.2–1.7 s, "should match within
+  a few ms"). Script, not app: its stand-in feeds `analyser`, but since 4c57929 (2026-10-15) the Entrance & Cutoff
+  Trainer reads `readRawMic()` (`micG.rawAn`), so it hears the fake mic's beep. The other scripts' stand-ins feed pitch,
+  which still reads `analyser` (p9: silent 0, sung 100). p7's label "(signed out, so nothing is sent)" is outdated.
+  Most scripts print values rather than a verdict.
+- 5a.1 (approved 2026-11-01, verbatim in PHASE5A.md): timing.js's stand-in enters through getUserMedia (every note now
+  reads +20/+21 ms, the known output/input latency item; 3/3 identical); p7's line fixed. Choir regress mode:
+  `scripts/choir-verify/choirregress.sh <branch|working> [base]` (master's and the branch's build in the same run, 3
+  runs per side, base :8766, branch :8767) and `choircompare.js` (medians, ±2 or master's A/A range from
+  `aa-ranges.json`). The A/A proof (master against itself) writes `aa-ranges.json`.
+- A/A proof 2026-11-02 (logs/regress-2026-11-01T19-01-40, master 34bf80d both sides, 3 runs each, 7 h): raw, 7 of 21
+  scripts "moved". Causes, all fixed in the comparer: lines that come a different number of times per run (Chaos
+  Mode's random chords, verify's arrays of varying length) were lined up by occurrence, so they're now counted as
+  variable and not compared; times of day and Turkish dates are masked; failed runs are left out of the numbers. Two
+  runs failed signing up (p5 branch #1, live6 base #2: auth timeout, nothing measured): choirregress.sh now keeps such
+  a run as .failed and runs it once more. What's left is real noise and goes into aa-ranges.json: timing 17–20 ms,
+  p5 onset 5–16 ms, yc VU ±4, live9 network save times, random Chaos scores. A 10 ms shift in timing still fails.
+  Independent check (not circular): `ONLY="live5 live6 live7 live9 p5 p7 timing yc" RUNS=3 choirregress.sh master`,
+  2026-11-02 07:33–10:25 IST (logs/regress-2026-11-02T02-03-53, compare.txt): 7 of 8 pass, all 48 runs exit 0; live9
+  failed on one network value only (save #3 returned after 1450–1969 ms on base, 1728–2427 ms on branch, same build:
+  Supabase round-trip, not the build). Both A/A runs are now in aa-ranges.json (widest range per value), so live9's
+  save times have wide ranges: they measure the network.
+- Not committed yet, kept in the working tree: `scripts/design-verify/shots5.js` (phase 5 screenshots, not yet run) and
+  `design/house-lights/.phase5-wip/` (the survey draft PHASE5_SURVEY.md with `__MASTER__`/`__SHOTNOTES__` to fill, and
+  the copy checker cwcopy.py with its outputs). Both go to redesign/phase5.
+- **The choir group is opt-in** (`ONLY=choir` or `WITH_CHOIR=1`; not in a default suites.sh/prod.sh run any more, which
+  used to include cv-live7, cv-modalz, cv-p9 and cv-p10). **Required for phases 5, 6 and 10**, with choirregress.sh as
+  the gate.
+- Then: merge tests/choir-verify (no deploy: test code only), and the phase 5 survey on redesign/phase5
+  (PHASE5_SURVEY.md, shots5.js → review/phase5-before).
+
 ## Waiting on the user (don't start without a go-ahead)
 
 - **Stripe / billing:** payments are still simulated. Billing columns and `trial_start_date` are server-only

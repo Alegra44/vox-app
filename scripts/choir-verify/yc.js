@@ -10,7 +10,7 @@
 // YC_WAV=<file> sings a real voice instead (vibfix's stim-S1.wav, a held sung note) for the level comparison.
 // Then BALANCE (the take against the choir parts) and STUDIO (a 15 s Studio take's clipped samples).
 // Usage: node scripts/choir-verify/yc.js [url]   (YC_MIC_ONLY=1 stops after the real-mic take; YC_WAV=<wav> the mic's file)
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const path = require('path'), fs = require('fs');
 const { TESTDATA } = require('../testdata');
@@ -40,7 +40,9 @@ function toneWav() {
 }
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${process.env.YC_WAV || toneWav()}`] });
+  H.start('yc', { limitMin: 15 });
+  H.step('launch');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream', `--use-file-for-fake-audio-capture=${process.env.YC_WAV || toneWav()}`] });
   const ctx = await browser.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });
   const page = await ctx.newPage();
   await page.addInitScript(() => {
@@ -49,6 +51,7 @@ function toneWav() {
     MediaDevices.prototype.getUserMedia = function (c) { window.__gum.push(c.audio); return g.call(this, c); };
   });
   const errors = []; page.on('pageerror', e => errors.push(String(e))); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  H.step('load (yc.js:52)', 180);
   await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
   const ev = (f, a) => page.evaluate(f, a);
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) { await lang.click(); await sleep(300); }
@@ -59,11 +62,14 @@ function toneWav() {
   await ev(() => { const o = document.getElementById('onboardingOverlay'); if (o) o.style.display = 'none'; });
   console.log('signed up', email);
 
+  H.step('Real-mic take: Record Alto through the one stream (yc.js:62)', 180);
   console.log('== Real-mic take: Record Alto through the one stream');
   await ev(() => { enterPanel('choir'); selectSong('hymn'); });
   await sleep(500);
   await page.locator('#ycParts [data-yc-rec="Alto"]').click();
+  H.step('real-mic take: wait for the Alto take to start', 150);
   await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
+  H.step('real-mic take: until the Alto take ends', 150);
   await ev(async () => { while (yourChoir.recording) await new Promise(r => setTimeout(r, 50)); });
   const mic = await ev(async () => {
     const tk = ycTakes().Alto; if (!tk) return { error: 'no take: ' + document.getElementById('ycStatus').textContent };
@@ -78,6 +84,7 @@ function toneWav() {
   });
   // And what it plays back at: Play my choir with only this take, the output (choirOutNode, after the headroom trim)
   // in 100 ms windows from the song's start to its end: median level and windows 20 dB under it.
+  H.step('real-mic take: play it back to the end', 150);
   if (!mic.error) Object.assign(mic, await ev(async () => {
     const an = audioCtx.createAnalyser(); an.fftSize = 4096; choirOutNode.connect(an);
     // every sample after the playback limiter (playbackOutNode, what reaches the speakers): |x| ≥ 0.99 and the peak
@@ -119,6 +126,7 @@ function toneWav() {
     }, until);
     await tapsOn();
     await page.locator('#ycParts [data-yc-rec="Bass"]').click();
+    H.step('balance: wait for the Bass take to start', 150);
     await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
     bal.whileRecordingBass = await sample('!!yourChoir.recording');
     await ev(() => ycDelete('Bass'));
@@ -139,7 +147,7 @@ function toneWav() {
       return { clipped: over, samples: n, peakDb: +(20 * Math.log10(mx)).toFixed(2), durS: +b.duration.toFixed(1), note: document.getElementById('studioRecordNote').textContent };
     })));
   }
-  if (process.env.YC_MIC_ONLY) { console.log('page errors:', errors); await browser.close(); return; }
+  if (process.env.YC_MIC_ONLY) { console.log('page errors:', errors); await H.finish(); return; }
   await ev(() => ycDelete('Alto'));
 
   await ev(async () => {
@@ -175,6 +183,7 @@ function toneWav() {
   // Record one part through the real UI button while the stand-in "sings" that part's notes at amp.
   const record = async (part, amp, midSample) => {
     await page.locator(`#ycParts [data-yc-rec="${part}"]`).click();
+    H.step(`record ${part}: wait for the take to start`, 150);
     await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
     await ev(([p, a]) => {
       const cd = songChordDurMs() / 1000, t0 = yourChoir.recording.downbeat, { osc, g } = __mic;
@@ -183,6 +192,7 @@ function toneWav() {
     const status = [];
     for (const t of [-1, 5.0]) { await waitSongT(t); status.push(await ev(() => document.getElementById('ycStatus').textContent)); }
     if (midSample) console.log(`  while recording ${part}:`, fmt(await measure()));
+    H.step(`record ${part}: until the take ends`, 150);
     await ev(async () => { while (yourChoir.recording) await new Promise(r => setTimeout(r, 50)); });
     // Alignment: first onset in the decoded take after its recorded downbeat, and the onset of chord 2.
     const take = await ev(async p => {
@@ -197,7 +207,9 @@ function toneWav() {
     console.log(`Recorded ${part}: status ${JSON.stringify(status)} → ${await ev(() => document.getElementById('ycStatus').textContent)} | take ${JSON.stringify(take)}`);
   };
 
+  H.step('Record Alto (amp 0.5) (yc.js:200)', 180);
   console.log('== Record Alto (amp 0.5)'); await record('Alto', 0.5, true);
+  H.step('Record Bass (amp 0.5) — the Alto take should play back under (yc.js:201)', 180);
   console.log('== Record Bass (amp 0.5) — the Alto take should play back underneath'); await record('Bass', 0.5, true);
   console.log('rows:', await ev(() => [...document.querySelectorAll('#ycParts .yc-row')].map(r => r.innerText.replace(/\s+/g, ' ').trim())));
 
@@ -208,6 +220,7 @@ function toneWav() {
     const rows = [];
     for (const t of [1.5, 5.0, 11.5, 25.0]) { await waitSongT(t); rows.push(await measure()); }
     const vu = await ev(() => Object.fromEntries(['Soprano', 'Lead', 'Alto', 'Tenor', 'Bass'].map(p => [p, document.getElementById('vu' + p).style.width])));
+    H.step(`playback (${label}): until it ends`, 150);
     await ev(async () => { while (yourChoir.playing) await new Promise(r => setTimeout(r, 50)); });
     const pk = await ev(() => { const p = __pk; __pk = null; return { peak: +p.max.toFixed(3), peakDbfs: +(20 * Math.log10(p.max)).toFixed(2), pctOver: +(100 * p.over / p.n).toFixed(2) }; });
     console.log(`== Stacked playback: ${label}`); rows.forEach(r => console.log('  ' + fmt(r)));
@@ -223,10 +236,12 @@ function toneWav() {
   await play('Bass muted via the workspace mute state');
   await ev(() => { choirState.Bass.muted = false; updateAllChoirGains(); });
 
+  H.step('Record Soprano, Lead, Tenor near full scale (amp 0.95) for a (yc.js:226)', 180);
   console.log('== Record Soprano, Lead, Tenor near full scale (amp 0.95) for a 5-part stacked peak test');
   for (const p of ['Soprano', 'Lead', 'Tenor']) await record(p, 0.95, false);
   await play('all 5 parts, default faders');
 
+  H.step('Delete Bass, then play (yc.js:230)', 180);
   console.log('== Delete Bass, then play');
   await page.locator('#ycParts [data-yc-del="Bass"]').click();
   console.log('status:', await ev(() => document.getElementById('ycStatus').textContent), '| stored parts:', await ev(() => Object.keys(JSON.parse(localStorage.getItem('yourChoirTakes')).hymn)));
@@ -236,5 +251,5 @@ function toneWav() {
     console.log(`== ${lang}`, JSON.stringify(await ev(async l => { await setLanguage(l); return { title: document.querySelector('#yourChoirCard .step-label').textContent, summary: ycSummary.textContent, desc: ycDesc.textContent.slice(0, 90) + '…', rows: [...document.querySelectorAll('#ycParts .yc-row')].map(r => r.innerText.replace(/\s+/g, ' ').trim()), play: ycPlayBtn.textContent, stop: ycStopBtn.textContent, note: document.querySelector('[data-i18n="yc_storage_note"]').textContent }; }, lang), null, 1));
   }
   console.log('page errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

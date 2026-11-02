@@ -1,19 +1,20 @@
 // Live click-through on production: Harmony Memory stage 1 + Breath Map, via real mouse clicks.
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const fs = require('fs'), crypto = require('crypto');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const URL = 'https://deploy-alegra1122.vercel.app/';
+const URL = process.argv[2] || 'https://deploy-alegra1122.vercel.app/';
 const SHOTS = require('os').tmpdir() + '/';
 (async () => {
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('live');
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 } });
   const p = await ctx.newPage();
   const errors = [];
   p.on('pageerror', e => errors.push(String(e)));
   await p.addInitScript(() => localStorage.setItem('language', 'en'));
 
-  const resp = await p.goto(URL, { waitUntil: 'load' });
+  H.step('load'); const resp = await p.goto(URL, { waitUntil: 'load' });
   const liveHtml = await resp.text();
   const local = fs.readFileSync(require('path').join(__dirname, '../../deploy/index.html'), 'utf8');
   const h = s => crypto.createHash('sha256').update(s).digest('hex').slice(0, 16);
@@ -21,6 +22,7 @@ const SHOTS = require('os').tmpdir() + '/';
   await sleep(4000);
   const ev = (f, a) => p.evaluate(f, a);
 
+  await H.signUp(p, 'cvlive'); H.step('Songs → I Am the Part, Breath Map');
   // Real clicks: bottom nav Songs -> "I Am the Part" hub card Open.
   await p.locator('.shell-nav button, nav button').filter({ hasText: 'Songs' }).first().click();
   await sleep(600);
@@ -35,6 +37,7 @@ const SHOTS = require('os').tmpdir() + '/';
   console.log('== Breath Map (live)'); console.log(JSON.stringify(bm, null, 1));
   await p.locator('#breathMapCard').screenshot({ path: SHOTS + 'live-bm.png' });
 
+  H.step('Harmony Memory stage 1 run');
   // Harmony Memory: fresh state, click stage 1 then Start
   console.log('stages:', await ev(() => [...document.querySelectorAll('#hmemStages [data-hm-stage]')].map(x => (x.disabled ? 'locked' : 'open') + ':' + x.querySelector('.rh-level-name').textContent)));
   await p.locator('#hmemStages [data-hm-stage="0"]').click();
@@ -64,5 +67,5 @@ const SHOTS = require('os').tmpdir() + '/';
   // Hear the Mistake's own button must not start Harmony Memory
   console.log('page errors:', errors);
   await ev(() => localStorage.removeItem('harmonyMemoryBest'));
-  await b.close();
+  await H.finish();
 })();

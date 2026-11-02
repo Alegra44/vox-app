@@ -1,20 +1,23 @@
 // Verifies: playback end follows the audio clock; loop restart; result colours. Usage: node fix.js <url>
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {
-  const b = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('fix');
+  const b = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await b.newContext({ permissions: ['microphone'] });
   const p = await ctx.newPage();
   const errors = [];
   p.on('pageerror', e => errors.push(String(e)));
   await p.addInitScript(() => localStorage.setItem('language', 'en'));
-  await p.goto(url); await sleep(3500);
+  H.step('load'); await p.goto(url); await sleep(3500);
+  await H.signUp(p, 'cvfix');
   const ev = (f, a) => p.evaluate(f, a);
   const songT = () => ev(() => audioCtx.currentTime - choirStartCtxTime);
   const waitSongT = async s => { for (;;) { const t = await songT(); if (t >= s) return; await sleep(Math.max(10, (s - t) * 1000 - 30)); } };
 
+  H.step('Harmony Memory stage 1: playback end on the audio clock');
   await ev(() => { enterPanel('partrehearsal'); setRehearsalPart('Alto'); });
   // Record when choirIsPlaying flips false, in audio-clock song time, plus wall-clock elapsed.
   await ev(async () => {
@@ -29,6 +32,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
   console.log('playback ended at', JSON.stringify(await ev(() => __endAt)), '| scheduled end songT', await ev(() => (choirEndCtxTime - choirStartCtxTime).toFixed(3)));
   console.log('run finished:', await ev(() => !harmonyMemory.active && !!harmonyMemory.lastRun));
 
+  H.step('colours');
   // Colours: Harmony Memory result rows + timing trainer verdict classes
   console.log('colours', JSON.stringify(await ev(() => {
     const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
@@ -40,6 +44,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
       'real rows': [...document.querySelectorAll('#hmemResults .record-val')].map(e => e.textContent.split('·').pop().trim() + '=' + getComputedStyle(e).color) };
   }), null, 1));
 
+  H.step('rehearsal loop restart');
   // Looping rehearsal playback still restarts at the song end, on the audio clock.
   await ev(() => startPartRehearsal());
   await sleep(300);
@@ -51,5 +56,5 @@ const url = process.argv[2] || 'http://localhost:8765/';
   await sleep(200);
   console.log('after stop', JSON.stringify(await ev(() => ({ playing: choirIsPlaying, cue: bmLive.textContent }))));
   console.log('page errors:', errors);
-  await b.close();
+  await H.finish();
 })();

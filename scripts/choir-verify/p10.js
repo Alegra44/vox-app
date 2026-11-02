@@ -9,7 +9,7 @@
 //    that part's written notes; the real Download button is clicked and the WAV is saved, then decoded outside the
 //    browser by wavcheck.py. A second export with Bass muted and Alto at 50% on the mixer (real clicks) must match.
 // Usage: node scripts/choir-verify/p10.js [delta|export|all] [url]
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const { execFileSync } = require('child_process');
 const path = require('path'), fs = require('fs');
@@ -25,6 +25,7 @@ async function openPage(browser, errors) {
   const page = await ctx.newPage();
   page.on('pageerror', e => errors.push(String(e)));
   page.on('console', m => { if (m.type() === 'error' && !/progress (load|save) error|Not signed in/.test(m.text())) errors.push(m.text()); });
+  H.step('load (p10.js:28)', 180);
   await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
   const lang = page.locator('#languageSelectOverlay [data-lang="en"]');
   if (await lang.isVisible()) { await lang.click(); await sleep(300); }
@@ -57,7 +58,9 @@ function expectedDelta(row) {
 }
 
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('p10', { limitMin: 25 });
+  H.step('launch');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const errors = [];
   const page = await openPage(browser, errors);
   const ev = (f, a) => page.evaluate(f, a);
@@ -69,6 +72,7 @@ function expectedDelta(row) {
   await ev(() => ['choirChallengeBest', 'harmonyMemoryBest', 'rehearsalPasses', 'yourChoirTakes'].forEach(k => localStorage.removeItem(k)));
 
   if (mode === 'delta' || mode === 'all') {
+    H.step('DELTA (Demo Hymn, Alto) (p10.js:72)', 180);
     console.log('\n==== DELTA (Demo Hymn, Alto)');
     await ev(() => { enterPanel('partrehearsal'); selectSong('hymn'); setRehearsalPart('Alto'); setRehearsalLevel(0); harmonyMemory.stage = 0; renderPartRehearsal(); });
     const standIn = silent => ev(sil => {
@@ -78,9 +82,10 @@ function expectedDelta(row) {
       run.notes.forEach(nt => { const on = choirStartCtxTime + nt.start; osc.frequency.setValueAtTime(noteToFreq(nt.midi), on); g.gain.setValueAtTime(sil ? 0 : 0.3, on); g.gain.setValueAtTime(0, choirStartCtxTime + nt.end - 0.01); });
       analyser = an;
     }, !!silent);
-    const waitDone = () => ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); });
+    const waitDone = () => (H.step('until the run ends', 150), ev(async () => { while (harmonyMemory.active || challenge.active) await new Promise(r => setTimeout(r, 50)); }));
     const check = async label => {
       const h = await home(page);
+      H.step('database read/write (p10.js:84)', 150);
       const row = db(`select choir_readiness->'parts'->'hymn'->'Alto' as alto from public.user_progress where user_id = '${uid}'`)[0].alto;
       const exp = expectedDelta(row);
       const shown = h.delta ? h.delta.replace(/^📈\s*/, '') : null;
@@ -91,6 +96,7 @@ function expectedDelta(row) {
     const hm = async (stage, silent) => {
       const before = saves;
       await ev(s => { harmonyMemory.stage = s; renderPartRehearsal(); }, stage);
+      H.step(`Harmony Memory stage ${stage + 1} run`, 150);
       await ev(async () => { document.getElementById('hmemStartBtn').click(); while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
       await standIn(silent); await waitDone(); await settle(before);
       return ev(() => ({ score: harmonyMemory.lastRun.score, passed: harmonyMemory.lastRun.passed }));
@@ -98,6 +104,7 @@ function expectedDelta(row) {
     const boss = async slot => {
       const before = saves;
       await ev(s => { chSel.boss = s; renderChoirBosses(); }, slot);
+      H.step(`Boss ${slot + 1} run`, 150);
       await ev(async () => { document.getElementById('cbStartBtn').click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });
       await standIn(false); await waitDone(); await settle(before);
       return ev(() => ({ score: challenge.lastRun.boss.score, passed: challenge.lastRun.boss.passed }));
@@ -108,13 +115,14 @@ function expectedDelta(row) {
     await check(`HM stage 2 passed: ${JSON.stringify(await hm(1))}`);
     await check(`Boss 1: ${JSON.stringify(await boss(0))}`);
     let before = saves;
-    for (let L = 0; L < 5; L++) await ev(async l => { setRehearsalLevel(l); await startPartRehearsal(0); const s0 = choirStartCtxTime; while (choirStartCtxTime === s0) await new Promise(r => setTimeout(r, 50)); stopPartRehearsal(); }, L);
+    for (let L = 0; L < 5; L++) await (H.step(`rehearsal level ${L + 1} play-through`, 150), ev(async l => { setRehearsalLevel(l); await startPartRehearsal(0); const s0 = choirStartCtxTime; while (choirStartCtxTime === s0) await new Promise(r => setTimeout(r, 50)); stopPartRehearsal(); }, L));
     await settle(before);
     await check('5 level play-throughs');
     for (let s = 2; s < 5; s++) console.log(`HM stage ${s + 1}:`, JSON.stringify(await hm(s)));
     await check('HM stages 3–5 passed (still Developing: 1 boss)');
     const rR = await check(`Boss 2: ${JSON.stringify(await boss(1))} (→ Ready: the snapshot moves to the Developing record)`);
     console.log('\nsnapshot after 1st change kept its ts until the 2nd change:', r1.snap.ts, '→', rR.snap.ts);
+    H.step('database read/write (p10.js:118)', 150);
     const log = db(`select choir_readiness->'log' as log from public.user_progress where user_id = '${uid}'`)[0].log;
     console.log('status log:', JSON.stringify(log.map(l => ({ ts: new Date(l.ts).toISOString(), from: l.from, to: l.status }))));
 
@@ -135,6 +143,7 @@ function expectedDelta(row) {
   }
 
   if (mode === 'export' || mode === 'all') {
+    H.step('EXPORT (Demo Hymn: Soprano, Alto, Bass) (p10.js:138)', 180);
     console.log('\n==== EXPORT (Demo Hymn: Soprano, Alto, Bass)');
     await ev(async () => {
       enterPanel('choir'); selectSong('hymn'); await initAudioOnly(); ensureChoirGainNodes();
@@ -144,11 +153,13 @@ function expectedDelta(row) {
     });
     const record = async part => {
       await page.locator(`#ycParts [data-yc-rec="${part}"]`).click();
+      H.step(`record ${part}: wait for the take to start`, 150);
       await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
       await ev(p => {
         const cd = songChordDurMs() / 1000, t0 = yourChoir.recording.downbeat, { osc, g } = __mic;
         SONG.parts[p].notes.forEach((m, i) => { osc.frequency.setValueAtTime(noteToFreq(m), t0 + i * cd); g.gain.setValueAtTime(0.4, t0 + i * cd); g.gain.setValueAtTime(0, t0 + (i + CHOIR_NOTE_FRACTION) * cd); });
       }, part);
+      H.step(`record ${part}: until the take ends`, 150);
       await ev(async () => { while (yourChoir.recording) await new Promise(r => setTimeout(r, 50)); });
       console.log(`recorded ${part}:`, await txt(page, '#ycStatus'));
     };
@@ -197,5 +208,5 @@ function expectedDelta(row) {
   }
 
   console.log('\npage errors:', errors);
-  await browser.close();
-})().catch(e => { console.error(e); process.exitCode = 1; });
+  await H.finish();
+})().catch(e => H.fail(`step error: ${e && e.stack || e}`));

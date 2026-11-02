@@ -1,15 +1,20 @@
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
+const url = process.argv[2] || 'http://localhost:8765/';
 (async () => {
-  const b = await chromium.launch();
+  H.start('shot');
+  const b = await H.launch(); let state;
   for (const [w, name] of [[1280, 'desk'], [390, 'phone']]) {
-    const p = await b.newPage({ viewport: { width: w, height: 900 } }); await p.addInitScript(() => localStorage.setItem('language', 'en'));
-    await p.goto('http://localhost:8765/'); await p.waitForTimeout(3500);
+    H.step(`${name}: load`);
+    const p = await b.newPage({ viewport: { width: w, height: 900 }, storageState: state }); await p.addInitScript(() => localStorage.setItem('language', 'en'));
+    await p.goto(url); await p.waitForTimeout(3500);
+    if (!state) { await H.signUp(p, 'cvshot'); state = await p.context().storageState(); } // one account for both widths
+    H.step(`${name}: screenshots`);
     await p.evaluate(() => { localStorage.setItem('harmonyMemoryBest', JSON.stringify({hymn:{Alto:[88,60]}})); enterPanel('partrehearsal'); });
     await p.waitForTimeout(500);
-    await (await p.$('#breathMapCard')).screenshot({ path: `bm-${name}.png` });
-    await (await p.$('#harmonyMemoryCard')).screenshot({ path: `hm-${name}.png` });
+    await (await p.$('#breathMapCard')).screenshot({ path: `${require("os").tmpdir()}/bm-${name}.png` });
+    await (await p.$('#harmonyMemoryCard')).screenshot({ path: `${require("os").tmpdir()}/hm-${name}.png` });
     const sw = await p.evaluate(() => document.documentElement.scrollWidth); console.log(name, 'scrollWidth', sw);
   }
-  await b.close();
+  await H.finish();
 })();

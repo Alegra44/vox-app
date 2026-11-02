@@ -3,19 +3,21 @@
 // single Chaos surge chord can be read on its own. Run against production for "before", localhost for "after".
 // Usage: node scripts/choir-verify/peaks.js [url] [scenario,...]
 //   scenarios: hymn, requiem, hymnmax, chaos, drowner, pad4, pad5 (default: all)
-const { chromium } = require('playwright');
+const H = require('./harness'); // its own test account, time limits, cleanup however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
 const only = process.argv[3] ? process.argv[3].split(',') : null;
 const want = s => !only || only.includes(s);
 (async () => {
-  const browser = await chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
+  H.start('peaks');
+  const browser = await H.launch({ args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--use-fake-device-for-media-stream'] });
   const ctx = await browser.newContext({ permissions: ['microphone'] });
   const page = await ctx.newPage();
   await page.addInitScript(() => { localStorage.setItem('language', 'en'); localStorage.removeItem('choirChallengeBest'); });
   const errors = []; page.on('pageerror', e => errors.push(String(e)));
-  await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
+  H.step('load'); await page.goto(url, { waitUntil: 'load' }); await sleep(3000);
+  await H.signUp(page, 'cvpeaks'); H.step('output tap');
   const ev = (f, a) => page.evaluate(f, a);
   await ev(async () => {
     await initAudioOnly(); ensureChoirGainNodes(); ensureBackingGain();
@@ -43,6 +45,7 @@ const want = s => !only || only.includes(s);
 
   // Choir Workspace ▶ Play (plain playChoir, default mixer faders), whole song, no loop.
   const workspace = async (song, faders) => {
+    H.step(`Workspace play, ${song}${faders ? ', faders 100%' : ''}`, 150);
     await ev(([s, f]) => { enterPanel('choir'); selectSong(s); document.getElementById('choirLoopCheck').checked = false; if (f) Object.keys(choirState).forEach(p => { choirState[p].volume = f; document.getElementById('vol' + p).value = f * 100; }); updateAllChoirGains(); }, [song, faders]);
     await sleep(300);
     await ev(async () => { document.getElementById('choirPlayBtn').click(); while (!choirIsPlaying) await new Promise(r => setTimeout(r, 20)); });
@@ -59,6 +62,7 @@ const want = s => !only || only.includes(s);
   if (want('hymnmax')) { out('Workspace play, Hymn, faders 100%', await workspace('hymn', 1)); await restore(); }
 
   const challengeRun = async (kind, boss) => {
+    H.step(`${kind} run`, 150);
     await ev(([k, b]) => { selectSong('hymn'); enterPanel('partrehearsal'); setRehearsalPart('Alto'); if (b !== null) { localStorage.setItem('choirChallengeBest', JSON.stringify({ boss: { hymn: { Alto: { 0: 100, 1: 100, 2: 100, 3: 100, 4: 100 } } } })); chSel.boss = b; renderChoirBosses(); } }, [kind, boss]);
     await ev(async k => { document.getElementById({ boss: 'cbStartBtn', chaos: 'cxStartBtn' }[k]).click(); while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); }, kind);
     await standIn();
@@ -78,6 +82,7 @@ const want = s => !only || only.includes(s);
   // Backing pad (Stay in Key / Emotional Singing / Karaoke accompaniment), 4 and 5 parts.
   for (const [name, lead] of [['pad4', false], ['pad5', true]]) {
     if (!want(name)) continue;
+    H.step(`backing pad ${name}`, 150);
     await ev(() => selectSong('hymn'));
     const t0 = await ev(async l => await playBackingPad(l), lead);
     await reset(t0);
@@ -87,5 +92,5 @@ const want = s => !only || only.includes(s);
     await ev(() => stopBackingPad());
   }
   console.log('page errors:', errors);
-  await browser.close();
+  await H.finish();
 })();

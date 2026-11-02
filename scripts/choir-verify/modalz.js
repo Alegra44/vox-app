@@ -3,7 +3,7 @@
 // viewport, opens the modal with a real click on the Sign in button, checks which element is on top at
 // the toggle's centre, clicks the toggle and the submit button for real (no force), and waits for sign-in.
 // Usage: node scripts/choir-verify/modalz.js [url] [email password]  (no credentials: signs up a new account)
-const { chromium } = require('playwright');
+const H = require('./harness'); // time limits, closes the browser and deletes the accounts however it ends (PHASE5A.md)
 require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped for this script (see that file)
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const url = process.argv[2] || 'http://localhost:8765/';
@@ -12,12 +12,15 @@ let [email, password] = process.argv.slice(3);
 async function open(browser, viewport) {
   const ctx = await browser.newContext({ viewport });
   const p = await ctx.newPage();
+  H.step('load (modalz.js:15)', 180);
   await p.goto(url, { waitUntil: 'load' }); await sleep(3000);
   const lang = p.locator('#languageSelectOverlay [data-lang="en"]'); if (await lang.isVisible()) await lang.click();
   return p;
 }
 (async () => {
-  const b = await chromium.launch();
+  H.start('modalz', { limitMin: 10 });
+  H.step('launch');
+  const b = await H.launch();
   if (!email) {
     email = require('./testAccounts').track(`voxcoach-modalz-${Date.now()}@example.com`); // deleted when this run exits
     password = 'Mz-' + Date.now() + '!x';
@@ -43,5 +46,5 @@ async function open(browser, viewport) {
     console.log(`${vp.width}x${vp.height}: z modal ${z.modal} / nav ${z.nav} (nav shown: ${z.navShown}) | modal ${opened} | element on top at toggle (y ${top.y} of ${top.vh}): ${top.hit} | after toggle click authMode=${mode} | signed in as`, await p.evaluate(() => profile && (profile.email || profile.name)));
     await p.context().close();
   }
-  await b.close();
+  await H.finish();
 })();
