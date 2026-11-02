@@ -1,4 +1,32 @@
-# House Lights: the VoxCoach design system (v1.7)
+# House Lights: the VoxCoach design system (v1.8)
+
+v1.8 (2026-11-02, phase 5, spec `PHASE5.md`): Choir World. (a) Structure: a landing at the top of `panel-choir` (a
+raised "Continue" block from `cwHubStatus`, then the songs as `.hl-item` rows with your part's readiness; a song opens
+its Rehearse tab), and on every song page a sub-navigation (`.hl-seg`, `aria-selected`, the current tab also
+`aria-current`) under the title: Rehearse · Song Lab · Trainers · Your Choir · Passport. Rehearse and Trainers are
+`panel-partrehearsal`, Song Lab and Your Choir are `panel-choir`, Passport is `panel-choirpassport`; a tab enters its
+panel and sets `data-cw-tab` on it, and CSS shows only that tab's sections. Every element ID stays; sections only show
+or hide. Entering `choir` opens Song Lab, `partrehearsal` Rehearse, `choirpassport` Passport. The sub-nav is sticky
+under the header at 390 and off-stage on the stage. Trainers is a list of five `.hl-item` rows (name, status, best); a
+row shows that trainer alone with a back row. (b) Hidden, IDs kept: the Director Dashboard (its invented people break
+rule 5; it needs a real multi-user backend), the "Rehearse one part" chips, the second Choir Workspace card on the
+Songs tab, the workspace copy of Choir DNA (Passport keeps its own). One locked preview, on the landing; the panels
+keep theirs for deep links. (c) Rehearsal playback lights the stage (`houseSession` from Play to Stop or the end); the
+five lanes (Soprano, Lead, Alto, Tenor, Bass in part colours, your part bold, section letters as rehearsal marks, the
+playhead, breath marks and the current note on your lane) replace the piano roll; "Hear me" (`.hl-key`,
+`aria-pressed`, remembered on this device, off by default, on by default once the mic permission is granted) opens
+the mic and draws your voice on your lane, display only, counted as vocal load (`singingSession` with the stage); off
+means no mic. The guide level is an `input.hl-fader` with five detents labelled by the level buttons. (d) Song Lab:
+the score header (title from `choir_song_*_name`), Song DNA as ink bars with `hl-flame`, the mixer as channel strips
+(rows at 390, vertical strips from 768; `.hl-meter` VU, `.hl-fader` volume, Mute and Solo as `.hl-key` with LEDs),
+Sonic X-Ray as a dark lightbox (a `data-house="down"` inset in both themes that never changes the house), Music
+Microscope as a table that fits (two lines per part at 390; "vs Lead" a column from 768). (e) The six singing
+activities (Harmony Memory, Choir Bosses, Chaos Mode, Tempo/Key Ladder, Entrance & Cutoff, a Your Choir take) each get
+a stage, the five lanes with your live voice, passed to `singingSession` at its existing call; the Stop button on a
+stage is the neutral active pill; results on `.vc-result` with the big number in ink, the pass line and the next
+improvement as coach lines, report rows as dimension rows. (f) Copy: no emoji in Choir World (icons only where the
+sprite has one; boss cards show number and name), trainer descriptions one size, method text in `hl-measure`, no §7
+words. (g) Toasts sit at the top, under the header, at every width and over the stage, never over content.
 
 v1.7 (2026-10-26, phase 4b, spec `PHASE4B.md`): (a) every tool that opens the mic gets a stage, take tools and live tools
 alike; (b) live tools (no take: Register Coach, Live Feedback, Resonance) go down on Start and up on Stop, and have no

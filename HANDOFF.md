@@ -384,6 +384,15 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   34 per size at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json, english-in-fr.json). The first full
   shots run failed signing up (auth timeout after several sign-ups in a few minutes); the retry 3 min later passed.
 
+### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): IN PROGRESS from 2026-11-02 11:35 IST
+- Rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs. No merge or deploy until the user has reviewed the screenshots.
+- Out of phase 5 (the user's answers): AI Duet, the six Songs-tab solo tools and the Performance Report's own screen go
+  to phase 6. live9's save round-trip times leave the choir gate (still printed).
+- **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
+  13). Whether Choir World should feed them is a product decision for phase 7.
+- **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
+  (a director and their singers) before it can come back; later, not scheduled.
+
 ## Waiting on the user (don't start without a go-ahead)
 
 - **Stripe / billing:** payments are still simulated. Billing columns and `trial_start_date` are server-only
