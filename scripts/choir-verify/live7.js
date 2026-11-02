@@ -58,6 +58,7 @@ const PLAN = [
   await ev(() => { enterPanel('partrehearsal'); });
   await sleep(500);
   await ev(() => { selectSong('hymn'); setRehearsalPart('Alto'); setRehearsalLevel(0); harmonyMemory.stage = 0; renderPartRehearsal(); });
+  await H.cwFor(p, '#hmemStartBtn');
   await p.locator('#hmemStartBtn').scrollIntoViewIfNeeded();
   await p.locator('#hmemStartBtn').click();
   H.step('Harmony Memory run 1: start (live7.js:60)', 150);

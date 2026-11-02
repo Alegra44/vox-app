@@ -60,4 +60,30 @@ async function signUp(page, prefix, name = 'Choir Check') {
   return { email, password };
 }
 
-module.exports = { start, step, launch, finish, fail, signUp, sleep };
+// Phase 5 (PHASE5.md §1a): Choir World's song page shows one tab at a time ('rehearse' | 'songlab' | 'trainers' |
+// 'yourchoir' | 'passport'; Trainers shows one trainer alone: 'hm' | 'boss' | 'chaos' | 'ladder' | 'timing').
+// cwTab(page, tab, trainer) shows it before a script clicks or reads what is on it; cwFor(page, selector) shows the tab
+// (and trainer) the element is on. If its panel is already the active one only the tab changes (nothing is re-entered,
+// so what the script set up stays). On a build without the tabs (master) both do nothing: everything is shown there.
+const CW_SHOW = ({ tab, trainer, sel }) => {
+  if (typeof cwShowTab !== 'function') return null;
+  const TAB_PANEL = { rehearse: 'partrehearsal', songlab: 'choir', trainers: 'partrehearsal', yourchoir: 'choir', passport: 'choirpassport' };
+  if (sel) {
+    const el = document.querySelector(sel), sec = el && el.closest('[data-cw-sec]'), panel = el && el.closest('section.panel');
+    if (!sec || !panel) return null;
+    tab = sec.dataset.cwSec.split(' ').find(k => TAB_PANEL[k] === panel.id.replace('panel-', '')) || null;
+    trainer = (el.closest('[data-cw-card]') || {}).dataset?.cwCard || null;
+    if (!tab) return null;
+  }
+  const panel = document.getElementById('panel-' + TAB_PANEL[tab]);
+  if (panel.classList.contains('active')) {
+    panel.dataset.cwTab = tab;
+    if (tab === 'trainers' && trainer) panel.dataset.cwTrainer = trainer; else delete panel.dataset.cwTrainer;
+    renderCwStructure();
+  } else cwShowTab(tab, trainer);
+  return { tab, trainer };
+};
+const cwTab = async (page, tab, trainer = null) => { const r = await page.evaluate(CW_SHOW, { tab, trainer }); if (r) await sleep(300); return r; };
+const cwFor = async (page, sel) => { const r = await page.evaluate(CW_SHOW, { sel }); if (r) await sleep(300); return r; };
+
+module.exports = { start, step, launch, finish, fail, signUp, sleep, cwTab, cwFor };

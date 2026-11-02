@@ -26,8 +26,10 @@ const SHOTS = require('os').tmpdir() + '/';
   // Real clicks: bottom nav Songs -> "I Am the Part" hub card Open.
   await p.locator('.shell-nav button, nav button').filter({ hasText: 'Songs' }).first().click();
   await sleep(600);
-  const openBtn = p.locator('[data-enter-panel="partrehearsal"]:visible').first();
-  await openBtn.scrollIntoViewIfNeeded(); await openBtn.click();
+  if (!await H.cwTab(p, 'rehearse')) { // phase 5: the card opens Choir World; the rehearsal is its Rehearse tab
+    const openBtn = p.locator('[data-enter-panel="partrehearsal"]:visible').first();
+    await openBtn.scrollIntoViewIfNeeded(); await openBtn.click();
+  }
   await sleep(800);
   console.log('panel active:', await ev(() => document.getElementById('panel-partrehearsal').classList.contains('active')));
   await p.locator('#rehearsalPartRow [data-rh-part="Alto"]').click();
@@ -40,6 +42,7 @@ const SHOTS = require('os').tmpdir() + '/';
   H.step('Harmony Memory stage 1 run');
   // Harmony Memory: fresh state, click stage 1 then Start
   console.log('stages:', await ev(() => [...document.querySelectorAll('#hmemStages [data-hm-stage]')].map(x => (x.disabled ? 'locked' : 'open') + ':' + x.querySelector('.rh-level-name').textContent)));
+  await H.cwFor(p, '#hmemStages');
   await p.locator('#hmemStages [data-hm-stage="0"]').click();
   await p.locator('#hmemStartBtn').click();
   await ev(async () => { while (!(harmonyMemory.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });

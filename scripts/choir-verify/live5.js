@@ -43,14 +43,17 @@ const SHOTS = require('os').tmpdir() + '/';
   // Real clicks: bottom nav Songs -> "I Am the Part" -> Alto.
   await p.locator('.shell-nav button, nav button').filter({ hasText: 'Songs' }).first().click();
   await sleep(600);
-  const openBtn = p.locator('[data-enter-panel="partrehearsal"]:visible').first();
-  await openBtn.scrollIntoViewIfNeeded(); await openBtn.click();
+  if (!await H.cwTab(p, 'rehearse')) { // phase 5: the card opens Choir World; the rehearsal is its Rehearse tab
+    const openBtn = p.locator('[data-enter-panel="partrehearsal"]:visible').first();
+    await openBtn.scrollIntoViewIfNeeded(); await openBtn.click();
+  }
   await sleep(800);
   console.log('panel active:', await ev(() => document.getElementById('panel-partrehearsal').classList.contains('active')));
   await p.locator('#rehearsalPartRow [data-rh-part="Alto"]').click();
 
   H.step('Drowner fight');
   // == Drowner fight
+  await H.cwFor(p, '#cbBosses');
   await p.locator('#cbBosses [data-cb-boss="0"]').click();
   const fight = p.locator('#cbStartBtn');
   await fight.scrollIntoViewIfNeeded();
@@ -84,6 +87,7 @@ const SHOTS = require('os').tmpdir() + '/';
 
   H.step('Chaos Mode run in French');
   // == One Chaos Mode session, in French: in tune on calm chords, +90 cents on chaos chords.
+  await H.cwFor(p, '#cxStartBtn');
   const cx = p.locator('#cxStartBtn');
   await cx.scrollIntoViewIfNeeded();
   console.log('FR chaos button:', await cx.innerText());

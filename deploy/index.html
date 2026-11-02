@@ -1640,6 +1640,52 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @keyframes hl-rec-blink{ 50%{opacity:.35;} }
   #oneTakeGateText{margin:0 0 var(--hl-s4);}
 
+  /* ============ HOUSE LIGHTS: CHOIR WORLD (phase 5) ============ */
+  /* The structure (v1.8): a panel's data-cw-tab says which tab is shown; only the sections whose data-cw-sec names it show.
+     data-cw-sec="hidden" never shows (the element and its ids stay). Panels with no data-cw-tab show everything. */
+  .cw-hidden{display:none !important;}
+  .panel[data-cw-tab] [data-cw-sec~="hidden"]{display:none !important;}
+  .panel[data-cw-tab="landing"] [data-cw-sec]:not([data-cw-sec~="landing"]),
+  .panel[data-cw-tab="rehearse"] [data-cw-sec]:not([data-cw-sec~="rehearse"]),
+  .panel[data-cw-tab="songlab"] [data-cw-sec]:not([data-cw-sec~="songlab"]),
+  .panel[data-cw-tab="trainers"] [data-cw-sec]:not([data-cw-sec~="trainers"]),
+  .panel[data-cw-tab="yourchoir"] [data-cw-sec]:not([data-cw-sec~="yourchoir"]),
+  .panel[data-cw-tab="passport"] [data-cw-sec]:not([data-cw-sec~="passport"]){display:none !important;}
+  /* Trainers: the list, or one trainer alone with a back row */
+  #panel-partrehearsal:not([data-cw-trainer]) [data-cw-card], #panel-partrehearsal:not([data-cw-trainer]) #cwTrainerBack{display:none !important;}
+  #panel-partrehearsal[data-cw-trainer] #cwTrainerList{display:none !important;}
+  #panel-partrehearsal[data-cw-trainer="hm"] [data-cw-card]:not([data-cw-card="hm"]),
+  #panel-partrehearsal[data-cw-trainer="boss"] [data-cw-card]:not([data-cw-card="boss"]),
+  #panel-partrehearsal[data-cw-trainer="chaos"] [data-cw-card]:not([data-cw-card="chaos"]),
+  #panel-partrehearsal[data-cw-trainer="ladder"] [data-cw-card]:not([data-cw-card="ladder"]),
+  #panel-partrehearsal[data-cw-trainer="timing"] [data-cw-card]:not([data-cw-card="timing"]){display:none !important;}
+  #panel-partrehearsal[data-cw-trainer] [data-cw-card]{margin-top:var(--hl-s3) !important;}
+  .cw-back{grid-template-columns:auto minmax(0,1fr);min-height:var(--hl-touch);}
+  .cw-back-chev{transform:scaleX(-1);}
+  /* the song page header: a crumb back to the landing, the song title, the sub-nav (sticky under the header at 390) */
+  .cw-songhead{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--hl-s2);margin-bottom:var(--hl-s4);}
+  .cw-crumb{justify-self:start;display:inline-flex;align-items:center;gap:var(--hl-s1);min-height:var(--hl-touch);padding:0;border:0;background:none;
+    color:var(--hl-ink-2);font:inherit;font-size:var(--hl-t-small);font-weight:600;cursor:pointer;}
+  .cw-crumb .hl-icon{transform:scaleX(-1);width:16px;height:16px;}
+  .cw-songtitle{margin:0;font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:var(--hl-t-h2);line-height:1.1;color:var(--hl-ink);}
+  .cw-songmeta{margin:0;font-size:var(--hl-t-small);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
+  .cw-subnav{display:flex;width:100%;box-sizing:border-box;overflow-x:auto;scrollbar-width:none;background:var(--hl-bg);}
+  .cw-subnav::-webkit-scrollbar{display:none;}
+  .cw-subnav-wrap{min-width:0;}
+  .cw-subnav button{flex:1 0 auto;white-space:nowrap;padding:0 var(--hl-s2);}
+  @media (max-width:959px){
+    .cw-subnav-wrap{position:sticky;top:56px;z-index:30;background:var(--hl-bg);padding:var(--hl-s2) 0;margin:0 calc(-1 * var(--hl-s4));padding-left:var(--hl-s4);padding-right:var(--hl-s4);}
+  }
+  /* the landing: one raised Continue block, then the songs as rows */
+  .cw-continue{padding:var(--hl-s5);display:grid;gap:var(--hl-s2);margin-bottom:var(--hl-s6);}
+  .cw-continue .hl-label{margin:0;}
+  .cw-continue-line{margin:0;font-size:var(--hl-t-body);color:var(--hl-ink);}
+  .cw-continue .hl-btn{justify-self:start;margin-top:var(--hl-s2);}
+  .cw-songs-label{margin:0 0 var(--hl-s2);}
+  .cw-song-list .hl-item, .cw-trainer-list .hl-item{grid-template-columns:minmax(0,1fr) auto;}
+  .cw-song-list .hl-item-title, .cw-trainer-list .hl-item-title{display:block;}
+  .cw-song-list .hl-item-meta, .cw-trainer-list .hl-item-meta{display:block;margin-top:2px;}
+
   /* ============ SIGNAL SHELL ============ */
   body{padding-bottom:calc(57px + env(safe-area-inset-bottom,0px));} /* room for the fixed tab bar */
 
@@ -2397,13 +2443,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="hc-desc" data-i18n="cw_hub_desc">Rehearse one part while the rest of the choir sings around you: a guide that fades over 5 levels, Harmony Memory, Choir Bosses, Your Choir recordings, and a readiness status for every part.</div>
       <div class="hc-desc cw-hub-status" id="cwHubStatus" style="display:none;"></div>
       <div class="hc-btn-row">
-        <button class="solid-btn teal" data-enter-panel="partrehearsal" data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</button>
-        <button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_songs_choir_title">Choir Workspace</button>
-        <button class="ghost-btn" data-enter-panel="choirpassport" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
+        <button class="solid-btn teal" data-enter-panel="choir" data-cw-landing data-i18n="cw_open_btn">Open Choir World</button>
+        <button class="ghost-btn cw-hidden" data-enter-panel="partrehearsal" data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</button>
+        <button class="ghost-btn cw-hidden" data-enter-panel="choir" data-i18n="hub_songs_choir_title">Choir Workspace</button>
+        <button class="ghost-btn cw-hidden" data-enter-panel="choirpassport" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
       </div>
     </div>
     <div class="hub-category-grid">
-      <div class="hub-category-card">
+      <div class="hub-category-card cw-hidden">
         <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
         <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
         <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
@@ -4379,6 +4426,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- CHOIR PASSPORT PANEL (Choir World phase 7) -->
   <section class="panel" id="panel-choirpassport">
+    <div class="cw-songhead" data-cw-head data-cw-sec="passport"></div>
     <div class="journey-hero">
       <div class="j-title" data-i18n="cp_title">🪪 Choir Passport</div>
       <div class="j-sub" data-i18n="cp_sub">Your ensemble identity in one place. Every field comes from runs you've actually done in Choir World. Nothing new is measured and nothing is filled in to cover a gap.</div>
@@ -4419,12 +4467,23 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- CHOIR WORKSPACE PANEL -->
   <section class="panel" id="panel-choir">
-    <div class="journey-hero">
+    <div class="cw-landing" id="cwLanding" data-cw-sec="landing">
+      <div class="journey-hero">
+        <div class="j-title" data-i18n="cw_landing_title">Choir World</div>
+        <div class="j-sub" data-i18n="cw_landing_sub">Rehearse one part while the rest of the choir sings around you.</div>
+      </div>
+      <div class="key-card cw-preview" id="cwPreviewLanding"></div>
+      <div class="hl-raised cw-continue cw-gated" id="cwContinue"></div>
+      <div class="hl-label cw-songs-label cw-gated" data-i18n="cw_songs_label">Songs</div>
+      <ul class="hl-list cw-song-list cw-gated" id="cwSongList"></ul>
+    </div>
+    <div class="cw-songhead" data-cw-head data-cw-sec="songlab yourchoir"></div>
+    <div class="journey-hero" data-cw-sec="hidden">
       <div class="j-title" data-i18n="choir_title">🎶 Choir Workspace</div>
       <div class="j-sub" data-i18n="choir_sub">Real per-part mixer — mute, solo, and volume genuinely work on a synthesized progression, not a simulated UI.</div>
     </div>
 
-    <div class="key-card">
+    <div class="key-card" data-cw-sec="hidden">
       <div class="step-label" data-i18n="choir_practicesongs_label">Practice Songs</div>
       <div class="mode-card-grid" id="songSelectRow">
         <button class="ex-type-btn mode-card active" data-song-id="hymn" aria-pressed="true">
@@ -4440,7 +4499,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
     </div>
 
-    <div class="key-card" style="margin-top:16px;">
+    <div class="key-card" style="margin-top:16px;" data-cw-sec="songlab">
       <div class="step-label"><span data-i18n="choir_practicetrack_label">Practice Track</span><span class="mock-tag" data-i18n="choir_synthdemo_tag">SYNTHESIZED DEMO</span></div>
       <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 4px;" id="choirTrackTitle">Demo Hymn — C Major (I–V–vi–IV)</h2>
       <p class="desc" style="margin-bottom:20px;" data-i18n="choir_track_desc">
@@ -4532,8 +4591,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="practice-chip" id="practiceClearBtn" data-i18n="choir_allparts_btn">All parts (clear solo)</button>
       </div>
 
-      <p class="fine-print cw-gated" style="margin:18px 0 6px;" data-i18n="choir_rehearse_label">Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:</p>
-      <div class="practice-chip-row cw-gated" id="rehearseEntryRow">
+      <p class="fine-print cw-gated cw-hidden" style="margin:18px 0 6px;" data-i18n="choir_rehearse_label">Rehearse one part on its own — the others keep playing while your guide fades out over 5 levels:</p>
+      <div class="practice-chip-row cw-gated cw-hidden" id="rehearseEntryRow">
         <button class="practice-chip" data-rehearse-part="Soprano">Soprano</button>
         <button class="practice-chip" data-rehearse-part="Lead">Lead</button>
         <button class="practice-chip" data-rehearse-part="Alto">Alto</button>
@@ -4542,9 +4601,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
     </div>
 
-    <div class="key-card cw-preview" id="cwPreviewWorkspace" style="margin-top:20px;"></div>
+    <div class="key-card cw-preview" id="cwPreviewWorkspace" style="margin-top:20px;" data-cw-sec="songlab yourchoir"></div>
 
-    <div class="key-card cw-gated" id="yourChoirCard" style="margin-top:20px;">
+    <div class="key-card cw-gated" id="yourChoirCard" style="margin-top:20px;" data-cw-sec="yourchoir">
       <div class="step-label" data-i18n="yc_title">🎤 Your Choir</div>
       <p class="desc" id="ycDesc" style="margin:6px 0 8px;"></p>
       <p class="fine-print" style="margin-bottom:10px;" data-i18n="tt_headphones">🎧 Use headphones — through speakers, the mic can hear the choir and mistake it for you.</p>
@@ -4561,14 +4620,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <p class="fine-print" style="margin-top:8px;" data-i18n="yc_storage_note">Your recordings are saved on this device only.</p>
     </div>
 
-    <div class="key-card cw-gated" id="choirDnaWorkspaceCard" style="margin-top:20px;text-align:center;">
+    <div class="key-card cw-gated" id="choirDnaWorkspaceCard" style="margin-top:20px;text-align:center;" data-cw-sec="hidden">
       <div class="step-label" data-i18n="dna_title">🧬 Choir DNA</div>
       <svg id="choirDnaWorkspaceSvg" class="dna-svg" viewBox="0 0 380 330" role="img"></svg>
       <p class="fine-print" id="choirDnaWorkspaceNote" style="margin-top:6px;"></p>
       <button class="ghost-btn" data-enter-panel="choirpassport" style="margin-top:12px;" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
     </div>
 
-    <div class="key-card" style="margin-top:20px;">
+    <div class="key-card" style="margin-top:20px;" data-cw-sec="hidden">
       <div class="step-label"><span data-i18n="choir_director_label">Director Dashboard</span><span class="mock-tag" data-i18n="choir_sampledata_tag">SAMPLE DATA</span></div>
       <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="choir_rosterprogress_h2">Choir roster progress</h2>
       <p class="desc" style="margin-bottom:16px;" data-i18n="choir_roster_desc">
@@ -4580,14 +4639,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- I AM THE {PART} — single-part rehearsal (reuses the Choir Workspace mixer) -->
   <section class="panel" id="panel-partrehearsal">
-    <div class="journey-hero">
+    <div class="cw-songhead" data-cw-head data-cw-sec="rehearse trainers"></div>
+    <div class="journey-hero" data-cw-sec="hidden">
       <div class="j-title" id="rehearsalTitle">🎙️ I Am the Alto</div>
       <div class="j-sub" data-i18n="rehearsal_sub">Your line is front and centre, the other parts keep playing around you, and your part's guide track genuinely fades out level by level until you're singing it alone.</div>
     </div>
 
-    <div class="key-card cw-preview" id="cwPreviewRehearsal"></div>
+    <div class="key-card cw-preview" id="cwPreviewRehearsal" data-cw-sec="rehearse trainers"></div>
 
-    <div class="key-card">
+    <div class="key-card" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rehearsal_choose_part">Choose your part</div>
       <div class="ex-type-row" id="rehearsalPartRow" style="margin:10px 0 12px;flex-wrap:wrap;">
         <button class="ex-type-btn" data-rh-part="Soprano" aria-pressed="false" data-part-name="Soprano">Soprano</button>
@@ -4601,7 +4661,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <p class="fine-print" style="margin-top:6px;" data-i18n="ac_desc">Your part goes silent and the other four play through Solo. The note display, Harmony Vision and level guide are hidden — just you and the choir.</p>
     </div>
 
-    <div class="key-card" id="readinessCard" style="margin-top:16px;">
+    <div class="key-card" id="readinessCard" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rd_title">📈 Readiness</div>
       <p class="desc" id="rdDesc" style="margin:6px 0 4px;"></p>
       <p class="fine-print" id="rdRule" style="margin-bottom:10px;"></p>
@@ -4610,9 +4670,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <button class="ghost-btn" data-enter-panel="choirpassport" style="margin-top:12px;" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
     </div>
 
-    <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.</div>
+    <div class="key-card ac-note" id="acappellaNote" style="margin-top:16px;" data-cw-sec="rehearse" data-i18n="ac_active_note">A Cappella is on — no visual guide. Your part is fully silent; the other four play at their normal mixer volume.</div>
 
-    <div class="key-card rh-hide-ac" style="margin-top:16px;">
+    <div class="key-card rh-hide-ac" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rehearsal_levels_label">Rehearsal level</div>
       <div class="rh-levels" id="rehearsalLevels" role="group"></div>
       <p class="desc" id="rehearsalLevelDesc" style="margin:4px 0 12px;"></p>
@@ -4627,7 +4687,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
     </div>
 
-    <div class="key-card" style="margin-top:16px;">
+    <div class="key-card" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="rehearsal_yourline_label">Your line — real notes &amp; timing</div>
       <p class="fine-print rh-hide-ac" style="margin:6px 0 0;" data-i18n="rehearsal_roll_desc">Bold bars are your part's actual notes; faint bars are the other parts, still audible for context.</p>
       <div class="transport-row">
@@ -4639,7 +4699,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="rh-notes rh-hide-ac" id="rehearsalNotes"></div>
     </div>
 
-    <div class="key-card" id="breathMapCard" style="margin-top:16px;">
+    <div class="key-card" id="breathMapCard" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="bm_title">🌬️ Breath Map</div>
       <p class="desc" style="margin:6px 0 8px;" data-i18n="bm_desc">Every breath point in your part, taken from the real playback schedule: the silence between one note's release and the next note's attack.</p>
       <p class="fine-print" id="bmSummary"></p>
@@ -4649,7 +4709,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div id="bmRows" style="margin-top:10px;"></div>
     </div>
 
-    <div class="key-card" id="harmonyMemoryCard" style="margin-top:16px;">
+    <div class="cw-trainers" data-cw-sec="trainers">
+      <ul class="hl-list cw-trainer-list" id="cwTrainerList"></ul>
+      <button class="hl-item cw-back" id="cwTrainerBack" type="button"><svg class="hl-icon cw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span class="hl-item-title" data-i18n="cw_back_trainers">All trainers</span></button>
+    </div>
+
+    <div class="key-card" id="harmonyMemoryCard" style="margin-top:16px;" data-cw-sec="trainers" data-cw-card="hm">
       <div class="step-label" data-i18n="hm_title">🧠 Harmony Memory</div>
       <p class="desc" id="hmemDesc" style="margin:6px 0 4px;"></p>
       <div class="rh-levels hm-stages" id="hmemStages" role="group"></div>
@@ -4662,7 +4727,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <p class="fine-print" style="margin-top:10px;" data-i18n="hm_storage_note">Stage progress is saved on this device only.</p>
     </div>
 
-    <div class="key-card" id="choirBossCard" style="margin-top:16px;">
+    <div class="key-card" id="choirBossCard" style="margin-top:16px;" data-cw-sec="trainers" data-cw-card="boss">
       <div class="step-label" data-i18n="cb_title">👹 Choir Bosses</div>
       <p class="desc" id="cbDesc" style="margin:6px 0 4px;"></p>
       <div class="rh-levels hm-stages" id="cbBosses" role="group"></div>
@@ -4686,7 +4751,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div id="cbResults" style="display:none;margin-top:12px;"></div>
     </div>
 
-    <div class="key-card" id="chaosCard" style="margin-top:16px;">
+    <div class="key-card" id="chaosCard" style="margin-top:16px;" data-cw-sec="trainers" data-cw-card="chaos">
       <div class="step-label" data-i18n="cx_title">🌪️ Chaos Mode</div>
       <p class="desc" id="cxDesc" style="margin:6px 0 8px;"></p>
       <p class="fine-print" id="cxBest" style="margin-bottom:14px;"></p>
@@ -4696,7 +4761,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div id="cxResults" style="display:none;margin-top:12px;"></div>
     </div>
 
-    <div class="key-card" id="ladderCard" style="margin-top:16px;">
+    <div class="key-card" id="ladderCard" style="margin-top:16px;" data-cw-sec="trainers" data-cw-card="ladder">
       <div class="step-label" data-i18n="tk_title">🪜 Tempo/Key Ladder</div>
       <p class="desc" id="tkDesc" style="margin:6px 0 4px;"></p>
       <div class="ex-type-row" id="tkDirRow" style="margin:10px 0 0;flex-wrap:wrap;">
@@ -4712,7 +4777,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <p class="fine-print" style="margin-top:10px;" data-i18n="ch_storage_note">Boss, Chaos and Ladder progress is saved on this device only.</p>
     </div>
 
-    <div class="key-card" id="timingTrainerCard" style="margin-top:16px;">
+    <div class="key-card" id="timingTrainerCard" style="margin-top:16px;" data-cw-sec="trainers" data-cw-card="timing">
       <div class="step-label" data-i18n="tt_title">⏱️ Entrance &amp; Cutoff Trainer</div>
       <div class="ex-type-row" id="ttModeRow" style="margin:10px 0 10px;flex-wrap:wrap;">
         <button class="ex-type-btn active" data-tt-mode="entrance" aria-pressed="true" data-i18n="tt_mode_entrance">Entrance Trainer</button>
@@ -5361,6 +5426,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     if(btn.dataset.panel==='studio' && typeof renderStudioMode==='function') renderStudioMode();
     if(btn.dataset.panel==='performancedirector' && typeof renderPdBriefing==='function') renderPdBriefing();
     if(btn.dataset.panel==='passport' && typeof renderVocalPassport==='function') renderVocalPassport();
+    if(['choir','partrehearsal','choirpassport'].includes(btn.dataset.panel) && typeof cwOnEnter==='function') cwOnEnter(btn.dataset.panel);
     if(btn.dataset.panel==='choirpassport' && typeof renderChoirPassport==='function') renderChoirPassport();
     if(btn.dataset.panel==='dashboard' && typeof renderDashboard==='function') renderDashboard();
     if(btn.dataset.panel==='partrehearsal' && typeof renderPartRehearsal==='function') renderPartRehearsal();
@@ -6826,6 +6892,29 @@ const TRANSLATIONS = {
     rd_local_only:"You're not signed in, so readiness isn't saved to an account. Harmony Memory and Boss scores stay on this device.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Choir World",
+    cw_open_btn:"Open Choir World",
+    cw_landing_title:"Choir World",
+    cw_landing_sub:"Rehearse one part while the rest of the choir sings around you.",
+    cw_continue_label:"Continue",
+    cw_continue_tpl:"{part} on {song} · {status}",
+    cw_continue_btn:"Rehearse",
+    cw_songs_label:"Songs",
+    cw_song_part_tpl:"Your {part}: {status}",
+    cw_crumb:"Choir World",
+    cw_subnav_label:"Song page",
+    cw_tab_rehearse:"Rehearse",
+    cw_tab_songlab:"Song Lab",
+    cw_tab_trainers:"Trainers",
+    cw_tab_yourchoir:"Your Choir",
+    cw_tab_passport:"Passport",
+    cw_trainers_label:"Trainers",
+    cw_back_trainers:"All trainers",
+    cw_tr_stage_tpl:"Stage {n}/{N}",
+    cw_tr_boss_tpl:"Boss {n}/{N}",
+    cw_tr_rung_tpl:"Rung {n}/{N}",
+    cw_tr_best_tpl:"Best {s}%",
+    cw_tr_chaos_status:"A new random plan each run",
+    cw_tr_timing_status:"Entrance or cutoff",
     cw_heading:"Choir World is part of the Choir plan",
     cw_reason_plan_tpl:"You're on the {plan}. Choir World is included only in the {choir} ({price}).",
     cw_reason_expired_tpl:"Your 21-day free trial has ended. Choir World continues on the {choir} ({price}) — everything you did in it during the trial is still saved.",
@@ -8323,6 +8412,29 @@ const TRANSLATIONS = {
     rd_local_only:"Vous n'êtes pas connecté·e : la préparation n'est pas enregistrée sur un compte. Les scores de Mémoire harmonique et des Boss restent sur cet appareil.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Monde Chorale",
+    cw_open_btn:"Ouvrir Monde Chorale",
+    cw_landing_title:"Monde Chorale",
+    cw_landing_sub:"Répétez une voix pendant que le reste du chœur chante autour de vous.",
+    cw_continue_label:"Reprendre",
+    cw_continue_tpl:"{part} sur {song} · {status}",
+    cw_continue_btn:"Répéter",
+    cw_songs_label:"Chants",
+    cw_song_part_tpl:"Votre {part} : {status}",
+    cw_crumb:"Monde Chorale",
+    cw_subnav_label:"Page du chant",
+    cw_tab_rehearse:"Répéter",
+    cw_tab_songlab:"Labo du chant",
+    cw_tab_trainers:"Entraîneurs",
+    cw_tab_yourchoir:"Votre chœur",
+    cw_tab_passport:"Passeport",
+    cw_trainers_label:"Entraîneurs",
+    cw_back_trainers:"Tous les entraîneurs",
+    cw_tr_stage_tpl:"Étape {n}/{N}",
+    cw_tr_boss_tpl:"Boss {n}/{N}",
+    cw_tr_rung_tpl:"Échelon {n}/{N}",
+    cw_tr_best_tpl:"Meilleur {s} %",
+    cw_tr_chaos_status:"Un nouveau plan au hasard à chaque essai",
+    cw_tr_timing_status:"Attaque ou fin de note",
     cw_heading:"Le Monde Chorale fait partie du forfait Chorale",
     cw_reason_plan_tpl:"Vous êtes sur le {plan}. Le Monde Chorale n'est inclus que dans le {choir} ({price}).",
     cw_reason_expired_tpl:"Votre essai gratuit de 21 jours est terminé. Le Monde Chorale continue avec le {choir} ({price}) — tout ce que vous y avez fait pendant l'essai reste enregistré.",
@@ -9820,6 +9932,29 @@ const TRANSLATIONS = {
     rd_local_only:"No has iniciado sesión, así que la preparación no se guarda en una cuenta. Las puntuaciones de Memoria armónica y de Jefes se quedan en este dispositivo.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Mundo Coral",
+    cw_open_btn:"Abrir Mundo Coral",
+    cw_landing_title:"Mundo Coral",
+    cw_landing_sub:"Ensaya una voz mientras el resto del coro canta a tu alrededor.",
+    cw_continue_label:"Continuar",
+    cw_continue_tpl:"{part} en {song} · {status}",
+    cw_continue_btn:"Ensayar",
+    cw_songs_label:"Canciones",
+    cw_song_part_tpl:"Tu {part}: {status}",
+    cw_crumb:"Mundo Coral",
+    cw_subnav_label:"Página de la canción",
+    cw_tab_rehearse:"Ensayar",
+    cw_tab_songlab:"Laboratorio",
+    cw_tab_trainers:"Entrenadores",
+    cw_tab_yourchoir:"Tu coro",
+    cw_tab_passport:"Pasaporte",
+    cw_trainers_label:"Entrenadores",
+    cw_back_trainers:"Todos los entrenadores",
+    cw_tr_stage_tpl:"Etapa {n}/{N}",
+    cw_tr_boss_tpl:"Jefe {n}/{N}",
+    cw_tr_rung_tpl:"Peldaño {n}/{N}",
+    cw_tr_best_tpl:"Mejor {s}%",
+    cw_tr_chaos_status:"Un plan al azar nuevo en cada intento",
+    cw_tr_timing_status:"Entrada o corte",
     cw_heading:"Mundo Coral forma parte del plan Coro",
     cw_reason_plan_tpl:"Tienes el {plan}. Mundo Coral solo está incluido en el {choir} ({price}).",
     cw_reason_expired_tpl:"Tu prueba gratuita de 21 días ha terminado. Mundo Coral continúa con el {choir} ({price}) — todo lo que hiciste en él durante la prueba sigue guardado.",
@@ -11317,6 +11452,29 @@ const TRANSLATIONS = {
     rd_local_only:"Giriş yapmadınız, bu yüzden hazırlık bir hesaba kaydedilmiyor. Armoni Hafızası ve Boss puanları bu cihazda kalır.",
     // Choir World gate (phase 8)
     cw_label:"🎼 Koro Dünyası",
+    cw_open_btn:"Koro Dünyası'nı aç",
+    cw_landing_title:"Koro Dünyası",
+    cw_landing_sub:"Koronun geri kalanı çevrenizde söylerken bir partiyi çalışın.",
+    cw_continue_label:"Devam et",
+    cw_continue_tpl:"{song} · {part} · {status}",
+    cw_continue_btn:"Çalış",
+    cw_songs_label:"Şarkılar",
+    cw_song_part_tpl:"{part} partiniz: {status}",
+    cw_crumb:"Koro Dünyası",
+    cw_subnav_label:"Şarkı sayfası",
+    cw_tab_rehearse:"Çalış",
+    cw_tab_songlab:"Şarkı Lab",
+    cw_tab_trainers:"Antrenörler",
+    cw_tab_yourchoir:"Korunuz",
+    cw_tab_passport:"Pasaport",
+    cw_trainers_label:"Antrenörler",
+    cw_back_trainers:"Tüm antrenörler",
+    cw_tr_stage_tpl:"Aşama {n}/{N}",
+    cw_tr_boss_tpl:"Boss {n}/{N}",
+    cw_tr_rung_tpl:"Basamak {n}/{N}",
+    cw_tr_best_tpl:"En iyi %{s}",
+    cw_tr_chaos_status:"Her denemede yeni rastgele bir plan",
+    cw_tr_timing_status:"Giriş ya da bitiş",
     cw_heading:"Koro Dünyası, Koro planına dahildir",
     cw_reason_plan_tpl:"{plan} kullanıyorsunuz. Koro Dünyası yalnızca {choir} içinde yer alır ({price}).",
     cw_reason_expired_tpl:"21 günlük ücretsiz denemeniz sona erdi. Koro Dünyası {choir} ile devam ediyor ({price}) — deneme sırasında burada yaptığınız her şey hâlâ kayıtlı.",
@@ -16658,6 +16816,7 @@ function renderReadiness(){
     document.getElementById('rdSyncNote').textContent = t(profile ? 'rd_synced' : 'rd_local_only');
   }
   renderChoirDna('choirDnaWorkspaceSvg', 'choirDnaWorkspaceNote', currentSongId);
+  if(window.cwStructureReady) renderCwStructure(); // not before its declarations have run (page load)
 }
 
 /* ---- Choir DNA ---- */
@@ -16725,7 +16884,7 @@ function cwReasonText(){
 function renderCwPreviews(){
   const price = CW_PRICE, reason = cwReasonText();
   const realSong = profile ? cwTeaserSong() : null;
-  [['cwPreviewRehearsal', true], ['cwPreviewPassport', true], ['cwPreviewWorkspace', false]].forEach(([id, teaser])=>{
+  [['cwPreviewLanding', true], ['cwPreviewRehearsal', true], ['cwPreviewPassport', true], ['cwPreviewWorkspace', false]].forEach(([id, teaser])=>{
     const box = document.getElementById(id);
     if(!box) return;
     box.innerHTML = `<div class="step-label">${t('cw_label')} <span class="mock-tag">${planLabel('choir')} · ${price}</span></div>
@@ -16900,6 +17059,103 @@ document.addEventListener('click', e=>{
   if(part) partRehearsal.part = part;
   enterPanel('partrehearsal');
 });
+
+/* ---- Choir World structure (phase 5, House Lights v1.8): the landing, the song page sub-navigation, the trainers ---- */
+// A song page is one of three panels shown on one of five tabs. A tab enters its panel (enterPanel, so every per-panel
+// hook still runs) and sets data-cw-tab on it; CSS shows only the sections whose data-cw-sec names that tab. Entering a
+// panel without asking for a tab (a deep link) opens the panel's own tab: choir → Song Lab, partrehearsal → Rehearse,
+// choirpassport → Passport. The landing is panel-choir's top, opened by the Songs tab's card.
+const CW_TABS = ['rehearse','songlab','trainers','yourchoir','passport'];
+const CW_TAB_PANEL = {rehearse:'partrehearsal', songlab:'choir', trainers:'partrehearsal', yourchoir:'choir', passport:'choirpassport'};
+const CW_PANEL_TAB = {choir:'songlab', partrehearsal:'rehearse', choirpassport:'passport'};
+const CW_TRAINERS = ['hm','boss','chaos','ladder','timing'];
+let cwPending = null; // the tab (and trainer) the next entry into a Choir World panel opens
+function cwShowTab(tab, trainer=null){
+  if(tab!=='landing' && !CW_TAB_PANEL[tab]) return;
+  cwPending = {tab, trainer};
+  enterPanel(tab==='landing' ? 'choir' : CW_TAB_PANEL[tab]);
+}
+function cwShowLanding(){ cwShowTab('landing'); }
+function cwOpenTrainer(key){
+  const panel = document.getElementById('panel-partrehearsal');
+  if(!panel.classList.contains('active') || panel.dataset.cwTab!=='trainers'){ cwShowTab('trainers', key); return; }
+  cwSetTrainer(key);
+}
+function cwSetTrainer(key){
+  const panel = document.getElementById('panel-partrehearsal');
+  if(CW_TRAINERS.includes(key)) panel.dataset.cwTrainer = key; else delete panel.dataset.cwTrainer;
+  window.scrollTo(0, 0);
+}
+// The router's hook (legacy tab click): every entry into a Choir World panel lands on a tab.
+function cwOnEnter(panel){
+  const want = cwPending; cwPending = null;
+  const fits = want && (want.tab==='landing' ? panel==='choir' : CW_TAB_PANEL[want.tab]===panel);
+  const tab = fits ? want.tab : CW_PANEL_TAB[panel];
+  const el = document.getElementById('panel-'+panel);
+  el.dataset.cwTab = tab;
+  if(panel==='partrehearsal'){ if(tab==='trainers' && fits && CW_TRAINERS.includes(want.trainer)) el.dataset.cwTrainer = want.trainer; else delete el.dataset.cwTrainer; }
+  renderCwStructure();
+}
+function cwSongHeadHtml(tab){
+  return `<button class="cw-crumb" type="button" data-cw-landing-btn><svg class="hl-icon" aria-hidden="true"><use href="#hl-chev"/></svg>${t('cw_crumb')}</button>
+    <h2 class="cw-songtitle">${songTitle(currentSongId)}</h2>
+    <div class="cw-subnav-wrap"><div class="hl-seg cw-subnav" role="tablist" aria-label="${t('cw_subnav_label')}">${CW_TABS.map(k=>
+      `<button type="button" role="tab" data-cw-tab="${k}" aria-selected="${k===tab}"${k===tab ? ' aria-current="page"' : ''}>${t('cw_tab_'+k)}</button>`).join('')}</div></div>`;
+}
+function renderCwLanding(){
+  const box = document.getElementById('cwContinue'), list = document.getElementById('cwSongList');
+  if(!box || !list) return;
+  const f = (profile && cwFocus()) || {song:currentSongId, part:partRehearsal.part};
+  const status = rdStatus(rdInputs(f.song, f.part));
+  box.innerHTML = `<div class="hl-label">${t('cw_continue_label')}</div>
+    <p class="cw-continue-line">${t('cw_continue_tpl').replace('{part}', partName(f.part)).replace('{song}', songTitle(f.song)).replace('{status}', t('rd_status_'+status))}</p>
+    <button class="hl-btn hl-btn--ink" type="button" data-cw-go="${f.song}|${f.part}">${t('cw_continue_btn')}</button>`;
+  list.innerHTML = Object.keys(SONGS).map(id=>{
+    const st = rdStatus(rdInputs(id, f.part));
+    return `<li><button class="hl-item" type="button" data-cw-song="${id}"><span><span class="hl-item-title">${songTitle(id)}</span>
+      <span class="hl-item-meta">${t('choir_song_'+id+'_tag')}</span>
+      <span class="hl-item-meta">${t('cw_song_part_tpl').replace('{part}', partName(f.part)).replace('{status}', t('rd_status_'+st))}</span></span>
+      <svg class="hl-icon" aria-hidden="true"><use href="#hl-chev"/></svg></button></li>`;
+  }).join('');
+}
+function renderCwTrainerList(){
+  const list = document.getElementById('cwTrainerList');
+  if(!list) return;
+  const best = o=>{ const v = Object.values(o || {}).filter(x=>typeof x==='number'); return v.length ? Math.max(...v) : null; };
+  const of = (n, N, tpl)=>t(tpl).replace('{n}', n).replace('{N}', N);
+  const rows = [
+    ['hm', t('hm_title'), of(hmUnlockedUpTo()+1, HM_STAGES.length, 'cw_tr_stage_tpl'), best(hmBest())],
+    ['boss', t('cb_title'), of(cbUnlocked()+1, CH_BOSSES.length, 'cw_tr_boss_tpl'), best(chBest('boss'))],
+    ['chaos', t('cx_title'), t('cw_tr_chaos_status'), best(chBest('chaos'))],
+    ['ladder', t('tk_title'), of(tkUnlocked()+1, TK_RUNGS.length, 'cw_tr_rung_tpl'), best(chBest('ladder'))],
+    ['timing', t('tt_title'), t('cw_tr_timing_status'), undefined], // timing runs keep no best
+  ];
+  list.innerHTML = rows.map(([k, name, status, b])=>`<li><button class="hl-item" type="button" data-cw-trainer-row="${k}">
+    <span><span class="hl-item-title">${name}</span><span class="hl-item-meta">${status}</span></span>
+    <span class="hl-item-end">${b===undefined ? '' : b===null ? t('hm_not_tried') : t('cw_tr_best_tpl').replace('{s}', b)}<svg class="hl-icon" aria-hidden="true"><use href="#hl-chev"/></svg></span></button></li>`).join('');
+}
+function renderCwStructure(){
+  document.querySelectorAll('[data-cw-head]').forEach(head=>{
+    const tab = head.closest('section.panel').dataset.cwTab;
+    head.innerHTML = tab && tab!=='landing' ? cwSongHeadHtml(tab) : '';
+  });
+  renderCwLanding();
+  renderCwTrainerList();
+}
+document.addEventListener('click', e=>{
+  const tab = e.target.closest('.cw-subnav [data-cw-tab]');
+  if(tab){ cwShowTab(tab.dataset.cwTab); return; }
+  if(e.target.closest('[data-cw-landing-btn]')){ cwShowLanding(); return; }
+  const row = e.target.closest('#cwTrainerList [data-cw-trainer-row]');
+  if(row){ cwSetTrainer(row.dataset.cwTrainerRow); return; }
+  if(e.target.closest('#cwTrainerBack')){ cwSetTrainer(null); return; }
+  const song = e.target.closest('#cwSongList [data-cw-song]');
+  if(song){ selectSong(song.dataset.cwSong); cwShowTab('rehearse'); }
+});
+// The Songs tab's Choir World card opens the landing: its button enters panel-choir like any data-enter-panel button,
+// and this (capture, so first) says which tab.
+document.addEventListener('click', e=>{ if(e.target.closest('[data-cw-landing]')) cwPending = {tab:'landing'}; }, true);
+window.cwStructureReady = true;
 
 /* ---- Choir Passport ---- */
 let cpDnaSong = null;

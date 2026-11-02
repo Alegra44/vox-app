@@ -65,6 +65,7 @@ const SHOTS = require('os').tmpdir() + '/';
 
   for (const part of ['Alto', 'Bass']) {
     H.step(`record ${part}`);
+    await H.cwFor(p, '#ycParts');
     const btn = p.locator(`#ycParts [data-yc-rec="${part}"]`);
     await btn.scrollIntoViewIfNeeded(); await btn.click();
     await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });

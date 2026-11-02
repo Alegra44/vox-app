@@ -66,6 +66,7 @@ function toneWav() {
   console.log('== Real-mic take: Record Alto through the one stream');
   await ev(() => { enterPanel('choir'); selectSong('hymn'); });
   await sleep(500);
+  await H.cwFor(page, '#ycParts');
   await page.locator('#ycParts [data-yc-rec="Alto"]').click();
   H.step('real-mic take: wait for the Alto take to start', 150);
   await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
@@ -125,6 +126,7 @@ function toneWav() {
       return Object.fromEntries(Object.entries(db).filter(([, v]) => v.length).map(([p, v]) => { const s = v.sort((x, y) => x - y); return [p, +s[s.length >> 1].toFixed(1)]; }));
     }, until);
     await tapsOn();
+    await H.cwFor(page, '#ycParts');
     await page.locator('#ycParts [data-yc-rec="Bass"]').click();
     H.step('balance: wait for the Bass take to start', 150);
     await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
@@ -182,6 +184,7 @@ function toneWav() {
 
   // Record one part through the real UI button while the stand-in "sings" that part's notes at amp.
   const record = async (part, amp, midSample) => {
+    await H.cwFor(page, '#ycParts');
     await page.locator(`#ycParts [data-yc-rec="${part}"]`).click();
     H.step(`record ${part}: wait for the take to start`, 150);
     await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
@@ -214,6 +217,7 @@ function toneWav() {
   console.log('rows:', await ev(() => [...document.querySelectorAll('#ycParts .yc-row')].map(r => r.innerText.replace(/\s+/g, ' ').trim())));
 
   const play = async label => {
+    await H.cwFor(page, '#ycPlayBtn');
     await page.locator('#ycPlayBtn').click();
     await ev(async () => { while (!yourChoir.playing) await new Promise(r => setTimeout(r, 10)); });
     await ev(() => { __pk = { max: 0, over: 0, n: 0 }; });
@@ -243,6 +247,7 @@ function toneWav() {
 
   H.step('Delete Bass, then play (yc.js:230)', 180);
   console.log('== Delete Bass, then play');
+  await H.cwFor(page, '#ycParts');
   await page.locator('#ycParts [data-yc-del="Bass"]').click();
   console.log('status:', await ev(() => document.getElementById('ycStatus').textContent), '| stored parts:', await ev(() => Object.keys(JSON.parse(localStorage.getItem('yourChoirTakes')).hymn)));
   await page.locator('#yourChoirCard').screenshot({ path: SHOTS + 'yc-card.png' });
