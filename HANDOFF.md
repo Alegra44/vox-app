@@ -368,7 +368,10 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   a run as .failed and runs it once more. What's left is real noise and goes into aa-ranges.json: timing 17–20 ms,
   p5 onset 5–16 ms, yc VU ±4, live9 network save times, random Chaos scores. A 10 ms shift in timing still fails.
   Independent check (not circular): `ONLY="live5 live6 live7 live9 p5 p7 timing yc" RUNS=3 choirregress.sh master`,
-  started 08:00 IST, ~2.7 h, gated by those ranges; it must pass before the merge.
+  2026-11-02 07:33–10:25 IST (logs/regress-2026-11-02T02-03-53, compare.txt): 7 of 8 pass, all 48 runs exit 0; live9
+  failed on one network value only (save #3 returned after 1450–1969 ms on base, 1728–2427 ms on branch, same build:
+  Supabase round-trip, not the build). Both A/A runs are now in aa-ranges.json (widest range per value), so live9's
+  save times have wide ranges: they measure the network.
 - Not committed yet, kept in the working tree: `scripts/design-verify/shots5.js` (phase 5 screenshots, not yet run) and
   `design/house-lights/.phase5-wip/` (the survey draft PHASE5_SURVEY.md with `__MASTER__`/`__SHOTNOTES__` to fill, and
   the copy checker cwcopy.py with its outputs). Both go to redesign/phase5.
