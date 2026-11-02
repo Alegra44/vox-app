@@ -372,14 +372,17 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   failed on one network value only (save #3 returned after 1450–1969 ms on base, 1728–2427 ms on branch, same build:
   Supabase round-trip, not the build). Both A/A runs are now in aa-ranges.json (widest range per value), so live9's
   save times have wide ranges: they measure the network.
-- Not committed yet, kept in the working tree: `scripts/design-verify/shots5.js` (phase 5 screenshots, not yet run) and
-  `design/house-lights/.phase5-wip/` (the survey draft PHASE5_SURVEY.md with `__MASTER__`/`__SHOTNOTES__` to fill, and
-  the copy checker cwcopy.py with its outputs). Both go to redesign/phase5.
 - **The choir group is opt-in** (`ONLY=choir` or `WITH_CHOIR=1`; not in a default suites.sh/prod.sh run any more, which
   used to include cv-live7, cv-modalz, cv-p9 and cv-p10). **Required for phases 5, 6 and 10**, with choirregress.sh as
   the gate.
-- Then: merge tests/choir-verify (no deploy: test code only), and the phase 5 survey on redesign/phase5
-  (PHASE5_SURVEY.md, shots5.js → review/phase5-before).
+- Merged into master with --no-ff 2026-11-02 (7296998), pushed; test code only, no deploy.
+- **Phase 5 survey DONE 2026-11-02, reported; waiting for the user's phase 5 spec.** Branch `redesign/phase5`:
+  `design/house-lights/PHASE5_SURVEY.md` (every Choir World screen, the five-tab mapping, the 32 contrast rows, the
+  Songs-tab tools by phase, copy problems, 14 broken or odd items), `scripts/design-verify/shots5.js` (the screenshots:
+  `node scripts/design-verify/shots5.js --base <ref> --out <dir>`; signs up a Choir-plan and an expired account) and
+  `scripts/design-verify/survey5/cwcopy.py` (the copy check). Screenshots: orphan `review/phase5-before` (102 shots,
+  34 per size at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json, english-in-fr.json). The first full
+  shots run failed signing up (auth timeout after several sign-ups in a few minutes); the retry 3 min later passed.
 
 ## Waiting on the user (don't start without a go-ahead)
 
