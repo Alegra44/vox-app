@@ -114,3 +114,17 @@ f) shots: as listed in 4.
 - Final, at 390 and 1280, Light and Dark: the Songs tab, the landing, the locked preview, each tab idle, Rehearse playing (both ways), the trainer list, each trainer idle, stage and result, a "Why?" open, Your Choir recording and result, X-Ray, Microscope, the mixer, a toast. Put them on review/phase5 with a contact sheet, and push both branches after the secret check.
 
 5. REPORT, then stop. No merge and no deploy until I've reviewed.
+
+## 2.6 (the part 1 review, 2026-11-02, verbatim)
+
+Part 1 review: the structure is approved. Seven fixes, as 2.6, after 2.5 and before the checks (four languages where text changes):
+
+1. Sub-nav under 480 px: the fifth tab is cut off ("Pa"). Below 480 it becomes text tabs that scroll sideways, with a fade on the edge that overflows and the current tab scrolled into view. The segmented box stays from 480 up.
+2. Guide-level labels break mid-word at 390 ("Independ-ent", "Performa-nce"). At 390, show the numbers 1–5 under the ticks, and the current level's name and line under the fader. Never break inside a word. Full labels from 768.
+3. Breath marks on the lanes are drawn as ")". Use the standard breath mark: a small comma (’) just above the lane, in ink-3.
+4. Song DNA's "Practice this" has lost its button look and floats as text. Make it the quiet button, right-aligned in its row.
+5. At 1280 the lanes are about 280 px wide in the middle of the stage. On wide screens they fill the stage column, up to about 760 px, with taller lanes.
+6. The Passport tab repeats a big "Choir Passport" hero under the song title. Inside the song page, hide that panel's hero, keep "Choir Passport" as an h2, and move its subtitle into hl-measure.
+7. Mixer rows at 390: the faders are about 70 px long. Let the fader take the row's free width (a narrower name column, 44 px keys).
+
+Include these screens in the final screenshots.

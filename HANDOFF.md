@@ -388,6 +388,9 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - Rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs. No merge or deploy until the user has reviewed the screenshots.
 - Out of phase 5 (the user's answers): AI Duet, the six Songs-tab solo tools and the Performance Report's own screen go
   to phase 6. live9's save round-trip times leave the choir gate (still printed).
+- Part 1 (2.1–2.3) pushed 2026-11-02 12:10 IST: review/phase5-part1 (9409169), redesign/phase5 3e05d9a. The user
+  approved the structure and added 2.6 (seven fixes, verbatim in PHASE5.md), built after 2.5 and before the checks; the
+  final screenshots include its screens.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
