@@ -15162,7 +15162,7 @@ function renderCwLanes(svg, opts={}){
     const x = (pt.from+pt.to)/2/(songChordDurMs()/1000)*colW;
     html += `<path class="cw-breath" d="M${x-3} ${mineLane.y+1} q3 4 0 8"/>`;
   });
-  html += `<path class="cw-voice" d=""/><text class="cw-curnote" x="0" y="${mineLane.y+12}"></text><line class="cw-playhead" x1="0" x2="0" y1="18" y2="${H-CW_LANE_GAP}"/>`;
+  html += `<path class="cw-voice" d=""/><text class="cw-curnote" x="0" y="${mineLane.y+12}"></text><line class="cw-playhead"${svg.id==='rehearsalRoll' ? ' id="rehearsalPlayhead"' : ''} x1="0" x2="0" y1="18" y2="${H-CW_LANE_GAP}"/>`;
   svg.setAttribute('viewBox', `0 0 ${w} ${H}`);
   svg.setAttribute('height', H);
   svg.innerHTML = html;
