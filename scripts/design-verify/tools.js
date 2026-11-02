@@ -160,12 +160,14 @@ const readTake = (page, tool) => page.evaluate(({ display, key }) => {
 
 // The review states of a tool (contrast.js, shots.js): <key>-idle, then for a sung tool <key>-stage (mid-take, at its
 // liveAt) and <key>-result (the house up again, the result in view); for a paper tool <key>-result (after its action);
-// for a live tool (tools4b.js) <key>-stage (listening, at its liveAt) and <key>-stopped (after Stop).
+// for a live tool (tools4b.js) <key>-stage (listening, at its liveAt) and <key>-stopped (after Stop); for a paper page
+// (choir5.js, page: true) <key>-idle only.
 // onState(name, rootSelector) is awaited at each.
 async function toolStates(page, tool, onState) {
   await tool.open(page); await C.sleep(500);
   if (tool.idle) { await page.evaluate(sel => { const e = document.querySelector(sel); if (e && e.getClientRects().length) e.scrollIntoView({ block: 'center' }); }, tool.idle); await C.sleep(250); }
   await onState(`${tool.key}-idle`, `#panel-${tool.panel}`);
+  if (tool.page) return; // a paper page (choir5.js): idle only
   if (tool.live) { // a live tool (tools4b.js): Start, its stage while it listens, Stop, shown stopped
     await tool.act(page);
     await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 8000 }).catch(() => {});

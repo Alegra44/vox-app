@@ -29,6 +29,15 @@
 //    the stage live, never up while listening, #vlBreak, the button topmost, up within 1.5 s of Stop, no marks. For
 //    every one, a second start: stopAllActiveSessions() brings the house up within 100 ms, no marks left. No console
 //    errors during any of it. --only4b runs check 11 alone (and the page checks it needs).
+// 12 Phase 5 (PHASE5.md §1b), Choir World (choir5.js), signed in on a fresh account (a trial: full access), Demo Hymn,
+//    Alto: the five trainers (Harmony Memory, Choir Bosses, Chaos Mode, Tempo/Key Ladder, Entrance & Cutoff), a Your
+//    Choir take and rehearsal playback (Hear me off, and on), each as check 11: down within 1.5 s with its own
+//    .vc-stage live, never up while it runs, #vlBreak on the stage, its Start/Stop topmost, up within 1.5 s after (the
+//    result shown; rehearsal playback: of Stop), no marks; a second start brought up by stopAllActiveSessions() within
+//    100 ms, no marks; no console errors.
+// 13 Phase 5, the paper pages never dim (100 ms samples, nothing staged): the landing, Song Lab with the mixer playing,
+//    Your Choir playing your stacked takes (not recording), Passport; the X-Ray lightbox is a data-house="down" inset
+//    inside Song Lab while the body stays up. --onlychoir runs checks 12 and 13 alone.
 //  7 Reduced motion: the dimmer never gets .is-on; down within 100 ms of the start, up 600 ms after the stop.
 //  8 While down, every meta theme-color is #060708; afterwards they're restored.
 //  9 #warmupOverlay has data-house="down".
@@ -37,7 +46,8 @@
 // On a build without the lighting engine (master) there is nothing to test: the script says so and exits 0.
 // Usage: node scripts/design-verify/house.js [--base <git ref>]   (DV_URL=https://… runs it on that site)
 const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b');
-const ONLY4B = process.argv.includes('--only4b');
+const ONLY4B = process.argv.includes('--only4b'), ONLYCHOIR = process.argv.includes('--onlychoir');
+const CW = require('./choir5');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const BASE = arg('--base');
 let pass = 0, fail = 0;
@@ -87,6 +97,7 @@ async function combo(b, dir, state, theme, w) {
   const consoleErrors = []; page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text().split('\n')[0]); });
   await C.clearOverlays(page); await page.evaluate(MONITOR); await S.warmMic(page);
   if (ONLY4B) { await tool4bChecks(page, consoleErrors); check('no page errors', !errors.length, errors.slice(0, 2).join(' | ')); await ctx.close(); return; }
+  if (ONLYCHOIR) { await choirChecks(page, consoleErrors); check('no page errors', !errors.length, errors.slice(0, 2).join(' | ')); await ctx.close(); return; }
   const metaBefore = await metas(page);
 
   // 1 Tuner start
@@ -179,6 +190,8 @@ async function combo(b, dir, state, theme, w) {
   await toolChecks(page, consoleErrors);
   // 11 the phase 4b tools
   await tool4bChecks(page, consoleErrors);
+  // 12, 13 Choir World
+  await choirChecks(page, consoleErrors);
   // 9 the warm-up overlay is a stage
   const wu = await page.evaluate(() => document.getElementById('warmupOverlay')?.getAttribute('data-house'));
   check('9 #warmupOverlay has data-house="down"', wu === 'down', String(wu));
@@ -258,7 +271,7 @@ async function toolChecks(page, consoleErrors) {
 }
 
 // 11 the phase 4b tools (see the header)
-async function tool4bChecks(page, consoleErrors) {
+async function tool4bChecks(page, consoleErrors, tools = T4.TOOLS, no = '11') {
   const topmost = sel => page.evaluate(sel => { const e = document.querySelector(sel); if (!e) return { found: false };
     const r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
     return { found: true, shown: !!e.getClientRects().length && getComputedStyle(e).display !== 'none', top: !!h && (h === e || e.contains(h)) }; }, sel);
@@ -267,7 +280,7 @@ async function tool4bChecks(page, consoleErrors) {
     const r = await page.evaluate(() => { const box = document.getElementById('vlBreak'); return { shown: !!box && getComputedStyle(box).display !== 'none' && !!box.getClientRects().length, off: !!box && box.hasAttribute('data-offstage'), house: document.body.dataset.house }; });
     await page.evaluate(() => vlHideBreak()); return r;
   };
-  for (const tool of T4.TOOLS) {
+  for (const tool of tools) {
     const n = tool.name;
     await tool.open(page); await C.sleep(400);
     await page.evaluate(({ busySrc, stage }) => { const busy = new Function('return (' + busySrc + ')()');
@@ -280,7 +293,7 @@ async function tool4bChecks(page, consoleErrors) {
     if (tool.live) {
       await tool.act(page);
       started = await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 8000 }).then(() => true, () => false);
-      await C.sleep(1500); top = await topmost(tool.btn); brk = await breakOnStage(); await C.sleep(500);
+      await C.sleep(no === '11' ? 1500 : tool.liveAt || 1500); top = await topmost(tool.btn); brk = await breakOnStage(); await C.sleep(500);
       await tool.stop(page);
       done = await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: 4000 }).then(() => true, () => false);
     } else {
@@ -294,12 +307,12 @@ async function tool4bChecks(page, consoleErrors) {
     const firstDown = log.s.find(x => x.house === 'down'), downAt = firstDown ? Math.round(firstDown.t - log.t0) : null;
     const upBusy = firstDown ? log.s.filter(x => x.t >= firstDown.t && x.busy && x.house !== 'down').length : null;
     const errs = consoleErrors.slice(cons0);
-    check(`11 ${n}: down within 1.5 s of ${tool.live ? 'Start' : 'the start'}, ${tool.stage} live`, started && downAt !== null && downAt <= 1500 && log.s.some(x => x.live), `${downAt !== null ? downAt + ' ms' : 'never down'}${started ? '' : ' · did not start'}`);
-    check(`11 ${n}: never up while ${tool.live ? 'listening' : 'the exercise runs'} (100 ms samples)`, upBusy === 0, `${upBusy} up of ${log.s.filter(x => x.busy).length} busy`);
-    check(`11 ${n}: #vlBreak displayed on its stage, not offstage`, !!brk && brk.shown && !brk.off && brk.house === 'down', JSON.stringify(brk));
-    check(`11 ${n}: ${tool.btn} topmost on the stage`, !!top && top.found && top.shown && top.top, JSON.stringify(top));
-    check(`11 ${n}: up within 1.5 s ${tool.live ? 'of Stop' : 'after'}${tool.live ? '' : ', result shown'}, no marks left`, done && up !== null && res && noMarks(m), `${up !== null ? up + ' ms' : 'still down'} · result ${res} · ${JSON.stringify(m)}${done ? '' : ' · did not finish'}`);
-    check(`11 ${n}: no console errors`, errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
+    check(`${no} ${n}: down within 1.5 s of ${tool.live ? 'Start' : 'the start'}, ${tool.stage} live`, started && downAt !== null && downAt <= 1500 && log.s.some(x => x.live), `${downAt !== null ? downAt + ' ms' : 'never down'}${started ? '' : ' · did not start'}`);
+    check(`${no} ${n}: never up while ${tool.live ? 'listening' : 'the exercise runs'} (100 ms samples)`, upBusy === 0, `${upBusy} up of ${log.s.filter(x => x.busy).length} busy`);
+    check(`${no} ${n}: #vlBreak displayed on its stage, not offstage`, !!brk && brk.shown && !brk.off && brk.house === 'down', JSON.stringify(brk));
+    check(`${no} ${n}: ${tool.btn} topmost on the stage`, !!top && top.found && top.shown && top.top, JSON.stringify(top));
+    check(`${no} ${n}: up within 1.5 s ${tool.live ? 'of Stop' : 'after'}${tool.live ? '' : ', result shown'}, no marks left`, done && up !== null && res && noMarks(m), `${up !== null ? up + ' ms' : 'still down'} · result ${res} · ${JSON.stringify(m)}${done ? '' : ' · did not finish'}`);
+    check(`${no} ${n}: no console errors`, errs.length === 0, errs.slice(0, 2).join(' | ') || 'none');
     await T.restoreRange(page);
     // a second start, stopped by stopAllActiveSessions while the house is down
     await tool.open(page); await C.sleep(400);
@@ -308,9 +321,36 @@ async function tool4bChecks(page, consoleErrors) {
     const t11 = await page.evaluate(async () => { const t0 = performance.now(); stopAllActiveSessions();
       while (performance.now() - t0 <= 100) { if (document.body.dataset.house === 'up') return Math.round(performance.now() - t0); await new Promise(r => setTimeout(r, 5)); } return null; });
     await C.sleep(50); const m2 = await marks(page);
-    check(`11 ${n}: stopAllActiveSessions() brings it up within 100 ms, no marks`, down2 && t11 !== null && noMarks(m2), `${down2 ? '' : 'never down · '}${t11 !== null ? t11 + ' ms' : 'not up'} · ${JSON.stringify(m2)}`);
+    check(`${no} ${n}: stopAllActiveSessions() brings it up within 100 ms, no marks`, down2 && t11 !== null && noMarks(m2), `${down2 ? '' : 'never down · '}${t11 !== null ? t11 + ' ms' : 'not up'} · ${JSON.stringify(m2)}`);
+    // a run that stopAllActiveSessions doesn't end (a Your Choir take saving) runs out first
+    await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: tool.timeout || 20000 }).catch(() => {});
     await C.sleep(600); await T.restoreRange(page);
   }
+}
+
+// 12, 13 Choir World (see the header)
+async function choirChecks(page, consoleErrors) {
+  await tool4bChecks(page, consoleErrors, CW.TOOLS, '12');
+  const sampleUp = async (ms, during) => {
+    await page.evaluate(() => { window.__ns = []; clearInterval(window.__nsT);
+      window.__nsT = setInterval(() => window.__ns.push(document.body.dataset.house + (document.querySelector('.is-live, .is-staged') ? '+staged' : '')), 100); });
+    if (during) await during(); await C.sleep(ms);
+    return page.evaluate(() => { clearInterval(window.__nsT); return window.__ns; });
+  };
+  const allUp = ns => ns.length >= 10 && ns.every(h => h === 'up');
+  for (const pg of CW.PAGES.filter(p => p.key !== 'cw-xray')) {
+    await pg.open(page);
+    let ns, what = '';
+    if (pg.key === 'cw-songlab') { what = ', the mixer playing'; ns = await sampleUp(3000, () => page.evaluate(() => document.getElementById('choirPlayBtn').click())); await page.evaluate(() => stopChoir()); }
+    else if (pg.key === 'cw-yourchoir') { what = ', your stacked takes playing'; ns = await sampleUp(3000, () => page.evaluate(() => document.getElementById('ycPlayBtn').click())); await page.evaluate(() => ycStop()); }
+    else ns = await sampleUp(1500);
+    check(`13 ${pg.name}${what}: data-house="up" throughout, nothing staged`, allUp(ns), `${ns.length} samples: ${[...new Set(ns)].join(', ')}`);
+  }
+  const xr = CW.byKey('cw-xray'); await xr.open(page);
+  const ns = await sampleUp(1500, () => page.evaluate(() => { const e = document.querySelector('#xraySvg rect, #xraySvg [data-sec]'); if (e) e.dispatchEvent(new MouseEvent('click', { bubbles: true })); }));
+  const inset = await page.evaluate(() => { const box = document.querySelector('#sonicXrayCard [data-house="down"]'); return { inset: !!box, svgInside: !!box && box.contains(document.getElementById('xraySvg')) }; });
+  await page.evaluate(() => stopAllActiveSessions());
+  check('13 Sonic X-Ray lightbox: a data-house="down" inset holding #xraySvg; the body stays up (a tap included)', inset.inset && inset.svgInside && allUp(ns), `${JSON.stringify(inset)} · ${[...new Set(ns)].join(', ')}`);
 }
 
 // The sharp stimulus (40 cents sharp, once, Light 390): the readout reads pm_live_sharp with a number, never locks.
@@ -344,7 +384,7 @@ async function sharpTake(dir, state) {
     await C.signUp(page, 'dvh', 'House Check');
     const state = await ctx.storageState(); await ctx.close();
     for (const theme of ['light', 'dark']) for (const w of ['390', '1280']) await combo(b, dir, state, theme, w);
-    if (!ONLY4B) await sharpTake(dir, state);
+    if (!ONLY4B && !ONLYCHOIR) await sharpTake(dir, state);
   } finally {
     await b.close();
     console.log(`\n${pass} passed, ${fail} failed`);

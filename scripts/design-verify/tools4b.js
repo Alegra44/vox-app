@@ -260,10 +260,12 @@ const byKey = k => TOOLS.find(t => t.key === k);
 const STATE_NAMES = TOOLS.flatMap(t => [`${t.key}-idle`, `${t.key}-stage`, `${t.key}-${t.live ? 'stopped' : 'result'}`]);
 
 // The tools a review script covers, from its --set argument: 4a (tools.js), 4b (these) or all (the default).
+// --set 4a | 4b | choir (phase 5: Choir World, choir5.js, its activities and its paper pages) | all (the default)
 function toolSet(argv = process.argv) {
-  const i = argv.indexOf('--set'), set = i > 0 ? argv[i + 1] : 'all', T = require('./tools');
-  const tools = set === '4a' ? T.TOOLS : set === '4b' ? TOOLS : [...T.TOOLS, ...TOOLS];
-  const names = set === '4a' ? T.STATE_NAMES : set === '4b' ? STATE_NAMES : [...T.STATE_NAMES, ...STATE_NAMES];
+  const i = argv.indexOf('--set'), set = i > 0 ? argv[i + 1] : 'all', T = require('./tools'), CW = require('./choir5');
+  const cw = [...CW.TOOLS, ...CW.PAGES];
+  const tools = set === '4a' ? T.TOOLS : set === '4b' ? TOOLS : set === 'choir' ? cw : [...T.TOOLS, ...TOOLS, ...cw];
+  const names = set === '4a' ? T.STATE_NAMES : set === '4b' ? STATE_NAMES : set === 'choir' ? CW.STATE_NAMES : [...T.STATE_NAMES, ...STATE_NAMES, ...CW.STATE_NAMES];
   return { set, tools, names };
 }
 
