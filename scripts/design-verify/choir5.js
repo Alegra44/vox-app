@@ -29,6 +29,7 @@ const openTab = (page, panel, tab, trainer) => page.evaluate(({ panel, tab, trai
   window.scrollTo(0, 0);
 }, { panel, tab, trainer, prep: `(${SONG_PART})()` }).then(() => C.sleep(700));
 const clickSel = (page, sel) => page.evaluate(sel => { window.__t0 = performance.now(); document.querySelector(sel).click(); }, sel);
+const stopSel = (page, sel) => page.evaluate(sel => { window.__t1 = performance.now(); document.querySelector(sel).click(); }, sel); // Stop: house.js times "up" from __t1
 const hear = (page, on) => page.evaluate(on => { // "Hear me" set as asked (remembered on this device: set it every time)
   const b = document.getElementById('rehearsalHearBtn'); if (!b) return;
   if ((b.getAttribute('aria-pressed') === 'true') !== on) b.click();
@@ -53,14 +54,14 @@ const TOOLS = [
     stage: '#rehearsalStage', liveAt: 3000, hear: false,
     open: async page => { await openTab(page, 'partrehearsal', 'rehearse'); await hear(page, false); },
     act: page => clickSel(page, '#rehearsalPlayBtn'),
-    stop: page => clickSel(page, '#rehearsalStopBtn'),
+    stop: page => stopSel(page, '#rehearsalStopBtn'),
     busy: () => partRehearsal.active && choirIsPlaying && !timingTrainer.active && !harmonyMemory.active && !challenge.active,
     idleOk: `(() => !partRehearsal.active && !choirIsPlaying && !document.getElementById('rehearsalPlayBtn').disabled)` },
   { key: 'rehearsalhear', name: 'Rehearsal playback, Hear me on', panel: 'partrehearsal', live: true, idle: '#rehearsalPlayBtn', btn: '#rehearsalStopBtn',
     stage: '#rehearsalStage', liveAt: 3000, hear: true,
     open: async page => { await openTab(page, 'partrehearsal', 'rehearse'); await hear(page, true); },
     act: page => clickSel(page, '#rehearsalPlayBtn'),
-    stop: page => clickSel(page, '#rehearsalStopBtn'),
+    stop: page => stopSel(page, '#rehearsalStopBtn'),
     busy: () => partRehearsal.active && choirIsPlaying && !timingTrainer.active && !harmonyMemory.active && !challenge.active,
     idleOk: `(() => !partRehearsal.active && !choirIsPlaying && !document.getElementById('rehearsalPlayBtn').disabled)` },
   trainer('hm', 'Harmony Memory', 'harmonyMemoryCard', 'hmemStartBtn', 'hmemStage', 'hmemResults', () => harmonyMemory.active),

@@ -1,6 +1,6 @@
 # Phase 5 copy: Choir World, old → new (four languages)
 
-Generated from TRANSLATIONS on master and on redesign/phase5 (PHASE5.md §2.5). 61 changed keys, 48 new keys. Rules: no §7 words (real, really, genuinely, honest, fake, PRD, §, GainNode…), no emoji in Choir World strings, developer copy removed, method text in hl-measure, trainer descriptions one or two sentences.
+Generated from TRANSLATIONS on master and on redesign/phase5 (PHASE5.md §2.5). 62 changed keys, 48 new keys. Rules: no §7 words (real, really, genuinely, honest, fake, PRD, §, GainNode…), no emoji in Choir World strings, developer copy removed, method text in hl-measure, trainer descriptions one or two sentences.
 
 ## Changed
 
@@ -552,6 +552,15 @@ Generated from TRANSLATIONS on master and on redesign/phase5 (PHASE5.md §2.5). 
 | fr | Le vrai contenu de lancement est un catalogue multipiste sous licence, pré-séparé (PRD §3.3) — la séparation de voix par IA en direct pour des téléversements arbitraires reste hors périmètre pour les raisons du PRD §9. Cette démo utilise des progressions originales et libres de droits, synthétisées en direct, afin que muet/solo/volume fonctionnent vraiment par voix plutôt que de simuler l'interface. | Cette démo utilise des progressions originales et libres de droits jouées par l'app, si bien que le mixeur agit sur chaque voix séparément. |
 | es | El contenido real de lanzamiento es un catálogo multipista con licencia, pre-separado (PRD §3.3) — la separación de voces por IA en vivo para cargas arbitrarias queda fuera de alcance por las razones del PRD §9. Esta demo usa progresiones originales y libres de regalías, sintetizadas en vivo, para que silenciar/solo/volumen realmente funcionen por voz en lugar de simular la interfaz. | Esta demo usa progresiones originales y libres de regalías tocadas por la app, así que el mezclador actúa sobre cada voz por separado. |
 | tr | Gerçek lansman içeriği, lisanslı, önceden ayrılmış çok parçalı bir katalogdur (PRD §3.3) — rastgele yüklemeler için canlı yapay zeka ses ayırma, PRD §9'daki nedenlerle kapsam dışı kalır. Bu demo, orijinal, telifsiz dizileri canlı olarak sentezler, böylece sessize alma/solo/ses düzeyi arayüzü simüle etmek yerine ses grubu başına gerçekten çalışır. | Bu demo, uygulamanın çaldığı özgün ve telifsiz diziler kullanır; bu yüzden mikser her partiyi ayrı ayrı etkiler. |
+
+### hm_off_pitch
+
+| | old | new |
+|---|---|---|
+| en | off pitch | off pitch |
+| fr | faux | pas juste |
+| es | desafinada | desafinada |
+| tr | detone | detone |
 
 ## New
 

@@ -47,6 +47,8 @@ async function measure(rootSel) {
     return out.filter(Boolean);
   };
   const visible = el => {
+    // inside a closed <details> (its summary aside): laid out by Chromium but never painted
+    const dt = el.closest('details:not([open])'); if (dt && !el.closest('summary')?.parentElement?.isSameNode(dt)) return false;
     for (let e = el; e && e.nodeType === 1; e = e.parentElement) {
       const s = getComputedStyle(e);
       if (s.display === 'none' || s.visibility === 'hidden' || s.visibility === 'collapse' || +s.opacity === 0) return false;
