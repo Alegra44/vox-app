@@ -397,10 +397,12 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Guards DONE** (logs/checks5-2026-11-02T07-41-37 and the re-run checks5-2026-11-02T09-26-25): house 882/1 (the one:
   a Supabase 503 in Register Coach, 4b, not Choir World), stopcheck pass, modecheck pass (Hear me off 0 / on 1
   getUserMedia), contrast only the master Profile icon rows, copyscan 0, hooks 21/0, navcheck 20/0.
-- **Gate RUNNING** (started 10:55 UTC, ~7 h): scripts/choir-verify/logs/regress-2026-11-02T10-55-10/progress.txt.
-  It waits for AC by itself. One script failed so far: branch live7 #2 exit 1 (0 min): look at it first; if the gate
-  was cut short, re-run `bash scripts/choir-verify/choirregress.sh working`.
-- **Still to do, in order:** read the gate (choircompare); `bash scripts/design-verify/checks5.sh after`; vocal load
+- **Gate DONE 2026-11-02 18:57 UTC: FAIL 2 of 21** (logs/regress-2026-11-02T10-55-10; 19 pass, 0 numbers moved in
+  them). live7: branch #2 sign-up timed out (Supabase, 20 s), the other runs passed: re-run. fix: every colour read
+  as its Dark value because fix.js read them 300 ms after Harmony Memory ended, with the house still down (new in
+  phase 5); fixed in 45f09c1 (waits for the house up; no-op on master). Next: re-run only those two, e.g. a
+  choirregress run limited to fix,live7 (check the script's options), then go on.
+- **Still to do, in order:** re-run fix and live7; `bash scripts/design-verify/checks5.sh after`; vocal load
   (existing = master ±2; measure Hear me's load for one play-through); final screenshots
   `node scripts/design-verify/shots5after.js --set final --out <dir>` (include the 2.6 screens); orphan
   review/phase5 with sheets/final.jpg; secret check; push redesign/phase5 and review/phase5; report; STOP. No merge,
