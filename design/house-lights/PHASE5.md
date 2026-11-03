@@ -128,3 +128,30 @@ Part 1 review: the structure is approved. Seven fixes, as 2.6, after 2.5 and bef
 7. Mixer rows at 390: the faders are about 70 px long. Let the fader take the row's free width (a narrower name column, 44 px keys).
 
 Include these screens in the final screenshots.
+
+## 5.1 (the phase 5 review, 2026-11-03, verbatim)
+
+Phase 5 review: approved after a small fix round (5.1). Save this in PHASE5.md as "5.1" and commit it first. Four languages wherever text changes.
+
+FIXES
+1. Coach lines in the Choir World results ("Not passed yet…", "Work on pitch next…", the boss result line) render at about 19 px at 390. Use the standard .hl-coach size, as in One Take and Pitch Match.
+2. "Why?" is ink with an underline (it's a details summary), not voice blue.
+3. Entrance & Cutoff result: when 0 notes were caught, show no big number, as Rhythm does. "0 early · 0 on time · 0 late (on time = within ±40 ms)" is data, so make it Archivo rows (Early / On time / Late). The coach line says what to do.
+4. Your Choir rows: date and time through Intl in the current language ("3 Nov, 2:26 pm"), duration rounded ("27 s"). "peak −4.6 dBFS" moves into hl-measure, off the row.
+5. Harmony Memory idle: "(gain 0.700 = 100% × 0.70)" moves into hl-measure. The visible line says the guide plays at full volume and the other parts at their mixer level.
+6. Part chooser at 390: "Soprano" and "Lead" run together. Use equal-width segments with centred labels and no touching text.
+
+CHECKS: hooks, copyscan, contrast, house (Choir World), and choirregress on the scripts these touch (fix, p7, yc, timing, live7; fix.js reading "Why?" in ink is expected). Fixshots of each fix at 390 and 1280, Light and Dark, on review/phase5-fix with one sheet. Secret check, push redesign/phase5 and review/phase5-fix, report, stop. No deploy until I type "deploy".
+
+WHEN I TYPE "deploy"
+1. Merge redesign/phase5 into master with --no-ff, secret check, push. Then wait: the user runs the Vercel line themselves.
+2. When the Vercel output shows the new deployment, carry on: prod.sh with WITH_CHOIR=1 (house, modecheck, scores, stopcheck, scores4b, live, navcheck, livevq, and the choir group once each). A failure that repeats on a rerun and isn't a network error or a Supabase 503 → roll back to dpl_BvNJh8hz89bSLfWzbAqHS15G85zs and report.
+3. If it passes: push review/phase5-prod with the production screenshots, delete review/phase5, review/phase5-part1, review/phase5-fix and review/phase5-before, update HANDOFF.
+4. Then a read-only survey for phase 6, like the phase 5 one. No app changes. On a new branch redesign/phase6, write design/house-lights/PHASE6_SURVEY.md covering the six Songs-tab solo tools (Studio Mode, Performance Director, AI Duet Partner, Stay in Key, Karaoke Coach, Emotional Singing) and the Performance Report. For each:
+   - what it measures and how it's scored;
+   - its live display and result, with element IDs;
+   - mic path and singingSession / houseSession;
+   - which verify scripts cover it;
+   - copy problems in four languages;
+   - anything broken (note it, don't fix it).
+   Take before-screenshots (idle, live, result) at 390 Light and Dark and 1280 Light on review/phase6-before with one contact sheet. Push both, report, stop.
