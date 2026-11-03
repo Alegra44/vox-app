@@ -1991,6 +1991,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-train-hub .hc-btn-row{display:block;}
   #panel-train-hub .coach-row .hl-item-title{color:var(--hl-ink);}
   #panel-train-hub .coach-best:empty{display:none;}
+  /* ---- SONGS TAB (phase 6): the Choir World card, the one raised block; then the six solo tools as rows ---- */
+  #panel-songs-hub .cw-hub-feature.hl-raised{background:var(--hl-raised);border:0;border-radius:var(--hl-r2);padding:var(--hl-s5);}
+  #panel-songs-hub .cw-hub-feature.hl-raised:hover{transform:none;box-shadow:none;}
+  #panel-songs-hub .cw-hub-feature .hc-title{color:var(--hl-ink);}
+  #panel-songs-hub .cw-hub-feature .hc-desc{color:var(--hl-ink-2);}
+  #panel-songs-hub .songs-tools{margin-top:var(--hl-s6);}
+  #panel-songs-hub .songs-tools-label{margin:0 0 var(--hl-s1);}
+  #panel-songs-hub .songs-row .hl-item-title{display:block;color:var(--hl-ink);}
+  #panel-songs-hub .songs-row .hl-item-meta{display:block;margin-top:2px;}
+  #panel-songs-hub .coach-best:empty{display:none;}
   /* rows and links are buttons: the House Lights focus ring on the ones it doesn't already cover */
   .home-sec-link:focus-visible, .home-range-find:focus-visible{outline:2px solid var(--hl-voice);outline-offset:2px;}
 
@@ -2602,8 +2612,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-title" data-i18n="hub_songs_title">Songs</div>
       <div class="j-sub" data-i18n="hub_songs_sub">Rehearse your choir part, or practice a song on your own.</div>
     </div>
-    <div class="hub-category-card cw-hub-feature">
-      <div class="hc-title"><span data-i18n="cw_label">🎼 Choir World</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
+    <div class="hub-category-card hl-raised cw-hub-feature">
+      <div class="hc-title"><span data-i18n="cw_label">Choir World</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
       <div class="hc-desc" data-i18n="cw_hub_desc">Rehearse one part while the rest of the choir sings around you: a guide that fades over 5 levels, Harmony Memory, Choir Bosses, Your Choir recordings, and a readiness status for every part.</div>
       <div class="hc-desc cw-hub-status" id="cwHubStatus" style="display:none;"></div>
       <div class="hc-btn-row">
@@ -2613,41 +2623,21 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="ghost-btn cw-hidden" data-enter-panel="choirpassport" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
       </div>
     </div>
-    <div class="hub-category-grid">
-      <div class="hub-category-card cw-hidden">
-        <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
-        <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_studio_title">Studio Mode</div>
-        <div class="hc-desc" data-i18n="hub_songs_studio_desc">No XP, no streak, no gamification — just record real takes and listen back.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="studio" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_aiduet_title">AI Duet Partner</div>
-        <div class="hc-desc" data-i18n="hub_songs_aiduet_desc">Pick your part — the AI genuinely sings the other four, live, so you're never singing alone.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="aiduet" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_pd_title">Performance Director</div>
-        <div class="hc-desc" data-i18n="hub_songs_pd_desc">Real section-by-section coaching cues, live, then a real multi-dimension report.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="performancedirector" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_staykey_title">Stay in Key</div>
-        <div class="hc-desc" data-i18n="hub_songs_staykey_desc">Sing over the backing track, live chord-tone matching.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="staykey" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_karaoke_title">Karaoke Coach</div>
-        <div class="hc-desc" data-i18n="hub_songs_karaoke_desc">Predictive note display, live Pitch + Timing scoring.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="karaoke" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_emotion_title">Emotional Singing</div>
-        <div class="hc-desc" data-i18n="hub_songs_emotion_desc">Pitch and dynamic-contrast, scored separately.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="emotion" data-i18n="hub_open_btn">Open</button></div>
+    <div class="hub-category-card cw-hidden">
+      <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
+      <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
+      <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
+    </div>
+    <!-- the six solo tools as rows, like the Coach tab (phase 6); "Best" where a best is stored (renderSongsHub) -->
+    <div class="songs-tools">
+      <div class="hl-label songs-tools-label" data-i18n="hub_songs_solo_label">On your own</div>
+      <div class="hl-list">
+        <button class="hl-item songs-row" data-enter-panel="studio"><svg class="hl-icon" aria-hidden="true"><use href="#hl-record"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_studio_title"></span><span class="hl-item-meta" data-i18n="hub_songs_studio_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="aiduet"><svg class="hl-icon" aria-hidden="true"><use href="#hl-choir"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_aiduet_title"></span><span class="hl-item-meta" data-i18n="hub_songs_aiduet_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="performancedirector"><svg class="hl-icon" aria-hidden="true"><use href="#hl-score"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_pd_title"></span><span class="hl-item-meta" data-i18n="hub_songs_pd_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="staykey"><svg class="hl-icon" aria-hidden="true"><use href="#hl-keys"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_staykey_title"></span><span class="hl-item-meta" data-i18n="hub_songs_staykey_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="karaoke"><svg class="hl-icon" aria-hidden="true"><use href="#hl-mic"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_karaoke_title"></span><span class="hl-item-meta" data-i18n="hub_songs_karaoke_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="emotion"><svg class="hl-icon" aria-hidden="true"><use href="#hl-flame"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_emotion_title"></span><span class="hl-item-meta" data-i18n="hub_songs_emotion_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
       </div>
     </div>
   </section>
@@ -8119,6 +8109,8 @@ const TRANSLATIONS = {
     emo_notenough:"There wasn't enough signal on one of the takes to compare them. Try again a little louder or closer to the mic.",
     emo_measure:"One note from the lower middle of your range, sung twice: first with your intention, then with another picked at random. Each take plays the note for 0.6 seconds, then listens for 3 seconds from 0.9 seconds after it starts. Dynamic range is your loudest moment minus your quietest (of the moments above the silence level); loudness is your average level; pitch stability is 100 minus 3 times the spread of your pitch, in cents, with natural vibrato taken out. Each row shows the second take against the first: as a percentage for dynamic range and loudness, in points for stability. Emotion itself isn't judged: only these three are measured.",
     vq_result_head:"Your tone",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"On your own",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9679,6 +9671,8 @@ const TRANSLATIONS = {
     emo_notenough:"Il n'y avait pas assez de signal sur l'une des prises pour les comparer. Réessayez un peu plus fort ou plus près du micro.",
     emo_measure:"Une note du bas-milieu de votre tessiture, chantée deux fois : d'abord avec votre intention, puis avec une autre tirée au hasard. Chaque prise joue la note 0,6 seconde, puis écoute 3 secondes à partir de 0,9 seconde après son début. La plage dynamique est votre moment le plus fort moins le plus faible (parmi ceux au-dessus du seuil de silence) ; le volume est votre niveau moyen ; la stabilité de la hauteur vaut 100 moins 3 fois la dispersion de votre hauteur, en cents, sans le vibrato naturel. Chaque ligne montre la deuxième prise face à la première : en pourcentage pour la plage dynamique et le volume, en points pour la stabilité. L'émotion elle-même n'est pas jugée : seules ces trois mesures le sont.",
     vq_result_head:"Votre timbre",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"En solo",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11239,6 +11233,8 @@ const TRANSLATIONS = {
     emo_notenough:"No hubo suficiente señal en una de las tomas para compararlas. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     emo_measure:"Una nota de la parte media baja de tu tesitura, cantada dos veces: primero con tu intención y luego con otra elegida al azar. Cada toma hace sonar la nota 0,6 segundos y luego escucha 3 segundos desde 0,9 segundos después de empezar. El rango dinámico es tu momento más fuerte menos el más suave (de los que superan el umbral de silencio); el volumen es tu nivel medio; la estabilidad de la altura es 100 menos 3 veces la dispersión de tu altura, en cents, sin el vibrato natural. Cada fila muestra la segunda toma frente a la primera: en porcentaje para el rango dinámico y el volumen, en puntos para la estabilidad. La emoción en sí no se juzga: solo se miden estas tres cosas.",
     vq_result_head:"Tu timbre",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"Por tu cuenta",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12799,6 +12795,8 @@ const TRANSLATIONS = {
     emo_notenough:"Karşılaştırmak için çekimlerden birinde yeterli sinyal yoktu. Biraz daha yüksek sesle ya da mikrofona daha yakın tekrar deneyin.",
     emo_measure:"Ses aralığınızın alt-orta kısmından bir nota, iki kez söylenir: önce sizin niyetinizle, sonra rastgele seçilen bir başkasıyla. Her çekim notayı 0,6 saniye çalar, ardından başlangıçtan 0,9 saniye sonra 3 saniye dinler. Dinamik aralık, en yüksek anınız eksi en sessiz anınızdır (sessizlik eşiğinin üstündeki anlar arasında); ses düzeyi ortalama seviyenizdir; perde kararlılığı, doğal vibrato çıkarılarak perdenizin yayılımının (sent) 3 katının 100'den çıkarılmasıdır. Her satır ikinci çekimi birinciye göre gösterir: dinamik aralık ve ses düzeyi için yüzde, kararlılık için puan. Duygunun kendisi değerlendirilmez: yalnızca bu üçü ölçülür.",
     vq_result_head:"Ses tınınız",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"Tek başınıza",
   },
 };
 let currentLanguage = 'en';
@@ -17874,6 +17872,15 @@ function translateFeatureLabel(raw){
 }
 // The Songs-tab solo tools' Start: "Start" to anyone with access, "Start (Pro)" only while it's locked.
 function songsStartLabel(){ return t(isPaid() ? 'action_start' : 'action_start_pro'); }
+// The Songs tab's rows: "Best {v}" where a best is stored (Karaoke Coach: songBestScores, for the song selected).
+function renderSongsHub(){
+  const kb = profile && progress && progress.songBestScores ? progress.songBestScores[currentSongId] : undefined;
+  const ends = {karaoke: typeof kb==='number' ? t('coach_best_tpl').replace('{v}', kb+'%') : ''};
+  document.querySelectorAll('#panel-songs-hub .songs-row').forEach(b=>{
+    const el = b.querySelector('.coach-best');
+    if(el) el.textContent = ends[b.dataset.enterPanel] || '';
+  });
+}
 function renderSongsStartLabels(){
   [['stayKeyStartLabel', ()=>stayKeyActive], ['emotionStartLabel', ()=>emotionActive], ['karaokeStartLabel', ()=>karaokeActive]].forEach(([id, running])=>{
     const el = document.getElementById(id);
@@ -20889,6 +20896,7 @@ function showShellSection(section){
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-songs-hub').classList.add('active');
     renderCwHubStatus();
+    renderSongsHub();
   } else if(section==='world'){
     enterPanel('arcade');
   } else if(section==='you'){
@@ -21175,6 +21183,7 @@ function renderCoachHub(){
     if(el) el.textContent = ends[b.dataset.enterPanel] || '';
   });
   if(typeof renderSongsStartLabels==='function') renderSongsStartLabels(); // the Songs tools' Start follows the plan too
+  if(typeof renderSongsHub==='function') renderSongsHub();
 }
 
 /* ---------------- Onboarding (Phase 2 — real, reuses existing data structures) ---------------- */
