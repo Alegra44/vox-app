@@ -1,0 +1,14 @@
+Phase 5 + 5.1 on production: dpl_7wMjFuZHdg3XE479UaD9N41gWCBY (master 1d0fce8, promoted 2026-11-03; the CLI deploy
+did not move the alias, `vercel promote` did). Rollback target was dpl_BvNJh8hz89bSLfWzbAqHS15G85zs (not used).
+
+final/  shots5after.js --set final with DV_URL=https://deploy-alegra1122.vercel.app/: Choir World 2.1–2.6 at 390 and
+        1280, Light and Dark, Choir-plan test account, fake mic steady A4. sheets/final.jpg, states.json.
+fix/    shots51.js, same site: the six 5.1 fixes. sheets/fix.jpg, measures.json (page errors: none).
+
+checks/ prod.sh ONLY="house modecheck scores stopcheck scores4b live navcheck livevq choir" WITH_CHOIR=1 (base 7296998):
+  pass first run: modecheck, scores, stopcheck, navcheck, livevq, all 21 choir scripts (cv-*).
+  house timed out at prod.sh's 30 min cap (735 checks passed; 1 Supabase CORS error); rerun uncapped 883 passed, 0 failed.
+  scores4b: note 1 74 (master 75–79), note 1 chest 64 (58–63); rerun: those pass, centroid 993 vs 996 instead. Not repeated.
+  live: 7.1 s pitch ct 40 vs 37; rerun: that passes, sharp Resonance 4.1 s ripple 72 vs 18 instead. Not repeated:
+        the first run had master's own 4.1 s ripple at 54/18/72. Phase 5 changed no Resonance/Register/centroid code.
+  No failure repeated on a rerun → no rollback.
