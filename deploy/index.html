@@ -2001,6 +2001,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-songs-hub .songs-row .hl-item-title{display:block;color:var(--hl-ink);}
   #panel-songs-hub .songs-row .hl-item-meta{display:block;margin-top:2px;}
   #panel-songs-hub .coach-best:empty{display:none;}
+  /* ---- STUDIO MODE (phase 6): the take on its stage; the takes as rows with Delete ---- */
+  .studio-stage{display:grid;justify-items:center;gap:var(--hl-s3);margin-top:var(--hl-s5);text-align:center;}
+  .studio-time{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;font-variant-numeric:tabular-nums;color:var(--hl-ink);line-height:1;}
+  .studio-level{width:min(76vw, 320px);height:6px;}
+  .vc-stage.is-live #studioRecordBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);} /* Stop: the neutral active pill */
+  .studio-take{padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .studio-take:first-child{border-top:0;padding-top:0;}
+  .studio-take-head{display:flex;align-items:center;justify-content:space-between;gap:var(--hl-s3);margin-bottom:var(--hl-s2);}
+  .studio-take-head .hl-item-meta{margin-left:var(--hl-s2);}
+  .studio-take audio{width:100%;}
   /* rows and links are buttons: the House Lights focus ring on the ones it doesn't already cover */
   .home-sec-link:focus-visible, .home-range-find:focus-visible{outline:2px solid var(--hl-voice);outline-offset:2px;}
 
@@ -4365,9 +4375,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- STUDIO MODE PANEL -->
   <section class="panel" id="panel-studio">
-    <div style="text-align:center;padding:10px 0 20px;">
-      <div style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;" data-i18n="studio_no_gamification">Studio — no XP, no streak, no gamification</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:26px;color:var(--cream);margin-top:8px;" data-i18n="studio_session_title">🎙️ Recording Session</h2>
+    <div class="journey-hero">
+      <div class="j-title" data-i18n="hub_songs_studio_title">Studio Mode</div>
+      <div class="j-sub" data-i18n="studio_sub">Record up to three takes of the song and listen back. No score, no XP.</div>
     </div>
     <div class="key-card">
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_song_label">Song</span><span id="studioSongName">—</span></div>
@@ -4375,17 +4385,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_tempo_label">Tempo</span><span id="studioSongTempo">—</span></div>
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_mic_label">Mic</span><span id="studioMicStatus" data-i18n="studio_mic_notconnected">Not connected yet</span></div>
     </div>
-    <div style="text-align:center;margin-top:24px;">
-      <button class="mic-btn" id="studioRecordBtn" style="width:180px;height:180px;border-radius:50%;font-size:15px;flex-direction:column;gap:8px;">
-        <span class="dot-icon"></span><span id="studioRecordLabel" data-i18n="studio_record_btn">RECORD</span>
-      </button>
-      <p class="fine-print" id="studioRecordNote" style="margin-top:12px;"></p>
+    <!-- the take on its stage (the Performance personality): the red tally, the time, the input level, Stop -->
+    <div class="vc-stage studio-stage" id="studioStage">
+      <p class="onetake-rec studio-tally vc-live-only"><span class="onetake-rec-dot" aria-hidden="true"></span><span data-i18n="onetake_recording">Recording</span></p>
+      <div class="studio-time vc-live-only" id="studioTime" aria-live="off">0:00 / 0:15</div>
+      <div class="hl-meter studio-level vc-live-only" id="studioLevel" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+      <button class="mic-btn vc-take-pill" id="studioRecordBtn"><span class="dot-icon"></span><span id="studioRecordLabel" data-i18n="studio_record_btn">Record</span></button>
+      <p class="fine-print vc-paper-only" id="studioRecordNote" role="status"></p>
       <div class="vl-gauge" id="vlGaugeStudio" style="display:none;"></div>
     </div>
     <div class="key-card" style="margin-top:24px;">
-      <div class="step-label" data-i18n="studio_takes_label">Your real takes</div>
+      <div class="step-label" data-i18n="studio_takes_label">Your takes</div>
       <div id="studioTakesList" style="margin-top:12px;"></div>
-      <p class="fine-print" style="margin-top:12px;" data-i18n="studio_scope_note">Honest scope: this app can't auto-judge which take is "better" after the fact — that needs re-analyzing a recorded file's pitch, a different capability than the live-mic scoring the rest of this app uses. Listen and decide for yourself.</p>
+      <p class="fine-print" style="margin-top:12px;" data-i18n="studio_device_note">Takes are kept on this device only, not in your account.</p>
+      <p class="fine-print" style="margin-top:6px;" data-i18n="studio_scope_note">The app doesn't compare takes: listen and keep the one you like.</p>
     </div>
   </section>
 
@@ -6780,14 +6793,12 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ Replay A and B',
     hearmistake_reproduce_label:'Now reproduce the correct version',
     hearmistake_next_btn:'Next round',
-    studio_no_gamification:'Studio — no XP, no streak, no gamification',
-    studio_session_title:'🎙️ Recording Session',
     studio_song_label:'Song',
     studio_key_label:'Key',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Mic',
-    studio_takes_label:'Your real takes',
-    studio_scope_note:'Honest scope: this app can\'t auto-judge which take is "better" after the fact — that needs re-analyzing a recorded file\'s pitch, a different capability than the live-mic scoring the rest of this app uses. Listen and decide for yourself.',
+    studio_takes_label:"Your takes",
+    studio_scope_note:"The app doesn't compare takes: listen and keep the one you like.",
     aiduet_title:"AI Duet Partner",
     aiduet_sub:'Pick your part. The AI genuinely sings the other four, live and in real time — the exact same synthesized progression Choir Workspace already uses, just framed simply: you\'re never singing alone.',
     aiduet_choose_part:'Choose your part',
@@ -7781,12 +7792,12 @@ const TRANSLATIONS = {
     pd_dim_technique:'Technique', pd_dim_timing:'Timing', pd_dim_dynamics:'Dynamics',
     pd_insight_prefix:"Your next real improvement isn't your top number — it's",
     pd_insight_notenough:'Not enough signal was captured to identify a real next step this time.',
-    studio_mic_connected:'Connected ✓', studio_mic_notconnected:'Not connected yet',
-    studio_notakes:'No real takes recorded yet.', studio_take_label:'Take',
-    studio_limit_reached:'Real limit: 3 takes max here — delete isn\'t built yet, so this keeps storage bounded.',
-    studio_recording_label:'REC… 15s', studio_record_btn:'RECORD',
-    studio_take_saved:'saved — real audio, stored locally.',
-    studio_save_failed:'Could not save this take (it may be too large) — try a shorter take.',
+    studio_mic_connected:"Connected", studio_mic_notconnected:'Not connected yet',
+    studio_notakes:"No takes yet.", studio_take_label:'Take',
+    studio_limit_reached:"Three takes are stored. Delete one to record another.",
+    studio_record_btn:"Record",
+    studio_take_saved:"saved on this device.",
+    studio_save_failed:"This device's storage is full, so the take wasn't kept. Delete a take and try again.",
     studio_notavailable:'Recording isn\'t available right now — check mic permissions.',
     snapshot_nobaseline:'No baseline yet.', snapshot_nodatayet:'No data yet',
     snapshot_nobaselinefor:'No Day 1 baseline for this — started tracking later',
@@ -8111,6 +8122,14 @@ const TRANSLATIONS = {
     vq_result_head:"Your tone",
     // phase 6 (PHASE6.md): the Songs-tab solo tools
     hub_songs_solo_label:"On your own",
+    studio_sub:"Record up to three takes of the song and listen back. No score, no XP.",
+    studio_device_note:"Takes are kept on this device only, not in your account.",
+    studio_bpm_tpl:"{n} BPM",
+    studio_delete_btn:"Delete",
+    studio_delete_confirm:"Delete take {n}? This can't be undone.",
+    studio_recording_label:"REC… 15s",
+    studio_no_gamification:"Studio — no XP, no streak, no gamification",
+    studio_session_title:"Recording Session",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8342,14 +8361,12 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ Rejouer A et B',
     hearmistake_reproduce_label:'Maintenant reproduisez la bonne version',
     hearmistake_next_btn:'Tour suivant',
-    studio_no_gamification:'Studio — pas de XP, pas de série, pas de ludification',
-    studio_session_title:'🎙️ Séance d\'Enregistrement',
     studio_song_label:'Chanson',
     studio_key_label:'Tonalité',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Micro',
-    studio_takes_label:'Vos vraies prises',
-    studio_scope_note:'Portée honnête : cette application ne peut pas juger automatiquement quelle prise est « meilleure » après coup — cela nécessite de ré-analyser la justesse d\'un fichier enregistré, une capacité différente de la notation en direct par micro utilisée par le reste de cette application. Écoutez et décidez par vous-même.',
+    studio_takes_label:"Vos prises",
+    studio_scope_note:"L'app ne compare pas les prises : écoutez-les et gardez celle qui vous plaît.",
     aiduet_title:"Partenaire de Duo IA",
     aiduet_sub:'Choisissez votre voix. L\'IA chante vraiment les quatre autres, en direct et en temps réel — exactement la même progression synthétisée que l\'Espace Chorale utilise déjà, juste présentée simplement : vous ne chantez jamais seul.',
     aiduet_choose_part:'Choisissez votre voix',
@@ -9343,12 +9360,12 @@ const TRANSLATIONS = {
     pd_dim_technique:'Technique', pd_dim_timing:'Timing', pd_dim_dynamics:'Dynamique',
     pd_insight_prefix:"Votre prochaine vraie amélioration n'est pas votre meilleur chiffre — c'est",
     pd_insight_notenough:'Pas assez de signal capté pour identifier une vraie prochaine étape cette fois.',
-    studio_mic_connected:'Connecté ✓', studio_mic_notconnected:'Pas encore connecté',
-    studio_notakes:'Aucune vraie prise enregistrée pour l\'instant.', studio_take_label:'Prise',
-    studio_limit_reached:'Vraie limite : 3 prises maximum ici — la suppression n\'est pas encore construite, donc cela garde le stockage borné.',
-    studio_recording_label:'ENR… 15s', studio_record_btn:'ENREGISTRER',
-    studio_take_saved:'enregistrée — audio réel, stocké localement.',
-    studio_save_failed:'Impossible d\'enregistrer cette prise (elle est peut-être trop volumineuse) — essayez une prise plus courte.',
+    studio_mic_connected:"Connecté", studio_mic_notconnected:'Pas encore connecté',
+    studio_notakes:"Aucune prise pour l'instant.", studio_take_label:'Prise',
+    studio_limit_reached:"Trois prises sont enregistrées. Supprimez-en une pour en enregistrer une autre.",
+    studio_record_btn:"Enregistrer",
+    studio_take_saved:"enregistrée sur cet appareil.",
+    studio_save_failed:"L'espace de cet appareil est plein : la prise n'a pas été gardée. Supprimez une prise et réessayez.",
     studio_notavailable:'L\'enregistrement n\'est pas disponible pour le moment — vérifiez les autorisations du micro.',
     snapshot_nobaseline:'Pas encore de référence.', snapshot_nodatayet:'Pas encore de données',
     snapshot_nobaselinefor:'Pas de référence du Jour 1 pour ceci — le suivi a commencé plus tard',
@@ -9673,6 +9690,14 @@ const TRANSLATIONS = {
     vq_result_head:"Votre timbre",
     // phase 6 (PHASE6.md): the Songs-tab solo tools
     hub_songs_solo_label:"En solo",
+    studio_sub:"Enregistrez jusqu'à trois prises du morceau et réécoutez-les. Sans score ni XP.",
+    studio_device_note:"Les prises restent sur cet appareil, pas dans votre compte.",
+    studio_bpm_tpl:"{n} BPM",
+    studio_delete_btn:"Supprimer",
+    studio_delete_confirm:"Supprimer la prise {n} ? Cette action est définitive.",
+    studio_recording_label:"ENR… 15s",
+    studio_no_gamification:"Studio — pas de XP, pas de série, pas de ludification",
+    studio_session_title:"Séance d'enregistrement",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9904,14 +9929,12 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ Repetir A y B',
     hearmistake_reproduce_label:'Ahora reproduce la versión correcta',
     hearmistake_next_btn:'Siguiente ronda',
-    studio_no_gamification:'Estudio — sin XP, sin racha, sin gamificación',
-    studio_session_title:'🎙️ Sesión de Grabación',
     studio_song_label:'Canción',
     studio_key_label:'Tono',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Micrófono',
-    studio_takes_label:'Tus tomas reales',
-    studio_scope_note:'Alcance honesto: esta app no puede juzgar automáticamente qué toma es "mejor" después del hecho — eso necesita reanalizar la afinación de un archivo grabado, una capacidad diferente de la puntuación en vivo por micrófono que usa el resto de esta app. Escucha y decide por ti mismo.',
+    studio_takes_label:"Tus tomas",
+    studio_scope_note:"La app no compara las tomas: escúchalas y quédate con la que te guste.",
     aiduet_title:"Compañero de Dúo IA",
     aiduet_sub:'Elige tu voz. La IA realmente canta las otras cuatro, en vivo y en tiempo real — exactamente la misma progresión sintetizada que el Espacio de Coro ya usa, solo presentada de forma simple: nunca cantas solo.',
     aiduet_choose_part:'Elige tu voz',
@@ -10905,12 +10928,12 @@ const TRANSLATIONS = {
     pd_dim_technique:'Técnica', pd_dim_timing:'Ritmo', pd_dim_dynamics:'Dinámica',
     pd_insight_prefix:'Tu próxima mejora real no es tu número más alto — es',
     pd_insight_notenough:'No se captó suficiente señal para identificar un verdadero próximo paso esta vez.',
-    studio_mic_connected:'Conectado ✓', studio_mic_notconnected:'Aún no conectado',
-    studio_notakes:'Aún no se ha grabado ninguna toma real.', studio_take_label:'Toma',
-    studio_limit_reached:'Límite real: 3 tomas máximo aquí — eliminar aún no está implementado, así que esto mantiene el almacenamiento acotado.',
-    studio_recording_label:'GRAB… 15s', studio_record_btn:'GRABAR',
-    studio_take_saved:'guardada — audio real, almacenado localmente.',
-    studio_save_failed:'No se pudo guardar esta toma (puede ser demasiado grande) — prueba una toma más corta.',
+    studio_mic_connected:"Conectado", studio_mic_notconnected:'Aún no conectado',
+    studio_notakes:"Aún no hay tomas.", studio_take_label:'Toma',
+    studio_limit_reached:"Hay tres tomas guardadas. Borra una para grabar otra.",
+    studio_record_btn:"Grabar",
+    studio_take_saved:"guardada en este dispositivo.",
+    studio_save_failed:"El almacenamiento de este dispositivo está lleno: la toma no se guardó. Borra una toma e inténtalo de nuevo.",
     studio_notavailable:'La grabación no está disponible ahora mismo — revisa los permisos del micrófono.',
     snapshot_nobaseline:'Aún no hay línea base.', snapshot_nodatayet:'Aún sin datos',
     snapshot_nobaselinefor:'No hay línea base del Día 1 para esto — el seguimiento empezó más tarde',
@@ -11235,6 +11258,14 @@ const TRANSLATIONS = {
     vq_result_head:"Tu timbre",
     // phase 6 (PHASE6.md): the Songs-tab solo tools
     hub_songs_solo_label:"Por tu cuenta",
+    studio_sub:"Graba hasta tres tomas de la canción y escúchalas. Sin puntuación ni XP.",
+    studio_device_note:"Las tomas se guardan solo en este dispositivo, no en tu cuenta.",
+    studio_bpm_tpl:"{n} ppm",
+    studio_delete_btn:"Borrar",
+    studio_delete_confirm:"¿Borrar la toma {n}? No se puede deshacer.",
+    studio_recording_label:"GRAB… 15s",
+    studio_no_gamification:"Estudio — sin XP, sin racha, sin gamificación",
+    studio_session_title:"Sesión de grabación",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11466,14 +11497,12 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ A ve B\'yi tekrar çal',
     hearmistake_reproduce_label:'Şimdi doğru versiyonu yeniden üretin',
     hearmistake_next_btn:'Sonraki tur',
-    studio_no_gamification:'Stüdyo — XP yok, seri yok, oyunlaştırma yok',
-    studio_session_title:'🎙️ Kayıt Oturumu',
     studio_song_label:'Şarkı',
     studio_key_label:'Ton',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Mikrofon',
-    studio_takes_label:'Gerçek çekimleriniz',
-    studio_scope_note:'Dürüst kapsam: bu uygulama hangi çekimin sonradan "daha iyi" olduğuna otomatik karar veremez — bu, bu uygulamanın geri kalanının kullandığı canlı mikrofon puanlamasından farklı bir yetenek olan kaydedilmiş bir dosyanın perdesini yeniden analiz etmeyi gerektirir. Dinleyin ve kendiniz karar verin.',
+    studio_takes_label:"Kayıtlarınız",
+    studio_scope_note:"Uygulama kayıtları karşılaştırmaz: dinleyin ve beğendiğinizi saklayın.",
     aiduet_title:"Yapay Zeka Düet Partneri",
     aiduet_sub:'Sesinizi seçin. Yapay zeka diğer dördünü gerçekten canlı ve gerçek zamanlı olarak söyler — Koro Çalışma Alanı\'nın zaten kullandığı tamamen aynı sentezlenmiş dizi, sadece basitçe çerçevelenmiş: asla yalnız söylemezsiniz.',
     aiduet_choose_part:'Sesinizi seçin',
@@ -12467,12 +12496,12 @@ const TRANSLATIONS = {
     pd_dim_technique:'Teknik', pd_dim_timing:'Zamanlama', pd_dim_dynamics:'Dinamikler',
     pd_insight_prefix:'Bir sonraki gerçek gelişiminiz en yüksek sayınız değil — bu:',
     pd_insight_notenough:'Bu sefer gerçek bir sonraki adımı belirlemek için yeterli sinyal alınamadı.',
-    studio_mic_connected:'Bağlandı ✓', studio_mic_notconnected:'Henüz bağlı değil',
-    studio_notakes:'Henüz gerçek bir kayıt yapılmadı.', studio_take_label:'Kayıt',
-    studio_limit_reached:'Gerçek sınır: burada en fazla 3 kayıt — silme henüz eklenmedi, bu yüzden bu depolamayı sınırlı tutuyor.',
-    studio_recording_label:'KAYIT… 15sn', studio_record_btn:'KAYDET',
-    studio_take_saved:'kaydedildi — gerçek ses, yerel olarak depolandı.',
-    studio_save_failed:'Bu kayıt kaydedilemedi (çok büyük olabilir) — daha kısa bir kayıt deneyin.',
+    studio_mic_connected:"Bağlandı", studio_mic_notconnected:'Henüz bağlı değil',
+    studio_notakes:"Henüz kayıt yok.", studio_take_label:'Kayıt',
+    studio_limit_reached:"Üç kayıt saklı. Yenisini kaydetmek için birini silin.",
+    studio_record_btn:"Kaydet",
+    studio_take_saved:"bu cihaza kaydedildi.",
+    studio_save_failed:"Bu cihazın depolama alanı dolu, kayıt saklanmadı. Bir kaydı silip yeniden deneyin.",
     studio_notavailable:'Kayıt şu anda kullanılamıyor — mikrofon izinlerini kontrol edin.',
     snapshot_nobaseline:'Henüz referans yok.', snapshot_nodatayet:'Henüz veri yok',
     snapshot_nobaselinefor:'Bunun için Gün 1 referansı yok — takip daha sonra başladı',
@@ -12797,6 +12826,14 @@ const TRANSLATIONS = {
     vq_result_head:"Ses tınınız",
     // phase 6 (PHASE6.md): the Songs-tab solo tools
     hub_songs_solo_label:"Tek başınıza",
+    studio_sub:"Şarkıdan en fazla üç kayıt alın ve dinleyin. Puan ya da XP yok.",
+    studio_device_note:"Kayıtlar yalnızca bu cihazda tutulur, hesabınızda değil.",
+    studio_bpm_tpl:"{n} BPM",
+    studio_delete_btn:"Sil",
+    studio_delete_confirm:"Kayıt {n} silinsin mi? Bu işlem geri alınamaz.",
+    studio_recording_label:"KAYIT… 15sn",
+    studio_no_gamification:"Stüdyo — XP yok, seri yok, oyunlaştırma yok",
+    studio_session_title:"Kayıt Oturumu",
   },
 };
 let currentLanguage = 'en';
@@ -12952,7 +12989,8 @@ async function loadProgress(){
     const { data:{ session } } = await sb.auth.getSession();
     if(session){
       const row = await apiFetch('/me/progress');
-      progress = normalizeJsonbScoreDefaults({ studioTakes: [], ...progress, ...objSnakeToCamel(row) });
+      progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
+      if(typeof studioMigrate==='function') studioMigrate(); // Studio's takes move to this device once (phase 6)
       if(Array.isArray(progress.history)) progress.history = {}; // defends against pre-migration rows
       return;
     }
@@ -23579,78 +23617,135 @@ document.getElementById('hmNextBtn')?.addEventListener('click', ()=>{
   document.getElementById('hmPreCard').style.display = 'block';
 });
 
-/* ---------------- Studio Mode (real recording, real playback, no fabricated take-judging) ---------------- */
+/* ---------------- Studio Mode: record takes of the song, listen back (no score) ---------------- */
+// Up to STUDIO_MAX_TAKES takes of STUDIO_TAKE_MS each, kept on this device (localStorage, one list per account, the way
+// Your Choir keeps its takes), never in the account's progress. Each take can be deleted. Takes recorded before
+// phase 6 were in progress.studioTakes, sent with every progress save: studioMigrate moves them here once and empties
+// that list. The take records on its stage: the red tally, the time, the input level (the raw path) and Stop, which
+// ends the take early and keeps it; leaving (stopAllActiveSessions → studioDiscard) stops it and keeps nothing.
+const STUDIO_TAKE_MS = 15000, STUDIO_MAX_TAKES = 3, STUDIO_STORE_PREFIX = 'studioTakes:';
+let studioMem = null, studioMemKey = null;
+// The take being recorded. gen changes when a take is discarded (leaving), so the recording that ends later is dropped.
+const studioRec = {active:false, recorder:null, gen:0, t0:0, stopSoon:false, raf:null};
+function studioStoreKey(){ return STUDIO_STORE_PREFIX + ((profile && (profile.id || profile.email)) || ''); }
+function studioTakes(){
+  const k = studioStoreKey();
+  if(studioMemKey!==k){ studioMemKey = k; try{ studioMem = JSON.parse(localStorage.getItem(k)) || []; }catch(e){ studioMem = []; } }
+  return studioMem;
+}
+// Returns false if the device storage is full; the list stays as it was.
+function studioSaveTakes(list){
+  const k = studioStoreKey();
+  try{ localStorage.setItem(k, JSON.stringify(list)); }
+  catch(e){ console.error('storage error', e); return false; }
+  studioMem = list; studioMemKey = k;
+  return true;
+}
+function studioMigrate(){
+  if(!profile || !progress || !Array.isArray(progress.studioTakes) || !progress.studioTakes.length) return;
+  const have = new Set(studioTakes().map(tk=>tk.recordedAt));
+  const merged = studioTakes().concat(progress.studioTakes.filter(tk=>tk && tk.base64 && !have.has(tk.recordedAt)));
+  if(!studioSaveTakes(merged)) return; // the device is full: they stay where they are
+  progress.studioTakes = [];
+  saveProgress();
+}
 function renderStudioMode(){
-  document.getElementById('studioSongName').textContent = SONG.name;
+  studioMigrate();
+  document.getElementById('studioSongName').textContent = songTitle(currentSongId);
   document.getElementById('studioSongKey').textContent = SONG.key;
-  document.getElementById('studioSongTempo').textContent = SONG.tempo+' BPM';
+  document.getElementById('studioSongTempo').textContent = t('studio_bpm_tpl').replace('{n}', SONG.tempo);
   document.getElementById('studioMicStatus').textContent = (typeof analyser!=='undefined' && analyser) ? t('studio_mic_connected') : t('studio_mic_notconnected');
+  if(!studioRec.active) studioResetButton(); else document.getElementById('studioRecordLabel').textContent = t('action_stop'); // a language switch mid-take
   renderStudioTakes();
 }
 function renderStudioTakes(){
   const wrap = document.getElementById('studioTakesList');
   if(!wrap) return;
-  const takes = (profile && progress.studioTakes) || [];
+  const takes = profile ? studioTakes() : [];
   if(takes.length===0){
     wrap.innerHTML = `<p class="desc" style="color:var(--muted);">${t('studio_notakes')}</p>`;
     return;
   }
+  const when = iso=>{ try{ return new Intl.DateTimeFormat(currentLanguage, {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'}).format(new Date(iso)); }catch(e){ return ''; } };
   wrap.innerHTML = takes.map((take,i)=>`
-    <div style="margin-bottom:14px;">
-      <div class="vc-label" style="margin-bottom:6px;">${t('studio_take_label')} ${String(i+1).padStart(2,'0')}</div>
-      <audio controls src="${take.base64}" style="width:100%;"></audio>
+    <div class="studio-take">
+      <div class="studio-take-head"><span><span class="vc-label">${t('studio_take_label')} ${String(i+1).padStart(2,'0')}</span><span class="hl-item-meta">${when(take.recordedAt)}</span></span>
+        <button class="ghost-btn" type="button" data-studio-del="${i}">${t('studio_delete_btn')}</button></div>
+      <audio controls src="${take.base64}"></audio>
     </div>
   `).join('');
+  wrap.querySelectorAll('[data-studio-del]').forEach(btn=>btn.addEventListener('click', ()=>{
+    const i = +btn.dataset.studioDel;
+    if(!confirm(t('studio_delete_confirm').replace('{n}', i+1))) return;
+    const list = studioTakes().slice(); list.splice(i, 1);
+    document.getElementById('studioRecordNote').textContent = studioSaveTakes(list) ? '' : t('studio_save_failed');
+    renderStudioTakes();
+  }));
 }
-// The take being recorded. gen changes when a take is discarded (leaving), so the recording that ends later is dropped.
-const studioRec = {active:false, recorder:null, gen:0};
 function studioResetButton(){
-  document.getElementById('studioRecordBtn').disabled = false;
+  const btn = document.getElementById('studioRecordBtn');
+  btn.disabled = false; btn.classList.remove('listening');
   document.getElementById('studioRecordLabel').textContent = t('studio_record_btn');
+}
+const studioClock = ms=>{ const s = Math.max(0, Math.floor(ms/1000)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+// On the stage while the take records: the time and the input level (the raw path's RMS, −54 dBFS to 0 dBFS).
+function studioTick(){
+  if(!studioRec.active) return;
+  const el = studioRec.t0 ? performance.now()-studioRec.t0 : 0;
+  document.getElementById('studioTime').textContent = `${studioClock(Math.min(el, STUDIO_TAKE_MS))} / ${studioClock(STUDIO_TAKE_MS)}`;
+  const rms = computeRMS(readRawMic()), pct = rms>0 ? Math.max(0, Math.min(100, (20*Math.log10(rms)+54)/54*100)) : 0;
+  const m = document.getElementById('studioLevel');
+  m.style.setProperty('--val', pct.toFixed(0)+'%'); m.setAttribute('aria-valuenow', pct.toFixed(0));
+  studioRec.raf = requestAnimationFrame(studioTick);
+}
+// Stop on the stage: the take ends now and is kept.
+function studioStopEarly(){
+  const r = studioRec.recorder;
+  if(r && r.state!=='inactive') r.stop(); else studioRec.stopSoon = true;
 }
 // Leaving (stopAllActiveSessions): the take stops and isn't kept.
 function studioDiscard(){
   if(!studioRec.active) return;
   studioRec.gen++;
   studioRec.active = false;
+  cancelAnimationFrame(studioRec.raf);
   const r = studioRec.recorder; studioRec.recorder = null;
   if(r && r.state!=='inactive') r.stop();
   studioResetButton();
 }
 document.getElementById('studioRecordBtn')?.addEventListener('click', async ()=>{
+  if(studioRec.active){ studioStopEarly(); return; }
   if(!requireProFeature('Studio Mode')) return;
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
   document.getElementById('studioMicStatus').textContent = (typeof analyser!=='undefined' && analyser) ? t('studio_mic_connected') : t('studio_mic_notconnected');
-
-  const takes = (profile && progress.studioTakes) || [];
-  if(takes.length>=3){
+  if(studioTakes().length>=STUDIO_MAX_TAKES){
     document.getElementById('studioRecordNote').textContent = t('studio_limit_reached');
     return;
   }
-
   const btn = document.getElementById('studioRecordBtn');
-  const label = document.getElementById('studioRecordLabel');
   const gen = ++studioRec.gen;
-  studioRec.active = true; studioRec.recorder = null;
-  btn.disabled = true;
-  label.textContent = t('studio_recording_label');
-  singingSession(()=>studioRec.active && gen===studioRec.gen);
-  const clip = await recordShortClip(15000, r=>{ if(gen!==studioRec.gen) r.stop(); else studioRec.recorder = r; });
+  Object.assign(studioRec, {active:true, recorder:null, t0:0, stopSoon:false});
+  btn.classList.add('listening');
+  document.getElementById('studioRecordLabel').textContent = t('action_stop');
+  document.getElementById('studioRecordNote').textContent = '';
+  studioTick();
+  singingSession(()=>studioRec.active && gen===studioRec.gen, document.getElementById('studioStage'));
+  const clip = await recordShortClip(STUDIO_TAKE_MS, r=>{
+    if(gen!==studioRec.gen){ r.stop(); return; }
+    studioRec.recorder = r; studioRec.t0 = performance.now();
+    if(studioRec.stopSoon) r.stop();
+  });
   if(gen!==studioRec.gen) return; // left midway (studioDiscard): the take isn't kept
   studioRec.active = false; studioRec.recorder = null;
+  cancelAnimationFrame(studioRec.raf);
   studioResetButton();
 
   if(clip && profile){
-    if(!progress.studioTakes) progress.studioTakes = [];
-    progress.studioTakes.push(clip);
-    try{
-      await saveProgress();
-      document.getElementById('studioRecordNote').textContent = `${t('studio_take_label')} ${progress.studioTakes.length} ${t('studio_take_saved')}`;
-    } catch(e){
-      document.getElementById('studioRecordNote').textContent = t('studio_save_failed');
-    }
+    const list = studioTakes().concat([clip]);
+    document.getElementById('studioRecordNote').textContent = studioSaveTakes(list)
+      ? `${t('studio_take_label')} ${list.length} ${t('studio_take_saved')}` : t('studio_save_failed');
     renderStudioTakes();
   } else if(!clip){
     document.getElementById('studioRecordNote').textContent = t('studio_notavailable');

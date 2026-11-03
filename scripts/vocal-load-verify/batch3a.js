@@ -52,14 +52,17 @@ const FEATURES = [
         && !!sa === !!sb && (!sa || Math.abs(num(sa[1]) - num(sb[1])) <= 0.1 + 1e-9);
     } },
   { key: 'studio', label: 'Studio Mode (a 15 s take)', kind: 'sidecar', ...hub('songs', 'studio'), startBtn: 'studioRecordBtn', gauge: 'vlGaugeStudio', safari: true,
-    active: disabled('studioRecordBtn'),
+    // phase 6: the button stays live as Stop while recording (studioRec.active), the takes are on the device (studioTakes())
+    active: "(typeof studioRec !== 'undefined' ? studioRec.active : !!document.getElementById('studioRecordBtn').disabled)",
     result: async () => { // the note is written once the take has been saved, after the button comes back
       const el = document.getElementById('studioRecordNote'), t0 = Date.now(), before = el.dataset.seen || '';
       while ((!el.textContent || el.textContent === before) && Date.now() - t0 < 10000) await new Promise(r => setTimeout(r, 100));
       el.dataset.seen = el.textContent;
-      return { note: el.textContent.replace(/\d+/, 'N'), kb: Math.round(progress.studioTakes[progress.studioTakes.length - 1].base64.length / 1000) };
+      const takes = (typeof studioTakes === 'function' ? studioTakes() : (progress.studioTakes || []));
+      return { note: el.textContent.replace(/\d+/, 'N'), kb: Math.round(takes[takes.length - 1].base64.length / 1000) };
     },
-    same: (a, b) => a.note === b.note && Math.abs(a.kb - b.kb) <= 0.15 * a.kb },
+    // the note's wording changed in phase 6 ("saved on this device", PHASE6_COPY.md): a note is written, and the take's size
+    same: (a, b) => !!a.note && !!b.note && Math.abs(a.kb - b.kb) <= 0.15 * a.kb },
   { key: 'journey', label: 'Hear Yourself Improve: the day-1 clip (Journey, 4 s)', kind: 'sidecar', ...hub('you', 'journey'), startBtn: 'journeyRecordBtn', gauge: 'vlGaugeJourney',
     active: disabled('journeyRecordBtn'),
     result: async () => { // the check and the label change once the clip has been saved, after the button comes back

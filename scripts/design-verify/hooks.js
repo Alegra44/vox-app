@@ -31,6 +31,8 @@ const ALLOWED_REMOVALS = {
   'data-i18n=theme_velvetopera': 'phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)',
   'data-i18n=staykey_tag': 'phase 6 §2.1: Stay in Key\'s tag goes (it isn\'t an estimate); key stays in TRANSLATIONS',
   'data-i18n=emotion_tag': 'phase 6 §2.1: Emotional Singing\'s tag becomes the "Estimate" label (beta_analysis_tag); key stays in TRANSLATIONS',
+  'data-i18n=studio_no_gamification': 'phase 6 §2.3: Studio\'s two header lines become one plain subtitle (studio_sub); key stays in TRANSLATIONS',
+  'data-i18n=studio_session_title': 'phase 6 §2.3: Studio\'s two header lines become one plain subtitle (studio_sub); key stays in TRANSLATIONS',
   'data-i18n=action_start_pro': 'phase 6 §2.1: the Songs tools\' Start reads "Start" with access, set by renderSongsStartLabels (Harmony Arena\'s keeps it)',
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).

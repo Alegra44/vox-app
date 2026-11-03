@@ -142,9 +142,10 @@ function toneWav() {
     // <audio> element at the Playback volume (≤ 1), outside the Web Audio limiter.
     await ev(() => enterPanel('studio')); await sleep(500);
     await page.locator('#studioRecordBtn').click();
-    await page.waitForFunction(() => !document.getElementById('studioRecordBtn').disabled && (progress.studioTakes || []).length > 0, null, { timeout: 40000 });
+    // phase 6: Studio's takes are on the device (studioTakes()), and its button stays live as Stop while recording (studioRec)
+    await page.waitForFunction(() => !(typeof studioRec !== 'undefined' ? studioRec.active : !!document.getElementById('studioRecordBtn').disabled) && (typeof studioTakes === 'function' ? studioTakes() : (progress.studioTakes || [])).length > 0, null, { timeout: 40000 });
     console.log('STUDIO ' + JSON.stringify(await ev(async () => {
-      const tk = progress.studioTakes[progress.studioTakes.length - 1], b = await ycDecode(tk.base64); let n = 0, over = 0, mx = 0;
+      const takes = (typeof studioTakes === 'function' ? studioTakes() : (progress.studioTakes || [])), tk = takes[takes.length - 1], b = await ycDecode(tk.base64); let n = 0, over = 0, mx = 0;
       for (let c = 0; c < b.numberOfChannels; c++) { const d = b.getChannelData(c); for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); n++; if (v >= 0.99) over++; if (v > mx) mx = v; } }
       return { clipped: over, samples: n, peakDb: +(20 * Math.log10(mx)).toFixed(2), durS: +b.duration.toFixed(1), note: document.getElementById('studioRecordNote').textContent };
     })));
