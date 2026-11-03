@@ -384,7 +384,7 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   34 per size at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json, english-in-fr.json). The first full
   shots run failed signing up (auth timeout after several sign-ups in a few minutes); the retry 3 min later passed.
 
-### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): DONE and REPORTED 2026-11-03, waiting for the user's review
+### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): approved after 5.1; 5.1 DONE and REPORTED 2026-11-03, waiting for "deploy"
 - Rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs. No merge or deploy until the user has reviewed the screenshots.
 - Out of phase 5 (the user's answers): AI Duet, the six Songs-tab solo tools and the Performance Report's own screen go
   to phase 6. live9's save round-trip times leave the choir gate (still printed).
@@ -410,7 +410,16 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Final screenshots DONE** and pushed 2026-11-03: review/phase5 (1e17386, orphan: 128 shots + sheets/final.jpg +
   notes.txt); redesign/phase5 pushed. They showed one bug, fixed in afe655f: Passport's recent runs read
   "undefined The Drowner" (the boss emoji removed in 2.5); boss and passport re-shot.
-- **Next: the user reviews the screenshots.** No merge, no deploy until they say. Rollback dpl_BvNJh8hz89bSLfWzbAqHS15G85zs.
+- **Review: approved after the 5.1 fix round** (six fixes, the deploy steps and the phase 6 survey, verbatim in PHASE5.md
+  ## 5.1). Built 804e15c, a9ea7de; copy 9a5a956 (2 changed, 15 new keys, four languages).
+- **5.1 checks DONE 2026-11-03** (logs checks5-2026-11-03T10-50-30): hooks 21/0, copyscan 0, contrast unchanged (only the
+  master Profile icon rows), house --onlychoir 256/0 (first run 255/1: a CORS/network failure on /me/progress, passed on
+  rerun). Gate (ONLY="fix p7 yc timing live7"): p7, yc, timing, live7 pass; fix's only moves are the result rows' colour
+  in ink (expected, as in phase 5). Fixshots: review/phase5-fix (orphan, 45 files, sheets/fix.jpg, notes.txt,
+  measures.json). English dates are en-US ("Nov 3, 7:26 PM"), not the en-GB example; one-line change if wanted.
+- **Next: wait for the user to type "deploy"**, then the four steps in PHASE5.md ## 5.1 (merge --no-ff, the user runs
+  Vercel, prod.sh WITH_CHOIR=1, review/phase5-prod, delete the review branches, then the read-only phase 6 survey).
+  Rollback dpl_BvNJh8hz89bSLfWzbAqHS15G85zs.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
