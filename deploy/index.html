@@ -2001,6 +2001,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-songs-hub .songs-row .hl-item-title{display:block;color:var(--hl-ink);}
   #panel-songs-hub .songs-row .hl-item-meta{display:block;margin-top:2px;}
   #panel-songs-hub .coach-best:empty{display:none;}
+  /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
+  .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
+  .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
+  .pd-cue{max-width:46ch;}
+  .pd-cue #pdCurrentSection{font-weight:600;color:var(--hl-ink-2);}
+  .pd-progress{width:100%;max-width:320px;margin:0;}
+  .vc-stage.is-live #pdStopBtn{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
   /* ---- STUDIO MODE (phase 6): the take on its stage; the takes as rows with Delete ---- */
   .studio-stage{display:grid;justify-items:center;gap:var(--hl-s3);margin-top:var(--hl-s5);text-align:center;}
   .studio-time{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;font-variant-numeric:tabular-nums;color:var(--hl-ink);line-height:1;}
@@ -4427,28 +4434,40 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-performancedirector">
     <div class="journey-hero">
       <div class="j-title" data-i18n="pd_title">Performance Director</div>
-      <div class="j-sub" data-i18n="pd_sub">Your technique is ready. Now let's perform — real section-by-section coaching cues, live, reusing the exact same pitch and timing capture as Karaoke Coach throughout.</div>
+      <div class="j-sub" data-i18n="pd_sub">Sing the Lead line through the song with a cue for each section, then see your Pitch, Timing and Dynamics.</div>
+    </div>
+
+    <div class="key-card" id="pdResultCard" style="display:none;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="vc-result-meta" data-i18n="pd_report_label">Your performance</div>
+      <div class="vc-result-num" id="pdPitchVal">—</div>
+      <h3 class="hl-h3" data-i18n="skill_pitch">Pitch</h3>
+      <p class="ex-feedback-text hl-coach" id="pdInsight"></p>
+      <div class="vc-result-dims" id="pdResultRows">
+        <div class="vc-dim"><span data-i18n="pd_dim_timing">Timing</span><span id="pdTimingVal">—</span></div>
+        <div class="vc-dim"><span data-i18n="pd_dim_dynamics">Dynamics</span><span id="pdDynamicsVal">—</span></div>
+        <div class="vc-dim"><span data-i18n="pd_dim_combined">Pitch and timing together</span><span id="pdTechniqueVal">—</span></div>
+      </div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="pd_measure"></p><p data-i18n="pd_expression_note"></p></details>
+      </div>
     </div>
 
     <div class="key-card" id="pdBriefingCard">
-      <div class="step-label" data-i18n="pd_direction_label">Today's real direction</div>
+      <div class="step-label" data-i18n="pd_direction_label">Today's direction</div>
       <div id="pdBriefingRows" style="margin-top:12px;"></div>
-      <button class="mic-btn" id="pdStartBtn" style="width:100%;justify-content:center;margin-top:16px;"><span class="dot-icon"></span>Begin the performance</button>
+      <button class="mic-btn" id="pdStartBtn" style="width:100%;justify-content:center;margin-top:16px;"><span class="dot-icon"></span><span id="pdStartLabel" data-i18n="pd_start_btn">Begin the performance</span></button>
     </div>
 
-    <div class="key-card" id="pdRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="pdCurrentSection">Verse</div>
-      <p class="desc" id="pdCurrentCue" style="margin:10px 0;font-style:italic;color:var(--brass);"></p>
-      <div class="chord-label-display" id="pdCurrentNote" style="margin-top:10px;">—</div>
-      <div class="progress-bar-thin" style="margin-top:16px;"><div class="fill" id="pdProgressFill" style="width:0%;"></div></div>
-      <div class="vl-gauge" id="vlGaugePd" style="display:none;"></div>
-    </div>
-
-    <div class="key-card" id="pdResultCard" role="status" aria-live="polite" style="display:none;">
-      <div class="step-label" style="text-align:center;" data-i18n="pd_report_label">Performance Report</div>
-      <div id="pdResultRows" style="margin-top:14px;"></div>
-      <p class="desc" id="pdInsight" style="margin-top:14px;text-align:center;color:var(--teal);"></p>
-      <p class="fine-print" style="margin-top:10px;" data-i18n="pd_expression_note">Expression isn't scored here — no reliable real detector exists for it anywhere in this app, same honest limit as everywhere else.</p>
+    <div class="key-card" id="pdRunnerCard" style="display:none;">
+      <!-- the stage: Choir World's five lanes, Lead as your part, your voice on it; the section and its cue; the note; Stop -->
+      <div class="vc-stage cw-stage pd-stage" id="pdStage">
+        <div class="rh-roll-wrap cw-lanes-wrap"><svg id="pdLanes" class="cw-lanes" aria-hidden="true"></svg></div>
+        <p class="cw-cue pd-cue"><span id="pdCurrentSection" data-i18n="section_name_verse">Verse</span><span aria-hidden="true"> · </span><span id="pdCurrentCue"></span></p>
+        <div class="ex-target-note vc-take-note" id="pdCurrentNote">—</div>
+        <div class="progress-bar-thin pd-progress"><div class="fill" id="pdProgressFill" style="width:0%;"></div></div>
+        <button class="mic-btn vc-take-pill listening" id="pdStopBtn"><span class="dot-icon"></span><span data-i18n="action_stop">Stop</span></button>
+        <div class="vl-gauge" id="vlGaugePd" style="display:none;"></div>
+      </div>
     </div>
   </section>
 
@@ -6803,10 +6822,10 @@ const TRANSLATIONS = {
     aiduet_sub:'Pick your part. The AI genuinely sings the other four, live and in real time — the exact same synthesized progression Choir Workspace already uses, just framed simply: you\'re never singing alone.',
     aiduet_choose_part:'Choose your part',
     pd_title:"Performance Director",
-    pd_sub:'Your technique is ready. Now let\'s perform — real section-by-section coaching cues, live, reusing the exact same pitch and timing capture as Karaoke Coach throughout.',
-    pd_direction_label:'Today\'s real direction',
-    pd_report_label:'Performance Report',
-    pd_expression_note:'Expression isn\'t scored here — no reliable real detector exists for it anywhere in this app, same honest limit as everywhere else.',
+    pd_sub:"Sing the Lead line through the song with a cue for each section, then see your Pitch, Timing and Dynamics.",
+    pd_direction_label:"Today's direction",
+    pd_report_label:"Your performance",
+    pd_expression_note:"Expression isn't scored: there's no reliable way to measure it.",
     mirror_title:"Mirror Mode",
     mirror_sub:"A 4-note phrase from your range plays; you echo it, and your contour is drawn over the phrase so you can see where you drifted.",
     mirror_ai_phrase:"Phrase",
@@ -7787,11 +7806,11 @@ const TRANSLATIONS = {
     word_of:'of',
     pd_cue_verse:'Stay relaxed — save your energy, let the story unfold.',
     pd_cue_prechorus:'Start building — let the intensity climb toward the chorus.',
-    pd_cue_chorus:"Don't push the high notes — trust your real technique, not extra force.",
+    pd_cue_chorus:"Don't push the high notes: trust your technique, not extra force.",
     pd_cue_bridge:'This is the emotional peak — this is where maximum expression matters most.',
     pd_dim_technique:'Technique', pd_dim_timing:'Timing', pd_dim_dynamics:'Dynamics',
-    pd_insight_prefix:"Your next real improvement isn't your top number — it's",
-    pd_insight_notenough:'Not enough signal was captured to identify a real next step this time.',
+    pd_insight_prefix:"Work on next:",
+    pd_insight_notenough:"Not enough of your voice was heard to score this. Sing a little louder or closer to the mic.",
     studio_mic_connected:"Connected", studio_mic_notconnected:'Not connected yet',
     studio_notakes:"No takes yet.", studio_take_label:'Take',
     studio_limit_reached:"Three takes are stored. Delete one to record another.",
@@ -8130,6 +8149,10 @@ const TRANSLATIONS = {
     studio_recording_label:"REC… 15s",
     studio_no_gamification:"Studio — no XP, no streak, no gamification",
     studio_session_title:"Recording Session",
+    pd_start_btn:"Begin the performance",
+    pd_dim_combined:"Pitch and timing together",
+    pd_insight_tpl:"Work on {dim} next: it was your lowest today ({n}).",
+    pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: a note scores 100 if your voice came in during its first 40 %, 50 if later, averaged over the notes you sang. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8371,10 +8394,10 @@ const TRANSLATIONS = {
     aiduet_sub:'Choisissez votre voix. L\'IA chante vraiment les quatre autres, en direct et en temps réel — exactement la même progression synthétisée que l\'Espace Chorale utilise déjà, juste présentée simplement : vous ne chantez jamais seul.',
     aiduet_choose_part:'Choisissez votre voix',
     pd_title:"Directeur de Performance",
-    pd_sub:'Votre technique est prête. Maintenant, performons — de vraies indications de coaching section par section, en direct, réutilisant exactement la même capture de justesse et de rythme que le Coach Karaoké tout du long.',
-    pd_direction_label:'La vraie direction du jour',
-    pd_report_label:'Rapport de Performance',
-    pd_expression_note:'L\'expression n\'est pas notée ici — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, même limite honnête que partout ailleurs.',
+    pd_sub:"Chantez la ligne principale du début à la fin avec une indication pour chaque section, puis voyez votre justesse, votre timing et votre dynamique.",
+    pd_direction_label:"La direction du jour",
+    pd_report_label:"Votre performance",
+    pd_expression_note:"L'expression n'est pas notée : il n'existe pas de moyen fiable de la mesurer.",
     mirror_title:"Mode Miroir",
     mirror_sub:"Une phrase de 4 notes de votre tessiture est jouée ; vous la répétez, et votre contour se dessine sur la phrase pour voir où vous avez dévié.",
     mirror_ai_phrase:"Phrase",
@@ -9355,11 +9378,11 @@ const TRANSLATIONS = {
     word_of:'sur',
     pd_cue_verse:'Restez détendu — économisez votre énergie, laissez l\'histoire se dérouler.',
     pd_cue_prechorus:'Commencez à monter — laissez l\'intensité grimper vers le refrain.',
-    pd_cue_chorus:'Ne poussez pas les notes aiguës — faites confiance à votre vraie technique, pas à plus de force.',
+    pd_cue_chorus:"Ne poussez pas les notes aiguës : faites confiance à votre technique, pas à la force.",
     pd_cue_bridge:'C\'est le sommet émotionnel — c\'est là que l\'expression maximale compte le plus.',
     pd_dim_technique:'Technique', pd_dim_timing:'Timing', pd_dim_dynamics:'Dynamique',
-    pd_insight_prefix:"Votre prochaine vraie amélioration n'est pas votre meilleur chiffre — c'est",
-    pd_insight_notenough:'Pas assez de signal capté pour identifier une vraie prochaine étape cette fois.',
+    pd_insight_prefix:"À travailler ensuite :",
+    pd_insight_notenough:"Votre voix n'a pas été assez entendue pour noter cette performance. Chantez un peu plus fort ou plus près du micro.",
     studio_mic_connected:"Connecté", studio_mic_notconnected:'Pas encore connecté',
     studio_notakes:"Aucune prise pour l'instant.", studio_take_label:'Prise',
     studio_limit_reached:"Trois prises sont enregistrées. Supprimez-en une pour en enregistrer une autre.",
@@ -9698,6 +9721,10 @@ const TRANSLATIONS = {
     studio_recording_label:"ENR… 15s",
     studio_no_gamification:"Studio — pas de XP, pas de série, pas de ludification",
     studio_session_title:"Séance d'enregistrement",
+    pd_start_btn:"Commencer la performance",
+    pd_dim_combined:"Justesse et timing ensemble",
+    pd_insight_tpl:"À travailler ensuite : {dim}, votre point le plus bas aujourd'hui ({n}).",
+    pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : une note vaut 100 si votre voix arrive dans ses premiers 40 %, 50 si plus tard, en moyenne sur les notes chantées. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9939,10 +9966,10 @@ const TRANSLATIONS = {
     aiduet_sub:'Elige tu voz. La IA realmente canta las otras cuatro, en vivo y en tiempo real — exactamente la misma progresión sintetizada que el Espacio de Coro ya usa, solo presentada de forma simple: nunca cantas solo.',
     aiduet_choose_part:'Elige tu voz',
     pd_title:"Director de Actuación",
-    pd_sub:'Tu técnica está lista. Ahora actuemos — indicaciones de coaching reales sección por sección, en vivo, reutilizando exactamente la misma captura de afinación y ritmo que el Coach de Karaoke en todo momento.',
-    pd_direction_label:'La dirección real de hoy',
-    pd_report_label:'Informe de Actuación',
-    pd_expression_note:'La expresión no se puntúa aquí — no existe un detector real confiable para ella en ninguna parte de esta app, el mismo límite honesto que en todas partes.',
+    pd_sub:"Canta la línea principal de principio a fin con una indicación para cada sección y luego mira tu afinación, tu ritmo y tu dinámica.",
+    pd_direction_label:"La dirección de hoy",
+    pd_report_label:"Tu actuación",
+    pd_expression_note:"La expresión no se puntúa: no hay una forma fiable de medirla.",
     mirror_title:"Modo Espejo",
     mirror_sub:"Suena una frase de 4 notas de tu tesitura; la repites, y tu contorno se dibuja sobre la frase para que veas dónde te desviaste.",
     mirror_ai_phrase:"Frase",
@@ -10923,11 +10950,11 @@ const TRANSLATIONS = {
     word_of:'de',
     pd_cue_verse:'Mantente relajado — ahorra tu energía, deja que la historia se despliegue.',
     pd_cue_prechorus:'Empieza a construir — deja que la intensidad suba hacia el estribillo.',
-    pd_cue_chorus:'No fuerces las notas agudas — confía en tu verdadera técnica, no en más fuerza.',
+    pd_cue_chorus:"No fuerces las notas agudas: confía en tu técnica, no en la fuerza.",
     pd_cue_bridge:'Este es el pico emocional — aquí es donde más importa la máxima expresión.',
     pd_dim_technique:'Técnica', pd_dim_timing:'Ritmo', pd_dim_dynamics:'Dinámica',
-    pd_insight_prefix:'Tu próxima mejora real no es tu número más alto — es',
-    pd_insight_notenough:'No se captó suficiente señal para identificar un verdadero próximo paso esta vez.',
+    pd_insight_prefix:"Lo siguiente a trabajar:",
+    pd_insight_notenough:"No se oyó tu voz lo suficiente para puntuar esto. Canta un poco más fuerte o más cerca del micrófono.",
     studio_mic_connected:"Conectado", studio_mic_notconnected:'Aún no conectado',
     studio_notakes:"Aún no hay tomas.", studio_take_label:'Toma',
     studio_limit_reached:"Hay tres tomas guardadas. Borra una para grabar otra.",
@@ -11266,6 +11293,10 @@ const TRANSLATIONS = {
     studio_recording_label:"GRAB… 15s",
     studio_no_gamification:"Estudio — sin XP, sin racha, sin gamificación",
     studio_session_title:"Sesión de grabación",
+    pd_start_btn:"Empezar la actuación",
+    pd_dim_combined:"Afinación y ritmo juntos",
+    pd_insight_tpl:"Lo siguiente a trabajar: {dim}, tu punto más bajo hoy ({n}).",
+    pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: una nota vale 100 si tu voz entra en su primer 40 %, 50 si entra después, en promedio sobre las notas cantadas. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11507,10 +11538,10 @@ const TRANSLATIONS = {
     aiduet_sub:'Sesinizi seçin. Yapay zeka diğer dördünü gerçekten canlı ve gerçek zamanlı olarak söyler — Koro Çalışma Alanı\'nın zaten kullandığı tamamen aynı sentezlenmiş dizi, sadece basitçe çerçevelenmiş: asla yalnız söylemezsiniz.',
     aiduet_choose_part:'Sesinizi seçin',
     pd_title:"Performans Yönetmeni",
-    pd_sub:'Tekniğiniz hazır. Şimdi performans gösterelim — canlı, gerçek bölüm bölüm koçluk ipuçları, boyunca Karaoke Koçu ile tamamen aynı perde ve zamanlama yakalamayı yeniden kullanarak.',
-    pd_direction_label:'Bugünün gerçek yönergesi',
-    pd_report_label:'Performans Raporu',
-    pd_expression_note:'İfade burada puanlanmaz — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur, her yerdeki aynı dürüst sınır.',
+    pd_sub:"Lead hattını şarkı boyunca her bölüm için bir ipucuyla söyleyin, ardından Perde, Zamanlama ve Dinamiklerinizi görün.",
+    pd_direction_label:"Bugünün yönlendirmesi",
+    pd_report_label:"Performansınız",
+    pd_expression_note:"İfade puanlanmaz: onu ölçmenin güvenilir bir yolu yok.",
     mirror_title:"Ayna Modu",
     mirror_sub:"Aralığınızdan 4 notalık bir cümle çalar; onu tekrarlarsınız ve konturunuz cümlenin üzerine çizilir, böylece nerede kaydığınızı görürsünüz.",
     mirror_ai_phrase:"Cümle",
@@ -12491,11 +12522,11 @@ const TRANSLATIONS = {
     word_of:'/',
     pd_cue_verse:'Rahat kalın — enerjinizi koruyun, hikayenin açılmasına izin verin.',
     pd_cue_prechorus:'Yükselmeye başlayın — yoğunluğun nakarata doğru tırmanmasına izin verin.',
-    pd_cue_chorus:'Tiz notaları zorlamayın — ekstra güce değil, gerçek tekniğinize güvenin.',
+    pd_cue_chorus:"Tiz notaları zorlamayın: ekstra güce değil, tekniğinize güvenin.",
     pd_cue_bridge:'Bu duygusal doruk noktası — maksimum ifadenin en çok önem taşıdığı yer burası.',
     pd_dim_technique:'Teknik', pd_dim_timing:'Zamanlama', pd_dim_dynamics:'Dinamikler',
-    pd_insight_prefix:'Bir sonraki gerçek gelişiminiz en yüksek sayınız değil — bu:',
-    pd_insight_notenough:'Bu sefer gerçek bir sonraki adımı belirlemek için yeterli sinyal alınamadı.',
+    pd_insight_prefix:"Sıradaki çalışma:",
+    pd_insight_notenough:"Bunu puanlamak için sesiniz yeterince duyulmadı. Biraz daha yüksek sesle ya da mikrofona daha yakın söyleyin.",
     studio_mic_connected:"Bağlandı", studio_mic_notconnected:'Henüz bağlı değil',
     studio_notakes:"Henüz kayıt yok.", studio_take_label:'Kayıt',
     studio_limit_reached:"Üç kayıt saklı. Yenisini kaydetmek için birini silin.",
@@ -12834,6 +12865,10 @@ const TRANSLATIONS = {
     studio_recording_label:"KAYIT… 15sn",
     studio_no_gamification:"Stüdyo — XP yok, seri yok, oyunlaştırma yok",
     studio_session_title:"Kayıt Oturumu",
+    pd_start_btn:"Performansa başla",
+    pd_dim_combined:"Perde ve zamanlama birlikte",
+    pd_insight_tpl:"Sırada {dim} var: bugünkü en düşük puanınız ({n}).",
+    pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, söylenen notaların ortalaması. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
   },
 };
 let currentLanguage = 'en';
@@ -23917,9 +23952,12 @@ function renderPdBriefing(){
   if(!wrap) return;
   const sections = getSongSections();
   wrap.innerHTML = sections.map(sec=>
-    `<div class="record-row"><span class="record-label">${sec.name}</span><span class="record-val" style="color:var(--muted);font-style:italic;font-size:12px;">${PERFORMANCE_DIRECTOR_CUES[sec.name]||''}</span></div>`
+    `<div class="record-row"><span class="record-label">${sectionLabel(sec.name)}</span><span class="record-val" style="color:var(--muted);font-style:italic;font-size:12px;">${PERFORMANCE_DIRECTOR_CUES[sec.name]||''}</span></div>`
   ).join('');
+  if(pdCurrentSectionName) document.getElementById('pdCurrentSection').textContent = sectionLabel(pdCurrentSectionName); // a language switch mid-run
 }
+// The run's stage: Choir World's five lanes with Lead as your part (cwLanePart) and your voice drawn on it (display only).
+function pdLanesOff(){ cwLanesFrame(null); if(cwLanePart==='Lead') cwLanePart = null; }
 
 document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Performance Director')) return;
@@ -23934,12 +23972,15 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   pdResults = [];
   pdRmsSamples = [];
   pdCurrentSectionName = null;
+  cwLanePart = 'Lead'; cwVoiceReset();
   document.getElementById('pdBriefingCard').style.display='none';
   document.getElementById('pdResultCard').style.display='none';
   document.getElementById('pdRunnerCard').style.display='block';
+  renderCwLanes(document.getElementById('pdLanes'));
   pdLoop();
-  singingSession(()=>pdActive);
+  singingSession(()=>pdActive, document.getElementById('pdStage'));
 });
+document.getElementById('pdStopBtn')?.addEventListener('click', ()=>{ if(pdActive) pdStop(); }); // ends the run; no score
 
 function pdFinalizeNote(idx){
   if(idx<0) return;
@@ -23973,7 +24014,7 @@ function pdLoop(){
     const sec = sections.find(s=>s.indices.includes(idx));
     if(sec && sec.name!==pdCurrentSectionName){
       pdCurrentSectionName = sec.name;
-      document.getElementById('pdCurrentSection').textContent = sec.name;
+      document.getElementById('pdCurrentSection').textContent = sectionLabel(sec.name);
       document.getElementById('pdCurrentCue').textContent = PERFORMANCE_DIRECTOR_CUES[sec.name]||'';
     }
     document.getElementById('pdCurrentNote').textContent = noteNameFromMidi(SONG.parts.Lead.notes[idx]);
@@ -23993,6 +24034,8 @@ function pdLoop(){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
     if(cents!==null && Math.abs(cents)<300) pdCentsBuf.push({t:elapsedMs, c:cents});
   }
+  cwVoicePush(elapsedMs/1000, freq);
+  cwLanesFrame(elapsedMs/1000);
 
   requestAnimationFrame(pdLoop);
 }
@@ -24000,13 +24043,16 @@ function pdLoop(){
 // Leaving (stopAllActiveSessions): the run ends with no score; the briefing and its Start come back.
 function pdStop(){
   pdActive = false;
+  pdLanesOff();
   document.getElementById('pdRunnerCard').style.display='none';
   document.getElementById('pdBriefingCard').style.display='block';
 }
 function finishPd(){
   pdActive = false;
+  pdLanesOff();
   document.getElementById('pdRunnerCard').style.display='none';
   document.getElementById('pdResultCard').style.display='block';
+  document.getElementById('pdBriefingCard').style.display='block'; // Start again, under the result
 
   const heard = pdResults.filter(r=>r && r.heard);
   const avgPitch = heard.length ? Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length) : 0;
@@ -24019,19 +24065,15 @@ function finishPd(){
     dynamics = Math.min(100, Math.round(((maxR-minR)/Math.max(0.001,maxR))*100*1.5));
   }
 
-  const dims = [
-    {label:t('pd_dim_technique'), val: technique},
-    {label:t('skill_pitch'), val: avgPitch},
-    {label:t('pd_dim_timing'), val: avgTiming},
-    {label:t('pd_dim_dynamics'), val: dynamics},
-  ];
-  document.getElementById('pdResultRows').innerHTML = dims.map(d=>
-    `<div class="record-row"><span class="record-label">${d.label}</span><span class="record-val" style="color:var(--teal);">${d.val}</span></div>`
-  ).join('');
-
+  // "Your performance": Pitch big (the score saved), then Timing, Dynamics, and Technique as "Pitch and timing together"
+  document.getElementById('pdPitchVal').textContent = avgPitch+'%';
+  document.getElementById('pdTimingVal').textContent = avgTiming+'%';
+  document.getElementById('pdDynamicsVal').textContent = dynamics+'%';
+  document.getElementById('pdTechniqueVal').textContent = technique+'%';
+  const dims = [{label:t('skill_pitch'), val: avgPitch}, {label:t('pd_dim_timing'), val: avgTiming}, {label:t('pd_dim_dynamics'), val: dynamics}];
   if(heard.length>0){
     const weakest = dims.reduce((a,b)=> a.val<=b.val ? a : b);
-    document.getElementById('pdInsight').textContent = `${t('pd_insight_prefix')} ${weakest.label} (${weakest.val}).`;
+    document.getElementById('pdInsight').textContent = t('pd_insight_tpl').replace('{dim}', weakest.label).replace('{n}', weakest.val+'%');
   } else {
     document.getElementById('pdInsight').textContent = t('pd_insight_notenough');
   }
