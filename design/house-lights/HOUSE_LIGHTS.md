@@ -1,4 +1,25 @@
-# House Lights: the VoxCoach design system (v1.8)
+# House Lights: the VoxCoach design system (v1.9)
+
+v1.9 (2026-11-04, phase 6, spec `PHASE6.md`): the six Songs-tab solo tools and the Songs tab. Decisions: (a) Names:
+Choir World's report keeps "Performance Report"; Performance Director's result is "Your performance" (fr "Votre
+performance", es "Tu actuación", tr "Performansınız"). AI Duet Partner is "Sing With the Choir" (fr "Chanter avec le
+chœur", es "Canta con el coro", tr "Koroyla söyle"): the app's synthesised choir, not an AI (panel and element IDs
+`aiduet` / `aiDuet…` kept). (b) Leaving stops everything: `stopAllActiveSessions` stops Stay in Key, Emotional Singing
+and Performance Director through their own stop paths (no score, no result), the backing pad and the choir, ends a
+Studio recording without keeping it, and resets every button; Sing With the Choir puts the mixer back as it was. A
+Stop button that's pressed still finishes and scores, as before. (c) A Start button reads "Start" to anyone with
+access, "Start (Pro)" only when it's locked. (d) Each tool sings on a `.vc-stage` passed to its existing
+`singingSession`; the Stop on a stage is the neutral active pill; results on `.vc-result` (the big number in ink, its
+label, the coach line, dimension rows, `hl-measure` with the method from the code). (e) Titles have no emoji; a
+BETA-style tag is the "Estimate" label where the reading is an estimate (Emotional Singing) and goes where it isn't
+(Stay in Key). (f) The Songs tab: the Choir World card first, the one raised block; the six tools as `.hl-item` rows
+with icons, like the Coach tab, "Best {value}" where a best is stored (Karaoke). (g) Studio (the Performance
+personality): a red "Recording" tally, the elapsed time, an `.hl-meter` input level and Stop on its stage; Stop keeps
+the take, leaving discards it; takes live on this device (not in your account's progress) and each can be deleted.
+(h) Performance Director and Sing With the Choir draw Choir World's five lanes with your part bold and your voice
+(display only); PD gets Stop and can run again. (i) Scores don't change in this phase: the scoring accuracy batch
+(Timing on a sounding voice, Dynamics/Expression on a steady tone, the note-pitch divisor, the two Timing averages,
+the Rhythm latency) waits until after the redesign (HANDOFF).
 
 v1.8 (2026-11-02, phase 5, spec `PHASE5.md`): Choir World. (a) Structure: a landing at the top of `panel-choir` (a
 raised "Continue" block from `cwHubStatus`, then the songs as `.hl-item` rows with your part's readiness; a song opens

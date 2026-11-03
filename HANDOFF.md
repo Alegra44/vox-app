@@ -437,6 +437,26 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
   (a director and their singers) before it can come back; later, not scheduled.
 
+### Phase 6, the Songs-tab solo tools (`redesign/phase6`, spec `PHASE6.md`): IN PROGRESS 2026-11-04
+- Spec saved as design/house-lights/PHASE6.md (0f6f584). Fixes survey bugs 1–3, 8, 9; renames AI Duet Partner to Sing
+  With the Choir; PD's result becomes "Your performance". No merge or deploy before the user's review of the shots.
+
+## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
+
+These change scores, so they wait until the redesign is finished (survey items in PHASE6_SURVEY.md "Broken or odd"):
+1. **Timing counts a voice that's already sounding.** Karaoke and Performance Director give a note 100 if anything voiced
+   arrives in its first 40 %, so a tone held through the whole song is "on time" on every note (steady tone: Timing 100
+   with Pitch 0).
+2. **Dynamics and Expression on a steady tone.** Emotional Singing's Expression (loudness spread × 250) gives a steady tone
+   51; PD's Dynamics ((max − min) / max × 150) gives it 86. Both read the onset, the room and the backing as dynamics.
+3. **Karaoke and PD divide note pitch by the wrong count:** `vibratoTolerantCents(buf)` is summed over its own output but
+   divided by the buffer's length (Karaoke 14782, PD 23795 on master 6266166). Equal only while the helper returns one
+   value per reading.
+4. **The two Timing averages:** Karaoke averages Timing over every note (a note not heard is 0), PD over the notes heard,
+   with the same formula and the same label.
+5. **Rhythm / Entrance & Cutoff latency** (from 4b 2.4, see "Later accuracy item" above): output and input latency land
+   in every onset offset as "late".
+
 ## Waiting on the user (don't start without a go-ahead)
 
 - **Stripe / billing:** payments are still simulated. Billing columns and `trial_start_date` are server-only
