@@ -397,13 +397,13 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Guards DONE** (logs/checks5-2026-11-02T07-41-37 and the re-run checks5-2026-11-02T09-26-25): house 882/1 (the one:
   a Supabase 503 in Register Coach, 4b, not Choir World), stopcheck pass, modecheck pass (Hear me off 0 / on 1
   getUserMedia), contrast only the master Profile icon rows, copyscan 0, hooks 21/0, navcheck 20/0.
-- **Gate DONE 2026-11-02 18:57 UTC: FAIL 2 of 21** (logs/regress-2026-11-02T10-55-10; 19 pass, 0 numbers moved in
-  them). live7: branch #2 sign-up timed out (Supabase, 20 s), the other runs passed: re-run. fix: every colour read
-  as its Dark value because fix.js read them 300 ms after Harmony Memory ended, with the house still down (new in
-  phase 5); fixed in 45f09c1 (waits for the house up; no-op on master). Next: re-run only those two, e.g. a
-  choirregress run limited to fix,live7 (check the script's options), then go on.
-- **Still to do, in order:** re-run fix and live7; `bash scripts/design-verify/checks5.sh after`; vocal load
-  (existing = master ±2; measure Hear me's load for one play-through); final screenshots
+- **Gate DONE.** Full run regress-2026-11-02T10-55-10: 19/21 pass. Re-run of fix and live7 (2026-11-03,
+  regress-2026-11-03T03-51-*): live7 3/3 pass; fix's only moved values are the Harmony Memory result rows' colour:
+  held/in tune teal → ink in the new .cw-result layout (2.4, by design: colour only for a miss; misses still coral).
+  Expected change, in the report.
+- **After set RUNNING** (2026-11-03 ~04:13 UTC): checks5.sh after, now with batch1/3a/3b on master too and hearme.js
+  (01e6972).
+- **Still to do, in order:** read the after set (vocal load = master ±2 from the batch logs; hearme.log); final screenshots
   `node scripts/design-verify/shots5after.js --set final --out <dir>` (include the 2.6 screens); orphan
   review/phase5 with sheets/final.jpg; secret check; push redesign/phase5 and review/phase5; report; STOP. No merge,
   no deploy.
