@@ -3,7 +3,7 @@
 # battery). Each check's output goes to <out>/<name>.log; <out>/progress.txt has a line per start and end with its exit.
 # Usage: bash scripts/design-verify/checks5.sh <set>   sets: guards | after | <name,name…>
 #   guards  house stopcheck modecheck contrast copyscan (Choir World, four languages) hooks navcheck
-#   after   batch1 batch3a batch3b picker warmup-entries warmup-tracking levelup home loopback
+#   after   batch1 batch3a batch3b (each also on master, served on :8766, for vocal load = master ±2) hearme picker warmup-entries warmup-tracking levelup home loopback
 # The gate, choirregress.sh, runs on its own: bash scripts/choir-verify/choirregress.sh working
 cd "$(dirname "$0")/../.."
 SET=${1:?usage: checks5.sh guards|after|name,name}
@@ -19,6 +19,10 @@ cmd(){ case $1 in
   batch1) echo "node scripts/vocal-load-verify/batch1.js";;
   batch3a) echo "node scripts/vocal-load-verify/batch3a.js";;
   batch3b) echo "node scripts/vocal-load-verify/batch3b.js";;
+  batch1-master) echo "node scripts/vocal-load-verify/batch1.js $M";;
+  batch3a-master) echo "node scripts/vocal-load-verify/batch3a.js $M";;
+  batch3b-master) echo "node scripts/vocal-load-verify/batch3b.js $M";;
+  hearme) echo "node scripts/vocal-load-verify/hearme.js";;
   picker) echo "env PK_BEFORE=master node scripts/vq-verify/picker.js";;
   warmup-entries) echo "node scripts/warmup-verify/entries.js";;
   warmup-tracking) echo "node scripts/warmup-verify/tracking.js";;
@@ -29,8 +33,12 @@ cmd(){ case $1 in
 esac; }
 case $SET in
   guards) LIST="house stopcheck modecheck contrast copyscan hooks navcheck";;
-  after) LIST="batch1 batch3a batch3b picker warmup-entries warmup-tracking levelup home loopback";;
+  after) LIST="batch1 batch1-master batch3a batch3a-master batch3b batch3b-master hearme picker warmup-entries warmup-tracking levelup home loopback";;
   *) LIST=${SET//,/ };;
+esac
+case " $LIST " in *-master*) # master's build on :8766 for the *-master checks
+  MDIR=$(node -e "console.log(require('./scripts/design-verify/common').buildDir('master'))"); M=http://localhost:8766/
+  (cd "$MDIR" && exec python3 -m http.server 8766 >/dev/null 2>&1) & MS=$!; trap 'kill $MS 2>/dev/null' EXIT; sleep 2;;
 esac
 echo "checks5 $SET on $(git rev-parse --short HEAD)$(git diff --quiet || echo ' + working changes')" > "$OUT/progress.txt"
 for n in $LIST; do
