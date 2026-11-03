@@ -1,0 +1,374 @@
+{
+ "studio 390 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "pd 390 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "aiduet 390 light": {
+  "idle": "up",
+  "live": "up",
+  "stopped": "up"
+ },
+ "staykey 390 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "karaoke 390 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "result-mission": "up"
+ },
+ "emotion 390 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "errors 390 light": [],
+ "studio 390 dark": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "pd 390 dark": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "aiduet 390 dark": {
+  "idle": "up",
+  "live": "up",
+  "stopped": "up"
+ },
+ "staykey 390 dark": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "karaoke 390 dark": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "result-mission": "up"
+ },
+ "emotion 390 dark": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up"
+ },
+ "errors 390 dark": [],
+ "studio 1280 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "leave_2s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": true,
+   "backingOsc": 0,
+   "vlRun": true,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Start (Pro)",
+    "emotion": "Start (Pro)",
+    "aiduet": "Start singing with AI"
+   },
+   "results": {
+    "staykey": "none",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "none"
+   }
+  },
+  "leave_32s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 0,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Start (Pro)",
+    "emotion": "Start (Pro)",
+    "aiduet": "Start singing with AI"
+   },
+   "results": {
+    "staykey": "none",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "none"
+   }
+  }
+ },
+ "pd 1280 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "error": "TimeoutError: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#pdStartBtn')\u001b[22m\n\u001b[2m    - locator resolved to <button class=\"mic-btn\" id=\"pdStartBtn\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stabl"
+ },
+ "aiduet 1280 light": {
+  "idle": "up",
+  "live": "up",
+  "stopped": "up",
+  "leave_2s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 0,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Start (Pro)",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "none",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  },
+  "leave_32s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 0,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Start (Pro)",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "none",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  }
+ },
+ "staykey 1280 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "leave_2s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": true,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 32,
+   "vlRun": true,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Stop",
+    "karaoke": "Start (Pro)",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "none",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  },
+  "leave_32s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 0,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Start (Pro)",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "block",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  }
+ },
+ "karaoke 1280 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "result-mission": "up",
+  "leave_2s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 32,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Stop",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "block",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  },
+  "leave_32s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 32,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Stop",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "block",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  }
+ },
+ "emotion 1280 light": {
+  "idle": "up",
+  "live": "up",
+  "ended": true,
+  "result": "up",
+  "leave_2s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": true,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 32,
+   "vlRun": true,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Stop",
+    "emotion": "Stop",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "block",
+    "emotion": "none",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  },
+  "leave_32s": {
+   "panel": "panel-home",
+   "house": "up",
+   "stayKeyActive": false,
+   "emotionActive": false,
+   "karaokeActive": false,
+   "pdActive": false,
+   "aiDuetActive": false,
+   "choirIsPlaying": false,
+   "studioRecording": false,
+   "backingOsc": 0,
+   "vlRun": false,
+   "vlSideRaf": true,
+   "labels": {
+    "staykey": "Start (Pro)",
+    "karaoke": "Stop",
+    "emotion": "Start (Pro)",
+    "aiduet": "Stop"
+   },
+   "results": {
+    "staykey": "block",
+    "emotion": "flex",
+    "karaoke": "none",
+    "pd": "block"
+   }
+  }
+ },
+ "errors 1280 light": []
+}
