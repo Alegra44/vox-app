@@ -421,7 +421,7 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   and then `vercel promote dpl_7wMjFuZHdg3XE479UaD9N41gWCBY` (CLI 62.2.0 built it as production but left the alias on the
   old deployment: "productionUrl": null; check `vercel inspect deploy-alegra1122.vercel.app` after every deploy).
 - **Production checks** (logs/prod-2026-11-03T17-03-49, base 7296998): modecheck, scores, stopcheck, navcheck, livevq
-  and all 21 choir scripts pass. house hit prod.sh's 30 min cap (now ~33 min with Choir World; raise its usual from 14);
+  and all 21 choir scripts pass. house hit prod.sh's 30 min cap (now ~33 min with Choir World; prod.sh's cap is now 45 min);
   rerun uncapped 883/0. scores4b and live each had 1–2 values just outside master's range; on rerun those passed and
   different ones moved (Resonance sharp 4.1 s ripple is bimodal 18/54/72 on master itself). Not repeated → no rollback.
 - **review/phase5-prod** (7532270, orphan): the final set and the 5.1 fixes on production, sheets, checks. Deleted:

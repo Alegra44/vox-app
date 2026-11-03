@@ -13,7 +13,7 @@
 #   site), navcheck, livevq and tools-shots (the 4b tools at 390 and 1280, Light and Dark); phase 5a made the choir
 #   group, opt-in (ONLY="choir", WITH_CHOIR=1 for everything plus the group, or by name: cv-desc … cv-yc): every Choir
 #   World script, with its own test account. Required for phases 5, 6 and 10 (with choirregress.sh, the choir gate)
-#   - each suite has a limit of 3× its usual minutes (the number after its name), 30 min at most; one that hits it is
+#   - each suite has a limit of 3× its usual minutes (the number after its name), 45 min at most (house takes ~33 since phase 5); one that hits it is
 #     stopped and logged "timed out", and the run carries on)
 cd "$(dirname "$0")/../.."
 P=https://deploy-alegra1122.vercel.app/
@@ -81,7 +81,7 @@ for s in "${SUITES[@]}"; do
     tries=$((tries+1)); echo "$(date -u +%H:%M:%S) unreachable before $name ($why), try $tries of 5" >> "$OUT/progress.txt"
     if [ $tries -ge 5 ]; then echo "$(date -u +%H:%M:%S) STOPPED: the site or Supabase unreachable 5 times before $name" >> "$OUT/progress.txt"; exit 2; fi
     sleep 60; done
-  limit=$(( usual * 3 )); [ $limit -gt 30 ] && limit=30
+  limit=$(( usual * 3 )); [ $limit -gt 45 ] && limit=45
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name (limit $limit min)" >> "$OUT/progress.txt"
   $cmd > "$OUT/$name.log" 2>&1 & pid=$!
   ( sleep $(( limit * 60 )); kill -0 $pid 2>/dev/null && touch "$OUT/.timedout-$name" && kill -TERM $pid; sleep 10; kill -KILL $pid 2>/dev/null ) & dog=$!
