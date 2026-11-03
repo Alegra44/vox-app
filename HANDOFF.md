@@ -426,7 +426,12 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   different ones moved (Resonance sharp 4.1 s ripple is bimodal 18/54/72 on master itself). Not repeated → no rollback.
 - **review/phase5-prod** (7532270, orphan): the final set and the 5.1 fixes on production, sheets, checks. Deleted:
   review/phase5, -part1, -fix, -before. Old rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs; new one is dpl_7wMj….
-- **Next: phase 6 survey** (read-only, PHASE5.md ## 5.1 step 4) on redesign/phase6.
+- **Phase 6 survey DONE 2026-11-04, reported; waiting for the user's phase 6 spec.** Branch `redesign/phase6`
+  (a3bc61f): design/house-lights/PHASE6_SURVEY.md, survey6/copy6.py, shots6before.js. review/phase6-before (24fa630,
+  orphan): idle/live/result of the six tools at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json with the
+  leave probe. Headline findings: stopAllActiveSessions doesn't stop Stay in Key, Emotional Singing or Performance
+  Director (they finish and score off-screen) nor the backing pad; PD can only run once per page load; AI Duet leaves your
+  part muted in Choir World; a steady tone scores Expression 51 / PD Dynamics 86. No app changes.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
