@@ -384,7 +384,7 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   34 per size at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json, english-in-fr.json). The first full
   shots run failed signing up (auth timeout after several sign-ups in a few minutes); the retry 3 min later passed.
 
-### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): approved after 5.1; 5.1 DONE and REPORTED 2026-11-03, waiting for "deploy"
+### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): LIVE 2026-11-04, dpl_7wMjFuZHdg3XE479UaD9N41gWCBY (master 1d0fce8)
 - Rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs. No merge or deploy until the user has reviewed the screenshots.
 - Out of phase 5 (the user's answers): AI Duet, the six Songs-tab solo tools and the Performance Report's own screen go
   to phase 6. live9's save round-trip times leave the choir gate (still printed).
@@ -417,9 +417,16 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   rerun). Gate (ONLY="fix p7 yc timing live7"): p7, yc, timing, live7 pass; fix's only moves are the result rows' colour
   in ink (expected, as in phase 5). Fixshots: review/phase5-fix (orphan, 45 files, sheets/fix.jpg, notes.txt,
   measures.json). English dates are en-US ("Nov 3, 7:26 PM"), not the en-GB example; one-line change if wanted.
-- **Next: wait for the user to type "deploy"**, then the four steps in PHASE5.md ## 5.1 (merge --no-ff, the user runs
-  Vercel, prod.sh WITH_CHOIR=1, review/phase5-prod, delete the review branches, then the read-only phase 6 survey).
-  Rollback dpl_BvNJh8hz89bSLfWzbAqHS15G85zs.
+- **Deployed 2026-11-03/04.** "deploy" given; master 1d0fce8 (--no-ff merge) pushed; the user ran `vercel deploy --prod`
+  and then `vercel promote dpl_7wMjFuZHdg3XE479UaD9N41gWCBY` (CLI 62.2.0 built it as production but left the alias on the
+  old deployment: "productionUrl": null; check `vercel inspect deploy-alegra1122.vercel.app` after every deploy).
+- **Production checks** (logs/prod-2026-11-03T17-03-49, base 7296998): modecheck, scores, stopcheck, navcheck, livevq
+  and all 21 choir scripts pass. house hit prod.sh's 30 min cap (now ~33 min with Choir World; raise its usual from 14);
+  rerun uncapped 883/0. scores4b and live each had 1–2 values just outside master's range; on rerun those passed and
+  different ones moved (Resonance sharp 4.1 s ripple is bimodal 18/54/72 on master itself). Not repeated → no rollback.
+- **review/phase5-prod** (7532270, orphan): the final set and the 5.1 fixes on production, sheets, checks. Deleted:
+  review/phase5, -part1, -fix, -before. Old rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs; new one is dpl_7wMj….
+- **Next: phase 6 survey** (read-only, PHASE5.md ## 5.1 step 4) on redesign/phase6.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend

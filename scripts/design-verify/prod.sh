@@ -22,7 +22,7 @@ SHOTS=${1:-${TMPDIR:-/tmp}/voxcoach-shots-prod}
 SB=https://ccharikhpeqtzpobarxi.supabase.co
 SCORES_BASE=${SCORES_BASE:-$(git log --merges -1 --format=%P | cut -d' ' -f1)}
 SUITES=(
-  "house|14|env DV_URL=$P node scripts/design-verify/house.js"
+  "house|20|env DV_URL=$P node scripts/design-verify/house.js"
   "system|1|env DV_URL=$P node scripts/design-verify/system.js"
   "contrast|10|env DV_URL=$P node scripts/design-verify/contrast.js --json $OUT/contrast-prod.json"
   "batch1|16|node scripts/vocal-load-verify/batch1.js $P"
