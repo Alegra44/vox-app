@@ -58,7 +58,7 @@ const STATES = [
   } },
   { key: '5-hm-idle', steps: async (page, shot, m) => {
     await tab(page, 'trainers', 'hm'); await ev(page, () => { document.querySelector('#harmonyMemoryCard details.hl-measure').open = true; });
-    await center(page, '#hmemStageDesc'); m.desc = await ev(page, () => document.getElementById('hmemStageDesc').textContent); await shot('idle');
+    await center(page, '#hmemMeasure'); m.desc = await ev(page, () => document.getElementById('hmemStageDesc').textContent); await shot('idle');
   } },
   { key: '6-parts', steps: async (page, shot, m, w) => {
     await tab(page, 'rehearse'); await center(page, '#rehearsalPartRow'); m.en = await partsMeasure(page); await shot('chooser');

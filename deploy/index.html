@@ -1727,7 +1727,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* the part chooser and A Cappella */
   .cw-parts{display:flex;width:100%;box-sizing:border-box;margin:var(--hl-s2) 0 var(--hl-s3);}
   .cw-parts button{flex:1 1 0;min-width:0;padding:0 var(--hl-s1);text-align:center;line-height:1.15;overflow-wrap:normal;hyphens:none;}
-  @media (max-width:479px){ .cw-parts button{padding:4px 2px;font-size:13px;font-stretch:var(--hl-w-condensed);} } /* 5.1: five equal segments at 390; a long name (fr "Voix principale") takes two centred lines */
+  @media (max-width:479px){ .cw-parts button{padding:4px 2px;font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);} } /* 5.1: five equal segments at 390; a long name (fr "Voix principale") takes two centred lines */
   /* the guide level: a fader with five detents, the level buttons as its labels under it */
   .cw-level-fader{margin-top:var(--hl-s2);width:80%;margin-left:10%;} /* its five detents over the centres of the five labels */
   #rehearsalLevels.cw-level-labels{display:grid;grid-template-columns:repeat(5, minmax(0,1fr));gap:var(--hl-s1);margin-top:var(--hl-s1);}
