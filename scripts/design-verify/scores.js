@@ -23,20 +23,27 @@
 // values, Voice Quality's centroid, every Emotion Mode value with the louder stimulus, Register Drills' per-note values:
 // SPREAD) are gated by master's own range instead, where a master run is more than ±2 from master's median: the
 // branch's median within master's min–max. Where master's runs agree within ±2 the ±2 gate stays.
+// Phase 6 (PHASE6.md §1a): the four scored Songs-tab tools (tools6.js: Performance Director, Stay in Key, Karaoke Coach,
+// Emotional Singing), each run through the song once, every number of its result (per-note pitch and timing, the
+// averages, Technique and Dynamics, % in key, Expression, the coach line chosen, Karaoke's song best and Song Mission
+// rows, the skill score recorded) from its own state and its display. With the steady A4 and "lead" (synthmic.js: the
+// steady note moved onto the Lead line, each note on its chord from the tool's own start). Gated ±2, or by master's own
+// range wherever master's runs spread wider than that (SPREAD: Dynamics and Expression move with the onset and the room).
+// Run them with --tools pd,staykey,karaoke,emotion.
 // --alternate: master, branch, master, branch… (by default the sides swap order each run: m b, b m, m b…).
 // Usage: node scripts/design-verify/scores.js [--base master] [--runs 3] [--tools interval,scale,…] [--stims steady,sharp]
 //   [--branch-url https://…]: the branch side is that site (production after a deploy) instead of the working copy
 //   [--branch-ref <git ref>]: the branch side is that ref's build (--branch-ref master: an A/A run, the noise floor)
 //   [--resume <json>]   (keeps the runs already in that file)
 const path = require('path'), fs = require('fs');
-const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b'), SYN = require('./synthmic');
+const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b'), T6 = require('./tools6'), SYN = require('./synthmic');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const BASE = arg('--base') || 'master', RUNS = +(arg('--runs') || 3);
 const ONLY = arg('--tools') ? arg('--tools').split(',') : null;
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const OUT = path.join(__dirname, 'logs', `scores-${stamp}`); fs.mkdirSync(path.dirname(OUT), { recursive: true });
 const logf = fs.createWriteStream(OUT + '.log'); const log = (...a) => { const s = a.join(' '); console.log(s); logf.write(s + '\n'); };
-const TOOLS = [...T.SUNG, ...T4.TAKE].filter(t => ONLY ? ONLY.includes(t.key) : !t.stims); // the 4a tools unless --tools names others
+const TOOLS = [...T.SUNG, ...T4.TAKE, ...T6.SCORED].filter(t => ONLY ? ONLY.includes(t.key) : !t.stims); // the 4a tools unless --tools names others
 const toolStims = t => t.stims || ['steady', 'sharp'];
 const STIMS = arg('--stims') ? arg('--stims').split(',') : [...new Set(TOOLS.flatMap(toolStims))];
 const toolsFor = stim => TOOLS.filter(t => toolStims(t).includes(stim));
@@ -47,7 +54,7 @@ function ensureVib() {
   require('child_process').execFileSync('python3', [path.join(C.ROOT, 'scripts/vq-verify/gen.py'), VIB_FILE,
     JSON.stringify({ f0: 440, harmonics: [1, 0.5, 0.33, 0.25], vibRate: 5.5, vibCents: 40, seconds: 40, seed: 3 })], { encoding: 'utf8' });
 }
-const SYNTH = { onbeat: { level: 0, late: 0 }, late60: { level: 0, late: 60 }, louder: { level: 1 } };
+const SYNTH = { onbeat: { level: 0, late: 0 }, late60: { level: 0, late: 60 }, louder: { level: 1 }, lead: { level: 1, melody: true } };
 const stimFile = stim => stim === 'vibrato' ? VIB_FILE : S.STIM[stim];
 const TOL = 2;
 // Rhythm's average on master's own build, min–max of the six runs of the A/A (scores-2026-10-26T15-24-34: onbeat
@@ -55,7 +62,8 @@ const TOL = 2;
 let RHYTHM_AA = { onbeat: [82, 87], late60: [44, 52] };
 const RHYTHM_GATED = ['average', 'result: average'], RHYTHM_REPORTED = /^beat \d/;
 // tool → stimulus → the value names gated by master's own range when it is wider than ±2 (4b.2)
-const SPREAD = { mirror: { '*': /^note \d/ }, voicequality: { '*': /^centroid Hz$/ }, emotionmode: { louder: /./ }, registerdrills: { '*': /^note \d/ } };
+const SPREAD = { mirror: { '*': /^note \d/ }, voicequality: { '*': /^centroid Hz$/ }, emotionmode: { louder: /./ }, registerdrills: { '*': /^note \d/ },
+  pd: { '*': /./ }, staykey: { '*': /./ }, karaoke: { '*': /./ }, emotion: { '*': /./ } }; // phase 6: master's own range where it spreads wider than ±2
 const spreadOf = (key, stim, n) => { const t = SPREAD[key]; const re = t && (t[stim] || t['*']); return !!re && re.test(n); };
 const ALTERNATE = process.argv.includes('--alternate');
 
@@ -88,7 +96,7 @@ async function oneRun(b, dir, state, tools, stim) {
   const out = {};
   try {
     await C.clearOverlays(page); await page.evaluate(T.CAPTURE_TAP); await S.warmMic(page);
-    if (syn) await page.evaluate(late => { window.__rhythmLate = late || 0; }, syn.late);
+    if (syn) await page.evaluate(({ late, melody }) => { window.__rhythmLate = late || 0; window.__leadLine = !!melody; }, { late: syn.late, melody: syn.melody });
     for (const tool of tools) {
       await tool.open(page); await C.sleep(300);
       await page.evaluate(() => { window.__caps = []; });

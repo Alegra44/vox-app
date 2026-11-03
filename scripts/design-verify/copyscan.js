@@ -6,6 +6,7 @@
 // language's scan also looks for the English words.
 // Phase 4b (PHASE4B.md §1f): --tools covers the 10 tools with their own displays (tools4b.js) too; --set 4a | 4b | all
 // (the default) picks them.
+// Phase 6 (PHASE6.md §1f): --set 6 scans the six Songs-tab solo tools and the Songs tab (tools6.js).
 // Usage: node scripts/design-verify/copyscan.js [--lang en] [--tools] [--set 4b]
 const C = require('./common'), H = require('./homeStates');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
