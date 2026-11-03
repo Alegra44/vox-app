@@ -401,10 +401,14 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   regress-2026-11-03T03-51-*): live7 3/3 pass; fix's only moved values are the Harmony Memory result rows' colour:
   held/in tune teal → ink in the new .cw-result layout (2.4, by design: colour only for a miss; misses still coral).
   Expected change, in the report.
-- **After set RUNNING** (2026-11-03 ~04:13 UTC): checks5.sh after, now with batch1/3a/3b on master too and hearme.js
-  (01e6972).
-- **Still to do, in order:** read the after set (vocal load = master ±2 from the batch logs; hearme.log); final screenshots
-  `node scripts/design-verify/shots5after.js --set final --out <dir>` (include the 2.6 screens); orphan
+- **After set DONE 2026-11-03** (logs checks5-2026-11-03T04-13-00, re-runs -06-44-41 and -07-51-06): batch1 112/0
+  (master 111/1: Karaoke's mid-run gauge sample, timing, on master too), batch3a 169/0 (= master), batch3b 179/0
+  (= master), picker 93/0, warm-up entries 52/0, tracking 29/0, levelup 45/0, home 102/0, loopback pass. The first runs
+  failed on the five trainers and Your Choir: the scripts clicked the Songs-hub entries 2.1 hid; cwreach.js enterHub
+  (e13856c, 400c3da) takes the user's route there. Vocal load = master on 31 stored sessions (worst 0.06). hearme.js:
+  one play-through (26.7 s, A4) Hear me off +0.00 (no session), on +66.39 load-s (26.75 active s, ~1% of 6800).
+- **Final screenshots RUNNING** → scratchpad final/ (shots5after.js --set final).
+- **Still to do, in order:** look at the final screenshots; orphan
   review/phase5 with sheets/final.jpg; secret check; push redesign/phase5 and review/phase5; report; STOP. No merge,
   no deploy.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
