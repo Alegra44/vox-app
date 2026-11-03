@@ -842,6 +842,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pr-report{margin-top:12px;padding-top:10px;border-top:1px solid var(--hairline);}
   .pr-report .record-label small{display:block;color:var(--muted);font-size:11px;margin-top:2px;line-height:1.4;}
   .why-btn{margin-left:8px;font-size:11px;}
+  .link-btn.why-btn{color:var(--hl-ink);text-decoration:underline;text-underline-offset:2px;} /* a disclosure, not a link: ink (5.1) */
   .why-detail{margin:4px 0 10px;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--bg);}
   .why-detail .why-k{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
   .why-detail .why-k:first-child{margin-top:0;}
@@ -1725,7 +1726,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-stage.is-live ~ .rh-notes{display:none;}
   /* the part chooser and A Cappella */
   .cw-parts{display:flex;width:100%;box-sizing:border-box;margin:var(--hl-s2) 0 var(--hl-s3);}
-  .cw-parts button{flex:1 1 0;min-width:0;padding:0 var(--hl-s1);}
+  .cw-parts button{flex:1 1 0;min-width:0;padding:0 var(--hl-s1);text-align:center;line-height:1.15;overflow-wrap:normal;hyphens:none;}
+  @media (max-width:479px){ .cw-parts button{padding:4px 2px;font-size:13px;font-stretch:var(--hl-w-condensed);} } /* 5.1: five equal segments at 390; a long name (fr "Voix principale") takes two centred lines */
   /* the guide level: a fader with five detents, the level buttons as its labels under it */
   .cw-level-fader{margin-top:var(--hl-s2);width:80%;margin-left:10%;} /* its five detents over the centres of the five labels */
   #rehearsalLevels.cw-level-labels{display:grid;grid-template-columns:repeat(5, minmax(0,1fr));gap:var(--hl-s1);margin-top:var(--hl-s1);}
@@ -6972,7 +6974,7 @@ const TRANSLATIONS = {
     hm_stage_4:'Guide 25%',
     hm_stage_5:'A Cappella',
     hm_stage_6:'From memory',
-    hm_stage_fade_desc:'Your guide track plays at {pct}% of its mixer volume (gain {gain} = {pct}% × {vol}); the other parts play at their mixer volume. Your notes stay on screen.',
+    hm_stage_fade_desc:"Your guide part plays at {pct}% volume and the other parts at their mixer level. Your notes stay on screen.",
     hm_stage_5_desc:'A Cappella Mode: your part is silent and the note display is hidden. The other parts play at their mixer volume.',
     hm_stage_6_desc:'Nothing plays. You hear your starting note during the count-in, then sing your whole line from memory: no choir, no guide, no notes on screen.',
     hm_locked_tpl:'Locked — pass stage {n}',
@@ -7055,7 +7057,7 @@ const TRANSLATIONS = {
     yc_desc:'Record yourself singing each part, one at a time, then hear all your takes together as a full choir. Each take starts after a 4-beat count-in; while you record, the synth plays the part you are singing and your earlier takes play back, so you can sing along with yourself. Parts you haven’t recorded stay silent. During playback, the faders, Mute and Solo above control your recorded parts.',
     yc_summary_tpl:'{n} of 5 parts recorded for {song}.',
     yc_not_recorded:'not recorded — silent in playback',
-    yc_recorded_tpl:'recorded {date} · {s} s · peak {db} dBFS',
+    yc_recorded_tpl:"recorded {date} · {s} s",
     yc_recording_now:'recording now…',
     yc_record_btn:'● Record',
     yc_rerecord_btn:'● Re-record',
@@ -7261,6 +7263,21 @@ const TRANSLATIONS = {
     tt_countin:'Count-in…',
     tt_listening_tpl:'Listening — chord {i}/{n}',
     tt_result_label:'Timing result',
+    tt_row_early:"Early",
+    tt_row_ontime:"On time",
+    tt_row_late:"Late",
+    tt_ontime_rule_tpl:"On time means within ±{tol} ms of the target.",
+    tt_coach_none_entrance:"No entrance was caught. Start each note as its chord begins, clearly enough for the mic; headphones keep the playback out.",
+    tt_coach_none_cutoff:"No cutoff was caught. Hold each note to the end of its chord, then stop cleanly; headphones keep the playback out.",
+    tt_coach_early_entrance:"You tend to come in early. Wait for the chord to start, then sing.",
+    tt_coach_late_entrance:"You tend to come in late. Breathe before the chord, then start with it.",
+    tt_coach_early_cutoff:"You tend to stop early. Hold each note until its chord ends.",
+    tt_coach_late_cutoff:"You tend to hold on too long. Stop as the chord ends.",
+    tt_coach_ontime:"Mostly on time. Keep it there through the whole song.",
+    yc_peaks_tpl:"Each take’s peak level: {list}. 0 dBFS is the loudest a recording can go.",
+    yc_peak_item_tpl:"{part} {db} dBFS",
+    hm_stage_full_desc:"Your guide part plays at full volume and the other parts at their mixer level. Your notes stay on screen.",
+    hm_gain_measure_tpl:"On this stage your guide plays at gain {gain} ({pct}% × your mixer volume {vol}).",
     tt_target:'target',
     tt_you:'you',
     tt_early:'early',
@@ -8517,7 +8534,7 @@ const TRANSLATIONS = {
     hm_stage_4:'Guide 25 %',
     hm_stage_5:'A cappella',
     hm_stage_6:'De mémoire',
-    hm_stage_fade_desc:'Votre piste guide joue à {pct} % de son volume de mixage (gain {gain} = {pct} % × {vol}) ; les autres voix jouent à leur volume de mixage. Vos notes restent affichées.',
+    hm_stage_fade_desc:"Votre voix guide joue à {pct} % du volume et les autres voix à leur niveau de mixage. Vos notes restent affichées.",
     hm_stage_5_desc:'Mode a cappella : votre voix est silencieuse et l’affichage des notes est masqué. Les autres voix jouent à leur volume de mixage.',
     hm_stage_6_desc:'Rien ne joue. Vous entendez votre note de départ pendant le décompte, puis vous chantez toute votre ligne de mémoire : pas de chœur, pas de guide, aucune note à l’écran.',
     hm_locked_tpl:'Verrouillée — réussissez l’étape {n}',
@@ -8600,7 +8617,7 @@ const TRANSLATIONS = {
     yc_desc:'Enregistrez-vous en chantant chaque voix, une à la fois, puis écoutez toutes vos prises ensemble comme une chorale complète. Chaque prise commence après un décompte de 4 temps ; pendant l’enregistrement, le synthé joue la voix que vous chantez et vos prises précédentes sont rejouées, pour que vous chantiez avec vous-même. Les voix non enregistrées restent muettes. Pendant la lecture, les curseurs, Muet et Solo ci-dessus règlent vos voix enregistrées.',
     yc_summary_tpl:'{n} voix sur 5 enregistrées pour {song}.',
     yc_not_recorded:'non enregistrée — muette à la lecture',
-    yc_recorded_tpl:'enregistrée le {date} · {s} s · crête {db} dBFS',
+    yc_recorded_tpl:"enregistrée le {date} · {s} s",
     yc_recording_now:'enregistrement en cours…',
     yc_record_btn:'● Enregistrer',
     yc_rerecord_btn:'● Réenregistrer',
@@ -8806,6 +8823,21 @@ const TRANSLATIONS = {
     tt_countin:'Décompte…',
     tt_listening_tpl:'À l’écoute — accord {i}/{n}',
     tt_result_label:'Résultat de timing',
+    tt_row_early:"En avance",
+    tt_row_ontime:"À temps",
+    tt_row_late:"En retard",
+    tt_ontime_rule_tpl:"À temps signifie à ±{tol} ms de la cible.",
+    tt_coach_none_entrance:"Aucune entrée n’a été captée. Commencez chaque note au début de son accord, assez nettement pour le micro ; un casque évite que le micro capte la lecture.",
+    tt_coach_none_cutoff:"Aucune fin de note n’a été captée. Tenez chaque note jusqu’à la fin de son accord, puis arrêtez net ; un casque évite que le micro capte la lecture.",
+    tt_coach_early_entrance:"Vous avez tendance à entrer trop tôt. Attendez le début de l’accord, puis chantez.",
+    tt_coach_late_entrance:"Vous avez tendance à entrer trop tard. Respirez avant l’accord, puis démarrez avec lui.",
+    tt_coach_early_cutoff:"Vous avez tendance à vous arrêter trop tôt. Tenez chaque note jusqu’à la fin de son accord.",
+    tt_coach_late_cutoff:"Vous avez tendance à tenir trop longtemps. Arrêtez-vous quand l’accord se termine.",
+    tt_coach_ontime:"Surtout à temps. Gardez ce timing sur tout le chant.",
+    yc_peaks_tpl:"Niveau de crête de chaque prise : {list}. 0 dBFS est le niveau maximal d’un enregistrement.",
+    yc_peak_item_tpl:"{part} {db} dBFS",
+    hm_stage_full_desc:"Votre voix guide joue à plein volume et les autres voix à leur niveau de mixage. Vos notes restent affichées.",
+    hm_gain_measure_tpl:"À cette étape, votre guide joue avec un gain de {gain} ({pct} % × votre volume de mixage {vol}).",
     tt_target:'cible',
     tt_you:'vous',
     tt_early:'en avance',
@@ -10062,7 +10094,7 @@ const TRANSLATIONS = {
     hm_stage_4:'Guía 25 %',
     hm_stage_5:'A cappella',
     hm_stage_6:'De memoria',
-    hm_stage_fade_desc:'Tu pista guía suena al {pct} % de su volumen del mezclador (ganancia {gain} = {pct} % × {vol}); las demás voces suenan a su volumen del mezclador. Tus notas siguen en pantalla.',
+    hm_stage_fade_desc:"Tu voz guía suena al {pct} % del volumen y las demás voces a su nivel del mezclador. Tus notas siguen en pantalla.",
     hm_stage_5_desc:'Modo a cappella: tu voz está en silencio y la vista de notas se oculta. Las demás voces suenan a su volumen del mezclador.',
     hm_stage_6_desc:'No suena nada. Oyes tu nota inicial durante la cuenta y luego cantas toda tu línea de memoria: sin coro, sin guía y sin notas en pantalla.',
     hm_locked_tpl:'Bloqueada — supera la etapa {n}',
@@ -10145,7 +10177,7 @@ const TRANSLATIONS = {
     yc_desc:'Grábate cantando cada voz, una por una, y luego escucha todas tus tomas juntas como un coro completo. Cada toma empieza tras una cuenta de 4 tiempos; mientras grabas, el sintetizador toca la voz que cantas y tus tomas anteriores se reproducen, para que cantes contigo mismo. Las voces que no has grabado quedan en silencio. Durante la reproducción, los deslizadores, Silenciar y Solo de arriba controlan tus voces grabadas.',
     yc_summary_tpl:'{n} de 5 voces grabadas para {song}.',
     yc_not_recorded:'sin grabar — en silencio al reproducir',
-    yc_recorded_tpl:'grabada {date} · {s} s · pico {db} dBFS',
+    yc_recorded_tpl:"grabada el {date} · {s} s",
     yc_recording_now:'grabando…',
     yc_record_btn:'● Grabar',
     yc_rerecord_btn:'● Volver a grabar',
@@ -10351,6 +10383,21 @@ const TRANSLATIONS = {
     tt_countin:'Cuenta…',
     tt_listening_tpl:'Escuchando — acorde {i}/{n}',
     tt_result_label:'Resultado de tiempo',
+    tt_row_early:"Adelantadas",
+    tt_row_ontime:"A tiempo",
+    tt_row_late:"Atrasadas",
+    tt_ontime_rule_tpl:"A tiempo significa a ±{tol} ms del objetivo.",
+    tt_coach_none_entrance:"No se captó ninguna entrada. Empieza cada nota cuando comienza su acorde, con claridad para el micrófono; con auriculares el micrófono no capta la reproducción.",
+    tt_coach_none_cutoff:"No se captó ningún corte. Sostén cada nota hasta el final de su acorde y luego corta limpio; con auriculares el micrófono no capta la reproducción.",
+    tt_coach_early_entrance:"Tiendes a entrar antes de tiempo. Espera a que empiece el acorde y luego canta.",
+    tt_coach_late_entrance:"Tiendes a entrar tarde. Respira antes del acorde y empieza con él.",
+    tt_coach_early_cutoff:"Tiendes a cortar antes de tiempo. Sostén cada nota hasta que termine su acorde.",
+    tt_coach_late_cutoff:"Tiendes a sostener demasiado. Corta cuando termina el acorde.",
+    tt_coach_ontime:"Casi siempre a tiempo. Mantenlo durante toda la canción.",
+    yc_peaks_tpl:"Nivel de pico de cada toma: {list}. 0 dBFS es lo más fuerte que puede llegar una grabación.",
+    yc_peak_item_tpl:"{part} {db} dBFS",
+    hm_stage_full_desc:"Tu voz guía suena a todo volumen y las demás voces a su nivel del mezclador. Tus notas siguen en pantalla.",
+    hm_gain_measure_tpl:"En esta etapa tu guía suena con ganancia {gain} ({pct} % × tu volumen del mezclador {vol}).",
     tt_target:'objetivo',
     tt_you:'tú',
     tt_early:'adelantado',
@@ -11607,7 +11654,7 @@ const TRANSLATIONS = {
     hm_stage_4:'Rehber %25',
     hm_stage_5:'A cappella',
     hm_stage_6:'Ezberden',
-    hm_stage_fade_desc:'Rehber kaydınız mikser seviyesinin %{pct} oranında çalar (kazanç {gain} = %{pct} × {vol}); diğer partiler kendi mikser seviyelerinde çalar. Notalarınız ekranda kalır.',
+    hm_stage_fade_desc:"Rehber partiniz %{pct} seste, diğer partiler mikser seviyelerinde çalar. Notalarınız ekranda kalır.",
     hm_stage_5_desc:'A cappella modu: partiniz sessizdir ve nota gösterimi gizlenir. Diğer partiler kendi mikser seviyelerinde çalar.',
     hm_stage_6_desc:'Hiçbir şey çalmaz. Sayım sırasında başlangıç notanızı duyarsınız, ardından tüm partinizi ezberden söylersiniz: koro yok, rehber yok, ekranda nota yok.',
     hm_locked_tpl:'Kilitli — önce {n}. aşamayı geçin',
@@ -11690,7 +11737,7 @@ const TRANSLATIONS = {
     yc_desc:'Her partiyi tek tek kendiniz söyleyerek kaydedin, ardından tüm kayıtlarınızı tam bir koro olarak birlikte dinleyin. Her kayıt 4 vuruşluk bir sayımdan sonra başlar; kayıt sırasında synth söylediğiniz partiyi çalar ve önceki kayıtlarınız da çalınır, böylece kendinizle birlikte söyleyebilirsiniz. Kaydetmediğiniz partiler sessiz kalır. Dinlerken yukarıdaki sürgüler, Sessiz ve Solo kaydedilmiş partilerinizi kontrol eder.',
     yc_summary_tpl:'{song} için 5 partiden {n} tanesi kaydedildi.',
     yc_not_recorded:'kaydedilmedi — çalarken sessiz',
-    yc_recorded_tpl:'{date} tarihinde kaydedildi · {s} sn · tepe {db} dBFS',
+    yc_recorded_tpl:"{date} tarihinde kaydedildi · {s} sn",
     yc_recording_now:'kaydediliyor…',
     yc_record_btn:'● Kaydet',
     yc_rerecord_btn:'● Yeniden kaydet',
@@ -11896,6 +11943,21 @@ const TRANSLATIONS = {
     tt_countin:'Sayım…',
     tt_listening_tpl:'Dinleniyor — akor {i}/{n}',
     tt_result_label:'Zamanlama sonucu',
+    tt_row_early:"Erken",
+    tt_row_ontime:"Zamanında",
+    tt_row_late:"Geç",
+    tt_ontime_rule_tpl:"Zamanında, hedefin ±{tol} ms içinde demektir.",
+    tt_coach_none_entrance:"Hiç giriş yakalanamadı. Her notaya akoru başlarken, mikrofonun duyacağı netlikte başlayın; kulaklık çalan sesi mikrofondan uzak tutar.",
+    tt_coach_none_cutoff:"Hiç bitiş yakalanamadı. Her notayı akorunun sonuna kadar tutun, sonra temiz bir şekilde bitirin; kulaklık çalan sesi mikrofondan uzak tutar.",
+    tt_coach_early_entrance:"Erken girme eğilimindesiniz. Akorun başlamasını bekleyin, sonra söyleyin.",
+    tt_coach_late_entrance:"Geç girme eğilimindesiniz. Akordan önce nefes alın, sonra onunla birlikte başlayın.",
+    tt_coach_early_cutoff:"Erken bitirme eğilimindesiniz. Her notayı akoru bitene kadar tutun.",
+    tt_coach_late_cutoff:"Notayı fazla uzun tutma eğilimindesiniz. Akor biterken durun.",
+    tt_coach_ontime:"Çoğunlukla zamanında. Bunu şarkının tamamında koruyun.",
+    yc_peaks_tpl:"Her kaydın tepe seviyesi: {list}. 0 dBFS, bir kaydın ulaşabileceği en yüksek seviyedir.",
+    yc_peak_item_tpl:"{part} {db} dBFS",
+    hm_stage_full_desc:"Rehber partiniz tam seste, diğer partiler mikser seviyelerinde çalar. Notalarınız ekranda kalır.",
+    hm_gain_measure_tpl:"Bu aşamada rehberiniz {gain} kazançla çalar (%{pct} × mikser seviyeniz {vol}).",
     tt_target:'hedef',
     tt_you:'siz',
     tt_early:'erken',
@@ -16030,14 +16092,18 @@ function renderTimingResults(){
   const avgAcc = claimed.length ? Math.round(claimed.reduce((a,r)=>a+r.accuracy,0)/claimed.length) : 0;
   const count = v => claimed.filter(r=>verdict(r.offsetMs)===v).length;
   const latMs = Math.round(((audioCtx.outputLatency||0) + (audioCtx.baseLatency||0))*1000);
+  const tend = !claimed.length ? 'none' : count('ontime')*2>=claimed.length ? 'ontime' : count('early')>=count('late') ? 'early' : 'late';
+  const coach = tend==='ontime' ? t('tt_coach_ontime') : t(`tt_coach_${tend}_${mode}`);
+  const dims = ['early','ontime','late'].map(v=>`<div class="record-row vc-dim"><span class="record-label">${t('tt_row_'+v)}</span><span class="record-val">${count(v)}</span></div>`).join('');
   box.innerHTML = `<div class="vc-result cw-result">
     <p class="hl-label">${t('tt_result_label')} — ${t('tt_mode_'+mode)}</p>
-    <div class="ex-accuracy vc-result-num">${avgAcc}%</div>
+    <div class="ex-accuracy vc-result-num${claimed.length ? '' : ' vc-result-none'}">${claimed.length ? avgAcc+'%' : '—'}</div>
     <p class="vc-result-meta desc">${t('tt_summary_tpl').replace('{hit}', claimed.length).replace('{n}', timingTrainer.results.length).replace('{avg}', avgAbs)}</p>
-    <p class="hl-coach">${t('tt_counts_tpl').replace('{early}', count('early')).replace('{ontime}', count('ontime')).replace('{late}', count('late')).replace('{tol}', TIMING_ONTIME_MS)}</p>
-    ${timingTrainer.bleedHits>=2 ? `<p class="hl-coach">${t('tt_bleed')}</p>` : ''}
+    <p class="ex-feedback-text hl-coach">${coach}</p>
+    ${timingTrainer.bleedHits>=2 ? `<p class="ex-feedback-text hl-coach">${t('tt_bleed')}</p>` : ''}
+    <div class="vc-result-dims">${dims}</div>
     <div class="cw-note-rows">${rows}</div>
-    ${cwMeasureHtml(t('tt_latency_tpl').replace('{ms}', latMs))}
+    ${cwMeasureHtml(t('tt_ontime_rule_tpl').replace('{tol}', TIMING_ONTIME_MS) + ' ' + t('tt_latency_tpl').replace('{ms}', latMs))}
   </div>`;
   box.style.display = 'block';
 }
@@ -16169,7 +16235,14 @@ function hmStageDesc(i){
   if(cfg.memory) return t('hm_stage_6_desc');
   if(cfg.acappella) return t('hm_stage_5_desc');
   const guide = REHEARSAL_LEVELS[cfg.level].guide, vol = choirState[partRehearsal.part].volume;
-  return t('hm_stage_fade_desc').replaceAll('{pct}', Math.round(guide*100)).replace('{gain}', (guide*vol).toFixed(3)).replace('{vol}', vol.toFixed(2));
+  return guide>=1 ? t('hm_stage_full_desc') : t('hm_stage_fade_desc').replace('{pct}', Math.round(guide*100));
+}
+// the guide's gain on a fading stage (the arithmetic, for hl-measure)
+function hmStageGain(i){
+  const cfg = HM_STAGES[i];
+  if(cfg.memory || cfg.acappella) return '';
+  const guide = REHEARSAL_LEVELS[cfg.level].guide, vol = choirState[partRehearsal.part].volume;
+  return ' ' + t('hm_gain_measure_tpl').replaceAll('{pct}', Math.round(guide*100)).replace('{gain}', fmtNum(guide*vol, 3)).replace('{vol}', fmtNum(vol, 2));
 }
 
 function renderHarmonyMemory(){
@@ -16179,7 +16252,6 @@ function renderHarmonyMemory(){
   if(!harmonyMemory.active) harmonyMemory.stage = Math.min(harmonyMemory.stage, open);
   const cur = harmonyMemory.stage;
   document.getElementById('hmemDesc').textContent = t('hm_desc');
-  document.getElementById('hmemMeasure').textContent = t('cw_hm_measure').replace('{pass}', HM_PASS_PCT).replace('{cents}', HM_TOL_CENTS);
   box.innerHTML = HM_STAGES.map((st,i)=>{
     const locked = i>open;
     const status = locked ? t('hm_locked_tpl').replace('{n}', i)
@@ -16192,6 +16264,7 @@ function renderHarmonyMemory(){
     </button>`;
   }).join('');
   document.getElementById('hmemStageDesc').textContent = hmStageDesc(cur);
+  document.getElementById('hmemMeasure').textContent = t('cw_hm_measure').replace('{pass}', HM_PASS_PCT).replace('{cents}', HM_TOL_CENTS) + hmStageGain(cur);
   document.getElementById('hmemStartLabel').textContent = harmonyMemory.active ? t('tt_stop_btn') : t('hm_start_tpl').replace('{n}', cur+1);
   if(harmonyMemory.active) harmonyMemory.lastIdx = -2; // status line redraws in the current language
   else document.getElementById('hmemStatus').textContent = '';
@@ -16929,6 +17002,13 @@ async function ycExport(){
   }
 }
 
+// A take's date and time, through Intl in the current language (e.g. "Nov 3, 2:26 PM" in English)
+const ycWhen = ms=>new Intl.DateTimeFormat(localeForLang(), {day:'numeric', month:'short', hour:'numeric', minute:'2-digit'}).format(new Date(ms));
+function ycPeaksHtml(takes){
+  const list = YC_PARTS.filter(p=>takes[p]).map(p=>t('yc_peak_item_tpl').replace('{part}', partName(p))
+    .replace('{db}', (20*Math.log10(takes[p].peak)).toLocaleString(localeForLang(), {maximumFractionDigits:1, minimumFractionDigits:1})));
+  return list.length ? cwMeasureHtml(t('yc_peaks_tpl').replace('{list}', list.join(' · '))) : '';
+}
 function renderYourChoir(){
   const box = document.getElementById('ycParts');
   if(!box) return;
@@ -16939,8 +17019,7 @@ function renderYourChoir(){
   box.innerHTML = YC_PARTS.map(p=>{
     const tk = takes[p];
     const state = rec && rec.part===p ? t('yc_recording_now')
-      : tk ? t('yc_recorded_tpl').replace('{date}', new Date(tk.recordedAt).toLocaleString(localeForLang(), {dateStyle:'short', timeStyle:'short'}))
-          .replace('{s}', tk.dur.toLocaleString(localeForLang())).replace('{db}', (20*Math.log10(tk.peak)).toLocaleString(localeForLang(), {maximumFractionDigits:1, minimumFractionDigits:1}))
+      : tk ? t('yc_recorded_tpl').replace('{date}', ycWhen(tk.recordedAt)).replace('{s}', Math.round(tk.dur))
       : t('yc_not_recorded');
     return `<div class="record-row yc-row" data-yc-part="${p}" data-recorded="${!!tk}">
       <span class="record-label"><span style="color:${PART_COLORS[p]};">●</span> <b>${partName(p)}</b> · ${state}</span>
@@ -16948,7 +17027,7 @@ function renderYourChoir(){
         <button class="practice-chip" data-yc-rec="${p}"${locked?' disabled':''}>${t(tk ? 'yc_rerecord_btn' : 'yc_record_btn')}</button>
         ${tk ? `<button class="practice-chip" data-yc-del="${p}"${locked?' disabled':''}>${t('yc_delete_btn')}</button>` : ''}
       </span></div>`;
-  }).join('');
+  }).join('') + ycPeaksHtml(takes); // each take's peak level: in hl-measure, off the rows
   const play = document.getElementById('ycPlayBtn');
   play.textContent = t(yourChoir.playing ? 'yc_playing_btn' : 'yc_play_btn');
   play.disabled = busy;
@@ -17039,7 +17118,7 @@ function cwResultHtml(head, score, summary, msg, report, rows){
     <p class="hl-label">${head}</p>
     <div class="ex-accuracy vc-result-num">${score}%</div>
     <p class="vc-result-meta desc">${summary}</p>
-    <p class="hl-coach">${msg}</p>
+    <p class="ex-feedback-text hl-coach">${msg}</p>
     ${report}
     <div class="cw-note-rows">${rows}</div>
   </div>`;
@@ -17065,7 +17144,7 @@ function perfReportHtml(run){
   return `<div class="pr-report">
     <p class="hl-label">${t('pd_report_label')}</p>
     <div class="vc-result-dims">${rows}</div>
-    <p class="desc hl-coach">${insight}</p>
+    <p class="desc ex-feedback-text hl-coach">${insight}</p>
     ${cwMeasureHtml(t('pr_method_note').replace('{pct}', Math.round(PR_ONTIME_FRACTION*100)))}
   </div>`;
 }
