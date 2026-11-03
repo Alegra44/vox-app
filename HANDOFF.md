@@ -384,7 +384,7 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   34 per size at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json, english-in-fr.json). The first full
   shots run failed signing up (auth timeout after several sign-ups in a few minutes); the retry 3 min later passed.
 
-### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): IN PROGRESS from 2026-11-02 11:35 IST
+### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): DONE and REPORTED 2026-11-03, waiting for the user's review
 - Rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs. No merge or deploy until the user has reviewed the screenshots.
 - Out of phase 5 (the user's answers): AI Duet, the six Songs-tab solo tools and the Performance Report's own screen go
   to phase 6. live9's save round-trip times leave the choir gate (still printed).
@@ -407,10 +407,10 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   failed on the five trainers and Your Choir: the scripts clicked the Songs-hub entries 2.1 hid; cwreach.js enterHub
   (e13856c, 400c3da) takes the user's route there. Vocal load = master on 31 stored sessions (worst 0.06). hearme.js:
   one play-through (26.7 s, A4) Hear me off +0.00 (no session), on +66.39 load-s (26.75 active s, ~1% of 6800).
-- **Final screenshots RUNNING** → scratchpad final/ (shots5after.js --set final).
-- **Still to do, in order:** look at the final screenshots; orphan
-  review/phase5 with sheets/final.jpg; secret check; push redesign/phase5 and review/phase5; report; STOP. No merge,
-  no deploy.
+- **Final screenshots DONE** and pushed 2026-11-03: review/phase5 (1e17386, orphan: 128 shots + sheets/final.jpg +
+  notes.txt); redesign/phase5 pushed. They showed one bug, fixed in afe655f: Passport's recent runs read
+  "undefined The Drowner" (the boss emoji removed in 2.5); boss and passport re-shot.
+- **Next: the user reviews the screenshots.** No merge, no deploy until they say. Rollback dpl_BvNJh8hz89bSLfWzbAqHS15G85zs.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
