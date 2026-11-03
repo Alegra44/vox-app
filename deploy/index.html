@@ -2007,6 +2007,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pd-cue{max-width:46ch;}
   .pd-cue #pdCurrentSection{font-weight:600;color:var(--hl-ink-2);}
   .pd-progress{width:100%;max-width:320px;margin:0;}
+  #aiDuetPartRow .ex-type-btn{background:transparent;border:0;}
+  #aiDuetPartRow .ex-type-btn[aria-pressed="true"]{background:var(--hl-ink);color:var(--hl-bg);}
+  .duet-stage{display:grid;gap:var(--hl-s3);justify-items:center;}
+  .duet-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
+  .vc-stage.is-live #aiDuetStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  .duet-after{margin-top:var(--hl-s3);}
+  .duet-after[hidden]{display:none;}
   .vc-stage.is-live #pdStopBtn{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
   /* ---- STUDIO MODE (phase 6): the take on its stage; the takes as rows with Delete ---- */
   .studio-stage{display:grid;justify-items:center;gap:var(--hl-s3);margin-top:var(--hl-s5);text-align:center;}
@@ -4409,24 +4416,29 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
   </section>
 
-  <!-- AI DUET PARTNER PANEL -->
+  <!-- SING WITH THE CHOIR PANEL (was AI Duet Partner; ids kept) -->
   <section class="panel" id="panel-aiduet">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="aiduet_title">AI Duet Partner</div>
-      <div class="j-sub" data-i18n="aiduet_sub">Pick your part. The AI genuinely sings the other four, live and in real time — the exact same synthesized progression Choir Workspace already uses, just framed simply: you're never singing alone.</div>
+      <div class="j-title" data-i18n="aiduet_title">Sing With the Choir</div>
+      <div class="j-sub" data-i18n="aiduet_sub">Pick your part. The app's choir sings the other four with you.</div>
     </div>
     <div class="key-card">
       <div class="step-label" data-i18n="aiduet_choose_part">Choose your part</div>
-      <div class="ex-type-row" id="aiDuetPartRow" style="margin:10px 0 18px;flex-wrap:wrap;">
-        <button class="ex-type-btn active" data-duet-part="Soprano" aria-pressed="true" data-part-name="Soprano">Soprano</button>
-        <button class="ex-type-btn" data-duet-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
-        <button class="ex-type-btn" data-duet-part="Alto" aria-pressed="false" data-part-name="Alto">Alto</button>
-        <button class="ex-type-btn" data-duet-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
-        <button class="ex-type-btn" data-duet-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
+      <div class="hl-seg cw-parts" id="aiDuetPartRow" role="group">
+        <button type="button" class="ex-type-btn active" data-duet-part="Soprano" aria-pressed="true" data-part-name="Soprano">Soprano</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Alto" aria-pressed="false" data-part-name="Alto">Alto</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
       </div>
-      <p class="desc" id="aiDuetNote" style="margin-bottom:16px;">The AI will sing Lead, Alto, Tenor, and Bass — you sing Soprano.</p>
-      <button class="mic-btn" id="aiDuetStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Start singing with AI</button>
-      <div class="vl-gauge" id="vlGaugeDuet" style="display:none;"></div>
+      <p class="desc" id="aiDuetNote" style="margin-bottom:16px;"></p>
+      <!-- the stage while the choir sings: the five lanes, your part bold, your voice on it (display only), Stop -->
+      <div class="vc-stage cw-stage duet-stage" id="aiDuetStage">
+        <div class="rh-roll-wrap cw-lanes-wrap vc-live-only"><svg id="aiDuetLanes" class="cw-lanes" aria-hidden="true"></svg></div>
+        <button class="mic-btn vc-take-pill" id="aiDuetStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="aiDuetStartLabel" data-i18n="aiduet_start_btn">Sing with the choir</span></button>
+        <div class="vl-gauge" id="vlGaugeDuet" style="display:none;"></div>
+      </div>
+      <p class="fine-print duet-after" id="aiDuetAfter" hidden><span id="aiDuetAfterText"></span> <button class="link-btn" id="aiDuetRehearseBtn" type="button"></button></p>
     </div>
   </section>
 
@@ -6628,7 +6640,7 @@ const TRANSLATIONS = {
     hub_you_teacher_title:'👩\u200d🏫 Teacher Dashboard', hub_you_teacher_desc:'Real roster and assignment tracking — Teacher plan.',
     hub_songs_choir_title:'Choir Workspace', hub_songs_choir_desc:'Mute/solo/volume per part, plus Song Difficulty rating.',
     hub_songs_studio_title:"Studio Mode", hub_songs_studio_desc:'No XP, no streak, no gamification — just record real takes and listen back.',
-    hub_songs_aiduet_title:"AI Duet Partner", hub_songs_aiduet_desc:"Pick your part — the AI genuinely sings the other four, live, so you're never singing alone.",
+    hub_songs_aiduet_title:"Sing With the Choir", hub_songs_aiduet_desc:"Pick your part; the app's choir sings the other four.",
     hub_songs_pd_title:"Performance Director", hub_songs_pd_desc:'Real section-by-section coaching cues, live, then a real multi-dimension report.',
     hub_songs_staykey_title:'Stay in Key', hub_songs_staykey_desc:'Sing over the backing track, live chord-tone matching.',
     hub_songs_karaoke_title:'Karaoke Coach', hub_songs_karaoke_desc:'Predictive note display, live Pitch + Timing scoring.',
@@ -6818,8 +6830,8 @@ const TRANSLATIONS = {
     studio_mic_label:'Mic',
     studio_takes_label:"Your takes",
     studio_scope_note:"The app doesn't compare takes: listen and keep the one you like.",
-    aiduet_title:"AI Duet Partner",
-    aiduet_sub:'Pick your part. The AI genuinely sings the other four, live and in real time — the exact same synthesized progression Choir Workspace already uses, just framed simply: you\'re never singing alone.',
+    aiduet_title:"Sing With the Choir",
+    aiduet_sub:"Pick your part. The app's choir sings the other four with you: the same synthesised voices as in Choir World, once through the song.",
     aiduet_choose_part:'Choose your part',
     pd_title:"Performance Director",
     pd_sub:"Sing the Lead line through the song with a cue for each section, then see your Pitch, Timing and Dynamics.",
@@ -6916,7 +6928,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'I Am the Tenor',
     rehearsal_title_Bass:'I Am the Bass',
     choir_practice_prefix:'Practice:',
-    aiduet_note_tpl:'The AI will sing {others} — you sing {part}.',
+    aiduet_note_tpl:"The choir sings {others}; you sing {part}.",
     xray_title:"Sonic X-Ray",
     xray_desc:"All 5 parts across the song, from the note schedule the mixer plays. Tap a section to play from there; tap a part to look at that moment in the Music Microscope.",
     xray_dna_legend:"Flame: a Song DNA difficult moment",
@@ -8153,6 +8165,9 @@ const TRANSLATIONS = {
     pd_dim_combined:"Pitch and timing together",
     pd_insight_tpl:"Work on {dim} next: it was your lowest today ({n}).",
     pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: a note scores 100 if your voice came in during its first 40 %, 50 if later, averaged over the notes you sang. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
+    aiduet_start_btn:"Sing with the choir",
+    aiduet_after_tpl:"You sang {part} with the choir.",
+    aiduet_rehearse_link:"Rehearse {part} in {cw}",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8200,7 +8215,7 @@ const TRANSLATIONS = {
     hub_you_teacher_title:'👩\u200d🏫 Tableau de bord enseignant', hub_you_teacher_desc:'Suivi réel des élèves et des devoirs — forfait Enseignant.',
     hub_songs_choir_title:'Espace Chorale', hub_songs_choir_desc:'Muet/solo/volume par voix, plus la note de difficulté du morceau.',
     hub_songs_studio_title:"Mode Studio", hub_songs_studio_desc:"Pas d'XP, pas de série, pas de ludification — juste enregistrer de vraies prises et les réécouter.",
-    hub_songs_aiduet_title:"Partenaire duo IA", hub_songs_aiduet_desc:"Choisissez votre voix — l'IA chante vraiment les quatre autres, en direct, pour que vous ne chantiez jamais seul.",
+    hub_songs_aiduet_title:"Chanter avec le chœur", hub_songs_aiduet_desc:"Choisissez votre voix ; le chœur de l'app chante les quatre autres.",
     hub_songs_pd_title:"Directeur de performance", hub_songs_pd_desc:'De vraies indications de coaching section par section, en direct, puis un vrai rapport multi-dimensionnel.',
     hub_songs_staykey_title:'Rester dans la tonalité', hub_songs_staykey_desc:"Chantez sur la piste d'accompagnement, correspondance d'accords en direct.",
     hub_songs_karaoke_title:'Coach Karaoké', hub_songs_karaoke_desc:'Affichage prédictif des notes, notation en direct de la justesse et du rythme.',
@@ -8390,8 +8405,8 @@ const TRANSLATIONS = {
     studio_mic_label:'Micro',
     studio_takes_label:"Vos prises",
     studio_scope_note:"L'app ne compare pas les prises : écoutez-les et gardez celle qui vous plaît.",
-    aiduet_title:"Partenaire de Duo IA",
-    aiduet_sub:'Choisissez votre voix. L\'IA chante vraiment les quatre autres, en direct et en temps réel — exactement la même progression synthétisée que l\'Espace Chorale utilise déjà, juste présentée simplement : vous ne chantez jamais seul.',
+    aiduet_title:"Chanter avec le chœur",
+    aiduet_sub:"Choisissez votre voix. Le chœur de l'app chante les quatre autres avec vous : les mêmes voix de synthèse que dans Monde Chorale, une fois tout le morceau.",
     aiduet_choose_part:'Choisissez votre voix',
     pd_title:"Directeur de Performance",
     pd_sub:"Chantez la ligne principale du début à la fin avec une indication pour chaque section, puis voyez votre justesse, votre timing et votre dynamique.",
@@ -8488,7 +8503,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'Je suis ténor',
     rehearsal_title_Bass:'Je suis basse',
     choir_practice_prefix:'Travailler :',
-    aiduet_note_tpl:'L\'IA chante : {others} — votre voix : {part}.',
+    aiduet_note_tpl:"Le chœur chante {others} ; vous chantez {part}.",
     xray_title:"Radiographie sonore",
     xray_desc:"Les 5 voix sur tout le morceau, d'après le programme de notes que joue le mixeur. Touchez une section pour lire à partir de là ; touchez une voix pour voir ce moment au Microscope musical.",
     xray_dna_legend:"Flamme : un moment difficile de l'ADN du chant",
@@ -9725,6 +9740,9 @@ const TRANSLATIONS = {
     pd_dim_combined:"Justesse et timing ensemble",
     pd_insight_tpl:"À travailler ensuite : {dim}, votre point le plus bas aujourd'hui ({n}).",
     pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : une note vaut 100 si votre voix arrive dans ses premiers 40 %, 50 si plus tard, en moyenne sur les notes chantées. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
+    aiduet_start_btn:"Chanter avec le chœur",
+    aiduet_after_tpl:"Vous avez chanté {part} avec le chœur.",
+    aiduet_rehearse_link:"Répéter {part} dans {cw}",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9772,7 +9790,7 @@ const TRANSLATIONS = {
     hub_you_teacher_title:'👩\u200d🏫 Panel del profesor', hub_you_teacher_desc:'Seguimiento real de alumnos y tareas — plan Profesor.',
     hub_songs_choir_title:'Espacio de Coro', hub_songs_choir_desc:'Silenciar/solo/volumen por voz, además de la calificación de dificultad de la canción.',
     hub_songs_studio_title:"Modo Estudio", hub_songs_studio_desc:'Sin XP, sin racha, sin gamificación — solo grabar tomas reales y escucharlas.',
-    hub_songs_aiduet_title:"Compañero de dúo IA", hub_songs_aiduet_desc:'Elige tu voz — la IA realmente canta las otras cuatro, en vivo, para que nunca cantes solo.',
+    hub_songs_aiduet_title:"Canta con el coro", hub_songs_aiduet_desc:"Elige tu voz; el coro de la app canta las otras cuatro.",
     hub_songs_pd_title:"Director de actuación", hub_songs_pd_desc:'Indicaciones de coaching reales sección por sección, en vivo, y luego un informe real multidimensional.',
     hub_songs_staykey_title:'Mantente en tono', hub_songs_staykey_desc:'Canta sobre la pista de acompañamiento, coincidencia de acordes en vivo.',
     hub_songs_karaoke_title:'Coach de Karaoke', hub_songs_karaoke_desc:'Visualización predictiva de notas, puntuación en vivo de afinación y ritmo.',
@@ -9962,8 +9980,8 @@ const TRANSLATIONS = {
     studio_mic_label:'Micrófono',
     studio_takes_label:"Tus tomas",
     studio_scope_note:"La app no compara las tomas: escúchalas y quédate con la que te guste.",
-    aiduet_title:"Compañero de Dúo IA",
-    aiduet_sub:'Elige tu voz. La IA realmente canta las otras cuatro, en vivo y en tiempo real — exactamente la misma progresión sintetizada que el Espacio de Coro ya usa, solo presentada de forma simple: nunca cantas solo.',
+    aiduet_title:"Canta con el coro",
+    aiduet_sub:"Elige tu voz. El coro de la app canta las otras cuatro contigo: las mismas voces sintetizadas que en Mundo Coral, una vez toda la canción.",
     aiduet_choose_part:'Elige tu voz',
     pd_title:"Director de Actuación",
     pd_sub:"Canta la línea principal de principio a fin con una indicación para cada sección y luego mira tu afinación, tu ritmo y tu dinámica.",
@@ -10060,7 +10078,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'Soy tenor',
     rehearsal_title_Bass:'Soy bajo',
     choir_practice_prefix:'Practicar:',
-    aiduet_note_tpl:'La IA canta: {others} — tu voz: {part}.',
+    aiduet_note_tpl:"El coro canta {others}; tú cantas {part}.",
     xray_title:"Rayos X sonoros",
     xray_desc:"Las 5 voces a lo largo de la canción, según el programa de notas que toca el mezclador. Toca una sección para reproducir desde ahí; toca una voz para ver ese momento en el Microscopio musical.",
     xray_dna_legend:"Llama: un momento difícil del ADN de la canción",
@@ -11297,6 +11315,9 @@ const TRANSLATIONS = {
     pd_dim_combined:"Afinación y ritmo juntos",
     pd_insight_tpl:"Lo siguiente a trabajar: {dim}, tu punto más bajo hoy ({n}).",
     pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: una nota vale 100 si tu voz entra en su primer 40 %, 50 si entra después, en promedio sobre las notas cantadas. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
+    aiduet_start_btn:"Cantar con el coro",
+    aiduet_after_tpl:"Cantaste {part} con el coro.",
+    aiduet_rehearse_link:"Ensayar {part} en {cw}",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11344,7 +11365,7 @@ const TRANSLATIONS = {
     hub_you_teacher_title:'👩\u200d🏫 Öğretmen Paneli', hub_you_teacher_desc:'Gerçek öğrenci listesi ve ödev takibi — Öğretmen planı.',
     hub_songs_choir_title:'Koro Çalışma Alanı', hub_songs_choir_desc:'Ses grubu başına sessize alma/solo/ses düzeyi, ayrıca Şarkı Zorluk derecesi.',
     hub_songs_studio_title:"Stüdyo Modu", hub_songs_studio_desc:'XP yok, seri yok, oyunlaştırma yok — sadece gerçek performanslar kaydedip geri dinleyin.',
-    hub_songs_aiduet_title:"Yapay Zeka Düet Partneri", hub_songs_aiduet_desc:'Sesinizi seçin — yapay zeka diğer dördünü gerçekten canlı söyler, böylece asla yalnız söylemezsiniz.',
+    hub_songs_aiduet_title:"Koroyla söyle", hub_songs_aiduet_desc:"Partinizi seçin; uygulamanın korosu diğer dördünü söyler.",
     hub_songs_pd_title:"Performans Yönetmeni", hub_songs_pd_desc:'Canlı, bölüm bölüm gerçek koçluk ipuçları, ardından gerçek çok boyutlu bir rapor.',
     hub_songs_staykey_title:'Tonda Kal', hub_songs_staykey_desc:'Eşlik parçası üzerinde söyleyin, canlı akor-nota eşleştirmesi.',
     hub_songs_karaoke_title:'Karaoke Koçu', hub_songs_karaoke_desc:'Öngörülü nota gösterimi, canlı Perde + Zamanlama puanlaması.',
@@ -11534,8 +11555,8 @@ const TRANSLATIONS = {
     studio_mic_label:'Mikrofon',
     studio_takes_label:"Kayıtlarınız",
     studio_scope_note:"Uygulama kayıtları karşılaştırmaz: dinleyin ve beğendiğinizi saklayın.",
-    aiduet_title:"Yapay Zeka Düet Partneri",
-    aiduet_sub:'Sesinizi seçin. Yapay zeka diğer dördünü gerçekten canlı ve gerçek zamanlı olarak söyler — Koro Çalışma Alanı\'nın zaten kullandığı tamamen aynı sentezlenmiş dizi, sadece basitçe çerçevelenmiş: asla yalnız söylemezsiniz.',
+    aiduet_title:"Koroyla söyle",
+    aiduet_sub:"Partinizi seçin. Uygulamanın korosu diğer dördünü sizinle söyler: Koro Dünyası'ndaki sentez seslerin aynısı, şarkı boyunca bir kez.",
     aiduet_choose_part:'Sesinizi seçin',
     pd_title:"Performans Yönetmeni",
     pd_sub:"Lead hattını şarkı boyunca her bölüm için bir ipucuyla söyleyin, ardından Perde, Zamanlama ve Dinamiklerinizi görün.",
@@ -11632,7 +11653,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'Ben tenorum',
     rehearsal_title_Bass:'Ben bas sesiyim',
     choir_practice_prefix:'Çalış:',
-    aiduet_note_tpl:'Yapay zeka şunları söyler: {others} — sizin partiniz: {part}.',
+    aiduet_note_tpl:"Koro {others} partilerini söyler; siz {part} söylersiniz.",
     xray_title:"Ses Röntgeni",
     xray_desc:"Mikserin çaldığı nota programına göre, şarkı boyunca 5 partinin tamamı. Oradan çalmak için bir bölüme, o anı Müzik Mikroskobu'nda görmek için bir partiye dokunun.",
     xray_dna_legend:"Alev: Şarkı DNA'sındaki zor bir an",
@@ -12869,6 +12890,9 @@ const TRANSLATIONS = {
     pd_dim_combined:"Perde ve zamanlama birlikte",
     pd_insight_tpl:"Sırada {dim} var: bugünkü en düşük puanınız ({n}).",
     pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, söylenen notaların ortalaması. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
+    aiduet_start_btn:"Koroyla söyle",
+    aiduet_after_tpl:"Koroyla {part} partisini söylediniz.",
+    aiduet_rehearse_link:"{part} partisini {cw} içinde çalışın",
   },
 };
 let currentLanguage = 'en';
@@ -13881,7 +13905,7 @@ function vlHideBreak(){
 // feeds one register frame per animation frame while isActive() holds, ending the session the moment it doesn't.
 // Never for a feature that reads the register input itself (a second reader would change its chest smoothing).
 let vlSideRaf = null, vlSideGen = 0;
-async function vlSidecar(isActive){
+async function vlSidecar(isActive, onFrame){ // onFrame(frame), if given, sees each frame fed (Sing With the Choir draws your voice from it)
   if(!profile || typeof VocalLoad==='undefined') return;
   const gen = ++vlSideGen;
   cancelAnimationFrame(vlSideRaf);
@@ -13892,6 +13916,7 @@ async function vlSidecar(isActive){
     if(!isActive()){ vlEnd(); return; }
     const fr = readRegisterFrame();
     vlFeed(fr.freq, fr.raw);
+    if(onFrame) onFrame(fr);
     vlSideRaf = requestAnimationFrame(tick);
   };
   tick();
@@ -20784,9 +20809,9 @@ function houseSession(isActive, stage){
   houseSessions.push({isActive, stage: stage || null});
   if(!houseRaf) houseRaf = requestAnimationFrame(houseWatch);
 }
-function singingSession(isActive, stage){
+function singingSession(isActive, stage, onFrame){
   houseSession(isActive, stage);
-  return vlSidecar(isActive);
+  return vlSidecar(isActive, onFrame);
 }
 function houseStageShown(stage){
   if(!stage || !stage.isConnected) return false;
@@ -24326,29 +24351,61 @@ function renderUnifiedProgress(){
   }
 }
 
-/* ---------------- AI Duet Partner (real, reuses Choir Workspace's exact playback engine) ---------------- */
+/* ---------------- Sing With the Choir (was AI Duet Partner): the app's choir sings the other four parts ---------------- */
+// Choir World's playback with your part muted, once through the song. On its stage the five lanes with your part bold
+// and your voice drawn on it from the register frames the vocal-load sidecar already reads (display only). At the
+// song's end, on Stop or on leaving (aiDuetStop): the choir stops, the mixer goes back as it was, the button resets, and
+// the paper offers to rehearse the part in Choir World. Element ids keep the old aiDuet names.
 let aiDuetSelectedPart = 'Soprano';
 let aiDuetActive = false;
 let aiDuetMixer = null; // Choir World's mixer (mute, solo) before the duet muted your part: put back when it ends
+let aiDuetRaf = null, aiDuetLast = null; // the stage's frame loop; the part just sung (the line after)
 function renderAiDuetButton(){
-  document.getElementById('aiDuetStartBtn').innerHTML = aiDuetActive ? '<span class="dot-icon"></span>Stop' : '<span class="dot-icon"></span>Start singing with AI';
+  document.getElementById('aiDuetStartBtn').classList.toggle('listening', aiDuetActive);
+  document.getElementById('aiDuetStartLabel').textContent = t(aiDuetActive ? 'action_stop' : 'aiduet_start_btn');
 }
+function renderAiDuetAfter(){
+  const box = document.getElementById('aiDuetAfter');
+  box.hidden = !aiDuetLast || aiDuetActive;
+  if(box.hidden) return;
+  document.getElementById('aiDuetAfterText').textContent = t('aiduet_after_tpl').replace('{part}', partName(aiDuetLast));
+  document.getElementById('aiDuetRehearseBtn').textContent = t('aiduet_rehearse_link').replace('{part}', partName(aiDuetLast)).replace('{cw}', t('cw_label'));
+}
+document.getElementById('aiDuetRehearseBtn')?.addEventListener('click', ()=>{
+  const part = aiDuetLast || aiDuetSelectedPart;
+  cwShowTab('rehearse');
+  setRehearsalPart(part);
+});
 function aiDuetRestoreMixer(){
   if(!aiDuetMixer) return;
   Object.entries(aiDuetMixer).forEach(([p, st])=>{ if(choirState[p]){ choirState[p].muted = st.muted; choirState[p].solo = st.solo; } });
   aiDuetMixer = null;
   updateAllChoirGains();
 }
-// Stop, or leaving (stopAllActiveSessions): the choir stops, your part is unmuted again, the button resets.
+// The song's end, Stop, or leaving (stopAllActiveSessions): the choir stops, your part is unmuted again, the button resets.
 function aiDuetStop(){
+  const was = aiDuetActive;
   aiDuetActive = false;
+  cancelAnimationFrame(aiDuetRaf);
   if(choirIsPlaying) stopChoir();
   aiDuetRestoreMixer();
+  cwLanesFrame(null);
+  if(cwLanePart===aiDuetSelectedPart) cwLanePart = null;
+  if(was) aiDuetLast = aiDuetSelectedPart;
   renderAiDuetButton();
+  renderAiDuetAfter();
+}
+// The stage's frame: the playhead on the song clock; the song over → the duet ends
+function aiDuetFrame(){
+  if(!aiDuetActive) return;
+  if(!choirIsPlaying){ aiDuetStop(); return; }
+  cwLanesFrame(audioCtx.currentTime - choirStartCtxTime);
+  aiDuetRaf = requestAnimationFrame(aiDuetFrame);
 }
 
 document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
+    if(aiDuetActive) return; // the part is set for the whole song
     document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
@@ -24359,6 +24416,8 @@ document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(btn=>{
 function renderAiDuetNote(){
   const others = Object.keys(SONG.parts).filter(p=>p!==aiDuetSelectedPart).map(partName);
   document.getElementById('aiDuetNote').textContent = t('aiduet_note_tpl').replace('{others}', others.join(', ')).replace('{part}', partName(aiDuetSelectedPart));
+  renderAiDuetButton();
+  renderAiDuetAfter();
 }
 renderAiDuetNote();
 
@@ -24374,11 +24433,15 @@ document.getElementById('aiDuetStartBtn')?.addEventListener('click', async ()=>{
     choirState[part].solo = false;
   });
   updateAllChoirGains();
-  await playChoir();
+  await playChoir({loop:false});
   if(tok!==startGen){ if(choirIsPlaying) stopChoir(); aiDuetRestoreMixer(); return; } // left while the choir was starting
   aiDuetActive = true;
-  singingSession(()=>aiDuetActive && choirIsPlaying);
-  renderAiDuetButton();
+  cwLanePart = aiDuetSelectedPart; cwVoiceReset();
+  renderCwLanes(document.getElementById('aiDuetLanes'));
+  renderAiDuetButton(); renderAiDuetAfter();
+  singingSession(()=>aiDuetActive && choirIsPlaying, document.getElementById('aiDuetStage'),
+    fr=>cwVoicePush(audioCtx.currentTime - choirStartCtxTime, fr.freq)); // your voice from the sidecar's frames (display only)
+  aiDuetFrame();
 });
 
 /* ---------------- AI Notices Things Proactively (real, computed, honestly absent when nothing qualifies) ---------------- */
