@@ -995,3 +995,159 @@ Generated from TRANSLATIONS on master and on redesign/phase5 (PHASE5.md §2.5). 
 | fr | Attaque ou fin de note |
 | es | Entrada o corte |
 | tr | Giriş ya da bitiş |
+
+## 5.1 (the review fixes)
+Changed: yc_recorded_tpl (the peak moves into hl-measure), hm_stage_fade_desc (the gain moves into hl-measure). New: the Entrance & Cutoff rows, coach lines and on-time rule; Your Choir peaks; Harmony Memory full-volume line and gain measure. tt_counts_tpl is no longer shown (its counts are rows now).
+
+### yc_recorded_tpl
+
+| | old | new |
+|---|---|---|
+| en | recorded {date} · {s} s · peak {db} dBFS | recorded {date} · {s} s |
+| fr | enregistrée le {date} · {s} s · crête {db} dBFS | enregistrée le {date} · {s} s |
+| es | grabada {date} · {s} s · pico {db} dBFS | grabada el {date} · {s} s |
+| tr | {date} tarihinde kaydedildi · {s} sn · tepe {db} dBFS | {date} tarihinde kaydedildi · {s} sn |
+
+### hm_stage_fade_desc
+
+| | old | new |
+|---|---|---|
+| en | Your guide track plays at {pct}% of its mixer volume (gain {gain} = {pct}% × {vol}); the other parts play at their mixer volume. Your notes stay on screen. | Your guide part plays at {pct}% volume and the other parts at their mixer level. Your notes stay on screen. |
+| fr | Votre piste guide joue à {pct} % de son volume de mixage (gain {gain} = {pct} % × {vol}) ; les autres voix jouent à leur volume de mixage. Vos notes restent affichées. | Votre voix guide joue à {pct} % du volume et les autres voix à leur niveau de mixage. Vos notes restent affichées. |
+| es | Tu pista guía suena al {pct} % de su volumen del mezclador (ganancia {gain} = {pct} % × {vol}); las demás voces suenan a su volumen del mezclador. Tus notas siguen en pantalla. | Tu voz guía suena al {pct} % del volumen y las demás voces a su nivel del mezclador. Tus notas siguen en pantalla. |
+| tr | Rehber kaydınız mikser seviyesinin %{pct} oranında çalar (kazanç {gain} = %{pct} × {vol}); diğer partiler kendi mikser seviyelerinde çalar. Notalarınız ekranda kalır. | Rehber partiniz %{pct} seste, diğer partiler mikser seviyelerinde çalar. Notalarınız ekranda kalır. |
+
+### tt_row_early (new)
+
+| | new |
+|---|---|
+| en | Early |
+| fr | En avance |
+| es | Adelantadas |
+| tr | Erken |
+
+### tt_row_ontime (new)
+
+| | new |
+|---|---|
+| en | On time |
+| fr | À temps |
+| es | A tiempo |
+| tr | Zamanında |
+
+### tt_row_late (new)
+
+| | new |
+|---|---|
+| en | Late |
+| fr | En retard |
+| es | Atrasadas |
+| tr | Geç |
+
+### tt_ontime_rule_tpl (new)
+
+| | new |
+|---|---|
+| en | On time means within ±{tol} ms of the target. |
+| fr | À temps signifie à ±{tol} ms de la cible. |
+| es | A tiempo significa a ±{tol} ms del objetivo. |
+| tr | Zamanında, hedefin ±{tol} ms içinde demektir. |
+
+### tt_coach_none_entrance (new)
+
+| | new |
+|---|---|
+| en | No entrance was caught. Start each note as its chord begins, clearly enough for the mic; headphones keep the playback out. |
+| fr | Aucune entrée n’a été captée. Commencez chaque note au début de son accord, assez nettement pour le micro ; un casque évite que le micro capte la lecture. |
+| es | No se captó ninguna entrada. Empieza cada nota cuando comienza su acorde, con claridad para el micrófono; con auriculares el micrófono no capta la reproducción. |
+| tr | Hiç giriş yakalanamadı. Her notaya akoru başlarken, mikrofonun duyacağı netlikte başlayın; kulaklık çalan sesi mikrofondan uzak tutar. |
+
+### tt_coach_none_cutoff (new)
+
+| | new |
+|---|---|
+| en | No cutoff was caught. Hold each note to the end of its chord, then stop cleanly; headphones keep the playback out. |
+| fr | Aucune fin de note n’a été captée. Tenez chaque note jusqu’à la fin de son accord, puis arrêtez net ; un casque évite que le micro capte la lecture. |
+| es | No se captó ningún corte. Sostén cada nota hasta el final de su acorde y luego corta limpio; con auriculares el micrófono no capta la reproducción. |
+| tr | Hiç bitiş yakalanamadı. Her notayı akorunun sonuna kadar tutun, sonra temiz bir şekilde bitirin; kulaklık çalan sesi mikrofondan uzak tutar. |
+
+### tt_coach_early_entrance (new)
+
+| | new |
+|---|---|
+| en | You tend to come in early. Wait for the chord to start, then sing. |
+| fr | Vous avez tendance à entrer trop tôt. Attendez le début de l’accord, puis chantez. |
+| es | Tiendes a entrar antes de tiempo. Espera a que empiece el acorde y luego canta. |
+| tr | Erken girme eğilimindesiniz. Akorun başlamasını bekleyin, sonra söyleyin. |
+
+### tt_coach_late_entrance (new)
+
+| | new |
+|---|---|
+| en | You tend to come in late. Breathe before the chord, then start with it. |
+| fr | Vous avez tendance à entrer trop tard. Respirez avant l’accord, puis démarrez avec lui. |
+| es | Tiendes a entrar tarde. Respira antes del acorde y empieza con él. |
+| tr | Geç girme eğilimindesiniz. Akordan önce nefes alın, sonra onunla birlikte başlayın. |
+
+### tt_coach_early_cutoff (new)
+
+| | new |
+|---|---|
+| en | You tend to stop early. Hold each note until its chord ends. |
+| fr | Vous avez tendance à vous arrêter trop tôt. Tenez chaque note jusqu’à la fin de son accord. |
+| es | Tiendes a cortar antes de tiempo. Sostén cada nota hasta que termine su acorde. |
+| tr | Erken bitirme eğilimindesiniz. Her notayı akoru bitene kadar tutun. |
+
+### tt_coach_late_cutoff (new)
+
+| | new |
+|---|---|
+| en | You tend to hold on too long. Stop as the chord ends. |
+| fr | Vous avez tendance à tenir trop longtemps. Arrêtez-vous quand l’accord se termine. |
+| es | Tiendes a sostener demasiado. Corta cuando termina el acorde. |
+| tr | Notayı fazla uzun tutma eğilimindesiniz. Akor biterken durun. |
+
+### tt_coach_ontime (new)
+
+| | new |
+|---|---|
+| en | Mostly on time. Keep it there through the whole song. |
+| fr | Surtout à temps. Gardez ce timing sur tout le chant. |
+| es | Casi siempre a tiempo. Mantenlo durante toda la canción. |
+| tr | Çoğunlukla zamanında. Bunu şarkının tamamında koruyun. |
+
+### yc_peaks_tpl (new)
+
+| | new |
+|---|---|
+| en | Each take’s peak level: {list}. 0 dBFS is the loudest a recording can go. |
+| fr | Niveau de crête de chaque prise : {list}. 0 dBFS est le niveau maximal d’un enregistrement. |
+| es | Nivel de pico de cada toma: {list}. 0 dBFS es lo más fuerte que puede llegar una grabación. |
+| tr | Her kaydın tepe seviyesi: {list}. 0 dBFS, bir kaydın ulaşabileceği en yüksek seviyedir. |
+
+### yc_peak_item_tpl (new)
+
+| | new |
+|---|---|
+| en | {part} {db} dBFS |
+| fr | {part} {db} dBFS |
+| es | {part} {db} dBFS |
+| tr | {part} {db} dBFS |
+
+### hm_stage_full_desc (new)
+
+| | new |
+|---|---|
+| en | Your guide part plays at full volume and the other parts at their mixer level. Your notes stay on screen. |
+| fr | Votre voix guide joue à plein volume et les autres voix à leur niveau de mixage. Vos notes restent affichées. |
+| es | Tu voz guía suena a todo volumen y las demás voces a su nivel del mezclador. Tus notas siguen en pantalla. |
+| tr | Rehber partiniz tam seste, diğer partiler mikser seviyelerinde çalar. Notalarınız ekranda kalır. |
+
+### hm_gain_measure_tpl (new)
+
+| | new |
+|---|---|
+| en | On this stage your guide plays at gain {gain} ({pct}% × your mixer volume {vol}). |
+| fr | À cette étape, votre guide joue avec un gain de {gain} ({pct} % × votre volume de mixage {vol}). |
+| es | En esta etapa tu guía suena con ganancia {gain} ({pct} % × tu volumen del mezclador {vol}). |
+| tr | Bu aşamada rehberiniz {gain} kazançla çalar (%{pct} × mikser seviyeniz {vol}). |
