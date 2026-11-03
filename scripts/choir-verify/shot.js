@@ -12,7 +12,9 @@ const url = process.argv[2] || 'http://localhost:8765/';
     H.step(`${name}: screenshots`);
     await p.evaluate(() => { localStorage.setItem('harmonyMemoryBest', JSON.stringify({hymn:{Alto:[88,60]}})); enterPanel('partrehearsal'); });
     await p.waitForTimeout(500);
+    await H.cwFor(p, '#breathMapCard');
     await (await p.$('#breathMapCard')).screenshot({ path: `${require("os").tmpdir()}/bm-${name}.png` });
+    await H.cwFor(p, '#harmonyMemoryCard');
     await (await p.$('#harmonyMemoryCard')).screenshot({ path: `${require("os").tmpdir()}/hm-${name}.png` });
     const sw = await p.evaluate(() => document.documentElement.scrollWidth); console.log(name, 'scrollWidth', sw);
   }

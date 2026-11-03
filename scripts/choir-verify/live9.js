@@ -48,6 +48,7 @@ const email = track(`voxcoach-live9-${Date.now()}@example.com`), password = 'L9-
     };
     enterPanel('partrehearsal'); selectSong('hymn'); setRehearsalPart('Alto'); chSel.boss = 0; renderChoirBosses();
   });
+  await H.cwFor(p, '#cbStartBtn');
   await p.locator('#cbStartBtn').click();
   H.step('boss run 1: start (live9.js:49)', 150);
   await ev(async () => { while (!(challenge.active && choirIsPlaying)) await new Promise(r => setTimeout(r, 20)); });

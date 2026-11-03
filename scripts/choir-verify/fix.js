@@ -33,6 +33,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
   console.log('run finished:', await ev(() => !harmonyMemory.active && !!harmonyMemory.lastRun));
 
   H.step('colours');
+  await p.waitForFunction(() => document.body.dataset.house !== 'down', null, { timeout: 3000 }).catch(() => {}); // phase 5: Harmony Memory dims; read the paper colours once the house is up (no-op on master)
   // Colours: Harmony Memory result rows + timing trainer verdict classes
   console.log('colours', JSON.stringify(await ev(() => {
     const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();

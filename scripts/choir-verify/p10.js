@@ -152,6 +152,7 @@ function expectedDelta(row) {
       window.__mic = { osc, g }; micStream = dest.stream;
     });
     const record = async part => {
+      await H.cwFor(page, '#ycParts');
       await page.locator(`#ycParts [data-yc-rec="${part}"]`).click();
       H.step(`record ${part}: wait for the take to start`, 150);
       await ev(async () => { while (!(yourChoir.recording && yourChoir.recording.downbeat)) await new Promise(r => setTimeout(r, 10)); });
@@ -172,6 +173,7 @@ function expectedDelta(row) {
       console.log(`\n-- ${label}`);
       console.log('before: button', JSON.stringify(await txt(page, '#ycExportBtn')), '| note', JSON.stringify(await txt(page, '#ycExportNote')));
       const dl = page.waitForEvent('download', { timeout: (expect.total + 60) * 1000 });
+      await H.cwFor(page, '#ycExportBtn');
       await page.locator('#ycExportBtn').click();
       await sleep(1500);
       console.log('during: button', JSON.stringify(await txt(page, '#ycExportBtn')), 'disabled', await page.locator('#ycExportBtn').isDisabled(), '| record buttons disabled', await page.locator('#ycParts [data-yc-rec="Tenor"]').isDisabled(), '| status', JSON.stringify(await txt(page, '#ycStatus')));
@@ -187,6 +189,7 @@ function expectedDelta(row) {
     };
     const e1 = await doExport('all three at default mixer');
     // Real mixer clicks: Bass muted, Alto fader to 50%
+    await H.cwFor(page, '#muteBass');
     await page.locator('#muteBass').click();
     const altoBefore = await ev(() => choirState.Alto.volume);
     await page.locator('#volAlto').fill(String(Math.round(altoBefore * 50)));
@@ -195,11 +198,13 @@ function expectedDelta(row) {
     const ratio = (e, p) => e.parts[p].medianAmp / e.parts.Soprano.medianAmp;
     console.log(`\nAlto/Soprano amplitude: ${ratio(e1, 'Alto').toFixed(3)} → ${ratio(e2, 'Alto').toFixed(3)} (×${(ratio(e2, 'Alto') / ratio(e1, 'Alto')).toFixed(3)}; fader ×${(await ev(() => choirState.Alto.volume) / altoBefore).toFixed(3)})`);
     console.log(`Bass: heard on ${e1.parts.Bass.heard}/${e1.parts.Bass.chords} chords → ${e2.parts.Bass.heard}/${e2.parts.Bass.chords} muted (median amp ${e1.parts.Bass.medianAmp} → ${e2.parts.Bass.medianAmp})`);
+    await H.cwFor(page, '#muteBass');
     await page.locator('#muteBass').click();
     await page.locator('#volAlto').fill(String(Math.round(altoBefore * 100)));
 
     // Stop mid-export: nothing may download
     let got = false; page.once('download', () => { got = true; });
+    await H.cwFor(page, '#ycExportBtn');
     await page.locator('#ycExportBtn').click(); await sleep(3000);
     await page.locator('#ycStopBtn').click(); await sleep(1500);
     console.log('\nstopped mid-export: status', JSON.stringify(await txt(page, '#ycStatus')), '| download fired:', got, '| button enabled again:', !(await page.locator('#ycExportBtn').isDisabled()));

@@ -13,6 +13,8 @@
 //  - Words: a line on one side only (in at least 2 of the 3 runs there and in none on the other) is listed for review;
 //    it fails the gate only when the line says MISMATCH, FAIL or false-for-a-check on the branch side.
 //  - A script fails the gate when the branch passes fewer of its runs (exit 0) than the base, or a number moves.
+//  - Not gated, still printed and listed (PHASE5.md, answer 2): NOT_GATED, lines that measure the network, not the app
+//    (live9's save round-trip times).
 // Usage: node scripts/choir-verify/choircompare.js <dir> [--aa <aa-ranges.json>] [--write-aa <file>]
 //   --write-aa: the proof (base and branch are both master): writes each slot's range over all the runs, both sides.
 const fs = require('fs'), path = require('path');
@@ -34,6 +36,7 @@ const MASKS = [
 ];
 const NUM = /-?\d+(?:\.\d+)?/g;
 const BAD = /MISMATCH|\bFAIL|FAILED/;
+const NOT_GATED = { live9: /^save #\d+: sent /, }; // script → lines whose numbers aren't compared
 const parse = line => { let s = line; for (const [re, to] of MASKS) s = s.replace(re, to); return { tpl: s.replace(NUM, '#'), nums: (s.match(NUM) || []).map(Number) }; };
 const median = a => { const s = [...a].sort((x, y) => x - y), n = s.length; return n % 2 ? s[n >> 1] : (s[n / 2 - 1] + s[n / 2]) / 2; };
 
@@ -67,13 +70,14 @@ for (const sc of scripts) {
   const tpls = [...new Set([...B, ...R].flatMap(r => Object.keys(r.counts)))], differs = rs => new Set(rs.map(r => r.counts[t] || 0)).size > 1;
   let t; const variable = new Set(tpls.filter(x => (t = x, writeAa ? differs([...B, ...R]) : differs(B) || differs(R) || ((AA[sc] && AA[sc].__variable) || []).includes(x))));
   if (writeAa && variable.size) (aaOut[sc] = aaOut[sc] || {}).__variable = [...variable];
-  let slots = 0;
+  let slots = 0, ungated = 0;
   for (const k of keys) {
     const bh = B.filter(r => r.keys[k]), rh = R.filter(r => r.keys[k]), tp = (bh[0] || rh[0]).keys[k].tpl, v = variable.has(tp);
     if (v && !k.endsWith('@1')) continue; // a variable line is listed once, by its first occurrence, and its numbers aren't compared
     if (bh.length >= 2 && !rh.length) { onlyBase.push(bh[0].keys[k].line); continue; }
     if (rh.length >= 2 && !bh.length) { onlyBranch.push(rh[0].keys[k].line); continue; }
     if (v || !bh.length || !rh.length) continue;
+    if (NOT_GATED[sc] && NOT_GATED[sc].test(bh[0].keys[k].line.trim())) { ungated++; continue; }
     const width = bh[0].keys[k].nums.length;
     for (let i = 0; i < width; i++) {
       const bv = bh.map(r => r.keys[k].nums[i]).filter(Number.isFinite), rv = rh.map(r => r.keys[k].nums[i]).filter(Number.isFinite);
@@ -89,7 +93,7 @@ for (const sc of scripts) {
   const bad = onlyBranch.filter(l => BAD.test(l));
   const fail = moved.length > 0 || ok(allR) < ok(allB) || bad.length > 0;
   if (fail) failed++;
-  out.push(`${fail ? 'FAIL' : 'pass'}  ${sc}: runs passed base ${ok(allB)}/${allB.length}, branch ${ok(allR)}/${allR.length} | ${slots} numbers compared, ${moved.length} moved | ${variable.size} variable lines (not compared) | lines only on base ${onlyBase.length}, only on branch ${onlyBranch.length}${bad.length ? ` (${bad.length} say MISMATCH/FAIL)` : ''}`);
+  out.push(`${fail ? 'FAIL' : 'pass'}  ${sc}: runs passed base ${ok(allB)}/${allB.length}, branch ${ok(allR)}/${allR.length} | ${slots} numbers compared, ${moved.length} moved | ${variable.size} variable lines (not compared)${ungated ? `, ${ungated} not gated (network)` : ''} | lines only on base ${onlyBase.length}, only on branch ${onlyBranch.length}${bad.length ? ` (${bad.length} say MISMATCH/FAIL)` : ''}`);
   moved.forEach(m => out.push('    moved: ' + m));
   onlyBase.slice(0, 15).forEach(l => out.push('    only on base:   ' + l.trim().slice(0, 160)));
   onlyBranch.slice(0, 15).forEach(l => out.push('    only on branch: ' + l.trim().slice(0, 160)));

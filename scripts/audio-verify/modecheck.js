@@ -9,6 +9,8 @@
 //     engine (until this branch it was hidden outside desktop Chromium).
 //   - phase 4a (PHASE4A.md §2.5), signed in, in a fresh page: a Vocal Puzzle round (start, the sequence, a guess) makes
 //     no getUserMedia call (it plays tones only: initAudioOnly), and its result shows.
+//   - phase 5 (PHASE5.md §1d), signed in (a fresh account: Choir World on its trial), each in a fresh page: rehearsal
+//     playback (Demo Hymn, Alto, 3 s, then Stop) with "Hear me" off makes 0 getUserMedia calls; with it on, exactly 1.
 // Fake capture: Chromium plays a sung note from a file; Firefox's fake device is its own tone; WebKit's is whatever
 // Playwright's build gives (signal levels are reported as found: −∞ means digital silence, which can't show pitch).
 // Usage: node scripts/audio-verify/modecheck.js [chromium,webkit,firefox]   (MC_SIGNED_OUT=1 skips the gauge check;
@@ -135,6 +137,30 @@ let auth = null;
           });
           check('Vocal Puzzle round: 0 getUserMedia calls, the result shows', pz.gum === 0 && pz.result, JSON.stringify(pz) + (perr.length ? ' · page errors ' + perr.join(' | ') : ''));
           await pctx.close();
+          for (const on of [false, true]) { // rehearsal playback, Hear me off then on, each in a fresh page
+            const rctx = await b.newContext({ ...ctxOpts, storageState: auth });
+            await rctx.addInitScript(SKIP); await rctx.addInitScript(GUM);
+            const rp = await rctx.newPage(), rerr = [];
+            rp.on('pageerror', e => rerr.push(String(e).split('\n')[0]));
+            await rp.goto(URL_ || `http://localhost:${PORT}/`, { waitUntil: 'load' }); await sleep(2500);
+            await rp.waitForFunction(() => !!profile && !!progress, null, { timeout: 20000 });
+            const rh = await rp.evaluate(async on => {
+              const o = document.getElementById('onboardingOverlay'); if (o) o.style.display = 'none';
+              selectSong('hymn'); setRehearsalPart('Alto');
+              if (typeof cwShowTab === 'function') cwShowTab('rehearse'); else enterPanel('partrehearsal');
+              await new Promise(r => setTimeout(r, 500));
+              const hb = document.getElementById('rehearsalHearBtn');
+              if (hb && (hb.getAttribute('aria-pressed') === 'true') !== on) hb.click();
+              document.getElementById('rehearsalPlayBtn').click();
+              await new Promise(r => setTimeout(r, 3000));
+              const playing = partRehearsal.active && choirIsPlaying;
+              document.getElementById('rehearsalStopBtn').click();
+              await new Promise(r => setTimeout(r, 500));
+              return { gum: window.__gum.length, playing, hear: hb ? hb.getAttribute('aria-pressed') : 'no Hear me key' };
+            }, on);
+            check(`rehearsal playback, Hear me ${on ? 'on: exactly 1 getUserMedia call' : 'off: 0 getUserMedia calls'}`, rh.playing && rh.gum === (on ? 1 : 0) && rh.hear === String(on), JSON.stringify(rh) + (rerr.length ? ' · page errors ' + rerr.join(' | ') : ''));
+            await rctx.close();
+          }
         }
       } catch (e) { fail++; log(`   ✗ ${name}: could not run (${e.message.split('\n')[0]})`); }
       finally { if (b) await b.close().catch(() => {}); }

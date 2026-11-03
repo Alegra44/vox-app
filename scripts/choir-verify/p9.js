@@ -140,6 +140,7 @@ async function view(page, label) {
     micStream = dest.stream;
   });
   let before = patches.length;
+  await H.cwFor(page, '#ycParts');
   await page.locator('#ycParts [data-yc-rec="Alto"]').click();
   H.step('Your Choir take: until it ends', 150);
   await ev(async () => { while (!yourChoir.recording) await new Promise(r => setTimeout(r, 20)); while (yourChoir.recording) await new Promise(r => setTimeout(r, 50)); });
@@ -195,7 +196,7 @@ async function view(page, label) {
   await page3.locator('#homeChoirCard [data-cw-cta]').click(); await sleep(400);
   console.log('Home CTA →', await page3.evaluate(() => document.querySelector('.panel.active').id));
   await goSongs(page3);
-  await page3.locator('#panel-songs-hub .cw-hub-feature [data-enter-panel="partrehearsal"]').click(); await sleep(500);
+  if (!await H.cwTab(page3, 'rehearse')) await page3.locator('#panel-songs-hub .cw-hub-feature [data-enter-panel="partrehearsal"]').click(); await sleep(500); // phase 5: the card opens Choir World
   console.log('hub "I Am the Part" → locked preview shown:', await visible(page3, '#cwPreviewRehearsal'), '| rehearsal controls hidden:', !(await visible(page3, '#hmemStartBtn')));
   await page3.context().close();
 

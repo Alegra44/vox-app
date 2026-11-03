@@ -6,6 +6,10 @@
 //   - the legacy variables choir-verify/fix.js reads are still defined
 //   - no Fraunces / Space Mono / Inter font names
 //   - no emoji in the header and tab-bar markup, renderAccountBar and updateShellTopbar
+//   - phase 5 (PHASE5.md §2.5): no emoji in Choir World: its panels' markup (choir, partrehearsal, choirpassport), its
+//     script (the Choir Workspace section, and from "I Am the {Part}" to the paywall section: the trainers, Your Choir,
+//     reporting, Why, Readiness, Choir DNA, the locked preview, its hooks, Passport) and every TRANSLATIONS value of its
+//     keys in en, es, fr and tr (CW_PREFIXES)
 //   - no hex / rgb / rgba colour literals outside the exemptions below
 // Usage: node scripts/design-verify/hooks.js [--base <git ref>] [--json <file>]   (exit 1 on any failure)
 const fs = require('fs'), path = require('path'), vm = require('vm');
@@ -160,6 +164,29 @@ const exemptBy = i => {
   const hits = [];
   for (const [name, a, b] of regions) for (let i = a; i <= b; i++) if (EMOJI.test(lines[i])) hits.push(`${name} line ${i + 1}: ${lines[i].trim().slice(0, 70)}`);
   check('no emoji in the header, tab bar, renderAccountBar, updateShellTopbar', hits.length === 0, hits.length ? hits.join(' | ') : regions.map(r => r[0]).join(', '));
+}
+
+// ---- 7b. emoji in Choir World (phase 5)
+{
+  const EMOJI = /\p{Extended_Pictographic}/u, regions = [];
+  for (const id of ['choir', 'partrehearsal', 'choirpassport']) {
+    const a = work.indexOf(`<section class="panel" id="panel-${id}"`);
+    if (a < 0) { check(`panel-${id} found`, false, 'not found'); continue; }
+    regions.push([`panel-${id}`, lineOf(a), lineOf(work.indexOf('</section>', a))]);
+  }
+  const span = (from, to, name) => { const a = work.indexOf(from), b = work.indexOf(to, a); if (a < 0 || b < 0) check(`${name} found`, false, 'not found'); else regions.push([name, lineOf(a), lineOf(b)]); };
+  span('/* ---------------- Choir Workspace ---------------- */', '/* ---------------- Stay in Key', 'Choir Workspace script');
+  span('/* ---------------- I Am the {Part}', '/* ---------------- Tier / Paywall', 'Choir World script');
+  const hits = [];
+  for (const [name, a, b] of regions) for (let i = a; i <= b; i++) if (EMOJI.test(lines[i])) hits.push(`${name} line ${i + 1}: ${lines[i].trim().slice(0, 70)}`);
+  check('no emoji in Choir World markup and script', hits.length === 0, hits.length ? `${hits.length}: ${hits.slice(0, 8).join(' | ')}${hits.length > 8 ? ' …' : ''}` : regions.map(r => r[0]).join(', '));
+  const CW_PREFIXES = /^(choir|cw|rehearsal|hv|ac|bm|hm|cb|cx|tk|ch|tt|yc|rd|pr|why|dna|cp|xray|mx|songdna|songdifficulty|part_name|hub_songs_choir|hub_songs_rehearsal)_/;
+  let T = null; try { T = translations(work); } catch (e) {}
+  if (T) {
+    const kh = [];
+    for (const l of ['en', 'es', 'fr', 'tr']) for (const [k, v] of Object.entries(T[l] || {})) if (CW_PREFIXES.test(k) && typeof v === 'string' && EMOJI.test(v)) kh.push(`${l}.${k}`);
+    check('no emoji in Choir World strings (en, es, fr, tr)', kh.length === 0, kh.length ? `${kh.length}: ${kh.slice(0, 12).join(', ')}${kh.length > 12 ? ' …' : ''}` : 'none');
+  }
 }
 
 // ---- 8. colour literals

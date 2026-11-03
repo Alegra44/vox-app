@@ -372,14 +372,58 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   failed on one network value only (save #3 returned after 1450–1969 ms on base, 1728–2427 ms on branch, same build:
   Supabase round-trip, not the build). Both A/A runs are now in aa-ranges.json (widest range per value), so live9's
   save times have wide ranges: they measure the network.
-- Not committed yet, kept in the working tree: `scripts/design-verify/shots5.js` (phase 5 screenshots, not yet run) and
-  `design/house-lights/.phase5-wip/` (the survey draft PHASE5_SURVEY.md with `__MASTER__`/`__SHOTNOTES__` to fill, and
-  the copy checker cwcopy.py with its outputs). Both go to redesign/phase5.
 - **The choir group is opt-in** (`ONLY=choir` or `WITH_CHOIR=1`; not in a default suites.sh/prod.sh run any more, which
   used to include cv-live7, cv-modalz, cv-p9 and cv-p10). **Required for phases 5, 6 and 10**, with choirregress.sh as
   the gate.
-- Then: merge tests/choir-verify (no deploy: test code only), and the phase 5 survey on redesign/phase5
-  (PHASE5_SURVEY.md, shots5.js → review/phase5-before).
+- Merged into master with --no-ff 2026-11-02 (7296998), pushed; test code only, no deploy.
+- **Phase 5 survey DONE 2026-11-02, reported; waiting for the user's phase 5 spec.** Branch `redesign/phase5`:
+  `design/house-lights/PHASE5_SURVEY.md` (every Choir World screen, the five-tab mapping, the 32 contrast rows, the
+  Songs-tab tools by phase, copy problems, 14 broken or odd items), `scripts/design-verify/shots5.js` (the screenshots:
+  `node scripts/design-verify/shots5.js --base <ref> --out <dir>`; signs up a Choir-plan and an expired account) and
+  `scripts/design-verify/survey5/cwcopy.py` (the copy check). Screenshots: orphan `review/phase5-before` (102 shots,
+  34 per size at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json, english-in-fr.json). The first full
+  shots run failed signing up (auth timeout after several sign-ups in a few minutes); the retry 3 min later passed.
+
+### Phase 5, Choir World (`redesign/phase5`, spec `PHASE5.md`): approved after 5.1; 5.1 DONE and REPORTED 2026-11-03, waiting for "deploy"
+- Rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs. No merge or deploy until the user has reviewed the screenshots.
+- Out of phase 5 (the user's answers): AI Duet, the six Songs-tab solo tools and the Performance Report's own screen go
+  to phase 6. live9's save round-trip times leave the choir gate (still printed).
+- Part 1 (2.1–2.3) pushed 2026-11-02 12:10 IST: review/phase5-part1 (9409169), redesign/phase5 3e05d9a. The user
+  approved the structure and added 2.6 (seven fixes, verbatim in PHASE5.md), built after 2.5 and before the checks; the
+  final screenshots include its screens.
+- Built 2026-11-02: 2.4 and 2.5 in one commit (eaaee8f; their edits interleave), 2.6 (c2b029a), the runner
+  checks5.sh (f4c6bad), guard fixes (ca77b84: choir5 Stop stamps __t1; contrast skips closed <details>; fr
+  hm_off_pitch faux → pas juste).
+- **Guards DONE** (logs/checks5-2026-11-02T07-41-37 and the re-run checks5-2026-11-02T09-26-25): house 882/1 (the one:
+  a Supabase 503 in Register Coach, 4b, not Choir World), stopcheck pass, modecheck pass (Hear me off 0 / on 1
+  getUserMedia), contrast only the master Profile icon rows, copyscan 0, hooks 21/0, navcheck 20/0.
+- **Gate DONE.** Full run regress-2026-11-02T10-55-10: 19/21 pass. Re-run of fix and live7 (2026-11-03,
+  regress-2026-11-03T03-51-*): live7 3/3 pass; fix's only moved values are the Harmony Memory result rows' colour:
+  held/in tune teal → ink in the new .cw-result layout (2.4, by design: colour only for a miss; misses still coral).
+  Expected change, in the report.
+- **After set DONE 2026-11-03** (logs checks5-2026-11-03T04-13-00, re-runs -06-44-41 and -07-51-06): batch1 112/0
+  (master 111/1: Karaoke's mid-run gauge sample, timing, on master too), batch3a 169/0 (= master), batch3b 179/0
+  (= master), picker 93/0, warm-up entries 52/0, tracking 29/0, levelup 45/0, home 102/0, loopback pass. The first runs
+  failed on the five trainers and Your Choir: the scripts clicked the Songs-hub entries 2.1 hid; cwreach.js enterHub
+  (e13856c, 400c3da) takes the user's route there. Vocal load = master on 31 stored sessions (worst 0.06). hearme.js:
+  one play-through (26.7 s, A4) Hear me off +0.00 (no session), on +66.39 load-s (26.75 active s, ~1% of 6800).
+- **Final screenshots DONE** and pushed 2026-11-03: review/phase5 (1e17386, orphan: 128 shots + sheets/final.jpg +
+  notes.txt); redesign/phase5 pushed. They showed one bug, fixed in afe655f: Passport's recent runs read
+  "undefined The Drowner" (the boss emoji removed in 2.5); boss and passport re-shot.
+- **Review: approved after the 5.1 fix round** (six fixes, the deploy steps and the phase 6 survey, verbatim in PHASE5.md
+  ## 5.1). Built 804e15c, a9ea7de; copy 9a5a956 (2 changed, 15 new keys, four languages).
+- **5.1 checks DONE 2026-11-03** (logs checks5-2026-11-03T10-50-30): hooks 21/0, copyscan 0, contrast unchanged (only the
+  master Profile icon rows), house --onlychoir 256/0 (first run 255/1: a CORS/network failure on /me/progress, passed on
+  rerun). Gate (ONLY="fix p7 yc timing live7"): p7, yc, timing, live7 pass; fix's only moves are the result rows' colour
+  in ink (expected, as in phase 5). Fixshots: review/phase5-fix (orphan, 45 files, sheets/fix.jpg, notes.txt,
+  measures.json). English dates are en-US ("Nov 3, 7:26 PM"), not the en-GB example; one-line change if wanted.
+- **Next: wait for the user to type "deploy"**, then the four steps in PHASE5.md ## 5.1 (merge --no-ff, the user runs
+  Vercel, prod.sh WITH_CHOIR=1, review/phase5-prod, delete the review branches, then the read-only phase 6 survey).
+  Rollback dpl_BvNJh8hz89bSLfWzbAqHS15G85zs.
+- **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
+  13). Whether Choir World should feed them is a product decision for phase 7.
+- **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
+  (a director and their singers) before it can come back; later, not scheduled.
 
 ## Waiting on the user (don't start without a go-ahead)
 

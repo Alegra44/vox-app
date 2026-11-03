@@ -70,7 +70,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
     const vis = sel => ev(s => [...document.querySelectorAll(s)].some(el => el.getClientRects().length > 0), sel);
     const shown = panelSel => ev(s => [...document.querySelector(s).children].filter(el => el.getClientRects().length > 0).map(el => el.id || el.className.split(' ')[0]), panelSel);
     const goSongs = async () => { await p.locator('.snb-item[data-shell="songs"]').click(); await sleep(400); };
-    const openHub = async panel => { await goSongs(); const btn = p.locator(`#panel-songs-hub [data-enter-panel="${panel}"]`).first(); /* the Choir World card (phase 9) comes first */ await btn.scrollIntoViewIfNeeded(); await btn.click(); await sleep(700); };
+    const openHub = async panel => { await goSongs(); if (await H.cwTab(p, { choir: 'songlab', partrehearsal: 'rehearse', choirpassport: 'passport' }[panel])) return; /* phase 5: the card opens Choir World; each panel is a tab */ const btn = p.locator(`#panel-songs-hub [data-enter-panel="${panel}"]`).first(); /* the Choir World card (phase 9) comes first */ await btn.scrollIntoViewIfNeeded(); await btn.click(); await sleep(700); };
 
     H.step(`${tier}: what a real user sees`);
     // --- what a real user sees
@@ -102,6 +102,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
       await ev(pn => { enterPanel(pn); if (pn === 'choir') renderSonicXray(); }, panel);
       await sleep(400);
       if (st.locked) await ev(() => document.body.classList.remove('cw-locked'));
+      await H.cwFor(p, sel);
       const loc = p.locator(sel).first();
       await loc.scrollIntoViewIfNeeded();
       await loc.click({ timeout: 5000 });
@@ -138,6 +139,7 @@ const STOP_ALL = () => { try { document.getElementById('levelupOverlay').classLi
       if (lg === langs[0]) await p.locator('#cwPreviewRehearsal').screenshot({ path: require('os').tmpdir() + `/p8-preview-${tier}-${lg}.png` });
       const txt = await ev(() => document.getElementById('cwPreviewRehearsal').innerText.replace(/\s+/g, ' '));
       await ev(() => document.body.classList.remove('cw-locked'));
+      await H.cwFor(p, '#cbStartBtn');
       await p.locator('#cbStartBtn').scrollIntoViewIfNeeded(); await p.locator('#cbStartBtn').click(); await sleep(400);
       const si = await vis('#signinRequiredOverlay'); // signed out gets the sign-in prompt, not the paywall
       const pw = si ? await ev(() => `sign-in prompt: ${signinRequiredTitle.textContent}`) : await ev(() => `${paywallTitle.textContent} — ${paywallReason.textContent} [${paywallPlanChip.textContent}]`);

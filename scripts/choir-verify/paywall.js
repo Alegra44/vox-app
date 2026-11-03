@@ -25,6 +25,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
       await ev(setup); await ev(l => { setLanguage(l); applyChoirWorldGateUI(); }, lg); await sleep(200);
       for (const [what, panel, sel] of [['boss', 'partrehearsal', '#cbStartBtn'], ['mixer', 'choir', '#muteAlto']]) {
         await ev(pn => { enterPanel(pn); document.body.classList.remove('cw-locked'); }, panel); await sleep(300);
+        await H.cwFor(p, sel);
         await p.locator(sel).scrollIntoViewIfNeeded(); await p.locator(sel).click(); await sleep(300);
         const shown = await ev(() => document.getElementById('paywallModalOverlay').style.display === 'flex');
         if (!shown) { console.log(`${name} ${lg} ${what}: no paywall`); bad++; continue; }
