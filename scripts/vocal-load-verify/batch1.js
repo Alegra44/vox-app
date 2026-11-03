@@ -79,13 +79,14 @@ async function openPage(b, { signedIn = true, ua } = {}) {
   if (signedIn) await page.waitForFunction(() => getComputedStyle(document.getElementById('vlGauge')).display !== 'none', null, { timeout: 15000 }).catch(() => {});
   return { ctx, page, errors };
 }
+const { enterHub } = require('../choir-verify/cwreach');
 // Through the navigation bar and the hubs, as a user would.
 async function goTo(page, f) {
   const shell = { pitch: 'train', staykey: 'songs', karaoke: 'songs', hmem: 'songs', glider: 'world', boss: 'world' }[f];
   await page.locator(`.snb-item[data-shell="${shell}"]`).click(); await sleep(500);
   if (f === 'pitch') await page.locator('#panel-train-hub [data-enter-panel="exercises"]').click();
   if (f === 'staykey' || f === 'karaoke') await page.locator(`#panel-songs-hub [data-enter-panel="${f}"]`).click();
-  if (f === 'hmem') await page.locator('#panel-songs-hub [data-enter-panel="partrehearsal"]').click();
+  if (f === 'hmem') await enterHub(page, '#panel-songs-hub [data-enter-panel="partrehearsal"]', '#hmemStartBtn'); // in Choir World: the landing, the Trainers tab
   if (f === 'glider' || f === 'boss') await page.locator(`.arcade-game-card[data-game="${f}"]`).click();
   await sleep(800);
   return page.evaluate(id => { const e = document.getElementById(id); return !!e && e.offsetParent !== null; },

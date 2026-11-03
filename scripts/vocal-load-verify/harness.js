@@ -81,7 +81,7 @@ async function goTo(page, F) {
     await page.evaluate(async () => { await loadProgress(); renderArcadeLocks(); });
   }
   await page.locator(`.snb-item[data-shell="${F.shell}"]`).click(); await sleep(500);
-  await page.locator(F.enter).first().click(); await sleep(800);
+  await enterHub(page, F.enter, startSel(F)); // the hub entry, or in Choir World the landing and the start's tab
   if (F.tab) { await page.locator(F.tab).click(); await sleep(300); } // a tab inside the panel
   if (F.show) { await page.evaluate(F.show); await sleep(300); }      // state the panel needs before its button shows
   const ok = await page.evaluate(sel => { const e = document.querySelector(sel); return !!e && e.offsetParent !== null; }, startSel(F));
@@ -104,6 +104,7 @@ const warm = page => page.evaluate(async () => {
   st.getTracks().forEach(t => t.stop()); await ac.close(); window.__gum = []; return heard;
 });
 
+const { enterHub } = require('../choir-verify/cwreach');
 const startSel = F => F.startSel || '#' + F.startBtn;
 const REG_STREAM = c => /"noiseSuppression":false/.test(c);
 // The load feed a feature uses, stubbed out (live: false) or restored.

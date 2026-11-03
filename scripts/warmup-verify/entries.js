@@ -82,6 +82,7 @@ const ENTRIES = [
   // last: it moves the page into its capture steps
   { key: 'range', panel: 'range', startBtn: 'rangeStartBtn', active: "mode==='rangeLow' || mode==='rangeHigh'", prep: "showStep('rangeIntro')" },
 ];
+const { enterHub } = require('../choir-verify/cwreach');
 const startSel = E => E.startSel || '#' + E.startBtn;
 
 // Through the navigation bar and the hub that lists the panel (or the arcade), as a user would.
@@ -93,7 +94,7 @@ async function reach(page, E) {
     const shell = await page.evaluate(p => { const hub = document.querySelector(`[data-enter-panel="${p}"]`)?.closest('[id$="-hub"]'); return hub && hub.id.replace(/^panel-|-hub$/g, ''); }, E.panel);
     if (!shell) throw new Error(`no hub lists panel ${E.panel}`);
     await page.locator(`.snb-item[data-shell="${shell}"]`).click(); await sleep(500);
-    await page.locator(`#panel-${shell}-hub [data-enter-panel="${E.panel}"]`).first().click(); await sleep(800);
+    await enterHub(page, `#panel-${shell}-hub [data-enter-panel="${E.panel}"]`, startSel(E)); // in Choir World: the landing, the start's tab
   }
   if (E.tab) { await page.locator(E.tab).click(); await sleep(300); }
   if (E.show) { await page.evaluate(E.show); await sleep(300); }
