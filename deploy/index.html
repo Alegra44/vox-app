@@ -17644,7 +17644,7 @@ window.cwStructureReady = true;
 let cpDnaSong = null;
 function cpRunLabel(r){
   if(r.kind==='hm') return `${t('hm_title')} · ${t('hm_stage_word')} ${r.slot+1}`;
-  if(r.kind==='boss') return `${CH_BOSSES[r.slot].emoji} ${t('cb_name_'+CH_BOSSES[r.slot].key)}`;
+  if(r.kind==='boss') return t('cb_name_'+CH_BOSSES[r.slot].key);
   if(r.kind==='chaos') return t('cx_title');
   const dir = String(r.slot).replace(/\d+$/, ''), rung = +String(r.slot).replace(/^\D+/, '');
   return `${t('tk_title')} · ${tkRungText(rung, dir)}`;
