@@ -23,9 +23,10 @@ const CW_SHOW = ({ tab, trainer, sel }) => {
 };
 const shown = (page, sel) => page.evaluate(sel => { const e = document.querySelector(sel); return !!e && e.offsetParent !== null; }, sel);
 async function enterHub(page, entrySel, startSel) {
-  if (await shown(page, entrySel) || !(await shown(page, '[data-cw-landing]'))) { await page.locator(entrySel).first().click(); await sleep(800); return 'hub'; }
-  await page.locator('[data-cw-landing]').first().click(); await sleep(800);
-  await page.evaluate(CW_SHOW, { sel: startSel }); await sleep(500);
-  return 'choir world';
+  const hub = await shown(page, entrySel) || !(await shown(page, '[data-cw-landing]'));
+  await page.locator(hub ? entrySel : '[data-cw-landing]').first().click(); await sleep(800);
+  // the entry can itself be Open Choir World (the first [data-enter-panel="choir"]): the start's tab, if it isn't showing
+  if (!(await shown(page, startSel)) && await page.evaluate(CW_SHOW, { sel: startSel })) await sleep(500);
+  return hub ? 'hub' : 'choir world';
 }
 module.exports = { CW_SHOW, enterHub };
