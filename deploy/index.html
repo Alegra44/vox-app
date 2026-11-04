@@ -2021,6 +2021,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live #aiDuetStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
   .duet-after{margin-top:var(--hl-s3);}
   .duet-after[hidden]{display:none;}
+  /* ---- EMOTIONAL SINGING (phase 6) ---- */
+  .emotion-stage{display:grid;justify-items:center;gap:var(--hl-s4);}
+  #emotionChordLabel{color:var(--hl-ink);}
+  .vc-stage.is-live #emotionChordLabel{font-size:var(--hl-t-display);font-weight:300;}
+  .emotion-progress{width:100%;max-width:320px;margin:0;}
+  .emotion-loud{display:grid;gap:var(--hl-s1);width:100%;max-width:320px;justify-items:start;}
+  .emotion-loud .hl-meter{width:100%;height:6px;}
+  .vc-stage.is-live #emotionStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
   /* ---- STAY IN KEY (phase 6) ---- */
   .staykey-stage{display:grid;justify-items:center;gap:var(--hl-s4);}
   .staykey-chord{font-size:var(--hl-t-h2);line-height:1.15;max-width:150px;text-align:center;}
@@ -4002,19 +4010,27 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="emotion_sub">Sing the Lead line and get Pitch and dynamic contrast scored separately — "technically perfect, needs more emotion," made real, not just phrasing/breath analysis a mic can't actually do.</div>
     </div>
     <div class="key-card">
-      <div class="chord-label-display" id="emotionChordLabel">—</div>
-      <div class="progress-bar-thin"><div class="fill" id="emotionProgressFill"></div></div>
-
+      <!-- the stage: the Lead note big, the song's progress, your loudness (the RMS it already reads), Start/Stop -->
+      <div class="vc-stage emotion-stage" id="emotionStage">
+      <div class="chord-label-display vc-take-note" id="emotionChordLabel">—</div>
+      <div class="progress-bar-thin emotion-progress"><div class="fill" id="emotionProgressFill"></div></div>
+      <div class="emotion-loud vc-live-only"><span class="hl-label" data-i18n="emo_loud_label">Loudness</span><div class="hl-meter" id="emotionLoudness" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div></div>
       <div class="btn-row" style="justify-content:center;">
-        <button class="mic-btn" id="emotionStartBtn"><span class="dot-icon"></span><span id="emotionStartLabel">Start (Pro)</span></button>
+        <button class="mic-btn vc-take-pill" id="emotionStartBtn"><span class="dot-icon"></span><span id="emotionStartLabel">Start (Pro)</span></button>
       </div>
       <div class="vl-gauge" id="vlGaugeEmotion" style="display:none;"></div>
-
-      <div class="dual-score-row" id="emotionResult" style="display:none;">
-        <div class="dual-score"><div class="dual-label" data-i18n="emotion_pitch_label">Pitch</div><div class="dual-val" id="emotionPitchVal">—</div></div>
-        <div class="dual-score"><div class="dual-label" data-i18n="emotion_expression_label">Expression</div><div class="dual-val" id="emotionExpressionVal">—</div></div>
       </div>
-      <p class="ex-feedback-text" id="emotionFeedback" style="text-align:center;margin-top:14px;"></p>
+
+      <div class="vc-result" id="emotionResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-meta"><span data-i18n="emotion_expression_label">Expression</span> · <span data-i18n="beta_analysis_tag">Estimate</span></div>
+        <div class="vc-result-num" id="emotionExpressionVal">—</div>
+        <h3 class="hl-h3" data-i18n="emotion_result_label">Dynamic contrast</h3>
+        <p class="ex-feedback-text hl-coach" id="emotionFeedback"></p>
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="emotion_pitch_label">Pitch</span><span id="emotionPitchVal">—</span></div>
+        </div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="emotion_measure"></p></details>
+      </div>
     </div>
   </section>
 
@@ -6762,7 +6778,7 @@ const TRANSLATIONS = {
     staykey_feedback_text:"Time in key",
     emotion_title:"Emotional Singing",
     emotion_tag:'LOUDNESS-VARIANCE PROXY',
-    emotion_sub:'Sing the Lead line and get Pitch and dynamic contrast scored separately — "technically perfect, needs more emotion," made real, not just phrasing/breath analysis a mic can\'t actually do.',
+    emotion_sub:"Sing the Lead line and see Pitch and dynamic contrast scored separately: a note can be right and still sound flat.",
     emotion_pitch_label:'Pitch',
     emotion_expression_label:'Expression',
     genre_title:'Genre Coach',
@@ -8201,6 +8217,8 @@ const TRANSLATIONS = {
     karaoke_obj_done:"done",
     karaoke_obj_open:"not yet",
     karaoke_measure:"Each chord is one note of the Lead line. A note's pitch: 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out); a note with no voice is Not heard. Pitch is the average over the notes you sang, saved as your pitch score. Timing: 100 if your voice came in during a note's first 40 %, 50 if later, 0 if not heard, averaged over every note. Your song best is the average of Pitch and Timing.",
+    emotion_result_label:"Dynamic contrast",
+    emotion_measure:"An estimate. Dynamic contrast is how much your loudness varies while you sing: the spread of your level readings above the silence threshold, relative to their average, × 250, at most 100. It's saved as your expression score. Loudness also changes with your distance from the mic and the room, so treat it as a guide. Pitch: for each note of the Lead line, 100 minus 0.6 × your average distance from it in cents, natural vibrato taken out.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8348,7 +8366,7 @@ const TRANSLATIONS = {
     staykey_feedback_text:"Temps dans la tonalité",
     emotion_title:"Chant Émotionnel",
     emotion_tag:'PROXY DE VARIANCE DE VOLUME',
-    emotion_sub:'Chantez la ligne principale et obtenez la justesse et le contraste dynamique notés séparément — "techniquement parfait, a besoin de plus d\'émotion," rendu réel, pas juste une analyse de phrasé/souffle qu\'un micro ne peut pas vraiment faire.',
+    emotion_sub:"Chantez la ligne principale et voyez la justesse et le contraste dynamique notés séparément : une note peut être juste et sonner plate.",
     emotion_pitch_label:'Justesse',
     emotion_expression_label:'Expression',
     genre_title:'Coach de Genre',
@@ -9787,6 +9805,8 @@ const TRANSLATIONS = {
     karaoke_obj_done:"réussi",
     karaoke_obj_open:"pas encore",
     karaoke_measure:"Chaque accord est une note de la ligne principale. Justesse d'une note : 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré) ; une note sans voix est « Pas entendue ». La justesse est la moyenne des notes chantées, enregistrée comme score de justesse. Timing : 100 si votre voix arrive dans les premiers 40 % de la note, 50 si plus tard, 0 si pas entendue, en moyenne sur toutes les notes. Votre meilleur score du morceau est la moyenne de la justesse et du timing.",
+    emotion_result_label:"Contraste dynamique",
+    emotion_measure:"Une estimation. Le contraste dynamique mesure combien votre volume varie pendant que vous chantez : l'écart de vos niveaux au-dessus du seuil de silence, rapporté à leur moyenne, × 250, 100 au plus. Il est enregistré comme score d'expression. Le volume change aussi avec la distance au micro et la pièce : prenez-le comme un repère. Justesse : pour chaque note de la ligne principale, 100 moins 0,6 × votre écart moyen en cents, vibrato naturel retiré.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9934,7 +9954,7 @@ const TRANSLATIONS = {
     staykey_feedback_text:"Tiempo en el tono",
     emotion_title:"Canto Emocional",
     emotion_tag:'PROXY DE VARIANZA DE VOLUMEN',
-    emotion_sub:'Canta la línea principal y obtén la afinación y el contraste dinámico puntuados por separado — "técnicamente perfecto, necesita más emoción," hecho real, no solo un análisis de fraseo/respiración que un micrófono no puede realmente hacer.',
+    emotion_sub:"Canta la línea principal y mira la afinación y el contraste dinámico puntuados por separado: una nota puede estar afinada y sonar plana.",
     emotion_pitch_label:'Afinación',
     emotion_expression_label:'Expresión',
     genre_title:'Coach de Género',
@@ -11373,6 +11393,8 @@ const TRANSLATIONS = {
     karaoke_obj_done:"logrado",
     karaoke_obj_open:"todavía no",
     karaoke_measure:"Cada acorde es una nota de la línea principal. Afinación de una nota: 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural); una nota sin voz es «No se oyó». La afinación es la media de las notas que cantaste y se guarda como tu puntuación de afinación. Ritmo: 100 si tu voz entra en el primer 40 % de la nota, 50 si entra después, 0 si no se oyó, en promedio sobre todas las notas. Tu mejor marca de la canción es la media de la afinación y el ritmo.",
+    emotion_result_label:"Contraste dinámico",
+    emotion_measure:"Una estimación. El contraste dinámico es cuánto varía tu volumen mientras cantas: la dispersión de tus niveles por encima del umbral de silencio, relativa a su media, × 250, como máximo 100. Se guarda como tu puntuación de expresión. El volumen también cambia con la distancia al micrófono y la sala, así que tómalo como una guía. Afinación: para cada nota de la línea principal, 100 menos 0,6 × tu distancia media en cents, sin el vibrato natural.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11520,7 +11542,7 @@ const TRANSLATIONS = {
     staykey_feedback_text:"Tonda kalınan süre",
     emotion_title:"Duygusal Söyleyiş",
     emotion_tag:'SES DÜZEYİ VARYANS VEKİLİ',
-    emotion_sub:'Lead hattını söyleyin ve Perde ile dinamik kontrastın ayrı ayrı puanlanmasını sağlayın — "teknik olarak mükemmel, daha fazla duyguya ihtiyacı var" gerçek hale getirildi, bir mikrofonun gerçekten yapamayacağı ifade/nefes analizi değil.',
+    emotion_sub:"Lead hattını söyleyin ve Perde ile dinamik kontrastı ayrı ayrı puanlanmış görün: bir nota doğru olup yine de düz duyulabilir.",
     emotion_pitch_label:'Perde',
     emotion_expression_label:'İfade',
     genre_title:'Tür Koçu',
@@ -12959,6 +12981,8 @@ const TRANSLATIONS = {
     karaoke_obj_done:"tamamlandı",
     karaoke_obj_open:"henüz değil",
     karaoke_measure:"Her akor Lead hattının bir notasıdır. Bir notanın perdesi: 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır); sesinizin olmadığı nota Duyulmadı olur. Perde, söylediğiniz notaların ortalamasıdır ve perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, duyulmazsa 0, tüm notaların ortalaması. Şarkıdaki en iyi puanınız Perde ve Zamanlama'nın ortalamasıdır.",
+    emotion_result_label:"Dinamik kontrast",
+    emotion_measure:"Bir tahmin. Dinamik kontrast, söylerken ses düzeyinizin ne kadar değiştiğidir: sessizlik eşiğinin üzerindeki seviye okumalarınızın ortalamalarına göre yayılımı, × 250, en fazla 100. İfade puanınız olarak kaydedilir. Ses düzeyi mikrofona uzaklığınızla ve odayla da değişir, bu yüzden onu bir rehber olarak görün. Perde: Lead hattının her notası için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız, doğal vibrato çıkarılır.",
   },
 };
 let currentLanguage = 'en';
@@ -14728,7 +14752,7 @@ async function startEmotionalSinging(){
   document.getElementById('emotionStartLabel').textContent = t('action_stop');
   document.getElementById('emotionStartBtn').classList.add('listening');
   emotionLoop();
-  singingSession(()=>emotionActive);
+  singingSession(()=>emotionActive, document.getElementById('emotionStage'));
 }
 function emotionLoop(){
   if(!emotionActive) return;
@@ -14748,6 +14772,8 @@ function emotionLoop(){
     if(cents!==null && Math.abs(cents)<300) emotionCentsSamples.push({t:elapsed, c:cents, idx});
     emotionRmsSamples.push(rms);
   }
+  const loud = document.getElementById('emotionLoudness'), pct = rms>0 ? Math.max(0, Math.min(100, (20*Math.log10(rms)+54)/54*100)) : 0; // −54 to 0 dBFS
+  loud.style.setProperty('--val', pct.toFixed(0)+'%'); loud.setAttribute('aria-valuenow', pct.toFixed(0));
   emotionRafId = requestAnimationFrame(emotionLoop);
 }
 function emotionReset(){
@@ -14758,6 +14784,7 @@ function emotionReset(){
   document.getElementById('emotionStartBtn').classList.remove('listening');
   document.getElementById('emotionChordLabel').textContent = '—';
   document.getElementById('emotionProgressFill').style.width='0%';
+  document.getElementById('emotionLoudness').style.setProperty('--val', '0%');
 }
 // Leaving (stopAllActiveSessions): the run ends with no result and no score.
 function emotionStop(){ emotionReset(); }
@@ -14783,7 +14810,7 @@ function finishEmotionalSinging(){
     }
   }
 
-  document.getElementById('emotionResult').style.display='flex';
+  document.getElementById('emotionResult').style.display='grid';
   document.getElementById('emotionPitchVal').textContent = pitchAcc!==null ? pitchAcc+'%' : '—';
   document.getElementById('emotionExpressionVal').textContent = expressionScore!==null ? expressionScore+'%' : '—';
 
