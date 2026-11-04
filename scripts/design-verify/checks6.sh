@@ -5,6 +5,8 @@
 #   all  hooks scores6 house stopcheck modecheck batch1 batch2 batch3a batch3b (each also on master, served on :8766, for
 #        vocal load = master ±2) warmup-entries warmup-tracking vibfix noisegate (regress) vlcompare yc contrast copyscan
 #        navcheck picker levelup home, then scores (4a) and scores4b (the other tools' scores, unchanged by the shared code)
+# vibfix and noisegate compare master (VF_BEFORE / NG_BEFORE=master; their default is HEAD) with the working tree.
+# modecheck serves on :8766 too: run it in a list with no *-master check.
 cd "$(dirname "$0")/../.."
 SET=${1:?usage: checks6.sh all|name,name}
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/checks6-$STAMP; mkdir -p "$OUT"
@@ -14,14 +16,15 @@ cmd(){ case $1 in
   scores) echo "node scripts/design-verify/scores.js";;
   scores4b) echo "node scripts/design-verify/scores.js --tools onetake,mirror,rhythm,registerdrills,vibrato,voicequality,emotionmode";;
   house) echo "node scripts/design-verify/house.js";;
+  house-choir) echo "node scripts/design-verify/house.js --onlychoir";;
   stopcheck) echo "node scripts/design-verify/stopcheck.js";;
   modecheck) echo "node scripts/audio-verify/modecheck.js";;
   batch1|batch2|batch3a|batch3b) echo "node scripts/vocal-load-verify/$1.js";;
   batch1-master|batch2-master|batch3a-master|batch3b-master) echo "node scripts/vocal-load-verify/${1%-master}.js $M";;
   warmup-entries) echo "node scripts/warmup-verify/entries.js";;
   warmup-tracking) echo "node scripts/warmup-verify/tracking.js";;
-  vibfix) echo "env VF_MODE=regress node scripts/vq-verify/vibfix.js";;
-  noisegate) echo "env NG_MODE=regress node scripts/vq-verify/noisegate.js";;
+  vibfix) echo "env VF_MODE=regress VF_BEFORE=master node scripts/vq-verify/vibfix.js";;
+  noisegate) echo "env NG_MODE=regress NG_BEFORE=master node scripts/vq-verify/noisegate.js";;
   vlcompare) echo "node scripts/audio-verify/vlcompare.js";;
   yc) echo "node scripts/choir-verify/yc.js";;
   contrast) echo "node scripts/design-verify/contrast.js --set 6 --json $OUT/contrast.json";;
