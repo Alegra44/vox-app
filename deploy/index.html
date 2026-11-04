@@ -17333,7 +17333,8 @@ function cwResultHtml(head, score, summary, msg, report, rows){
     <div class="cw-note-rows">${rows}</div>
   </div>`;
 }
-const cwMeasureHtml = text=>`<details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span>${t('measure_summary')}</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p>${text}</p></details>`;
+// a function declaration, so it exists before the page's first renderYourChoir() (a stored take renders its peaks)
+function cwMeasureHtml(text){ return `<details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span>${t('measure_summary')}</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p>${text}</p></details>`; }
 function perfReportHtml(run){
   if(!run.cents) return '';
   const rep = computePerfReport(run);
