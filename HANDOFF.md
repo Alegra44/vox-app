@@ -444,11 +444,20 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   On master stopcheck --only6 failed 12/12 as predicted; after 2.1 it passed 12/12.
 - **Build DONE**, one commit per item: 2.1 6faad57, 2.2 d6cb9ee, 2.3 859daae, 2.4 c763390, 2.5 003104c, 2.6 8d9407c,
   2.7 849ee0a, 2.8 e7ce975, 2.9 9aeef83 (PHASE6_COPY.md, 60 keys). checks6.sh + shots6.js committed.
-- **Checks IN PROGRESS** (scripts/design-verify/logs/checks6-2026-11-04T00-14-44): hooks ✓, scores6 gate ✓, house 1050/1 (one network error in Choir World Entrance &
-  Cutoff: rerun `house.js --onlychoir`), stopcheck ✓, modecheck NOT RUN (checks6.sh's master server holds :8766, which
-  modecheck needs: run it alone; fix the port in checks6.sh), batch1 ✓ / batch1-master 1 network error (compare loads),
-  batch2 ✓ both, batch3a ✓. Still to come in that run: batch3a-master, batch3b ×2, warmup entries/tracking, vibfix,
-  noisegate, vlcompare, yc, contrast --set 6, copyscan --set 6, navcheck, picker, levelup, home, scores (4a), scores4b.
+- **Checks, PAUSED 2026-11-04 ~12:05 UTC** (the user left; AC only). Logs: checks6-2026-11-04T00-14-27 (first run) and
+  checks6-2026-11-04T05-59-21 (second run). PASSED: hooks 21/0; scores6 gate (PD, Stay in Key, Karaoke, Emotion, steady
+  + lead, 3 runs a side); house 1050/1 (the 1 = a network error in Choir World Entrance & Cutoff) and its rerun
+  house-choir ✓; stopcheck ✓ (every tool incl. the six); modecheck ✓ (run alone); batch1 ✓, batch2 ✓ both, batch3a ✓
+  both, batch3b-master ✓, batch3b rerun ✓; warmup-tracking ✓ (Karaoke roll same as master apart from colours);
+  vibfix regress vs master ✓ (135 pass, 0 regressions). OPEN: batch1-master had a network error (rerun, then compare the
+  four batches' loads master vs branch ±2); warmup-entries: all 42 entries pass but its "once a day" part times out
+  twice (the splash covers the Coach tab after a reload): run `WU_ONLY=pitch node scripts/warmup-verify/entries.js` on
+  master and on the branch to see whether phase 6 causes it. noisegate was stopped ~1 h in (4 of 24 stimuli): rerun.
+  NOT RUN YET: noisegate vlcompare yc contrast copyscan navcheck picker levelup home scores scores4b (the last two are
+  extra cover, not in the spec). checks6.sh now runs vibfix/noisegate against master; don't put modecheck in a list with
+  a *-master check (both use :8766).
+- **To resume:** `bash scripts/design-verify/checks6.sh noisegate,vlcompare,yc,contrast,copyscan,navcheck,picker,levelup,home,scores,scores4b`
+  then `bash scripts/design-verify/checks6.sh batch1-master`, then the warm-up once-a-day test (about 7 h in all).
 - **Next:** finish the checks (rerun house --onlychoir, modecheck alone, compare batch loads master ±2), then §4 shots
   (`node scripts/design-verify/shots6.js --out <dir>`, all four combos) on orphan review/phase6 with the sheet, secret
   check, push both branches, report, stop. No merge or deploy before the user's review.
