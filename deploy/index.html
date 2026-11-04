@@ -1227,9 +1227,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   /* ---- KARAOKE COACH ---- */
   .karaoke-roll-wrap{
-    position:relative;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;
+    position:relative;background:var(--hl-sunk);border:var(--hl-hair) solid var(--hl-rule);border-radius:var(--hl-r2);
     overflow:hidden;padding:0;margin-bottom:18px;
   }
+  .vc-stage.is-live .karaoke-roll-wrap{width:100%;align-self:stretch;margin-bottom:0;}
+  .vc-stage.is-live #karaokeStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  .karaoke-notes:empty{display:none;}
+  #karaokeMissionCard .step-label{margin-top:var(--hl-s4);}
+  .karaoke-obj{display:inline-flex;align-items:center;gap:var(--hl-s2);}
+  .karaoke-obj .hl-icon{color:var(--hl-ok);}
+  .karaoke-ring{width:14px;height:14px;border-radius:50%;border:var(--hl-hair) solid var(--hl-ink-3);box-sizing:border-box;flex:none;}
   .karaoke-roll{width:100%;display:block;height:160px;}
   /* ---- PRE-SESSION WARM-UP ---- */
   .wu-overlay{z-index:120;}
@@ -1254,7 +1261,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @media (max-width:480px){ .wu-card{padding:22px 16px;} }
   .karaoke-playhead-label{
     position:absolute;left:16.67%;top:4px;transform:translateX(-50%);
-    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--brass);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--hl-ink-3);
   }
   .karaoke-live-line{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px;}
   .karaoke-note-chip{
@@ -4038,28 +4045,32 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="karaoke_sub">Notes scroll toward you before you need to hit them — real Pitch and Timing scoring from your mic. Expression and pronunciation stay honestly unscored; no reliable signal exists for either.</div>
     </div>
     <div class="key-card">
+      <!-- the stage: the roll (the Lead line in its part colour, your cursor in the voice colour, NOW), Start/Stop; no scores while singing -->
+      <div class="vc-stage karaoke-stage" id="karaokeStage">
       <div class="karaoke-roll-wrap">
         <div class="karaoke-playhead-label" data-i18n="karaoke_now_label">NOW</div>
         <svg class="karaoke-roll" id="karaokeRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
       </div>
-
       <div class="btn-row" style="justify-content:center;">
-        <button class="mic-btn" id="karaokeStartBtn"><span class="dot-icon"></span><span id="karaokeStartLabel">Start (Pro)</span></button>
+        <button class="mic-btn vc-take-pill" id="karaokeStartBtn"><span class="dot-icon"></span><span id="karaokeStartLabel">Start (Pro)</span></button>
       </div>
       <div class="vl-gauge" id="vlGaugeKaraoke" style="display:none;"></div>
-
-      <div class="karaoke-live-line" id="karaokeLiveLine"></div>
-
-      <div class="dual-score-row" id="karaokeResult" role="status" aria-live="polite" style="display:none;">
-        <div class="dual-score"><div class="dual-label" data-i18n="karaoke_pitch_label">Pitch</div><div class="dual-val" id="karaokePitchVal">—</div></div>
-        <div class="dual-score"><div class="dual-label" data-i18n="karaoke_timing_label">Timing</div><div class="dual-val" id="karaokeTimingVal">—</div></div>
       </div>
 
-      <div id="karaokeMissionCard" style="display:none;margin-top:16px;">
-        <div class="step-label" data-i18n="karaoke_mission_label">Song Mission</div>
-        <div id="karaokeMissionRows" style="margin-top:8px;"></div>
-        <div class="step-label" style="margin-top:16px;" data-i18n="karaoke_bonus_label">Bonus objectives</div>
-        <div id="karaokeMissionBonusRows" style="margin-top:8px;"></div>
+      <div class="vc-result" id="karaokeResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-num" id="karaokePitchVal">—</div>
+        <h3 class="hl-h3" data-i18n="karaoke_pitch_label">Pitch</h3>
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="karaoke_timing_label">Timing</span><span id="karaokeTimingVal">—</span></div>
+        </div>
+        <div class="vc-result-dims karaoke-notes" id="karaokeLiveLine"></div>
+        <div id="karaokeMissionCard" style="display:none;">
+          <div class="step-label" data-i18n="karaoke_mission_label">Song Mission</div>
+          <div class="vc-result-dims" id="karaokeMissionRows"></div>
+          <div class="step-label" style="margin-top:16px;" data-i18n="karaoke_bonus_label">Bonus objectives</div>
+          <div class="vc-result-dims" id="karaokeMissionBonusRows"></div>
+        </div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="karaoke_measure"></p></details>
       </div>
     </div>
   </section>
@@ -6758,7 +6769,7 @@ const TRANSLATIONS = {
     genre_sub:"Pick a style: tips and default settings for Warmup and Vibrato. You choose; the app doesn't detect it from your voice.",
     genre_apply_btn:'Set as my genre',
     karaoke_title:"Karaoke Coach",
-    karaoke_sub:'Notes scroll toward you before you need to hit them — real Pitch and Timing scoring from your mic. Expression and pronunciation stay honestly unscored; no reliable signal exists for either.',
+    karaoke_sub:"The Lead line scrolls toward the NOW line before you sing it. Pitch and Timing are scored from your mic; expression and pronunciation aren't, as there's no reliable way to measure them.",
     karaoke_now_label:'NOW',
     karaoke_pitch_label:'Pitch',
     karaoke_timing_label:'Timing',
@@ -8185,6 +8196,11 @@ const TRANSLATIONS = {
     staykey_coach_low:"You drifted off the chords often. Hum along with the backing first, then sing on one of its notes.",
     staykey_coach_none:"Not enough of your voice was heard to score this. Sing a little louder or closer to the mic.",
     staykey_measure:"Every frame your pitch is compared with the notes of the chord playing, in any octave, with natural vibrato taken out. Within 35 cents of a chord note counts as in key. The score is the share of the frames with your voice that were in key; it's saved as your pitch score when more than 10 frames had your voice.",
+    karaoke_note_tpl:"Note {n}",
+    karaoke_not_heard:"Not heard",
+    karaoke_obj_done:"done",
+    karaoke_obj_open:"not yet",
+    karaoke_measure:"Each chord is one note of the Lead line. A note's pitch: 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out); a note with no voice is Not heard. Pitch is the average over the notes you sang, saved as your pitch score. Timing: 100 if your voice came in during a note's first 40 %, 50 if later, 0 if not heard, averaged over every note. Your song best is the average of Pitch and Timing.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8339,7 +8355,7 @@ const TRANSLATIONS = {
     genre_sub:"Choisissez un style : des conseils et des réglages par défaut pour l'Échauffement et le Vibrato. Vous choisissez ; l'application ne le détecte pas dans votre voix.",
     genre_apply_btn:'Définir comme mon genre',
     karaoke_title:"Coach Karaoké",
-    karaoke_sub:'Les notes défilent vers vous avant que vous ayez besoin de les atteindre — vraie notation de justesse et de rythme depuis votre micro. L\'expression et la prononciation restent honnêtement non notées ; aucun signal fiable n\'existe pour l\'une ou l\'autre.',
+    karaoke_sub:"La ligne principale défile vers la ligne MAINTENANT avant que vous la chantiez. La justesse et le timing sont notés depuis votre micro ; l'expression et la prononciation ne le sont pas, faute de moyen fiable de les mesurer.",
     karaoke_now_label:'MAINTENANT',
     karaoke_pitch_label:'Justesse',
     karaoke_timing_label:'Rythme',
@@ -9766,6 +9782,11 @@ const TRANSLATIONS = {
     staykey_coach_low:"Vous vous êtes souvent écarté des accords. Fredonnez d'abord avec l'accompagnement, puis chantez sur une de ses notes.",
     staykey_coach_none:"Votre voix n'a pas été assez entendue pour noter ceci. Chantez un peu plus fort ou plus près du micro.",
     staykey_measure:"À chaque image, votre hauteur est comparée aux notes de l'accord joué, à n'importe quelle octave, vibrato naturel retiré. À moins de 35 cents d'une note de l'accord, c'est dans la tonalité. Le score est la part des images avec votre voix qui étaient dans la tonalité ; il est enregistré comme score de justesse quand plus de 10 images avaient votre voix.",
+    karaoke_note_tpl:"Note {n}",
+    karaoke_not_heard:"Pas entendue",
+    karaoke_obj_done:"réussi",
+    karaoke_obj_open:"pas encore",
+    karaoke_measure:"Chaque accord est une note de la ligne principale. Justesse d'une note : 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré) ; une note sans voix est « Pas entendue ». La justesse est la moyenne des notes chantées, enregistrée comme score de justesse. Timing : 100 si votre voix arrive dans les premiers 40 % de la note, 50 si plus tard, 0 si pas entendue, en moyenne sur toutes les notes. Votre meilleur score du morceau est la moyenne de la justesse et du timing.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9920,7 +9941,7 @@ const TRANSLATIONS = {
     genre_sub:"Elige un estilo: consejos y ajustes predeterminados para el Calentamiento y el Vibrato. Tú eliges; la app no lo detecta en tu voz.",
     genre_apply_btn:'Establecer como mi género',
     karaoke_title:"Coach de Karaoke",
-    karaoke_sub:'Las notas se desplazan hacia ti antes de que necesites alcanzarlas — puntuación real de afinación y ritmo desde tu micrófono. La expresión y la pronunciación permanecen honestamente sin puntuar; no existe una señal confiable para ninguna de las dos.',
+    karaoke_sub:"La línea principal avanza hacia la línea AHORA antes de que la cantes. La afinación y el ritmo se puntúan desde tu micrófono; la expresión y la pronunciación no, porque no hay una forma fiable de medirlas.",
     karaoke_now_label:'AHORA',
     karaoke_pitch_label:'Afinación',
     karaoke_timing_label:'Ritmo',
@@ -11347,6 +11368,11 @@ const TRANSLATIONS = {
     staykey_coach_low:"Te saliste de los acordes a menudo. Tararea primero con el acompañamiento y luego canta en una de sus notas.",
     staykey_coach_none:"No se oyó tu voz lo suficiente para puntuar esto. Canta un poco más fuerte o más cerca del micrófono.",
     staykey_measure:"En cada fotograma tu tono se compara con las notas del acorde que suena, en cualquier octava, sin el vibrato natural. A menos de 35 cents de una nota del acorde cuenta como en el tono. La puntuación es la parte de los fotogramas con tu voz que estuvieron en el tono; se guarda como tu puntuación de afinación cuando más de 10 fotogramas tenían tu voz.",
+    karaoke_note_tpl:"Nota {n}",
+    karaoke_not_heard:"No se oyó",
+    karaoke_obj_done:"logrado",
+    karaoke_obj_open:"todavía no",
+    karaoke_measure:"Cada acorde es una nota de la línea principal. Afinación de una nota: 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural); una nota sin voz es «No se oyó». La afinación es la media de las notas que cantaste y se guarda como tu puntuación de afinación. Ritmo: 100 si tu voz entra en el primer 40 % de la nota, 50 si entra después, 0 si no se oyó, en promedio sobre todas las notas. Tu mejor marca de la canción es la media de la afinación y el ritmo.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11501,7 +11527,7 @@ const TRANSLATIONS = {
     genre_sub:"Bir stil seçin: Isınma ve Vibrato için ipuçları ve varsayılan ayarlar. Siz seçersiniz; uygulama bunu sesinizden algılamaz.",
     genre_apply_btn:'Türüm olarak ayarla',
     karaoke_title:"Karaoke Koçu",
-    karaoke_sub:'Notalar, onlara ulaşmanız gerekmeden önce size doğru kayar — mikrofonunuzdan gerçek Perde ve Zamanlama puanlaması. İfade ve telaffuz dürüstçe puanlanmadan kalır; ikisi için de güvenilir bir sinyal yoktur.',
+    karaoke_sub:"Lead hattı siz söylemeden önce ŞİMDİ çizgisine doğru kayar. Perde ve Zamanlama mikrofonunuzdan puanlanır; ifade ve telaffuz puanlanmaz, çünkü onları ölçmenin güvenilir bir yolu yok.",
     karaoke_now_label:'ŞİMDİ',
     karaoke_pitch_label:'Perde',
     karaoke_timing_label:'Zamanlama',
@@ -12928,6 +12954,11 @@ const TRANSLATIONS = {
     staykey_coach_low:"Sık sık akorların dışına çıktınız. Önce eşlikle birlikte mırıldanın, sonra notalarından birinde söyleyin.",
     staykey_coach_none:"Bunu puanlamak için sesiniz yeterince duyulmadı. Biraz daha yüksek sesle ya da mikrofona daha yakın söyleyin.",
     staykey_measure:"Her karede sesiniz, çalan akorun notalarıyla herhangi bir oktavda, doğal vibrato çıkarılarak karşılaştırılır. Bir akor notasına 35 sent içinde olmak tonda sayılır. Puan, sesinizin olduğu karelerin tonda olan payıdır; sesinizin olduğu kare sayısı 10'u aşınca perde puanınız olarak kaydedilir.",
+    karaoke_note_tpl:"Nota {n}",
+    karaoke_not_heard:"Duyulmadı",
+    karaoke_obj_done:"tamamlandı",
+    karaoke_obj_open:"henüz değil",
+    karaoke_measure:"Her akor Lead hattının bir notasıdır. Bir notanın perdesi: 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır); sesinizin olmadığı nota Duyulmadı olur. Perde, söylediğiniz notaların ortalamasıdır ve perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, duyulmazsa 0, tüm notaların ortalaması. Şarkıdaki en iyi puanınız Perde ve Zamanlama'nın ortalamasıdır.",
   },
 };
 let currentLanguage = 'en';
@@ -14881,12 +14912,12 @@ function buildKaraokeRoll(ids=KARAOKE_ROLL){ // returns the roll's {minMidi, max
     const x = KARAOKE_PLAYHEAD_X + i*chordDurSec*KARAOKE_PX_PER_SEC;
     const w = chordDurSec*KARAOKE_PX_PER_SEC*0.88;
     const y = midiToY(midi)-9;
-    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:color-mix(in srgb, var(--hl-ink) 14%, transparent);stroke:var(--hl-ink-3);stroke-width:1;"/>`;
+    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:color-mix(in srgb, var(--hl-lead) 55%, transparent);stroke:var(--hl-lead);stroke-width:1;"/>`;
   });
   svg.innerHTML = `
-    <line x1="${KARAOKE_PLAYHEAD_X}" y1="0" x2="${KARAOKE_PLAYHEAD_X}" y2="160" style="stroke:var(--brass);stroke-width:2;"/>
+    <line x1="${KARAOKE_PLAYHEAD_X}" y1="0" x2="${KARAOKE_PLAYHEAD_X}" y2="160" style="stroke:var(--hl-ink-3);stroke-width:2;"/>
     <g id="${ids.group}">${rects}</g>
-    <circle id="${ids.cursor}" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--teal)" stroke="var(--cream)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px var(--teal));transition:cy .06s linear;"/>
+    <circle id="${ids.cursor}" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--hl-voice)" stroke="var(--hl-bg)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px var(--hl-voice));transition:cy .06s linear;"/>
   `;
   return {minMidi, maxMidi};
 }
@@ -14915,10 +14946,11 @@ async function startKaraoke(){
   karaokeResults = [];
   document.getElementById('karaokeLiveLine').innerHTML = '';
   document.getElementById('karaokeResult').style.display='none';
+  document.getElementById('karaokeMissionCard').style.display='none';
   document.getElementById('karaokeStartLabel').textContent = t('action_stop');
   document.getElementById('karaokeStartBtn').classList.add('listening');
   karaokeLoop();
-  singingSession(()=>karaokeActive);
+  singingSession(()=>karaokeActive, document.getElementById('karaokeStage'));
 }
 function finalizeKaraokeNote(idx){
   if(idx<0) return;
@@ -14935,12 +14967,11 @@ function finalizeKaraokeNote(idx){
   karaokeResults[idx] = {pitchAcc, timingScore, heard: karaokeCentsBuf.length>0};
 
   const rect = document.querySelector(`.karaoke-note-rect[data-idx="${idx}"]`);
-  if(rect) rect.style.fill = pitchAcc>=70 ? 'var(--hl-ok)' : (karaokeCentsBuf.length>0 ? 'var(--coral)' : 'var(--hairline)');
-
-  const chip = document.createElement('div');
-  chip.className = 'karaoke-note-chip '+(pitchAcc>=70?'good':(karaokeCentsBuf.length>0?'bad':''));
-  chip.textContent = karaokeCentsBuf.length>0 ? `Note ${idx+1} · ${pitchAcc}%` : `Note ${idx+1} · missed`;
-  document.getElementById('karaokeLiveLine').appendChild(chip);
+  if(rect){ const c = pitchAcc>=70 ? 'var(--hl-ok)' : (karaokeCentsBuf.length>0 ? 'var(--hl-miss)' : 'var(--hl-rule)'); rect.style.fill = c; rect.style.stroke = c; }
+}
+// The result's per-note rows (Note n · % or Not heard), in place of the chips the stage had
+function renderKaraokeNotes(){
+  document.getElementById('karaokeLiveLine').innerHTML = karaokeResults.map((r,i)=>r ? `<div class="vc-dim"><span>${t('karaoke_note_tpl').replace('{n}', i+1)}</span><span>${r.heard ? r.pitchAcc+'%' : t('karaoke_not_heard')}</span></div>` : '').join('');
 }
 function karaokeLoop(){
   if(!karaokeActive) return;
@@ -14969,7 +15000,6 @@ function karaokeLoop(){
       const y = karaokeRollY(liveMidi, karaokeMinMidi, karaokeMaxMidi);
       cursor.setAttribute('cy', y.toFixed(1));
       cursor.style.display = 'block';
-      cursor.setAttribute('fill', (cents!==null && Math.abs(cents)<=25) ? 'var(--teal)' : 'var(--coral)');
     }
   } else if(cursor){
     cursor.style.display = 'none';
@@ -14998,9 +15028,10 @@ function finishKaraoke(){
   const avgPitch = heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.pitchAcc,0)/heardResults.length) : 0;
   const avgTiming = karaokeResults.filter(r=>r).length ? Math.round(karaokeResults.filter(r=>r).reduce((a,b)=>a+b.timingScore,0)/karaokeResults.filter(r=>r).length) : 0;
 
-  document.getElementById('karaokeResult').style.display='flex';
+  document.getElementById('karaokeResult').style.display='grid';
   document.getElementById('karaokePitchVal').textContent = avgPitch+'%';
   document.getElementById('karaokeTimingVal').textContent = avgTiming+'%';
+  renderKaraokeNotes();
 
   if(heardResults.length>0) recordSkillScore('pitch', avgPitch);
   if(profile){
@@ -15045,12 +15076,13 @@ function renderKaraokeMissionObjectives(){
     {label:t('karaoke_mission_fullperf'), done: allHeard, note: allHeard ? t('karaoke_mission_clean') : `${karaokeResults.filter(r=>r&&r.heard).length}/${karaokeResults.length} ${t('karaoke_mission_notes')}`},
   ];
   const bonus = [
-    {label:`🔥 ${t('karaoke_mission_perfectchorus')}`, done: chorusAvg!==null && chorusAvg>=90, note: chorusAvg!==null ? `${chorusAvg}%` : t('karaoke_mission_nodata')},
-    {label:`🔥 ${t('karaoke_mission_tighttiming')}`, done: overallAvgTiming>=85, note: `${overallAvgTiming}%`},
-    {label:`🔥 ${t('karaoke_mission_flawless')}`, done: overallAvgPitchAll>=90, note: `${overallAvgPitchAll}%`},
+    {label:t('karaoke_mission_perfectchorus'), done: chorusAvg!==null && chorusAvg>=90, note: chorusAvg!==null ? `${chorusAvg}%` : t('karaoke_mission_nodata')},
+    {label:t('karaoke_mission_tighttiming'), done: overallAvgTiming>=85, note: `${overallAvgTiming}%`},
+    {label:t('karaoke_mission_flawless'), done: overallAvgPitchAll>=90, note: `${overallAvgPitchAll}%`},
   ];
 
-  const rowHtml = o => `<div class="record-row"><span class="record-label">${o.done?'✅':'⬜'} ${o.label}</span><span class="record-val${!o.done?' untracked':''}" style="${o.done?'color:var(--teal);':''}">${o.note}</span></div>`;
+  const mark = done => done ? '<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg>' : '<span class="karaoke-ring" aria-hidden="true"></span>';
+  const rowHtml = o => `<div class="vc-dim" data-done="${o.done?1:0}"><span class="karaoke-obj">${mark(o.done)}<span>${o.label}<span class="vc-visually-hidden"> · ${t(o.done ? 'karaoke_obj_done' : 'karaoke_obj_open')}</span></span></span><span>${o.note}</span></div>`;
   rowsEl.innerHTML = core.map(rowHtml).join('');
   bonusEl.innerHTML = bonus.map(rowHtml).join('');
   card.style.display = 'block';
