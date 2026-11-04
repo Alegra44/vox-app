@@ -437,30 +437,21 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
   (a director and their singers) before it can come back; later, not scheduled.
 
-### Phase 6, the Songs-tab solo tools (`redesign/phase6`, spec `PHASE6.md`): IN PROGRESS 2026-11-04
-- Spec saved as design/house-lights/PHASE6.md (0f6f584). Fixes survey bugs 1–3, 8, 9; renames AI Duet Partner to Sing
-  With the Choir; PD's result becomes "Your performance". No merge or deploy before the user's review of the shots.
-- **Guards** 83f371f (tools6.js; scores/house/stopcheck/navcheck/contrast/copyscan cover the six; synthmic "lead" stimulus).
-  On master stopcheck --only6 failed 12/12 as predicted; after 2.1 it passed 12/12.
-- **Build DONE**, one commit per item: 2.1 6faad57, 2.2 d6cb9ee, 2.3 859daae, 2.4 c763390, 2.5 003104c, 2.6 8d9407c,
-  2.7 849ee0a, 2.8 e7ce975, 2.9 9aeef83 (PHASE6_COPY.md, 60 keys). checks6.sh + shots6.js committed.
-- **Checks, PAUSED 2026-11-04 ~12:05 UTC** (the user left; AC only). Logs: checks6-2026-11-04T00-14-27 (first run) and
-  checks6-2026-11-04T05-59-21 (second run). PASSED: hooks 21/0; scores6 gate (PD, Stay in Key, Karaoke, Emotion, steady
-  + lead, 3 runs a side); house 1050/1 (the 1 = a network error in Choir World Entrance & Cutoff) and its rerun
-  house-choir ✓; stopcheck ✓ (every tool incl. the six); modecheck ✓ (run alone); batch1 ✓, batch2 ✓ both, batch3a ✓
-  both, batch3b-master ✓, batch3b rerun ✓; warmup-tracking ✓ (Karaoke roll same as master apart from colours);
-  vibfix regress vs master ✓ (135 pass, 0 regressions). OPEN: batch1-master had a network error (rerun, then compare the
-  four batches' loads master vs branch ±2); warmup-entries: all 42 entries pass but its "once a day" part times out
-  twice (the splash covers the Coach tab after a reload): run `WU_ONLY=pitch node scripts/warmup-verify/entries.js` on
-  master and on the branch to see whether phase 6 causes it. noisegate was stopped ~1 h in (4 of 24 stimuli): rerun.
-  NOT RUN YET: noisegate vlcompare yc contrast copyscan navcheck picker levelup home scores scores4b (the last two are
-  extra cover, not in the spec). checks6.sh now runs vibfix/noisegate against master; don't put modecheck in a list with
-  a *-master check (both use :8766).
-- **To resume:** `bash scripts/design-verify/checks6.sh noisegate,vlcompare,yc,contrast,copyscan,navcheck,picker,levelup,home,scores,scores4b`
-  then `bash scripts/design-verify/checks6.sh batch1-master`, then the warm-up once-a-day test (about 7 h in all).
-- **Next:** finish the checks (rerun house --onlychoir, modecheck alone, compare batch loads master ±2), then §4 shots
-  (`node scripts/design-verify/shots6.js --out <dir>`, all four combos) on orphan review/phase6 with the sheet, secret
-  check, push both branches, report, stop. No merge or deploy before the user's review.
+### Phase 6, the Songs-tab solo tools (`redesign/phase6`, spec `PHASE6.md`): DONE 2026-11-05, reported; waiting for the user's review
+- Spec PHASE6.md (0f6f584). Guards 83f371f (tools6.js; scores/house/stopcheck/navcheck/contrast/copyscan cover the six;
+  synthmic "lead" stimulus). Build, one commit per item: 2.1 6faad57, 2.2 d6cb9ee, 2.3 859daae, 2.4 c763390, 2.5 003104c,
+  2.6 8d9407c, 2.7 849ee0a, 2.8 e7ce975, 2.9 9aeef83 (PHASE6_COPY.md, 60 keys). checks6.sh, shots6.js.
+- **Found and fixed, live since phase 5 (0d2c888):** with a Your Choir take stored on the device, the page's first
+  renderYourChoir() reached cwMeasureHtml (a const) before it was defined; the error stopped the script and the splash
+  never hid. cwMeasureHtml is now a function declaration. Reproduced on master 1d0fce8. The user was asked whether to
+  hotfix production or wait for the phase 6 deploy.
+- **Checks all pass** (logs checks6-2026-11-04T*; summary in review/phase6 notes.txt): hooks; the scores gate; house
+  (1 network error, rerun passed); stopcheck (the six failed 12/12 on master); modecheck; vocal load (41 loads, largest
+  difference 0.06); warm-up entries 52/0 and tracking; vibfix and noisegate vs master, 0 regressions; vlcompare; yc;
+  contrast (the six and the Songs tab clean; Profile's achievement icon in Dark 3.38:1, known); copyscan 0 in four
+  languages; navcheck, picker, levelup (45/0 on rerun), home; extra 4a and 4b scores (4b on rerun: bimodal on master).
+- **review/phase6** (60173be, orphan): 84 shots, sheets/phase6.jpg, states.json, notes.txt. No merge or deploy until
+  the user has reviewed and types "deploy" (then the steps in PHASE6.md, including the promote check).
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
