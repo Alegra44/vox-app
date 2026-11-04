@@ -1,0 +1,24 @@
+Phase 6: the six Songs-tab solo tools and the Songs tab (redesign/phase6, PHASE6.md). For the user's review.
+Shots: shots6.js, local build of redesign/phase6, production backend, a fresh trial account, the synthetic mic singing
+the steady A4 moved onto the Lead line (so results show what a sung line gets). 390 and 1280, Light and Dark.
+Per tool: idle, stage (mid-run), result; Studio: recording, the takes list, three takes (the limit line, Delete);
+Sing With the Choir: playing and after (the line with the Choir World link); Karaoke: the Song Mission rows.
+Contact sheet: sheets/phase6.jpg. states.json: data-house per shot (down on every stage, up elsewhere), page errors.
+
+Checks (one at a time, AC; logs scripts/design-verify/logs/checks6-2026-11-04T*):
+  hooks 21/0 · scores gate (PD, Stay in Key, Karaoke, Emotion; steady + lead; 3 runs a side) every value within its gate
+  house 1050/1, the 1 a network error in Choir World Entrance & Cutoff; rerun house --onlychoir passed
+  stopcheck all passed (every tool; the six left at 0.8 s and 2.6 s: no loop, no sound, no score or result after leaving,
+    Studio's take not saved, the duet's mixer restored, Start works again; on master the six failed 12/12)
+  modecheck passed · vocal load batch1/2/3a/3b: 41 stored loads, largest master/branch difference 0.06 (gate ±2)
+  warm-up entries 52/0 (after the Your Choir fix below), tracking 29/0 (Karaoke's roll same as master apart from colours)
+  vibfix regress vs master 135 pass, 0 regressions · noisegate regress vs master 160 pass, 0 regressions · vlcompare passed
+  yc passed (Studio's take 15 s, no clipping, saved on the device) · contrast: the six and the Songs tab 0 fails (the run's
+    one fail is Profile's achievement icon in Dark, 3.38:1, known since phase 5) · copyscan 532 texts × en/fr/es/tr, 0 §7
+  navcheck, picker, home passed · levelup 45/0 on rerun (44/1 first: the known level-up 1 flake, also seen in 4b)
+  extra: scores 4a passed; 4b passed on rerun (Emotion Mode louder / Drills / VQ centroid are bimodal on master itself)
+
+Found and fixed (live since phase 5): with a Your Choir take stored on the device, the page's first renderYourChoir()
+reached cwMeasureHtml before it was defined; the error stopped the script, the splash never hid. Fix 0d2c888.
+Expected changes only: the leave fixes; PD's Stop and restart; the duet mixer restore and the rename; Studio's storage,
+Delete and Stop; the Start label; the Songs tab rows; the Stay in Key pulse.
