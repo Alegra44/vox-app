@@ -2142,6 +2142,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     transition:opacity .5s ease, visibility .5s ease;
   }
   .splash-screen.splash-hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .boot-error{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--hl-s4);padding:var(--hl-s5);background:var(--hl-bg);color:var(--hl-ink);text-align:center;font-family:var(--hl-font);}
+  .boot-error p{margin:0;max-width:36ch;font-size:var(--hl-t-body);}
   .splash-ring{width:120px;height:120px;}
   #splashRingFill{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1);}
   .splash-wordmark{opacity:0;transition:opacity .6s ease .3s;}
@@ -5652,6 +5654,28 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   </div>
 </div>
 
+<script>/* startup safety net (6.1): if the main script throws while it starts, the rest of it never runs, so the splash would
+   never hide. Until it has finished (window.__vcBooted), the first uncaught error hides the splash and shows one short
+   message with Reload, in the stored language (the translations live in the main script, so they're here too). */
+(function(){
+  var MSG = {en:["VoxCoach couldn't start. Reload the page to try again.", "Reload"],
+    fr:["VoxCoach n'a pas pu démarrer. Rechargez la page pour réessayer.", "Recharger"],
+    es:["VoxCoach no pudo iniciarse. Recarga la página para intentarlo de nuevo.", "Recargar"],
+    tr:["VoxCoach başlatılamadı. Yeniden denemek için sayfayı yenileyin.", "Yenile"]};
+  function show(){
+    if(window.__vcBooted || document.getElementById('bootError')) return;
+    var lang = 'en'; try{ lang = localStorage.getItem('language') || (navigator.language||'en').slice(0,2); }catch(e){}
+    var m = MSG[lang] || MSG.en, sp = document.getElementById('splashScreen');
+    if(sp){ sp.classList.add('splash-hide'); sp.style.display = 'none'; }
+    var box = document.createElement('div'); box.id = 'bootError'; box.className = 'boot-error'; box.setAttribute('role', 'alert');
+    var p = document.createElement('p'); p.textContent = m[0];
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'hl-btn hl-btn--ink'; b.textContent = m[1];
+    b.addEventListener('click', function(){ location.reload(); });
+    box.appendChild(p); box.appendChild(b); document.body.appendChild(box);
+  }
+  window.addEventListener('error', function(e){ if(e && e.error !== undefined) show(); }); // script errors, not a failed image or script file
+})();
+</script>
 <script>
 /* ---------------- Accessibility: reusable focus trap + Escape-to-close for all modals ---------------- */
 function openModalWithA11y(modalEl, onClose){
@@ -24718,6 +24742,7 @@ document.getElementById('feedbackAnotherBtn')?.addEventListener('click', ()=>{
 setExerciseLevel('beginner');
 updateExCapNote();
 appFullyLoaded = true;
+window.__vcBooted = true; // the startup safety net stands down (it ran to here)
 </script>
 </body>
 </html>
