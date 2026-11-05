@@ -437,6 +437,17 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
   (a director and their singers) before it can come back; later, not scheduled.
 
+### Hotfix: the startup splash (LIVE 2026-11-05, dpl_BGXeU41kbimZ6MekBmVSNkf39BFC, master bf9cf5d)
+- hotfix/splash from master 6266166: the cwMeasureHtml fix only (e9a7722) + bootcheck.js + prod.sh runs bootcheck first.
+  bootcheck: master failed only the Your Choir case; the hotfix 8/8. Checks on the hotfix: hooks, bootcheck, yc, warm-up
+  entries 52/0, house --onlychoir 256/0, batch1 112/0. Production: bootcheck 8/8 (first run 7/1: the Studio old-format
+  case 6.7 s with the test's re-fetch; not repeated), yc, warm-up entries, house --onlychoir 256/0 on rerun (first run
+  one CORS block on a vocal-load request), batch1 112/0. The deploy aliased itself; no promote needed (an extra alias
+  deploy-nine-rouge-32.vercel.app appeared, same project). **New rollback target: dpl_BGXeU41kbimZ6MekBmVSNkf39BFC**
+  (the old one, dpl_7wMj…, has the splash bug). bootcheck now runs in prod.sh and in every phase's checks.
+- Found while writing bootcheck: user_progress has no studio_takes column, so on master Studio takes never reached
+  the server (they lasted until a reload); phase 6's device storage fixes that.
+
 ### Phase 6, the Songs-tab solo tools (`redesign/phase6`, spec `PHASE6.md`): DONE 2026-11-05, reported; waiting for the user's review
 - Spec PHASE6.md (0f6f584). Guards 83f371f (tools6.js; scores/house/stopcheck/navcheck/contrast/copyscan cover the six;
   synthmic "lead" stimulus). Build, one commit per item: 2.1 6faad57, 2.2 d6cb9ee, 2.3 859daae, 2.4 c763390, 2.5 003104c,

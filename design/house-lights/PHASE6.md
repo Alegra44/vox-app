@@ -91,3 +91,11 @@ WHEN I TYPE "deploy" (after my review)
 3. Production checks: prod.sh with WITH_CHOIR=1. Same rollback rule (a failure that repeats on a rerun and isn't a network error or a Supabase 503 → roll back to dpl_7wMjFuZHdg3XE479UaD9N41gWCBY).
 4. If it passes: review/phase6-prod; delete review/phase6, review/phase6-before and review/phase5-prod; update HANDOFF.
 5. Then a read-only survey for phase 7 (Progress and identity: the You hub, Journey, Dashboard, Records, Vocal Passport, Voice Health, Profile and settings), in the same form as the phase 6 survey, on redesign/phase7, with before-screenshots on review/phase7-before. Also note where Choir World runs could feed the Skill Profile (the open decision), without changing anything. Push, report, stop.
+
+## 6.1
+
+PHASE 6: approved after a short fix round (6.1), on redesign/phase6 after the hotfix. Save this in PHASE6.md as "6.1".
+1. Sing With the Choir's "Rehearse Soprano in Choir World" link is voice blue. Make it ink with an underline, like "Why?" in 5.1.
+2. Karaoke's roll is about 280 px wide at 1280. Like the Choir World lanes, it fills the stage column, up to about 760 px.
+3. Startup safety net: if the page's main script throws while starting, hide the splash and show one short message with a Reload button (four languages) instead of a stuck splash. bootcheck gets a case that forces an error and expects the message.
+Checks: hooks, bootcheck, house (the six tools), contrast, copyscan, warm-up tracking (Karaoke's roll). Fixshots at 390 and 1280, Light and Dark, on review/phase6-fix. Push, report, stop. Deploy as in PHASE6.md when I type "deploy".
