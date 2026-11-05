@@ -15,6 +15,8 @@
 #   World script, with its own test account. Required for phases 5, 6 and 10 (with choirregress.sh, the choir gate)
 #   - each suite has a limit of 3× its usual minutes (the number after its name), 45 min at most (house takes ~33 since phase 5); one that hits it is
 #     stopped and logged "timed out", and the run carries on)
+#   the splash hotfix (2026-11-05) added bootcheck, first: the page starts with no error and the splash hidden in 5 s, in each
+#   startup state (bootcheck.js). It runs in every phase's checks too.
 cd "$(dirname "$0")/../.."
 P=https://deploy-alegra1122.vercel.app/
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/prod-$STAMP; mkdir -p "$OUT"
@@ -22,6 +24,7 @@ SHOTS=${1:-${TMPDIR:-/tmp}/voxcoach-shots-prod}
 SB=https://ccharikhpeqtzpobarxi.supabase.co
 SCORES_BASE=${SCORES_BASE:-$(git log --merges -1 --format=%P | cut -d' ' -f1)}
 SUITES=(
+  "bootcheck|2|env DV_URL=$P node scripts/design-verify/bootcheck.js"
   "house|20|env DV_URL=$P node scripts/design-verify/house.js"
   "system|1|env DV_URL=$P node scripts/design-verify/system.js"
   "contrast|10|env DV_URL=$P node scripts/design-verify/contrast.js --json $OUT/contrast-prod.json"
