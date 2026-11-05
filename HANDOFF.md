@@ -448,7 +448,12 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - Found while writing bootcheck: user_progress has no studio_takes column, so on master Studio takes never reached
   the server (they lasted until a reload); phase 6's device storage fixes that.
 
-### Phase 6, the Songs-tab solo tools (`redesign/phase6`, spec `PHASE6.md`): DONE 2026-11-05, reported; waiting for the user's review
+### Phase 6 + 6.1 (`redesign/phase6`, spec `PHASE6.md`): APPROVED after 6.1; 6.1 DONE 2026-11-05, reported; waiting for "deploy"
+- 6.1 (PHASE6.md "6.1"): 564d63f the duet's link in ink; 9152993 Karaoke's stage up to 760 px; 6eae11c the startup
+  safety net (#bootError) + bootcheck's forced-error case. Checks (logs checks61-*): hooks, bootcheck 9/0, house --only6
+  172/0 on rerun (two Supabase 503s first), contrast, copyscan, warm-up tracking. review/phase6-fix fc9e3b5.
+- On "deploy": the rollback target is now **dpl_BGXeU41kbimZ6MekBmVSNkf39BFC** (the hotfix), not PHASE6.md's dpl_7wMj….
+  prod.sh runs bootcheck first. Afterwards also delete review/phase6-fix and hotfix/splash with the branches PHASE6.md lists.
 - Spec PHASE6.md (0f6f584). Guards 83f371f (tools6.js; scores/house/stopcheck/navcheck/contrast/copyscan cover the six;
   synthmic "lead" stimulus). Build, one commit per item: 2.1 6faad57, 2.2 d6cb9ee, 2.3 859daae, 2.4 c763390, 2.5 003104c,
   2.6 8d9407c, 2.7 849ee0a, 2.8 e7ce975, 2.9 9aeef83 (PHASE6_COPY.md, 60 keys). checks6.sh, shots6.js.
