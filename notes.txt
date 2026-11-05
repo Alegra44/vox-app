@@ -1,0 +1,11 @@
+Phase 6.1 fix round (PHASE6.md "6.1"), redesign/phase6 after the splash hotfix (master bf9cf5d merged in).
+1. 564d63f  Sing With the Choir's "Rehearse {part} in Choir World" link: ink with an underline, like "Why?" (5.1). See duet-after.
+2. 9152993  Karaoke's stage fills the stage column up to 760 px (was held to the 560 px stage): the roll is 760 px at
+            1280 (karaoke-stage, 1280-*), the full width at 390.
+3. 6eae11c  The startup safety net: a script error while the main script starts hides the splash and shows one line
+            with Reload (#bootError, four languages). bootcheck's forced-error case: splash hidden at 362 ms, message + Reload.
+Checks: hooks 21/0 · bootcheck 9/0 · house --only6 172/0 (first run 170/2: Supabase 503 on vocal-load requests, not repeated)
+· contrast --set 6: the six and the Songs tab clean (Profile's achievement icon is the only fail, outside phase 6)
+· copyscan --set 6: 0 §7 words in en/fr/es/tr · warm-up tracking 29/0 (Karaoke's roll same as master apart from colours).
+Shots: shots6.js, all six tools and the Songs tab, 390/1280 Light/Dark, sheets/phase6.jpg; states.json: house down on
+every stage, no page errors.
