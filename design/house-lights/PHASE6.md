@@ -99,3 +99,7 @@ PHASE 6: approved after a short fix round (6.1), on redesign/phase6 after the ho
 2. Karaoke's roll is about 280 px wide at 1280. Like the Choir World lanes, it fills the stage column, up to about 760 px.
 3. Startup safety net: if the page's main script throws while starting, hide the splash and show one short message with a Reload button (four languages) instead of a stuck splash. bootcheck gets a case that forces an error and expects the message.
 Checks: hooks, bootcheck, house (the six tools), contrast, copyscan, warm-up tracking (Karaoke's roll). Fixshots at 390 and 1280, Light and Dark, on review/phase6-fix. Push, report, stop. Deploy as in PHASE6.md when I type "deploy".
+
+## Deploy (2026-11-07)
+
+"6.1 approved. Deploy phase 6 with the steps in PHASE6.md, with one change: the rollback target is the hotfix, dpl_BGXeU41kbimZ6MekBmVSNkf39BFC (not dpl_7wMj…, which has the stuck-splash bug). bootcheck runs in the production checks."
