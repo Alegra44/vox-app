@@ -5,6 +5,9 @@
 //   (signed out, the language stored) · signed in
 // The Your Choir case is the bug the hotfix fixes (master 6266166: "Cannot access 'cwMeasureHtml' before
 // initialization", the splash never hides). A throwaway account (deleted at exit), the production backend.
+// 6.1 (PHASE6.md): the startup safety net. One more case forces an error at the start of the main script (the page's
+// own index.html with a throw put in front of it): the splash must be hidden and #bootError (one line and Reload)
+// shown within 5 s, the forced error the only page error.
 // Usage: node scripts/design-verify/bootcheck.js [--base <git ref>]   (DV_URL=https://… runs it on that site)
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -35,11 +38,18 @@ const OLD_STUDIO = [{ base64: 'data:audio/webm;base64,AAAA', mimeType: 'audio/we
       { name: 'the warm-up already done today (signed in)', signedIn: true, ls: { [`warmup:${uid}:${day}`]: 'done' } },
       ...['fr', 'es', 'tr'].map(l => ({ name: `language ${l} (signed out)`, ls: { language: l } })),
       { name: 'signed in', signedIn: true },
+      { name: 'an error forced at the start of the main script (6.1)', forced: true },
     ];
     for (const cs of CASES) {
       let r; const seen = []; // page errors, kept even when the page never finishes loading
       try {
         const { ctx, page, errors } = await C.openPage(b, { dir, storageState: cs.signedIn ? signedIn : undefined, prepare: async ctx => {
+          if (cs.forced) await ctx.route(u => u.pathname === '/' || u.pathname.endsWith('/index.html'), async rt => {
+            // the page as served: from the site, or (locally) the build's own file
+            const html = C.REMOTE || /^https?:/.test(dir) ? await (await rt.fetch()).text() : require('fs').readFileSync(require('path').join(dir, 'index.html'), 'utf8');
+            const at = html.lastIndexOf('\n<script>\n');
+            rt.fulfill({ status: 200, contentType: 'text/html', body: html.slice(0, at) + '\n<script>\nthrow new Error("bootcheck: forced startup error");\n' + html.slice(at + 10) });
+          });
           ctx.on('weberror', e => seen.push(String(e.error()).split('\n')[0].slice(0, 160)));
           await ctx.addInitScript(WATCH);
           if (cs.ls) await ctx.addInitScript(kv => { try { for (const [k, v] of Object.entries(kv)) localStorage.setItem(k, v); } catch (e) {} }, cs.ls); // (about:blank has no storage)
@@ -51,11 +61,15 @@ const OLD_STUDIO = [{ base64: 'data:audio/webm;base64,AAAA', mimeType: 'audio/we
         } });
         await page.waitForFunction(() => !!window.__splashAt, null, { timeout: 4000 }).catch(() => {});
         r = { at: await page.evaluate(() => window.__splashAt || null), errors: [...new Set([...seen, ...errors])].slice(0, 3) };
+        if (cs.forced) { // the message instead of a stuck splash; the forced error is the expected one
+          r.box = await page.evaluate(() => { const b = document.getElementById('bootError'); return b && b.getClientRects().length ? { text: b.textContent.trim(), reload: !!b.querySelector('button') } : null; });
+          r.errors = r.errors.filter(e => !/bootcheck: forced startup error/.test(e));
+        }
         await ctx.close();
       } catch (e) { r = { at: null, errors: [...new Set(seen)].slice(0, 3).concat(['did not load: ' + String(e).split('\n')[0].slice(0, 120)]) }; }
-      const ok = r.at !== null && r.at > 0 && r.at <= LIMIT && !r.errors.length;
+      const ok = r.at !== null && r.at > 0 && r.at <= LIMIT && !r.errors.length && (!cs.forced || (!!r.box && r.box.reload));
       ok ? pass++ : fail++;
-      console.log(`  ${ok ? '✓' : '✗'} ${cs.name.padEnd(56)} splash hidden ${r.at ? r.at + ' ms' : 'never'} · page errors ${r.errors.join(' | ') || 'none'}`);
+      console.log(`  ${ok ? '✓' : '✗'} ${cs.name.padEnd(56)} splash hidden ${r.at ? r.at + ' ms' : 'never'} · page errors ${r.errors.join(' | ') || 'none'}${cs.forced ? ` · message ${r.box ? JSON.stringify(r.box.text) + (r.box.reload ? ' + Reload' : '') : 'not shown'}` : ''}`);
     }
   } finally { await b.close(); console.log(`\n${pass} passed, ${fail} failed`); process.exitCode = fail ? 1 : 0; C.cleanup(); }
 })();

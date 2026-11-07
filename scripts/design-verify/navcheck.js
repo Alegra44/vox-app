@@ -11,10 +11,13 @@
 // Song Lab, partrehearsal → Rehearse, choirpassport → Passport): Songs is the lit tab, and the sub-nav marks exactly one
 // tab, the one shown, with aria-current="page" and aria-selected="true" (the others aria-selected="false", no
 // aria-current). Each trainer opened alone keeps Trainers marked.
+// Phase 6 (PHASE6.md §1f): the Songs tab's buttons include all six solo tools (Studio Mode, Sing With the Choir,
+// Performance Director, Stay in Key, Karaoke Coach, Emotional Singing), each highlighting Songs (the first pass).
 // Usage: node scripts/design-verify/navcheck.js [--base <git ref>]
 const C = require('./common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const HUBS = [['train', 'train-hub', 'Coach'], ['songs', 'songs-hub', 'Songs'], ['you', 'you-hub', 'You']];
+const SONGS_SIX = ['studio', 'aiduet', 'performancedirector', 'staykey', 'karaoke', 'emotion'];
 
 (async () => {
   const dir = C.buildDir(arg('--base'));
@@ -36,9 +39,10 @@ const HUBS = [['train', 'train-hub', 'Coach'], ['songs', 'songs-hub', 'Songs'], 
         await page.evaluate(() => stopAllActiveSessions());
         if (st.active !== shell || st.current !== shell) wrong.push(`${k} → ${st.active}`);
       }
-      const ok = !wrong.length && keys.length > 0 && (shell !== 'train' || keys.length === 23);
+      const missing = shell === 'songs' ? SONGS_SIX.filter(k => !keys.includes(k)) : [];
+      const ok = !wrong.length && keys.length > 0 && (shell !== 'train' || keys.length === 23) && !missing.length;
       ok ? pass++ : fail++;
-      console.log(`  ${ok ? '✓' : '✗'} ${name}: ${keys.length} tool buttons, each highlights ${name}${wrong.length ? ` · wrong: ${wrong.join(', ')}` : ''}`);
+      console.log(`  ${ok ? '✓' : '✗'} ${name}: ${keys.length} tool buttons, each highlights ${name}${shell === 'songs' ? ` (the six solo tools ${missing.length ? 'missing ' + missing.join(', ') : 'all there'})` : ''}${wrong.length ? ` · wrong: ${wrong.join(', ')}` : ''}`);
     }
     // from Home
     for (const [shell, panel, name] of HUBS) {

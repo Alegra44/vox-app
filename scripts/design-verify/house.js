@@ -38,6 +38,11 @@
 // 13 Phase 5, the paper pages never dim (100 ms samples, nothing staged): the landing, Song Lab with the mixer playing,
 //    Your Choir playing your stacked takes (not recording), Passport; the X-Ray lightbox is a data-house="down" inset
 //    inside Song Lab while the body stays up. --onlychoir runs checks 12 and 13 alone.
+// 14 Phase 6 (PHASE6.md §1b), the six Songs-tab solo tools (tools6.js), each as check 11: down within 1.5 s with its own
+//    .vc-stage live, never up while it sings or records (Studio from Record to the end of the take; Sing With the Choir
+//    while the choir plays), #vlBreak on the stage, its Start/Stop topmost (Performance Director: its Stop), up within
+//    1.5 s after (the result shown; Sing With the Choir: of Stop), no marks; a second start brought up by
+//    stopAllActiveSessions() within 100 ms, no marks; no console errors. --only6 runs check 14 alone.
 //  7 Reduced motion: the dimmer never gets .is-on; down within 100 ms of the start, up 600 ms after the stop.
 //  8 While down, every meta theme-color is #060708; afterwards they're restored.
 //  9 #warmupOverlay has data-house="down".
@@ -46,8 +51,8 @@
 // On a build without the lighting engine (master) there is nothing to test: the script says so and exits 0.
 // Usage: node scripts/design-verify/house.js [--base <git ref>]   (DV_URL=https://… runs it on that site)
 const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b');
-const ONLY4B = process.argv.includes('--only4b'), ONLYCHOIR = process.argv.includes('--onlychoir');
-const CW = require('./choir5');
+const ONLY4B = process.argv.includes('--only4b'), ONLYCHOIR = process.argv.includes('--onlychoir'), ONLY6 = process.argv.includes('--only6');
+const CW = require('./choir5'), T6 = require('./tools6');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const BASE = arg('--base');
 let pass = 0, fail = 0;
@@ -98,6 +103,7 @@ async function combo(b, dir, state, theme, w) {
   await C.clearOverlays(page); await page.evaluate(MONITOR); await S.warmMic(page);
   if (ONLY4B) { await tool4bChecks(page, consoleErrors); check('no page errors', !errors.length, errors.slice(0, 2).join(' | ')); await ctx.close(); return; }
   if (ONLYCHOIR) { await choirChecks(page, consoleErrors); check('no page errors', !errors.length, errors.slice(0, 2).join(' | ')); await ctx.close(); return; }
+  if (ONLY6) { await tool4bChecks(page, consoleErrors, T6.TOOLS, '14'); check('no page errors', !errors.length, errors.slice(0, 2).join(' | ')); await ctx.close(); return; }
   const metaBefore = await metas(page);
 
   // 1 Tuner start
@@ -192,6 +198,8 @@ async function combo(b, dir, state, theme, w) {
   await tool4bChecks(page, consoleErrors);
   // 12, 13 Choir World
   await choirChecks(page, consoleErrors);
+  // 14 the Songs-tab solo tools
+  await tool4bChecks(page, consoleErrors, T6.TOOLS, '14');
   // 9 the warm-up overlay is a stage
   const wu = await page.evaluate(() => document.getElementById('warmupOverlay')?.getAttribute('data-house'));
   check('9 #warmupOverlay has data-house="down"', wu === 'down', String(wu));
@@ -384,7 +392,7 @@ async function sharpTake(dir, state) {
     await C.signUp(page, 'dvh', 'House Check');
     const state = await ctx.storageState(); await ctx.close();
     for (const theme of ['light', 'dark']) for (const w of ['390', '1280']) await combo(b, dir, state, theme, w);
-    if (!ONLY4B && !ONLYCHOIR) await sharpTake(dir, state);
+    if (!ONLY4B && !ONLYCHOIR && !ONLY6) await sharpTake(dir, state);
   } finally {
     await b.close();
     console.log(`\n${pass} passed, ${fail} failed`);

@@ -5,6 +5,8 @@
 // Usage: openPage(b, { prepare: ctx => synth.attach(ctx, file, { level }) }) in a browser from synth.launch(); in the page:
 //   __synth.level(g)            the gain from now on (1 = the file as it is)
 //   __synth.pulses(times, ms)   an onset at each performance.now() time: the gain up for ms, silent between
+//   __synth.melody(t0, semis, stepMs)  (phase 6) the file moved by semis[i] semitones (playback rate) from t0 + i × stepMs
+//                                (performance.now() times): the steady A4 sung as a line, each note on its step
 const fs = require('fs');
 const C = require('./common');
 
@@ -20,7 +22,7 @@ const INIT = level0 => {
     src.buffer = buf; src.loop = true; g.gain.value = level;
     src.connect(g).connect(dest); src.start();
     if (ac.state !== 'running') await ac.resume();
-    return (S = { ac, g, dest });
+    return (S = { ac, g, dest, src });
   };
   window.__synth = {
     level: v => { level = v; if (S) { S.g.gain.cancelScheduledValues(S.ac.currentTime); S.g.gain.setValueAtTime(v, S.ac.currentTime); } },
@@ -33,6 +35,11 @@ const INIT = level0 => {
         g.gain.setValueAtTime(1, at + ms / 1000); g.gain.linearRampToValueAtTime(0, at + ms / 1000 + 0.02);
       }
     },
+  };
+  window.__synth.melody = (t0, semis, stepMs) => {
+    const { ac, src } = S, now = performance.now(), base = ac.currentTime, r = src.playbackRate;
+    r.cancelScheduledValues(base);
+    semis.forEach((s, i) => r.setValueAtTime(Math.pow(2, s / 12), Math.max(base, base + (t0 + i * stepMs - now) / 1000)));
   };
   md.getUserMedia = async () => {
     if (!S) { if (!opening) opening = make(); await opening; }

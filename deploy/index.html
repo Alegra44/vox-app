@@ -406,8 +406,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     100%{filter:none;}
   }
   /* locked: the voice fills the ring (a disc in --hl-lock) and the note reads on it */
-  #tunerLockFill{opacity:0;transition:opacity var(--hl-d1) var(--hl-ease);}
-  .tuner-ring-wrap.locked-pulse #tunerLockFill{opacity:1;}
+  #tunerLockFill, #stayKeyLockFill{opacity:0;transition:opacity var(--hl-d1) var(--hl-ease);}
+  .tuner-ring-wrap.locked-pulse #tunerLockFill, .tuner-ring-wrap.locked-pulse #stayKeyLockFill{opacity:1;}
   .tuner-ring-wrap.locked-pulse .note-display, .tuner-ring-wrap.locked-pulse .note-display .oct,
   .tuner-ring-wrap.locked-pulse .cents-display.locked{color:var(--hl-on-voice);}
   /* on the stage: a bigger ring, the note in the display style */
@@ -1227,9 +1227,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   /* ---- KARAOKE COACH ---- */
   .karaoke-roll-wrap{
-    position:relative;background:var(--surface);border:1px solid var(--hairline);border-radius:14px;
+    position:relative;background:var(--hl-sunk);border:var(--hl-hair) solid var(--hl-rule);border-radius:var(--hl-r2);
     overflow:hidden;padding:0;margin-bottom:18px;
   }
+  .vc-stage.is-live.karaoke-stage{width:100%;max-width:760px;} /* the roll fills the stage column, like Choir World's lanes */
+  .vc-stage.is-live .karaoke-roll-wrap{width:100%;align-self:stretch;margin-bottom:0;}
+  .vc-stage.is-live #karaokeStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  .karaoke-notes:empty{display:none;}
+  #karaokeMissionCard .step-label{margin-top:var(--hl-s4);}
+  .karaoke-obj{display:inline-flex;align-items:center;gap:var(--hl-s2);}
+  .karaoke-obj .hl-icon{color:var(--hl-ok);}
+  .karaoke-ring{width:14px;height:14px;border-radius:50%;border:var(--hl-hair) solid var(--hl-ink-3);box-sizing:border-box;flex:none;}
   .karaoke-roll{width:100%;display:block;height:160px;}
   /* ---- PRE-SESSION WARM-UP ---- */
   .wu-overlay{z-index:120;}
@@ -1254,7 +1262,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @media (max-width:480px){ .wu-card{padding:22px 16px;} }
   .karaoke-playhead-label{
     position:absolute;left:16.67%;top:4px;transform:translateX(-50%);
-    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--brass);
+    font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10px;color:var(--hl-ink-3);
   }
   .karaoke-live-line{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px;}
   .karaoke-note-chip{
@@ -1991,6 +1999,55 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-train-hub .hc-btn-row{display:block;}
   #panel-train-hub .coach-row .hl-item-title{color:var(--hl-ink);}
   #panel-train-hub .coach-best:empty{display:none;}
+  /* ---- SONGS TAB (phase 6): the Choir World card, the one raised block; then the six solo tools as rows ---- */
+  #panel-songs-hub .cw-hub-feature.hl-raised{background:var(--hl-raised);border:0;border-radius:var(--hl-r2);padding:var(--hl-s5);}
+  #panel-songs-hub .cw-hub-feature.hl-raised:hover{transform:none;box-shadow:none;}
+  #panel-songs-hub .cw-hub-feature .hc-title{color:var(--hl-ink);}
+  #panel-songs-hub .cw-hub-feature .hc-desc{color:var(--hl-ink-2);}
+  #panel-songs-hub .songs-tools{margin-top:var(--hl-s6);}
+  #panel-songs-hub .songs-tools-label{margin:0 0 var(--hl-s1);}
+  #panel-songs-hub .songs-row .hl-item-title{display:block;color:var(--hl-ink);}
+  #panel-songs-hub .songs-row .hl-item-meta{display:block;margin-top:2px;}
+  #panel-songs-hub .coach-best:empty{display:none;}
+  /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
+  .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
+  .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
+  .pd-cue{max-width:46ch;}
+  .pd-cue #pdCurrentSection{font-weight:600;color:var(--hl-ink-2);}
+  .pd-progress{width:100%;max-width:320px;margin:0;}
+  #aiDuetPartRow .ex-type-btn{background:transparent;border:0;}
+  #aiDuetPartRow .ex-type-btn[aria-pressed="true"]{background:var(--hl-ink);color:var(--hl-bg);}
+  .duet-stage{display:grid;gap:var(--hl-s3);justify-items:center;}
+  .duet-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
+  .vc-stage.is-live #aiDuetStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  .duet-after{margin-top:var(--hl-s3);}
+  .duet-after[hidden]{display:none;}
+  .duet-after .link-btn{color:var(--hl-ink);font-size:inherit;text-decoration:underline;text-underline-offset:2px;} /* a quiet link: ink, like "Why?" (5.1) */
+  /* ---- EMOTIONAL SINGING (phase 6) ---- */
+  .emotion-stage{display:grid;justify-items:center;gap:var(--hl-s4);}
+  #emotionChordLabel{color:var(--hl-ink);}
+  .vc-stage.is-live #emotionChordLabel{font-size:var(--hl-t-display);font-weight:300;}
+  .emotion-progress{width:100%;max-width:320px;margin:0;}
+  .emotion-loud{display:grid;gap:var(--hl-s1);width:100%;max-width:320px;justify-items:start;}
+  .emotion-loud .hl-meter{width:100%;height:6px;}
+  .vc-stage.is-live #emotionStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  /* ---- STAY IN KEY (phase 6) ---- */
+  .staykey-stage{display:grid;justify-items:center;gap:var(--hl-s4);}
+  .staykey-chord{font-size:var(--hl-t-h2);line-height:1.15;max-width:150px;text-align:center;}
+  .vc-stage.is-live .staykey-chord{font-size:var(--hl-t-h1);font-weight:300;max-width:220px;}
+  .staykey-progress{width:100%;max-width:320px;margin:0;}
+  .vc-stage.is-live #stayKeyStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  .vc-stage.is-live #pdStopBtn{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  /* ---- STUDIO MODE (phase 6): the take on its stage; the takes as rows with Delete ---- */
+  .studio-stage{display:grid;justify-items:center;gap:var(--hl-s3);margin-top:var(--hl-s5);text-align:center;}
+  .studio-time{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;font-variant-numeric:tabular-nums;color:var(--hl-ink);line-height:1;}
+  .studio-level{width:min(76vw, 320px);height:6px;}
+  .vc-stage.is-live #studioRecordBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);} /* Stop: the neutral active pill */
+  .studio-take{padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .studio-take:first-child{border-top:0;padding-top:0;}
+  .studio-take-head{display:flex;align-items:center;justify-content:space-between;gap:var(--hl-s3);margin-bottom:var(--hl-s2);}
+  .studio-take-head .hl-item-meta{margin-left:var(--hl-s2);}
+  .studio-take audio{width:100%;}
   /* rows and links are buttons: the House Lights focus ring on the ones it doesn't already cover */
   .home-sec-link:focus-visible, .home-range-find:focus-visible{outline:2px solid var(--hl-voice);outline-offset:2px;}
 
@@ -2085,6 +2142,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     transition:opacity .5s ease, visibility .5s ease;
   }
   .splash-screen.splash-hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .boot-error{position:fixed;inset:0;z-index:10000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--hl-s4);padding:var(--hl-s5);background:var(--hl-bg);color:var(--hl-ink);text-align:center;font-family:var(--hl-font);}
+  .boot-error p{margin:0;max-width:36ch;font-size:var(--hl-t-body);}
   .splash-ring{width:120px;height:120px;}
   #splashRingFill{transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1);}
   .splash-wordmark{opacity:0;transition:opacity .6s ease .3s;}
@@ -2602,8 +2661,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-title" data-i18n="hub_songs_title">Songs</div>
       <div class="j-sub" data-i18n="hub_songs_sub">Rehearse your choir part, or practice a song on your own.</div>
     </div>
-    <div class="hub-category-card cw-hub-feature">
-      <div class="hc-title"><span data-i18n="cw_label">🎼 Choir World</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
+    <div class="hub-category-card hl-raised cw-hub-feature">
+      <div class="hc-title"><span data-i18n="cw_label">Choir World</span> <span class="mock-tag cw-lock-only" data-i18n="cw_hub_tag">CHOIR PLAN</span></div>
       <div class="hc-desc" data-i18n="cw_hub_desc">Rehearse one part while the rest of the choir sings around you: a guide that fades over 5 levels, Harmony Memory, Choir Bosses, Your Choir recordings, and a readiness status for every part.</div>
       <div class="hc-desc cw-hub-status" id="cwHubStatus" style="display:none;"></div>
       <div class="hc-btn-row">
@@ -2613,41 +2672,21 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="ghost-btn cw-hidden" data-enter-panel="choirpassport" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
       </div>
     </div>
-    <div class="hub-category-grid">
-      <div class="hub-category-card cw-hidden">
-        <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
-        <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_studio_title">🎙️ Studio Mode</div>
-        <div class="hc-desc" data-i18n="hub_songs_studio_desc">No XP, no streak, no gamification — just record real takes and listen back.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="studio" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_aiduet_title">🤝 AI Duet Partner</div>
-        <div class="hc-desc" data-i18n="hub_songs_aiduet_desc">Pick your part — the AI genuinely sings the other four, live, so you're never singing alone.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="aiduet" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_pd_title">🎤 Performance Director</div>
-        <div class="hc-desc" data-i18n="hub_songs_pd_desc">Real section-by-section coaching cues, live, then a real multi-dimension report.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="performancedirector" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_staykey_title">Stay in Key</div>
-        <div class="hc-desc" data-i18n="hub_songs_staykey_desc">Sing over the backing track, live chord-tone matching.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="staykey" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_karaoke_title">Karaoke Coach</div>
-        <div class="hc-desc" data-i18n="hub_songs_karaoke_desc">Predictive note display, live Pitch + Timing scoring.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="karaoke" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_songs_emotion_title">Emotional Singing</div>
-        <div class="hc-desc" data-i18n="hub_songs_emotion_desc">Pitch and dynamic-contrast, scored separately.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="emotion" data-i18n="hub_open_btn">Open</button></div>
+    <div class="hub-category-card cw-hidden">
+      <div class="hc-title" data-i18n="hub_songs_choir_title">Choir Workspace</div>
+      <div class="hc-desc" data-i18n="hub_songs_choir_desc">Mute/solo/volume per part, plus Song Difficulty rating.</div>
+      <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="choir" data-i18n="hub_open_btn">Open</button></div>
+    </div>
+    <!-- the six solo tools as rows, like the Coach tab (phase 6); "Best" where a best is stored (renderSongsHub) -->
+    <div class="songs-tools">
+      <div class="hl-label songs-tools-label" data-i18n="hub_songs_solo_label">On your own</div>
+      <div class="hl-list">
+        <button class="hl-item songs-row" data-enter-panel="studio"><svg class="hl-icon" aria-hidden="true"><use href="#hl-record"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_studio_title"></span><span class="hl-item-meta" data-i18n="hub_songs_studio_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="aiduet"><svg class="hl-icon" aria-hidden="true"><use href="#hl-choir"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_aiduet_title"></span><span class="hl-item-meta" data-i18n="hub_songs_aiduet_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="performancedirector"><svg class="hl-icon" aria-hidden="true"><use href="#hl-score"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_pd_title"></span><span class="hl-item-meta" data-i18n="hub_songs_pd_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="staykey"><svg class="hl-icon" aria-hidden="true"><use href="#hl-keys"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_staykey_title"></span><span class="hl-item-meta" data-i18n="hub_songs_staykey_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="karaoke"><svg class="hl-icon" aria-hidden="true"><use href="#hl-mic"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_karaoke_title"></span><span class="hl-item-meta" data-i18n="hub_songs_karaoke_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item songs-row" data-enter-panel="emotion"><svg class="hl-icon" aria-hidden="true"><use href="#hl-flame"/></svg><span><span class="hl-item-title" data-i18n="hub_songs_emotion_title"></span><span class="hl-item-meta" data-i18n="hub_songs_emotion_desc"></span></span><span class="hl-item-end"><span class="coach-best"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
       </div>
     </div>
   </section>
@@ -3933,32 +3972,37 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- STAY IN KEY PANEL -->
   <section class="panel" id="panel-staykey">
     <div class="journey-hero">
-      <div class="j-title"><span data-i18n="staykey_title">🎼 Stay in Key</span><span class="mock-tag" style="margin-left:10px;" data-i18n="staykey_tag">USES KNOWN BACKING TRACK</span></div>
+      <div class="j-title"><span data-i18n="staykey_title">Stay in Key</span></div>
       <div class="j-sub" data-i18n="staykey_sub">Sing over the backing progression and stay in the chord — checks your live pitch against the actual chord tones at each moment, not general-purpose chord recognition.</div>
     </div>
     <div class="tuner-hero-card">
+      <!-- the stage: the chord big, the ring as closeness (filled in the lock colour in key, like the Tuner), the status, the song's progress -->
+      <div class="vc-stage staykey-stage" id="stayKeyStage">
       <div class="tuner-ring-wrap" id="stayKeyRingWrap">
         <svg class="tuner-ring" viewBox="0 0 200 200">
-          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="10"/>
-          <circle id="stayKeyRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="10"
+          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"/>
+          <circle id="stayKeyLockFill" cx="100" cy="100" r="80" fill="var(--hl-lock)"/>
+          <circle id="stayKeyRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"
             stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="553"
             transform="rotate(-90 100 100)" style="transition:stroke-dashoffset .1s linear, stroke .15s ease;"/>
         </svg>
         <div class="tuner-ring-center">
-          <div class="note-display" id="stayKeyChordLabel" style="font-size:30px;">—</div>
+          <div class="note-display staykey-chord" id="stayKeyChordLabel">—</div>
           <div class="cents-display" id="stayKeyStatus" data-i18n="staykey_press_start">Press start and sing along</div>
         </div>
       </div>
-
+      <div class="progress-bar-thin staykey-progress"><div class="fill" id="stayKeyProgressFill"></div></div>
       <div class="btn-row" style="justify-content:center;">
-        <button class="mic-btn" id="stayKeyStartBtn"><span class="dot-icon"></span><span id="stayKeyStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
+        <button class="mic-btn vc-take-pill" id="stayKeyStartBtn"><span class="dot-icon"></span><span id="stayKeyStartLabel">Start (Pro)</span></button>
       </div>
       <div class="vl-gauge" id="vlGaugeStayKey" style="display:none;"></div>
-      <div class="progress-bar-thin" style="margin-top:16px;"><div class="fill" id="stayKeyProgressFill"></div></div>
+      </div>
 
-      <div class="ex-result" id="stayKeyResult" style="display:none;text-align:center;margin-top:20px;">
-        <div class="ex-accuracy" id="stayKeyAccuracyVal">—</div>
-        <div class="ex-feedback-text" data-i18n="staykey_feedback_text">of the progression spent in key</div>
+      <div class="vc-result" id="stayKeyResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-num" id="stayKeyAccuracyVal">—</div>
+        <h3 class="hl-h3" data-i18n="staykey_feedback_text">Time in key</h3>
+        <p class="ex-feedback-text hl-coach" id="stayKeyCoach"></p>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="staykey_measure"></p></details>
       </div>
     </div>
   </section>
@@ -3966,23 +4010,31 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- EMOTIONAL SINGING PANEL -->
   <section class="panel" id="panel-emotion">
     <div class="journey-hero">
-      <div class="j-title"><span data-i18n="emotion_title">🎭 Emotional Singing</span><span class="mock-tag" style="margin-left:10px;" data-i18n="emotion_tag">LOUDNESS-VARIANCE PROXY</span></div>
+      <div class="j-title"><span data-i18n="emotion_title">Emotional Singing</span><span class="beta-tag" data-i18n="beta_analysis_tag">Estimate</span></div>
       <div class="j-sub" data-i18n="emotion_sub">Sing the Lead line and get Pitch and dynamic contrast scored separately — "technically perfect, needs more emotion," made real, not just phrasing/breath analysis a mic can't actually do.</div>
     </div>
     <div class="key-card">
-      <div class="chord-label-display" id="emotionChordLabel">—</div>
-      <div class="progress-bar-thin"><div class="fill" id="emotionProgressFill"></div></div>
-
+      <!-- the stage: the Lead note big, the song's progress, your loudness (the RMS it already reads), Start/Stop -->
+      <div class="vc-stage emotion-stage" id="emotionStage">
+      <div class="chord-label-display vc-take-note" id="emotionChordLabel">—</div>
+      <div class="progress-bar-thin emotion-progress"><div class="fill" id="emotionProgressFill"></div></div>
+      <div class="emotion-loud vc-live-only"><span class="hl-label" data-i18n="emo_loud_label">Loudness</span><div class="hl-meter" id="emotionLoudness" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div></div>
       <div class="btn-row" style="justify-content:center;">
-        <button class="mic-btn" id="emotionStartBtn"><span class="dot-icon"></span><span id="emotionStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
+        <button class="mic-btn vc-take-pill" id="emotionStartBtn"><span class="dot-icon"></span><span id="emotionStartLabel">Start (Pro)</span></button>
       </div>
       <div class="vl-gauge" id="vlGaugeEmotion" style="display:none;"></div>
-
-      <div class="dual-score-row" id="emotionResult" style="display:none;">
-        <div class="dual-score"><div class="dual-label" data-i18n="emotion_pitch_label">Pitch</div><div class="dual-val" id="emotionPitchVal">—</div></div>
-        <div class="dual-score"><div class="dual-label" data-i18n="emotion_expression_label">Expression</div><div class="dual-val" id="emotionExpressionVal">—</div></div>
       </div>
-      <p class="ex-feedback-text" id="emotionFeedback" style="text-align:center;margin-top:14px;"></p>
+
+      <div class="vc-result" id="emotionResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-meta"><span data-i18n="emotion_expression_label">Expression</span> · <span data-i18n="beta_analysis_tag">Estimate</span></div>
+        <div class="vc-result-num" id="emotionExpressionVal">—</div>
+        <h3 class="hl-h3" data-i18n="emotion_result_label">Dynamic contrast</h3>
+        <p class="ex-feedback-text hl-coach" id="emotionFeedback"></p>
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="emotion_pitch_label">Pitch</span><span id="emotionPitchVal">—</span></div>
+        </div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="emotion_measure"></p></details>
+      </div>
     </div>
   </section>
 
@@ -4009,32 +4061,36 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- KARAOKE COACH PANEL -->
   <section class="panel" id="panel-karaoke">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="karaoke_title">🎤 Karaoke Coach</div>
+      <div class="j-title" data-i18n="karaoke_title">Karaoke Coach</div>
       <div class="j-sub" data-i18n="karaoke_sub">Notes scroll toward you before you need to hit them — real Pitch and Timing scoring from your mic. Expression and pronunciation stay honestly unscored; no reliable signal exists for either.</div>
     </div>
     <div class="key-card">
+      <!-- the stage: the roll (the Lead line in its part colour, your cursor in the voice colour, NOW), Start/Stop; no scores while singing -->
+      <div class="vc-stage karaoke-stage" id="karaokeStage">
       <div class="karaoke-roll-wrap">
         <div class="karaoke-playhead-label" data-i18n="karaoke_now_label">NOW</div>
         <svg class="karaoke-roll" id="karaokeRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
       </div>
-
       <div class="btn-row" style="justify-content:center;">
-        <button class="mic-btn" id="karaokeStartBtn"><span class="dot-icon"></span><span id="karaokeStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
+        <button class="mic-btn vc-take-pill" id="karaokeStartBtn"><span class="dot-icon"></span><span id="karaokeStartLabel">Start (Pro)</span></button>
       </div>
       <div class="vl-gauge" id="vlGaugeKaraoke" style="display:none;"></div>
-
-      <div class="karaoke-live-line" id="karaokeLiveLine"></div>
-
-      <div class="dual-score-row" id="karaokeResult" role="status" aria-live="polite" style="display:none;">
-        <div class="dual-score"><div class="dual-label" data-i18n="karaoke_pitch_label">Pitch</div><div class="dual-val" id="karaokePitchVal">—</div></div>
-        <div class="dual-score"><div class="dual-label" data-i18n="karaoke_timing_label">Timing</div><div class="dual-val" id="karaokeTimingVal">—</div></div>
       </div>
 
-      <div id="karaokeMissionCard" style="display:none;margin-top:16px;">
-        <div class="step-label" data-i18n="karaoke_mission_label">🎵 Song Mission</div>
-        <div id="karaokeMissionRows" style="margin-top:8px;"></div>
-        <div class="step-label" style="margin-top:16px;" data-i18n="karaoke_bonus_label">Bonus objectives</div>
-        <div id="karaokeMissionBonusRows" style="margin-top:8px;"></div>
+      <div class="vc-result" id="karaokeResult" role="status" aria-live="polite" style="display:none;">
+        <div class="vc-result-num" id="karaokePitchVal">—</div>
+        <h3 class="hl-h3" data-i18n="karaoke_pitch_label">Pitch</h3>
+        <div class="vc-result-dims">
+          <div class="vc-dim"><span data-i18n="karaoke_timing_label">Timing</span><span id="karaokeTimingVal">—</span></div>
+        </div>
+        <div class="vc-result-dims karaoke-notes" id="karaokeLiveLine"></div>
+        <div id="karaokeMissionCard" style="display:none;">
+          <div class="step-label" data-i18n="karaoke_mission_label">Song Mission</div>
+          <div class="vc-result-dims" id="karaokeMissionRows"></div>
+          <div class="step-label" style="margin-top:16px;" data-i18n="karaoke_bonus_label">Bonus objectives</div>
+          <div class="vc-result-dims" id="karaokeMissionBonusRows"></div>
+        </div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="karaoke_measure"></p></details>
       </div>
     </div>
   </section>
@@ -4375,9 +4431,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- STUDIO MODE PANEL -->
   <section class="panel" id="panel-studio">
-    <div style="text-align:center;padding:10px 0 20px;">
-      <div style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;" data-i18n="studio_no_gamification">Studio — no XP, no streak, no gamification</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:26px;color:var(--cream);margin-top:8px;" data-i18n="studio_session_title">🎙️ Recording Session</h2>
+    <div class="journey-hero">
+      <div class="j-title" data-i18n="hub_songs_studio_title">Studio Mode</div>
+      <div class="j-sub" data-i18n="studio_sub">Record up to three takes of the song and listen back. No score, no XP.</div>
     </div>
     <div class="key-card">
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_song_label">Song</span><span id="studioSongName">—</span></div>
@@ -4385,67 +4441,87 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_tempo_label">Tempo</span><span id="studioSongTempo">—</span></div>
       <div class="curriculum-detail-row"><span class="cd-label" data-i18n="studio_mic_label">Mic</span><span id="studioMicStatus" data-i18n="studio_mic_notconnected">Not connected yet</span></div>
     </div>
-    <div style="text-align:center;margin-top:24px;">
-      <button class="mic-btn" id="studioRecordBtn" style="width:180px;height:180px;border-radius:50%;font-size:15px;flex-direction:column;gap:8px;">
-        <span class="dot-icon"></span><span id="studioRecordLabel" data-i18n="studio_record_btn">RECORD</span>
-      </button>
-      <p class="fine-print" id="studioRecordNote" style="margin-top:12px;"></p>
+    <!-- the take on its stage (the Performance personality): the red tally, the time, the input level, Stop -->
+    <div class="vc-stage studio-stage" id="studioStage">
+      <p class="onetake-rec studio-tally vc-live-only"><span class="onetake-rec-dot" aria-hidden="true"></span><span data-i18n="onetake_recording">Recording</span></p>
+      <div class="studio-time vc-live-only" id="studioTime" aria-live="off">0:00 / 0:15</div>
+      <div class="hl-meter studio-level vc-live-only" id="studioLevel" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i></i></div>
+      <button class="mic-btn vc-take-pill" id="studioRecordBtn"><span class="dot-icon"></span><span id="studioRecordLabel" data-i18n="studio_record_btn">Record</span></button>
+      <p class="fine-print vc-paper-only" id="studioRecordNote" role="status"></p>
       <div class="vl-gauge" id="vlGaugeStudio" style="display:none;"></div>
     </div>
     <div class="key-card" style="margin-top:24px;">
-      <div class="step-label" data-i18n="studio_takes_label">Your real takes</div>
+      <div class="step-label" data-i18n="studio_takes_label">Your takes</div>
       <div id="studioTakesList" style="margin-top:12px;"></div>
-      <p class="fine-print" style="margin-top:12px;" data-i18n="studio_scope_note">Honest scope: this app can't auto-judge which take is "better" after the fact — that needs re-analyzing a recorded file's pitch, a different capability than the live-mic scoring the rest of this app uses. Listen and decide for yourself.</p>
+      <p class="fine-print" style="margin-top:12px;" data-i18n="studio_device_note">Takes are kept on this device only, not in your account.</p>
+      <p class="fine-print" style="margin-top:6px;" data-i18n="studio_scope_note">The app doesn't compare takes: listen and keep the one you like.</p>
     </div>
   </section>
 
-  <!-- AI DUET PARTNER PANEL -->
+  <!-- SING WITH THE CHOIR PANEL (was AI Duet Partner; ids kept) -->
   <section class="panel" id="panel-aiduet">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="aiduet_title">🤝 AI Duet Partner</div>
-      <div class="j-sub" data-i18n="aiduet_sub">Pick your part. The AI genuinely sings the other four, live and in real time — the exact same synthesized progression Choir Workspace already uses, just framed simply: you're never singing alone.</div>
+      <div class="j-title" data-i18n="aiduet_title">Sing With the Choir</div>
+      <div class="j-sub" data-i18n="aiduet_sub">Pick your part. The app's choir sings the other four with you.</div>
     </div>
     <div class="key-card">
       <div class="step-label" data-i18n="aiduet_choose_part">Choose your part</div>
-      <div class="ex-type-row" id="aiDuetPartRow" style="margin:10px 0 18px;flex-wrap:wrap;">
-        <button class="ex-type-btn active" data-duet-part="Soprano" aria-pressed="true" data-part-name="Soprano">Soprano</button>
-        <button class="ex-type-btn" data-duet-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
-        <button class="ex-type-btn" data-duet-part="Alto" aria-pressed="false" data-part-name="Alto">Alto</button>
-        <button class="ex-type-btn" data-duet-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
-        <button class="ex-type-btn" data-duet-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
+      <div class="hl-seg cw-parts" id="aiDuetPartRow" role="group">
+        <button type="button" class="ex-type-btn active" data-duet-part="Soprano" aria-pressed="true" data-part-name="Soprano">Soprano</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Lead" aria-pressed="false" data-part-name="Lead">Lead</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Alto" aria-pressed="false" data-part-name="Alto">Alto</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Tenor" aria-pressed="false" data-part-name="Tenor">Tenor</button>
+        <button type="button" class="ex-type-btn" data-duet-part="Bass" aria-pressed="false" data-part-name="Bass">Bass</button>
       </div>
-      <p class="desc" id="aiDuetNote" style="margin-bottom:16px;">The AI will sing Lead, Alto, Tenor, and Bass — you sing Soprano.</p>
-      <button class="mic-btn" id="aiDuetStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Start singing with AI</button>
-      <div class="vl-gauge" id="vlGaugeDuet" style="display:none;"></div>
+      <p class="desc" id="aiDuetNote" style="margin-bottom:16px;"></p>
+      <!-- the stage while the choir sings: the five lanes, your part bold, your voice on it (display only), Stop -->
+      <div class="vc-stage cw-stage duet-stage" id="aiDuetStage">
+        <div class="rh-roll-wrap cw-lanes-wrap vc-live-only"><svg id="aiDuetLanes" class="cw-lanes" aria-hidden="true"></svg></div>
+        <button class="mic-btn vc-take-pill" id="aiDuetStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="aiDuetStartLabel" data-i18n="aiduet_start_btn">Sing with the choir</span></button>
+        <div class="vl-gauge" id="vlGaugeDuet" style="display:none;"></div>
+      </div>
+      <p class="fine-print duet-after" id="aiDuetAfter" hidden><span id="aiDuetAfterText"></span> <button class="link-btn" id="aiDuetRehearseBtn" type="button"></button></p>
     </div>
   </section>
 
   <!-- PERFORMANCE DIRECTOR PANEL -->
   <section class="panel" id="panel-performancedirector">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="pd_title">🎤 Performance Director</div>
-      <div class="j-sub" data-i18n="pd_sub">Your technique is ready. Now let's perform — real section-by-section coaching cues, live, reusing the exact same pitch and timing capture as Karaoke Coach throughout.</div>
+      <div class="j-title" data-i18n="pd_title">Performance Director</div>
+      <div class="j-sub" data-i18n="pd_sub">Sing the Lead line through the song with a cue for each section, then see your Pitch, Timing and Dynamics.</div>
+    </div>
+
+    <div class="key-card" id="pdResultCard" style="display:none;">
+      <div class="vc-result" role="status" aria-live="polite">
+      <div class="vc-result-meta" data-i18n="pd_report_label">Your performance</div>
+      <div class="vc-result-num" id="pdPitchVal">—</div>
+      <h3 class="hl-h3" data-i18n="skill_pitch">Pitch</h3>
+      <p class="ex-feedback-text hl-coach" id="pdInsight"></p>
+      <div class="vc-result-dims" id="pdResultRows">
+        <div class="vc-dim"><span data-i18n="pd_dim_timing">Timing</span><span id="pdTimingVal">—</span></div>
+        <div class="vc-dim"><span data-i18n="pd_dim_dynamics">Dynamics</span><span id="pdDynamicsVal">—</span></div>
+        <div class="vc-dim"><span data-i18n="pd_dim_combined">Pitch and timing together</span><span id="pdTechniqueVal">—</span></div>
+      </div>
+      <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="pd_measure"></p><p data-i18n="pd_expression_note"></p></details>
+      </div>
     </div>
 
     <div class="key-card" id="pdBriefingCard">
-      <div class="step-label" data-i18n="pd_direction_label">Today's real direction</div>
+      <div class="step-label" data-i18n="pd_direction_label">Today's direction</div>
       <div id="pdBriefingRows" style="margin-top:12px;"></div>
-      <button class="mic-btn" id="pdStartBtn" style="width:100%;justify-content:center;margin-top:16px;"><span class="dot-icon"></span>Begin the performance</button>
+      <button class="mic-btn" id="pdStartBtn" style="width:100%;justify-content:center;margin-top:16px;"><span class="dot-icon"></span><span id="pdStartLabel" data-i18n="pd_start_btn">Begin the performance</span></button>
     </div>
 
-    <div class="key-card" id="pdRunnerCard" style="display:none;text-align:center;">
-      <div class="step-label" id="pdCurrentSection">Verse</div>
-      <p class="desc" id="pdCurrentCue" style="margin:10px 0;font-style:italic;color:var(--brass);"></p>
-      <div class="chord-label-display" id="pdCurrentNote" style="margin-top:10px;">—</div>
-      <div class="progress-bar-thin" style="margin-top:16px;"><div class="fill" id="pdProgressFill" style="width:0%;"></div></div>
-      <div class="vl-gauge" id="vlGaugePd" style="display:none;"></div>
-    </div>
-
-    <div class="key-card" id="pdResultCard" role="status" aria-live="polite" style="display:none;">
-      <div class="step-label" style="text-align:center;" data-i18n="pd_report_label">Performance Report</div>
-      <div id="pdResultRows" style="margin-top:14px;"></div>
-      <p class="desc" id="pdInsight" style="margin-top:14px;text-align:center;color:var(--teal);"></p>
-      <p class="fine-print" style="margin-top:10px;" data-i18n="pd_expression_note">Expression isn't scored here — no reliable real detector exists for it anywhere in this app, same honest limit as everywhere else.</p>
+    <div class="key-card" id="pdRunnerCard" style="display:none;">
+      <!-- the stage: Choir World's five lanes, Lead as your part, your voice on it; the section and its cue; the note; Stop -->
+      <div class="vc-stage cw-stage pd-stage" id="pdStage">
+        <div class="rh-roll-wrap cw-lanes-wrap"><svg id="pdLanes" class="cw-lanes" aria-hidden="true"></svg></div>
+        <p class="cw-cue pd-cue"><span id="pdCurrentSection" data-i18n="section_name_verse">Verse</span><span aria-hidden="true"> · </span><span id="pdCurrentCue"></span></p>
+        <div class="ex-target-note vc-take-note" id="pdCurrentNote">—</div>
+        <div class="progress-bar-thin pd-progress"><div class="fill" id="pdProgressFill" style="width:0%;"></div></div>
+        <button class="mic-btn vc-take-pill listening" id="pdStopBtn"><span class="dot-icon"></span><span data-i18n="action_stop">Stop</span></button>
+        <div class="vl-gauge" id="vlGaugePd" style="display:none;"></div>
+      </div>
     </div>
   </section>
 
@@ -5578,6 +5654,28 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   </div>
 </div>
 
+<script>/* startup safety net (6.1): if the main script throws while it starts, the rest of it never runs, so the splash would
+   never hide. Until it has finished (window.__vcBooted), the first uncaught error hides the splash and shows one short
+   message with Reload, in the stored language (the translations live in the main script, so they're here too). */
+(function(){
+  var MSG = {en:["VoxCoach couldn't start. Reload the page to try again.", "Reload"],
+    fr:["VoxCoach n'a pas pu démarrer. Rechargez la page pour réessayer.", "Recharger"],
+    es:["VoxCoach no pudo iniciarse. Recarga la página para intentarlo de nuevo.", "Recargar"],
+    tr:["VoxCoach başlatılamadı. Yeniden denemek için sayfayı yenileyin.", "Yenile"]};
+  function show(){
+    if(window.__vcBooted || document.getElementById('bootError')) return;
+    var lang = 'en'; try{ lang = localStorage.getItem('language') || (navigator.language||'en').slice(0,2); }catch(e){}
+    var m = MSG[lang] || MSG.en, sp = document.getElementById('splashScreen');
+    if(sp){ sp.classList.add('splash-hide'); sp.style.display = 'none'; }
+    var box = document.createElement('div'); box.id = 'bootError'; box.className = 'boot-error'; box.setAttribute('role', 'alert');
+    var p = document.createElement('p'); p.textContent = m[0];
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'hl-btn hl-btn--ink'; b.textContent = m[1];
+    b.addEventListener('click', function(){ location.reload(); });
+    box.appendChild(p); box.appendChild(b); document.body.appendChild(box);
+  }
+  window.addEventListener('error', function(e){ if(e && e.error !== undefined) show(); }); // script errors, not a failed image or script file
+})();
+</script>
 <script>
 /* ---------------- Accessibility: reusable focus trap + Escape-to-close for all modals ---------------- */
 function openModalWithA11y(modalEl, onClose){
@@ -5630,6 +5728,7 @@ document.querySelectorAll('nav.tabs button').forEach(btn=>{
     if(btn.dataset.panel==='exercises' && typeof renderReweightCard==='function') renderReweightCard();
     if(btn.dataset.panel==='arcade' && typeof showArcadeHub==='function') showArcadeHub();
     if(btn.dataset.panel==='karaoke' && typeof buildKaraokeRoll==='function') buildKaraokeRoll();
+    if(['staykey','karaoke','emotion'].includes(btn.dataset.panel) && typeof renderSongsStartLabels==='function') renderSongsStartLabels();
     if(btn.dataset.panel==='pricing' && typeof renderPricingState==='function') renderPricingState();
     if(btn.dataset.panel==='records' && typeof renderRecordsList==='function') renderRecordsList();
     if(btn.dataset.panel==='profile' && typeof renderProfile==='function') renderProfile();
@@ -6604,9 +6703,9 @@ const TRANSLATIONS = {
     hub_you_records_title:'Personal Records', hub_you_records_desc:'Every real best, in one place — range, pitch, breath, and every Vocal World game.',
     hub_you_teacher_title:'👩\u200d🏫 Teacher Dashboard', hub_you_teacher_desc:'Real roster and assignment tracking — Teacher plan.',
     hub_songs_choir_title:'Choir Workspace', hub_songs_choir_desc:'Mute/solo/volume per part, plus Song Difficulty rating.',
-    hub_songs_studio_title:'🎙️ Studio Mode', hub_songs_studio_desc:'No XP, no streak, no gamification — just record real takes and listen back.',
-    hub_songs_aiduet_title:'🤝 AI Duet Partner', hub_songs_aiduet_desc:"Pick your part — the AI genuinely sings the other four, live, so you're never singing alone.",
-    hub_songs_pd_title:'🎤 Performance Director', hub_songs_pd_desc:'Real section-by-section coaching cues, live, then a real multi-dimension report.',
+    hub_songs_studio_title:"Studio Mode", hub_songs_studio_desc:"Record takes of the song and listen back. No score.",
+    hub_songs_aiduet_title:"Sing With the Choir", hub_songs_aiduet_desc:"Pick your part; the app's choir sings the other four.",
+    hub_songs_pd_title:"Performance Director", hub_songs_pd_desc:"A cue for each section as you sing, then your Pitch, Timing and Dynamics.",
     hub_songs_staykey_title:'Stay in Key', hub_songs_staykey_desc:'Sing over the backing track, live chord-tone matching.',
     hub_songs_karaoke_title:'Karaoke Coach', hub_songs_karaoke_desc:'Predictive note display, live Pitch + Timing scoring.',
     hub_songs_emotion_title:'Emotional Singing', hub_songs_emotion_desc:'Pitch and dynamic-contrast, scored separately.',
@@ -6699,24 +6798,24 @@ const TRANSLATIONS = {
     voicehealth_sub:'Trends across sessions, not one-off warnings — a single rough day never triggers anything here, only a real multi-day decline.',
     voicehealth_stability_h2:'Stability — last 14 days',
     voicehealth_breath_h2:'Breath consistency — last 14 days',
-    staykey_title:'🎼 Stay in Key',
+    staykey_title:"Stay in Key",
     staykey_tag:'USES KNOWN BACKING TRACK',
-    staykey_sub:'Sing over the backing progression and stay in the chord — checks your live pitch against the actual chord tones at each moment, not general-purpose chord recognition.',
-    staykey_feedback_text:'of the progression spent in key',
-    emotion_title:'🎭 Emotional Singing',
+    staykey_sub:"Sing over the backing chords and stay on a note of each chord. Your pitch is checked against the chord's notes as you sing.",
+    staykey_feedback_text:"Time in key",
+    emotion_title:"Emotional Singing",
     emotion_tag:'LOUDNESS-VARIANCE PROXY',
-    emotion_sub:'Sing the Lead line and get Pitch and dynamic contrast scored separately — "technically perfect, needs more emotion," made real, not just phrasing/breath analysis a mic can\'t actually do.',
+    emotion_sub:"Sing the Lead line and see Pitch and dynamic contrast scored separately: a note can be right and still sound flat.",
     emotion_pitch_label:'Pitch',
     emotion_expression_label:'Expression',
     genre_title:'Genre Coach',
     genre_sub:"Pick a style: tips and default settings for Warmup and Vibrato. You choose; the app doesn't detect it from your voice.",
     genre_apply_btn:'Set as my genre',
-    karaoke_title:'🎤 Karaoke Coach',
-    karaoke_sub:'Notes scroll toward you before you need to hit them — real Pitch and Timing scoring from your mic. Expression and pronunciation stay honestly unscored; no reliable signal exists for either.',
+    karaoke_title:"Karaoke Coach",
+    karaoke_sub:"The Lead line scrolls toward the NOW line before you sing it. Pitch and Timing are scored from your mic; expression and pronunciation aren't, as there's no reliable way to measure them.",
     karaoke_now_label:'NOW',
     karaoke_pitch_label:'Pitch',
     karaoke_timing_label:'Timing',
-    karaoke_mission_label:'🎵 Song Mission',
+    karaoke_mission_label:"Song Mission",
     karaoke_bonus_label:'Bonus objectives',
     livefeedback_title:"Live Feedback",
     livefeedback_sub:"Four live checks while you sing: pitch, stability, loudness consistency and register.",
@@ -6789,22 +6888,20 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ Replay A and B',
     hearmistake_reproduce_label:'Now reproduce the correct version',
     hearmistake_next_btn:'Next round',
-    studio_no_gamification:'Studio — no XP, no streak, no gamification',
-    studio_session_title:'🎙️ Recording Session',
     studio_song_label:'Song',
     studio_key_label:'Key',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Mic',
-    studio_takes_label:'Your real takes',
-    studio_scope_note:'Honest scope: this app can\'t auto-judge which take is "better" after the fact — that needs re-analyzing a recorded file\'s pitch, a different capability than the live-mic scoring the rest of this app uses. Listen and decide for yourself.',
-    aiduet_title:'🤝 AI Duet Partner',
-    aiduet_sub:'Pick your part. The AI genuinely sings the other four, live and in real time — the exact same synthesized progression Choir Workspace already uses, just framed simply: you\'re never singing alone.',
+    studio_takes_label:"Your takes",
+    studio_scope_note:"The app doesn't compare takes: listen and keep the one you like.",
+    aiduet_title:"Sing With the Choir",
+    aiduet_sub:"Pick your part. The app's choir sings the other four with you: the same synthesised voices as in Choir World, once through the song.",
     aiduet_choose_part:'Choose your part',
-    pd_title:'🎤 Performance Director',
-    pd_sub:'Your technique is ready. Now let\'s perform — real section-by-section coaching cues, live, reusing the exact same pitch and timing capture as Karaoke Coach throughout.',
-    pd_direction_label:'Today\'s real direction',
-    pd_report_label:'Performance Report',
-    pd_expression_note:'Expression isn\'t scored here — no reliable real detector exists for it anywhere in this app, same honest limit as everywhere else.',
+    pd_title:"Performance Director",
+    pd_sub:"Sing the Lead line through the song with a cue for each section, then see your Pitch, Timing and Dynamics.",
+    pd_direction_label:"Today's direction",
+    pd_report_label:"Your performance",
+    pd_expression_note:"Expression isn't scored: there's no reliable way to measure it.",
     mirror_title:"Mirror Mode",
     mirror_sub:"A 4-note phrase from your range plays; you echo it, and your contour is drawn over the phrase so you can see where you drifted.",
     mirror_ai_phrase:"Phrase",
@@ -6895,7 +6992,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'I Am the Tenor',
     rehearsal_title_Bass:'I Am the Bass',
     choir_practice_prefix:'Practice:',
-    aiduet_note_tpl:'The AI will sing {others} — you sing {part}.',
+    aiduet_note_tpl:"The choir sings {others}; you sing {part}.",
     xray_title:"Sonic X-Ray",
     xray_desc:"All 5 parts across the song, from the note schedule the mixer plays. Tap a section to play from there; tap a part to look at that moment in the Music Microscope.",
     xray_dna_legend:"Flame: a Song DNA difficult moment",
@@ -7785,17 +7882,17 @@ const TRANSLATIONS = {
     word_of:'of',
     pd_cue_verse:'Stay relaxed — save your energy, let the story unfold.',
     pd_cue_prechorus:'Start building — let the intensity climb toward the chorus.',
-    pd_cue_chorus:"Don't push the high notes — trust your real technique, not extra force.",
+    pd_cue_chorus:"Don't push the high notes: trust your technique, not extra force.",
     pd_cue_bridge:'This is the emotional peak — this is where maximum expression matters most.',
     pd_dim_technique:'Technique', pd_dim_timing:'Timing', pd_dim_dynamics:'Dynamics',
-    pd_insight_prefix:"Your next real improvement isn't your top number — it's",
-    pd_insight_notenough:'Not enough signal was captured to identify a real next step this time.',
-    studio_mic_connected:'Connected ✓', studio_mic_notconnected:'Not connected yet',
-    studio_notakes:'No real takes recorded yet.', studio_take_label:'Take',
-    studio_limit_reached:'Real limit: 3 takes max here — delete isn\'t built yet, so this keeps storage bounded.',
-    studio_recording_label:'REC… 15s', studio_record_btn:'RECORD',
-    studio_take_saved:'saved — real audio, stored locally.',
-    studio_save_failed:'Could not save this take (it may be too large) — try a shorter take.',
+    pd_insight_prefix:"Work on next:",
+    pd_insight_notenough:"Not enough of your voice was heard to score this. Sing a little louder or closer to the mic.",
+    studio_mic_connected:"Connected", studio_mic_notconnected:'Not connected yet',
+    studio_notakes:"No takes yet.", studio_take_label:'Take',
+    studio_limit_reached:"Three takes are stored. Delete one to record another.",
+    studio_record_btn:"Record",
+    studio_take_saved:"saved on this device.",
+    studio_save_failed:"This device's storage is full, so the take wasn't kept. Delete a take and try again.",
     studio_notavailable:'Recording isn\'t available right now — check mic permissions.',
     snapshot_nobaseline:'No baseline yet.', snapshot_nodatayet:'No data yet',
     snapshot_nobaselinefor:'No Day 1 baseline for this — started tracking later',
@@ -8118,6 +8215,36 @@ const TRANSLATIONS = {
     emo_notenough:"There wasn't enough signal on one of the takes to compare them. Try again a little louder or closer to the mic.",
     emo_measure:"One note from the lower middle of your range, sung twice: first with your intention, then with another picked at random. Each take plays the note for 0.6 seconds, then listens for 3 seconds from 0.9 seconds after it starts. Dynamic range is your loudest moment minus your quietest (of the moments above the silence level); loudness is your average level; pitch stability is 100 minus 3 times the spread of your pitch, in cents, with natural vibrato taken out. Each row shows the second take against the first: as a percentage for dynamic range and loudness, in points for stability. Emotion itself isn't judged: only these three are measured.",
     vq_result_head:"Your tone",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"On your own",
+    studio_sub:"Record up to three takes of the song and listen back. No score, no XP.",
+    studio_device_note:"Takes are kept on this device only, not in your account.",
+    studio_bpm_tpl:"{n} BPM",
+    studio_delete_btn:"Delete",
+    studio_delete_confirm:"Delete take {n}? This can't be undone.",
+    studio_recording_label:"REC… 15s",
+    studio_no_gamification:"Studio — no XP, no streak, no gamification",
+    studio_session_title:"Recording Session",
+    pd_start_btn:"Begin the performance",
+    pd_dim_combined:"Pitch and timing together",
+    pd_insight_tpl:"Work on {dim} next: it was your lowest today ({n}).",
+    pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: a note scores 100 if your voice came in during its first 40 %, 50 if later, averaged over the notes you sang. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
+    aiduet_start_btn:"Sing with the choir",
+    aiduet_after_tpl:"You sang {part} with the choir.",
+    aiduet_rehearse_link:"Rehearse {part} in {cw}",
+    staykey_drift_tpl:"Drifted: nearest {note}, {cents} ct",
+    staykey_coach_high:"You stayed on the chords almost all the way through.",
+    staykey_coach_mid:"Most of it was in key. Listen for each chord change and move with it.",
+    staykey_coach_low:"You drifted off the chords often. Hum along with the backing first, then sing on one of its notes.",
+    staykey_coach_none:"Not enough of your voice was heard to score this. Sing a little louder or closer to the mic.",
+    staykey_measure:"Every frame your pitch is compared with the notes of the chord playing, in any octave, with natural vibrato taken out. Within 35 cents of a chord note counts as in key. The score is the share of the frames with your voice that were in key; it's saved as your pitch score when more than 10 frames had your voice.",
+    karaoke_note_tpl:"Note {n}",
+    karaoke_not_heard:"Not heard",
+    karaoke_obj_done:"done",
+    karaoke_obj_open:"not yet",
+    karaoke_measure:"Each chord is one note of the Lead line. A note's pitch: 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out); a note with no voice is Not heard. Pitch is the average over the notes you sang, saved as your pitch score. Timing: 100 if your voice came in during a note's first 40 %, 50 if later, 0 if not heard, averaged over every note. Your song best is the average of Pitch and Timing.",
+    emotion_result_label:"Dynamic contrast",
+    emotion_measure:"An estimate. Dynamic contrast is how much your loudness varies while you sing: the spread of your level readings above the silence threshold, relative to their average, × 250, at most 100. It's saved as your expression score. Loudness also changes with your distance from the mic and the room, so treat it as a guide. Pitch: for each note of the Lead line, 100 minus 0.6 × your average distance from it in cents, natural vibrato taken out.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8164,9 +8291,9 @@ const TRANSLATIONS = {
     hub_you_records_title:'Records personnels', hub_you_records_desc:'Chaque record réel, au même endroit — tessiture, justesse, souffle, et chaque jeu du Monde Vocal.',
     hub_you_teacher_title:'👩\u200d🏫 Tableau de bord enseignant', hub_you_teacher_desc:'Suivi réel des élèves et des devoirs — forfait Enseignant.',
     hub_songs_choir_title:'Espace Chorale', hub_songs_choir_desc:'Muet/solo/volume par voix, plus la note de difficulté du morceau.',
-    hub_songs_studio_title:'🎙️ Mode Studio', hub_songs_studio_desc:"Pas d'XP, pas de série, pas de ludification — juste enregistrer de vraies prises et les réécouter.",
-    hub_songs_aiduet_title:'🤝 Partenaire duo IA', hub_songs_aiduet_desc:"Choisissez votre voix — l'IA chante vraiment les quatre autres, en direct, pour que vous ne chantiez jamais seul.",
-    hub_songs_pd_title:'🎤 Directeur de performance', hub_songs_pd_desc:'De vraies indications de coaching section par section, en direct, puis un vrai rapport multi-dimensionnel.',
+    hub_songs_studio_title:"Mode Studio", hub_songs_studio_desc:"Enregistrez des prises du morceau et réécoutez-les. Sans score.",
+    hub_songs_aiduet_title:"Chanter avec le chœur", hub_songs_aiduet_desc:"Choisissez votre voix ; le chœur de l'app chante les quatre autres.",
+    hub_songs_pd_title:"Directeur de performance", hub_songs_pd_desc:"Une indication par section pendant que vous chantez, puis votre justesse, votre timing et votre dynamique.",
     hub_songs_staykey_title:'Rester dans la tonalité', hub_songs_staykey_desc:"Chantez sur la piste d'accompagnement, correspondance d'accords en direct.",
     hub_songs_karaoke_title:'Coach Karaoké', hub_songs_karaoke_desc:'Affichage prédictif des notes, notation en direct de la justesse et du rythme.',
     hub_songs_emotion_title:'Chant émotionnel', hub_songs_emotion_desc:'Justesse et contraste dynamique, notés séparément.',
@@ -8259,24 +8386,24 @@ const TRANSLATIONS = {
     voicehealth_sub:'Des tendances à travers les séances, pas des avertissements ponctuels — une seule journée difficile ne déclenche jamais rien ici, seul un vrai déclin sur plusieurs jours le fait.',
     voicehealth_stability_h2:'Stabilité — 14 derniers jours',
     voicehealth_breath_h2:'Régularité du souffle — 14 derniers jours',
-    staykey_title:'🎼 Rester dans la Tonalité',
+    staykey_title:"Rester dans la Tonalité",
     staykey_tag:'UTILISE UNE PISTE CONNUE',
-    staykey_sub:'Chantez sur la progression d\'accompagnement et restez dans l\'accord — vérifie votre justesse en direct par rapport aux vraies notes de l\'accord à chaque instant, pas une reconnaissance d\'accords générique.',
-    staykey_feedback_text:'de la progression passée dans la tonalité',
-    emotion_title:'🎭 Chant Émotionnel',
+    staykey_sub:"Chantez sur les accords d'accompagnement en restant sur une note de chaque accord. Votre hauteur est comparée aux notes de l'accord pendant que vous chantez.",
+    staykey_feedback_text:"Temps dans la tonalité",
+    emotion_title:"Chant Émotionnel",
     emotion_tag:'PROXY DE VARIANCE DE VOLUME',
-    emotion_sub:'Chantez la ligne principale et obtenez la justesse et le contraste dynamique notés séparément — "techniquement parfait, a besoin de plus d\'émotion," rendu réel, pas juste une analyse de phrasé/souffle qu\'un micro ne peut pas vraiment faire.',
+    emotion_sub:"Chantez la ligne principale et voyez la justesse et le contraste dynamique notés séparément : une note peut être juste et sonner plate.",
     emotion_pitch_label:'Justesse',
     emotion_expression_label:'Expression',
     genre_title:'Coach de Genre',
     genre_sub:"Choisissez un style : des conseils et des réglages par défaut pour l'Échauffement et le Vibrato. Vous choisissez ; l'application ne le détecte pas dans votre voix.",
     genre_apply_btn:'Définir comme mon genre',
-    karaoke_title:'🎤 Coach Karaoké',
-    karaoke_sub:'Les notes défilent vers vous avant que vous ayez besoin de les atteindre — vraie notation de justesse et de rythme depuis votre micro. L\'expression et la prononciation restent honnêtement non notées ; aucun signal fiable n\'existe pour l\'une ou l\'autre.',
+    karaoke_title:"Coach Karaoké",
+    karaoke_sub:"La ligne principale défile vers la ligne MAINTENANT avant que vous la chantiez. La justesse et le timing sont notés depuis votre micro ; l'expression et la prononciation ne le sont pas, faute de moyen fiable de les mesurer.",
     karaoke_now_label:'MAINTENANT',
     karaoke_pitch_label:'Justesse',
     karaoke_timing_label:'Rythme',
-    karaoke_mission_label:'🎵 Mission Chanson',
+    karaoke_mission_label:"Mission Chanson",
     karaoke_bonus_label:'Objectifs bonus',
     livefeedback_title:"Retour en direct",
     livefeedback_sub:"Quatre vérifications en direct pendant que vous chantez : justesse, stabilité, régularité du volume et registre.",
@@ -8349,22 +8476,20 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ Rejouer A et B',
     hearmistake_reproduce_label:'Maintenant reproduisez la bonne version',
     hearmistake_next_btn:'Tour suivant',
-    studio_no_gamification:'Studio — pas de XP, pas de série, pas de ludification',
-    studio_session_title:'🎙️ Séance d\'Enregistrement',
     studio_song_label:'Chanson',
     studio_key_label:'Tonalité',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Micro',
-    studio_takes_label:'Vos vraies prises',
-    studio_scope_note:'Portée honnête : cette application ne peut pas juger automatiquement quelle prise est « meilleure » après coup — cela nécessite de ré-analyser la justesse d\'un fichier enregistré, une capacité différente de la notation en direct par micro utilisée par le reste de cette application. Écoutez et décidez par vous-même.',
-    aiduet_title:'🤝 Partenaire de Duo IA',
-    aiduet_sub:'Choisissez votre voix. L\'IA chante vraiment les quatre autres, en direct et en temps réel — exactement la même progression synthétisée que l\'Espace Chorale utilise déjà, juste présentée simplement : vous ne chantez jamais seul.',
+    studio_takes_label:"Vos prises",
+    studio_scope_note:"L'app ne compare pas les prises : écoutez-les et gardez celle qui vous plaît.",
+    aiduet_title:"Chanter avec le chœur",
+    aiduet_sub:"Choisissez votre voix. Le chœur de l'app chante les quatre autres avec vous : les mêmes voix de synthèse que dans Monde Chorale, une fois tout le morceau.",
     aiduet_choose_part:'Choisissez votre voix',
-    pd_title:'🎤 Directeur de Performance',
-    pd_sub:'Votre technique est prête. Maintenant, performons — de vraies indications de coaching section par section, en direct, réutilisant exactement la même capture de justesse et de rythme que le Coach Karaoké tout du long.',
-    pd_direction_label:'La vraie direction du jour',
-    pd_report_label:'Rapport de Performance',
-    pd_expression_note:'L\'expression n\'est pas notée ici — aucun vrai détecteur fiable n\'existe pour elle nulle part dans cette application, même limite honnête que partout ailleurs.',
+    pd_title:"Directeur de Performance",
+    pd_sub:"Chantez la ligne principale du début à la fin avec une indication pour chaque section, puis voyez votre justesse, votre timing et votre dynamique.",
+    pd_direction_label:"La direction du jour",
+    pd_report_label:"Votre performance",
+    pd_expression_note:"L'expression n'est pas notée : il n'existe pas de moyen fiable de la mesurer.",
     mirror_title:"Mode Miroir",
     mirror_sub:"Une phrase de 4 notes de votre tessiture est jouée ; vous la répétez, et votre contour se dessine sur la phrase pour voir où vous avez dévié.",
     mirror_ai_phrase:"Phrase",
@@ -8455,7 +8580,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'Je suis ténor',
     rehearsal_title_Bass:'Je suis basse',
     choir_practice_prefix:'Travailler :',
-    aiduet_note_tpl:'L\'IA chante : {others} — votre voix : {part}.',
+    aiduet_note_tpl:"Le chœur chante {others} ; vous chantez {part}.",
     xray_title:"Radiographie sonore",
     xray_desc:"Les 5 voix sur tout le morceau, d'après le programme de notes que joue le mixeur. Touchez une section pour lire à partir de là ; touchez une voix pour voir ce moment au Microscope musical.",
     xray_dna_legend:"Flamme : un moment difficile de l'ADN du chant",
@@ -9345,17 +9470,17 @@ const TRANSLATIONS = {
     word_of:'sur',
     pd_cue_verse:'Restez détendu — économisez votre énergie, laissez l\'histoire se dérouler.',
     pd_cue_prechorus:'Commencez à monter — laissez l\'intensité grimper vers le refrain.',
-    pd_cue_chorus:'Ne poussez pas les notes aiguës — faites confiance à votre vraie technique, pas à plus de force.',
+    pd_cue_chorus:"Ne poussez pas les notes aiguës : faites confiance à votre technique, pas à la force.",
     pd_cue_bridge:'C\'est le sommet émotionnel — c\'est là que l\'expression maximale compte le plus.',
     pd_dim_technique:'Technique', pd_dim_timing:'Timing', pd_dim_dynamics:'Dynamique',
-    pd_insight_prefix:"Votre prochaine vraie amélioration n'est pas votre meilleur chiffre — c'est",
-    pd_insight_notenough:'Pas assez de signal capté pour identifier une vraie prochaine étape cette fois.',
-    studio_mic_connected:'Connecté ✓', studio_mic_notconnected:'Pas encore connecté',
-    studio_notakes:'Aucune vraie prise enregistrée pour l\'instant.', studio_take_label:'Prise',
-    studio_limit_reached:'Vraie limite : 3 prises maximum ici — la suppression n\'est pas encore construite, donc cela garde le stockage borné.',
-    studio_recording_label:'ENR… 15s', studio_record_btn:'ENREGISTRER',
-    studio_take_saved:'enregistrée — audio réel, stocké localement.',
-    studio_save_failed:'Impossible d\'enregistrer cette prise (elle est peut-être trop volumineuse) — essayez une prise plus courte.',
+    pd_insight_prefix:"À travailler ensuite :",
+    pd_insight_notenough:"Votre voix n'a pas été assez entendue pour noter cette performance. Chantez un peu plus fort ou plus près du micro.",
+    studio_mic_connected:"Connecté", studio_mic_notconnected:'Pas encore connecté',
+    studio_notakes:"Aucune prise pour l'instant.", studio_take_label:'Prise',
+    studio_limit_reached:"Trois prises sont enregistrées. Supprimez-en une pour en enregistrer une autre.",
+    studio_record_btn:"Enregistrer",
+    studio_take_saved:"enregistrée sur cet appareil.",
+    studio_save_failed:"L'espace de cet appareil est plein : la prise n'a pas été gardée. Supprimez une prise et réessayez.",
     studio_notavailable:'L\'enregistrement n\'est pas disponible pour le moment — vérifiez les autorisations du micro.',
     snapshot_nobaseline:'Pas encore de référence.', snapshot_nodatayet:'Pas encore de données',
     snapshot_nobaselinefor:'Pas de référence du Jour 1 pour ceci — le suivi a commencé plus tard',
@@ -9678,6 +9803,36 @@ const TRANSLATIONS = {
     emo_notenough:"Il n'y avait pas assez de signal sur l'une des prises pour les comparer. Réessayez un peu plus fort ou plus près du micro.",
     emo_measure:"Une note du bas-milieu de votre tessiture, chantée deux fois : d'abord avec votre intention, puis avec une autre tirée au hasard. Chaque prise joue la note 0,6 seconde, puis écoute 3 secondes à partir de 0,9 seconde après son début. La plage dynamique est votre moment le plus fort moins le plus faible (parmi ceux au-dessus du seuil de silence) ; le volume est votre niveau moyen ; la stabilité de la hauteur vaut 100 moins 3 fois la dispersion de votre hauteur, en cents, sans le vibrato naturel. Chaque ligne montre la deuxième prise face à la première : en pourcentage pour la plage dynamique et le volume, en points pour la stabilité. L'émotion elle-même n'est pas jugée : seules ces trois mesures le sont.",
     vq_result_head:"Votre timbre",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"En solo",
+    studio_sub:"Enregistrez jusqu'à trois prises du morceau et réécoutez-les. Sans score ni XP.",
+    studio_device_note:"Les prises restent sur cet appareil, pas dans votre compte.",
+    studio_bpm_tpl:"{n} BPM",
+    studio_delete_btn:"Supprimer",
+    studio_delete_confirm:"Supprimer la prise {n} ? Cette action est définitive.",
+    studio_recording_label:"ENR… 15s",
+    studio_no_gamification:"Studio — pas de XP, pas de série, pas de ludification",
+    studio_session_title:"Séance d'enregistrement",
+    pd_start_btn:"Commencer la performance",
+    pd_dim_combined:"Justesse et timing ensemble",
+    pd_insight_tpl:"À travailler ensuite : {dim}, votre point le plus bas aujourd'hui ({n}).",
+    pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : une note vaut 100 si votre voix arrive dans ses premiers 40 %, 50 si plus tard, en moyenne sur les notes chantées. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
+    aiduet_start_btn:"Chanter avec le chœur",
+    aiduet_after_tpl:"Vous avez chanté {part} avec le chœur.",
+    aiduet_rehearse_link:"Répéter {part} dans {cw}",
+    staykey_drift_tpl:"Écart : note la plus proche {note}, {cents} ct",
+    staykey_coach_high:"Vous êtes resté sur les accords presque tout du long.",
+    staykey_coach_mid:"La plupart était dans la tonalité. Écoutez chaque changement d'accord et suivez-le.",
+    staykey_coach_low:"Vous vous êtes souvent écarté des accords. Fredonnez d'abord avec l'accompagnement, puis chantez sur une de ses notes.",
+    staykey_coach_none:"Votre voix n'a pas été assez entendue pour noter ceci. Chantez un peu plus fort ou plus près du micro.",
+    staykey_measure:"À chaque image, votre hauteur est comparée aux notes de l'accord joué, à n'importe quelle octave, vibrato naturel retiré. À moins de 35 cents d'une note de l'accord, c'est dans la tonalité. Le score est la part des images avec votre voix qui étaient dans la tonalité ; il est enregistré comme score de justesse quand plus de 10 images avaient votre voix.",
+    karaoke_note_tpl:"Note {n}",
+    karaoke_not_heard:"Pas entendue",
+    karaoke_obj_done:"réussi",
+    karaoke_obj_open:"pas encore",
+    karaoke_measure:"Chaque accord est une note de la ligne principale. Justesse d'une note : 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré) ; une note sans voix est « Pas entendue ». La justesse est la moyenne des notes chantées, enregistrée comme score de justesse. Timing : 100 si votre voix arrive dans les premiers 40 % de la note, 50 si plus tard, 0 si pas entendue, en moyenne sur toutes les notes. Votre meilleur score du morceau est la moyenne de la justesse et du timing.",
+    emotion_result_label:"Contraste dynamique",
+    emotion_measure:"Une estimation. Le contraste dynamique mesure combien votre volume varie pendant que vous chantez : l'écart de vos niveaux au-dessus du seuil de silence, rapporté à leur moyenne, × 250, 100 au plus. Il est enregistré comme score d'expression. Le volume change aussi avec la distance au micro et la pièce : prenez-le comme un repère. Justesse : pour chaque note de la ligne principale, 100 moins 0,6 × votre écart moyen en cents, vibrato naturel retiré.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9724,9 +9879,9 @@ const TRANSLATIONS = {
     hub_you_records_title:'Récords personales', hub_you_records_desc:'Cada récord real, en un solo lugar — rango, afinación, respiración, y cada juego del Mundo Vocal.',
     hub_you_teacher_title:'👩\u200d🏫 Panel del profesor', hub_you_teacher_desc:'Seguimiento real de alumnos y tareas — plan Profesor.',
     hub_songs_choir_title:'Espacio de Coro', hub_songs_choir_desc:'Silenciar/solo/volumen por voz, además de la calificación de dificultad de la canción.',
-    hub_songs_studio_title:'🎙️ Modo Estudio', hub_songs_studio_desc:'Sin XP, sin racha, sin gamificación — solo grabar tomas reales y escucharlas.',
-    hub_songs_aiduet_title:'🤝 Compañero de dúo IA', hub_songs_aiduet_desc:'Elige tu voz — la IA realmente canta las otras cuatro, en vivo, para que nunca cantes solo.',
-    hub_songs_pd_title:'🎤 Director de actuación', hub_songs_pd_desc:'Indicaciones de coaching reales sección por sección, en vivo, y luego un informe real multidimensional.',
+    hub_songs_studio_title:"Modo Estudio", hub_songs_studio_desc:"Graba tomas de la canción y escúchalas. Sin puntuación.",
+    hub_songs_aiduet_title:"Canta con el coro", hub_songs_aiduet_desc:"Elige tu voz; el coro de la app canta las otras cuatro.",
+    hub_songs_pd_title:"Director de actuación", hub_songs_pd_desc:"Una indicación por sección mientras cantas y luego tu afinación, tu ritmo y tu dinámica.",
     hub_songs_staykey_title:'Mantente en tono', hub_songs_staykey_desc:'Canta sobre la pista de acompañamiento, coincidencia de acordes en vivo.',
     hub_songs_karaoke_title:'Coach de Karaoke', hub_songs_karaoke_desc:'Visualización predictiva de notas, puntuación en vivo de afinación y ritmo.',
     hub_songs_emotion_title:'Canto emocional', hub_songs_emotion_desc:'Afinación y contraste dinámico, puntuados por separado.',
@@ -9819,24 +9974,24 @@ const TRANSLATIONS = {
     voicehealth_sub:'Tendencias a través de sesiones, no advertencias puntuales — un solo día difícil nunca activa nada aquí, solo un declive real de varios días lo hace.',
     voicehealth_stability_h2:'Estabilidad — últimos 14 días',
     voicehealth_breath_h2:'Consistencia de respiración — últimos 14 días',
-    staykey_title:'🎼 Mantente en Tono',
+    staykey_title:"Mantente en Tono",
     staykey_tag:'USA PISTA CONOCIDA',
-    staykey_sub:'Canta sobre la progresión de acompañamiento y mantente en el acorde — verifica tu afinación en vivo contra las notas reales del acorde en cada momento, no un reconocimiento de acordes genérico.',
-    staykey_feedback_text:'de la progresión pasada en tono',
-    emotion_title:'🎭 Canto Emocional',
+    staykey_sub:"Canta sobre los acordes de acompañamiento y quédate en una nota de cada acorde. Tu tono se compara con las notas del acorde mientras cantas.",
+    staykey_feedback_text:"Tiempo en el tono",
+    emotion_title:"Canto Emocional",
     emotion_tag:'PROXY DE VARIANZA DE VOLUMEN',
-    emotion_sub:'Canta la línea principal y obtén la afinación y el contraste dinámico puntuados por separado — "técnicamente perfecto, necesita más emoción," hecho real, no solo un análisis de fraseo/respiración que un micrófono no puede realmente hacer.',
+    emotion_sub:"Canta la línea principal y mira la afinación y el contraste dinámico puntuados por separado: una nota puede estar afinada y sonar plana.",
     emotion_pitch_label:'Afinación',
     emotion_expression_label:'Expresión',
     genre_title:'Coach de Género',
     genre_sub:"Elige un estilo: consejos y ajustes predeterminados para el Calentamiento y el Vibrato. Tú eliges; la app no lo detecta en tu voz.",
     genre_apply_btn:'Establecer como mi género',
-    karaoke_title:'🎤 Coach de Karaoke',
-    karaoke_sub:'Las notas se desplazan hacia ti antes de que necesites alcanzarlas — puntuación real de afinación y ritmo desde tu micrófono. La expresión y la pronunciación permanecen honestamente sin puntuar; no existe una señal confiable para ninguna de las dos.',
+    karaoke_title:"Coach de Karaoke",
+    karaoke_sub:"La línea principal avanza hacia la línea AHORA antes de que la cantes. La afinación y el ritmo se puntúan desde tu micrófono; la expresión y la pronunciación no, porque no hay una forma fiable de medirlas.",
     karaoke_now_label:'AHORA',
     karaoke_pitch_label:'Afinación',
     karaoke_timing_label:'Ritmo',
-    karaoke_mission_label:'🎵 Misión de Canción',
+    karaoke_mission_label:"Misión de Canción",
     karaoke_bonus_label:'Objetivos adicionales',
     livefeedback_title:"Retroalimentación en vivo",
     livefeedback_sub:"Cuatro comprobaciones en vivo mientras cantas: afinación, estabilidad, consistencia de volumen y registro.",
@@ -9909,22 +10064,20 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ Repetir A y B',
     hearmistake_reproduce_label:'Ahora reproduce la versión correcta',
     hearmistake_next_btn:'Siguiente ronda',
-    studio_no_gamification:'Estudio — sin XP, sin racha, sin gamificación',
-    studio_session_title:'🎙️ Sesión de Grabación',
     studio_song_label:'Canción',
     studio_key_label:'Tono',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Micrófono',
-    studio_takes_label:'Tus tomas reales',
-    studio_scope_note:'Alcance honesto: esta app no puede juzgar automáticamente qué toma es "mejor" después del hecho — eso necesita reanalizar la afinación de un archivo grabado, una capacidad diferente de la puntuación en vivo por micrófono que usa el resto de esta app. Escucha y decide por ti mismo.',
-    aiduet_title:'🤝 Compañero de Dúo IA',
-    aiduet_sub:'Elige tu voz. La IA realmente canta las otras cuatro, en vivo y en tiempo real — exactamente la misma progresión sintetizada que el Espacio de Coro ya usa, solo presentada de forma simple: nunca cantas solo.',
+    studio_takes_label:"Tus tomas",
+    studio_scope_note:"La app no compara las tomas: escúchalas y quédate con la que te guste.",
+    aiduet_title:"Canta con el coro",
+    aiduet_sub:"Elige tu voz. El coro de la app canta las otras cuatro contigo: las mismas voces sintetizadas que en Mundo Coral, una vez toda la canción.",
     aiduet_choose_part:'Elige tu voz',
-    pd_title:'🎤 Director de Actuación',
-    pd_sub:'Tu técnica está lista. Ahora actuemos — indicaciones de coaching reales sección por sección, en vivo, reutilizando exactamente la misma captura de afinación y ritmo que el Coach de Karaoke en todo momento.',
-    pd_direction_label:'La dirección real de hoy',
-    pd_report_label:'Informe de Actuación',
-    pd_expression_note:'La expresión no se puntúa aquí — no existe un detector real confiable para ella en ninguna parte de esta app, el mismo límite honesto que en todas partes.',
+    pd_title:"Director de Actuación",
+    pd_sub:"Canta la línea principal de principio a fin con una indicación para cada sección y luego mira tu afinación, tu ritmo y tu dinámica.",
+    pd_direction_label:"La dirección de hoy",
+    pd_report_label:"Tu actuación",
+    pd_expression_note:"La expresión no se puntúa: no hay una forma fiable de medirla.",
     mirror_title:"Modo Espejo",
     mirror_sub:"Suena una frase de 4 notas de tu tesitura; la repites, y tu contorno se dibuja sobre la frase para que veas dónde te desviaste.",
     mirror_ai_phrase:"Frase",
@@ -10015,7 +10168,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'Soy tenor',
     rehearsal_title_Bass:'Soy bajo',
     choir_practice_prefix:'Practicar:',
-    aiduet_note_tpl:'La IA canta: {others} — tu voz: {part}.',
+    aiduet_note_tpl:"El coro canta {others}; tú cantas {part}.",
     xray_title:"Rayos X sonoros",
     xray_desc:"Las 5 voces a lo largo de la canción, según el programa de notas que toca el mezclador. Toca una sección para reproducir desde ahí; toca una voz para ver ese momento en el Microscopio musical.",
     xray_dna_legend:"Llama: un momento difícil del ADN de la canción",
@@ -10905,17 +11058,17 @@ const TRANSLATIONS = {
     word_of:'de',
     pd_cue_verse:'Mantente relajado — ahorra tu energía, deja que la historia se despliegue.',
     pd_cue_prechorus:'Empieza a construir — deja que la intensidad suba hacia el estribillo.',
-    pd_cue_chorus:'No fuerces las notas agudas — confía en tu verdadera técnica, no en más fuerza.',
+    pd_cue_chorus:"No fuerces las notas agudas: confía en tu técnica, no en la fuerza.",
     pd_cue_bridge:'Este es el pico emocional — aquí es donde más importa la máxima expresión.',
     pd_dim_technique:'Técnica', pd_dim_timing:'Ritmo', pd_dim_dynamics:'Dinámica',
-    pd_insight_prefix:'Tu próxima mejora real no es tu número más alto — es',
-    pd_insight_notenough:'No se captó suficiente señal para identificar un verdadero próximo paso esta vez.',
-    studio_mic_connected:'Conectado ✓', studio_mic_notconnected:'Aún no conectado',
-    studio_notakes:'Aún no se ha grabado ninguna toma real.', studio_take_label:'Toma',
-    studio_limit_reached:'Límite real: 3 tomas máximo aquí — eliminar aún no está implementado, así que esto mantiene el almacenamiento acotado.',
-    studio_recording_label:'GRAB… 15s', studio_record_btn:'GRABAR',
-    studio_take_saved:'guardada — audio real, almacenado localmente.',
-    studio_save_failed:'No se pudo guardar esta toma (puede ser demasiado grande) — prueba una toma más corta.',
+    pd_insight_prefix:"Lo siguiente a trabajar:",
+    pd_insight_notenough:"No se oyó tu voz lo suficiente para puntuar esto. Canta un poco más fuerte o más cerca del micrófono.",
+    studio_mic_connected:"Conectado", studio_mic_notconnected:'Aún no conectado',
+    studio_notakes:"Aún no hay tomas.", studio_take_label:'Toma',
+    studio_limit_reached:"Hay tres tomas guardadas. Borra una para grabar otra.",
+    studio_record_btn:"Grabar",
+    studio_take_saved:"guardada en este dispositivo.",
+    studio_save_failed:"El almacenamiento de este dispositivo está lleno: la toma no se guardó. Borra una toma e inténtalo de nuevo.",
     studio_notavailable:'La grabación no está disponible ahora mismo — revisa los permisos del micrófono.',
     snapshot_nobaseline:'Aún no hay línea base.', snapshot_nodatayet:'Aún sin datos',
     snapshot_nobaselinefor:'No hay línea base del Día 1 para esto — el seguimiento empezó más tarde',
@@ -11238,6 +11391,36 @@ const TRANSLATIONS = {
     emo_notenough:"No hubo suficiente señal en una de las tomas para compararlas. Inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
     emo_measure:"Una nota de la parte media baja de tu tesitura, cantada dos veces: primero con tu intención y luego con otra elegida al azar. Cada toma hace sonar la nota 0,6 segundos y luego escucha 3 segundos desde 0,9 segundos después de empezar. El rango dinámico es tu momento más fuerte menos el más suave (de los que superan el umbral de silencio); el volumen es tu nivel medio; la estabilidad de la altura es 100 menos 3 veces la dispersión de tu altura, en cents, sin el vibrato natural. Cada fila muestra la segunda toma frente a la primera: en porcentaje para el rango dinámico y el volumen, en puntos para la estabilidad. La emoción en sí no se juzga: solo se miden estas tres cosas.",
     vq_result_head:"Tu timbre",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"Por tu cuenta",
+    studio_sub:"Graba hasta tres tomas de la canción y escúchalas. Sin puntuación ni XP.",
+    studio_device_note:"Las tomas se guardan solo en este dispositivo, no en tu cuenta.",
+    studio_bpm_tpl:"{n} ppm",
+    studio_delete_btn:"Borrar",
+    studio_delete_confirm:"¿Borrar la toma {n}? No se puede deshacer.",
+    studio_recording_label:"GRAB… 15s",
+    studio_no_gamification:"Estudio — sin XP, sin racha, sin gamificación",
+    studio_session_title:"Sesión de grabación",
+    pd_start_btn:"Empezar la actuación",
+    pd_dim_combined:"Afinación y ritmo juntos",
+    pd_insight_tpl:"Lo siguiente a trabajar: {dim}, tu punto más bajo hoy ({n}).",
+    pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: una nota vale 100 si tu voz entra en su primer 40 %, 50 si entra después, en promedio sobre las notas cantadas. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
+    aiduet_start_btn:"Cantar con el coro",
+    aiduet_after_tpl:"Cantaste {part} con el coro.",
+    aiduet_rehearse_link:"Ensayar {part} en {cw}",
+    staykey_drift_tpl:"Desviado: nota más cercana {note}, {cents} ct",
+    staykey_coach_high:"Te mantuviste en los acordes casi todo el tiempo.",
+    staykey_coach_mid:"Casi todo estuvo en el tono. Escucha cada cambio de acorde y muévete con él.",
+    staykey_coach_low:"Te saliste de los acordes a menudo. Tararea primero con el acompañamiento y luego canta en una de sus notas.",
+    staykey_coach_none:"No se oyó tu voz lo suficiente para puntuar esto. Canta un poco más fuerte o más cerca del micrófono.",
+    staykey_measure:"En cada fotograma tu tono se compara con las notas del acorde que suena, en cualquier octava, sin el vibrato natural. A menos de 35 cents de una nota del acorde cuenta como en el tono. La puntuación es la parte de los fotogramas con tu voz que estuvieron en el tono; se guarda como tu puntuación de afinación cuando más de 10 fotogramas tenían tu voz.",
+    karaoke_note_tpl:"Nota {n}",
+    karaoke_not_heard:"No se oyó",
+    karaoke_obj_done:"logrado",
+    karaoke_obj_open:"todavía no",
+    karaoke_measure:"Cada acorde es una nota de la línea principal. Afinación de una nota: 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural); una nota sin voz es «No se oyó». La afinación es la media de las notas que cantaste y se guarda como tu puntuación de afinación. Ritmo: 100 si tu voz entra en el primer 40 % de la nota, 50 si entra después, 0 si no se oyó, en promedio sobre todas las notas. Tu mejor marca de la canción es la media de la afinación y el ritmo.",
+    emotion_result_label:"Contraste dinámico",
+    emotion_measure:"Una estimación. El contraste dinámico es cuánto varía tu volumen mientras cantas: la dispersión de tus niveles por encima del umbral de silencio, relativa a su media, × 250, como máximo 100. Se guarda como tu puntuación de expresión. El volumen también cambia con la distancia al micrófono y la sala, así que tómalo como una guía. Afinación: para cada nota de la línea principal, 100 menos 0,6 × tu distancia media en cents, sin el vibrato natural.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11284,9 +11467,9 @@ const TRANSLATIONS = {
     hub_you_records_title:'Kişisel Rekorlar', hub_you_records_desc:'Her gerçek rekor tek bir yerde — ses aralığı, perde, nefes ve her Vokal Dünyası oyunu.',
     hub_you_teacher_title:'👩\u200d🏫 Öğretmen Paneli', hub_you_teacher_desc:'Gerçek öğrenci listesi ve ödev takibi — Öğretmen planı.',
     hub_songs_choir_title:'Koro Çalışma Alanı', hub_songs_choir_desc:'Ses grubu başına sessize alma/solo/ses düzeyi, ayrıca Şarkı Zorluk derecesi.',
-    hub_songs_studio_title:'🎙️ Stüdyo Modu', hub_songs_studio_desc:'XP yok, seri yok, oyunlaştırma yok — sadece gerçek performanslar kaydedip geri dinleyin.',
-    hub_songs_aiduet_title:'🤝 Yapay Zeka Düet Partneri', hub_songs_aiduet_desc:'Sesinizi seçin — yapay zeka diğer dördünü gerçekten canlı söyler, böylece asla yalnız söylemezsiniz.',
-    hub_songs_pd_title:'🎤 Performans Yönetmeni', hub_songs_pd_desc:'Canlı, bölüm bölüm gerçek koçluk ipuçları, ardından gerçek çok boyutlu bir rapor.',
+    hub_songs_studio_title:"Stüdyo Modu", hub_songs_studio_desc:"Şarkının kayıtlarını alın ve dinleyin. Puan yok.",
+    hub_songs_aiduet_title:"Koroyla söyle", hub_songs_aiduet_desc:"Partinizi seçin; uygulamanın korosu diğer dördünü söyler.",
+    hub_songs_pd_title:"Performans Yönetmeni", hub_songs_pd_desc:"Söylerken her bölüm için bir ipucu, ardından Perde, Zamanlama ve Dinamikleriniz.",
     hub_songs_staykey_title:'Tonda Kal', hub_songs_staykey_desc:'Eşlik parçası üzerinde söyleyin, canlı akor-nota eşleştirmesi.',
     hub_songs_karaoke_title:'Karaoke Koçu', hub_songs_karaoke_desc:'Öngörülü nota gösterimi, canlı Perde + Zamanlama puanlaması.',
     hub_songs_emotion_title:'Duygusal Söyleyiş', hub_songs_emotion_desc:'Perde ve dinamik kontrast, ayrı ayrı puanlanır.',
@@ -11379,24 +11562,24 @@ const TRANSLATIONS = {
     voicehealth_sub:'Tek seferlik uyarılar değil, oturumlar arası eğilimler — tek bir kötü gün burada hiçbir şeyi tetiklemez, yalnızca gerçek çok günlü bir düşüş tetikler.',
     voicehealth_stability_h2:'Kararlılık — son 14 gün',
     voicehealth_breath_h2:'Nefes tutarlılığı — son 14 gün',
-    staykey_title:'🎼 Tonda Kal',
+    staykey_title:"Tonda Kal",
     staykey_tag:'BİLİNEN EŞLİK PARÇASI KULLANIR',
-    staykey_sub:'Eşlik akor dizisi üzerinde söyleyin ve akorda kalın — canlı perdenizi her anda gerçek akor notalarına göre kontrol eder, genel amaçlı akor tanıma değil.',
-    staykey_feedback_text:'dizinin tonda geçen kısmı',
-    emotion_title:'🎭 Duygusal Söyleyiş',
+    staykey_sub:"Eşlik akorlarının üzerinde söyleyin ve her akorun bir notasında kalın. Sesiniz söylerken akorun notalarıyla karşılaştırılır.",
+    staykey_feedback_text:"Tonda kalınan süre",
+    emotion_title:"Duygusal Söyleyiş",
     emotion_tag:'SES DÜZEYİ VARYANS VEKİLİ',
-    emotion_sub:'Lead hattını söyleyin ve Perde ile dinamik kontrastın ayrı ayrı puanlanmasını sağlayın — "teknik olarak mükemmel, daha fazla duyguya ihtiyacı var" gerçek hale getirildi, bir mikrofonun gerçekten yapamayacağı ifade/nefes analizi değil.',
+    emotion_sub:"Lead hattını söyleyin ve Perde ile dinamik kontrastı ayrı ayrı puanlanmış görün: bir nota doğru olup yine de düz duyulabilir.",
     emotion_pitch_label:'Perde',
     emotion_expression_label:'İfade',
     genre_title:'Tür Koçu',
     genre_sub:"Bir stil seçin: Isınma ve Vibrato için ipuçları ve varsayılan ayarlar. Siz seçersiniz; uygulama bunu sesinizden algılamaz.",
     genre_apply_btn:'Türüm olarak ayarla',
-    karaoke_title:'🎤 Karaoke Koçu',
-    karaoke_sub:'Notalar, onlara ulaşmanız gerekmeden önce size doğru kayar — mikrofonunuzdan gerçek Perde ve Zamanlama puanlaması. İfade ve telaffuz dürüstçe puanlanmadan kalır; ikisi için de güvenilir bir sinyal yoktur.',
+    karaoke_title:"Karaoke Koçu",
+    karaoke_sub:"Lead hattı siz söylemeden önce ŞİMDİ çizgisine doğru kayar. Perde ve Zamanlama mikrofonunuzdan puanlanır; ifade ve telaffuz puanlanmaz, çünkü onları ölçmenin güvenilir bir yolu yok.",
     karaoke_now_label:'ŞİMDİ',
     karaoke_pitch_label:'Perde',
     karaoke_timing_label:'Zamanlama',
-    karaoke_mission_label:'🎵 Şarkı Görevi',
+    karaoke_mission_label:"Şarkı Görevi",
     karaoke_bonus_label:'Bonus hedefler',
     livefeedback_title:"Canlı geri bildirim",
     livefeedback_sub:"Siz söylerken dört canlı kontrol: perde, kararlılık, ses düzeyi tutarlılığı ve register.",
@@ -11469,22 +11652,20 @@ const TRANSLATIONS = {
     hearmistake_replay_btn:'▶ A ve B\'yi tekrar çal',
     hearmistake_reproduce_label:'Şimdi doğru versiyonu yeniden üretin',
     hearmistake_next_btn:'Sonraki tur',
-    studio_no_gamification:'Stüdyo — XP yok, seri yok, oyunlaştırma yok',
-    studio_session_title:'🎙️ Kayıt Oturumu',
     studio_song_label:'Şarkı',
     studio_key_label:'Ton',
     studio_tempo_label:'Tempo',
     studio_mic_label:'Mikrofon',
-    studio_takes_label:'Gerçek çekimleriniz',
-    studio_scope_note:'Dürüst kapsam: bu uygulama hangi çekimin sonradan "daha iyi" olduğuna otomatik karar veremez — bu, bu uygulamanın geri kalanının kullandığı canlı mikrofon puanlamasından farklı bir yetenek olan kaydedilmiş bir dosyanın perdesini yeniden analiz etmeyi gerektirir. Dinleyin ve kendiniz karar verin.',
-    aiduet_title:'🤝 Yapay Zeka Düet Partneri',
-    aiduet_sub:'Sesinizi seçin. Yapay zeka diğer dördünü gerçekten canlı ve gerçek zamanlı olarak söyler — Koro Çalışma Alanı\'nın zaten kullandığı tamamen aynı sentezlenmiş dizi, sadece basitçe çerçevelenmiş: asla yalnız söylemezsiniz.',
+    studio_takes_label:"Kayıtlarınız",
+    studio_scope_note:"Uygulama kayıtları karşılaştırmaz: dinleyin ve beğendiğinizi saklayın.",
+    aiduet_title:"Koroyla söyle",
+    aiduet_sub:"Partinizi seçin. Uygulamanın korosu diğer dördünü sizinle söyler: Koro Dünyası'ndaki sentez seslerin aynısı, şarkı boyunca bir kez.",
     aiduet_choose_part:'Sesinizi seçin',
-    pd_title:'🎤 Performans Yönetmeni',
-    pd_sub:'Tekniğiniz hazır. Şimdi performans gösterelim — canlı, gerçek bölüm bölüm koçluk ipuçları, boyunca Karaoke Koçu ile tamamen aynı perde ve zamanlama yakalamayı yeniden kullanarak.',
-    pd_direction_label:'Bugünün gerçek yönergesi',
-    pd_report_label:'Performans Raporu',
-    pd_expression_note:'İfade burada puanlanmaz — bu uygulamada onun için hiçbir yerde güvenilir gerçek bir dedektör yoktur, her yerdeki aynı dürüst sınır.',
+    pd_title:"Performans Yönetmeni",
+    pd_sub:"Lead hattını şarkı boyunca her bölüm için bir ipucuyla söyleyin, ardından Perde, Zamanlama ve Dinamiklerinizi görün.",
+    pd_direction_label:"Bugünün yönlendirmesi",
+    pd_report_label:"Performansınız",
+    pd_expression_note:"İfade puanlanmaz: onu ölçmenin güvenilir bir yolu yok.",
     mirror_title:"Ayna Modu",
     mirror_sub:"Aralığınızdan 4 notalık bir cümle çalar; onu tekrarlarsınız ve konturunuz cümlenin üzerine çizilir, böylece nerede kaydığınızı görürsünüz.",
     mirror_ai_phrase:"Cümle",
@@ -11575,7 +11756,7 @@ const TRANSLATIONS = {
     rehearsal_title_Tenor:'Ben tenorum',
     rehearsal_title_Bass:'Ben bas sesiyim',
     choir_practice_prefix:'Çalış:',
-    aiduet_note_tpl:'Yapay zeka şunları söyler: {others} — sizin partiniz: {part}.',
+    aiduet_note_tpl:"Koro {others} partilerini söyler; siz {part} söylersiniz.",
     xray_title:"Ses Röntgeni",
     xray_desc:"Mikserin çaldığı nota programına göre, şarkı boyunca 5 partinin tamamı. Oradan çalmak için bir bölüme, o anı Müzik Mikroskobu'nda görmek için bir partiye dokunun.",
     xray_dna_legend:"Alev: Şarkı DNA'sındaki zor bir an",
@@ -12465,17 +12646,17 @@ const TRANSLATIONS = {
     word_of:'/',
     pd_cue_verse:'Rahat kalın — enerjinizi koruyun, hikayenin açılmasına izin verin.',
     pd_cue_prechorus:'Yükselmeye başlayın — yoğunluğun nakarata doğru tırmanmasına izin verin.',
-    pd_cue_chorus:'Tiz notaları zorlamayın — ekstra güce değil, gerçek tekniğinize güvenin.',
+    pd_cue_chorus:"Tiz notaları zorlamayın: ekstra güce değil, tekniğinize güvenin.",
     pd_cue_bridge:'Bu duygusal doruk noktası — maksimum ifadenin en çok önem taşıdığı yer burası.',
     pd_dim_technique:'Teknik', pd_dim_timing:'Zamanlama', pd_dim_dynamics:'Dinamikler',
-    pd_insight_prefix:'Bir sonraki gerçek gelişiminiz en yüksek sayınız değil — bu:',
-    pd_insight_notenough:'Bu sefer gerçek bir sonraki adımı belirlemek için yeterli sinyal alınamadı.',
-    studio_mic_connected:'Bağlandı ✓', studio_mic_notconnected:'Henüz bağlı değil',
-    studio_notakes:'Henüz gerçek bir kayıt yapılmadı.', studio_take_label:'Kayıt',
-    studio_limit_reached:'Gerçek sınır: burada en fazla 3 kayıt — silme henüz eklenmedi, bu yüzden bu depolamayı sınırlı tutuyor.',
-    studio_recording_label:'KAYIT… 15sn', studio_record_btn:'KAYDET',
-    studio_take_saved:'kaydedildi — gerçek ses, yerel olarak depolandı.',
-    studio_save_failed:'Bu kayıt kaydedilemedi (çok büyük olabilir) — daha kısa bir kayıt deneyin.',
+    pd_insight_prefix:"Sıradaki çalışma:",
+    pd_insight_notenough:"Bunu puanlamak için sesiniz yeterince duyulmadı. Biraz daha yüksek sesle ya da mikrofona daha yakın söyleyin.",
+    studio_mic_connected:"Bağlandı", studio_mic_notconnected:'Henüz bağlı değil',
+    studio_notakes:"Henüz kayıt yok.", studio_take_label:'Kayıt',
+    studio_limit_reached:"Üç kayıt saklı. Yenisini kaydetmek için birini silin.",
+    studio_record_btn:"Kaydet",
+    studio_take_saved:"bu cihaza kaydedildi.",
+    studio_save_failed:"Bu cihazın depolama alanı dolu, kayıt saklanmadı. Bir kaydı silip yeniden deneyin.",
     studio_notavailable:'Kayıt şu anda kullanılamıyor — mikrofon izinlerini kontrol edin.',
     snapshot_nobaseline:'Henüz referans yok.', snapshot_nodatayet:'Henüz veri yok',
     snapshot_nobaselinefor:'Bunun için Gün 1 referansı yok — takip daha sonra başladı',
@@ -12798,6 +12979,36 @@ const TRANSLATIONS = {
     emo_notenough:"Karşılaştırmak için çekimlerden birinde yeterli sinyal yoktu. Biraz daha yüksek sesle ya da mikrofona daha yakın tekrar deneyin.",
     emo_measure:"Ses aralığınızın alt-orta kısmından bir nota, iki kez söylenir: önce sizin niyetinizle, sonra rastgele seçilen bir başkasıyla. Her çekim notayı 0,6 saniye çalar, ardından başlangıçtan 0,9 saniye sonra 3 saniye dinler. Dinamik aralık, en yüksek anınız eksi en sessiz anınızdır (sessizlik eşiğinin üstündeki anlar arasında); ses düzeyi ortalama seviyenizdir; perde kararlılığı, doğal vibrato çıkarılarak perdenizin yayılımının (sent) 3 katının 100'den çıkarılmasıdır. Her satır ikinci çekimi birinciye göre gösterir: dinamik aralık ve ses düzeyi için yüzde, kararlılık için puan. Duygunun kendisi değerlendirilmez: yalnızca bu üçü ölçülür.",
     vq_result_head:"Ses tınınız",
+    // phase 6 (PHASE6.md): the Songs-tab solo tools
+    hub_songs_solo_label:"Tek başınıza",
+    studio_sub:"Şarkıdan en fazla üç kayıt alın ve dinleyin. Puan ya da XP yok.",
+    studio_device_note:"Kayıtlar yalnızca bu cihazda tutulur, hesabınızda değil.",
+    studio_bpm_tpl:"{n} BPM",
+    studio_delete_btn:"Sil",
+    studio_delete_confirm:"Kayıt {n} silinsin mi? Bu işlem geri alınamaz.",
+    studio_recording_label:"KAYIT… 15sn",
+    studio_no_gamification:"Stüdyo — XP yok, seri yok, oyunlaştırma yok",
+    studio_session_title:"Kayıt Oturumu",
+    pd_start_btn:"Performansa başla",
+    pd_dim_combined:"Perde ve zamanlama birlikte",
+    pd_insight_tpl:"Sırada {dim} var: bugünkü en düşük puanınız ({n}).",
+    pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, söylenen notaların ortalaması. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
+    aiduet_start_btn:"Koroyla söyle",
+    aiduet_after_tpl:"Koroyla {part} partisini söylediniz.",
+    aiduet_rehearse_link:"{part} partisini {cw} içinde çalışın",
+    staykey_drift_tpl:"Kaydı: en yakın nota {note}, {cents} ct",
+    staykey_coach_high:"Neredeyse baştan sona akorların üzerinde kaldınız.",
+    staykey_coach_mid:"Çoğu tondaydı. Her akor değişimini dinleyin ve onunla birlikte geçin.",
+    staykey_coach_low:"Sık sık akorların dışına çıktınız. Önce eşlikle birlikte mırıldanın, sonra notalarından birinde söyleyin.",
+    staykey_coach_none:"Bunu puanlamak için sesiniz yeterince duyulmadı. Biraz daha yüksek sesle ya da mikrofona daha yakın söyleyin.",
+    staykey_measure:"Her karede sesiniz, çalan akorun notalarıyla herhangi bir oktavda, doğal vibrato çıkarılarak karşılaştırılır. Bir akor notasına 35 sent içinde olmak tonda sayılır. Puan, sesinizin olduğu karelerin tonda olan payıdır; sesinizin olduğu kare sayısı 10'u aşınca perde puanınız olarak kaydedilir.",
+    karaoke_note_tpl:"Nota {n}",
+    karaoke_not_heard:"Duyulmadı",
+    karaoke_obj_done:"tamamlandı",
+    karaoke_obj_open:"henüz değil",
+    karaoke_measure:"Her akor Lead hattının bir notasıdır. Bir notanın perdesi: 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır); sesinizin olmadığı nota Duyulmadı olur. Perde, söylediğiniz notaların ortalamasıdır ve perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, duyulmazsa 0, tüm notaların ortalaması. Şarkıdaki en iyi puanınız Perde ve Zamanlama'nın ortalamasıdır.",
+    emotion_result_label:"Dinamik kontrast",
+    emotion_measure:"Bir tahmin. Dinamik kontrast, söylerken ses düzeyinizin ne kadar değiştiğidir: sessizlik eşiğinin üzerindeki seviye okumalarınızın ortalamalarına göre yayılımı, × 250, en fazla 100. İfade puanınız olarak kaydedilir. Ses düzeyi mikrofona uzaklığınızla ve odayla da değişir, bu yüzden onu bir rehber olarak görün. Perde: Lead hattının her notası için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız, doğal vibrato çıkarılır.",
   },
 };
 let currentLanguage = 'en';
@@ -12953,7 +13164,8 @@ async function loadProgress(){
     const { data:{ session } } = await sb.auth.getSession();
     if(session){
       const row = await apiFetch('/me/progress');
-      progress = normalizeJsonbScoreDefaults({ studioTakes: [], ...progress, ...objSnakeToCamel(row) });
+      progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
+      if(typeof studioMigrate==='function') studioMigrate(); // Studio's takes move to this device once (phase 6)
       if(Array.isArray(progress.history)) progress.history = {}; // defends against pre-migration rows
       return;
     }
@@ -13809,7 +14021,7 @@ function vlHideBreak(){
 // feeds one register frame per animation frame while isActive() holds, ending the session the moment it doesn't.
 // Never for a feature that reads the register input itself (a second reader would change its chest smoothing).
 let vlSideRaf = null, vlSideGen = 0;
-async function vlSidecar(isActive){
+async function vlSidecar(isActive, onFrame){ // onFrame(frame), if given, sees each frame fed (Sing With the Choir draws your voice from it)
   if(!profile || typeof VocalLoad==='undefined') return;
   const gen = ++vlSideGen;
   cancelAnimationFrame(vlSideRaf);
@@ -13820,6 +14032,7 @@ async function vlSidecar(isActive){
     if(!isActive()){ vlEnd(); return; }
     const fr = readRegisterFrame();
     vlFeed(fr.freq, fr.raw);
+    if(onFrame) onFrame(fr);
     vlSideRaf = requestAnimationFrame(tick);
   };
   tick();
@@ -14454,7 +14667,7 @@ async function startStayInKey(){
   const t0 = await playBackingPad(false);
   if(tok!==startGen) return;
   const ring = document.getElementById('stayKeyRingFill');
-  if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hairline)'; }
+  if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hl-rule)'; }
   stayKeyActive = true;
   stayKeyStartTime = performance.now();
   stayKeyInKeyFrames = 0;
@@ -14464,7 +14677,7 @@ async function startStayInKey(){
   document.getElementById('stayKeyStartLabel').textContent = t('action_stop');
   document.getElementById('stayKeyStartBtn').classList.add('listening');
   stayKeyLoop();
-  singingSession(()=>stayKeyActive);
+  singingSession(()=>stayKeyActive, document.getElementById('stayKeyStage'));
 }
 function stayKeyLoop(){
   if(!stayKeyActive) return;
@@ -14484,19 +14697,18 @@ function stayKeyLoop(){
   if(freq>0){
     const nearest = nearestChordToneCents(440*Math.pow(2, (heldCents-6900)/1200), idx);
     stayKeyTotalFrames++;
-    if(nearest && Math.abs(nearest.cents) <= 35){
+    const inKey = !!nearest && Math.abs(nearest.cents) <= 35;
+    if(inKey){
       stayKeyInKeyFrames++;
       statusEl.className = 'cents-display locked';
       statusEl.textContent = 'In key';
-      if(ring){ ring.style.stroke='var(--teal)'; }
-      document.getElementById('stayKeyRingWrap')?.classList.add('locked-pulse');
-      setTimeout(()=>document.getElementById('stayKeyRingWrap')?.classList.remove('locked-pulse'), 400);
+      if(ring){ ring.style.stroke='var(--hl-voice)'; }
     } else if(nearest){
       statusEl.className = 'cents-display flat';
-      const pcNames = NOTE_NAMES[nearest.pc];
-      statusEl.textContent = `Drifted — nearest ${pcNames}, ${nearest.cents>0?'+':''}${Math.round(nearest.cents)} cents`;
-      if(ring){ ring.style.stroke='var(--coral)'; }
+      statusEl.textContent = t('staykey_drift_tpl').replace('{note}', NOTE_NAMES[nearest.pc]).replace('{cents}', (nearest.cents>0?'+':'')+Math.round(nearest.cents));
+      if(ring){ ring.style.stroke='var(--hl-ink-2)'; }
     }
+    document.getElementById('stayKeyRingWrap')?.classList.toggle('locked-pulse', inKey); // the lock fill while in key
     if(ring && nearest){
       const closeness = Math.max(0, 100 - Math.min(100, Math.abs(nearest.cents)*1.2));
       const c = 553;
@@ -14505,27 +14717,37 @@ function stayKeyLoop(){
   } else {
     statusEl.className = 'cents-display';
     statusEl.textContent = 'Listening…';
-    if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hairline)'; }
+    if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hl-rule)'; }
+    document.getElementById('stayKeyRingWrap')?.classList.remove('locked-pulse');
   }
   stayKeyRafId = requestAnimationFrame(stayKeyLoop);
 }
-function finishStayInKey(){
+// The run's end: the pad stops, the button and the ring go back to idle (finishing and leaving alike).
+function stayKeyReset(){
   stayKeyActive = false;
   cancelAnimationFrame(stayKeyRafId);
   stopBackingPad();
-  document.getElementById('stayKeyStartLabel').textContent = t('action_start_pro');
+  document.getElementById('stayKeyStartLabel').textContent = songsStartLabel();
   document.getElementById('stayKeyStartBtn').classList.remove('listening');
   document.getElementById('stayKeyChordLabel').textContent = '—';
   document.getElementById('stayKeyStatus').textContent = t('staykey_press_start');
   document.getElementById('stayKeyStatus').className = 'cents-display';
   const ring = document.getElementById('stayKeyRingFill');
-  if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hairline)'; }
+  if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hl-rule)'; }
+  document.getElementById('stayKeyRingWrap')?.classList.remove('locked-pulse');
+  document.getElementById('stayKeyProgressFill').style.width = '0%';
+}
+// Leaving (stopAllActiveSessions): the run ends with no result and no score.
+function stayKeyStop(){ stayKeyReset(); }
+function finishStayInKey(){
+  stayKeyReset();
 
   const pct = stayKeyTotalFrames>0 ? Math.round((stayKeyInKeyFrames/stayKeyTotalFrames)*100) : 0;
-  document.getElementById('stayKeyResult').style.display='block';
+  document.getElementById('stayKeyResult').style.display='grid';
   const accEl = document.getElementById('stayKeyAccuracyVal');
   accEl.textContent = pct+'%';
-  accEl.className = 'ex-accuracy '+accuracyClass(pct);
+  accEl.className = 'vc-result-num ex-accuracy'; // in ink
+  document.getElementById('stayKeyCoach').textContent = t(stayKeyTotalFrames<=10 ? 'staykey_coach_none' : pct>=80 ? 'staykey_coach_high' : pct>=50 ? 'staykey_coach_mid' : 'staykey_coach_low');
   if(stayKeyTotalFrames>10) recordSkillScore('pitch', pct);
   registerExerciseCompletion();
 }
@@ -14556,7 +14778,7 @@ async function startEmotionalSinging(){
   document.getElementById('emotionStartLabel').textContent = t('action_stop');
   document.getElementById('emotionStartBtn').classList.add('listening');
   emotionLoop();
-  singingSession(()=>emotionActive);
+  singingSession(()=>emotionActive, document.getElementById('emotionStage'));
 }
 function emotionLoop(){
   if(!emotionActive) return;
@@ -14576,16 +14798,24 @@ function emotionLoop(){
     if(cents!==null && Math.abs(cents)<300) emotionCentsSamples.push({t:elapsed, c:cents, idx});
     emotionRmsSamples.push(rms);
   }
+  const loud = document.getElementById('emotionLoudness'), pct = rms>0 ? Math.max(0, Math.min(100, (20*Math.log10(rms)+54)/54*100)) : 0; // −54 to 0 dBFS
+  loud.style.setProperty('--val', pct.toFixed(0)+'%'); loud.setAttribute('aria-valuenow', pct.toFixed(0));
   emotionRafId = requestAnimationFrame(emotionLoop);
 }
-function finishEmotionalSinging(){
+function emotionReset(){
   emotionActive = false;
   cancelAnimationFrame(emotionRafId);
   stopBackingPad();
-  document.getElementById('emotionStartLabel').textContent = t('action_start_pro');
+  document.getElementById('emotionStartLabel').textContent = songsStartLabel();
   document.getElementById('emotionStartBtn').classList.remove('listening');
   document.getElementById('emotionChordLabel').textContent = '—';
   document.getElementById('emotionProgressFill').style.width='0%';
+  document.getElementById('emotionLoudness').style.setProperty('--val', '0%');
+}
+// Leaving (stopAllActiveSessions): the run ends with no result and no score.
+function emotionStop(){ emotionReset(); }
+function finishEmotionalSinging(){
+  emotionReset();
 
   let pitchAcc = null, expressionScore = null;
   if(emotionCentsSamples.length>10){
@@ -14606,7 +14836,7 @@ function finishEmotionalSinging(){
     }
   }
 
-  document.getElementById('emotionResult').style.display='flex';
+  document.getElementById('emotionResult').style.display='grid';
   document.getElementById('emotionPitchVal').textContent = pitchAcc!==null ? pitchAcc+'%' : '—';
   document.getElementById('emotionExpressionVal').textContent = expressionScore!==null ? expressionScore+'%' : '—';
 
@@ -14735,12 +14965,12 @@ function buildKaraokeRoll(ids=KARAOKE_ROLL){ // returns the roll's {minMidi, max
     const x = KARAOKE_PLAYHEAD_X + i*chordDurSec*KARAOKE_PX_PER_SEC;
     const w = chordDurSec*KARAOKE_PX_PER_SEC*0.88;
     const y = midiToY(midi)-9;
-    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:color-mix(in srgb, var(--hl-ink) 14%, transparent);stroke:var(--hl-ink-3);stroke-width:1;"/>`;
+    rects += `<rect class="${ids.rect}" data-idx="${i}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="18" rx="6" style="fill:color-mix(in srgb, var(--hl-lead) 55%, transparent);stroke:var(--hl-lead);stroke-width:1;"/>`;
   });
   svg.innerHTML = `
-    <line x1="${KARAOKE_PLAYHEAD_X}" y1="0" x2="${KARAOKE_PLAYHEAD_X}" y2="160" style="stroke:var(--brass);stroke-width:2;"/>
+    <line x1="${KARAOKE_PLAYHEAD_X}" y1="0" x2="${KARAOKE_PLAYHEAD_X}" y2="160" style="stroke:var(--hl-ink-3);stroke-width:2;"/>
     <g id="${ids.group}">${rects}</g>
-    <circle id="${ids.cursor}" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--teal)" stroke="var(--cream)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px var(--teal));transition:cy .06s linear;"/>
+    <circle id="${ids.cursor}" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--hl-voice)" stroke="var(--hl-bg)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px var(--hl-voice));transition:cy .06s linear;"/>
   `;
   return {minMidi, maxMidi};
 }
@@ -14769,10 +14999,11 @@ async function startKaraoke(){
   karaokeResults = [];
   document.getElementById('karaokeLiveLine').innerHTML = '';
   document.getElementById('karaokeResult').style.display='none';
+  document.getElementById('karaokeMissionCard').style.display='none';
   document.getElementById('karaokeStartLabel').textContent = t('action_stop');
   document.getElementById('karaokeStartBtn').classList.add('listening');
   karaokeLoop();
-  singingSession(()=>karaokeActive);
+  singingSession(()=>karaokeActive, document.getElementById('karaokeStage'));
 }
 function finalizeKaraokeNote(idx){
   if(idx<0) return;
@@ -14789,12 +15020,11 @@ function finalizeKaraokeNote(idx){
   karaokeResults[idx] = {pitchAcc, timingScore, heard: karaokeCentsBuf.length>0};
 
   const rect = document.querySelector(`.karaoke-note-rect[data-idx="${idx}"]`);
-  if(rect) rect.style.fill = pitchAcc>=70 ? 'var(--hl-ok)' : (karaokeCentsBuf.length>0 ? 'var(--coral)' : 'var(--hairline)');
-
-  const chip = document.createElement('div');
-  chip.className = 'karaoke-note-chip '+(pitchAcc>=70?'good':(karaokeCentsBuf.length>0?'bad':''));
-  chip.textContent = karaokeCentsBuf.length>0 ? `Note ${idx+1} · ${pitchAcc}%` : `Note ${idx+1} · missed`;
-  document.getElementById('karaokeLiveLine').appendChild(chip);
+  if(rect){ const c = pitchAcc>=70 ? 'var(--hl-ok)' : (karaokeCentsBuf.length>0 ? 'var(--hl-miss)' : 'var(--hl-rule)'); rect.style.fill = c; rect.style.stroke = c; }
+}
+// The result's per-note rows (Note n · % or Not heard), in place of the chips the stage had
+function renderKaraokeNotes(){
+  document.getElementById('karaokeLiveLine').innerHTML = karaokeResults.map((r,i)=>r ? `<div class="vc-dim"><span>${t('karaoke_note_tpl').replace('{n}', i+1)}</span><span>${r.heard ? r.pitchAcc+'%' : t('karaoke_not_heard')}</span></div>` : '').join('');
 }
 function karaokeLoop(){
   if(!karaokeActive) return;
@@ -14823,7 +15053,6 @@ function karaokeLoop(){
       const y = karaokeRollY(liveMidi, karaokeMinMidi, karaokeMaxMidi);
       cursor.setAttribute('cy', y.toFixed(1));
       cursor.style.display = 'block';
-      cursor.setAttribute('fill', (cents!==null && Math.abs(cents)<=25) ? 'var(--teal)' : 'var(--coral)');
     }
   } else if(cursor){
     cursor.style.display = 'none';
@@ -14834,22 +15063,28 @@ function karaokeLoop(){
 
   karaokeRafId = requestAnimationFrame(karaokeLoop);
 }
-function finishKaraoke(){
-  finalizeKaraokeNote(karaokeCurrentIdx);
+function karaokeReset(){
   karaokeActive = false;
   cancelAnimationFrame(karaokeRafId);
   stopBackingPad();
-  document.getElementById('karaokeStartLabel').textContent = t('action_start_pro');
+  document.getElementById('karaokeStartLabel').textContent = songsStartLabel();
   document.getElementById('karaokeStartBtn').classList.remove('listening');
   document.getElementById('karaokeLiveCursor')?.style.setProperty('display','none');
+}
+// Leaving (stopAllActiveSessions): the pad stops, the button resets; no result and no score.
+function karaokeStop(){ karaokeReset(); }
+function finishKaraoke(){
+  finalizeKaraokeNote(karaokeCurrentIdx);
+  karaokeReset();
 
   const heardResults = karaokeResults.filter(r=>r && r.heard);
   const avgPitch = heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.pitchAcc,0)/heardResults.length) : 0;
   const avgTiming = karaokeResults.filter(r=>r).length ? Math.round(karaokeResults.filter(r=>r).reduce((a,b)=>a+b.timingScore,0)/karaokeResults.filter(r=>r).length) : 0;
 
-  document.getElementById('karaokeResult').style.display='flex';
+  document.getElementById('karaokeResult').style.display='grid';
   document.getElementById('karaokePitchVal').textContent = avgPitch+'%';
   document.getElementById('karaokeTimingVal').textContent = avgTiming+'%';
+  renderKaraokeNotes();
 
   if(heardResults.length>0) recordSkillScore('pitch', avgPitch);
   if(profile){
@@ -14894,12 +15129,13 @@ function renderKaraokeMissionObjectives(){
     {label:t('karaoke_mission_fullperf'), done: allHeard, note: allHeard ? t('karaoke_mission_clean') : `${karaokeResults.filter(r=>r&&r.heard).length}/${karaokeResults.length} ${t('karaoke_mission_notes')}`},
   ];
   const bonus = [
-    {label:`🔥 ${t('karaoke_mission_perfectchorus')}`, done: chorusAvg!==null && chorusAvg>=90, note: chorusAvg!==null ? `${chorusAvg}%` : t('karaoke_mission_nodata')},
-    {label:`🔥 ${t('karaoke_mission_tighttiming')}`, done: overallAvgTiming>=85, note: `${overallAvgTiming}%`},
-    {label:`🔥 ${t('karaoke_mission_flawless')}`, done: overallAvgPitchAll>=90, note: `${overallAvgPitchAll}%`},
+    {label:t('karaoke_mission_perfectchorus'), done: chorusAvg!==null && chorusAvg>=90, note: chorusAvg!==null ? `${chorusAvg}%` : t('karaoke_mission_nodata')},
+    {label:t('karaoke_mission_tighttiming'), done: overallAvgTiming>=85, note: `${overallAvgTiming}%`},
+    {label:t('karaoke_mission_flawless'), done: overallAvgPitchAll>=90, note: `${overallAvgPitchAll}%`},
   ];
 
-  const rowHtml = o => `<div class="record-row"><span class="record-label">${o.done?'✅':'⬜'} ${o.label}</span><span class="record-val${!o.done?' untracked':''}" style="${o.done?'color:var(--teal);':''}">${o.note}</span></div>`;
+  const mark = done => done ? '<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg>' : '<span class="karaoke-ring" aria-hidden="true"></span>';
+  const rowHtml = o => `<div class="vc-dim" data-done="${o.done?1:0}"><span class="karaoke-obj">${mark(o.done)}<span>${o.label}<span class="vc-visually-hidden"> · ${t(o.done ? 'karaoke_obj_done' : 'karaoke_obj_open')}</span></span></span><span>${o.note}</span></div>`;
   rowsEl.innerHTML = core.map(rowHtml).join('');
   bonusEl.innerHTML = bonus.map(rowHtml).join('');
   card.style.display = 'block';
@@ -17856,6 +18092,23 @@ function translateFeatureLabel(raw){
   const key = FEATURE_LABEL_KEYS[raw];
   return key ? t(key) : raw;
 }
+// The Songs-tab solo tools' Start: "Start" to anyone with access, "Start (Pro)" only while it's locked.
+function songsStartLabel(){ return t(isPaid() ? 'action_start' : 'action_start_pro'); }
+// The Songs tab's rows: "Best {v}" where a best is stored (Karaoke Coach: songBestScores, for the song selected).
+function renderSongsHub(){
+  const kb = profile && progress && progress.songBestScores ? progress.songBestScores[currentSongId] : undefined;
+  const ends = {karaoke: typeof kb==='number' ? t('coach_best_tpl').replace('{v}', kb+'%') : ''};
+  document.querySelectorAll('#panel-songs-hub .songs-row').forEach(b=>{
+    const el = b.querySelector('.coach-best');
+    if(el) el.textContent = ends[b.dataset.enterPanel] || '';
+  });
+}
+function renderSongsStartLabels(){
+  [['stayKeyStartLabel', ()=>stayKeyActive], ['emotionStartLabel', ()=>emotionActive], ['karaokeStartLabel', ()=>karaokeActive]].forEach(([id, running])=>{
+    const el = document.getElementById(id);
+    if(el && !running()) el.textContent = songsStartLabel(); // a running tool's button reads Stop
+  });
+}
 function requireProFeature(featureLabel){
   if(isPaid()) return true;
   if(!profile){ requireSignIn(featureLabel); return false; }
@@ -20680,9 +20933,9 @@ function houseSession(isActive, stage){
   houseSessions.push({isActive, stage: stage || null});
   if(!houseRaf) houseRaf = requestAnimationFrame(houseWatch);
 }
-function singingSession(isActive, stage){
+function singingSession(isActive, stage, onFrame){
   houseSession(isActive, stage);
-  return vlSidecar(isActive);
+  return vlSidecar(isActive, onFrame);
 }
 function houseStageShown(stage){
   if(!stage || !stage.isConnected) return false;
@@ -20775,7 +21028,14 @@ function stopAllActiveSessions(){
   if(typeof rafId!=='undefined' && rafId){ cancelAnimationFrame(rafId); rafId=null; }
   if(typeof mode!=='undefined') mode=null;
   if(typeof regStop==='function') regStop();
-  karaokeActive = false;
+  // phase 6: the Songs-tab solo tools stop through their own stop paths (no result, no score), the backing pad with them
+  if(karaokeActive) karaokeStop();
+  if(stayKeyActive) stayKeyStop();
+  if(emotionActive) emotionStop();
+  if(pdActive) pdStop();
+  if(aiDuetActive) aiDuetStop();
+  studioDiscard();
+  stopBackingPad();
   gliderActive = false;
   bossActive = false;
   bridgeActive = false;
@@ -20794,7 +21054,6 @@ function stopAllActiveSessions(){
   oneTakeActive = false;
   drillActive = false;
   if(typeof drillStop==='function') drillStop();
-  aiDuetActive = false;
   if(typeof vqActive!=='undefined') vqActive = false;
   if(typeof lfActive!=='undefined' && lfActive) stopLiveFeedback();
   if(typeof vibratoActive!=='undefined' && vibratoActive){ vibratoActive = false; vibratoReset(); } // 4b: leaving stops the hold
@@ -20859,6 +21118,7 @@ function showShellSection(section){
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-songs-hub').classList.add('active');
     renderCwHubStatus();
+    renderSongsHub();
   } else if(section==='world'){
     enterPanel('arcade');
   } else if(section==='you'){
@@ -21144,6 +21404,8 @@ function renderCoachHub(){
     const el = b.querySelector('.coach-best');
     if(el) el.textContent = ends[b.dataset.enterPanel] || '';
   });
+  if(typeof renderSongsStartLabels==='function') renderSongsStartLabels(); // the Songs tools' Start follows the plan too
+  if(typeof renderSongsHub==='function') renderSongsHub();
 }
 
 /* ---------------- Onboarding (Phase 2 — real, reuses existing data structures) ---------------- */
@@ -23539,60 +23801,135 @@ document.getElementById('hmNextBtn')?.addEventListener('click', ()=>{
   document.getElementById('hmPreCard').style.display = 'block';
 });
 
-/* ---------------- Studio Mode (real recording, real playback, no fabricated take-judging) ---------------- */
+/* ---------------- Studio Mode: record takes of the song, listen back (no score) ---------------- */
+// Up to STUDIO_MAX_TAKES takes of STUDIO_TAKE_MS each, kept on this device (localStorage, one list per account, the way
+// Your Choir keeps its takes), never in the account's progress. Each take can be deleted. Takes recorded before
+// phase 6 were in progress.studioTakes, sent with every progress save: studioMigrate moves them here once and empties
+// that list. The take records on its stage: the red tally, the time, the input level (the raw path) and Stop, which
+// ends the take early and keeps it; leaving (stopAllActiveSessions → studioDiscard) stops it and keeps nothing.
+const STUDIO_TAKE_MS = 15000, STUDIO_MAX_TAKES = 3, STUDIO_STORE_PREFIX = 'studioTakes:';
+let studioMem = null, studioMemKey = null;
+// The take being recorded. gen changes when a take is discarded (leaving), so the recording that ends later is dropped.
+const studioRec = {active:false, recorder:null, gen:0, t0:0, stopSoon:false, raf:null};
+function studioStoreKey(){ return STUDIO_STORE_PREFIX + ((profile && (profile.id || profile.email)) || ''); }
+function studioTakes(){
+  const k = studioStoreKey();
+  if(studioMemKey!==k){ studioMemKey = k; try{ studioMem = JSON.parse(localStorage.getItem(k)) || []; }catch(e){ studioMem = []; } }
+  return studioMem;
+}
+// Returns false if the device storage is full; the list stays as it was.
+function studioSaveTakes(list){
+  const k = studioStoreKey();
+  try{ localStorage.setItem(k, JSON.stringify(list)); }
+  catch(e){ console.error('storage error', e); return false; }
+  studioMem = list; studioMemKey = k;
+  return true;
+}
+function studioMigrate(){
+  if(!profile || !progress || !Array.isArray(progress.studioTakes) || !progress.studioTakes.length) return;
+  const have = new Set(studioTakes().map(tk=>tk.recordedAt));
+  const merged = studioTakes().concat(progress.studioTakes.filter(tk=>tk && tk.base64 && !have.has(tk.recordedAt)));
+  if(!studioSaveTakes(merged)) return; // the device is full: they stay where they are
+  progress.studioTakes = [];
+  saveProgress();
+}
 function renderStudioMode(){
-  document.getElementById('studioSongName').textContent = SONG.name;
+  studioMigrate();
+  document.getElementById('studioSongName').textContent = songTitle(currentSongId);
   document.getElementById('studioSongKey').textContent = SONG.key;
-  document.getElementById('studioSongTempo').textContent = SONG.tempo+' BPM';
+  document.getElementById('studioSongTempo').textContent = t('studio_bpm_tpl').replace('{n}', SONG.tempo);
   document.getElementById('studioMicStatus').textContent = (typeof analyser!=='undefined' && analyser) ? t('studio_mic_connected') : t('studio_mic_notconnected');
+  if(!studioRec.active) studioResetButton(); else document.getElementById('studioRecordLabel').textContent = t('action_stop'); // a language switch mid-take
   renderStudioTakes();
 }
 function renderStudioTakes(){
   const wrap = document.getElementById('studioTakesList');
   if(!wrap) return;
-  const takes = (profile && progress.studioTakes) || [];
+  const takes = profile ? studioTakes() : [];
   if(takes.length===0){
     wrap.innerHTML = `<p class="desc" style="color:var(--muted);">${t('studio_notakes')}</p>`;
     return;
   }
+  const when = iso=>{ try{ return new Intl.DateTimeFormat(currentLanguage, {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'}).format(new Date(iso)); }catch(e){ return ''; } };
   wrap.innerHTML = takes.map((take,i)=>`
-    <div style="margin-bottom:14px;">
-      <div class="vc-label" style="margin-bottom:6px;">${t('studio_take_label')} ${String(i+1).padStart(2,'0')}</div>
-      <audio controls src="${take.base64}" style="width:100%;"></audio>
+    <div class="studio-take">
+      <div class="studio-take-head"><span><span class="vc-label">${t('studio_take_label')} ${String(i+1).padStart(2,'0')}</span><span class="hl-item-meta">${when(take.recordedAt)}</span></span>
+        <button class="ghost-btn" type="button" data-studio-del="${i}">${t('studio_delete_btn')}</button></div>
+      <audio controls src="${take.base64}"></audio>
     </div>
   `).join('');
+  wrap.querySelectorAll('[data-studio-del]').forEach(btn=>btn.addEventListener('click', ()=>{
+    const i = +btn.dataset.studioDel;
+    if(!confirm(t('studio_delete_confirm').replace('{n}', i+1))) return;
+    const list = studioTakes().slice(); list.splice(i, 1);
+    document.getElementById('studioRecordNote').textContent = studioSaveTakes(list) ? '' : t('studio_save_failed');
+    renderStudioTakes();
+  }));
+}
+function studioResetButton(){
+  const btn = document.getElementById('studioRecordBtn');
+  btn.disabled = false; btn.classList.remove('listening');
+  document.getElementById('studioRecordLabel').textContent = t('studio_record_btn');
+}
+const studioClock = ms=>{ const s = Math.max(0, Math.floor(ms/1000)); return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; };
+// On the stage while the take records: the time and the input level (the raw path's RMS, −54 dBFS to 0 dBFS).
+function studioTick(){
+  if(!studioRec.active) return;
+  const el = studioRec.t0 ? performance.now()-studioRec.t0 : 0;
+  document.getElementById('studioTime').textContent = `${studioClock(Math.min(el, STUDIO_TAKE_MS))} / ${studioClock(STUDIO_TAKE_MS)}`;
+  const rms = computeRMS(readRawMic()), pct = rms>0 ? Math.max(0, Math.min(100, (20*Math.log10(rms)+54)/54*100)) : 0;
+  const m = document.getElementById('studioLevel');
+  m.style.setProperty('--val', pct.toFixed(0)+'%'); m.setAttribute('aria-valuenow', pct.toFixed(0));
+  studioRec.raf = requestAnimationFrame(studioTick);
+}
+// Stop on the stage: the take ends now and is kept.
+function studioStopEarly(){
+  const r = studioRec.recorder;
+  if(r && r.state!=='inactive') r.stop(); else studioRec.stopSoon = true;
+}
+// Leaving (stopAllActiveSessions): the take stops and isn't kept.
+function studioDiscard(){
+  if(!studioRec.active) return;
+  studioRec.gen++;
+  studioRec.active = false;
+  cancelAnimationFrame(studioRec.raf);
+  const r = studioRec.recorder; studioRec.recorder = null;
+  if(r && r.state!=='inactive') r.stop();
+  studioResetButton();
 }
 document.getElementById('studioRecordBtn')?.addEventListener('click', async ()=>{
+  if(studioRec.active){ studioStopEarly(); return; }
   if(!requireProFeature('Studio Mode')) return;
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
   document.getElementById('studioMicStatus').textContent = (typeof analyser!=='undefined' && analyser) ? t('studio_mic_connected') : t('studio_mic_notconnected');
-
-  const takes = (profile && progress.studioTakes) || [];
-  if(takes.length>=3){
+  if(studioTakes().length>=STUDIO_MAX_TAKES){
     document.getElementById('studioRecordNote').textContent = t('studio_limit_reached');
     return;
   }
-
   const btn = document.getElementById('studioRecordBtn');
-  const label = document.getElementById('studioRecordLabel');
-  btn.disabled = true;
-  label.textContent = t('studio_recording_label');
-  singingSession(()=>btn.disabled);
-  const clip = await recordShortClip(15000);
-  btn.disabled = false;
-  label.textContent = t('studio_record_btn');
+  const gen = ++studioRec.gen;
+  Object.assign(studioRec, {active:true, recorder:null, t0:0, stopSoon:false});
+  btn.classList.add('listening');
+  document.getElementById('studioRecordLabel').textContent = t('action_stop');
+  document.getElementById('studioRecordNote').textContent = '';
+  studioTick();
+  singingSession(()=>studioRec.active && gen===studioRec.gen, document.getElementById('studioStage'));
+  const clip = await recordShortClip(STUDIO_TAKE_MS, r=>{
+    if(gen!==studioRec.gen){ r.stop(); return; }
+    studioRec.recorder = r; studioRec.t0 = performance.now();
+    if(studioRec.stopSoon) r.stop();
+  });
+  if(gen!==studioRec.gen) return; // left midway (studioDiscard): the take isn't kept
+  studioRec.active = false; studioRec.recorder = null;
+  cancelAnimationFrame(studioRec.raf);
+  studioResetButton();
 
   if(clip && profile){
-    if(!progress.studioTakes) progress.studioTakes = [];
-    progress.studioTakes.push(clip);
-    try{
-      await saveProgress();
-      document.getElementById('studioRecordNote').textContent = `${t('studio_take_label')} ${progress.studioTakes.length} ${t('studio_take_saved')}`;
-    } catch(e){
-      document.getElementById('studioRecordNote').textContent = t('studio_save_failed');
-    }
+    const list = studioTakes().concat([clip]);
+    document.getElementById('studioRecordNote').textContent = studioSaveTakes(list)
+      ? `${t('studio_take_label')} ${list.length} ${t('studio_take_saved')}` : t('studio_save_failed');
     renderStudioTakes();
   } else if(!clip){
     document.getElementById('studioRecordNote').textContent = t('studio_notavailable');
@@ -23764,9 +24101,12 @@ function renderPdBriefing(){
   if(!wrap) return;
   const sections = getSongSections();
   wrap.innerHTML = sections.map(sec=>
-    `<div class="record-row"><span class="record-label">${sec.name}</span><span class="record-val" style="color:var(--muted);font-style:italic;font-size:12px;">${PERFORMANCE_DIRECTOR_CUES[sec.name]||''}</span></div>`
+    `<div class="record-row"><span class="record-label">${sectionLabel(sec.name)}</span><span class="record-val" style="color:var(--muted);font-style:italic;font-size:12px;">${PERFORMANCE_DIRECTOR_CUES[sec.name]||''}</span></div>`
   ).join('');
+  if(pdCurrentSectionName) document.getElementById('pdCurrentSection').textContent = sectionLabel(pdCurrentSectionName); // a language switch mid-run
 }
+// The run's stage: Choir World's five lanes with Lead as your part (cwLanePart) and your voice drawn on it (display only).
+function pdLanesOff(){ cwLanesFrame(null); if(cwLanePart==='Lead') cwLanePart = null; }
 
 document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('Performance Director')) return;
@@ -23781,12 +24121,15 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   pdResults = [];
   pdRmsSamples = [];
   pdCurrentSectionName = null;
+  cwLanePart = 'Lead'; cwVoiceReset();
   document.getElementById('pdBriefingCard').style.display='none';
   document.getElementById('pdResultCard').style.display='none';
   document.getElementById('pdRunnerCard').style.display='block';
+  renderCwLanes(document.getElementById('pdLanes'));
   pdLoop();
-  singingSession(()=>pdActive);
+  singingSession(()=>pdActive, document.getElementById('pdStage'));
 });
+document.getElementById('pdStopBtn')?.addEventListener('click', ()=>{ if(pdActive) pdStop(); }); // ends the run; no score
 
 function pdFinalizeNote(idx){
   if(idx<0) return;
@@ -23820,7 +24163,7 @@ function pdLoop(){
     const sec = sections.find(s=>s.indices.includes(idx));
     if(sec && sec.name!==pdCurrentSectionName){
       pdCurrentSectionName = sec.name;
-      document.getElementById('pdCurrentSection').textContent = sec.name;
+      document.getElementById('pdCurrentSection').textContent = sectionLabel(sec.name);
       document.getElementById('pdCurrentCue').textContent = PERFORMANCE_DIRECTOR_CUES[sec.name]||'';
     }
     document.getElementById('pdCurrentNote').textContent = noteNameFromMidi(SONG.parts.Lead.notes[idx]);
@@ -23840,14 +24183,25 @@ function pdLoop(){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
     if(cents!==null && Math.abs(cents)<300) pdCentsBuf.push({t:elapsedMs, c:cents});
   }
+  cwVoicePush(elapsedMs/1000, freq);
+  cwLanesFrame(elapsedMs/1000);
 
   requestAnimationFrame(pdLoop);
 }
 
+// Leaving (stopAllActiveSessions): the run ends with no score; the briefing and its Start come back.
+function pdStop(){
+  pdActive = false;
+  pdLanesOff();
+  document.getElementById('pdRunnerCard').style.display='none';
+  document.getElementById('pdBriefingCard').style.display='block';
+}
 function finishPd(){
   pdActive = false;
+  pdLanesOff();
   document.getElementById('pdRunnerCard').style.display='none';
   document.getElementById('pdResultCard').style.display='block';
+  document.getElementById('pdBriefingCard').style.display='block'; // Start again, under the result
 
   const heard = pdResults.filter(r=>r && r.heard);
   const avgPitch = heard.length ? Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length) : 0;
@@ -23860,19 +24214,15 @@ function finishPd(){
     dynamics = Math.min(100, Math.round(((maxR-minR)/Math.max(0.001,maxR))*100*1.5));
   }
 
-  const dims = [
-    {label:t('pd_dim_technique'), val: technique},
-    {label:t('skill_pitch'), val: avgPitch},
-    {label:t('pd_dim_timing'), val: avgTiming},
-    {label:t('pd_dim_dynamics'), val: dynamics},
-  ];
-  document.getElementById('pdResultRows').innerHTML = dims.map(d=>
-    `<div class="record-row"><span class="record-label">${d.label}</span><span class="record-val" style="color:var(--teal);">${d.val}</span></div>`
-  ).join('');
-
+  // "Your performance": Pitch big (the score saved), then Timing, Dynamics, and Technique as "Pitch and timing together"
+  document.getElementById('pdPitchVal').textContent = avgPitch+'%';
+  document.getElementById('pdTimingVal').textContent = avgTiming+'%';
+  document.getElementById('pdDynamicsVal').textContent = dynamics+'%';
+  document.getElementById('pdTechniqueVal').textContent = technique+'%';
+  const dims = [{label:t('skill_pitch'), val: avgPitch}, {label:t('pd_dim_timing'), val: avgTiming}, {label:t('pd_dim_dynamics'), val: dynamics}];
   if(heard.length>0){
     const weakest = dims.reduce((a,b)=> a.val<=b.val ? a : b);
-    document.getElementById('pdInsight').textContent = `${t('pd_insight_prefix')} ${weakest.label} (${weakest.val}).`;
+    document.getElementById('pdInsight').textContent = t('pd_insight_tpl').replace('{dim}', weakest.label).replace('{n}', weakest.val+'%');
   } else {
     document.getElementById('pdInsight').textContent = t('pd_insight_notenough');
   }
@@ -24125,12 +24475,61 @@ function renderUnifiedProgress(){
   }
 }
 
-/* ---------------- AI Duet Partner (real, reuses Choir Workspace's exact playback engine) ---------------- */
+/* ---------------- Sing With the Choir (was AI Duet Partner): the app's choir sings the other four parts ---------------- */
+// Choir World's playback with your part muted, once through the song. On its stage the five lanes with your part bold
+// and your voice drawn on it from the register frames the vocal-load sidecar already reads (display only). At the
+// song's end, on Stop or on leaving (aiDuetStop): the choir stops, the mixer goes back as it was, the button resets, and
+// the paper offers to rehearse the part in Choir World. Element ids keep the old aiDuet names.
 let aiDuetSelectedPart = 'Soprano';
 let aiDuetActive = false;
+let aiDuetMixer = null; // Choir World's mixer (mute, solo) before the duet muted your part: put back when it ends
+let aiDuetRaf = null, aiDuetLast = null; // the stage's frame loop; the part just sung (the line after)
+function renderAiDuetButton(){
+  document.getElementById('aiDuetStartBtn').classList.toggle('listening', aiDuetActive);
+  document.getElementById('aiDuetStartLabel').textContent = t(aiDuetActive ? 'action_stop' : 'aiduet_start_btn');
+}
+function renderAiDuetAfter(){
+  const box = document.getElementById('aiDuetAfter');
+  box.hidden = !aiDuetLast || aiDuetActive;
+  if(box.hidden) return;
+  document.getElementById('aiDuetAfterText').textContent = t('aiduet_after_tpl').replace('{part}', partName(aiDuetLast));
+  document.getElementById('aiDuetRehearseBtn').textContent = t('aiduet_rehearse_link').replace('{part}', partName(aiDuetLast)).replace('{cw}', t('cw_label'));
+}
+document.getElementById('aiDuetRehearseBtn')?.addEventListener('click', ()=>{
+  const part = aiDuetLast || aiDuetSelectedPart;
+  cwShowTab('rehearse');
+  setRehearsalPart(part);
+});
+function aiDuetRestoreMixer(){
+  if(!aiDuetMixer) return;
+  Object.entries(aiDuetMixer).forEach(([p, st])=>{ if(choirState[p]){ choirState[p].muted = st.muted; choirState[p].solo = st.solo; } });
+  aiDuetMixer = null;
+  updateAllChoirGains();
+}
+// The song's end, Stop, or leaving (stopAllActiveSessions): the choir stops, your part is unmuted again, the button resets.
+function aiDuetStop(){
+  const was = aiDuetActive;
+  aiDuetActive = false;
+  cancelAnimationFrame(aiDuetRaf);
+  if(choirIsPlaying) stopChoir();
+  aiDuetRestoreMixer();
+  cwLanesFrame(null);
+  if(cwLanePart===aiDuetSelectedPart) cwLanePart = null;
+  if(was) aiDuetLast = aiDuetSelectedPart;
+  renderAiDuetButton();
+  renderAiDuetAfter();
+}
+// The stage's frame: the playhead on the song clock; the song over → the duet ends
+function aiDuetFrame(){
+  if(!aiDuetActive) return;
+  if(!choirIsPlaying){ aiDuetStop(); return; }
+  cwLanesFrame(audioCtx.currentTime - choirStartCtxTime);
+  aiDuetRaf = requestAnimationFrame(aiDuetFrame);
+}
 
 document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
+    if(aiDuetActive) return; // the part is set for the whole song
     document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
@@ -24141,29 +24540,32 @@ document.querySelectorAll('#aiDuetPartRow .ex-type-btn').forEach(btn=>{
 function renderAiDuetNote(){
   const others = Object.keys(SONG.parts).filter(p=>p!==aiDuetSelectedPart).map(partName);
   document.getElementById('aiDuetNote').textContent = t('aiduet_note_tpl').replace('{others}', others.join(', ')).replace('{part}', partName(aiDuetSelectedPart));
+  renderAiDuetButton();
+  renderAiDuetAfter();
 }
 renderAiDuetNote();
 
 document.getElementById('aiDuetStartBtn')?.addEventListener('click', async ()=>{
   if(!requireProFeature('AI Duet Partner')) return;
-  if(aiDuetActive){
-    stopChoir();
-    aiDuetActive = false;
-    document.getElementById('aiDuetStartBtn').innerHTML = '<span class="dot-icon"></span>Start singing with AI';
-    return;
-  }
+  if(aiDuetActive){ aiDuetStop(); return; }
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
+  aiDuetMixer = Object.fromEntries(Object.keys(choirState).map(p=>[p, {muted:choirState[p].muted, solo:choirState[p].solo}]));
   Object.keys(choirState).forEach(part=>{
     choirState[part].muted = (part===aiDuetSelectedPart);
     choirState[part].solo = false;
   });
   updateAllChoirGains();
-  await playChoir();
+  await playChoir({loop:false});
+  if(tok!==startGen){ if(choirIsPlaying) stopChoir(); aiDuetRestoreMixer(); return; } // left while the choir was starting
   aiDuetActive = true;
-  singingSession(()=>aiDuetActive && choirIsPlaying);
-  document.getElementById('aiDuetStartBtn').innerHTML = '<span class="dot-icon"></span>Stop';
+  cwLanePart = aiDuetSelectedPart; cwVoiceReset();
+  renderCwLanes(document.getElementById('aiDuetLanes'));
+  renderAiDuetButton(); renderAiDuetAfter();
+  singingSession(()=>aiDuetActive && choirIsPlaying, document.getElementById('aiDuetStage'),
+    fr=>cwVoicePush(audioCtx.currentTime - choirStartCtxTime, fr.freq)); // your voice from the sidecar's frames (display only)
+  aiDuetFrame();
 });
 
 /* ---------------- AI Notices Things Proactively (real, computed, honestly absent when nothing qualifies) ---------------- */
@@ -24340,6 +24742,7 @@ document.getElementById('feedbackAnotherBtn')?.addEventListener('click', ()=>{
 setExerciseLevel('beginner');
 updateExCapNote();
 appFullyLoaded = true;
+window.__vcBooted = true; // the startup safety net stands down (it ran to here)
 </script>
 </body>
 </html>

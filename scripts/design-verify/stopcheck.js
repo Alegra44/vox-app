@@ -5,7 +5,7 @@
 // no marks; no mic loop left running (no autoCorrelate, readRegisterFrame or vlFeed call in the 5 s on Home from 1 s
 // after leaving: a timer left behind, like Mirror's echo, fires in that time); back on the tool, its starting state (tools4b.js idleOk) and Start working (it
 // starts again). One Take: the take left midway saves nothing (no take stored for today) and today's take is still
-// available. Usage: node scripts/design-verify/stopcheck.js [--base <git ref>] [--only4b] [--tools onetake,mirror,…]
+// available. Usage: node scripts/design-verify/stopcheck.js [--base <git ref>] [--only4b | --onlychoir | --only6] [--tools onetake,mirror,…]
 // 4b.3 (PHASE4B.md): the vocal load is checked from the trace (vocal-load-verify/vltrace.js), not from the gauge: from the
 // moment of leaving to the end of the 5 s on Home, no vlFeed call, and every loop flag off (no session open). The gauge
 // may still settle once from a session that ended by the time you left: vlEnd defers a session whose server state hasn't
@@ -16,13 +16,18 @@
 // off (Harmony Memory, the challenges, the timing trainer, the rehearsal, a recording, the stacked playback) and the
 // playback stopped (choirIsPlaying false); back on it (its tab, its trainer), its starting state and Start working.
 // --onlychoir runs these alone; without it they run after the 4b tools.
+// Phase 6 (PHASE6.md §1c): the six Songs-tab solo tools (tools6.js), each left at 0.8 s and 2.6 s the same way, and
+// besides: every loop flag off and no sound left (the backing pad's and the choir's oscillators counted: none), no
+// result shown and no skill score recorded after leaving, Studio's take left midway not saved (checked past its 15 s),
+// Sing With the Choir's mixer as it was before the start (your part unmuted again); back on it, its starting state and
+// Start working. --only6 runs these alone; without it they run after Choir World.
 // Test-only switches: --trace prints each case's trace; --slow-input <ms> delays every mic opener (initAudio,
 // openRegisterInput, vqCapture, through warmupGate) by that much (a slow mic open, hypothesis A); --slow-state <ms>
 // delays the vocal-load state GET (/me/vocal-load?day=…) by that much (a slow server, hypothesis B).
 const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b'), VT = require('../vocal-load-verify/vltrace');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const ONLY4B = process.argv.includes('--only4b'), ONLYCHOIR = process.argv.includes('--onlychoir'), ONLY = arg('--tools') ? arg('--tools').split(',') : null;
-const CW = require('./choir5');
+const ONLY4B = process.argv.includes('--only4b'), ONLYCHOIR = process.argv.includes('--onlychoir'), ONLY6 = process.argv.includes('--only6'), ONLY = arg('--tools') ? arg('--tools').split(',') : null;
+const CW = require('./choir5'), T6 = require('./tools6');
 const TRACE = process.argv.includes('--trace'), SLOW_INPUT = Number(arg('--slow-input')) || 0, SLOW_STATE = Number(arg('--slow-state')) || 0;
 const prepare = async ctx => {
   await ctx.addInitScript(VT.INIT);
@@ -45,16 +50,18 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
   for (const tool of tools.filter(t => !ONLY || ONLY.includes(t.key))) {
     for (const at of tool.key === 'mirror' ? [800, 2600, 4400] : [800, 2600]) {
       await tool.open(page); await C.sleep(500);
+      const snap0 = tool.snap ? await page.evaluate(`(${tool.snap})()`) : null;
       await VT.take(page); await VT.mark(page, `start ${tool.name}`);
       await tool.act(page); await C.sleep(at);
       const left = await page.evaluate(() => { // the mark and the click in one task: no frame of the tool between them
-        window.__vlTrace.push({ op: 'mark', label: 'leave', t: Math.round(performance.now()) });
+        window.__vlTrace.push({ op: 'mark', label: 'leave', t: Math.round(performance.now()) }); window.__leaveT = performance.now();
         document.querySelector('.snb-item[data-shell="home"]').click(); return vlDay.load;
       });
       await C.sleep(1000);
       await page.waitForFunction(() => vlRun === null, null, { timeout: 6000 }).catch(() => {}); await C.sleep(1500); // the stopped session closes
       const a = await page.evaluate(() => ({ ...window.__cnt, load: vlDay.load }));
       await C.sleep(5000);
+      if (tool.settle) await C.sleep(tool.settle); // Studio: past the take's own end
       const z = await page.evaluate(cwFlags => ({ ...window.__cnt, load: vlDay.load, house: document.body.dataset.house,
         cw: cwFlags ? Object.entries(new Function('return (' + cwFlags + ')()')()).filter(([, v]) => v).map(([k]) => k) : [],
         flags: ['mode', 'lfActive', 'resonanceActive', 'drillActive', 'vibratoActive', 'vqActive', 'rhythmActive', 'mirrorActive', 'emoActive',
@@ -72,6 +79,7 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
         && Math.abs(z.load - (fin.length ? fin[fin.length - 1].load : left)) < 0.01;
       const settled = fin.map(e => `#${e.run} ${e.deferred ? `${e.after} ms after its end` : 'at its end'} ${e.before} → ${e.load}`).join(', ') || 'none';
       const loop = !calls.autoCorrelate && !calls.readRegisterFrame && !calls.vlFeed && !feeds.length && !z.flags.length && settleOk;
+      const kept = tool.leaveOk ? await page.evaluate(`(${tool.leaveOk})(${JSON.stringify(snap0)})`) : { ok: true, detail: '' };
       // back on the tool: its starting state, and Start works
       if (tool.flags) await tool.open(page); else await C.showPanel(page, tool.panel);
       await C.clearOverlays(page); await C.sleep(400);
@@ -80,12 +88,14 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
       const again = await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 6000 }).then(() => true, () => false);
       await page.evaluate(() => stopAllActiveSessions()); await C.sleep(tool.key === 'mirror' ? 4500 : 3500);
       if (tool.key === 'yctake') await page.waitForFunction(() => !yourChoir.recording, null, { timeout: 15000 }).catch(() => {}); // a cancelled take finishes
+      if (tool.drain) await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: 20000 }).catch(() => {}); // a take stopAllActiveSessions didn't end runs out
       const ot = tool.key === 'onetake' ? !z.onetake.saved && !z.onetake.last : true;
-      const pass = z.house === 'up' && !z.marks && loop && idle && again && ot;
+      const pass = z.house === 'up' && !z.marks && loop && idle && again && ot && kept.ok;
       if (!pass) bad++;
       log(`${pass ? '✓' : '✗'} ${tool.name} left at ${at} ms: house ${z.house}, marks ${z.marks} · mic loop calls on Home ${JSON.stringify(calls)}`
         + ` · vlFeed after leaving ${fedAfter} · flags on ${z.flags.join(', ') || 'none'} · vocal load ${left.toFixed(2)} → ${z.load.toFixed(2)}, settled (allowed) ${settled}${settleOk ? '' : ' NOT EXPLAINED'}`
-        + ` · back: starting state ${idle}, starts again ${again}${tool.key === 'onetake' ? ` · take saved ${z.onetake.saved}, today used ${z.onetake.last}` : ''}`);
+        + ` · back: starting state ${idle}, starts again ${again}${tool.key === 'onetake' ? ` · take saved ${z.onetake.saved}, today used ${z.onetake.last}` : ''}`
+        + (tool.leaveOk ? ` · ${kept.detail}` : ''));
       if (TRACE || !pass) log(VT.format(tr));
     }
     await T.restoreRange(page);
@@ -101,7 +111,7 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
   try {
     const { page } = await C.openPage(b, { dir, theme: 'light', storageState: state, prepare });
     await C.clearOverlays(page); await S.warmMic(page);
-    for (const [key, btn, label, flag] of ONLY4B || ONLYCHOIR ? [] : [['eve', 'eveStartBtn', 'eveStartLabel', 'eveActive'], ['five', 'fiveStartBtn', 'fiveStartLabel', 'fiveActive']]) {
+    for (const [key, btn, label, flag] of ONLY4B || ONLYCHOIR || ONLY6 ? [] : [['eve', 'eveStartBtn', 'eveStartLabel', 'eveActive'], ['five', 'fiveStartBtn', 'fiveStartLabel', 'fiveActive']]) {
       for (const at of [800, 2600]) {
         const tool = T.TOOLS.find(t => t.key === key); await tool.open(page); await C.sleep(500);
         await page.evaluate(id => document.getElementById(id).click(), btn); await C.sleep(at);
@@ -118,8 +128,9 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
         console.log(`${pass ? '✓' : '✗'} ${key} stopped at ${at} ms: enabled within 5 s ${ok} · ${JSON.stringify(st)} · restarts ${again}`);
       }
     }
-    if (!ONLYCHOIR) bad += await leaveChecks(page, console.log);
-    if (!ONLY4B) bad += await leaveChecks(page, console.log, CW.TOOLS);
+    if (!ONLYCHOIR && !ONLY6) bad += await leaveChecks(page, console.log);
+    if (!ONLY4B && !ONLY6) bad += await leaveChecks(page, console.log, CW.TOOLS);
+    if (!ONLY4B && !ONLYCHOIR) bad += await leaveChecks(page, console.log, T6.TOOLS);
   } finally { await b.close(); await C.cleanup(); }
   console.log(bad ? `${bad} failed` : 'all passed'); process.exit(bad ? 1 : 0);
 })();

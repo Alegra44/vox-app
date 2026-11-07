@@ -49,7 +49,7 @@ const ENTRIES = [
   { key: 'staykey', panel: 'staykey', startBtn: 'stayKeyStartBtn', active: 'stayKeyActive', stop: click('#stayKeyStartBtn') },
   { key: 'karaoke', panel: 'karaoke', startBtn: 'karaokeStartBtn', active: 'karaokeActive', stop: click('#karaokeStartBtn') },
   { key: 'emotion', panel: 'emotion', startBtn: 'emotionStartBtn', active: 'emotionActive', stop: click('#emotionStartBtn') },
-  { key: 'studio', panel: 'studio', startBtn: 'studioRecordBtn', active: disabled('studioRecordBtn') },
+  { key: 'studio', panel: 'studio', startBtn: 'studioRecordBtn', active: "(typeof studioRec !== 'undefined' ? studioRec.active : !!document.getElementById('studioRecordBtn').disabled)" }, // phase 6: live as Stop while recording
   { key: 'duet', panel: 'aiduet', startBtn: 'aiDuetStartBtn', active: 'aiDuetActive', stop: click('#aiDuetStartBtn') },
   { key: 'yourchoir', panel: 'choir', startSel: '[data-yc-rec="Lead"]', active: '!!yourChoir.recording' },
   { key: 'pd', panel: 'performancedirector', startBtn: 'pdStartBtn', active: 'pdActive',

@@ -15,6 +15,7 @@
 // --tools-only measures only them.
 // Phase 4b (PHASE4B.md §1f): the 10 tools with their own displays (tools4b.js) the same way (the live tools idle, on the
 // stage while listening, and stopped). --set 4a | 4b | all (the default) picks the tools.
+// Phase 6 (PHASE6.md §1f): --set 6 measures the six Songs-tab solo tools (idle, stage, result) and the Songs tab.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).

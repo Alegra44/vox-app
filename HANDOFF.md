@@ -426,11 +426,64 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   different ones moved (Resonance sharp 4.1 s ripple is bimodal 18/54/72 on master itself). Not repeated → no rollback.
 - **review/phase5-prod** (7532270, orphan): the final set and the 5.1 fixes on production, sheets, checks. Deleted:
   review/phase5, -part1, -fix, -before. Old rollback target dpl_BvNJh8hz89bSLfWzbAqHS15G85zs; new one is dpl_7wMj….
-- **Next: phase 6 survey** (read-only, PHASE5.md ## 5.1 step 4) on redesign/phase6.
+- **Phase 6 survey DONE 2026-11-04, reported; waiting for the user's phase 6 spec.** Branch `redesign/phase6`
+  (a3bc61f): design/house-lights/PHASE6_SURVEY.md, survey6/copy6.py, shots6before.js. review/phase6-before (24fa630,
+  orphan): idle/live/result of the six tools at 390 Light/Dark and 1280 Light, sheets/before.jpg, states.json with the
+  leave probe. Headline findings: stopAllActiveSessions doesn't stop Stay in Key, Emotional Singing or Performance
+  Director (they finish and score off-screen) nor the backing pad; PD can only run once per page load; AI Duet leaves your
+  part muted in Choir World; a steady tone scores Expression 51 / PD Dynamics 86. No app changes.
 - **Phase 7 decision (recorded for later):** Today's focus and the Skill Profile ignore Choir World runs (survey item
   13). Whether Choir World should feed them is a product decision for phase 7.
 - **Director Dashboard** is hidden in phase 5 (its invented people break rule 5). It needs a real multi-user backend
   (a director and their singers) before it can come back; later, not scheduled.
+
+### Hotfix: the startup splash (LIVE 2026-11-05, dpl_BGXeU41kbimZ6MekBmVSNkf39BFC, master bf9cf5d)
+- hotfix/splash from master 6266166: the cwMeasureHtml fix only (e9a7722) + bootcheck.js + prod.sh runs bootcheck first.
+  bootcheck: master failed only the Your Choir case; the hotfix 8/8. Checks on the hotfix: hooks, bootcheck, yc, warm-up
+  entries 52/0, house --onlychoir 256/0, batch1 112/0. Production: bootcheck 8/8 (first run 7/1: the Studio old-format
+  case 6.7 s with the test's re-fetch; not repeated), yc, warm-up entries, house --onlychoir 256/0 on rerun (first run
+  one CORS block on a vocal-load request), batch1 112/0. The deploy aliased itself; no promote needed (an extra alias
+  deploy-nine-rouge-32.vercel.app appeared, same project). **New rollback target: dpl_BGXeU41kbimZ6MekBmVSNkf39BFC**
+  (the old one, dpl_7wMj…, has the splash bug). bootcheck now runs in prod.sh and in every phase's checks.
+- Found while writing bootcheck: user_progress has no studio_takes column, so on master Studio takes never reached
+  the server (they lasted until a reload); phase 6's device storage fixes that.
+
+### Phase 6 + 6.1 (`redesign/phase6`, spec `PHASE6.md`): APPROVED after 6.1; 6.1 DONE 2026-11-05, reported; waiting for "deploy"
+- 6.1 (PHASE6.md "6.1"): 564d63f the duet's link in ink; 9152993 Karaoke's stage up to 760 px; 6eae11c the startup
+  safety net (#bootError) + bootcheck's forced-error case. Checks (logs checks61-*): hooks, bootcheck 9/0, house --only6
+  172/0 on rerun (two Supabase 503s first), contrast, copyscan, warm-up tracking. review/phase6-fix fc9e3b5.
+- On "deploy": the rollback target is now **dpl_BGXeU41kbimZ6MekBmVSNkf39BFC** (the hotfix), not PHASE6.md's dpl_7wMj….
+  prod.sh runs bootcheck first. Afterwards also delete review/phase6-fix and hotfix/splash with the branches PHASE6.md lists.
+- Spec PHASE6.md (0f6f584). Guards 83f371f (tools6.js; scores/house/stopcheck/navcheck/contrast/copyscan cover the six;
+  synthmic "lead" stimulus). Build, one commit per item: 2.1 6faad57, 2.2 d6cb9ee, 2.3 859daae, 2.4 c763390, 2.5 003104c,
+  2.6 8d9407c, 2.7 849ee0a, 2.8 e7ce975, 2.9 9aeef83 (PHASE6_COPY.md, 60 keys). checks6.sh, shots6.js.
+- **Found and fixed, live since phase 5 (0d2c888):** with a Your Choir take stored on the device, the page's first
+  renderYourChoir() reached cwMeasureHtml (a const) before it was defined; the error stopped the script and the splash
+  never hid. cwMeasureHtml is now a function declaration. Reproduced on master 1d0fce8. The user was asked whether to
+  hotfix production or wait for the phase 6 deploy.
+- **Checks all pass** (logs checks6-2026-11-04T*; summary in review/phase6 notes.txt): hooks; the scores gate; house
+  (1 network error, rerun passed); stopcheck (the six failed 12/12 on master); modecheck; vocal load (41 loads, largest
+  difference 0.06); warm-up entries 52/0 and tracking; vibfix and noisegate vs master, 0 regressions; vlcompare; yc;
+  contrast (the six and the Songs tab clean; Profile's achievement icon in Dark 3.38:1, known); copyscan 0 in four
+  languages; navcheck, picker, levelup (45/0 on rerun), home; extra 4a and 4b scores (4b on rerun: bimodal on master).
+- **review/phase6** (60173be, orphan): 84 shots, sheets/phase6.jpg, states.json, notes.txt. No merge or deploy until
+  the user has reviewed and types "deploy" (then the steps in PHASE6.md, including the promote check).
+
+## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
+
+These change scores, so they wait until the redesign is finished (survey items in PHASE6_SURVEY.md "Broken or odd"):
+1. **Timing counts a voice that's already sounding.** Karaoke and Performance Director give a note 100 if anything voiced
+   arrives in its first 40 %, so a tone held through the whole song is "on time" on every note (steady tone: Timing 100
+   with Pitch 0).
+2. **Dynamics and Expression on a steady tone.** Emotional Singing's Expression (loudness spread × 250) gives a steady tone
+   51; PD's Dynamics ((max − min) / max × 150) gives it 86. Both read the onset, the room and the backing as dynamics.
+3. **Karaoke and PD divide note pitch by the wrong count:** `vibratoTolerantCents(buf)` is summed over its own output but
+   divided by the buffer's length (Karaoke 14782, PD 23795 on master 6266166). Equal only while the helper returns one
+   value per reading.
+4. **The two Timing averages:** Karaoke averages Timing over every note (a note not heard is 0), PD over the notes heard,
+   with the same formula and the same label.
+5. **Rhythm / Entrance & Cutoff latency** (from 4b 2.4, see "Later accuracy item" above): output and input latency land
+   in every onset offset as "late".
 
 ## Waiting on the user (don't start without a go-ahead)
 
