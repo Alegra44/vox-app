@@ -704,7 +704,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .dash-card .big-val .unit{font-family:var(--hl-font);font-size:13px;color:var(--muted);font-weight:500;}
 
   .activity-chart{display:flex;align-items:flex-end;gap:6px;height:90px;}
-  .activity-chart .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .activity-chart .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;} /* phase 7: height, or the bars' % heights resolved to nothing */
   .activity-chart .bar{width:100%;max-width:22px;background:var(--hairline);border-radius:4px 4px 0 0;transition:height .2s ease;}
   .activity-chart .bar.active{background:var(--hl-ink);}
   .activity-chart .day-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:9px;color:var(--muted);}
@@ -2024,6 +2024,66 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-songs-hub .songs-row .hl-item-title{display:block;color:var(--hl-ink);}
   #panel-songs-hub .songs-row .hl-item-meta{display:block;margin-top:2px;}
   #panel-songs-hub .coach-best:empty{display:none;}
+  /* ---- YOU TAB (phase 7, 2.1): one raised block for who you are, the Skill Profile, then the You screens as rows ---- */
+  #panel-you-hub .you-signedout{display:flex;flex-direction:column;align-items:flex-start;gap:var(--hl-s3);padding:var(--hl-s5);margin-top:var(--hl-s5);}
+  #panel-you-hub .you-signedout[hidden], #panel-you-hub .you-signedin[hidden], #panel-you-hub .you-row[hidden]{display:none;}
+  #panel-you-hub .you-signedout .hl-h3{color:var(--hl-ink);}
+  #panel-you-hub .you-id{display:flex;flex-direction:column;gap:var(--hl-s3);padding:var(--hl-s5);margin-top:var(--hl-s5);}
+  #panel-you-hub .you-id-head{--gap:var(--hl-s4);}
+  #panel-you-hub .you-avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--hl-ink);color:var(--hl-bg);
+    font-size:var(--hl-t-h3);font-stretch:var(--hl-w-wide);font-weight:600;}
+  #panel-you-hub .you-id-text{min-width:0;}
+  #panel-you-hub .you-id .hl-h3{color:var(--hl-ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #panel-you-hub .you-xp-meter{margin-top:var(--hl-s2);--part:var(--hl-ink);}
+  #panel-you-hub .you-figs{display:flex;gap:var(--hl-s7);margin-top:var(--hl-s1);}
+  #panel-you-hub .you-fig{font-size:var(--hl-t-body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--hl-ink-2);}
+  #panel-you-hub .you-skill{margin-top:var(--hl-s6);}
+  #panel-you-hub .you-skill > .hl-label{margin-bottom:var(--hl-s4);}
+  #panel-you-hub .you-skill-summary{margin-top:var(--hl-s4);}
+  #panel-you-hub .vc-dim-note, #panel-dashboard .vc-dim-note, #panel-profile .vc-dim-note{display:block;font-size:var(--hl-t-small);color:var(--hl-ink-3);margin-top:2px;font-weight:400;}
+  #panel-you-hub .vc-dim > :last-child{text-align:right;}
+  #panel-you-hub .you-rows{margin-top:var(--hl-s6);border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-you-hub .you-row .hl-item-title{display:block;color:var(--hl-ink);}
+  #panel-you-hub .you-row .hl-item-meta{display:block;margin-top:2px;}
+  #panel-you-hub .you-row-val{color:var(--hl-ink-2);text-align:right;}
+  @media (min-width:960px){
+    #panel-you-hub .you-signedin{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;}
+    #panel-you-hub .you-signedin[hidden]{display:none;}
+    #panel-you-hub .you-id{grid-column:1;}
+    #panel-you-hub .you-skill{grid-column:1;}
+    #panel-you-hub .you-rows{grid-column:2;grid-row:1 / span 2;margin-top:var(--hl-s5);}
+  }
+  /* ---- PROGRESS (phase 7, 2.2; was Dashboard): plan rows, the challenge block, range, activity, unified progress ---- */
+  #panel-dashboard .dash-signedout.hl-raised{background:var(--hl-raised);border:0;padding:var(--hl-s5);margin-top:var(--hl-s5);}
+  #panel-dashboard .dash-signedout .range-step{display:flex;flex-direction:column;align-items:flex-start;gap:var(--hl-s3);text-align:left;}
+  #panel-dashboard .dash-signedout .hl-h3{color:var(--hl-ink);margin:0;}
+  #panel-dashboard .dash-signedout p{margin:0;}
+  #panel-dashboard .dash-elsewhere[hidden]{display:none;}
+  #panel-dashboard .hl-section{margin-top:var(--hl-s5);}
+  #panel-dashboard .hl-section > .hl-label{margin-bottom:var(--hl-s2);}
+  #panel-dashboard .dash-h{color:var(--hl-ink);margin:0 0 var(--hl-s3);}
+  #panel-dashboard .plan-row .hl-item-title{display:block;color:var(--hl-ink);}
+  #panel-dashboard .plan-row .hl-item-meta{display:block;margin-top:2px;}
+  #panel-dashboard .dash-challenge{display:flex;flex-direction:column;gap:var(--hl-s2);padding:var(--hl-s5);margin-top:var(--hl-s5);}
+  #panel-dashboard .dash-challenge .hl-h3{color:var(--hl-ink);}
+  #panel-dashboard .dash-challenge-meter{margin-top:var(--hl-s2);}
+  #panel-dashboard .dash-challenge-meter > i{background:var(--hl-ink);}
+  #panel-dashboard .dash-challenge p{margin:0;}
+  #panel-dashboard .range-span{font-size:var(--hl-t-h2);color:var(--hl-ink);margin:0 0 var(--hl-s3);}
+  #panel-dashboard .range-bar-wrap{margin:0;max-width:none;}
+  #panel-dashboard .activity-chart .bar{max-height:calc(100% - 20px);}
+  #panel-dashboard .activity-chart .day-label{color:var(--hl-ink-3);font-size:var(--hl-t-label);}
+  #panel-dashboard .dash-unified p{margin:var(--hl-s2) 0 0;}
+  #panel-dashboard .dash-legend{display:flex;gap:var(--hl-s4);margin-top:var(--hl-s3);font-size:var(--hl-t-small);color:var(--hl-ink-2);}
+  #panel-dashboard .dash-key{display:inline-flex;align-items:center;gap:6px;}
+  #panel-dashboard .dash-key > i{display:inline-block;width:16px;height:0;border-top:2.5px solid var(--hl-ink);}
+  #panel-dashboard .dash-key--pitch > i{border-top-color:var(--hl-voice);}
+  #panel-dashboard .dash-key--agility > i{border-top:2.5px dashed var(--hl-ink-3);}
+  #panel-dashboard .dash-actions{margin-top:var(--hl-s6);}
+  @media (min-width:960px){
+    #panel-dashboard #dashSignedIn[style*="block"]{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;} /* renderDashboard shows it with display:block */
+    #panel-dashboard .dash-actions{grid-column:1 / -1;}
+  }
   /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
   .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
   .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
@@ -2712,41 +2772,42 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-title" data-i18n="hub_you_title">You</div>
       <div class="j-sub" data-i18n="hub_you_sub">Your range, progress and plan.</div>
     </div>
-    <div class="hub-category-grid">
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_profile_title">🎤 Profile</div>
-        <div class="hc-desc" data-i18n="hub_you_profile_desc">Your singer identity in one place — level, range, strengths, achievements, records, all real.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="profile" data-i18n="hub_open_btn">Open</button></div>
+    <!-- phase 7 (PHASE7.md 2.1): the one place for you. Signed out: one block. Signed in: who you are (level, XP to the
+         next level, streak, sessions), the Skill Profile (drawn here only), then every You screen as a row with one value. -->
+    <div class="you-signedout hl-raised" id="youSignedOut" hidden>
+      <h3 class="hl-h3" data-i18n="you_signedout_h">Your progress lives here</h3>
+      <p class="hl-small" data-i18n="you_signedout_desc">Sign in and this page shows your level, your Skill Profile, your records and your 21-Day Journey, from what you sing.</p>
+      <button class="hl-btn hl-btn--ink" id="youSignInBtn" type="button" data-i18n="auth_signin_btn">Sign in</button>
+    </div>
+    <div class="you-signedin" id="youSignedIn" hidden>
+      <div class="you-id hl-raised">
+        <div class="hl-row you-id-head">
+          <div class="you-avatar" id="youAvatar" aria-hidden="true">?</div>
+          <div class="you-id-text"><h3 class="hl-h3" id="youName">—</h3><div class="hl-small" id="youLevelLine">—</div></div>
+        </div>
+        <div class="hl-meter you-xp-meter" id="youXpMeter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-labelledby="youXpText"><i></i></div>
+        <div class="hl-meta" id="youXpText">—</div>
+        <div class="you-figs">
+          <div class="hl-stat"><span class="hl-label" data-i18n="profile_streak_label">Streak</span><span class="you-fig" id="youStreak">0</span></div>
+          <div class="hl-stat"><span class="hl-label" data-i18n="profile_totalsessions_label">Total sessions</span><span class="you-fig" id="youSessions">0</span></div>
+        </div>
       </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_journey_title">21-Day Journey</div>
-        <div class="hc-desc" data-i18n="hub_you_journey_desc">Baseline, goal, XP, achievements, Day 1 vs. today.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="journey" data-i18n="hub_open_btn">Open</button></div>
+      <div class="you-skill">
+        <div class="hl-label" data-i18n="dashboard_skillprofile_label">Vocal Skill Profile</div>
+        <div id="youSkillBars"></div>
+        <div class="you-skill-summary vc-result-dims" id="youSkillSummary"></div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="you_skill_measure"></p></details>
       </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_dashboard_title">Dashboard &amp; Skill Profile</div>
-        <div class="hc-desc" data-i18n="hub_you_dashboard_desc">5 real scores, Today's Plan, Weekly Challenge, adaptive weighting.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="dashboard" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_voicehealth_title">Voice Health</div>
-        <div class="hc-desc" data-i18n="hub_you_voicehealth_desc">14-day trend on stability and breath — not single-session panic.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="voicehealth" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_pricing_title">Plan &amp; Pricing</div>
-        <div class="hc-desc" data-i18n="hub_you_pricing_desc">See your tier, upgrade, or manage your plan.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="pricing" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_records_title">Personal Records</div>
-        <div class="hc-desc" data-i18n="hub_you_records_desc">Every real best, in one place — range, pitch, breath, and every Vocal World game.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="records" data-i18n="hub_open_btn">Open</button></div>
-      </div>
-      <div class="hub-category-card">
-        <div class="hc-title" data-i18n="hub_you_teacher_title">👩‍🏫 Teacher Dashboard</div>
-        <div class="hc-desc" data-i18n="hub_you_teacher_desc">Real roster and assignment tracking — Teacher plan.</div>
-        <div class="hc-btn-row"><button class="ghost-btn" data-enter-panel="teacher" data-i18n="hub_open_btn">Open</button></div>
+      <div class="hl-list you-rows">
+        <button class="hl-item you-row" data-enter-panel="journey"><svg class="hl-icon" aria-hidden="true"><use href="#hl-calendar"/></svg><span><span class="hl-item-title" data-i18n="hub_you_journey_title"></span><span class="hl-item-meta" data-i18n="hub_you_journey_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValJourney"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="dashboard"><svg class="hl-icon" aria-hidden="true"><use href="#hl-chart"/></svg><span><span class="hl-item-title" data-i18n="hub_you_dashboard_title"></span><span class="hl-item-meta" data-i18n="hub_you_dashboard_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValProgress"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="records"><svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg><span><span class="hl-item-title" data-i18n="hub_you_records_title"></span><span class="hl-item-meta" data-i18n="hub_you_records_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValRecords"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="passport"><svg class="hl-icon" aria-hidden="true"><use href="#hl-passport"/></svg><span><span class="hl-item-title" data-i18n="you_passport_title"></span><span class="hl-item-meta" data-i18n="you_passport_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPassport"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="voicehealth"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span><span class="hl-item-title" data-i18n="hub_you_voicehealth_title"></span><span class="hl-item-meta" data-i18n="hub_you_voicehealth_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValHealth"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" id="youChoirRow" data-you-choir hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-choir"/></svg><span><span class="hl-item-title" data-i18n="cw_label">Choir World</span><span class="hl-item-meta" data-i18n="you_choir_desc">Your parts' readiness</span></span><span class="hl-item-end"><span class="you-row-val" id="youValChoir"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="teacher" id="youTeacherRow" hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-group"/></svg><span><span class="hl-item-title" data-i18n="hub_you_teacher_title"></span><span class="hl-item-meta" data-i18n="hub_you_teacher_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValTeacher"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="pricing"><svg class="hl-icon" aria-hidden="true"><use href="#hl-lock"/></svg><span><span class="hl-item-title" data-i18n="hub_you_pricing_title"></span><span class="hl-item-meta" data-i18n="hub_you_pricing_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPlan"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="profile"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span><span class="hl-item-title" data-i18n="hub_you_profile_title"></span><span class="hl-item-meta" data-i18n="hub_you_profile_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValProfile"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
       </div>
     </div>
   </section>
@@ -3695,75 +3756,76 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- DASHBOARD PANEL -->
   <section class="panel" id="panel-dashboard">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="dashboard_title">📊 Dashboard</div>
-      <div class="j-sub" data-i18n="dashboard_sub">Your 5-score Skill Profile, Today's Plan, and the adaptive engine that reweights your training from real results.</div>
+      <div class="j-title" data-i18n="dashboard_title">Progress</div>
+      <div class="j-sub" data-i18n="dashboard_sub">Today's Plan, this week's challenge, your range and your practice over time.</div>
     </div>
-    <div class="key-card" id="dashSignedOut">
+    <!-- phase 7 (PHASE7.md 2.2): Progress (was Dashboard). Who you are and the Skill Profile live on You; the invented
+         "How you compare" is hidden (rule 5, like the Director Dashboard). IDs kept. -->
+    <div class="key-card dash-signedout hl-raised" id="dashSignedOut">
       <div class="range-step">
-        <div class="step-label" data-i18n="dashboard_signedout_label">Progress Dashboard</div>
-        <h2 data-i18n="dashboard_signedout_h2">Create a free account to track progress</h2>
-        <p data-i18n="dashboard_signedout_desc">Once signed in, your range, practice streak, and session history save locally and show up here — the same shape as the real per-user dashboard in the PRD.</p>
+        <div class="step-label hl-label" data-i18n="dashboard_signedout_label">Progress</div>
+        <h2 class="hl-h3" data-i18n="dashboard_signedout_h2">Create a free account to track progress</h2>
+        <p class="hl-small" data-i18n="dashboard_signedout_desc">Once signed in, your range, practice streak and session history show up here.</p>
         <button class="solid-btn teal" id="dashSignInBtn" data-i18n="dashboard_create_account_btn">Create free account</button>
       </div>
     </div>
 
     <div id="dashSignedIn" style="display:none;">
-      <div class="dash-grid">
-        <div class="dash-card">
-          <div class="label" data-i18n="dashboard_signedinas_label">Signed in as</div>
-          <div class="big-val" id="dashName">—</div>
+      <div class="dash-elsewhere" hidden>
+        <div class="dash-grid">
+          <div class="dash-card"><div class="label" data-i18n="dashboard_signedinas_label">Signed in as</div><div class="big-val" id="dashName">—</div></div>
+          <div class="dash-card"><div class="label" data-i18n="dashboard_streak_label">Current streak</div><div class="big-val"><span id="dashStreak">0</span> <span class="unit" data-i18n="dashboard_days_unit">days</span></div></div>
+          <div class="dash-card"><div class="label" data-i18n="dashboard_sessions_label">Total sessions</div><div class="big-val" id="dashSessions">0</div></div>
         </div>
-        <div class="dash-card">
-          <div class="label" data-i18n="dashboard_streak_label">Current streak</div>
-          <div class="big-val"><span id="dashStreak">0</span> <span class="unit" data-i18n="dashboard_days_unit">days</span></div>
-        </div>
-        <div class="dash-card">
-          <div class="label" data-i18n="dashboard_sessions_label">Total sessions</div>
-          <div class="big-val" id="dashSessions">0</div>
-        </div>
-      </div>
-
-      <div class="key-card" style="margin-top:20px;">
-        <div class="step-label" data-i18n="dashboard_skillprofile_label">Vocal Skill Profile</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="dashboard_skillprofile_h2">Five scores, built from what you've actually practiced</h2>
-        <p class="desc" style="margin-bottom:18px;" data-i18n="dashboard_skillprofile_desc">Pitch and Agility come from Exercises, Range from Range Finder, Breath from the Breath Trainer. Expression stays honest — it shows "not enough data" until an expression/dynamics trainer exists, rather than guessing.</p>
         <div id="skillProfileBars"></div>
         <div class="skill-summary-row" id="skillSummaryRow"></div>
-      </div>
-
-      <div class="key-card" style="margin-top:20px;">
-        <div class="step-label" data-i18n="dashboard_todaysplan_label">Today's Plan</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="dashboard_todaysplan_h2">Rule-based, not AI — built from your real weak spots</h2>
-        <p class="desc" style="margin-bottom:16px;" data-i18n="dashboard_todaysplan_desc">This is a deterministic recommendation engine reading your Skill Profile and Register Coach history, not a language model reasoning about you — worth saying plainly rather than overclaiming "AI."</p>
-        <div id="todaysPlanList"></div>
-      </div>
-
-      <div class="key-card" style="margin-top:20px;">
-        <div class="step-label" data-i18n="dashboard_weeklychallenge_label">Weekly Challenge</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" id="challengeTitle">—</h2>
-        <div class="challenge-progress-track"><div class="challenge-progress-fill" id="challengeProgressFill" style="width:0%;"></div></div>
-        <p class="fine-print" id="challengeStatusText" style="margin-top:8px;"></p>
-        <p class="desc" style="margin:16px 0 8px;"><span data-i18n="dashboard_howyoucompare">How you compare</span> <span class="mock-tag" data-i18n="dashboard_sampledata_tag">SAMPLE DATA</span> <span data-i18n="dashboard_backend_note">— needs a real multi-user backend, same honesty note as the Director Dashboard.</span></p>
+        <p class="desc"><span data-i18n="dashboard_howyoucompare">How you compare</span> <span class="mock-tag" data-i18n="dashboard_sampledata_tag">SAMPLE DATA</span> <span data-i18n="dashboard_backend_note"></span></p>
         <div id="challengeLeaderboard"></div>
       </div>
 
-      <div class="key-card" style="margin-top:20px;">
-        <div class="step-label" data-i18n="dashboard_rangeprogress_label">Vocal Range Progress</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 18px;" data-i18n="dashboard_widestrange_h2">Widest range recorded</h2>
-        <div class="range-span" id="dashRangeSpan" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:19px;margin-bottom:14px;">Not captured yet — visit Range Finder</div>
-        <div class="range-bar-wrap" style="margin:0;">
+      <section class="hl-section dash-plan">
+        <div class="hl-label" data-i18n="dashboard_todaysplan_label">Today's Plan</div>
+        <div class="hl-list" id="todaysPlanList"></div>
+        <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="progress_plan_measure"></p></details>
+      </section>
+
+      <section class="dash-challenge hl-raised">
+        <div class="hl-label" data-i18n="dashboard_weeklychallenge_label">Weekly Challenge</div>
+        <h3 class="hl-h3" id="challengeTitle">—</h3>
+        <div class="hl-meter dash-challenge-meter"><i id="challengeProgressFill" style="width:0%;"></i></div>
+        <p class="hl-small" id="challengeStatusText"></p>
+      </section>
+
+      <section class="hl-section">
+        <div class="hl-label" data-i18n="dashboard_rangeprogress_label">Vocal Range Progress</div>
+        <h3 class="hl-h3 dash-h" data-i18n="dashboard_widestrange_h2">Widest range recorded</h3>
+        <div class="range-span hl-note" id="dashRangeSpan">—</div>
+        <div class="range-bar-wrap">
           <div class="range-bar"><div class="fill" id="dashRangeFill" style="left:0;width:0;"></div></div>
           <div class="range-bar-labels"><span>C2</span><span>C4</span><span>C6</span></div>
         </div>
-      </div>
+      </section>
 
-      <div class="key-card" style="margin-top:20px;">
-        <div class="step-label" data-i18n="dashboard_last14days_label">Last 14 Days</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 18px;" data-i18n="dashboard_activity_h2">Practice activity</h2>
+      <section class="hl-section">
+        <div class="hl-label" data-i18n="dashboard_last14days_label">Last 14 Days</div>
+        <h3 class="hl-h3 dash-h" data-i18n="dashboard_activity_h2">Practice activity</h3>
         <div class="activity-chart" id="activityChart"></div>
-      </div>
+      </section>
 
-      <div class="btn-row" style="margin-top:22px;">
+      <section class="hl-section dash-unified">
+        <div class="hl-label" data-i18n="profile_unifiedprogress_label">Unified Progress</div>
+        <p class="hl-small" data-i18n="profile_unifiedprogress_desc"></p>
+        <svg id="unifiedTrendSvg" viewBox="0 0 400 180" style="width:100%;display:block;"></svg>
+        <div class="dash-legend">
+          <span class="dash-key dash-key--pitch"><i></i><span data-i18n="profile_pitch_label">Pitch</span></span>
+          <span class="dash-key dash-key--breath"><i></i><span data-i18n="profile_breath_label">Breath</span></span>
+          <span class="dash-key dash-key--agility"><i></i><span data-i18n="profile_agility_label">Agility</span></span>
+        </div>
+        <p class="hl-meta" id="unifiedProgressNote"></p>
+        <p class="hl-small" id="unifiedProgressImproved"></p>
+      </section>
+
+      <div class="btn-row dash-actions">
         <button class="solid-btn teal" id="shareRecapBtn" data-i18n="dashboard_share_btn">Share my recap</button>
         <button class="ghost-btn" id="dashResetBtn" data-i18n="dashboard_reset_btn">Reset local data</button>
         <button class="ghost-btn" id="dashSignOutBtn" data-i18n="dashboard_signout_btn">Sign out</button>
@@ -5302,18 +5364,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="btn-row" style="margin-top:14px;"><button class="ghost-btn" data-enter-panel="arcade" data-i18n="profile_openworld_btn">Open Vocal World</button></div>
       </div>
 
-      <div class="key-card" style="margin-top:16px;">
-        <div class="step-label" data-i18n="profile_unifiedprogress_label">📈 Unified Progress</div>
-        <p class="fine-print" style="margin:6px 0 14px;" data-i18n="profile_unifiedprogress_desc">One real trend view across your three most-tracked categories — pulled from the same real weekly log every exercise already writes to, not a separate tracker.</p>
-        <svg id="unifiedTrendSvg" viewBox="0 0 400 180" style="width:100%;display:block;"></svg>
-        <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;">
-          <span style="color:var(--teal);">● <span data-i18n="profile_pitch_label">Pitch</span></span>
-          <span style="color:var(--brass);">● <span data-i18n="profile_breath_label">Breath</span></span>
-          <span style="color:var(--coral);">● <span data-i18n="profile_agility_label">Agility</span></span>
-        </div>
-        <p class="fine-print" id="unifiedProgressNote" style="margin-top:10px;"></p>
-        <p class="fine-print" id="unifiedProgressImproved" style="margin-top:6px;color:var(--hl-ok);"></p>
-      </div>
 
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_personalrecords_label">Personal Records</div>
@@ -6712,7 +6762,7 @@ const TRANSLATIONS = {
     settings_playback_title:'🔊 Playback volume', settings_playback_sub:'Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.',
     hub_you_profile_title:'🎤 Profile', hub_you_profile_desc:'Your singer identity in one place — level, range, strengths, achievements, records, all real.',
     hub_you_journey_title:'21-Day Journey', hub_you_journey_desc:'Baseline, goal, XP, achievements, Day 1 vs. today.',
-    hub_you_dashboard_title:'Dashboard & Skill Profile', hub_you_dashboard_desc:"5 real scores, Today's Plan, Weekly Challenge, adaptive weighting.",
+    hub_you_dashboard_title:"Progress", hub_you_dashboard_desc:"Today's Plan, the weekly challenge, your range and activity.",
     hub_you_voicehealth_title:'Voice Health', hub_you_voicehealth_desc:'14-day trend on stability and breath — not single-session panic.',
     hub_you_pricing_title:'Plan & Pricing', hub_you_pricing_desc:'See your tier, upgrade, or manage your plan.',
     hub_you_records_title:'Personal Records', hub_you_records_desc:'Every real best, in one place — range, pitch, breath, and every Vocal World game.',
@@ -6969,8 +7019,8 @@ const TRANSLATIONS = {
     journey_sub:'Not a trial countdown — a structured baseline, three themed weeks, and an honest before/after at the end. Every number here comes from tools already built elsewhere in this app, sequenced into one guided path.',
     key_title:'Key Trainer',
     key_sub:"Play a reference tone in any key, or let the app recommend the best key for your captured range, transposed to fit.",
-    dashboard_title:'📊 Dashboard',
-    dashboard_sub:'Your 5-score Skill Profile, Today\'s Plan, and the adaptive engine that reweights your training from real results.',
+    dashboard_title:"Progress",
+    dashboard_sub:"Today's Plan, this week's challenge, your range and your practice over time.",
     boss_choose_desc:'Same real engine, genuinely different scoring per boss — not reskins.',
     boss_choose_h2:'Choose your boss and difficulty',
     boss_listen_score_btn:'Listen & score',
@@ -7457,9 +7507,9 @@ const TRANSLATIONS = {
     dashboard_sessions_label:'Total sessions',
     dashboard_share_btn:'Share my recap',
     dashboard_signedinas_label:'Signed in as',
-    dashboard_signedout_desc:'Once signed in, your range, practice streak, and session history save locally and show up here — the same shape as the real per-user dashboard in the PRD.',
+    dashboard_signedout_desc:"Once signed in, your range, practice streak and session history show up here.",
     dashboard_signedout_h2:'Create a free account to track progress',
-    dashboard_signedout_label:'Progress Dashboard',
+    dashboard_signedout_label:"Progress",
     dashboard_signout_btn:'Sign out',
     dashboard_skillprofile_desc:'Pitch and Agility come from Exercises, Range from Range Finder, Breath from the Breath Trainer. Expression stays honest — it shows "not enough data" until an expression/dynamics trainer exists, rather than guessing.',
     dashboard_skillprofile_h2:'Five scores, built from what you\'ve actually practiced',
@@ -7662,7 +7712,7 @@ const TRANSLATIONS = {
     profile_downloadcard_btn:'Download my Voice Card',
     profile_fingerprint_desc:'The real shape of your Skill Profile — same five categories as everywhere else, just drawn as one identity rather than five separate bars.',
     profile_fingerprint_label:'🫆 Your Voice Fingerprint',
-    profile_opendashboard_btn:'Open full Dashboard',
+    profile_opendashboard_btn:"Open Progress",
     profile_openjourney_btn:'Open full 21-Day Journey',
     profile_openworld_btn:'Open Vocal World',
     profile_personalrecords_label:'Personal Records',
@@ -8260,6 +8310,30 @@ const TRANSLATIONS = {
     karaoke_measure:"Each chord is one note of the Lead line. A note's pitch: 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out); a note with no voice is Not heard. Pitch is the average over the notes you sang, saved as your pitch score. Timing: 100 if your voice came in during a note's first 40 %, 50 if later, 0 if not heard, averaged over every note. Your song best is the average of Pitch and Timing.",
     emotion_result_label:"Dynamic contrast",
     emotion_measure:"An estimate. Dynamic contrast is how much your loudness varies while you sing: the spread of your level readings above the silence threshold, relative to their average, × 250, at most 100. It's saved as your expression score. Loudness also changes with your distance from the mic and the room, so treat it as a guide. Pitch: for each note of the Lead line, 100 minus 0.6 × your average distance from it in cents, natural vibrato taken out.",
+    // phase 7 (PHASE7.md)
+    you_signedout_h:"Your progress lives here",
+    you_signedout_desc:"Sign in and this page shows your level, your Skill Profile, your records and your 21-Day Journey, from what you sing.",
+    you_level_tpl:"Level {n} · {name}",
+    you_xp_tpl:"{xp} XP · {left} to level {next}",
+    you_notstarted:"Not started",
+    you_week_tpl:"{p}% this week",
+    you_records_tpl:"{n} records",
+    you_load_tpl:"{p}% vocal load",
+    you_passport_title:"Vocal Passport",
+    you_passport_desc:"Your range, level and breakthroughs, in one place.",
+    you_choir_desc:"Your parts' readiness",
+    skill_status_label:"Status",
+    skill_nodata:"No scores yet: try an exercise or the Range Finder.",
+    skill_read_label:"Level read",
+    skill_level_pro:"Professional",
+    skill_level_mid:"Intermediate",
+    skill_level_beg:"Beginner",
+    skill_strongest_label:"Strongest",
+    skill_needswork_label:"Needs work",
+    skill_notscored_label:"Not scored yet",
+    skill_notinprofile:"Not in your profile yet.",
+    you_skill_measure:"Pitch: the average of your last 20 pitch scores, from Pitch Match, Interval Match, Stay in Key, Karaoke Coach, Performance Director and the other pitch trainers. Range: your saved range, where 30 semitones (two and a half octaves) is 100. Breath: Breath Control. Agility: Scale Run, the Rhythm Trainer, Vocal Puzzle and Rift. Expression isn't in your profile yet: its measurement is being improved first. The level read is the average of the scored rings: 80 and above Professional, 55 and above Intermediate.",
+    progress_plan_measure:"Rule-based: a warm-up first, then the lowest ring of your Skill Profile, Register Coach if your longest register crossing is under 3 seconds, then this week's challenge.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8300,7 +8374,7 @@ const TRANSLATIONS = {
     settings_playback_title:'🔊 Volume de lecture', settings_playback_sub:'Notes de référence, guides, accompagnement, chœur et enregistrements. Votre micro et vos scores ne sont pas concernés.',
     hub_you_profile_title:'🎤 Profil', hub_you_profile_desc:'Votre identité de chanteur en un seul endroit — niveau, tessiture, points forts, succès, records, tout est réel.',
     hub_you_journey_title:'Parcours de 21 jours', hub_you_journey_desc:"Référence de départ, objectif, XP, succès, Jour 1 vs aujourd'hui.",
-    hub_you_dashboard_title:'Tableau de bord et Profil de compétences', hub_you_dashboard_desc:"5 scores réels, Plan du jour, Défi hebdomadaire, pondération adaptative.",
+    hub_you_dashboard_title:"Progrès", hub_you_dashboard_desc:"Le plan du jour, le défi de la semaine, votre tessiture et votre activité.",
     hub_you_voicehealth_title:'Santé vocale', hub_you_voicehealth_desc:"Tendance sur 14 jours de la stabilité et du souffle — pas la panique d'une seule séance.",
     hub_you_pricing_title:'Forfait et tarifs', hub_you_pricing_desc:'Consultez votre offre, passez à un niveau supérieur ou gérez votre forfait.',
     hub_you_records_title:'Records personnels', hub_you_records_desc:'Chaque record réel, au même endroit — tessiture, justesse, souffle, et chaque jeu du Monde Vocal.',
@@ -8557,8 +8631,8 @@ const TRANSLATIONS = {
     journey_sub:'Pas un compte à rebours d\'essai — une base structurée, trois semaines thématiques, et un vrai avant/après honnête à la fin. Chaque chiffre ici provient d\'outils déjà construits ailleurs dans cette application, séquencés en un seul chemin guidé.',
     key_title:'Entraîneur de Tonalité',
     key_sub:"Jouez un son de référence dans n'importe quelle tonalité, ou laissez l'application recommander la meilleure tonalité pour votre tessiture enregistrée, transposée pour lui convenir.",
-    dashboard_title:'📊 Tableau de Bord',
-    dashboard_sub:'Votre Profil de compétences à 5 scores, le Plan du jour, et le moteur adaptatif qui repondère votre entraînement à partir de vrais résultats.',
+    dashboard_title:"Progrès",
+    dashboard_sub:"Le plan du jour, le défi de la semaine, votre tessiture et votre pratique dans le temps.",
     boss_choose_desc:'Même vrai moteur, notation vraiment différente par boss — pas de simples re-habillages.',
     boss_choose_h2:'Choisissez votre boss et votre difficulté',
     boss_listen_score_btn:'Écouter et noter',
@@ -9045,9 +9119,9 @@ const TRANSLATIONS = {
     dashboard_sessions_label:'Sessions totales',
     dashboard_share_btn:'Partager mon récapitulatif',
     dashboard_signedinas_label:'Connecté en tant que',
-    dashboard_signedout_desc:'Une fois connecté, votre tessiture, votre série de pratique et votre historique de sessions s\'enregistrent localement et apparaissent ici — la même forme que le vrai tableau de bord par utilisateur du PRD.',
+    dashboard_signedout_desc:"Une fois connecté, votre tessiture, votre série de pratique et l'historique de vos séances apparaissent ici.",
     dashboard_signedout_h2:'Créez un compte gratuit pour suivre vos progrès',
-    dashboard_signedout_label:'Tableau de bord des progrès',
+    dashboard_signedout_label:"Progrès",
     dashboard_signout_btn:'Se déconnecter',
     dashboard_skillprofile_desc:'La justesse et l\'agilité viennent des Exercices, la tessiture du Détecteur de tessiture, le souffle de l\'Entraîneur de souffle. L\'expression reste honnête — elle affiche « pas assez de données » jusqu\'à ce qu\'un entraîneur d\'expression/dynamique existe, plutôt que de deviner.',
     dashboard_skillprofile_h2:'Cinq scores, construits à partir de ce que vous avez réellement pratiqué',
@@ -9250,7 +9324,7 @@ const TRANSLATIONS = {
     profile_downloadcard_btn:'Télécharger ma carte vocale',
     profile_fingerprint_desc:'La vraie forme de votre Profil de compétences — mêmes cinq catégories que partout ailleurs, juste dessinée comme une seule identité plutôt que cinq barres séparées.',
     profile_fingerprint_label:'🫆 Votre empreinte vocale',
-    profile_opendashboard_btn:'Ouvrir le tableau de bord complet',
+    profile_opendashboard_btn:"Ouvrir Progrès",
     profile_openjourney_btn:'Ouvrir le parcours complet de 21 jours',
     profile_openworld_btn:'Ouvrir le Monde Vocal',
     profile_personalrecords_label:'Records personnels',
@@ -9848,6 +9922,30 @@ const TRANSLATIONS = {
     karaoke_measure:"Chaque accord est une note de la ligne principale. Justesse d'une note : 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré) ; une note sans voix est « Pas entendue ». La justesse est la moyenne des notes chantées, enregistrée comme score de justesse. Timing : 100 si votre voix arrive dans les premiers 40 % de la note, 50 si plus tard, 0 si pas entendue, en moyenne sur toutes les notes. Votre meilleur score du morceau est la moyenne de la justesse et du timing.",
     emotion_result_label:"Contraste dynamique",
     emotion_measure:"Une estimation. Le contraste dynamique mesure combien votre volume varie pendant que vous chantez : l'écart de vos niveaux au-dessus du seuil de silence, rapporté à leur moyenne, × 250, 100 au plus. Il est enregistré comme score d'expression. Le volume change aussi avec la distance au micro et la pièce : prenez-le comme un repère. Justesse : pour chaque note de la ligne principale, 100 moins 0,6 × votre écart moyen en cents, vibrato naturel retiré.",
+    // phase 7 (PHASE7.md)
+    you_signedout_h:"Votre progression est ici",
+    you_signedout_desc:"Connectez-vous : cette page montre votre niveau, votre profil de compétences, vos records et votre parcours de 21 jours, d'après ce que vous chantez.",
+    you_level_tpl:"Niveau {n} · {name}",
+    you_xp_tpl:"{xp} XP · {left} avant le niveau {next}",
+    you_notstarted:"Pas commencé",
+    you_week_tpl:"{p} % cette semaine",
+    you_records_tpl:"{n} records",
+    you_load_tpl:"charge vocale {p} %",
+    you_passport_title:"Passeport vocal",
+    you_passport_desc:"Votre tessiture, votre niveau et vos progrès marquants, au même endroit.",
+    you_choir_desc:"La préparation de vos voix",
+    skill_status_label:"État",
+    skill_nodata:"Pas encore de score : essayez un exercice ou le Détecteur de tessiture.",
+    skill_read_label:"Niveau estimé",
+    skill_level_pro:"Professionnel",
+    skill_level_mid:"Intermédiaire",
+    skill_level_beg:"Débutant",
+    skill_strongest_label:"Point fort",
+    skill_needswork_label:"À travailler",
+    skill_notscored_label:"Pas encore noté",
+    skill_notinprofile:"Pas encore dans votre profil.",
+    you_skill_measure:"Justesse : la moyenne de vos 20 derniers scores de justesse, issus de Précision de note, Reconnaissance d'intervalles, Rester dans la tonalité, Coach Karaoké, Directeur de performance et des autres exercices de justesse. Tessiture : votre tessiture enregistrée, où 30 demi-tons (deux octaves et demie) valent 100. Souffle : Contrôle du souffle. Agilité : Gamme, l'Entraîneur de Rythme, Puzzle Vocal et Rift. L'expression n'est pas encore dans votre profil : sa mesure est d'abord améliorée. Le niveau estimé est la moyenne des anneaux notés : 80 et plus Professionnel, 55 et plus Intermédiaire.",
+    progress_plan_measure:"Fondé sur des règles : d'abord un échauffement, puis l'anneau le plus bas de votre profil de compétences, le Coach de registre si votre plus long passage de registre dure moins de 3 secondes, puis le défi de la semaine.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -9888,7 +9986,7 @@ const TRANSLATIONS = {
     settings_playback_title:'🔊 Volumen de reproducción', settings_playback_sub:'Notas de referencia, guías, acompañamiento, coro y grabaciones. Tu micrófono y tus puntuaciones no cambian.',
     hub_you_profile_title:'🎤 Perfil', hub_you_profile_desc:'Tu identidad de cantante en un solo lugar — nivel, rango, fortalezas, logros, récords, todo real.',
     hub_you_journey_title:'Recorrido de 21 días', hub_you_journey_desc:'Línea base, objetivo, XP, logros, Día 1 frente a hoy.',
-    hub_you_dashboard_title:'Panel y Perfil de habilidades', hub_you_dashboard_desc:"5 puntuaciones reales, Plan de hoy, Desafío semanal, ponderación adaptativa.",
+    hub_you_dashboard_title:"Progreso", hub_you_dashboard_desc:"El plan de hoy, el reto semanal, tu registro y tu actividad.",
     hub_you_voicehealth_title:'Salud vocal', hub_you_voicehealth_desc:'Tendencia de 14 días en estabilidad y respiración — no el pánico de una sola sesión.',
     hub_you_pricing_title:'Plan y precios', hub_you_pricing_desc:'Consulta tu nivel, mejora o gestiona tu plan.',
     hub_you_records_title:'Récords personales', hub_you_records_desc:'Cada récord real, en un solo lugar — rango, afinación, respiración, y cada juego del Mundo Vocal.',
@@ -10145,8 +10243,8 @@ const TRANSLATIONS = {
     journey_sub:'No es una cuenta regresiva de prueba — una línea base estructurada, tres semanas temáticas, y un antes/después honesto al final. Cada número aquí proviene de herramientas ya construidas en otra parte de esta app, secuenciadas en un camino guiado.',
     key_title:'Entrenador de Tonalidad',
     key_sub:"Toca un tono de referencia en cualquier tonalidad, o deja que la app recomiende la mejor tonalidad para tu rango registrado, transportada para que encaje.",
-    dashboard_title:'📊 Panel',
-    dashboard_sub:'Tu Perfil de habilidades de 5 puntuaciones, el Plan de hoy, y el motor adaptativo que reajusta tu entrenamiento a partir de resultados reales.',
+    dashboard_title:"Progreso",
+    dashboard_sub:"El plan de hoy, el reto de la semana, tu registro y tu práctica a lo largo del tiempo.",
     boss_choose_desc:'Mismo motor real, puntuación genuinamente diferente por jefe — no solo reskins.',
     boss_choose_h2:'Elige tu jefe y dificultad',
     boss_listen_score_btn:'Escuchar y puntuar',
@@ -10633,9 +10731,9 @@ const TRANSLATIONS = {
     dashboard_sessions_label:'Sesiones totales',
     dashboard_share_btn:'Compartir mi resumen',
     dashboard_signedinas_label:'Conectado como',
-    dashboard_signedout_desc:'Una vez que inicies sesión, tu rango, racha de práctica e historial de sesiones se guardan localmente y aparecen aquí — la misma forma que el panel real por usuario del PRD.',
+    dashboard_signedout_desc:"Cuando inicies sesión, tu registro, tu racha de práctica y tu historial de sesiones aparecerán aquí.",
     dashboard_signedout_h2:'Crea una cuenta gratis para seguir tu progreso',
-    dashboard_signedout_label:'Panel de progreso',
+    dashboard_signedout_label:"Progreso",
     dashboard_signout_btn:'Cerrar sesión',
     dashboard_skillprofile_desc:'Afinación y Agilidad vienen de Ejercicios, Rango del Buscador de rango, Respiración del Entrenador de respiración. La Expresión se mantiene honesta — muestra "datos insuficientes" hasta que exista un entrenador de expresión/dinámica, en lugar de adivinar.',
     dashboard_skillprofile_h2:'Cinco puntuaciones, construidas a partir de lo que realmente has practicado',
@@ -10838,7 +10936,7 @@ const TRANSLATIONS = {
     profile_downloadcard_btn:'Descargar mi tarjeta de voz',
     profile_fingerprint_desc:'La forma real de tu Perfil de habilidades — las mismas cinco categorías que en todas partes, solo dibujada como una identidad en lugar de cinco barras separadas.',
     profile_fingerprint_label:'🫆 Tu huella de voz',
-    profile_opendashboard_btn:'Abrir panel completo',
+    profile_opendashboard_btn:"Abrir Progreso",
     profile_openjourney_btn:'Abrir el recorrido completo de 21 días',
     profile_openworld_btn:'Abrir Mundo Vocal',
     profile_personalrecords_label:'Récords personales',
@@ -11436,6 +11534,30 @@ const TRANSLATIONS = {
     karaoke_measure:"Cada acorde es una nota de la línea principal. Afinación de una nota: 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural); una nota sin voz es «No se oyó». La afinación es la media de las notas que cantaste y se guarda como tu puntuación de afinación. Ritmo: 100 si tu voz entra en el primer 40 % de la nota, 50 si entra después, 0 si no se oyó, en promedio sobre todas las notas. Tu mejor marca de la canción es la media de la afinación y el ritmo.",
     emotion_result_label:"Contraste dinámico",
     emotion_measure:"Una estimación. El contraste dinámico es cuánto varía tu volumen mientras cantas: la dispersión de tus niveles por encima del umbral de silencio, relativa a su media, × 250, como máximo 100. Se guarda como tu puntuación de expresión. El volumen también cambia con la distancia al micrófono y la sala, así que tómalo como una guía. Afinación: para cada nota de la línea principal, 100 menos 0,6 × tu distancia media en cents, sin el vibrato natural.",
+    // phase 7 (PHASE7.md)
+    you_signedout_h:"Tu progreso está aquí",
+    you_signedout_desc:"Inicia sesión y esta página mostrará tu nivel, tu perfil de habilidades, tus récords y tu recorrido de 21 días, a partir de lo que cantas.",
+    you_level_tpl:"Nivel {n} · {name}",
+    you_xp_tpl:"{xp} XP · {left} para el nivel {next}",
+    you_notstarted:"Sin empezar",
+    you_week_tpl:"{p} % esta semana",
+    you_records_tpl:"{n} récords",
+    you_load_tpl:"carga vocal {p} %",
+    you_passport_title:"Pasaporte vocal",
+    you_passport_desc:"Tu registro, tu nivel y tus avances, en un solo lugar.",
+    you_choir_desc:"La preparación de tus voces",
+    skill_status_label:"Estado",
+    skill_nodata:"Aún no hay puntuaciones: prueba un ejercicio o el Buscador de registro.",
+    skill_read_label:"Nivel estimado",
+    skill_level_pro:"Profesional",
+    skill_level_mid:"Intermedio",
+    skill_level_beg:"Principiante",
+    skill_strongest_label:"Punto fuerte",
+    skill_needswork_label:"A mejorar",
+    skill_notscored_label:"Sin puntuar aún",
+    skill_notinprofile:"Aún no está en tu perfil.",
+    you_skill_measure:"Afinación: la media de tus últimas 20 puntuaciones de afinación, de Precisión de nota, Reconocimiento de intervalos, Mantente en tono, Coach de Karaoke, Director de actuación y los demás ejercicios de afinación. Registro: tu registro guardado, donde 30 semitonos (dos octavas y media) valen 100. Respiración: Control de respiración. Agilidad: Escala, el Entrenador de Ritmo, Rompecabezas Vocal y Rift. La expresión aún no está en tu perfil: primero se está mejorando su medición. El nivel estimado es la media de los anillos puntuados: 80 o más Profesional, 55 o más Intermedio.",
+    progress_plan_measure:"Basado en reglas: primero un calentamiento, luego el anillo más bajo de tu perfil de habilidades, el Coach de registro si tu paso de registro más largo dura menos de 3 segundos, y después el reto de la semana.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11476,7 +11598,7 @@ const TRANSLATIONS = {
     settings_playback_title:'🔊 Çalma sesi', settings_playback_sub:'Referans notalar, kılavuzlar, eşlik, koro ve kayıtlar. Mikrofonunuz ve puanlarınız etkilenmez.',
     hub_you_profile_title:'🎤 Profil', hub_you_profile_desc:'Şarkıcı kimliğiniz tek bir yerde — seviye, ses aralığı, güçlü yönler, başarılar, rekorlar, hepsi gerçek.',
     hub_you_journey_title:'21 Günlük Yolculuk', hub_you_journey_desc:'Başlangıç, hedef, XP, başarılar, 1. Gün ile bugün karşılaştırması.',
-    hub_you_dashboard_title:'Panel ve Yetenek Profili', hub_you_dashboard_desc:"5 gerçek puan, Bugünün Planı, Haftalık Meydan Okuma, uyarlanabilir ağırlıklandırma.",
+    hub_you_dashboard_title:"İlerleme", hub_you_dashboard_desc:"Bugünün planı, haftalık görev, ses aralığın ve etkinliğin.",
     hub_you_voicehealth_title:'Ses Sağlığı', hub_you_voicehealth_desc:'Kararlılık ve nefeste 14 günlük eğilim — tek oturumluk panik değil.',
     hub_you_pricing_title:'Plan ve Fiyatlandırma', hub_you_pricing_desc:'Planınızı görün, yükseltin veya yönetin.',
     hub_you_records_title:'Kişisel Rekorlar', hub_you_records_desc:'Her gerçek rekor tek bir yerde — ses aralığı, perde, nefes ve her Vokal Dünyası oyunu.',
@@ -11733,8 +11855,8 @@ const TRANSLATIONS = {
     journey_sub:'Bir deneme geri sayımı değil — yapılandırılmış bir başlangıç noktası, üç temalı hafta ve sonunda dürüst bir öncesi/sonrası. Buradaki her sayı, uygulamanın başka yerinde zaten oluşturulmuş araçlardan gelir, tek bir rehberli yola dizilmiştir.',
     key_title:'Tonalite Antrenörü',
     key_sub:"Herhangi bir tonda referans ses çalın ya da uygulamanın kaydedilen aralığınıza en uygun tonu, ona göre transpoze ederek önermesine izin verin.",
-    dashboard_title:'📊 Panel',
-    dashboard_sub:'5 puanlı Yetenek Profiliniz, Bugünün Planı ve gerçek sonuçlardan antrenmanınızı yeniden ağırlıklandıran uyarlanabilir motor.',
+    dashboard_title:"İlerleme",
+    dashboard_sub:"Bugünün planı, haftanın görevi, ses aralığın ve zaman içindeki çalışman.",
     boss_choose_desc:'Aynı gerçek motor, boss başına gerçekten farklı puanlama — yeniden kaplamalar değil.',
     boss_choose_h2:'Boss ve zorluk seçin',
     boss_listen_score_btn:'Dinle ve puanla',
@@ -12221,9 +12343,9 @@ const TRANSLATIONS = {
     dashboard_sessions_label:'Toplam oturum',
     dashboard_share_btn:'Özetimi paylaş',
     dashboard_signedinas_label:'Şu olarak oturum açıldı',
-    dashboard_signedout_desc:'Oturum açtıktan sonra, ses aralığınız, pratik seriniz ve oturum geçmişiniz yerel olarak kaydedilir ve burada görünür — PRD\'deki gerçek kullanıcı başına panelle aynı şekil.',
+    dashboard_signedout_desc:"Giriş yaptığında ses aralığın, çalışma serin ve oturum geçmişin burada görünür.",
     dashboard_signedout_h2:'İlerlemeyi takip etmek için ücretsiz hesap oluşturun',
-    dashboard_signedout_label:'İlerleme Paneli',
+    dashboard_signedout_label:"İlerleme",
     dashboard_signout_btn:'Oturumu kapat',
     dashboard_skillprofile_desc:'Perde ve Çeviklik Egzersizlerden, Aralık Ses Aralığı Bulucudan, Nefes Nefes Antrenöründen gelir. İfade dürüst kalır — tahmin etmek yerine, bir ifade/dinamik antrenörü var olana kadar "yeterli veri yok" gösterir.',
     dashboard_skillprofile_h2:'Gerçekten pratik yaptığınız şeylerden oluşturulan beş puan',
@@ -12426,7 +12548,7 @@ const TRANSLATIONS = {
     profile_downloadcard_btn:'Ses Kartımı indir',
     profile_fingerprint_desc:'Yetenek Profilinizin gerçek şekli — her yerdeki aynı beş kategori, sadece beş ayrı çubuk yerine tek bir kimlik olarak çizilmiş.',
     profile_fingerprint_label:'🫆 Ses Parmak İziniz',
-    profile_opendashboard_btn:'Tam Paneli aç',
+    profile_opendashboard_btn:"İlerleme'yi aç",
     profile_openjourney_btn:'Tam 21 Günlük Yolculuğu aç',
     profile_openworld_btn:'Vokal Dünyasını aç',
     profile_personalrecords_label:'Kişisel Rekorlar',
@@ -13024,6 +13146,30 @@ const TRANSLATIONS = {
     karaoke_measure:"Her akor Lead hattının bir notasıdır. Bir notanın perdesi: 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır); sesinizin olmadığı nota Duyulmadı olur. Perde, söylediğiniz notaların ortalamasıdır ve perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, duyulmazsa 0, tüm notaların ortalaması. Şarkıdaki en iyi puanınız Perde ve Zamanlama'nın ortalamasıdır.",
     emotion_result_label:"Dinamik kontrast",
     emotion_measure:"Bir tahmin. Dinamik kontrast, söylerken ses düzeyinizin ne kadar değiştiğidir: sessizlik eşiğinin üzerindeki seviye okumalarınızın ortalamalarına göre yayılımı, × 250, en fazla 100. İfade puanınız olarak kaydedilir. Ses düzeyi mikrofona uzaklığınızla ve odayla da değişir, bu yüzden onu bir rehber olarak görün. Perde: Lead hattının her notası için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız, doğal vibrato çıkarılır.",
+    // phase 7 (PHASE7.md)
+    you_signedout_h:"İlerlemen burada",
+    you_signedout_desc:"Giriş yap: bu sayfa söylediklerine göre seviyeni, beceri profilini, rekorlarını ve 21 günlük yolculuğunu gösterir.",
+    you_level_tpl:"Seviye {n} · {name}",
+    you_xp_tpl:"{xp} XP · seviye {next} için {left}",
+    you_notstarted:"Başlamadı",
+    you_week_tpl:"bu hafta %{p}",
+    you_records_tpl:"{n} rekor",
+    you_load_tpl:"ses yükü %{p}",
+    you_passport_title:"Ses Pasaportu",
+    you_passport_desc:"Ses aralığın, seviyen ve dönüm noktaların tek yerde.",
+    you_choir_desc:"Partilerinin hazırlığı",
+    skill_status_label:"Durum",
+    skill_nodata:"Henüz puan yok: bir egzersiz ya da Ses Aralığı Bulucu'yu dene.",
+    skill_read_label:"Seviye tahmini",
+    skill_level_pro:"Profesyonel",
+    skill_level_mid:"Orta",
+    skill_level_beg:"Başlangıç",
+    skill_strongest_label:"En güçlü",
+    skill_needswork_label:"Çalışılmalı",
+    skill_notscored_label:"Henüz puanlanmadı",
+    skill_notinprofile:"Henüz profilinde değil.",
+    you_skill_measure:"Perde: son 20 perde puanının ortalaması; Nota Eşleştirme, Aralık Eşleştirme, Tonda Kal, Karaoke Koçu, Performans Yönetmeni ve diğer perde çalışmalarından. Ses Aralığı: kayıtlı aralığın; 30 yarım ses (iki buçuk oktav) 100 sayılır. Nefes: Nefes Kontrolü. Çeviklik: Gam Çalışması, Ritim Antrenörü, Vokal Bulmaca ve Rift. İfade henüz profilinde değil: önce ölçümü iyileştiriliyor. Seviye tahmini, puanlanmış halkaların ortalamasıdır: 80 ve üzeri Profesyonel, 55 ve üzeri Orta.",
+    progress_plan_measure:"Kurallara dayanır: önce ısınma, sonra beceri profilindeki en düşük halka, en uzun register geçişin 3 saniyenin altındaysa Register Koçu, ardından haftanın görevi.",
   },
 };
 let currentLanguage = 'en';
@@ -13497,6 +13643,7 @@ function renderDashboard(){
   renderSkillProfile();
   if(typeof renderTodaysPlan==='function') renderTodaysPlan();
   if(typeof renderWeeklyChallenge==='function') renderWeeklyChallenge();
+  if(typeof renderUnifiedProgress==='function') renderUnifiedProgress();
 
   if(progress.lowestMidi!==null && progress.highestMidi!==null){
     document.getElementById('dashRangeSpan').textContent =
@@ -19008,28 +19155,27 @@ function renderSkillProfile(barsId, summaryId){
     renderResonanceRing(document.getElementById(ringId), v===null?0:v, v===null?'var(--hairline)':'var(--brass)');
   });
 
-  const available = rows.filter(r=>scores[r.key]!==null);
+  // the summary as rows (phase 7, 2.1): keyed, from skillSummary(), the same rule as before
   const summaryEl = document.getElementById(summaryId);
   if(!summaryEl) return;
-  if(available.length===0){
-    summaryEl.innerHTML = `<div class="skill-summary-item" style="grid-column:1/-1;">
-      <div class="label">Status</div>
-      <div class="val" style="font-size:13px;">Not enough data yet — try an exercise or the Range Finder.</div>
-    </div>`;
-    return;
-  }
-  const avgAvailable = Math.round(available.reduce((a,r)=>a+scores[r.key],0)/available.length);
-  const level = avgAvailable>=80 ? 'Professional' : avgAvailable>=55 ? 'Intermediate' : 'Beginner';
-  const strongest = available.reduce((a,b)=> scores[a.key]>=scores[b.key]?a:b);
-  const weakest = available.reduce((a,b)=> scores[a.key]<=scores[b.key]?a:b);
-  const missing = rows.filter(r=>scores[r.key]===null).map(r=>r.label);
-
-  summaryEl.innerHTML = `
-    <div class="skill-summary-item"><div class="label">Read (early)</div><div class="val">${level}</div></div>
-    <div class="skill-summary-item"><div class="label">Strongest</div><div class="val">${strongest.label}</div></div>
-    <div class="skill-summary-item"><div class="label">Needs work</div><div class="val">${weakest.label}</div></div>
-    ${missing.length ? `<div class="skill-summary-item" style="grid-column:1/-1;"><div class="label">Not scored yet</div><div class="val" style="font-size:12.5px;">${missing.join(' · ')} — no trainer built for these yet</div></div>` : ''}
-  `;
+  const sum = skillSummary(scores), label = k=>t('skill_'+k);
+  summaryEl.innerHTML = sum.level===null
+    ? `<div class="vc-dim"><span>${t('skill_status_label')}</span><span>${t('skill_nodata')}</span></div>`
+    : `<div class="vc-dim"><span>${t('skill_read_label')}</span><span>${t('skill_level_'+sum.level)}</span></div>
+       <div class="vc-dim"><span>${t('skill_strongest_label')}</span><span>${label(sum.strongest)}</span></div>
+       <div class="vc-dim"><span>${t('skill_needswork_label')}</span><span>${label(sum.weakest)}</span></div>
+       ${sum.missing.length ? `<div class="vc-dim"><span>${t('skill_notscored_label')}</span><span>${sum.missing.map(label).join(' · ')}<span class="vc-dim-note">${t('skill_notinprofile')}</span></span></div>` : ''}`;
+}
+// The Skill Profile's summary: the level read (the mean of the scored rings: 80+ Professional, 55+ Intermediate), the
+// strongest and weakest ring, the rings with no score yet. Keys, not words: youstates.js compares it with master's rule.
+function skillSummary(scores){
+  const keys = ['pitch','range','breath','agility','expression'];
+  const av = keys.filter(k=>scores[k]!==null);
+  if(!av.length) return {level:null, strongest:null, weakest:null, missing:keys};
+  const avg = Math.round(av.reduce((a,k)=>a+scores[k],0)/av.length);
+  return {level: avg>=80 ? 'pro' : avg>=55 ? 'mid' : 'beg',
+    strongest: av.reduce((a,b)=>scores[a]>=scores[b]?a:b), weakest: av.reduce((a,b)=>scores[a]<=scores[b]?a:b),
+    missing: keys.filter(k=>scores[k]===null)};
 }
 
 /* ---------------- Voice Health (trend detection) ---------------- */
@@ -19214,16 +19360,8 @@ function renderWeeklyChallenge(){
     document.getElementById('challengeStatusText').innerHTML = result.detail + (result.done ? `<span class="challenge-done-badge">${t('weeklychallenge_done_badge')}</span>` : '');
   }
 
-  const SAMPLE_LEADERBOARD = [
-    {name:'Jules M.', pct:100},{name:'Amara T.', pct:88},{name:'Devon R.', pct:71},{name:t('weeklychallenge_you'), pct:null},{name:'Priya K.', pct:52},
-  ];
-  document.getElementById('challengeLeaderboard').innerHTML = SAMPLE_LEADERBOARD.map(p=>`
-    <div class="roster-row">
-      <div class="roster-avatar">${p.name.charAt(0)}</div>
-      <div class="roster-info"><div class="roster-name">${p.name}</div></div>
-      <div class="roster-bar-wrap"><div class="roster-bar-fill" style="width:${p.pct===null?0:p.pct}%;"></div></div>
-      <div class="roster-pct">${p.pct===null?'—':p.pct+'%'}</div>
-    </div>`).join('');
+  // "How you compare" showed four invented people: hidden (phase 7, PHASE7.md decisions; rule 5, like the Director Dashboard)
+  document.getElementById('challengeLeaderboard').innerHTML = '';
 }
 
 /* ---------------- Today's Plan (rule-based recommendations) ---------------- */
@@ -19255,17 +19393,11 @@ function renderTodaysPlan(){
 
   steps.push({text:t('todaysplan_finishchallenge'), reason: WEEKLY_CHALLENGES[isoWeekNumber(new Date())%WEEKLY_CHALLENGES.length].label, panel:'dashboard'});
 
-  listEl.innerHTML = steps.map(s=>`
-    <div class="plan-step-row">
-      <div><div class="ps-text">${s.text}</div><div class="ps-reason">${s.reason}</div></div>
-      <button class="ghost-btn plan-go-btn" data-goto="${s.panel}">${t('action_go')}</button>
-    </div>`).join('');
-  listEl.querySelectorAll('.plan-go-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const panel = btn.dataset.goto;
-      document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.panel===panel));
-      document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+panel));
-    });
+  // rows (phase 7, 2.2): each opens its screen through enterPanel, so its hooks run and the tab bar follows
+  const icons = {warmup:'warmup', exercises:'score', range:'range', breath:'breath', register:'steps', dashboard:'calendar', agility:'pulse'};
+  listEl.innerHTML = steps.map(s=>`<button class="hl-item plan-row" type="button" data-goto="${s.panel}"><svg class="hl-icon" aria-hidden="true"><use href="#hl-${icons[s.panel]||'chev'}"/></svg><span><span class="hl-item-title">${s.text}</span><span class="hl-item-meta">${s.reason}</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>`).join('');
+  listEl.querySelectorAll('.plan-row').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ const panel = btn.dataset.goto; if(panel!=='dashboard') enterPanel(panel); else document.querySelector('#panel-dashboard .dash-challenge')?.scrollIntoView({block:'center', behavior:'smooth'}); });
   });
 }
 
@@ -21139,6 +21271,7 @@ function showShellSection(section){
   } else if(section==='you'){
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     document.getElementById('panel-you-hub').classList.add('active');
+    renderYouHub();
   }
 }
 document.querySelectorAll('.snb-item').forEach(btn=>{
@@ -21421,7 +21554,61 @@ function renderCoachHub(){
   });
   if(typeof renderSongsStartLabels==='function') renderSongsStartLabels(); // the Songs tools' Start follows the plan too
   if(typeof renderSongsHub==='function') renderSongsHub();
+
+  if(typeof renderYouHub==='function') renderYouHub();
 }
+
+/* ---------------- The You tab (phase 7, 2.1): who you are, the Skill Profile, every You screen as a row ---------------- */
+const YOU_LANG_NAMES = {en:'English', fr:'Français', es:'Español', tr:'Türkçe'};
+function youRecordsCount(){
+  const v = personalRecordValues();
+  return Object.values(v).filter(x=>x!==null && x!==undefined).length;
+}
+function renderYouHub(){
+  const so = document.getElementById('youSignedOut'), si = document.getElementById('youSignedIn');
+  if(!so || !si) return;
+  so.hidden = !!profile; si.hidden = !profile;
+  if(!profile || !progress) return;
+  const set = (id, v)=>{ const e = document.getElementById(id); if(e && e.textContent!==String(v)) e.textContent = v; };
+  const name = (profile.name||'').trim();
+  set('youAvatar', ([...name][0] || '?').toLocaleUpperCase(currentLanguage));
+  set('youName', name || '—');
+  const xp = progress.xp||0, {level, name:tier} = levelForXp(xp), into = xp % 50;
+  set('youLevelLine', t('you_level_tpl').replace('{n}', level).replace('{name}', tier));
+  const meter = document.getElementById('youXpMeter');
+  meter.style.setProperty('--val', (into/50*100).toFixed(1)+'%');
+  meter.setAttribute('aria-valuenow', String(Math.round(into/50*100)));
+  set('youXpText', t('you_xp_tpl').replace('{xp}', xp).replace('{left}', 50-into).replace('{next}', level+1));
+  set('youStreak', progress.streak||0);
+  set('youSessions', progress.totalSessions||0);
+  renderSkillProfile('youSkillBars', 'youSkillSummary');
+  // the rows' values
+  set('youValJourney', profile.day1StartDate
+    ? `${t('journey_day_p1')} ${Math.min(21, daysBetween(profile.day1StartDate, todayStr())+1)} ${t('journey_day_p2')}` : t('you_notstarted'));
+  const ch = WEEKLY_CHALLENGES[isoWeekNumber(new Date()) % WEEKLY_CHALLENGES.length];
+  const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate()-7);
+  set('youValProgress', t('you_week_tpl').replace('{p}', ch.check((progress.weeklyLog||[]).filter(e=>new Date(e.date)>=weekAgo)).progress));
+  set('youValRecords', t('you_records_tpl').replace('{n}', youRecordsCount()));
+  set('youValPassport', progress.lowestMidi!==null && progress.lowestMidi!==undefined && progress.highestMidi!==null && progress.highestMidi!==undefined
+    ? `${noteNameFromMidi(progress.lowestMidi)}–${noteNameFromMidi(progress.highestMidi)}` : '—');
+  if(typeof VocalLoad!=='undefined'){
+    const pct = vlPercent(), shown = pct < 10 ? Math.round(pct*10)/10 : Math.round(pct);
+    set('youValHealth', t('you_load_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1})));
+  }
+  const runs = rdAll().runs || [], choirRow = document.getElementById('youChoirRow');
+  choirRow.hidden = !runs.length;
+  if(runs.length){
+    const n = {ready:0, developing:0, learning:0};
+    cwStoredParts().forEach(x=>{ if(n[x.st.status]!==undefined) n[x.st.status]++; });
+    set('youValChoir', ['ready','developing','learning'].filter(k=>n[k]).map(k=>`${n[k]} ${t('rd_status_'+k)}`).join(' · ') || '—');
+  }
+  document.getElementById('youTeacherRow').hidden = profile.subscriptionPlan!=='teacher';
+  set('youValPlan', hasActiveSubscription() ? planLabel(profile.subscriptionPlan)
+    : isInTrial() ? `${t('accountbar_day_p1')} ${trialDayNumber()}/21` : t('accountbar_trial_ended'));
+  set('youValProfile', YOU_LANG_NAMES[currentLanguage] || '');
+}
+document.getElementById('youSignInBtn')?.addEventListener('click', ()=>{ openAuthModal(); setAuthMode('signin'); });
+document.getElementById('youChoirRow')?.addEventListener('click', ()=>enterPanel('choirpassport'));
 
 /* ---------------- Onboarding (Phase 2 — real, reuses existing data structures) ---------------- */
 let obStepIndex = 0;
@@ -24452,10 +24639,11 @@ function renderUnifiedProgress(){
   let gridSvg = '';
   [0,25,50,75,100].forEach(pct=>{
     const y = yFor(pct);
-    gridSvg += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--hairline)" stroke-width="1"/>`;
+    gridSvg += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--hl-rule)" stroke-width="1"/>`;
   });
 
-  const colors = {pitch:'var(--teal)', breath:'var(--brass)', agility:'var(--coral)'};
+  // House Lights (phase 7, 2.2): your voice for Pitch, ink for Breath, ink-3 dashed for Agility (not teal / brass / coral)
+  const colors = {pitch:'var(--hl-voice)', breath:'var(--hl-ink)', agility:'var(--hl-ink-3)'}, dash = {agility:' stroke-dasharray="6 4"'};
   let linesSvg = '';
   Object.keys(trend.series).forEach(type=>{
     const vals = trend.series[type];
@@ -24466,7 +24654,7 @@ function renderUnifiedProgress(){
       pathD += (started?' L':' M') + x.toFixed(1) + ' ' + y.toFixed(1);
       started = true;
     });
-    if(pathD) linesSvg += `<path d="${pathD.trim()}" fill="none" stroke="${colors[type]}" stroke-width="2.5"/>`;
+    if(pathD) linesSvg += `<path d="${pathD.trim()}" fill="none" stroke="${colors[type]}" stroke-width="2.5"${dash[type]||''}/>`;
     vals.forEach((v,i)=>{
       if(v!==null) linesSvg += `<circle cx="${xFor(i).toFixed(1)}" cy="${yFor(v).toFixed(1)}" r="3" fill="${colors[type]}"/>`;
     });

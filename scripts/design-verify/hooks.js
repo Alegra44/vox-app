@@ -33,6 +33,10 @@ const ALLOWED_REMOVALS = {
   'data-i18n=emotion_tag': 'phase 6 §2.1: Emotional Singing\'s tag becomes the "Estimate" label (beta_analysis_tag); key stays in TRANSLATIONS',
   'data-i18n=studio_no_gamification': 'phase 6 §2.3: Studio\'s two header lines become one plain subtitle (studio_sub); key stays in TRANSLATIONS',
   'data-i18n=studio_session_title': 'phase 6 §2.3: Studio\'s two header lines become one plain subtitle (studio_sub); key stays in TRANSLATIONS',
+  'data-i18n=dashboard_skillprofile_h2': 'phase 7 §2.2: the Skill Profile lives on You (one label there); key stays in TRANSLATIONS',
+  'data-i18n=dashboard_skillprofile_desc': 'phase 7 §2.2: the Skill Profile lives on You, its sources in the hl-measure (you_skill_measure); key stays in TRANSLATIONS',
+  'data-i18n=dashboard_todaysplan_h2': 'phase 7 §2.2: Today\'s Plan as rows; the "not AI" heading goes; key stays in TRANSLATIONS',
+  'data-i18n=dashboard_todaysplan_desc': 'phase 7 §2.2: the "not a language model" text goes; one hl-measure line (progress_plan_measure); key stays in TRANSLATIONS',
   'data-i18n=action_start_pro': 'phase 6 §2.1: the Songs tools\' Start reads "Start" with access, set by renderSongsStartLabels (Harmony Arena\'s keeps it)',
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
