@@ -17,6 +17,9 @@
 #     stopped and logged "timed out", and the run carries on)
 #   the splash hotfix (2026-11-05) added bootcheck, first: the page starts with no error and the splash hidden in 5 s, in each
 #   startup state (bootcheck.js). It runs in every phase's checks too.
+#   phase 7 (2026-11-08): house and contrast cover the six phase 6 tools; measured on production 2026-11-08 house 46 min
+#   (also 46 in checks6), contrast 42 min, so their limit is 1.5× that (house 69, contrast 63), 75 min at most; prod.sh's
+#   old 45 / 30 min limits cut both off on the phase 6 deploy.
 cd "$(dirname "$0")/../.."
 P=https://deploy-alegra1122.vercel.app/
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/prod-$STAMP; mkdir -p "$OUT"
@@ -25,9 +28,9 @@ SB=https://ccharikhpeqtzpobarxi.supabase.co
 SCORES_BASE=${SCORES_BASE:-$(git log --merges -1 --format=%P | cut -d' ' -f1)}
 SUITES=(
   "bootcheck|2|env DV_URL=$P node scripts/design-verify/bootcheck.js"
-  "house|20|env DV_URL=$P node scripts/design-verify/house.js"
+  "house|46|env DV_URL=$P node scripts/design-verify/house.js"
   "system|1|env DV_URL=$P node scripts/design-verify/system.js"
-  "contrast|10|env DV_URL=$P node scripts/design-verify/contrast.js --json $OUT/contrast-prod.json"
+  "contrast|42|env DV_URL=$P node scripts/design-verify/contrast.js --json $OUT/contrast-prod.json"
   "batch1|16|node scripts/vocal-load-verify/batch1.js $P"
   "batch3c|4|node scripts/vocal-load-verify/batch3c.js $P"
   "warmup-entries|17|node scripts/warmup-verify/entries.js $P"
@@ -84,7 +87,10 @@ for s in "${SUITES[@]}"; do
     tries=$((tries+1)); echo "$(date -u +%H:%M:%S) unreachable before $name ($why), try $tries of 5" >> "$OUT/progress.txt"
     if [ $tries -ge 5 ]; then echo "$(date -u +%H:%M:%S) STOPPED: the site or Supabase unreachable 5 times before $name" >> "$OUT/progress.txt"; exit 2; fi
     sleep 60; done
-  limit=$(( usual * 3 )); [ $limit -gt 45 ] && limit=45
+  case $name in
+    house|contrast) limit=$(( (usual * 3 + 1) / 2 )); [ $limit -gt 75 ] && limit=75;; # 1.5× their measured time, 75 min at most
+    *) limit=$(( usual * 3 )); [ $limit -gt 45 ] && limit=45;;
+  esac
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name (limit $limit min)" >> "$OUT/progress.txt"
   $cmd > "$OUT/$name.log" 2>&1 & pid=$!
   ( sleep $(( limit * 60 )); kill -0 $pid 2>/dev/null && touch "$OUT/.timedout-$name" && kill -TERM $pid; sleep 10; kill -KILL $pid 2>/dev/null ) & dog=$!
