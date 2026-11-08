@@ -2139,6 +2139,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-passport .timeline-row .record-label{color:var(--hl-ink);font-size:var(--hl-t-body);}
   #panel-passport .timeline-row .record-val{color:var(--hl-ink-3);font-size:var(--hl-t-small);font-variant-numeric:tabular-nums;white-space:nowrap;}
   #panel-passport #passportUpdatedStamp{text-align:left !important;color:var(--hl-ink-3);}
+  /* ---- VOICE HEALTH (phase 7, 2.8): vocal load today and the last 14 days, beside stability and breath ---- */
+  #panel-voicehealth .key-card{background:none;border:0;border-radius:0;box-shadow:none;padding:0;margin-top:var(--hl-s5);}
+  #panel-voicehealth .key-card h2{font-family:var(--hl-font) !important;font-stretch:normal !important;font-size:var(--hl-t-h3) !important;font-weight:600 !important;color:var(--hl-ink);margin:var(--hl-s6) 0 var(--hl-s2) !important;}
+  #panel-voicehealth .vh-h{font-family:var(--hl-font);font-size:var(--hl-t-h3);font-weight:600;color:var(--hl-ink);margin:var(--hl-s6) 0 var(--hl-s2);}
+  #panel-voicehealth .vh-load{display:flex;flex-direction:column;gap:var(--hl-s2);}
+  #panel-voicehealth .vh-load-val{font-size:var(--hl-t-body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--hl-ink);}
+  #panel-voicehealth .vh-load-meter > i{background:var(--hl-ink);}
+  #panel-voicehealth .vh-load-meter.over > i{background:var(--hl-warn);}
+  #panel-voicehealth .vh-load p{margin:0;}
+  #panel-voicehealth .health-trend-chart .h-bar.zero{background:var(--hl-rule);height:2px !important;}
   /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
   .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
   .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
@@ -4084,7 +4094,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="j-sub" data-i18n="voicehealth_sub">Trends across sessions, not one-off warnings — a single rough day never triggers anything here, only a real multi-day decline.</div>
     </div>
     <div class="key-card">
-      <div class="health-status-banner neutral" id="healthBanner" style="margin-top:18px;">Not enough data yet — practice on a few different days to see trends.</div>
+      <div class="health-status-banner neutral" id="healthBanner" style="margin-top:18px;" data-i18n="voicehealth_notenoughdata">Not enough data yet — practice on a few different days to see trends.</div>
+
+      <!-- phase 7 (PHASE7.md 2.8): vocal load, the one health measure every singing tool feeds: today against the
+           budget (the gauge's numbers) and the last 14 days, from the account (GET /me/vocal-load?day=, one per day) -->
+      <h2 class="vh-h" data-i18n="voicehealth_load_h2">Vocal load today</h2>
+      <div class="vh-load">
+        <div class="hl-spread"><span class="vh-load-val" id="vhLoadToday">—</span></div>
+        <div class="hl-meter vh-load-meter" id="vhLoadMeter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-labelledby="vhLoadToday"><i></i></div>
+        <p class="hl-small" data-i18n="voicehealth_load_rule">Your load is measured while you sing, against a daily budget. At 80% of it the app suggests a break; at 100% it suggests resting your voice for the rest of the day or keeping your singing light. It never stops you.</p>
+      </div>
+      <h2 class="vh-h" data-i18n="voicehealth_load14_h2">Vocal load — last 14 days</h2>
+      <div class="health-trend-chart" id="loadTrendChart"></div>
 
       <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:20px 0 4px;" data-i18n="voicehealth_stability_h2">Stability — last 14 days</h2>
       <div class="health-trend-chart" id="stabilityTrendChart"></div>
@@ -8405,6 +8426,11 @@ const TRANSLATIONS = {
     record_label_cw_ready:"Parts Ready",
     record_note_cw_none:"None yet",
     passport_updated_tpl:"Last change: {date}",
+    voicehealth_load_h2:"Vocal load today",
+    voicehealth_load_rule:"Your load is measured while you sing, against a daily budget. At 80% of it the app suggests a break; at 100% it suggests resting your voice for the rest of the day or keeping your singing light. It never stops you.",
+    voicehealth_load14_h2:"Vocal load — last 14 days",
+    voicehealth_warn_minutes_tpl:"You've been singing for {n} minutes straight. Consider a short break before continuing.",
+    voicehealth_warn_stability_tpl:"Your pitch stability has dropped {n} points since you started this session. A short break before continuing might help.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -10034,6 +10060,11 @@ const TRANSLATIONS = {
     record_label_cw_ready:"Voix prêtes",
     record_note_cw_none:"Aucun pour l'instant",
     passport_updated_tpl:"Dernière modification : {date}",
+    voicehealth_load_h2:"Charge vocale aujourd'hui",
+    voicehealth_load_rule:"Votre charge est mesurée pendant que vous chantez, par rapport à un budget quotidien. À 80 % de celui-ci, l'application suggère une pause ; à 100 %, elle suggère de reposer votre voix pour le reste de la journée ou de chanter légèrement. Elle ne vous arrête jamais.",
+    voicehealth_load14_h2:"Charge vocale — 14 derniers jours",
+    voicehealth_warn_minutes_tpl:"Vous chantez depuis {n} minutes d'affilée. Pensez à faire une courte pause avant de continuer.",
+    voicehealth_warn_stability_tpl:"Votre stabilité de justesse a baissé de {n} points depuis le début de cette séance. Une courte pause avant de continuer pourrait aider.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11663,6 +11694,11 @@ const TRANSLATIONS = {
     record_label_cw_ready:"Voces listas",
     record_note_cw_none:"Ninguno aún",
     passport_updated_tpl:"Último cambio: {date}",
+    voicehealth_load_h2:"Carga vocal hoy",
+    voicehealth_load_rule:"Tu carga se mide mientras cantas, frente a un presupuesto diario. Al 80 % la app sugiere una pausa; al 100 % sugiere descansar la voz el resto del día o cantar suave. Nunca te detiene.",
+    voicehealth_load14_h2:"Carga vocal — últimos 14 días",
+    voicehealth_warn_minutes_tpl:"Llevas {n} minutos seguidos cantando. Considera una pausa corta antes de seguir.",
+    voicehealth_warn_stability_tpl:"Tu estabilidad de afinación ha bajado {n} puntos desde que empezaste esta sesión. Una pausa corta antes de seguir podría ayudar.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13292,6 +13328,11 @@ const TRANSLATIONS = {
     record_label_cw_ready:"Hazır partiler",
     record_note_cw_none:"Henüz yok",
     passport_updated_tpl:"Son değişiklik: {date}",
+    voicehealth_load_h2:"Bugünkü ses yükü",
+    voicehealth_load_rule:"Yükün şarkı söylerken günlük bir bütçeye göre ölçülür. Bütçenin %80'inde uygulama mola önerir; %100'de günün geri kalanında sesini dinlendirmeni ya da hafif söylemeni önerir. Seni asla durdurmaz.",
+    voicehealth_load14_h2:"Ses yükü — son 14 gün",
+    voicehealth_warn_minutes_tpl:"{n} dakikadır aralıksız söylüyorsun. Devam etmeden önce kısa bir mola vermeyi düşün.",
+    voicehealth_warn_stability_tpl:"Bu oturumun başından beri perde kararlılığın {n} puan düştü. Devam etmeden önce kısa bir mola işe yarayabilir.",
   },
 };
 let currentLanguage = 'en';
@@ -19333,7 +19374,38 @@ function renderVoiceHealthChart(elId, type){
   }).join('');
   return values;
 }
+// Vocal load on Voice Health (phase 7, 2.8): today from vlPercent() (what every gauge shows), past days from the
+// account, fetched once per day per page (a past day doesn't change). The day is the app's todayStr() day, like the budget.
+const vhLoadCache = {};
+async function renderVoiceHealthLoad(){
+  const val = document.getElementById('vhLoadToday'), meter = document.getElementById('vhLoadMeter'), chart = document.getElementById('loadTrendChart');
+  if(!val) return;
+  if(!profile || typeof VocalLoad==='undefined'){ val.textContent = '—'; meter.style.setProperty('--val','0%'); chart.innerHTML = ''; return; }
+  const pct = vlPercent(), shown = pct < 10 ? Math.round(pct*10)/10 : Math.round(pct);
+  val.textContent = t('vl_gauge_pct_tpl').replace('{p}', shown.toLocaleString(localeForLang(), {maximumFractionDigits:1}));
+  meter.style.setProperty('--val', Math.min(100, pct).toFixed(1)+'%'); meter.setAttribute('aria-valuenow', String(Math.round(pct)));
+  meter.classList.toggle('over', pct>=100);
+  const days = last14Days(), today = todayStr(), uid = profile.id || profile.email || '';
+  const draw = ()=>{
+    const values = days.map(d=>d===today ? pct : (vhLoadCache[uid+d]!==undefined ? vhLoadCache[uid+d] : null));
+    chart.innerHTML = days.map((d,i)=>{
+      const v = values[i], h = v!==null && v>0 ? Math.max(8, Math.min(100, v)) : 8;
+      const dayLabel = new Date(d).toLocaleDateString(localeForLang(),{weekday:'narrow'});
+      const tip = v!==null ? t('vl_gauge_pct_tpl').replace('{p}', Math.round(v)) : t('voicehealth_nodata_tooltip');
+      return `<div class="h-bar-col"><div class="h-bar${v!==null && v>0 ? ' has-data' : v===0 ? ' zero' : ' no-data'}" style="height:${h}%" title="${tip}"></div><div class="h-day-label">${dayLabel}</div></div>`;
+    }).join('');
+  };
+  draw();
+  const missing = days.filter(d=>d!==today && vhLoadCache[uid+d]===undefined);
+  if(!missing.length) return;
+  await Promise.all(missing.map(async d=>{
+    try{ const st = await vlFetchState(d); vhLoadCache[uid+d] = (Number(st.dayLoad)||0)/VocalLoad.DAILY_BUDGET*100; }
+    catch(e){ /* left as no data */ }
+  }));
+  if(profile && (profile.id || profile.email || '')===uid) draw();
+}
 function renderVoiceHealth(){
+  if(typeof renderVoiceHealthLoad==='function') renderVoiceHealthLoad();
   const banner = document.getElementById('healthBanner');
   const stabilityValues = renderVoiceHealthChart('stabilityTrendChart', 'stability');
   const breathValues = renderVoiceHealthChart('breathTrendChart', 'breath');
@@ -23572,7 +23644,7 @@ function checkVocalHealthSignal(){
   if(tunerSessionStartTime){
     const elapsedMin = (performance.now()-tunerSessionStartTime)/60000;
     if(elapsedMin >= 20){
-      banner.textContent = `You've been training for ${Math.round(elapsedMin)} minutes straight. Consider a short break before continuing.`;
+      banner.textContent = t('voicehealth_warn_minutes_tpl').replace('{n}', Math.round(elapsedMin));
       banner.style.display = 'block';
       vocalHealthWarningShown = true;
       return;
@@ -23584,7 +23656,7 @@ function checkVocalHealthSignal(){
     const firstHalfAvg = sessionStabilityReadings.slice(0,half).reduce((a,b)=>a+b,0)/half;
     const secondHalfAvg = sessionStabilityReadings.slice(half).reduce((a,b)=>a+b,0)/(sessionStabilityReadings.length-half);
     if(firstHalfAvg-secondHalfAvg >= 12){
-      banner.textContent = `Your pitch stability has dropped ${Math.round(firstHalfAvg-secondHalfAvg)} points since you started this session. A short break before continuing might help.`;
+      banner.textContent = t('voicehealth_warn_stability_tpl').replace('{n}', Math.round(firstHalfAvg-secondHalfAvg));
       banner.style.display = 'block';
       vocalHealthWarningShown = true;
     }
