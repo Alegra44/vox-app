@@ -490,6 +490,13 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **review/phase6** (60173be, orphan): 84 shots, sheets/phase6.jpg, states.json, notes.txt. No merge or deploy until
   the user has reviewed and types "deploy" (then the steps in PHASE6.md, including the promote check).
 
+### Phase 7 (`redesign/phase7`, spec `PHASE7.md`, given 2026-11-08)
+- Phase 6 production approved, no rollback. **Rollback target from now on: dpl_6EgEe6idPGDet91hDsVkkwc2YGXx.**
+- Order: (1) prod.sh limits for house and contrast at 1.5× their measured times, 75 min at most (master);
+  (2a) the tuner drift-off colour fix, first commit on redesign/phase7, proven by 10 contrast runs of the drift-off
+  moment in Light and Dark (0 below 3:1), ships with phase 7; (2b) the read-only phase 7 survey + review/phase7-before.
+  Push both, report, stop.
+
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
 These change scores, so they wait until the redesign is finished (survey items in PHASE6_SURVEY.md "Broken or odd"):
