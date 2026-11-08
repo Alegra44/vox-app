@@ -496,6 +496,18 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   (2a) the tuner drift-off colour fix, first commit on redesign/phase7, proven by 10 contrast runs of the drift-off
   moment in Light and Dark (0 below 3:1), ships with phase 7; (2b) the read-only phase 7 survey + review/phase7-before.
   Push both, report, stop.
+- **1 DONE** 2026-11-08 (4748c1f, master): house 46 → 69 min, contrast 42 → 63 min (measured on production 2026-11-08).
+- **2a DONE** 6372713: the lock fill's opacity is a registered property (`--hl-lock-a`); the ring's text reads its
+  colour from it (on-voice above 0.75, stage ink 0.75–0.15, own colour below), for the Tuner and Stay in Key; Breath's
+  timer no longer turns on-voice. contrast.js --drift 10 (f8c86c3): 0 below 3:1 in 10 drift-off runs × Light/Dark
+  (lowest 4.34); master fails 20/20. rings7.js: Stay in Key and Breath had the same fault on master (1:1), fixed.
+  contrast.js now reads color(srgb …) (color-mix): before, such colours were skipped. hooks 21/0. Logs
+  scripts/design-verify/logs/checks7-tuner/.
+- **2b DONE** ecbf1e2: design/house-lights/PHASE7_SURVEY.md, shots7before.js, survey7/copy7.py. review/phase7-before
+  d0d488b (orphan: 42 shots, sheets/before.jpg, states.json, notes.txt). Headlines: Expression never scored though two
+  tools store it; the "achievement icon" is the 7-day streak printing "undefined"; invented people in Dashboard's "How
+  you compare"; Records says song scores aren't saved; the day is the UTC date; Voice Health ignores Vocal Load; Choir
+  World vs Skill Profile: five options described. Waiting for the user's phase 7 spec.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
