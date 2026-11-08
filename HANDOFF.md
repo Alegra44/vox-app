@@ -545,6 +545,15 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   -before, -fix, review/phase6-prod. review/phase7-part1 (42a3ee5) is still on GitHub (not in the delete list).
   **The rollback target for the next deploy is dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk.**
 
+- **Phases 8 and 9 survey DONE 2026-11-09, reported; waiting for the user's phase 8 spec.** Branch `redesign/phase8`:
+  design/house-lights/PHASE8_SURVEY.md, survey8/copy8.py, shots8before.js. review/phase8-before (08b2875, orphan, 147
+  shots, sheets before8/before9, states, french.json, probes). Headlines: the Rift's back link leaves it shown and
+  running; the demo checkout says "subscribed" while nothing changes (production); signed-out plan buttons ask to sign
+  in to "Teacher Dashboard"; Bridge and the Register Wraith never go house-down; emoji art across Vocal World; onboarding
+  steps 1–6, checkout and posters English in every language. Phase 8 ≈ phase 6 in size, phase 9 ≈ phase 7; phase 9
+  needs decisions first (demo checkout, Teacher Dashboard, Vocal Lab, legacy tabs). No app changes.
+- Follow-up from the phase 7 deploy: scores.js's Voice Quality centroid gate (±2 Hz) is tighter than its A/A noise.
+
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
 These change scores, so they wait until the redesign is finished (survey items in PHASE6_SURVEY.md "Broken or odd"):
