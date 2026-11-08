@@ -7,7 +7,9 @@
 //  - the Coach tab's #coachFocus (branch) shows the same label and target; hidden signed out.
 //  - all 23 [data-enter-panel] buttons in #panel-train-hub exist, and clicking each opens its panel (as on master).
 //  - every "Best" value on a Coach row equals the Personal Records value for the same progress (branch).
-//  - the Personal Records list (renderRecordsList) renders byte-identical HTML on master and the branch.
+//  - the Personal Records list (renderRecordsList) renders byte-identical HTML on master and the branch. Phase 7 (2.5):
+//    the Range & technique and Vocal World lists only (Songs and Choir World changed on purpose), with the best-pitch
+//    row's new label ("Best pitch (of your last 20)") read as the old one; its value must still match.
 //  - #homeVlCard's previous element sibling is #homeChoirCard (batch3c), and #homeChoirCard's text is identical on
 //    master and the branch, whitespace aside (p9/p10): its DOM text (textContent; the label's CSS uppercase aside), with
 //    emoji dropped (Home's 🎼 and 📈 become sprite icons); #homeCwDelta's innerText (what p10 reads) identical.
@@ -50,14 +52,15 @@ function readCoach() {
   document.querySelectorAll('#panel-train-hub [data-enter-panel]').forEach(b => { const e = b.querySelector('.coach-best'); ends[b.dataset.enterPanel] = e && e.textContent.trim() ? e.textContent.trim() : null; });
   // the Personal Records list for the same progress
   renderRecordsList();
-  const html = ['recordsListVoice', 'recordsListWorld', 'recordsListSongs'].map(id => document.getElementById(id).innerHTML).join('\n');
+  const relabel = x => { const n = t('record_label_best_pitch_last20'); return n === 'record_label_best_pitch_last20' ? x : x.split(n).join(t('record_label_best_pitch_acc')); };
+  const html = ['recordsListVoice', 'recordsListWorld'].map(id => relabel(document.getElementById(id).innerHTML)).join('\n');
   const rec = {}; document.querySelectorAll('#recordsListVoice .record-row').forEach(r => { const v = r.querySelector('.record-val'); rec[r.querySelector('.record-label').textContent] = v.classList.contains('untracked') ? null : v.textContent; });
   const L = k => rec[t(k)];
   const lo = L('record_label_lowest_note'), hi = L('record_label_highest_note');
   const fill = v => v === null || v === undefined ? null : t('coach_best_tpl').replace('{v}', v);
   const expected = typeof personalRecordValues === 'function' ? {
     tuner: fill(L('record_label_best_stability')), range: lo && hi ? `${lo}–${hi}` : null, register: fill(L('record_label_longest_crossing')),
-    breath: fill(L('record_label_longest_breath')), exercises: fill(L('record_label_best_pitch_acc')) } : null;
+    breath: fill(L('record_label_longest_breath')), exercises: fill(L('record_label_best_pitch_acc') ?? L('record_label_best_pitch_last20')) } : null;
   return { shown, label, panel, ends, expected, html, n: document.querySelectorAll('#panel-train-hub [data-enter-panel]').length };
 }
 // In the page: click each tool button on the Coach tab; which panels opened.
