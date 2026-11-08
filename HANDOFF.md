@@ -25,7 +25,9 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`).
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-07:
+phase 6 + 6.1, dpl_6EgEe6idPGDet91hDsVkkwc2YGXx (master 170c145); the rollback target for the next deploy. The table
+above predates phase 5; `review/phase6-prod` is the current review branch.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -448,7 +450,26 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - Found while writing bootcheck: user_progress has no studio_takes column, so on master Studio takes never reached
   the server (they lasted until a reload); phase 6's device storage fixes that.
 
-### Phase 6 + 6.1 (`redesign/phase6`, spec `PHASE6.md`): APPROVED after 6.1; 6.1 DONE 2026-11-05, reported; waiting for "deploy"
+### Phase 6 + 6.1 (`redesign/phase6`, spec `PHASE6.md`): LIVE 2026-11-07, dpl_6EgEe6idPGDet91hDsVkkwc2YGXx (master 170c145)
+- **Deployed 2026-11-07.** "deploy" given with the rollback target the hotfix dpl_BGXeU41kbimZ6MekBmVSNkf39BFC (PHASE6.md
+  "Deploy"). Master 170c145 (--no-ff) pushed, secret check clean. The user's first `vercel deploy --prod` answered "Not
+  authorized"; the same command again deployed and aliased deploy-alegra1122 itself (no promote; checked with inspect).
+- **Production checks** (logs/prod-2026-11-07T17-15-32, reruns in its rerun/; summary in review/phase6-prod notes.txt):
+  29 of 36 suites pass first run (bootcheck 9/0 with the 6.1 forced-error case). house and contrast hit prod.sh's caps
+  (phase 6 added ~170 house checks and the six tools to contrast): reruns uncapped house 1051/0 (46 min), contrast 42 min.
+  scores, tools-shots, cv-live: the test sign-up timed out; all pass on rerun; signuptime.js (new): 20/20 sign-ups,
+  site median 1.6 s vs master 1.8 s. scores4b (vibrato consistency 93/96, then brightness 222/217 instead) and live
+  (steady Resonance ripple, master bimodal) moved on different values each run: not repeated → no rollback.
+- **Found:** contrast Dark tuner-live-locked 3 items < 3:1 on the rerun (note, octave and cents over the lock fill
+  mid-fade, captured just after the lock dropped: the text drops locked-pulse colours at once while #tunerLockFill
+  fades out over --hl-d1). Tuner code unchanged from master; a timing case. Fix (not made, needs a go-ahead): keep the
+  on-voice text colour until the fill has faded, or drop the fill without the fade.
+- **review/phase6-prod** (9555f0f, orphan): shots6.js on production (84 shots, the 6.1 fixes in them, sheets/phase6.jpg,
+  states.json: no page errors, house down on all 24 stages), checks/ with every log. **The rollback target for the
+  next deploy is dpl_6EgEe6idPGDet91hDsVkkwc2YGXx** (phase 6, live and checked).
+- Branch deletion (review/phase6 60173be, -before 24fa630, -fix fc9e3b5, review/phase5-prod 7532270, hotfix/splash
+  522a2d8, all pushed and identical on GitHub; hotfix/splash is in master) was blocked by Claude Code's permission
+  check; left for the user.
 - 6.1 (PHASE6.md "6.1"): 564d63f the duet's link in ink; 9152993 Karaoke's stage up to 760 px; 6eae11c the startup
   safety net (#bootError) + bootcheck's forced-error case. Checks (logs checks61-*): hooks, bootcheck 9/0, house --only6
   172/0 on rerun (two Supabase 503s first), contrast, copyscan, warm-up tracking. review/phase6-fix fc9e3b5.
