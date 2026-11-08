@@ -17,7 +17,7 @@
 // stage while listening, and stopped). --set 4a | 4b | all (the default) picks the tools.
 // Phase 6 (PHASE6.md §1f): --set 6 measures the six Songs-tab solo tools (idle, stage, result) and the Songs tab.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
-// Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>]
+// Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>] [--drift [N]]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), H = require('./homeStates'), T = require('./tools'), TOOLSET = require('./tools4b').toolSet().tools;
@@ -31,9 +31,11 @@ const JSON_OUT = arg('--json') || path.join(__dirname, 'logs', `contrast-${BASE 
 // Runs in the page: every visible element with its own text inside `root`. It first waits (1 s at most) until nothing
 // inside root, or around it, has a running CSS transition or animation: a colour caught halfway through a 120 ms fade
 // (the take note locking) isn't one the design shows.
-async function measure(rootSel) {
+async function measure(rootArg) {
+  // a string, or { sel, now: true } to read at once, mid-transition (the drift mode), instead of waiting for the animations
+  const rootSel = typeof rootArg === 'string' ? rootArg : rootArg.sel, now = typeof rootArg === 'object' && !!rootArg.now;
   const settleIn = [...document.querySelectorAll(rootSel)];
-  const busy = () => document.getAnimations().some(a => { const t = a.effect && a.effect.target; return a.playState === 'running' && t && settleIn.some(r => r.contains(t) || t.contains(r)); });
+  const busy = now ? () => false : () => document.getAnimations().some(a => { const t = a.effect && a.effect.target; return a.playState === 'running' && t && settleIn.some(r => r.contains(t) || t.contains(r)); });
   for (const t0 = performance.now(); busy() && performance.now() - t0 < 1000;) await new Promise(r => setTimeout(r, 50));
   const parse = s => { const m = s.match(/rgba?\(([^)]+)\)/); if (!m) return null; const p = m[1].split(/[\s,/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; };
   const over = (top, bot) => { const a = top[3] + bot[3] * (1 - top[3]); if (!a) return [0, 0, 0, 0]; return [0, 1, 2].map(i => (top[i] * top[3] + bot[i] * bot[3] * (1 - top[3])) / a).concat(a); };
@@ -41,7 +43,9 @@ async function measure(rootSel) {
   const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
   // a canvas to resolve any CSS colour (color-mix, oklch…) to rgba
   const cv = document.createElement('canvas').getContext('2d');
-  const resolve = s => { if (/^rgba?\(/.test(s)) return parse(s); cv.fillStyle = '#000'; cv.fillStyle = s; const v = cv.fillStyle; if (v[0] === '#') return [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16), 1]; return parse(v); };
+  // color(srgb r g b / a) (what Chromium computes for color-mix): channels 0–1
+  const srgb = s => { const m = s.match(/color\(srgb\s+([^)]+)\)/); if (!m) return null; const p = m[1].split(/[\s/]+/).filter(Boolean).map(Number); return [p[0] * 255, p[1] * 255, p[2] * 255, p.length > 3 ? p[3] : 1]; };
+  const resolve = s => { if (/^rgba?\(/.test(s)) return parse(s); if (/^color\(srgb/.test(s)) return srgb(s); cv.fillStyle = '#000'; cv.fillStyle = s; const v = cv.fillStyle; if (v[0] === '#') return [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16), 1]; return parse(v); };
   const stops = img => { // colour stops of the gradients in a background-image
     const out = []; const re = /(rgba?\([^)]*\)|#[0-9a-fA-F]{3,8}\b|\b(?:transparent|white|black)\b)/g; let m;
     while ((m = re.exec(img))) out.push(m[1] === 'transparent' ? [0, 0, 0, 0] : resolve(m[1]));
@@ -172,6 +176,58 @@ async function measureHome(b, dir, theme, state, panels) {
   }
 }
 
+// --drift N (phase 7, 2a): the Tuner's drift-off moment, N runs per theme (default 10). The fake mic sings S.STIM.drift
+// (locked 2.0 s, 25 ct flat 1.2 s, looping). Each run waits for the lock to drop (locked-pulse leaves #tunerRingWrap)
+// and measures the ring (note, octave, cents) on every animation frame for 200 ms (the fill fades over --hl-d1, 120 ms),
+// with measure({ now: true }), so no frame of the fade is skipped. The lock coming back is measured the same way and
+// reported, not gated. Pass: 0 below 3:1 at drift-off in every run and theme.
+const DRIFT = process.argv.includes('--drift') ? +(arg('--drift') || 10) || 10 : 0;
+async function driftMoment(page, ring, edge) { // edge 'off': the lock drops; 'on': it comes back
+  return page.evaluate(async ([src, ring, edge]) => {
+    const m = eval('(' + src + ')'), w = document.getElementById(ring);
+    const isOn = () => w.classList.contains('locked-pulse');
+    // wait for the opposite state, then for the edge
+    for (const t0 = performance.now(); (edge === 'off' ? !isOn() : isOn()) && performance.now() - t0 < 8000;) await new Promise(r => setTimeout(r, 10));
+    await new Promise(r => setTimeout(r, edge === 'off' ? 300 : 150)); // settled in the opposite state
+    const t0 = performance.now();
+    while ((edge === 'off' ? isOn() : !isOn()) && performance.now() - t0 < 8000) await new Promise(r => requestAnimationFrame(r));
+    const te = performance.now(), frames = [];
+    while (performance.now() - te < 200) {
+      const a = +getComputedStyle(w).getPropertyValue('--hl-lock-a') || +getComputedStyle(w.querySelector('circle[id$="LockFill"]') || w).opacity;
+      const items = await m({ sel: '#' + ring, now: true });
+      frames.push({ ms: Math.round(performance.now() - te), a: Math.round(a * 1000) / 1000, items: items.map(i => ({ text: i.text, ratio: i.ratio, fg: i.fg, bg: i.bg, status: i.status })) });
+      await new Promise(r => requestAnimationFrame(r));
+    }
+    return { edge, cents: (document.getElementById('centsDisplay') || {}).textContent, frames };
+  }, [measure.toString(), ring, edge]);
+}
+async function runDrift(dir, state) {
+  S.ensureStimuli(); S.ensureDrift();
+  const res = { runs: DRIFT, themes: {} }; let fails = 0;
+  for (const theme of THEMES) {
+    const b = await S.launchMic(S.STIM.drift), rows = [];
+    try {
+      const { page } = await C.openPage(b, { dir, theme, storageState: state });
+      await C.clearOverlays(page); await S.warmMic(page); await S.startTuner(page); await S.houseIs(page, 'down', 3000);
+      for (let i = 1; i <= DRIFT; i++) {
+        for (const edge of ['off', 'on']) {
+          const r = await driftMoment(page, 'tunerRingWrap', edge);
+          const all = r.frames.flatMap(f => f.items.map(it => ({ ...it, ms: f.ms, a: f.a })));
+          const worst = all.reduce((w, x) => (!w || x.ratio < w.ratio ? x : w), null);
+          const below3 = all.filter(x => x.ratio < 3), below45 = all.filter(x => x.ratio < 4.5);
+          if (edge === 'off' && below3.length) fails++;
+          rows.push({ run: i, edge, frames: r.frames.length, aSeen: [...new Set(r.frames.map(f => f.a))], below3: below3.length, below45: below45.length, worst, detail: r.frames });
+          console.log(`   ${theme} run ${String(i).padStart(2)} ${edge === 'off' ? 'drift-off' : 'lock-on  '}  ${r.frames.length} frames, fill ${r.frames.length ? r.frames[0].a + '→' + r.frames[r.frames.length - 1].a : '—'}  below 3:1 ${below3.length}  3–4.5 ${below45.length - below3.length}  worst ${worst ? `${worst.ratio} "${worst.text}" ${worst.fg} on ${worst.bg} at ${worst.ms} ms, fill ${worst.a}` : '—'}${edge === 'off' ? '' : '  (not gated)'}`);
+        }
+      }
+      await S.stopTuner(page);
+    } finally { await b.close(); }
+    res.themes[theme] = rows;
+  }
+  console.log(`\nDRIFT: ${fails ? `FAIL: ${fails} drift-off run(s) with text below 3:1` : `PASS: 0 below 3:1 at the drift-off in ${DRIFT} runs × ${THEMES.join(', ')}`}`);
+  return { res, fails };
+}
+
 (async () => {
   const dir = C.buildDir(BASE);
   const b = await C.chromium.launch();
@@ -181,6 +237,7 @@ async function measureHome(b, dir, theme, state, panels) {
     const { ctx, page, errors } = await C.openPage(b, { dir, theme: THEMES[0] });
     await C.signUp(page, 'dvc');
     const state = await ctx.storageState(); await ctx.close();
+    if (DRIFT) { const { res, fails } = await runDrift(dir, state); report.drift = res; process.exitCode = fails ? 1 : 0; return; }
     for (const theme of THEMES) {
       const panels = {};
       if (!TOOLS_ONLY) {
