@@ -467,9 +467,8 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **review/phase6-prod** (9555f0f, orphan): shots6.js on production (84 shots, the 6.1 fixes in them, sheets/phase6.jpg,
   states.json: no page errors, house down on all 24 stages), checks/ with every log. **The rollback target for the
   next deploy is dpl_6EgEe6idPGDet91hDsVkkwc2YGXx** (phase 6, live and checked).
-- Branch deletion (review/phase6 60173be, -before 24fa630, -fix fc9e3b5, review/phase5-prod 7532270, hotfix/splash
-  522a2d8, all pushed and identical on GitHub; hotfix/splash is in master) was blocked by Claude Code's permission
-  check; left for the user.
+- Deleted by the user 2026-11-08 (local and GitHub): review/phase6 60173be, -before 24fa630, -fix fc9e3b5,
+  review/phase5-prod 7532270, hotfix/splash 522a2d8 (in master).
 - 6.1 (PHASE6.md "6.1"): 564d63f the duet's link in ink; 9152993 Karaoke's stage up to 760 px; 6eae11c the startup
   safety net (#bootError) + bootcheck's forced-error case. Checks (logs checks61-*): hooks, bootcheck 9/0, house --only6
   172/0 on rerun (two Supabase 503s first), contrast, copyscan, warm-up tracking. review/phase6-fix fc9e3b5.
