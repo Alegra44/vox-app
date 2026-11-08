@@ -521,8 +521,12 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - Built 2.4 bb91540, 2.5 4ca829d, 2.6 d2f204d, 2.7 17901f6, 2.8 cafdca3, 2.9 7abbf8d (own commit), 2.10 43a0cdc
   (PHASE7_COPY.md, copyscan --you 0/0), HOUSE_LIGHTS v2.0 eacb477, checks7.sh. Interval Match's Day 1 step stays manual
   (its score is stored with Pitch Match's). **Next:** `bash scripts/design-verify/checks7.sh all` (was started
-  2026-11-08 ~04:50 UTC; check logs/checks7-*/progress.txt, rerun if cut off), then shots7.js (all seven screens,
-  signed out/new/active + activecw for You and Records) → review/phase7 with notes and sheet, secret check, push, report.
+  2026-11-08), then shots7.js → review/phase7.
+- **Phase 7 DONE 2026-11-08, reported; waiting for the user's review.** Checks (logs checks7-*): youstates en/fr equal
+  except expected; contrast --you 0; full contrast: Profile row gone, Light Scale Run dots 4.42:1 on their color-mix tint
+  (existing, newly measured); copyscan --you 0/0; hooks 21/0, navcheck, bootcheck 9/0, home 102/0 (script updated for
+  2.5; first run a sign-up timeout), levelup, p9, voicecard 16/16, batch1, picker. **review/phase7 3c49ef9** (92 shots,
+  sheet, notes). No merge or deploy before the user's review.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
