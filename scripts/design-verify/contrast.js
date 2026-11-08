@@ -17,7 +17,10 @@
 // stage while listening, and stopped). --set 4a | 4b | all (the default) picks the tools.
 // Phase 6 (PHASE6.md §1f): --set 6 measures the six Songs-tab solo tools (idle, stage, result) and the Songs tab.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
-// Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>] [--drift [N]]
+// --you (phase 7, PHASE7.md §1b): the You screens filled in, as shots7before measured them: each panel (the hub,
+// Journey, Progress, Records, Vocal Passport, Voice Health, Profile & settings) in each seeded state of youSeed.js, at
+// 390 and 1280, per theme. The regular run sees these screens only on an empty account.
+// Usage: node scripts/design-verify/contrast.js [--base <git ref>] [--themes light,dark] [--json <file>] [--drift [N]] [--you]
 //   --base master serves master's deploy/index.html (the baseline: Dark only, master has no Light theme).
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), H = require('./homeStates'), T = require('./tools'), TOOLSET = require('./tools4b').toolSet().tools;
@@ -228,6 +231,42 @@ async function runDrift(dir, state) {
   return { res, fails };
 }
 
+const YOU = process.argv.includes('--you');
+async function runYou(b, dir, state, report) {
+  const Y = require('./youSeed'), PANELS = ['you-hub', 'journey', 'dashboard', 'records', 'passport', 'voicehealth', 'profile'];
+  for (const theme of THEMES) {
+    const panels = {};
+    for (const [w, viewport] of [['390', { width: 390, height: 844 }], ['1280', { width: 1280, height: 800 }]]) {
+      for (const st of Y.YOU_STATES) {
+        const { ctx, page } = await C.openPage(b, { dir, theme, viewport, storageState: st === 'signedout' ? undefined : state });
+        try {
+          await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+          await C.clearOverlays(page);
+          if (st !== 'signedout') await page.evaluate(Y.seedInPage, st);
+          for (const p of PANELS) {
+            await page.evaluate(p => { if (p === 'you-hub') showShellSection('you'); else enterPanel(p); window.scrollTo(0, 0); }, p);
+            await C.sleep(450);
+            panels[`${w} ${st}: ${p}`] = await page.evaluate(measure, `#panel-${p}`);
+          }
+        } finally { await ctx.close(); }
+      }
+    }
+    report.themes[theme] = panels;
+    console.log(`\n-- ${theme}: panel                              fail<3  fail3-4.5  unknown  checked`);
+    const tot = { 'fail<3': 0, 'fail3-4.5': 0, unknown: 0, n: 0 };
+    for (const [k, items] of Object.entries(panels)) {
+      const counted = items.filter(i => !i.disabled), n = s => counted.filter(i => i.status === s).length;
+      tot['fail<3'] += n('fail<3'); tot['fail3-4.5'] += n('fail3-4.5'); tot.unknown += n('unknown'); tot.n += counted.length;
+      if (n('fail<3') || n('fail3-4.5') || n('unknown')) {
+        console.log(`   ${k.padEnd(40)} ${String(n('fail<3')).padStart(6)} ${String(n('fail3-4.5')).padStart(10)} ${String(n('unknown')).padStart(8)} ${String(counted.length).padStart(8)}`);
+        for (const i of counted.filter(i => i.status !== 'pass')) console.log(`      ${i.status} ${i.ratio ?? ''} "${(i.text || '').slice(0, 50)}" ${i.fg || ''} on ${i.bg || ''}  ${i.why || i.path || ''}`);
+      }
+    }
+    console.log(`   ${'TOTAL'.padEnd(40)} ${String(tot['fail<3']).padStart(6)} ${String(tot['fail3-4.5']).padStart(10)} ${String(tot.unknown).padStart(8)} ${String(tot.n).padStart(8)}`);
+    report.themes[theme].__totals = tot;
+  }
+}
+
 (async () => {
   const dir = C.buildDir(BASE);
   const b = await C.chromium.launch();
@@ -238,6 +277,7 @@ async function runDrift(dir, state) {
     await C.signUp(page, 'dvc');
     const state = await ctx.storageState(); await ctx.close();
     if (DRIFT) { const { res, fails } = await runDrift(dir, state); report.drift = res; process.exitCode = fails ? 1 : 0; return; }
+    if (YOU) { await runYou(b, dir, state, report); return; }
     for (const theme of THEMES) {
       const panels = {};
       if (!TOOLS_ONLY) {
