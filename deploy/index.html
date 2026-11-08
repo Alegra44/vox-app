@@ -2084,6 +2084,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     #panel-dashboard #dashSignedIn[style*="block"]{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;} /* renderDashboard shows it with display:block */
     #panel-dashboard .dash-actions{grid-column:1 / -1;}
   }
+  /* ---- PROFILE & SETTINGS (phase 7, 2.3): the Voice Card, then Settings with Account; the rest lives elsewhere ---- */
+  #panel-profile .profile-elsewhere[hidden]{display:none;}
+  #panel-profile #profileSignedIn > .key-card{background:none;border:0;border-radius:0;box-shadow:none;padding:var(--hl-s5) 0 0;margin-top:var(--hl-s5) !important;border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-profile #profileSignedIn > .key-card .step-label{font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);font-weight:650;text-transform:uppercase;letter-spacing:.09em;color:var(--hl-ink-3);}
+  #panel-profile #profileSignedIn > .key-card h2, #panel-profile .profile-set-h{font-family:var(--hl-font) !important;font-stretch:normal !important;font-size:var(--hl-t-h3) !important;font-weight:600 !important;color:var(--hl-ink);margin:var(--hl-s6) 0 var(--hl-s2) !important;}
+  #panel-profile .profile-set-sub{margin:0 0 var(--hl-s3);}
+  #panel-profile .profile-account{gap:var(--hl-s3);}
+  #panel-profile #voiceCardCanvas{border-radius:var(--hl-r2);}
+  #panel-profile #profileSignedOut{background:var(--hl-raised);border:0;border-radius:var(--hl-r2);padding:var(--hl-s5);margin-top:var(--hl-s5);}
+  @media (min-width:960px){
+    #panel-profile #profileSignedIn[style*="block"]{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;}
+  }
   /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
   .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
   .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
@@ -3827,8 +3839,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
       <div class="btn-row dash-actions">
         <button class="solid-btn teal" id="shareRecapBtn" data-i18n="dashboard_share_btn">Share my recap</button>
-        <button class="ghost-btn" id="dashResetBtn" data-i18n="dashboard_reset_btn">Reset local data</button>
-        <button class="ghost-btn" id="dashSignOutBtn" data-i18n="dashboard_signout_btn">Sign out</button>
       </div>
     </div>
   </section>
@@ -5291,15 +5301,26 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- PROFILE PANEL -->
   <section class="panel" id="panel-profile">
     <div class="journey-hero">
-      <div class="j-title">🎤 Profile</div>
-      <div class="j-sub">One real singer identity — consolidated from Dashboard, Journey, and Personal Records, not a separate data source.</div>
+      <div class="j-title" data-i18n="profile_title">Profile &amp; settings</div>
+      <div class="j-sub" data-i18n="profile_sub">Your Voice Card, your language and theme, and your account.</div>
     </div>
 
     <div class="profile-id-card" id="profileSignedOut" style="display:none;">
-      <p class="desc">Sign in to build a real profile — there's nothing to consolidate until you have data.</p>
+      <p class="desc" data-i18n="profile_signedout_desc">Sign in to see your Voice Card and your account settings.</p>
     </div>
 
     <div id="profileSignedIn" style="display:none;">
+      <!-- phase 7 (PHASE7.md 2.3): the Voice Card, then Settings with an Account section. Who you are, the Skill Profile,
+           training history and the 21-day line live on You, the Fingerprint on the Passport, achievements on the Journey,
+           the Skill Tree on Vocal World, records on Personal Records, range on Progress: hidden here, IDs kept. -->
+      <div class="key-card" style="margin-top:16px;text-align:center;">
+        <div class="step-label" data-i18n="profile_sharevoicecard_label">🎤 Share Your Voice Card</div>
+        <p class="desc" style="margin:8px 0 14px;" data-i18n="profile_voicecard_desc">A real snapshot of your actual progress — every number on it comes straight from your real tracked data, nothing staged for the screenshot.</p>
+        <canvas id="voiceCardCanvas" width="600" height="800" role="img" aria-label="Preview of your downloadable Voice Card — a shareable image with your real Pitch, Range, Breath, Agility, and streak" style="width:100%;max-width:260px;border-radius:14px;display:block;margin:0 auto;box-shadow:0 8px 24px rgba(0,0,0,0.4);"></canvas>
+        <button class="mic-btn vc-ink" id="voiceCardDownloadBtn" style="margin-top:16px;"><span class="dot-icon"></span><span data-i18n="profile_downloadcard_btn">Download my Voice Card</span></button>
+        <p class="fine-print" id="voiceCardNote" style="margin-top:8px;"></p>
+      </div>
+      <div class="profile-elsewhere" hidden>
       <div class="profile-id-card">
         <div class="profile-avatar-big" id="profileAvatarBig">?</div>
         <div class="profile-id-text">
@@ -5308,7 +5329,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="profile-xp-line" id="profileXpLine">—</div>
         </div>
       </div>
-
       <div class="key-card" style="margin-top:16px;text-align:center;">
         <div class="step-label" data-i18n="profile_fingerprint_label">🫆 Your Voice Fingerprint</div>
         <p class="desc" style="margin:8px 0 4px;" data-i18n="profile_fingerprint_desc">The real shape of your Skill Profile — same five categories as everywhere else, just drawn as one identity rather than five separate bars.</p>
@@ -5316,20 +5336,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <p class="fine-print" id="fingerprintUpdatedNote" style="margin-top:8px;"></p>
         <div class="btn-row" style="justify-content:center;margin-top:14px;"><button class="ghost-btn" data-enter-panel="passport" data-i18n="profile_viewpassport_btn">🪪 View my Vocal Passport</button></div>
       </div>
-
-      <div class="key-card" style="margin-top:16px;text-align:center;">
-        <div class="step-label" data-i18n="profile_sharevoicecard_label">🎤 Share Your Voice Card</div>
-        <p class="desc" style="margin:8px 0 14px;" data-i18n="profile_voicecard_desc">A real snapshot of your actual progress — every number on it comes straight from your real tracked data, nothing staged for the screenshot.</p>
-        <canvas id="voiceCardCanvas" width="600" height="800" role="img" aria-label="Preview of your downloadable Voice Card — a shareable image with your real Pitch, Range, Breath, Agility, and streak" style="width:100%;max-width:260px;border-radius:14px;display:block;margin:0 auto;box-shadow:0 8px 24px rgba(0,0,0,0.4);"></canvas>
-        <button class="mic-btn vc-ink" id="voiceCardDownloadBtn" style="margin-top:16px;"><span class="dot-icon"></span><span data-i18n="profile_downloadcard_btn">Download my Voice Card</span></button>
-        <p class="fine-print" id="voiceCardNote" style="margin-top:8px;"></p>
-      </div>
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_vocalrange_label">Vocal Range</div>
         <div class="profile-range-line" id="profileRangeLine">Not captured yet</div>
       </div>
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_vocalstats_label">Vocal Statistics</div>
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="profile_vocalstats_h2">Strengths &amp; weaknesses, from your real Skill Profile</h2>
@@ -5337,7 +5347,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="skill-summary-row" id="profileSkillSummary"></div>
         <div class="btn-row" style="margin-top:16px;"><button class="ghost-btn" data-enter-panel="dashboard" data-i18n="profile_opendashboard_btn">Open full Dashboard</button></div>
       </div>
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_traininghistory_label">Training History</div>
         <div class="profile-stat-row">
@@ -5346,31 +5355,26 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="profile-stat"><div class="ps-label" data-i18n="profile_songsmastered_label">Songs mastered</div><div class="ps-val" id="profileSongsMastered">0</div></div>
         </div>
       </div>
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_21dayprogress_label">21-Day Progress</div>
         <div class="profile-range-line" id="profileJourneyLine">Not started</div>
         <div class="btn-row" style="margin-top:14px;"><button class="ghost-btn" data-enter-panel="journey" data-i18n="profile_openjourney_btn">Open full 21-Day Journey</button></div>
       </div>
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_achievements_label">Achievements</div>
         <div class="achievement-grid" id="profileAchievementGrid"></div>
       </div>
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_skilltree_label">Vocal Skill Tree</div>
         <div class="profile-range-line" id="profileSkillTreeLine">—</div>
         <div class="btn-row" style="margin-top:14px;"><button class="ghost-btn" data-enter-panel="arcade" data-i18n="profile_openworld_btn">Open Vocal World</button></div>
       </div>
-
-
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_personalrecords_label">Personal Records</div>
         <div id="profileRecordsPreview"></div>
         <div class="btn-row" style="margin-top:14px;"><button class="ghost-btn" data-enter-panel="records" data-i18n="profile_viewallrecords_btn">View all records</button></div>
       </div>
-
+      </div>
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="settings_title">Settings</div>
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:8px 0 12px;" data-i18n="settings_language_title">🌐 Language</h2>
@@ -5400,6 +5404,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">💬 Feedback</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_feedback_sub">Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.</p>
         <button class="ghost-btn" data-enter-panel="feedback" style="width:100%;justify-content:center;" data-i18n="settings_feedback_btn">Give Feedback</button>
+
+        <h2 class="profile-set-h" data-i18n="profile_account_title">Account</h2>
+        <p class="fine-print profile-set-sub" data-i18n="profile_account_sub">Reset local data erases the progress saved on your account: range, streak, sessions, scores and history. It can't be undone. Signing out keeps everything.</p>
+        <div class="btn-row profile-account">
+          <button class="ghost-btn" id="dashSignOutBtn" data-i18n="dashboard_signout_btn">Sign out</button>
+          <button class="ghost-btn" id="dashResetBtn" data-i18n="dashboard_reset_btn">Reset local data</button>
+        </div>
       </div>
     </div>
   </section>
@@ -8334,6 +8345,12 @@ const TRANSLATIONS = {
     skill_notinprofile:"Not in your profile yet.",
     you_skill_measure:"Pitch: the average of your last 20 pitch scores, from Pitch Match, Interval Match, Stay in Key, Karaoke Coach, Performance Director and the other pitch trainers. Range: your saved range, where 30 semitones (two and a half octaves) is 100. Breath: Breath Control. Agility: Scale Run, the Rhythm Trainer, Vocal Puzzle and Rift. Expression isn't in your profile yet: its measurement is being improved first. The level read is the average of the scored rings: 80 and above Professional, 55 and above Intermediate.",
     progress_plan_measure:"Rule-based: a warm-up first, then the lowest ring of your Skill Profile, Register Coach if your longest register crossing is under 3 seconds, then this week's challenge.",
+    profile_title:"Profile & settings",
+    profile_sub:"Your Voice Card, your language and theme, and your account.",
+    profile_signedout_desc:"Sign in to see your Voice Card and your account settings.",
+    profile_account_title:"Account",
+    profile_account_sub:"Reset local data erases the progress saved on your account: range, streak, sessions, scores and history. It can't be undone. Signing out keeps everything.",
+    profile_reset_confirm:"Erase the progress saved on your account? This can't be undone.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9946,6 +9963,12 @@ const TRANSLATIONS = {
     skill_notinprofile:"Pas encore dans votre profil.",
     you_skill_measure:"Justesse : la moyenne de vos 20 derniers scores de justesse, issus de Précision de note, Reconnaissance d'intervalles, Rester dans la tonalité, Coach Karaoké, Directeur de performance et des autres exercices de justesse. Tessiture : votre tessiture enregistrée, où 30 demi-tons (deux octaves et demie) valent 100. Souffle : Contrôle du souffle. Agilité : Gamme, l'Entraîneur de Rythme, Puzzle Vocal et Rift. L'expression n'est pas encore dans votre profil : sa mesure est d'abord améliorée. Le niveau estimé est la moyenne des anneaux notés : 80 et plus Professionnel, 55 et plus Intermédiaire.",
     progress_plan_measure:"Fondé sur des règles : d'abord un échauffement, puis l'anneau le plus bas de votre profil de compétences, le Coach de registre si votre plus long passage de registre dure moins de 3 secondes, puis le défi de la semaine.",
+    profile_title:"Profil et réglages",
+    profile_sub:"Votre carte vocale, votre langue et votre thème, et votre compte.",
+    profile_signedout_desc:"Connectez-vous pour voir votre carte vocale et les réglages de votre compte.",
+    profile_account_title:"Compte",
+    profile_account_sub:"Réinitialiser les données efface la progression enregistrée sur votre compte : tessiture, série, séances, scores et historique. C'est irréversible. Se déconnecter garde tout.",
+    profile_reset_confirm:"Effacer la progression enregistrée sur votre compte ? C'est irréversible.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11558,6 +11581,12 @@ const TRANSLATIONS = {
     skill_notinprofile:"Aún no está en tu perfil.",
     you_skill_measure:"Afinación: la media de tus últimas 20 puntuaciones de afinación, de Precisión de nota, Reconocimiento de intervalos, Mantente en tono, Coach de Karaoke, Director de actuación y los demás ejercicios de afinación. Registro: tu registro guardado, donde 30 semitonos (dos octavas y media) valen 100. Respiración: Control de respiración. Agilidad: Escala, el Entrenador de Ritmo, Rompecabezas Vocal y Rift. La expresión aún no está en tu perfil: primero se está mejorando su medición. El nivel estimado es la media de los anillos puntuados: 80 o más Profesional, 55 o más Intermedio.",
     progress_plan_measure:"Basado en reglas: primero un calentamiento, luego el anillo más bajo de tu perfil de habilidades, el Coach de registro si tu paso de registro más largo dura menos de 3 segundos, y después el reto de la semana.",
+    profile_title:"Perfil y ajustes",
+    profile_sub:"Tu tarjeta vocal, tu idioma y tema, y tu cuenta.",
+    profile_signedout_desc:"Inicia sesión para ver tu tarjeta vocal y los ajustes de tu cuenta.",
+    profile_account_title:"Cuenta",
+    profile_account_sub:"Restablecer los datos borra el progreso guardado en tu cuenta: registro, racha, sesiones, puntuaciones e historial. No se puede deshacer. Cerrar sesión lo conserva todo.",
+    profile_reset_confirm:"¿Borrar el progreso guardado en tu cuenta? No se puede deshacer.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13170,6 +13199,12 @@ const TRANSLATIONS = {
     skill_notinprofile:"Henüz profilinde değil.",
     you_skill_measure:"Perde: son 20 perde puanının ortalaması; Nota Eşleştirme, Aralık Eşleştirme, Tonda Kal, Karaoke Koçu, Performans Yönetmeni ve diğer perde çalışmalarından. Ses Aralığı: kayıtlı aralığın; 30 yarım ses (iki buçuk oktav) 100 sayılır. Nefes: Nefes Kontrolü. Çeviklik: Gam Çalışması, Ritim Antrenörü, Vokal Bulmaca ve Rift. İfade henüz profilinde değil: önce ölçümü iyileştiriliyor. Seviye tahmini, puanlanmış halkaların ortalamasıdır: 80 ve üzeri Profesyonel, 55 ve üzeri Orta.",
     progress_plan_measure:"Kurallara dayanır: önce ısınma, sonra beceri profilindeki en düşük halka, en uzun register geçişin 3 saniyenin altındaysa Register Koçu, ardından haftanın görevi.",
+    profile_title:"Profil ve ayarlar",
+    profile_sub:"Ses kartın, dilin ve temanın yanı sıra hesabın.",
+    profile_signedout_desc:"Ses kartını ve hesap ayarlarını görmek için giriş yap.",
+    profile_account_title:"Hesap",
+    profile_account_sub:"Verileri sıfırlamak hesabında kayıtlı ilerlemeyi siler: ses aralığı, seri, oturumlar, puanlar ve geçmiş. Geri alınamaz. Çıkış yapmak her şeyi korur.",
+    profile_reset_confirm:"Hesabında kayıtlı ilerleme silinsin mi? Bu geri alınamaz.",
   },
 };
 let currentLanguage = 'en';
@@ -13616,7 +13651,7 @@ document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
 });
 
 document.getElementById('dashResetBtn').addEventListener('click', async ()=>{
-  if(!confirm('Clear all locally saved progress data?')) return;
+  if(!confirm(t('profile_reset_confirm'))) return; // phase 7: it erases the account's saved progress, not only this device's (the old text said "locally")
   progress = {highestMidi:null, lowestMidi:null, totalSessions:0, lastPracticeDate:null, streak:0, history:{}};
   await saveProgress();
   renderDashboard();
