@@ -518,6 +518,11 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   checkpoint, 40 shots, no contrast item, You lit). Found: the 14-day activity bars never showed (CSS, fixed); Today's
   Plan Go skipped enterPanel (fixed); **Reset local data erases the account's saved progress** (saveProgress), its
   confirm said "locally": copy made accurate, behaviour unchanged (decision for the user).
+- Built 2.4 bb91540, 2.5 4ca829d, 2.6 d2f204d, 2.7 17901f6, 2.8 cafdca3, 2.9 7abbf8d (own commit), 2.10 43a0cdc
+  (PHASE7_COPY.md, copyscan --you 0/0), HOUSE_LIGHTS v2.0 eacb477, checks7.sh. Interval Match's Day 1 step stays manual
+  (its score is stored with Pitch Match's). **Next:** `bash scripts/design-verify/checks7.sh all` (was started
+  2026-11-08 ~04:50 UTC; check logs/checks7-*/progress.txt, rerun if cut off), then shots7.js (all seven screens,
+  signed out/new/active + activecw for You and Records) → review/phase7 with notes and sheet, secret check, push, report.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
