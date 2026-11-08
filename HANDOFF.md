@@ -507,6 +507,10 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   tools store it; the "achievement icon" is the 7-day streak printing "undefined"; invented people in Dashboard's "How
   you compare"; Records says song scores aren't saved; the day is the UTC date; Voice Health ignores Vocal Load; Choir
   World vs Skill Profile: five options described. Waiting for the user's phase 7 spec.
+- **Phase 7 spec given 2026-11-08** (PHASE7.md "Phase 7 spec"): option 2 (Choir World run pitches in Pitch, 2.9, its
+  own commit); Expression "Not in your profile yet"; "How you compare" hidden; Dashboard → Progress; HOUSE_LIGHTS v2.0.
+  Guards first (youstates.js), build 2.1–2.10, midway review/phase7-part1 after 2.3, then review/phase7. No merge or
+  deploy before the user's review. Rollback target dpl_6EgEe6idPGDet91hDsVkkwc2YGXx.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
@@ -523,6 +527,16 @@ These change scores, so they wait until the redesign is finished (survey items i
    with the same formula and the same label.
 5. **Rhythm / Entrance & Cutoff latency** (from 4b 2.4, see "Later accuracy item" above): output and input latency land
    in every onset offset as "late".
+
+6. **Expression joins the Skill Profile after its fix** (PHASE7.md decision): Emotional Singing and Harmony Arena
+   already store `expressionScores`; once the batch fixes Expression's measurement (a steady tone scores 51), add it
+   to `computeSkillProfile` from those stored scores. Until then it reads "Not in your profile yet".
+
+## Later: the day is the UTC date (PHASE7_SURVEY.md item 5; decided in PHASE7.md, not in phase 7)
+
+`todayStr()` is `toISOString().slice(0,10)`: streaks, `history`, `dailyMetrics`, the Journey day and the vocal-load
+budget roll over at UTC midnight, and the 14-day labels print the day before west of UTC. Not fixed in phase 7 because
+the vocal-load budget and the server share that day; needs a plan that moves both together.
 
 ## Waiting on the user (don't start without a go-ahead)
 
