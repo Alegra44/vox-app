@@ -89,3 +89,10 @@ Expected changes (list them in the report; nothing else may change):
 All seven screens, signed out, new and active (plus the Choir World state for You and Records), at 390 and 1280, Light and Dark, and the Voice Card image itself. Put them on review/phase7 with a contact sheet. Secret check, push both branches.
 
 5. REPORT, then stop.
+
+## 2.9 clarified (2026-11-08)
+
+The solo pitch scores (`progress.pitchScores`) carry no time, so "merged by time, last 20 overall" isn't possible
+without storing something new. The user chose: Pitch = the mean of the last 20 solo pitch scores together with the last
+20 Choir World run pitches (by time; each finished run with a Performance Report pitch is one score). Nothing stored,
+reversible, no XP change.
