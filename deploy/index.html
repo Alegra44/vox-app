@@ -2118,6 +2118,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-journey .assess-step.done{border-color:var(--hl-ink-3);}
   #panel-journey .vc-result-dims{margin-top:var(--hl-s3);}
   #panel-journey .snapshot-row{border-bottom:0;padding:var(--hl-s3) 0;margin:0;}
+  #panel-journey .journey-cw-done{display:flex;align-items:center;gap:var(--hl-s2);color:var(--hl-ink);}
   #panel-journey .snapshot-delta{background:none !important;padding:0 !important;color:var(--hl-ink-2);margin-left:var(--hl-s2);}
   #panel-journey .snapshot-delta.up{color:var(--hl-ok);}
   /* ---- PERSONAL RECORDS (phase 7, 2.5): plain sections of rows ---- */
@@ -2866,13 +2867,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="hl-list you-rows">
         <button class="hl-item you-row" data-enter-panel="journey"><svg class="hl-icon" aria-hidden="true"><use href="#hl-calendar"/></svg><span><span class="hl-item-title" data-i18n="hub_you_journey_title"></span><span class="hl-item-meta" data-i18n="hub_you_journey_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValJourney"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         <button class="hl-item you-row" data-enter-panel="dashboard"><svg class="hl-icon" aria-hidden="true"><use href="#hl-chart"/></svg><span><span class="hl-item-title" data-i18n="hub_you_dashboard_title"></span><span class="hl-item-meta" data-i18n="hub_you_dashboard_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValProgress"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-        <button class="hl-item you-row" data-enter-panel="records"><svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg><span><span class="hl-item-title" data-i18n="hub_you_records_title"></span><span class="hl-item-meta" data-i18n="hub_you_records_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValRecords"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-        <button class="hl-item you-row" data-enter-panel="passport"><svg class="hl-icon" aria-hidden="true"><use href="#hl-passport"/></svg><span><span class="hl-item-title" data-i18n="you_passport_title"></span><span class="hl-item-meta" data-i18n="you_passport_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPassport"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-        <button class="hl-item you-row" data-enter-panel="voicehealth"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span><span class="hl-item-title" data-i18n="hub_you_voicehealth_title"></span><span class="hl-item-meta" data-i18n="hub_you_voicehealth_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValHealth"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="records"><svg class="hl-icon" aria-hidden="true"><use href="#hl-medal"/></svg><span><span class="hl-item-title" data-i18n="hub_you_records_title"></span><span class="hl-item-meta" data-i18n="hub_you_records_desc">Your bests in one place: range, pitch, breath, songs, Vocal World and Choir World.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValRecords"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="passport"><svg class="hl-icon" aria-hidden="true"><use href="#hl-passport"/></svg><span><span class="hl-item-title" data-i18n="you_passport_title">Vocal Passport</span><span class="hl-item-meta" data-i18n="you_passport_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPassport"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="voicehealth"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span><span class="hl-item-title" data-i18n="hub_you_voicehealth_title"></span><span class="hl-item-meta" data-i18n="hub_you_voicehealth_desc">Vocal load, stability and breath over the last 14 days.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValHealth"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         <button class="hl-item you-row" id="youChoirRow" data-you-choir hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-choir"/></svg><span><span class="hl-item-title" data-i18n="cw_label">Choir World</span><span class="hl-item-meta" data-i18n="you_choir_desc">Your parts' readiness</span></span><span class="hl-item-end"><span class="you-row-val" id="youValChoir"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-        <button class="hl-item you-row" data-enter-panel="teacher" id="youTeacherRow" hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-group"/></svg><span><span class="hl-item-title" data-i18n="hub_you_teacher_title"></span><span class="hl-item-meta" data-i18n="hub_you_teacher_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValTeacher"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="teacher" id="youTeacherRow" hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-group"/></svg><span><span class="hl-item-title" data-i18n="hub_you_teacher_title">Teacher Dashboard</span><span class="hl-item-meta" data-i18n="hub_you_teacher_desc">Your students and their assignments. Teacher plan.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValTeacher"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         <button class="hl-item you-row" data-enter-panel="pricing"><svg class="hl-icon" aria-hidden="true"><use href="#hl-lock"/></svg><span><span class="hl-item-title" data-i18n="hub_you_pricing_title"></span><span class="hl-item-meta" data-i18n="hub_you_pricing_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPlan"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-        <button class="hl-item you-row" data-enter-panel="profile"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span><span class="hl-item-title" data-i18n="hub_you_profile_title"></span><span class="hl-item-meta" data-i18n="hub_you_profile_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValProfile"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <button class="hl-item you-row" data-enter-panel="profile"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span><span class="hl-item-title" data-i18n="hub_you_profile_title">Profile &amp; settings</span><span class="hl-item-meta" data-i18n="hub_you_profile_desc">Your Voice Card, language, theme and account.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValProfile"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
       </div>
     </div>
   </section>
@@ -2890,13 +2891,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <div class="journey-hero">
       <div class="j-title" data-i18n="journey_title">21 Days to Discover Your Voice</div>
-      <div class="j-sub" data-i18n="journey_sub">Not a trial countdown — a structured baseline, three themed weeks, and an honest before/after at the end. Every number here comes from tools already built elsewhere in this app, sequenced into one guided path.</div>
+      <div class="j-sub" data-i18n="journey_sub">A baseline on Day 1, three themed weeks, and a before/after at the end. Every number comes from the tools you already use, in one guided path.</div>
     </div>
 
     <!-- DAY 1 ASSESSMENT (shown until complete) -->
     <div class="key-card" id="journeyAssessmentCard">
       <div class="step-label" data-i18n="journey_day1_label">Day 1 — Discover Your Voice</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 16px;" data-i18n="journey_day1_h2">Five quick real measurements, then a personal goal</h2>
+      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 16px;" data-i18n="journey_day1_h2">Five quick measurements, then a personal goal</h2>
 
       <div class="assess-step" data-step="range">
         <div><div class="as-title" data-i18n="journey_step_range_title">Find your range</div><div class="as-sub" data-i18n="journey_step_range_sub">Range Finder — lowest and highest comfortable note</div></div>
@@ -2920,7 +2921,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
       </div>
       <div class="assess-step" data-step="breath">
-        <div><div class="as-title" data-i18n="journey_step_breath_title">One breath hold</div><div class="as-sub" data-i18n="journey_step_breath_sub">Breath Trainer — see your real sustain time</div></div>
+        <div><div class="as-title" data-i18n="journey_step_breath_title">One breath hold</div><div class="as-sub" data-i18n="journey_step_breath_sub">Breath Control: see how long you can sustain a note</div></div>
         <div style="display:flex;align-items:center;gap:10px;">
           <button class="ghost-btn" data-goto-tab="breath" data-i18n="hub_open_btn">Open</button>
           <div class="assess-check" id="assessCheckbreath">○</div>
@@ -2937,13 +2938,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="assess-step" id="voiceRecordStep">
         <div><div class="as-title"><span data-i18n="journey_step_record_title">Record a quick clip</span> <span style="color:var(--muted);font-weight:400;" data-i18n="journey_optional_tag">(optional)</span></div><div class="as-sub" id="voiceRecordSub" data-i18n="journey_step_record_sub">4 seconds, saved on this device only — so you can hear your own progress later. Nothing is uploaded, and it's entirely optional.</div></div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <button class="ghost-btn" id="journeyRecordBtn" data-i18n="journey_record_btn">🎙️ Record</button>
+          <button class="ghost-btn" id="journeyRecordBtn" data-i18n="journey_record_btn">Record</button>
           <div class="assess-check" id="voiceRecordCheck">○</div>
         </div>
       </div>
       <div class="vl-gauge" id="vlGaugeJourney" style="display:none;"></div>
 
-      <p class="fine-print" style="margin-top:6px;" data-i18n="journey_open_hint">Each "Open" jumps to the real tool. Come back here and mark it done once you've tried it — this page doesn't auto-detect across tabs, so it asks honestly instead of guessing.</p>
+      <p class="fine-print" style="margin-top:6px;" data-i18n="journey_open_hint">Each Open goes to the tool. A step ticks itself once that tool has a saved result (Interval Match shares its results with Pitch Match, so tick it yourself); you can also tick any step by hand.</p>
 
       <div id="journeyGoalSection" style="margin-top:22px;display:none;">
         <div class="step-label" data-i18n="journey_goal_label">Your 21-Day Goal</div>
@@ -2970,7 +2971,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="step-label" id="curriculumDayLabel">Today's Curriculum — Day 1</div>
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:19px;margin:8px 0 4px;" id="curriculumObjective">—</h2>
         <p class="desc" id="curriculumTheme" style="margin-bottom:14px;"></p>
-        <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_sequence_label">Real sequence</span><span id="curriculumExercises"></span></div>
+        <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_sequence_label">Sequence</span><span id="curriculumExercises"></span></div>
         <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_duration_label">Duration</span><span id="curriculumDuration"></span></div>
         <div class="curriculum-detail-row"><span class="cd-label" data-i18n="journey_challenge_label">Today's challenge</span><span id="curriculumChallenge"></span></div>
         <p class="desc" id="curriculumMessage" style="margin:14px 0;font-style:italic;color:var(--brass);"></p>
@@ -2991,14 +2992,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
       <div class="key-card">
         <div class="step-label" data-i18n="journey_achievements_label">Achievements</div>
-        <p class="hl-small journey-ach-sub" data-i18n="journey_achievements_h2">Every one of these is computed from real logged data — none are hand-awarded</p>
+        <p class="hl-small journey-ach-sub" data-i18n="journey_achievements_h2">Each one unlocks from your saved results.</p>
         <div class="achievement-grid" id="achievementGrid"></div>
       </div>
 
       <div class="key-card" style="margin-top:20px;">
         <div class="step-label" data-i18n="journey_day1vtoday_label">Day 1 vs. Today</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;" data-i18n="journey_day1vtoday_h2">Real numeric comparison — no audio replay yet</h2>
-        <p class="desc" style="margin-bottom:16px;" data-i18n="journey_day1vtoday_desc">Honest scope: this compares your stored Day 1 Skill Profile snapshot to today's, numerically. Hearing your actual Day 1 vs. today recording side-by-side isn't built — that needs take storage this prototype doesn't have (see PRD §18.6).</p>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;" data-i18n="journey_day1vtoday_h2">Your Day 1 numbers next to today's</h2>
+        <p class="desc" style="margin-bottom:16px;" data-i18n="journey_day1vtoday_desc">Your Skill Profile as it was when you set your baseline, next to today's. A recording of Day 1 to play beside today's isn't kept.</p>
         <div class="vc-result-dims" id="journeySnapshotCompare"></div>
       </div>
 
@@ -3839,7 +3840,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
         <div id="skillProfileBars"></div>
         <div class="skill-summary-row" id="skillSummaryRow"></div>
-        <p class="desc"><span data-i18n="dashboard_howyoucompare">How you compare</span> <span class="mock-tag" data-i18n="dashboard_sampledata_tag">SAMPLE DATA</span> <span data-i18n="dashboard_backend_note"></span></p>
+        <p class="desc"><span data-i18n="dashboard_howyoucompare">How you compare</span> <span class="mock-tag" data-i18n="dashboard_sampledata_tag">SAMPLE DATA</span> <span data-i18n="dashboard_backend_note">Hidden until people can compare with each other's actual results.</span></p>
         <div id="challengeLeaderboard"></div>
       </div>
 
@@ -3874,7 +3875,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
       <section class="hl-section dash-unified">
         <div class="hl-label" data-i18n="profile_unifiedprogress_label">Unified Progress</div>
-        <p class="hl-small" data-i18n="profile_unifiedprogress_desc"></p>
+        <p class="hl-small" data-i18n="profile_unifiedprogress_desc">Pitch, breath and agility day by day over the last 14 days, from the log each exercise writes to.</p>
         <svg id="unifiedTrendSvg" viewBox="0 0 400 180" style="width:100%;display:block;"></svg>
         <div class="dash-legend">
           <span class="dash-key dash-key--pitch"><i></i><span data-i18n="profile_pitch_label">Pitch</span></span>
@@ -4090,8 +4091,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- VOICE HEALTH PANEL -->
   <section class="panel" id="panel-voicehealth">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="voicehealth_title">🩺 Voice Health</div>
-      <div class="j-sub" data-i18n="voicehealth_sub">Trends across sessions, not one-off warnings — a single rough day never triggers anything here, only a real multi-day decline.</div>
+      <div class="j-title" data-i18n="voicehealth_title">Voice Health</div>
+      <div class="j-sub" data-i18n="voicehealth_sub">Trends across days, not one-off warnings: one rough day never triggers anything here, only a decline over several days.</div>
     </div>
     <div class="key-card">
       <div class="health-status-banner neutral" id="healthBanner" style="margin-top:18px;" data-i18n="voicehealth_notenoughdata">Not enough data yet — practice on a few different days to see trends.</div>
@@ -4773,7 +4774,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- VOCAL PASSPORT PANEL -->
   <section class="panel" id="panel-passport">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="passport_title">🪪 Vocal Passport</div>
+      <div class="j-title" data-i18n="passport_title">Vocal Passport</div>
       <div class="j-sub" data-i18n="passport_sub">Your long-term identity, consolidated in one place. Every field here is pulled from data already tracked elsewhere — nothing new is measured, nothing is invented to fill a gap.</div>
     </div>
 
@@ -4800,11 +4801,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
 
       <p class="fine-print" id="passportUpdatedStamp" style="margin-top:16px;text-align:center;"></p>
-      <p class="fine-print" style="margin-top:8px;" data-i18n="passport_bestkey_note">Honest about scope: Best Key isn't shown here — with only a couple of songs and no real per-key attempt history yet, a "best key" field would be more guess than measurement. It'll appear once there's real data to back it.</p>
+      <p class="fine-print" style="margin-top:8px;" data-i18n="passport_bestkey_note">Best key isn't shown: with only a few songs and no attempts per key yet, it would be a guess. It will appear once there's enough data.</p>
 
       <div class="key-card" style="margin-top:16px;">
-        <div class="step-label" data-i18n="passport_timeline_label">🌱 Your Breakthrough Timeline</div>
-        <p class="desc" style="margin:8px 0 14px;" data-i18n="passport_timeline_desc">The real story of your voice, in order — every entry here fired for a real reason, logged the moment it happened.</p>
+        <div class="step-label" data-i18n="passport_timeline_label">Your Breakthrough Timeline</div>
+        <p class="desc" style="margin:8px 0 14px;" data-i18n="passport_timeline_desc">The moments of your voice, in order, each logged when it happened.</p>
         <div id="timelineList"></div>
       </div>
     </div>
@@ -5378,8 +5379,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
            training history and the 21-day line live on You, the Fingerprint on the Passport, achievements on the Journey,
            the Skill Tree on Vocal World, records on Personal Records, range on Progress: hidden here, IDs kept. -->
       <div class="key-card" style="margin-top:16px;text-align:center;">
-        <div class="step-label" data-i18n="profile_sharevoicecard_label">🎤 Share Your Voice Card</div>
-        <p class="desc" style="margin:8px 0 14px;" data-i18n="profile_voicecard_desc">A real snapshot of your actual progress — every number on it comes straight from your real tracked data, nothing staged for the screenshot.</p>
+        <div class="step-label" data-i18n="profile_sharevoicecard_label">Share your Voice Card</div>
+        <p class="desc" style="margin:8px 0 14px;" data-i18n="profile_voicecard_desc">A picture of your current scores, made from your saved results.</p>
         <canvas id="voiceCardCanvas" width="600" height="800" role="img" aria-label="Preview of your downloadable Voice Card — a shareable image with your real Pitch, Range, Breath, Agility, and streak" style="width:100%;max-width:260px;border-radius:14px;display:block;margin:0 auto;box-shadow:0 8px 24px rgba(0,0,0,0.4);"></canvas>
         <button class="mic-btn vc-ink" id="voiceCardDownloadBtn" style="margin-top:16px;"><span class="dot-icon"></span><span data-i18n="profile_downloadcard_btn">Download my Voice Card</span></button>
         <p class="fine-print" id="voiceCardNote" style="margin-top:8px;"></p>
@@ -5394,11 +5395,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
       </div>
       <div class="key-card" style="margin-top:16px;text-align:center;">
-        <div class="step-label" data-i18n="profile_fingerprint_label">🫆 Your Voice Fingerprint</div>
-        <p class="desc" style="margin:8px 0 4px;" data-i18n="profile_fingerprint_desc">The real shape of your Skill Profile — same five categories as everywhere else, just drawn as one identity rather than five separate bars.</p>
+        <div class="step-label" data-i18n="profile_fingerprint_label">Your Voice Fingerprint</div>
+        <p class="desc" style="margin:8px 0 4px;" data-i18n="profile_fingerprint_desc">The shape of your Skill Profile: the same five categories, drawn as one shape.</p>
         <svg id="fingerprintSvg" viewBox="0 0 300 300" style="width:100%;max-width:280px;margin:14px auto 0;display:block;"></svg>
         <p class="fine-print" id="fingerprintUpdatedNote" style="margin-top:8px;"></p>
-        <div class="btn-row" style="justify-content:center;margin-top:14px;"><button class="ghost-btn" data-enter-panel="passport" data-i18n="profile_viewpassport_btn">🪪 View my Vocal Passport</button></div>
+        <div class="btn-row" style="justify-content:center;margin-top:14px;"><button class="ghost-btn" data-enter-panel="passport" data-i18n="profile_viewpassport_btn">View my Vocal Passport</button></div>
       </div>
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_vocalrange_label">Vocal Range</div>
@@ -5406,7 +5407,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="profile_vocalstats_label">Vocal Statistics</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="profile_vocalstats_h2">Strengths &amp; weaknesses, from your real Skill Profile</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="profile_vocalstats_h2">Strengths and weaknesses, from your Skill Profile</h2>
         <div id="profileSkillBars"></div>
         <div class="skill-summary-row" id="profileSkillSummary"></div>
         <div class="btn-row" style="margin-top:16px;"><button class="ghost-btn" data-enter-panel="dashboard" data-i18n="profile_opendashboard_btn">Open full Dashboard</button></div>
@@ -5441,14 +5442,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="settings_title">Settings</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:8px 0 12px;" data-i18n="settings_language_title">🌐 Language</h2>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:8px 0 12px;" data-i18n="settings_language_title">Language</h2>
         <div class="ex-type-row" id="profileLanguageRow">
           <button class="ex-type-btn" data-profile-lang="en" aria-pressed="false">🇬🇧 English</button>
           <button class="ex-type-btn" data-profile-lang="fr" aria-pressed="false">🇫🇷 Français</button>
           <button class="ex-type-btn" data-profile-lang="es" aria-pressed="false">🇪🇸 Español</button>
           <button class="ex-type-btn" data-profile-lang="tr" aria-pressed="false">🇹🇷 Türkçe</button>
         </div>
-        <p class="fine-print" style="margin-top:10px;" data-i18n="lang_select_disclosure">Honest about scope: navigation, onboarding, shared buttons, and account screens are fully translated. Deep tool-specific content across this app's 41 screens is still English-only — real translation of that volume is a larger, ongoing effort, not something to fake with machine text.</p>
+        <p class="fine-print" style="margin-top:10px;" data-i18n="lang_select_disclosure">The whole app is translated: navigation, every tool, exercises, games and account screens. One exception for now: the 21-Day Journey's day-by-day curriculum text is in English.</p>
 
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" id="themePickerTitle" data-i18n="settings_theme_title">Theme</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_theme_sub">System follows your device's light or dark setting.</p>
@@ -5458,15 +5459,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <button class="theme-swatch-btn" data-theme-choice="dark" aria-pressed="false" data-i18n="theme_dark">Dark</button>
         </div>
 
-        <h2 id="playbackVolumeTitle" style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">🔊 Playback volume</h2>
+        <h2 id="playbackVolumeTitle" style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">Playback volume</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_playback_sub">Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.</p>
         <div style="display:flex;align-items:center;gap:12px;">
           <input type="range" id="playbackVolumeSlider" min="0" max="100" step="1" value="100" aria-labelledby="playbackVolumeTitle" style="flex:1;accent-color:var(--teal);">
           <span id="playbackVolumeVal" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;min-width:44px;text-align:right;">100%</span>
         </div>
 
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">💬 Feedback</h2>
-        <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_feedback_sub">Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.</p>
+        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">Feedback</h2>
+        <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_feedback_sub">Specific feedback is stored so it can be acted on.</p>
         <button class="ghost-btn" data-enter-panel="feedback" style="width:100%;justify-content:center;" data-i18n="settings_feedback_btn">Give Feedback</button>
 
         <h2 class="profile-set-h" data-i18n="profile_account_title">Account</h2>
@@ -5679,7 +5680,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="mode-card-icon">🇹🇷</div><div class="mode-card-name">Türkçe</div>
         </button>
       </div>
-      <p class="fine-print" style="margin-top:16px;" data-i18n="lang_select_disclosure">Honest about scope: navigation, onboarding, and account screens are fully translated. Deep coaching content and the 21-day curriculum are still English-only — real translation of that volume is a larger, ongoing effort, not something to fake with machine text.</p>
+      <p class="fine-print" style="margin-top:16px;" data-i18n="lang_select_disclosure">The whole app is translated: navigation, every tool, exercises, games and account screens. One exception for now: the 21-Day Journey's day-by-day curriculum text is in English.</p>
     </div>
   </div>
 
@@ -6823,7 +6824,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Six quick questions, then straight into your real Day 1 assessment — this isn't a form, it's the start of your vocal journey.",
     ob_back_btn:'Back', ob_get_started_btn:'Get started', ob_start_assessment_btn:'Start my Day 1 assessment', ob_next_btn:'Next',
     lang_select_title:'Choose your language',
-    lang_select_disclosure:"Honest about scope: the whole app — navigation, every tool, exercises, games, and account screens — is fully translated. The one deliberate exception is the 21-Day Journey's day-by-day curriculum text, which stays English-only for now.",
+    lang_select_disclosure:"The whole app is translated: navigation, every tool, exercises, games and account screens. One exception for now: the 21-Day Journey's day-by-day curriculum text is in English.",
     hub_train_title:'Coach', hub_train_sub:'Exercises and tools for pitch, range, breath and tone.',
     hub_songs_title:'Songs', hub_songs_sub:'Rehearse your choir part, or practice a song on your own.',
     hub_you_title:'You', hub_you_sub:'Your range, progress and plan.',
@@ -6831,17 +6832,17 @@ const TRANSLATIONS = {
     hub_world_sub:"Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines as the rest of the app; nothing here is a separate fake game bolted on.",
     settings_theme_title:'Theme', settings_theme_sub:'System follows your device\'s light or dark setting.',
     theme_default:'Default', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Liquid Aurora', theme_velvetopera:'Velvet Opera', theme_system:'System', theme_light:'Light', theme_dark:'Dark',
-    settings_feedback_title:'💬 Feedback', settings_feedback_sub:"Real, specific feedback — stored so we can actually act on it, not a mailbox that goes nowhere.",
+    settings_feedback_title:"Feedback", settings_feedback_sub:"Specific feedback is stored so it can be acted on.",
     settings_feedback_btn:'Give Feedback',
-    settings_title:'Settings', settings_language_title:'🌐 Language',
-    settings_playback_title:'🔊 Playback volume', settings_playback_sub:'Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.',
-    hub_you_profile_title:'🎤 Profile', hub_you_profile_desc:'Your singer identity in one place — level, range, strengths, achievements, records, all real.',
+    settings_title:'Settings', settings_language_title:"Language",
+    settings_playback_title:"Playback volume", settings_playback_sub:'Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.',
+    hub_you_profile_title:"Profile & settings", hub_you_profile_desc:"Your Voice Card, language, theme and account.",
     hub_you_journey_title:'21-Day Journey', hub_you_journey_desc:'Baseline, goal, XP, achievements, Day 1 vs. today.',
     hub_you_dashboard_title:"Progress", hub_you_dashboard_desc:"Today's Plan, the weekly challenge, your range and activity.",
-    hub_you_voicehealth_title:'Voice Health', hub_you_voicehealth_desc:'14-day trend on stability and breath — not single-session panic.',
+    hub_you_voicehealth_title:'Voice Health', hub_you_voicehealth_desc:"Vocal load, stability and breath over the last 14 days.",
     hub_you_pricing_title:'Plan & Pricing', hub_you_pricing_desc:'See your tier, upgrade, or manage your plan.',
-    hub_you_records_title:'Personal Records', hub_you_records_desc:'Every real best, in one place — range, pitch, breath, and every Vocal World game.',
-    hub_you_teacher_title:'👩\u200d🏫 Teacher Dashboard', hub_you_teacher_desc:'Real roster and assignment tracking — Teacher plan.',
+    hub_you_records_title:'Personal Records', hub_you_records_desc:"Your bests in one place: range, pitch, breath, songs, Vocal World and Choir World.",
+    hub_you_teacher_title:"Teacher Dashboard", hub_you_teacher_desc:"Your students and their assignments. Teacher plan.",
     hub_songs_choir_title:'Choir Workspace', hub_songs_choir_desc:'Mute/solo/volume per part, plus Song Difficulty rating.',
     hub_songs_studio_title:"Studio Mode", hub_songs_studio_desc:"Record takes of the song and listen back. No score.",
     hub_songs_aiduet_title:"Sing With the Choir", hub_songs_aiduet_desc:"Pick your part; the app's choir sings the other four.",
@@ -6934,8 +6935,8 @@ const TRANSLATIONS = {
     vibrato_rate_label:"Vibrato rate",
     vibrato_depth_label:'Depth',
     vibrato_consistency_label:'Consistency',
-    voicehealth_title:'🩺 Voice Health',
-    voicehealth_sub:'Trends across sessions, not one-off warnings — a single rough day never triggers anything here, only a real multi-day decline.',
+    voicehealth_title:"Voice Health",
+    voicehealth_sub:"Trends across days, not one-off warnings: one rough day never triggers anything here, only a decline over several days.",
     voicehealth_stability_h2:'Stability — last 14 days',
     voicehealth_breath_h2:'Breath consistency — last 14 days',
     staykey_title:"Stay in Key",
@@ -7064,7 +7065,7 @@ const TRANSLATIONS = {
     emotionmode_retry_btn:'Try two different intentions',
     vocallab_title:'Vocal Lab',
     vocallab_sub:"Not one range number but three. A note you hit once isn't the same as a note you can rely on. Every tier comes from your captured attempts.",
-    passport_title:'🪪 Vocal Passport',
+    passport_title:"Vocal Passport",
     passport_sub:'Your long-term identity, consolidated in one place. Every field here is pulled from data already tracked elsewhere — nothing new is measured, nothing is invented to fill a gap.',
     passport_identity_label:'Identity',
     passport_level_label:'Level',
@@ -7077,21 +7078,21 @@ const TRANSLATIONS = {
     passport_achievements_label:'Achievements',
     passport_breakthroughs_label:'Breakthroughs',
     passport_fingerprint_label:'Voice Fingerprint',
-    passport_bestkey_note:'Honest about scope: Best Key isn\'t shown here — with only a couple of songs and no real per-key attempt history yet, a "best key" field would be more guess than measurement. It\'ll appear once there\'s real data to back it.',
-    passport_timeline_label:'🌱 Your Breakthrough Timeline',
-    passport_timeline_desc:'The real story of your voice, in order — every entry here fired for a real reason, logged the moment it happened.',
+    passport_bestkey_note:"Best key isn't shown: with only a few songs and no attempts per key yet, it would be a guess. It will appear once there's enough data.",
+    passport_timeline_label:"Your Breakthrough Timeline",
+    passport_timeline_desc:"The moments of your voice, in order, each logged when it happened.",
     choir_title:"Choir Workspace",
     choir_sub:"A mixer for every part: mute, solo and set the volume of each voice in the song.",
     pricing_title:'💳 Plans',
     pricing_sub:'21 days of full access on every new account, then a real plan continues it — transparent before you ever create one.',
-    records_title:'🏆 Personal Records',
-    records_sub:'Every real best, consolidated — nothing here is invented if the underlying activity hasn\'t happened yet.',
+    records_title:"Personal Records",
+    records_sub:"Your bests, from what you've sung. A record appears once you've done the activity.",
     feedback_title:'💬 Feedback',
     feedback_sub:'Real, specific answers help far more than "it\'s fine" — a couple of sentences per question is genuinely useful.',
     teacher_title:'👩‍🏫 Teacher Dashboard',
     teacher_sub:'A real roster and assignment tracker — not sample data, an actual local tool you can use.',
     journey_title:'21 Days to Discover Your Voice',
-    journey_sub:'Not a trial countdown — a structured baseline, three themed weeks, and an honest before/after at the end. Every number here comes from tools already built elsewhere in this app, sequenced into one guided path.',
+    journey_sub:"A baseline on Day 1, three themed weeks, and a before/after at the end. Every number comes from the tools you already use, in one guided path.",
     key_title:'Key Trainer',
     key_sub:"Play a reference tone in any key, or let the app recommend the best key for your captured range, transposed to fit.",
     dashboard_title:"Progress",
@@ -7425,7 +7426,7 @@ const TRANSLATIONS = {
     home_cw_locked_saved_tpl:"Your readiness is saved: {part} on {song} — {status}.",
     cw_hub_desc:"Rehearse one part while the rest of the choir sings around you: a guide that fades over 5 levels, Harmony Memory, Choir Bosses, Your Choir recordings, and a readiness status for every part.",
     cw_hub_status_tpl:"Last rehearsed: {part} on {song} — {status}",
-    journey_cw_label:"🎼 Choir World milestone",
+    journey_cw_label:"Choir World milestone",
     journey_cw_title:"Hold your part with the choir",
     journey_cw_desc_tpl:"Pass any Harmony Memory stage in I Am the Part: sing your part while the others sing around you, and hold at least {pct}% of its notes in tune.",
     journey_cw_open_btn:"Open I Am the Part",
@@ -7571,7 +7572,7 @@ const TRANSLATIONS = {
     choir_synthdemo_tag:'SYNTHESIZED DEMO',
     choir_track_desc:"This demo uses original, royalty-free progressions played by the app, so the mixer acts on each part on its own.",
     dashboard_activity_h2:'Practice activity',
-    dashboard_backend_note:'— needs a real multi-user backend, same honesty note as the Director Dashboard.',
+    dashboard_backend_note:"Hidden until people can compare with each other's actual results.",
     dashboard_create_account_btn:'Create free account',
     dashboard_days_unit:'days',
     dashboard_howyoucompare:'How you compare',
@@ -7646,26 +7647,26 @@ const TRANSLATIONS = {
     harmony_ribbon_hint:'Sing your part — the ribbon snaps flush when you\'re aligned, and skews off-axis when you drift.',
     harmony_step_label:'🎼 Harmony Castle — Harmony Arena',
     harmony_timing_label:'Timing',
-    journey_achievements_h2:'Every one of these is computed from real logged data — none are hand-awarded',
+    journey_achievements_h2:"Each one unlocks from your saved results.",
     journey_achievements_label:'Achievements',
     journey_challenge_label:'Today\'s challenge',
-    journey_day1_h2:'Five quick real measurements, then a personal goal',
+    journey_day1_h2:"Five quick measurements, then a personal goal",
     journey_day1_label:'Day 1 — Discover Your Voice',
-    journey_day1vtoday_desc:'Honest scope: this compares your stored Day 1 Skill Profile snapshot to today\'s, numerically. Hearing your actual Day 1 vs. today recording side-by-side isn\'t built — that needs take storage this prototype doesn\'t have (see PRD §18.6).',
-    journey_day1vtoday_h2:'Real numeric comparison — no audio replay yet',
+    journey_day1vtoday_desc:"Your Skill Profile as it was when you set your baseline, next to today's. A recording of Day 1 to play beside today's isn't kept.",
+    journey_day1vtoday_h2:"Your Day 1 numbers next to today's",
     journey_day1vtoday_label:'Day 1 vs. Today',
     journey_duration_label:'Duration',
     journey_goal_label:'Your 21-Day Goal',
     journey_level_label:'Level',
     journey_mark_done_btn:'Mark done',
     journey_open_first_btn:'Open today\'s first tool',
-    journey_open_hint:'Each "Open" jumps to the real tool. Come back here and mark it done once you\'ve tried it — this page doesn\'t auto-detect across tabs, so it asks honestly instead of guessing.',
+    journey_open_hint:"Each Open goes to the tool. A step ticks itself once that tool has a saved result (Interval Match shares its results with Pitch Match, so tick it yourself); you can also tick any step by hand.",
     journey_optional_tag:'(optional)',
-    journey_record_btn:'🎙️ Record',
+    journey_record_btn:"Record",
     journey_reset_btn:'Reset my 21-day journey',
-    journey_sequence_label:'Real sequence',
+    journey_sequence_label:"Sequence",
     journey_setbaseline_btn:'Set my baseline & begin',
-    journey_step_breath_sub:'Breath Trainer — see your real sustain time',
+    journey_step_breath_sub:"Breath Control: see how long you can sustain a note",
     journey_step_breath_title:'One breath hold',
     journey_step_interval_sub:'Exercises → Interval Match, a couple of attempts',
     journey_step_interval_title:'Try two intervals',
@@ -7785,27 +7786,27 @@ const TRANSLATIONS = {
     profile_agility_label:'Agility',
     profile_breath_label:'Breath',
     profile_downloadcard_btn:'Download my Voice Card',
-    profile_fingerprint_desc:'The real shape of your Skill Profile — same five categories as everywhere else, just drawn as one identity rather than five separate bars.',
-    profile_fingerprint_label:'🫆 Your Voice Fingerprint',
+    profile_fingerprint_desc:"The shape of your Skill Profile: the same five categories, drawn as one shape.",
+    profile_fingerprint_label:"Your Voice Fingerprint",
     profile_opendashboard_btn:"Open Progress",
     profile_openjourney_btn:'Open full 21-Day Journey',
     profile_openworld_btn:'Open Vocal World',
     profile_personalrecords_label:'Personal Records',
     profile_pitch_label:'Pitch',
-    profile_sharevoicecard_label:'🎤 Share Your Voice Card',
+    profile_sharevoicecard_label:"Share your Voice Card",
     profile_skilltree_label:'Vocal Skill Tree',
     profile_songsmastered_label:'Songs mastered',
     profile_streak_label:'Streak',
     profile_totalsessions_label:'Total sessions',
     profile_traininghistory_label:'Training History',
-    profile_unifiedprogress_desc:'One real trend view across your three most-tracked categories — pulled from the same real weekly log every exercise already writes to, not a separate tracker.',
-    profile_unifiedprogress_label:'📈 Unified Progress',
+    profile_unifiedprogress_desc:"Pitch, breath and agility day by day over the last 14 days, from the log each exercise writes to.",
+    profile_unifiedprogress_label:"Unified Progress",
     profile_viewallrecords_btn:'View all records',
-    profile_viewpassport_btn:'🪪 View my Vocal Passport',
+    profile_viewpassport_btn:"View my Vocal Passport",
     profile_vocalrange_label:'Vocal Range',
-    profile_vocalstats_h2:'Strengths & weaknesses, from your real Skill Profile',
+    profile_vocalstats_h2:"Strengths and weaknesses, from your Skill Profile",
     profile_vocalstats_label:'Vocal Statistics',
-    profile_voicecard_desc:'A real snapshot of your actual progress — every number on it comes straight from your real tracked data, nothing staged for the screenshot.',
+    profile_voicecard_desc:"A picture of your current scores, made from your saved results.",
     scale_average_desc:'Average across the run',
     ex_attack_label:'Attack',
     ex_ear_chords_btn:'Chords',
@@ -7852,7 +7853,7 @@ const TRANSLATIONS = {
     record_label_song_score:'Best song score (Karaoke/Emotional)', record_note_not_set:'Not set yet',
     record_note_keychange:'Not tracked yet — no dedicated key-change score exists in this prototype.',
     record_note_song_score:"Not tracked yet — those tools show live results but don't save a persistent best.",
-    records_signin_msg:'Sign in to start building real personal records.',
+    records_signin_msg:"Sign in to start keeping your personal records.",
     record_popup_bridge_crossing:'Clean register crossing', record_popup_glider_score:'Vocal Journey score',
     record_popup_bridge_score:'Register Runner score', record_popup_harmony_acc:'Harmony Arena accuracy',
     record_popup_rift_avg:'Vocal Rift average', action_listening:'Listening…',
@@ -7896,7 +7897,7 @@ const TRANSLATIONS = {
     journey_beyond_program:'— beyond the 21-day program', journey_billing_activeplan_suffix:' plan — full access',
     journey_billing_ended:'your 21-day free access has ended — choose a plan to continue', journey_billing_prefix:'Billing:',
     journey_billing_trial_mid:'of 21 free access —', journey_billing_trial_suffix:'days left',
-    journey_complete_theme:'Program complete — real continued practice from here',
+    journey_complete_theme:"Program complete: keep practising from here",
     journey_confirm_reset:'Reset your 21-day journey? This clears your Day 1 baseline and goal, not your other progress.',
     journey_day_p1:'Day', journey_day_p2:'of 21',
     journey_toast_finish_steps:'Try each of the 5 steps above and mark it done first — the baseline needs at least a first data point in each.',
@@ -7948,13 +7949,13 @@ const TRANSLATIONS = {
     teacher_roster_empty:'No students yet — add your first one above.',
     teacher_student_plural:'students', teacher_student_singular:'student', teacher_toast_needstudent:'Add at least one student to the roster first.',
     timeline_breakthrough_p1:'Breakthrough on', timeline_breakthrough_p2:'— was averaging', timeline_breakthrough_p3:'before',
-    timeline_empty:'Nothing logged yet — your first real assessment, breakthrough, or level-up will start the story here.',
+    timeline_empty:"Nothing logged yet: your first assessment, breakthrough or level-up starts the timeline.",
     timeline_first_assessment:'First assessment — Day 1 baseline set', timeline_new_record_p1:'New record:', levelup_why:'You levelled up: {list}', levelup_and:'and', levelup_records_one:'{n} new record', levelup_records_other:'{n} new records', levelup_breakthroughs_one:'{n} breakthrough', levelup_breakthroughs_other:'{n} breakthroughs', levelup_boss_wins_one:'{n} Boss Battle won', levelup_boss_wins_other:'{n} Boss Battles won', levelup_curriculum_one:'{n} curriculum day', levelup_curriculum_other:'{n} curriculum days', levelup_sessions_one:'{n} session', levelup_sessions_other:'{n} sessions', levelup_warmups_one:'{n} warm-up', levelup_warmups_other:'{n} warm-ups', levelup_streak:'a {n}-day streak', timeline_reached_level_p1:'Reached Level',
     todaysplan_dayssince:'day(s) since your last session', todaysplan_finishchallenge:'Finish with the Weekly Challenge',
     todaysplan_goodhabit:'Good habit before anything else', todaysplan_lowestscore:'Your lowest Skill Profile score',
     todaysplan_nodata:'No Skill Profile data yet — this starts building it', todaysplan_practiceregister:'Practice Register Coach',
     todaysplan_shortcrossing:'Your longest clean crossing above the passaggio is still short',
-    todaysplan_signin:'Sign in to get a plan built from your actual practice data.', todaysplan_trypitch:'Try a Pitch Match exercise',
+    todaysplan_signin:"Sign in to get a plan built from your practice.", todaysplan_trypitch:'Try a Pitch Match exercise',
     todaysplan_warmup:'Warm up first', todaysplan_workon:'Work on',
     weeklychallenge_done_badge:'DONE', weeklychallenge_signin:"Sign in to track this week's challenge.", weeklychallenge_you:'You',
     home_voice_eyebrow:'Your Voice', home_mission_eyebrow:"Today's focus", home_start_training_btn:'Start training',
@@ -8081,9 +8082,9 @@ const TRANSLATIONS = {
     skilltree_prog_pitch:'No pitch score yet.', skilltree_prog_range:'No range captured yet.', skilltree_prog_agility:'No Scale Run data yet.',
     skilltree_bestcrossing:'Best clean crossing', skilltree_prog_chestvoice:'No Breath Trainer data yet.',
     skilltree_prog_mixedvoice:'Requires both branches unlocked.',
-    skilltree_signin:'Sign in to grow your real skill tree.', skilltree_unlockedcount_suffix:'unlocked', skilltree_next:'next',
+    skilltree_signin:"Sign in to grow your skill tree.", skilltree_unlockedcount_suffix:'unlocked', skilltree_next:'next',
     skilltree_fullyunlocked:'Vocal Master — fully unlocked',
-    skilltree_fullyunlocked_desc:"Every node reflects a real, currently-held skill level — not a one-time achievement. Scores can drift back down if a category's recent average drops.",
+    skilltree_fullyunlocked_desc:"Every node shows a skill level you hold now, not a one-time achievement: it can drop if a category's recent average drops.",
     skilltree_keeppracticing:'Keep practicing across categories — nodes further up the tree need their parent nodes unlocked first.',
     vocallab_signin:'Sign in to start building your real Vocal Lab data.',
     vocallab_needrangefinder:'Run the Range Finder at least once to establish your Extended range — everything else builds from there.',
@@ -8092,16 +8093,16 @@ const TRANSLATIONS = {
     vocallab_reliable:'Reliable', vocallab_reliable_sub:"3+ attempts, consistently accurate",
     vocallab_notenoughdata:'not enough data yet',
     vocallab_notecount_suffix:"distinct notes tracked from your Pitch Match, Custom Challenge, Boss Battle and Vocal Rift attempts.",
-    passport_signin:'Sign in to start building your real Vocal Passport.',
-    passport_needrangefinder:'Run the Range Finder and a few real exercises first — your Passport builds from that same real data.',
+    passport_signin:"Sign in to start your Vocal Passport.",
+    passport_needrangefinder:"Run the Range Finder and a few exercises first: your Passport is built from them.",
     passport_notenoughdata:'Not enough data yet', passport_singfulltake:'Sing a full take in Karaoke Coach to set this',
     passport_updated_prefix:'Updated live — as of', passport_updated_suffix:', not a monthly batch.',
-    fingerprint_all5tracked:'All 5 categories tracked — updated from your real, current Skill Profile.',
-    fingerprint_of5_suffix:'of 5 categories have real data so far — dashed points mean genuinely not tracked yet, not a zero score.',
+    fingerprint_all5tracked:"All 5 categories scored, from your current Skill Profile.",
+    fingerprint_of5_suffix:"of 5 categories scored so far. A dashed point means not scored yet, not a zero.",
     voicecard_title:'My Voice Today', voicecard_harmony:'Harmony', voicecard_nottracked:'Not tracked yet',
     voicecard_daystreak:'day streak', voicecard_level:'Level', voicecard_footer:"Measured from your singing with VoxCoach",
-    voicecard_note_real:'Every number above is real — nothing staged for the screenshot.',
-    voicecard_note_practice:'Practice a bit first — this card is honest, so it needs real numbers to show.',
+    voicecard_note_real:"Every number on the card comes from your saved results.",
+    voicecard_note_practice:"Practise a little first: the card shows only measured numbers.",
     songdifficulty_alllevels:'All levels', songdifficulty_fitsrange:'Fits comfortably in your captured range',
     songdifficulty_outsiderange:'Outside part of your captured range — try a different voice part',
     songdifficulty_difficulty:'Difficulty', songdifficulty_highest:'Highest', songdifficulty_lowest:'Lowest',
@@ -8109,8 +8110,8 @@ const TRANSLATIONS = {
     songdna_register:'Register (passaggio crossing)', songdna_highsustained:'High sustained note', songdna_bigjump:'Big jump',
     songdna_to:'to', songdna_semitones:'semitones', songdna_descending:'Descending phrase', songdna_notes:'notes',
     songdna_practicethis:'Practice this', songdna_shortsong:'This song is short enough that no single moment stands out as significantly harder.',
-    unifiedprogress_trackedof3:'of 3 tracked categories have real data in the last 14 days.',
-    unifiedprogress_nodata:'No real data yet in the last 14 days — practice a bit to see your trend here.',
+    unifiedprogress_trackedof3:"of 3 categories have scores in the last 14 days.",
+    unifiedprogress_nodata:"No scores in the last 14 days yet: practise a bit to see your trend here.",
     unifiedprogress_mostimproved:'Most improved recently:', unifiedprogress_points:'points', unifiedprogress_halves:'first half vs second half of this window',
     proactive_climbed_p1:'Your', proactive_climbed_p2:'has climbed from averaging', proactive_to:'to',
     proactive_climbed_p3:"recently, measured across your sessions.",
@@ -8457,7 +8458,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Six questions rapides, puis directement votre véritable évaluation du Jour 1 — ce n'est pas un formulaire, c'est le début de votre parcours vocal.",
     ob_back_btn:'Retour', ob_get_started_btn:'Commencer', ob_start_assessment_btn:'Commencer mon évaluation du Jour 1', ob_next_btn:'Suivant',
     lang_select_title:'Choisissez votre langue',
-    lang_select_disclosure:"En toute honnêteté sur la portée : toute l'application — navigation, chaque outil, exercices, jeux et écrans de compte — est entièrement traduite. La seule exception délibérée est le contenu jour par jour du Programme de 21 jours, qui reste en anglais pour l'instant.",
+    lang_select_disclosure:"Toute l'application est traduite : navigation, chaque outil, exercices, jeux et écrans de compte. Une exception pour l'instant : le texte du programme jour par jour du parcours de 21 jours est en anglais.",
     hub_train_title:'Coach', hub_train_sub:'Exercices et outils pour la justesse, la tessiture, le souffle et le timbre.',
     hub_songs_title:'Chansons', hub_songs_sub:'Répétez votre voix du chœur, ou travaillez une chanson seul.',
     hub_you_title:'Vous', hub_you_sub:'Votre tessiture, vos progrès et votre forfait.',
@@ -8465,17 +8466,17 @@ const TRANSLATIONS = {
     hub_world_sub:"Quatre lieux connectés, un monde persistant — débloqué à mesure que votre vrai Niveau augmente (même système XP/Niveau que le Parcours de 21 jours). Chaque mécanique ci-dessous réutilise les mêmes moteurs de détection que le reste de l'application ; rien ici n'est un faux jeu séparé ajouté après coup.",
     settings_theme_title:'Thème', settings_theme_sub:'Système suit le réglage clair ou sombre de votre appareil.',
     theme_default:'Par défaut', theme_cyberpunk:'Néon Cyberpunk', theme_aurora:'Aurore Liquide', theme_velvetopera:'Opéra Velours', theme_system:'Système', theme_light:'Clair', theme_dark:'Sombre',
-    settings_feedback_title:'💬 Avis', settings_feedback_sub:"Des retours réels et précis — enregistrés pour qu'on puisse vraiment agir dessus, pas une boîte mail qui ne mène nulle part.",
+    settings_feedback_title:"Avis", settings_feedback_sub:"Les avis précis sont enregistrés pour pouvoir y donner suite.",
     settings_feedback_btn:'Donner mon avis',
-    settings_title:'Paramètres', settings_language_title:'🌐 Langue',
-    settings_playback_title:'🔊 Volume de lecture', settings_playback_sub:'Notes de référence, guides, accompagnement, chœur et enregistrements. Votre micro et vos scores ne sont pas concernés.',
-    hub_you_profile_title:'🎤 Profil', hub_you_profile_desc:'Votre identité de chanteur en un seul endroit — niveau, tessiture, points forts, succès, records, tout est réel.',
+    settings_title:'Paramètres', settings_language_title:"Langue",
+    settings_playback_title:"Volume de lecture", settings_playback_sub:'Notes de référence, guides, accompagnement, chœur et enregistrements. Votre micro et vos scores ne sont pas concernés.',
+    hub_you_profile_title:"Profil et réglages", hub_you_profile_desc:"Votre carte vocale, votre langue, votre thème et votre compte.",
     hub_you_journey_title:'Parcours de 21 jours', hub_you_journey_desc:"Référence de départ, objectif, XP, succès, Jour 1 vs aujourd'hui.",
     hub_you_dashboard_title:"Progrès", hub_you_dashboard_desc:"Le plan du jour, le défi de la semaine, votre tessiture et votre activité.",
-    hub_you_voicehealth_title:'Santé vocale', hub_you_voicehealth_desc:"Tendance sur 14 jours de la stabilité et du souffle — pas la panique d'une seule séance.",
+    hub_you_voicehealth_title:'Santé vocale', hub_you_voicehealth_desc:"Charge vocale, stabilité et souffle sur les 14 derniers jours.",
     hub_you_pricing_title:'Forfait et tarifs', hub_you_pricing_desc:'Consultez votre offre, passez à un niveau supérieur ou gérez votre forfait.',
-    hub_you_records_title:'Records personnels', hub_you_records_desc:'Chaque record réel, au même endroit — tessiture, justesse, souffle, et chaque jeu du Monde Vocal.',
-    hub_you_teacher_title:'👩\u200d🏫 Tableau de bord enseignant', hub_you_teacher_desc:'Suivi réel des élèves et des devoirs — forfait Enseignant.',
+    hub_you_records_title:'Records personnels', hub_you_records_desc:"Vos meilleurs résultats au même endroit : tessiture, justesse, souffle, chansons, Monde Vocal et Choir World.",
+    hub_you_teacher_title:"Tableau de bord enseignant", hub_you_teacher_desc:"Vos élèves et leurs devoirs. Forfait Enseignant.",
     hub_songs_choir_title:'Espace Chorale', hub_songs_choir_desc:'Muet/solo/volume par voix, plus la note de difficulté du morceau.',
     hub_songs_studio_title:"Mode Studio", hub_songs_studio_desc:"Enregistrez des prises du morceau et réécoutez-les. Sans score.",
     hub_songs_aiduet_title:"Chanter avec le chœur", hub_songs_aiduet_desc:"Choisissez votre voix ; le chœur de l'app chante les quatre autres.",
@@ -8568,8 +8569,8 @@ const TRANSLATIONS = {
     vibrato_rate_label:"Fréquence du vibrato",
     vibrato_depth_label:'Profondeur',
     vibrato_consistency_label:'Régularité',
-    voicehealth_title:'🩺 Santé Vocale',
-    voicehealth_sub:'Des tendances à travers les séances, pas des avertissements ponctuels — une seule journée difficile ne déclenche jamais rien ici, seul un vrai déclin sur plusieurs jours le fait.',
+    voicehealth_title:"Santé vocale",
+    voicehealth_sub:"Des tendances sur plusieurs jours, pas des alertes ponctuelles : une mauvaise journée ne déclenche rien ici, seulement une baisse sur plusieurs jours.",
     voicehealth_stability_h2:'Stabilité — 14 derniers jours',
     voicehealth_breath_h2:'Régularité du souffle — 14 derniers jours',
     staykey_title:"Rester dans la Tonalité",
@@ -8698,7 +8699,7 @@ const TRANSLATIONS = {
     emotionmode_retry_btn:'Essayer deux intentions différentes',
     vocallab_title:'Labo Vocal',
     vocallab_sub:"Pas un chiffre de tessiture, mais trois. Une note atteinte une fois n'est pas une note sur laquelle vous pouvez compter. Chaque niveau vient de vos tentatives enregistrées.",
-    passport_title:'🪪 Passeport Vocal',
+    passport_title:"Passeport vocal",
     passport_sub:'Votre identité à long terme, consolidée en un seul endroit. Chaque champ ici est tiré de données déjà suivies ailleurs — rien de nouveau n\'est mesuré, rien n\'est inventé pour combler un vide.',
     passport_identity_label:'Identité',
     passport_level_label:'Niveau',
@@ -8711,21 +8712,21 @@ const TRANSLATIONS = {
     passport_achievements_label:'Succès',
     passport_breakthroughs_label:'Percées',
     passport_fingerprint_label:'Empreinte Vocale',
-    passport_bestkey_note:'Honnête sur la portée : la Meilleure tonalité n\'est pas affichée ici — avec seulement quelques chansons et pas encore de vrai historique de tentatives par tonalité, un champ « meilleure tonalité » serait plus une supposition qu\'une mesure. Il apparaîtra une fois qu\'il y aura de vraies données pour l\'appuyer.',
-    passport_timeline_label:'🌱 Votre Chronologie de Percées',
-    passport_timeline_desc:'La vraie histoire de votre voix, dans l\'ordre — chaque entrée ici s\'est déclenchée pour une vraie raison, enregistrée au moment où c\'est arrivé.',
+    passport_bestkey_note:"La meilleure tonalité n'est pas affichée : avec peu de chansons et pas encore d'essais par tonalité, ce serait une supposition. Elle apparaîtra quand il y aura assez de données.",
+    passport_timeline_label:"Votre chronologie de progrès",
+    passport_timeline_desc:"Les moments de votre voix, dans l'ordre, chacun noté au moment où il s'est produit.",
     choir_title:"Espace Chorale",
     choir_sub:"Un mixeur pour chaque voix : coupez, isolez et réglez le volume de chaque voix du morceau.",
     pricing_title:'💳 Forfaits',
     pricing_sub:'21 jours d\'accès complet sur chaque nouveau compte, puis un vrai forfait continue — transparent avant même que vous n\'en créiez un.',
-    records_title:'🏆 Records Personnels',
-    records_sub:'Chaque vrai record, consolidé — rien ici n\'est inventé si l\'activité sous-jacente n\'a pas encore eu lieu.',
+    records_title:"Records personnels",
+    records_sub:"Vos meilleurs résultats, d'après ce que vous avez chanté. Un record apparaît une fois l'activité faite.",
     feedback_title:'💬 Avis',
     feedback_sub:'Des réponses réelles et précises aident bien plus que « c\'est bien » — quelques phrases par question sont vraiment utiles.',
     teacher_title:'👩‍🏫 Tableau de Bord Enseignant',
     teacher_sub:'Un vrai suivi de liste d\'élèves et de devoirs — pas des données d\'exemple, un vrai outil local que vous pouvez utiliser.',
     journey_title:'21 Jours pour Découvrir Votre Voix',
-    journey_sub:'Pas un compte à rebours d\'essai — une base structurée, trois semaines thématiques, et un vrai avant/après honnête à la fin. Chaque chiffre ici provient d\'outils déjà construits ailleurs dans cette application, séquencés en un seul chemin guidé.',
+    journey_sub:"Un point de départ au jour 1, trois semaines à thème et un avant/après à la fin. Chaque chiffre vient des outils que vous utilisez déjà, sur un seul parcours guidé.",
     key_title:'Entraîneur de Tonalité',
     key_sub:"Jouez un son de référence dans n'importe quelle tonalité, ou laissez l'application recommander la meilleure tonalité pour votre tessiture enregistrée, transposée pour lui convenir.",
     dashboard_title:"Progrès",
@@ -9059,7 +9060,7 @@ const TRANSLATIONS = {
     home_cw_locked_saved_tpl:"Votre préparation est enregistrée : {part} sur {song} — {status}.",
     cw_hub_desc:"Répétez une voix pendant que le reste du chœur chante autour de vous : un guide qui s'efface sur 5 niveaux, la Mémoire harmonique, les boss de la chorale, les enregistrements Votre chorale et un statut de préparation pour chaque voix.",
     cw_hub_status_tpl:"Dernière répétition : {part} sur {song} — {status}",
-    journey_cw_label:"🎼 Étape du Monde Chorale",
+    journey_cw_label:"Étape Choir World",
     journey_cw_title:"Tenez votre voix avec le chœur",
     journey_cw_desc_tpl:"Réussissez n'importe quelle étape de Mémoire harmonique dans Je suis ma voix : chantez votre voix pendant que les autres chantent autour de vous, et tenez au moins {pct} % de ses notes justes.",
     journey_cw_open_btn:"Ouvrir Je suis ma voix",
@@ -9205,7 +9206,7 @@ const TRANSLATIONS = {
     choir_synthdemo_tag:'DÉMO SYNTHÉTISÉE',
     choir_track_desc:"Cette démo utilise des progressions originales et libres de droits jouées par l'app, si bien que le mixeur agit sur chaque voix séparément.",
     dashboard_activity_h2:'Activité d\'entraînement',
-    dashboard_backend_note:'— nécessite un vrai backend multi-utilisateur, même remarque honnête que le Tableau de bord du directeur.',
+    dashboard_backend_note:"Masqué tant qu'on ne peut pas se comparer aux résultats des autres.",
     dashboard_create_account_btn:'Créer un compte gratuit',
     dashboard_days_unit:'jours',
     dashboard_howyoucompare:'Comment vous vous comparez',
@@ -9280,26 +9281,26 @@ const TRANSLATIONS = {
     harmony_ribbon_hint:'Chantez votre voix — le ruban s\'aligne net quand vous êtes juste, et dévie quand vous vous éloignez.',
     harmony_step_label:'🎼 Château Harmonie — Arène Harmonie',
     harmony_timing_label:'Rythme',
-    journey_achievements_h2:'Chacun de ceux-ci est calculé à partir de vraies données enregistrées — aucun n\'est attribué à la main',
+    journey_achievements_h2:"Chacun se débloque d'après vos résultats enregistrés.",
     journey_achievements_label:'Succès',
     journey_challenge_label:'Défi du jour',
-    journey_day1_h2:'Cinq vraies mesures rapides, puis un objectif personnel',
+    journey_day1_h2:"Cinq mesures rapides, puis un objectif personnel",
     journey_day1_label:'Jour 1 — Découvrez votre voix',
-    journey_day1vtoday_desc:'Portée honnête : ceci compare numériquement votre instantané de Profil de compétences du Jour 1 stocké à celui d\'aujourd\'hui. Entendre côte à côte votre enregistrement réel du Jour 1 vs aujourd\'hui n\'est pas construit — cela nécessite un stockage de prises que ce prototype n\'a pas (voir PRD §18.6).',
-    journey_day1vtoday_h2:'Vraie comparaison numérique — pas encore de relecture audio',
+    journey_day1vtoday_desc:"Votre profil de compétences tel qu'il était quand vous avez fixé votre point de départ, à côté de celui d'aujourd'hui. Aucun enregistrement du jour 1 n'est conservé pour l'écouter à côté.",
+    journey_day1vtoday_h2:"Vos chiffres du jour 1 à côté de ceux d'aujourd'hui",
     journey_day1vtoday_label:'Jour 1 vs aujourd\'hui',
     journey_duration_label:'Durée',
     journey_goal_label:'Votre objectif de 21 jours',
     journey_level_label:'Niveau',
     journey_mark_done_btn:'Marquer comme fait',
     journey_open_first_btn:'Ouvrir le premier outil du jour',
-    journey_open_hint:'Chaque « Ouvrir » vous amène au vrai outil. Revenez ici et marquez-le comme fait une fois essayé — cette page ne détecte pas automatiquement entre les onglets, alors elle demande honnêtement plutôt que de deviner.',
+    journey_open_hint:"Chaque Ouvrir mène à l'outil. Une étape se coche d'elle-même dès que l'outil a un résultat enregistré (Reconnaissance d'intervalles partage ses résultats avec Précision de note : cochez-la vous-même) ; vous pouvez aussi cocher une étape à la main.",
     journey_optional_tag:'(facultatif)',
-    journey_record_btn:'🎙️ Enregistrer',
+    journey_record_btn:"Enregistrer",
     journey_reset_btn:'Réinitialiser mon parcours de 21 jours',
-    journey_sequence_label:'Séquence réelle',
+    journey_sequence_label:"Séquence",
     journey_setbaseline_btn:'Définir ma référence et commencer',
-    journey_step_breath_sub:'Entraîneur de souffle — voyez votre vrai temps de tenue',
+    journey_step_breath_sub:"Contrôle du souffle : voyez combien de temps vous tenez une note",
     journey_step_breath_title:'Une tenue de souffle',
     journey_step_interval_sub:'Exercices → Interval Match, quelques tentatives',
     journey_step_interval_title:'Essayez deux intervalles',
@@ -9419,27 +9420,27 @@ const TRANSLATIONS = {
     profile_agility_label:'Agilité',
     profile_breath_label:'Souffle',
     profile_downloadcard_btn:'Télécharger ma carte vocale',
-    profile_fingerprint_desc:'La vraie forme de votre Profil de compétences — mêmes cinq catégories que partout ailleurs, juste dessinée comme une seule identité plutôt que cinq barres séparées.',
-    profile_fingerprint_label:'🫆 Votre empreinte vocale',
+    profile_fingerprint_desc:"La forme de votre profil de compétences : les mêmes cinq catégories, dessinées en une seule forme.",
+    profile_fingerprint_label:"Votre empreinte vocale",
     profile_opendashboard_btn:"Ouvrir Progrès",
     profile_openjourney_btn:'Ouvrir le parcours complet de 21 jours',
     profile_openworld_btn:'Ouvrir le Monde Vocal',
     profile_personalrecords_label:'Records personnels',
     profile_pitch_label:'Justesse',
-    profile_sharevoicecard_label:'🎤 Partagez votre carte vocale',
+    profile_sharevoicecard_label:"Partagez votre carte vocale",
     profile_skilltree_label:'Arbre de compétences vocales',
     profile_songsmastered_label:'Chansons maîtrisées',
     profile_streak_label:'Série',
     profile_totalsessions_label:'Sessions totales',
     profile_traininghistory_label:'Historique d\'entraînement',
-    profile_unifiedprogress_desc:'Une vraie vue de tendance sur vos trois catégories les plus suivies — tirée du même vrai journal hebdomadaire dans lequel chaque exercice écrit déjà, pas un tracker séparé.',
-    profile_unifiedprogress_label:'📈 Progrès unifié',
+    profile_unifiedprogress_desc:"Justesse, souffle et agilité jour par jour sur les 14 derniers jours, d'après le journal que chaque exercice remplit.",
+    profile_unifiedprogress_label:"Progrès unifié",
     profile_viewallrecords_btn:'Voir tous les records',
-    profile_viewpassport_btn:'🪪 Voir mon passeport vocal',
+    profile_viewpassport_btn:"Voir mon passeport vocal",
     profile_vocalrange_label:'Tessiture vocale',
-    profile_vocalstats_h2:'Forces et faiblesses, à partir de votre vrai Profil de compétences',
+    profile_vocalstats_h2:"Points forts et points faibles, d'après votre profil de compétences",
     profile_vocalstats_label:'Statistiques vocales',
-    profile_voicecard_desc:'Un vrai instantané de vos progrès réels — chaque chiffre provient directement de vos vraies données suivies, rien n\'est mis en scène pour la capture d\'écran.',
+    profile_voicecard_desc:"Une image de vos scores actuels, faite à partir de vos résultats enregistrés.",
     scale_average_desc:'Moyenne sur la gamme',
     ex_attack_label:'Attaque',
     ex_ear_chords_btn:'Accords',
@@ -9486,7 +9487,7 @@ const TRANSLATIONS = {
     record_label_song_score:'Meilleur score de chanson (Karaoké/Émotion)', record_note_not_set:'Pas encore défini',
     record_note_keychange:"Pas encore suivi — aucun score dédié au changement de tonalité n'existe dans ce prototype.",
     record_note_song_score:"Pas encore suivi — ces outils affichent des résultats en direct mais ne sauvegardent pas de meilleur score permanent.",
-    records_signin_msg:'Connectez-vous pour commencer à établir vos vrais records personnels.',
+    records_signin_msg:"Connectez-vous pour commencer à garder vos records personnels.",
     record_popup_bridge_crossing:'Transition de registre réussie', record_popup_glider_score:'Score au Voyage Vocal',
     record_popup_bridge_score:'Score au Coureur de Registre', record_popup_harmony_acc:"Précision à l'Arène Harmonie",
     record_popup_rift_avg:'Moyenne à la Faille Vocale', action_listening:'Écoute en cours…',
@@ -9530,7 +9531,7 @@ const TRANSLATIONS = {
     journey_beyond_program:'— au-delà du programme de 21 jours', journey_billing_activeplan_suffix:' — accès complet',
     journey_billing_ended:'votre accès gratuit de 21 jours a pris fin — choisissez un forfait pour continuer', journey_billing_prefix:'Facturation :',
     journey_billing_trial_mid:"sur 21 jours d'accès gratuit —", journey_billing_trial_suffix:'jours restants',
-    journey_complete_theme:"Programme terminé — la vraie pratique continue à partir d'ici",
+    journey_complete_theme:"Programme terminé : continuez à pratiquer à partir d'ici",
     journey_confirm_reset:'Réinitialiser votre parcours de 21 jours ? Cela efface votre référence et votre objectif du Jour 1, pas le reste de votre progression.',
     journey_day_p1:'Jour', journey_day_p2:'sur 21',
     journey_toast_finish_steps:"Essayez chacune des 5 étapes ci-dessus et cochez-la — la référence a besoin d'au moins une première donnée dans chacune.",
@@ -9582,13 +9583,13 @@ const TRANSLATIONS = {
     teacher_roster_empty:'Aucun élève pour le moment — ajoutez le premier ci-dessus.',
     teacher_student_plural:'élèves', teacher_student_singular:'élève', teacher_toast_needstudent:"Ajoutez au moins un élève à la liste d'abord.",
     timeline_breakthrough_p1:'Percée sur', timeline_breakthrough_p2:'— la moyenne était de', timeline_breakthrough_p3:'avant',
-    timeline_empty:"Rien à afficher pour le moment — votre première vraie évaluation, percée ou montée de niveau commencera l'histoire ici.",
+    timeline_empty:"Rien pour l'instant : votre première évaluation, percée ou montée de niveau lance la chronologie.",
     timeline_first_assessment:'Première évaluation — référence du Jour 1 établie', timeline_new_record_p1:'Nouveau record :', levelup_why:'Niveau supérieur : {list}', levelup_and:'et', levelup_records_one:'{n} nouveau record', levelup_records_other:'{n} nouveaux records', levelup_breakthroughs_one:'{n} percée', levelup_breakthroughs_other:'{n} percées', levelup_boss_wins_one:'{n} combat de Boss remporté', levelup_boss_wins_other:'{n} combats de Boss remportés', levelup_curriculum_one:'{n} jour du programme', levelup_curriculum_other:'{n} jours du programme', levelup_sessions_one:'{n} séance', levelup_sessions_other:'{n} séances', levelup_warmups_one:'{n} échauffement', levelup_warmups_other:'{n} échauffements', levelup_streak:'une série de {n} jours', timeline_reached_level_p1:'Niveau atteint',
     todaysplan_dayssince:'jour(s) depuis votre dernière session', todaysplan_finishchallenge:'Terminez avec le Défi Hebdomadaire',
     todaysplan_goodhabit:'Bonne habitude avant tout le reste', todaysplan_lowestscore:'Votre score de Profil Vocal le plus bas',
     todaysplan_nodata:'Pas encore de données de Profil Vocal — cela commence à les construire', todaysplan_practiceregister:'Pratiquez le Coach de Registre',
     todaysplan_shortcrossing:'Votre plus longue transition propre au-dessus du passage est encore courte',
-    todaysplan_signin:'Connectez-vous pour obtenir un plan basé sur vos vraies données de pratique.', todaysplan_trypitch:'Essayez un exercice Pitch Match',
+    todaysplan_signin:"Connectez-vous pour obtenir un plan construit d'après votre pratique.", todaysplan_trypitch:'Essayez un exercice Pitch Match',
     todaysplan_warmup:"Échauffez-vous d'abord", todaysplan_workon:'Travaillez',
     weeklychallenge_done_badge:'FAIT', weeklychallenge_signin:'Connectez-vous pour suivre le défi de cette semaine.', weeklychallenge_you:'Vous',
     home_voice_eyebrow:'Votre voix', home_mission_eyebrow:"Objectif du jour", home_start_training_btn:"Commencer l'entraînement",
@@ -9715,9 +9716,9 @@ const TRANSLATIONS = {
     skilltree_prog_pitch:'Pas encore de score de justesse.', skilltree_prog_range:'Pas encore de tessiture capturée.', skilltree_prog_agility:'Pas encore de données de Gamme.',
     skilltree_bestcrossing:'Meilleur passage propre', skilltree_prog_chestvoice:'Pas encore de données d\'Entraîneur de souffle.',
     skilltree_prog_mixedvoice:'Nécessite les deux branches débloquées.',
-    skilltree_signin:'Connectez-vous pour développer votre vrai arbre de compétences.', skilltree_unlockedcount_suffix:'débloqués', skilltree_next:'suivant',
+    skilltree_signin:"Connectez-vous pour faire pousser votre arbre de compétences.", skilltree_unlockedcount_suffix:'débloqués', skilltree_next:'suivant',
     skilltree_fullyunlocked:'Maître vocal — entièrement débloqué',
-    skilltree_fullyunlocked_desc:'Chaque nœud reflète un niveau de compétence réel actuellement détenu — pas une réussite ponctuelle. Les scores peuvent redescendre si la moyenne récente d\'une catégorie baisse.',
+    skilltree_fullyunlocked_desc:"Chaque nœud montre un niveau que vous tenez maintenant, pas un succès ponctuel : il peut baisser si la moyenne récente d'une catégorie baisse.",
     skilltree_keeppracticing:'Continuez à pratiquer dans toutes les catégories — les nœuds plus haut dans l\'arbre nécessitent d\'abord leurs nœuds parents débloqués.',
     vocallab_signin:'Connectez-vous pour commencer à construire vos vraies données de Laboratoire vocal.',
     vocallab_needrangefinder:'Lancez le Détecteur de tessiture au moins une fois pour établir votre tessiture étendue — tout le reste se construit à partir de là.',
@@ -9726,16 +9727,16 @@ const TRANSLATIONS = {
     vocallab_reliable:'Fiable', vocallab_reliable_sub:"3+ tentatives, toujours justes",
     vocallab_notenoughdata:'pas encore assez de données',
     vocallab_notecount_suffix:"notes distinctes suivies depuis vos tentatives de Pitch Match, Défi personnalisé, Combat de boss et Faille vocale.",
-    passport_signin:'Connectez-vous pour commencer à construire votre vrai Passeport vocal.',
-    passport_needrangefinder:'Lancez d\'abord le Buscador de rango et quelques vrais exercices — votre Passeport se construit à partir de ces mêmes données réelles.',
+    passport_signin:"Connectez-vous pour commencer votre passeport vocal.",
+    passport_needrangefinder:"Faites d'abord le Détecteur de tessiture et quelques exercices : votre passeport en est construit.",
     passport_notenoughdata:'Pas encore assez de données', passport_singfulltake:'Chantez une prise complète dans Karaoke Coach pour définir ceci',
     passport_updated_prefix:'Mis à jour en direct — au', passport_updated_suffix:', pas un lot mensuel.',
-    fingerprint_all5tracked:'Les 5 catégories sont suivies — mis à jour depuis votre vrai Profil de compétences actuel.',
-    fingerprint_of5_suffix:'catégories sur 5 ont de vraies données jusqu\'ici — les points en pointillés signifient qu\'ils ne sont vraiment pas encore suivis, pas un score nul.',
+    fingerprint_all5tracked:"Les 5 catégories sont notées, d'après votre profil de compétences actuel.",
+    fingerprint_of5_suffix:"catégories sur 5 notées pour l'instant. Un point en pointillé signifie pas encore noté, pas zéro.",
     voicecard_title:'Ma voix aujourd\'hui', voicecard_harmony:'Harmonie', voicecard_nottracked:'Pas encore suivi',
     voicecard_daystreak:'jours de série', voicecard_level:'Niveau', voicecard_footer:"Mesuré à partir de votre chant avec VoxCoach",
-    voicecard_note_real:'Chaque chiffre ci-dessus est réel — rien n\'est mis en scène pour la capture d\'écran.',
-    voicecard_note_practice:'Pratiquez un peu d\'abord — cette carte est honnête, elle a donc besoin de vrais chiffres à afficher.',
+    voicecard_note_real:"Chaque chiffre de la carte vient de vos résultats enregistrés.",
+    voicecard_note_practice:"Pratiquez un peu d'abord : la carte n'affiche que des chiffres mesurés.",
     songdifficulty_alllevels:'Tous niveaux', songdifficulty_fitsrange:'S\'inscrit confortablement dans votre tessiture capturée',
     songdifficulty_outsiderange:'En partie hors de votre tessiture capturée — essayez une autre voix',
     songdifficulty_difficulty:'Difficulté', songdifficulty_highest:'Plus aiguë', songdifficulty_lowest:'Plus grave',
@@ -9743,8 +9744,8 @@ const TRANSLATIONS = {
     songdna_register:'Registre (passages du passaggio)', songdna_highsustained:'Note aiguë tenue', songdna_bigjump:'Grand saut',
     songdna_to:'à', songdna_semitones:'demi-tons', songdna_descending:'Phrase descendante', songdna_notes:'notes',
     songdna_practicethis:'Pratiquer ceci', songdna_shortsong:'Cette chanson est assez courte pour qu\'aucun moment ne se démarque comme significativement plus difficile.',
-    unifiedprogress_trackedof3:'des 3 catégories suivies ont de vraies données sur les 14 derniers jours.',
-    unifiedprogress_nodata:'Pas encore de vraies données sur les 14 derniers jours — pratiquez un peu pour voir votre tendance ici.',
+    unifiedprogress_trackedof3:"catégories sur 3 ont des scores sur les 14 derniers jours.",
+    unifiedprogress_nodata:"Pas encore de score sur les 14 derniers jours : pratiquez un peu pour voir votre tendance ici.",
     unifiedprogress_mostimproved:'Plus grande amélioration récente :', unifiedprogress_points:'points', unifiedprogress_halves:'première moitié contre seconde moitié de cette fenêtre',
     proactive_climbed_p1:'Votre', proactive_climbed_p2:'est passé d\'une moyenne de', proactive_to:'à',
     proactive_climbed_p3:"récemment, mesuré sur vos séances.",
@@ -10091,7 +10092,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:'Seis preguntas rápidas, y luego directo a tu evaluación real del Día 1 — esto no es un formulario, es el comienzo de tu viaje vocal.',
     ob_back_btn:'Atrás', ob_get_started_btn:'Empezar', ob_start_assessment_btn:'Comenzar mi evaluación del Día 1', ob_next_btn:'Siguiente',
     lang_select_title:'Elige tu idioma',
-    lang_select_disclosure:'Honestidad sobre el alcance: toda la app — navegación, cada herramienta, ejercicios, juegos y pantallas de cuenta — está totalmente traducida. La única excepción deliberada es el contenido día a día del Programa de 21 días, que por ahora sigue solo en inglés.',
+    lang_select_disclosure:"Toda la app está traducida: navegación, cada herramienta, ejercicios, juegos y pantallas de cuenta. Una excepción por ahora: el texto del programa día a día del recorrido de 21 días está en inglés.",
     hub_train_title:'Coach', hub_train_sub:'Ejercicios y herramientas para afinación, rango, respiración y timbre.',
     hub_songs_title:'Canciones', hub_songs_sub:'Ensaya tu voz del coro o practica una canción por tu cuenta.',
     hub_you_title:'Tú', hub_you_sub:'Tu rango, tu progreso y tu plan.',
@@ -10099,17 +10100,17 @@ const TRANSLATIONS = {
     hub_world_sub:'Cuatro ubicaciones conectadas, un mundo persistente — desbloqueado a medida que sube tu Nivel real (el mismo sistema de XP/Nivel que el Programa de 21 Días). Cada mecánica de abajo reutiliza los mismos motores de detección que el resto de la aplicación; nada aquí es un juego falso añadido por separado.',
     settings_theme_title:'Tema', settings_theme_sub:'Sistema sigue el ajuste claro u oscuro de tu dispositivo.',
     theme_default:'Predeterminado', theme_cyberpunk:'Neón Cyberpunk', theme_aurora:'Aurora Líquida', theme_velvetopera:'Ópera de Terciopelo', theme_system:'Sistema', theme_light:'Claro', theme_dark:'Oscuro',
-    settings_feedback_title:'💬 Comentarios', settings_feedback_sub:'Comentarios reales y específicos — guardados para que realmente podamos actuar, no un buzón que no lleva a ninguna parte.',
+    settings_feedback_title:"Comentarios", settings_feedback_sub:"Los comentarios concretos se guardan para poder actuar en consecuencia.",
     settings_feedback_btn:'Dar mi opinión',
-    settings_title:'Configuración', settings_language_title:'🌐 Idioma',
-    settings_playback_title:'🔊 Volumen de reproducción', settings_playback_sub:'Notas de referencia, guías, acompañamiento, coro y grabaciones. Tu micrófono y tus puntuaciones no cambian.',
-    hub_you_profile_title:'🎤 Perfil', hub_you_profile_desc:'Tu identidad de cantante en un solo lugar — nivel, rango, fortalezas, logros, récords, todo real.',
+    settings_title:'Configuración', settings_language_title:"Idioma",
+    settings_playback_title:"Volumen de reproducción", settings_playback_sub:'Notas de referencia, guías, acompañamiento, coro y grabaciones. Tu micrófono y tus puntuaciones no cambian.',
+    hub_you_profile_title:"Perfil y ajustes", hub_you_profile_desc:"Tu tarjeta vocal, idioma, tema y cuenta.",
     hub_you_journey_title:'Recorrido de 21 días', hub_you_journey_desc:'Línea base, objetivo, XP, logros, Día 1 frente a hoy.',
     hub_you_dashboard_title:"Progreso", hub_you_dashboard_desc:"El plan de hoy, el reto semanal, tu registro y tu actividad.",
-    hub_you_voicehealth_title:'Salud vocal', hub_you_voicehealth_desc:'Tendencia de 14 días en estabilidad y respiración — no el pánico de una sola sesión.',
+    hub_you_voicehealth_title:'Salud vocal', hub_you_voicehealth_desc:"Carga vocal, estabilidad y respiración en los últimos 14 días.",
     hub_you_pricing_title:'Plan y precios', hub_you_pricing_desc:'Consulta tu nivel, mejora o gestiona tu plan.',
-    hub_you_records_title:'Récords personales', hub_you_records_desc:'Cada récord real, en un solo lugar — rango, afinación, respiración, y cada juego del Mundo Vocal.',
-    hub_you_teacher_title:'👩\u200d🏫 Panel del profesor', hub_you_teacher_desc:'Seguimiento real de alumnos y tareas — plan Profesor.',
+    hub_you_records_title:'Récords personales', hub_you_records_desc:"Tus mejores marcas en un solo lugar: registro, afinación, respiración, canciones, Mundo Vocal y Choir World.",
+    hub_you_teacher_title:"Panel del profesor", hub_you_teacher_desc:"Tus alumnos y sus tareas. Plan Profesor.",
     hub_songs_choir_title:'Espacio de Coro', hub_songs_choir_desc:'Silenciar/solo/volumen por voz, además de la calificación de dificultad de la canción.',
     hub_songs_studio_title:"Modo Estudio", hub_songs_studio_desc:"Graba tomas de la canción y escúchalas. Sin puntuación.",
     hub_songs_aiduet_title:"Canta con el coro", hub_songs_aiduet_desc:"Elige tu voz; el coro de la app canta las otras cuatro.",
@@ -10202,8 +10203,8 @@ const TRANSLATIONS = {
     vibrato_rate_label:"Frecuencia del vibrato",
     vibrato_depth_label:'Profundidad',
     vibrato_consistency_label:'Consistencia',
-    voicehealth_title:'🩺 Salud Vocal',
-    voicehealth_sub:'Tendencias a través de sesiones, no advertencias puntuales — un solo día difícil nunca activa nada aquí, solo un declive real de varios días lo hace.',
+    voicehealth_title:"Salud vocal",
+    voicehealth_sub:"Tendencias a lo largo de los días, no avisos sueltos: un mal día nunca activa nada aquí, solo un descenso durante varios días.",
     voicehealth_stability_h2:'Estabilidad — últimos 14 días',
     voicehealth_breath_h2:'Consistencia de respiración — últimos 14 días',
     staykey_title:"Mantente en Tono",
@@ -10332,7 +10333,7 @@ const TRANSLATIONS = {
     emotionmode_retry_btn:'Prueba dos intenciones diferentes',
     vocallab_title:'Laboratorio Vocal',
     vocallab_sub:"No un número de rango, sino tres. Una nota que alcanzas una vez no es una nota en la que puedes confiar. Cada nivel sale de tus intentos registrados.",
-    passport_title:'🪪 Pasaporte Vocal',
+    passport_title:"Pasaporte vocal",
     passport_sub:'Tu identidad a largo plazo, consolidada en un solo lugar. Cada campo aquí se extrae de datos ya rastreados en otro lugar — nada nuevo se mide, nada se inventa para llenar un vacío.',
     passport_identity_label:'Identidad',
     passport_level_label:'Nivel',
@@ -10345,21 +10346,21 @@ const TRANSLATIONS = {
     passport_achievements_label:'Logros',
     passport_breakthroughs_label:'Avances',
     passport_fingerprint_label:'Huella de Voz',
-    passport_bestkey_note:'Honestos sobre el alcance: el Mejor tono no se muestra aquí — con solo un par de canciones y sin historial real de intentos por tono todavía, un campo de "mejor tono" sería más una suposición que una medición. Aparecerá una vez que haya datos reales que lo respalden.',
-    passport_timeline_label:'🌱 Tu Cronología de Avances',
-    passport_timeline_desc:'La historia real de tu voz, en orden — cada entrada aquí se activó por una razón real, registrada en el momento en que sucedió.',
+    passport_bestkey_note:"La mejor tonalidad no se muestra: con pocas canciones y aún sin intentos por tonalidad, sería una suposición. Aparecerá cuando haya datos suficientes.",
+    passport_timeline_label:"Tu cronología de avances",
+    passport_timeline_desc:"Los momentos de tu voz, en orden, cada uno anotado cuando ocurrió.",
     choir_title:"Espacio de Coro",
     choir_sub:"Un mezclador por voz: silencia, aísla y ajusta el volumen de cada voz de la canción.",
     pricing_title:'💳 Planes',
     pricing_sub:'21 días de acceso completo en cada cuenta nueva, luego un plan real lo continúa — transparente antes de que crees una.',
-    records_title:'🏆 Récords Personales',
-    records_sub:'Cada récord real, consolidado — nada aquí se inventa si la actividad subyacente aún no ha ocurrido.',
+    records_title:"Récords personales",
+    records_sub:"Tus mejores marcas, según lo que has cantado. Un récord aparece cuando has hecho la actividad.",
     feedback_title:'💬 Comentarios',
     feedback_sub:'Respuestas reales y específicas ayudan mucho más que "está bien" — un par de frases por pregunta es genuinamente útil.',
     teacher_title:'👩‍🏫 Panel del Profesor',
     teacher_sub:'Un seguimiento real de lista de alumnos y tareas — no datos de muestra, una herramienta local real que puedes usar.',
     journey_title:'21 Días para Descubrir Tu Voz',
-    journey_sub:'No es una cuenta regresiva de prueba — una línea base estructurada, tres semanas temáticas, y un antes/después honesto al final. Cada número aquí proviene de herramientas ya construidas en otra parte de esta app, secuenciadas en un camino guiado.',
+    journey_sub:"Un punto de partida el día 1, tres semanas temáticas y un antes/después al final. Cada número viene de las herramientas que ya usas, en un solo recorrido guiado.",
     key_title:'Entrenador de Tonalidad',
     key_sub:"Toca un tono de referencia en cualquier tonalidad, o deja que la app recomiende la mejor tonalidad para tu rango registrado, transportada para que encaje.",
     dashboard_title:"Progreso",
@@ -10693,7 +10694,7 @@ const TRANSLATIONS = {
     home_cw_locked_saved_tpl:"Tu preparación está guardada: {part} en {song} — {status}.",
     cw_hub_desc:"Ensaya una voz mientras el resto del coro canta a tu alrededor: una guía que se desvanece en 5 niveles, Memoria armónica, jefes del coro, grabaciones de Tu coro y un estado de preparación para cada voz.",
     cw_hub_status_tpl:"Último ensayo: {part} en {song} — {status}",
-    journey_cw_label:"🎼 Hito de Mundo Coral",
+    journey_cw_label:"Hito de Choir World",
     journey_cw_title:"Sostén tu voz con el coro",
     journey_cw_desc_tpl:"Supera cualquier etapa de Memoria armónica en Yo soy mi voz: canta tu voz mientras las demás cantan a tu alrededor y mantén afinadas al menos el {pct} % de sus notas.",
     journey_cw_open_btn:"Abrir Yo soy mi voz",
@@ -10839,7 +10840,7 @@ const TRANSLATIONS = {
     choir_synthdemo_tag:'DEMO SINTETIZADA',
     choir_track_desc:"Esta demo usa progresiones originales y libres de regalías tocadas por la app, así que el mezclador actúa sobre cada voz por separado.",
     dashboard_activity_h2:'Actividad de práctica',
-    dashboard_backend_note:'— necesita un backend real multiusuario, misma nota de honestidad que el Panel del director.',
+    dashboard_backend_note:"Oculto hasta que se pueda comparar con los resultados de otras personas.",
     dashboard_create_account_btn:'Crear cuenta gratis',
     dashboard_days_unit:'días',
     dashboard_howyoucompare:'Cómo te comparas',
@@ -10914,26 +10915,26 @@ const TRANSLATIONS = {
     harmony_ribbon_hint:'Canta tu voz — la cinta se alinea cuando estás afinado, y se desvía cuando te desvías.',
     harmony_step_label:'🎼 Castillo de Armonía — Arena de Armonía',
     harmony_timing_label:'Ritmo',
-    journey_achievements_h2:'Cada uno de estos se calcula a partir de datos reales registrados — ninguno se otorga manualmente',
+    journey_achievements_h2:"Cada uno se desbloquea con tus resultados guardados.",
     journey_achievements_label:'Logros',
     journey_challenge_label:'Desafío de hoy',
-    journey_day1_h2:'Cinco mediciones reales rápidas, luego un objetivo personal',
+    journey_day1_h2:"Cinco mediciones rápidas y luego un objetivo personal",
     journey_day1_label:'Día 1 — Descubre tu voz',
-    journey_day1vtoday_desc:'Alcance honesto: esto compara numéricamente tu instantánea guardada del Perfil de habilidades del Día 1 con la de hoy. Escuchar tu grabación real del Día 1 frente a hoy en paralelo no está construido — eso necesita almacenamiento de tomas que este prototipo no tiene (ver PRD §18.6).',
-    journey_day1vtoday_h2:'Comparación numérica real — aún sin repetición de audio',
+    journey_day1vtoday_desc:"Tu perfil de habilidades tal como estaba al fijar tu punto de partida, junto al de hoy. No se guarda una grabación del día 1 para escucharla al lado.",
+    journey_day1vtoday_h2:"Tus números del día 1 junto a los de hoy",
     journey_day1vtoday_label:'Día 1 vs hoy',
     journey_duration_label:'Duración',
     journey_goal_label:'Tu objetivo de 21 días',
     journey_level_label:'Nivel',
     journey_mark_done_btn:'Marcar como hecho',
     journey_open_first_btn:'Abrir la primera herramienta de hoy',
-    journey_open_hint:'Cada "Abrir" te lleva a la herramienta real. Vuelve aquí y márcalo como hecho una vez que lo hayas probado — esta página no detecta automáticamente entre pestañas, así que pregunta honestamente en lugar de adivinar.',
+    journey_open_hint:"Cada Abrir lleva a la herramienta. Un paso se marca solo cuando esa herramienta tiene un resultado guardado (Reconocimiento de intervalos comparte sus resultados con Precisión de nota: márcalo tú); también puedes marcar cualquier paso a mano.",
     journey_optional_tag:'(opcional)',
-    journey_record_btn:'🎙️ Grabar',
+    journey_record_btn:"Grabar",
     journey_reset_btn:'Reiniciar mi recorrido de 21 días',
-    journey_sequence_label:'Secuencia real',
+    journey_sequence_label:"Secuencia",
     journey_setbaseline_btn:'Establecer mi línea base y comenzar',
-    journey_step_breath_sub:'Entrenador de respiración — mira tu tiempo real de sostenido',
+    journey_step_breath_sub:"Control de respiración: mira cuánto tiempo sostienes una nota",
     journey_step_breath_title:'Un sostenido de respiración',
     journey_step_interval_sub:'Ejercicios → Precisión de intervalos, un par de intentos',
     journey_step_interval_title:'Prueba dos intervalos',
@@ -11053,27 +11054,27 @@ const TRANSLATIONS = {
     profile_agility_label:'Agilidad',
     profile_breath_label:'Respiración',
     profile_downloadcard_btn:'Descargar mi tarjeta de voz',
-    profile_fingerprint_desc:'La forma real de tu Perfil de habilidades — las mismas cinco categorías que en todas partes, solo dibujada como una identidad en lugar de cinco barras separadas.',
-    profile_fingerprint_label:'🫆 Tu huella de voz',
+    profile_fingerprint_desc:"La forma de tu perfil de habilidades: las mismas cinco categorías, dibujadas como una sola forma.",
+    profile_fingerprint_label:"Tu huella vocal",
     profile_opendashboard_btn:"Abrir Progreso",
     profile_openjourney_btn:'Abrir el recorrido completo de 21 días',
     profile_openworld_btn:'Abrir Mundo Vocal',
     profile_personalrecords_label:'Récords personales',
     profile_pitch_label:'Afinación',
-    profile_sharevoicecard_label:'🎤 Comparte tu tarjeta de voz',
+    profile_sharevoicecard_label:"Comparte tu tarjeta vocal",
     profile_skilltree_label:'Árbol de habilidades vocales',
     profile_songsmastered_label:'Canciones dominadas',
     profile_streak_label:'Racha',
     profile_totalsessions_label:'Sesiones totales',
     profile_traininghistory_label:'Historial de entrenamiento',
-    profile_unifiedprogress_desc:'Una vista de tendencia real en tus tres categorías más rastreadas — extraída del mismo registro semanal real en el que ya escribe cada ejercicio, no un rastreador separado.',
-    profile_unifiedprogress_label:'📈 Progreso unificado',
+    profile_unifiedprogress_desc:"Afinación, respiración y agilidad día a día en los últimos 14 días, según el registro que escribe cada ejercicio.",
+    profile_unifiedprogress_label:"Progreso unificado",
     profile_viewallrecords_btn:'Ver todos los récords',
-    profile_viewpassport_btn:'🪪 Ver mi pasaporte vocal',
+    profile_viewpassport_btn:"Ver mi pasaporte vocal",
     profile_vocalrange_label:'Rango vocal',
-    profile_vocalstats_h2:'Fortalezas y debilidades, de tu Perfil de habilidades real',
+    profile_vocalstats_h2:"Puntos fuertes y débiles, según tu perfil de habilidades",
     profile_vocalstats_label:'Estadísticas vocales',
-    profile_voicecard_desc:'Una instantánea real de tu progreso real — cada número proviene directamente de tus datos reales rastreados, nada preparado para la captura de pantalla.',
+    profile_voicecard_desc:"Una imagen de tus puntuaciones actuales, hecha con tus resultados guardados.",
     scale_average_desc:'Promedio en la escala',
     ex_attack_label:'Ataque',
     ex_ear_chords_btn:'Acordes',
@@ -11120,7 +11121,7 @@ const TRANSLATIONS = {
     record_label_song_score:'Mejor puntuación de canción (Karaoke/Emoción)', record_note_not_set:'Aún sin definir',
     record_note_keychange:'Aún sin registrar — este prototipo no tiene una puntuación dedicada al cambio de tonalidad.',
     record_note_song_score:'Aún sin registrar — esas herramientas muestran resultados en vivo pero no guardan una mejor puntuación permanente.',
-    records_signin_msg:'Inicia sesión para empezar a construir tus verdaderos récords personales.',
+    records_signin_msg:"Inicia sesión para empezar a guardar tus récords personales.",
     record_popup_bridge_crossing:'Transición de registro limpia', record_popup_glider_score:'Puntuación en el Viaje Vocal',
     record_popup_bridge_score:'Puntuación en el Corredor de Registro', record_popup_harmony_acc:'Precisión en la Arena de Armonía',
     record_popup_rift_avg:'Promedio en la Grieta Vocal', action_listening:'Escuchando…',
@@ -11164,7 +11165,7 @@ const TRANSLATIONS = {
     journey_beyond_program:'— más allá del programa de 21 días', journey_billing_activeplan_suffix:' — acceso completo',
     journey_billing_ended:'tu acceso gratuito de 21 días ha terminado — elige un plan para continuar', journey_billing_prefix:'Facturación:',
     journey_billing_trial_mid:'de 21 días de acceso gratuito —', journey_billing_trial_suffix:'días restantes',
-    journey_complete_theme:'Programa completado — la práctica real continúa a partir de aquí',
+    journey_complete_theme:"Programa completado: sigue practicando desde aquí",
     journey_confirm_reset:'¿Reiniciar tu viaje de 21 días? Esto borra tu referencia y objetivo del Día 1, no el resto de tu progreso.',
     journey_day_p1:'Día', journey_day_p2:'de 21',
     journey_toast_finish_steps:'Prueba cada uno de los 5 pasos de arriba y márcalo — la referencia necesita al menos un primer dato en cada uno.',
@@ -11216,13 +11217,13 @@ const TRANSLATIONS = {
     teacher_roster_empty:'Aún no hay estudiantes — añade el primero arriba.',
     teacher_student_plural:'estudiantes', teacher_student_singular:'estudiante', teacher_toast_needstudent:'Añade al menos un estudiante a la lista primero.',
     timeline_breakthrough_p1:'Avance en', timeline_breakthrough_p2:'— antes promediabas', timeline_breakthrough_p3:'antes',
-    timeline_empty:'Nada registrado todavía — tu primera evaluación, avance o subida de nivel real empezará la historia aquí.',
+    timeline_empty:"Nada todavía: tu primera evaluación, avance o subida de nivel inicia la cronología.",
     timeline_first_assessment:'Primera evaluación — referencia del Día 1 establecida', timeline_new_record_p1:'Nuevo récord:', levelup_why:'Subiste de nivel: {list}', levelup_and:'y', levelup_records_one:'{n} récord nuevo', levelup_records_other:'{n} récords nuevos', levelup_breakthroughs_one:'{n} avance', levelup_breakthroughs_other:'{n} avances', levelup_boss_wins_one:'{n} batalla de jefe ganada', levelup_boss_wins_other:'{n} batallas de jefe ganadas', levelup_curriculum_one:'{n} día del programa', levelup_curriculum_other:'{n} días del programa', levelup_sessions_one:'{n} sesión', levelup_sessions_other:'{n} sesiones', levelup_warmups_one:'{n} calentamiento', levelup_warmups_other:'{n} calentamientos', levelup_streak:'una racha de {n} días', timeline_reached_level_p1:'Nivel alcanzado',
     todaysplan_dayssince:'día(s) desde tu última sesión', todaysplan_finishchallenge:'Termina con el Reto Semanal',
     todaysplan_goodhabit:'Buen hábito antes que nada', todaysplan_lowestscore:'Tu puntuación más baja del Perfil Vocal',
     todaysplan_nodata:'Aún sin datos del Perfil Vocal — esto empieza a construirlos', todaysplan_practiceregister:'Practica el Entrenador de Registro',
     todaysplan_shortcrossing:'Tu transición limpia más larga por encima del passaggio sigue siendo corta',
-    todaysplan_signin:'Inicia sesión para obtener un plan basado en tus datos reales de práctica.', todaysplan_trypitch:'Prueba un ejercicio de Pitch Match',
+    todaysplan_signin:"Inicia sesión para obtener un plan hecho a partir de tu práctica.", todaysplan_trypitch:'Prueba un ejercicio de Pitch Match',
     todaysplan_warmup:'Calienta primero', todaysplan_workon:'Trabaja',
     weeklychallenge_done_badge:'HECHO', weeklychallenge_signin:'Inicia sesión para seguir el reto de esta semana.', weeklychallenge_you:'Tú',
     home_voice_eyebrow:'Tu voz', home_mission_eyebrow:"Objetivo de hoy", home_start_training_btn:'Empezar a entrenar',
@@ -11349,9 +11350,9 @@ const TRANSLATIONS = {
     skilltree_prog_pitch:'Aún no hay puntuación de afinación.', skilltree_prog_range:'Aún no se ha capturado el rango.', skilltree_prog_agility:'Aún no hay datos de Escala.',
     skilltree_bestcrossing:'Mejor cruce limpio', skilltree_prog_chestvoice:'Aún no hay datos de Entrenador de respiración.',
     skilltree_prog_mixedvoice:'Requiere ambas ramas desbloqueadas.',
-    skilltree_signin:'Inicia sesión para hacer crecer tu verdadero árbol de habilidades.', skilltree_unlockedcount_suffix:'desbloqueados', skilltree_next:'siguiente',
+    skilltree_signin:"Inicia sesión para hacer crecer tu árbol de habilidades.", skilltree_unlockedcount_suffix:'desbloqueados', skilltree_next:'siguiente',
     skilltree_fullyunlocked:'Maestro vocal — totalmente desbloqueado',
-    skilltree_fullyunlocked_desc:'Cada nodo refleja un nivel de habilidad real que tienes actualmente — no un logro puntual. Las puntuaciones pueden volver a bajar si el promedio reciente de una categoría cae.',
+    skilltree_fullyunlocked_desc:"Cada nodo muestra un nivel que tienes ahora, no un logro de una vez: puede bajar si baja la media reciente de una categoría.",
     skilltree_keeppracticing:'Sigue practicando en todas las categorías — los nodos más arriba en el árbol necesitan que sus nodos padres estén desbloqueados primero.',
     vocallab_signin:'Inicia sesión para empezar a construir tus datos reales de Laboratorio Vocal.',
     vocallab_needrangefinder:'Ejecuta el Buscador de rango al menos una vez para establecer tu rango extendido — todo lo demás se construye desde ahí.',
@@ -11360,16 +11361,16 @@ const TRANSLATIONS = {
     vocallab_reliable:'Fiable', vocallab_reliable_sub:"3+ intentos, precisos de forma constante",
     vocallab_notenoughdata:'aún no hay suficientes datos',
     vocallab_notecount_suffix:"notas distintas registradas de tus intentos de Precisión de nota, Desafío personalizado, Combate de jefe y Grieta Vocal.",
-    passport_signin:'Inicia sesión para empezar a construir tu verdadero Pasaporte Vocal.',
-    passport_needrangefinder:'Ejecuta primero el Buscador de rango y algunos ejercicios reales — tu Pasaporte se construye a partir de esos mismos datos reales.',
+    passport_signin:"Inicia sesión para empezar tu pasaporte vocal.",
+    passport_needrangefinder:"Haz primero el Buscador de rango y algunos ejercicios: tu pasaporte se construye con ellos.",
     passport_notenoughdata:'Aún no hay suficientes datos', passport_singfulltake:'Canta una toma completa en Karaoke Coach para fijar esto',
     passport_updated_prefix:'Actualizado en vivo — a fecha de', passport_updated_suffix:', no un lote mensual.',
-    fingerprint_all5tracked:'Las 5 categorías están registradas — actualizado desde tu verdadero Perfil de habilidades actual.',
-    fingerprint_of5_suffix:'de 5 categorías tienen datos reales hasta ahora — los puntos discontinuos significan que genuinamente aún no están registrados, no una puntuación de cero.',
+    fingerprint_all5tracked:"Las 5 categorías puntuadas, según tu perfil de habilidades actual.",
+    fingerprint_of5_suffix:"de 5 categorías puntuadas por ahora. Un punto discontinuo significa sin puntuar aún, no un cero.",
     voicecard_title:'Mi voz hoy', voicecard_harmony:'Armonía', voicecard_nottracked:'Aún no registrado',
     voicecard_daystreak:'días de racha', voicecard_level:'Nivel', voicecard_footer:"Medido a partir de tu canto con VoxCoach",
-    voicecard_note_real:'Cada número de arriba es real — nada preparado para la captura de pantalla.',
-    voicecard_note_practice:'Practica un poco primero — esta tarjeta es honesta, así que necesita números reales para mostrar.',
+    voicecard_note_real:"Cada número de la tarjeta viene de tus resultados guardados.",
+    voicecard_note_practice:"Practica un poco primero: la tarjeta solo muestra números medidos.",
     songdifficulty_alllevels:'Todos los niveles', songdifficulty_fitsrange:'Encaja cómodamente en tu rango capturado',
     songdifficulty_outsiderange:'Parcialmente fuera de tu rango capturado — prueba con otra voz',
     songdifficulty_difficulty:'Dificultad', songdifficulty_highest:'Más aguda', songdifficulty_lowest:'Más grave',
@@ -11377,8 +11378,8 @@ const TRANSLATIONS = {
     songdna_register:'Registro (cruces del passaggio)', songdna_highsustained:'Nota aguda sostenida', songdna_bigjump:'Salto grande',
     songdna_to:'a', songdna_semitones:'semitonos', songdna_descending:'Frase descendente', songdna_notes:'notas',
     songdna_practicethis:'Practicar esto', songdna_shortsong:'Esta canción es lo bastante corta como para que ningún momento destaque como significativamente más difícil.',
-    unifiedprogress_trackedof3:'de 3 categorías registradas tienen datos reales en los últimos 14 días.',
-    unifiedprogress_nodata:'Aún no hay datos reales en los últimos 14 días — practica un poco para ver tu tendencia aquí.',
+    unifiedprogress_trackedof3:"de 3 categorías tienen puntuaciones en los últimos 14 días.",
+    unifiedprogress_nodata:"Aún no hay puntuaciones en los últimos 14 días: practica un poco para ver tu tendencia aquí.",
     unifiedprogress_mostimproved:'Más mejorado recientemente:', unifiedprogress_points:'puntos', unifiedprogress_halves:'primera mitad frente a segunda mitad de esta ventana',
     proactive_climbed_p1:'Tu', proactive_climbed_p2:'ha subido de un promedio de', proactive_to:'a',
     proactive_climbed_p3:"recientemente, medido en tus sesiones.",
@@ -11725,7 +11726,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Altı hızlı soru, ardından doğrudan gerçek 1. Gün değerlendirmenize geçiyoruz — bu bir form değil, vokal yolculuğunuzun başlangıcı.",
     ob_back_btn:'Geri', ob_get_started_btn:'Başla', ob_start_assessment_btn:'1. Gün değerlendirmemi başlat', ob_next_btn:'İleri',
     lang_select_title:'Dilinizi seçin',
-    lang_select_disclosure:"Kapsam konusunda dürüstüz: uygulamanın tamamı — gezinme, her araç, egzersizler, oyunlar ve hesap ekranları — tamamen çevrildi. Tek bilinçli istisna, 21 Günlük Yolculuk'un gün gün müfredat metnidir; bu şimdilik yalnızca İngilizce kalıyor.",
+    lang_select_disclosure:"Uygulamanın tamamı çevrildi: gezinme, her araç, egzersizler, oyunlar ve hesap ekranları. Şimdilik bir istisna: 21 günlük yolculuğun gün gün program metni İngilizce.",
     hub_train_title:'Koç', hub_train_sub:'Perde, ses aralığı, nefes ve tını için egzersizler ve araçlar.',
     hub_songs_title:'Şarkılar', hub_songs_sub:'Koro partini çalış ya da bir şarkıyı tek başına çalış.',
     hub_you_title:'Sen', hub_you_sub:'Ses aralığın, ilerlemen ve planın.',
@@ -11733,17 +11734,17 @@ const TRANSLATIONS = {
     hub_world_sub:'Dört bağlantılı konum, tek bir kalıcı dünya — gerçek Seviyeniz yükseldikçe açılır (21 Günlük Yolculuk ile aynı XP/Seviye sistemi). Aşağıdaki her mekanik, uygulamanın geri kalanıyla aynı algılama motorlarını kullanır; burada ayrı, sahte bir oyun eklenmiş değildir.',
     settings_theme_title:'Tema', settings_theme_sub:'Sistem, cihazının açık veya koyu ayarını izler.',
     theme_default:'Varsayılan', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Sıvı Aurora', theme_velvetopera:'Kadife Opera', theme_system:'Sistem', theme_light:'Açık', theme_dark:'Koyu',
-    settings_feedback_title:'💬 Geri Bildirim', settings_feedback_sub:'Gerçek, somut geri bildirim — gerçekten üzerinde çalışabilmemiz için saklanır, hiçbir yere gitmeyen bir posta kutusu değil.',
+    settings_feedback_title:"Geri Bildirim", settings_feedback_sub:"Belirli geri bildirimler, üzerinde çalışılabilsin diye saklanır.",
     settings_feedback_btn:'Geri Bildirim Ver',
-    settings_title:'Ayarlar', settings_language_title:'🌐 Dil',
-    settings_playback_title:'🔊 Çalma sesi', settings_playback_sub:'Referans notalar, kılavuzlar, eşlik, koro ve kayıtlar. Mikrofonunuz ve puanlarınız etkilenmez.',
-    hub_you_profile_title:'🎤 Profil', hub_you_profile_desc:'Şarkıcı kimliğiniz tek bir yerde — seviye, ses aralığı, güçlü yönler, başarılar, rekorlar, hepsi gerçek.',
+    settings_title:'Ayarlar', settings_language_title:"Dil",
+    settings_playback_title:"Çalma sesi", settings_playback_sub:'Referans notalar, kılavuzlar, eşlik, koro ve kayıtlar. Mikrofonunuz ve puanlarınız etkilenmez.',
+    hub_you_profile_title:"Profil ve ayarlar", hub_you_profile_desc:"Ses kartın, dilin, temanın ve hesabın.",
     hub_you_journey_title:'21 Günlük Yolculuk', hub_you_journey_desc:'Başlangıç, hedef, XP, başarılar, 1. Gün ile bugün karşılaştırması.',
     hub_you_dashboard_title:"İlerleme", hub_you_dashboard_desc:"Bugünün planı, haftalık görev, ses aralığın ve etkinliğin.",
-    hub_you_voicehealth_title:'Ses Sağlığı', hub_you_voicehealth_desc:'Kararlılık ve nefeste 14 günlük eğilim — tek oturumluk panik değil.',
+    hub_you_voicehealth_title:'Ses Sağlığı', hub_you_voicehealth_desc:"Son 14 günde ses yükü, kararlılık ve nefes.",
     hub_you_pricing_title:'Plan ve Fiyatlandırma', hub_you_pricing_desc:'Planınızı görün, yükseltin veya yönetin.',
-    hub_you_records_title:'Kişisel Rekorlar', hub_you_records_desc:'Her gerçek rekor tek bir yerde — ses aralığı, perde, nefes ve her Vokal Dünyası oyunu.',
-    hub_you_teacher_title:'👩\u200d🏫 Öğretmen Paneli', hub_you_teacher_desc:'Gerçek öğrenci listesi ve ödev takibi — Öğretmen planı.',
+    hub_you_records_title:'Kişisel Rekorlar', hub_you_records_desc:"En iyilerin tek yerde: ses aralığı, perde, nefes, şarkılar, Vokal Dünyası ve Choir World.",
+    hub_you_teacher_title:"Öğretmen Paneli", hub_you_teacher_desc:"Öğrencilerin ve ödevleri. Öğretmen planı.",
     hub_songs_choir_title:'Koro Çalışma Alanı', hub_songs_choir_desc:'Ses grubu başına sessize alma/solo/ses düzeyi, ayrıca Şarkı Zorluk derecesi.',
     hub_songs_studio_title:"Stüdyo Modu", hub_songs_studio_desc:"Şarkının kayıtlarını alın ve dinleyin. Puan yok.",
     hub_songs_aiduet_title:"Koroyla söyle", hub_songs_aiduet_desc:"Partinizi seçin; uygulamanın korosu diğer dördünü söyler.",
@@ -11836,8 +11837,8 @@ const TRANSLATIONS = {
     vibrato_rate_label:"Vibrato hızı",
     vibrato_depth_label:'Derinlik',
     vibrato_consistency_label:'Tutarlılık',
-    voicehealth_title:'🩺 Ses Sağlığı',
-    voicehealth_sub:'Tek seferlik uyarılar değil, oturumlar arası eğilimler — tek bir kötü gün burada hiçbir şeyi tetiklemez, yalnızca gerçek çok günlü bir düşüş tetikler.',
+    voicehealth_title:"Ses Sağlığı",
+    voicehealth_sub:"Tek seferlik uyarılar değil, günler boyunca eğilimler: kötü bir gün burada hiçbir şeyi tetiklemez, yalnızca birkaç güne yayılan bir düşüş.",
     voicehealth_stability_h2:'Kararlılık — son 14 gün',
     voicehealth_breath_h2:'Nefes tutarlılığı — son 14 gün',
     staykey_title:"Tonda Kal",
@@ -11966,7 +11967,7 @@ const TRANSLATIONS = {
     emotionmode_retry_btn:'İki farklı niyet deneyin',
     vocallab_title:'Vokal Laboratuvarı',
     vocallab_sub:"Tek bir aralık sayısı değil, üç. Bir kez ulaştığınız nota, güvenebileceğiniz bir nota değildir. Her katman kaydedilen denemelerinizden gelir.",
-    passport_title:'🪪 Vokal Pasaportu',
+    passport_title:"Vokal Pasaportu",
     passport_sub:'Uzun vadeli kimliğiniz, tek bir yerde birleştirilmiş. Buradaki her alan başka yerde zaten izlenen verilerden alınır — yeni hiçbir şey ölçülmez, bir boşluğu doldurmak için hiçbir şey uydurulmaz.',
     passport_identity_label:'Kimlik',
     passport_level_label:'Seviye',
@@ -11979,21 +11980,21 @@ const TRANSLATIONS = {
     passport_achievements_label:'Başarılar',
     passport_breakthroughs_label:'Atılımlar',
     passport_fingerprint_label:'Ses Parmak İzi',
-    passport_bestkey_note:'Kapsam konusunda dürüz: En İyi Ton burada gösterilmiyor — sadece birkaç şarkı ve henüz gerçek tona özgü deneme geçmişi olmadan, bir "en iyi ton" alanı ölçümden çok tahmin olurdu. Onu destekleyecek gerçek veri olduğunda görünecek.',
-    passport_timeline_label:'🌱 Atılım Zaman Çizelgeniz',
-    passport_timeline_desc:'Sesinizin gerçek hikayesi, sırayla — buradaki her giriş gerçek bir nedenle tetiklendi, gerçekleştiği anda kaydedildi.',
+    passport_bestkey_note:"En iyi ton gösterilmiyor: az sayıda şarkı ve henüz tona göre deneme olmadan bu bir tahmin olurdu. Yeterli veri olunca görünecek.",
+    passport_timeline_label:"Atılım Zaman Çizelgen",
+    passport_timeline_desc:"Sesinin anları sırayla; her biri olduğu anda kaydedildi.",
     choir_title:"Koro Çalışma Alanı",
     choir_sub:"Her parti için bir mikser: şarkıdaki her sesi sessize alın, solo yapın ve ses düzeyini ayarlayın.",
     pricing_title:'💳 Planlar',
     pricing_sub:'Her yeni hesapta 21 gün tam erişim, ardından gerçek bir plan bunu sürdürür — bir tane oluşturmadan önce şeffaf.',
-    records_title:'🏆 Kişisel Rekorlar',
-    records_sub:'Her gerçek rekor, birleştirilmiş — temel etkinlik henüz gerçekleşmediyse burada hiçbir şey uydurulmaz.',
+    records_title:"Kişisel Rekorlar",
+    records_sub:"Söylediklerinden en iyilerin. Bir rekor, o etkinliği yaptığında görünür.",
     feedback_title:'💬 Geri Bildirim',
     feedback_sub:'Gerçek, somut cevaplar "iyi" demekten çok daha fazla yardımcı olur — soru başına birkaç cümle gerçekten faydalıdır.',
     teacher_title:'👩‍🏫 Öğretmen Paneli',
     teacher_sub:'Gerçek bir öğrenci listesi ve ödev takipçisi — örnek veri değil, kullanabileceğiniz gerçek bir yerel araç.',
     journey_title:'Sesinizi Keşfetmek İçin 21 Gün',
-    journey_sub:'Bir deneme geri sayımı değil — yapılandırılmış bir başlangıç noktası, üç temalı hafta ve sonunda dürüst bir öncesi/sonrası. Buradaki her sayı, uygulamanın başka yerinde zaten oluşturulmuş araçlardan gelir, tek bir rehberli yola dizilmiştir.',
+    journey_sub:"1. günde bir başlangıç ölçümü, üç temalı hafta ve sonunda bir önce/sonra. Her sayı zaten kullandığın araçlardan gelir, tek bir rehberli yolda.",
     key_title:'Tonalite Antrenörü',
     key_sub:"Herhangi bir tonda referans ses çalın ya da uygulamanın kaydedilen aralığınıza en uygun tonu, ona göre transpoze ederek önermesine izin verin.",
     dashboard_title:"İlerleme",
@@ -12327,7 +12328,7 @@ const TRANSLATIONS = {
     home_cw_locked_saved_tpl:"Hazırlığınız kayıtlı: {song} içinde {part} — {status}.",
     cw_hub_desc:"Koronun geri kalanı etrafınızda söylerken tek bir partiyi çalışın: 5 seviyede kısılan bir rehber, Armoni Hafızası, Koro Boss'ları, Senin Koron kayıtları ve her parti için bir hazırlık durumu.",
     cw_hub_status_tpl:"Son çalışma: {song} içinde {part} — {status}",
-    journey_cw_label:"🎼 Koro Dünyası kilometre taşı",
+    journey_cw_label:"Choir World kilometre taşı",
     journey_cw_title:"Partinizi koroyla birlikte tutun",
     journey_cw_desc_tpl:"Ben Kendi Partimim'de herhangi bir Armoni Hafızası aşamasını geçin: diğerleri etrafınızda söylerken kendi partinizi söyleyin ve notalarının en az %{pct}'ini doğru perdede tutun.",
     journey_cw_open_btn:"Ben Kendi Partimim'i aç",
@@ -12473,7 +12474,7 @@ const TRANSLATIONS = {
     choir_synthdemo_tag:'SENTEZLENMİŞ DEMO',
     choir_track_desc:"Bu demo, uygulamanın çaldığı özgün ve telifsiz diziler kullanır; bu yüzden mikser her partiyi ayrı ayrı etkiler.",
     dashboard_activity_h2:'Pratik etkinliği',
-    dashboard_backend_note:'— gerçek bir çok kullanıcılı arka uç gerektirir, Yönetmen Paneli ile aynı dürüstlük notu.',
+    dashboard_backend_note:"Başkalarının sonuçlarıyla karşılaştırma mümkün olana kadar gizli.",
     dashboard_create_account_btn:'Ücretsiz hesap oluştur',
     dashboard_days_unit:'gün',
     dashboard_howyoucompare:'Nasıl karşılaştırılırsınız',
@@ -12548,26 +12549,26 @@ const TRANSLATIONS = {
     harmony_ribbon_hint:'Sesinizi söyleyin — hizalandığınızda kurdele düz oturur, kaydığınızda eksenden sapar.',
     harmony_step_label:'🎼 Armoni Kalesi — Armoni Arenası',
     harmony_timing_label:'Zamanlama',
-    journey_achievements_h2:'Bunların her biri gerçek kayıtlı verilerden hesaplanır — hiçbiri elle verilmez',
+    journey_achievements_h2:"Her biri kayıtlı sonuçlarınla açılır.",
     journey_achievements_label:'Başarılar',
     journey_challenge_label:'Bugünün meydan okuması',
-    journey_day1_h2:'Beş hızlı gerçek ölçüm, ardından kişisel bir hedef',
+    journey_day1_h2:"Beş hızlı ölçüm, ardından kişisel bir hedef",
     journey_day1_label:'1. Gün — Sesinizi Keşfedin',
-    journey_day1vtoday_desc:'Dürüst kapsam: bu, saklanan 1. Gün Yetenek Profili anlık görüntünüzü bugünküyle sayısal olarak karşılaştırır. Gerçek 1. Gün ile bugünün kaydını yan yana duymak inşa edilmedi — bu, bu prototipin sahip olmadığı çekim depolaması gerektirir (bkz. PRD §18.6).',
-    journey_day1vtoday_h2:'Gerçek sayısal karşılaştırma — henüz ses tekrarı yok',
+    journey_day1vtoday_desc:"Başlangıç ölçümünü yaptığın günkü beceri profilin, bugünküyle yan yana. 1. günün bir kaydı yanında dinlemek için saklanmıyor.",
+    journey_day1vtoday_h2:"1. gün sayıların bugünküyle yan yana",
     journey_day1vtoday_label:'1. Gün ile Bugün',
     journey_duration_label:'Süre',
     journey_goal_label:'21 Günlük Hedefiniz',
     journey_level_label:'Seviye',
     journey_mark_done_btn:'Tamamlandı olarak işaretle',
     journey_open_first_btn:'Bugünün ilk aracını aç',
-    journey_open_hint:'Her "Aç" gerçek araca gider. Denedikten sonra buraya dönün ve tamamlandı olarak işaretleyin — bu sayfa sekmeler arasında otomatik algılama yapmaz, bu yüzden tahmin etmek yerine dürüstçe sorar.',
+    journey_open_hint:"Her Aç düğmesi araca gider. O aracın kayıtlı bir sonucu olduğunda adım kendiliğinden işaretlenir (Aralık Eşleştirme sonuçlarını Nota Eşleştirme ile paylaşır, onu kendin işaretle); istediğin adımı elle de işaretleyebilirsin.",
     journey_optional_tag:'(isteğe bağlı)',
-    journey_record_btn:'🎙️ Kaydet',
+    journey_record_btn:"Kaydet",
     journey_reset_btn:'21 günlük yolculuğumu sıfırla',
-    journey_sequence_label:'Gerçek dizi',
+    journey_sequence_label:"Sıra",
     journey_setbaseline_btn:'Başlangıç noktamı belirle ve başla',
-    journey_step_breath_sub:'Nefes Antrenörü — gerçek sürdürme sürenizi görün',
+    journey_step_breath_sub:"Nefes Kontrolü: bir notayı ne kadar uzun tutabildiğini gör",
     journey_step_breath_title:'Bir nefes tutuşu',
     journey_step_interval_sub:'Egzersizler → Aralık Eşleştirme, birkaç deneme',
     journey_step_interval_title:'İki aralık deneyin',
@@ -12687,27 +12688,27 @@ const TRANSLATIONS = {
     profile_agility_label:'Çeviklik',
     profile_breath_label:'Nefes',
     profile_downloadcard_btn:'Ses Kartımı indir',
-    profile_fingerprint_desc:'Yetenek Profilinizin gerçek şekli — her yerdeki aynı beş kategori, sadece beş ayrı çubuk yerine tek bir kimlik olarak çizilmiş.',
-    profile_fingerprint_label:'🫆 Ses Parmak İziniz',
+    profile_fingerprint_desc:"Beceri profilinin şekli: aynı beş kategori, tek bir şekil olarak çizilmiş.",
+    profile_fingerprint_label:"Ses Parmak İzin",
     profile_opendashboard_btn:"İlerleme'yi aç",
     profile_openjourney_btn:'Tam 21 Günlük Yolculuğu aç',
     profile_openworld_btn:'Vokal Dünyasını aç',
     profile_personalrecords_label:'Kişisel Rekorlar',
     profile_pitch_label:'Perde',
-    profile_sharevoicecard_label:'🎤 Ses Kartınızı Paylaşın',
+    profile_sharevoicecard_label:"Ses Kartını Paylaş",
     profile_skilltree_label:'Vokal Yetenek Ağacı',
     profile_songsmastered_label:'Hakim olunan şarkılar',
     profile_streak_label:'Seri',
     profile_totalsessions_label:'Toplam oturum',
     profile_traininghistory_label:'Antrenman Geçmişi',
-    profile_unifiedprogress_desc:'En çok izlenen üç kategoriniz genelinde tek bir gerçek eğilim görünümü — her egzersizin zaten yazdığı aynı gerçek haftalık günlükten alınır, ayrı bir izleyici değil.',
-    profile_unifiedprogress_label:'📈 Birleşik İlerleme',
+    profile_unifiedprogress_desc:"Son 14 günde gün gün perde, nefes ve çeviklik; her egzersizin yazdığı kayıttan.",
+    profile_unifiedprogress_label:"Birleşik İlerleme",
     profile_viewallrecords_btn:'Tüm rekorları görüntüle',
-    profile_viewpassport_btn:'🪪 Vokal Pasaportumu görüntüle',
+    profile_viewpassport_btn:"Vokal Pasaportumu görüntüle",
     profile_vocalrange_label:'Ses Aralığı',
-    profile_vocalstats_h2:'Gerçek Yetenek Profilinizden güçlü ve zayıf yönler',
+    profile_vocalstats_h2:"Beceri profilinden güçlü ve zayıf yönler",
     profile_vocalstats_label:'Vokal İstatistikleri',
-    profile_voicecard_desc:'Gerçek ilerlemenizin gerçek bir anlık görüntüsü — üzerindeki her sayı doğrudan gerçek izlenen verilerinizden gelir, ekran görüntüsü için hazırlanmış hiçbir şey yok.',
+    profile_voicecard_desc:"Kayıtlı sonuçlarından yapılmış, güncel puanlarının bir resmi.",
     scale_average_desc:'Çalışma boyunca ortalama',
     ex_attack_label:'Atak',
     ex_ear_chords_btn:'Akorlar',
@@ -12754,7 +12755,7 @@ const TRANSLATIONS = {
     record_label_song_score:'En iyi şarkı skoru (Karaoke/Duygu)', record_note_not_set:'Henüz belirlenmedi',
     record_note_keychange:'Henüz takip edilmiyor — bu prototipte tonalite değişimi için ayrı bir skor bulunmuyor.',
     record_note_song_score:'Henüz takip edilmiyor — bu araçlar canlı sonuç gösteriyor ama kalıcı bir en iyi skoru kaydetmiyor.',
-    records_signin_msg:'Gerçek kişisel rekorlarınızı oluşturmaya başlamak için oturum açın.',
+    records_signin_msg:"Kişisel rekorlarını tutmaya başlamak için giriş yap.",
     record_popup_bridge_crossing:'Temiz register geçişi', record_popup_glider_score:'Vokal Yolculuğu skoru',
     record_popup_bridge_score:'Register Koşucusu skoru', record_popup_harmony_acc:'Armoni Arenası doğruluğu',
     record_popup_rift_avg:'Vokal Yarığı ortalaması', action_listening:'Dinleniyor…',
@@ -12798,7 +12799,7 @@ const TRANSLATIONS = {
     journey_beyond_program:'— 21 günlük programın ötesinde', journey_billing_activeplan_suffix:' — tam erişim',
     journey_billing_ended:'21 günlük ücretsiz erişiminiz sona erdi — devam etmek için bir plan seçin', journey_billing_prefix:'Faturalandırma:',
     journey_billing_trial_mid:'21 günlük ücretsiz erişimin —', journey_billing_trial_suffix:'gün kaldı',
-    journey_complete_theme:'Program tamamlandı — gerçek antrenman buradan devam ediyor',
+    journey_complete_theme:"Program tamamlandı: buradan çalışmaya devam et",
     journey_confirm_reset:'21 günlük yolculuğunuzu sıfırlamak istiyor musunuz? Bu, 1. Gün referansınızı ve hedefinizi siler, diğer ilerlemenizi silmez.',
     journey_day_p1:'Gün', journey_day_p2:'/ 21',
     journey_toast_finish_steps:'Yukarıdaki 5 adımın her birini deneyin ve önce tamamlandı olarak işaretleyin — referans için her birinde en az bir ilk veri gerekiyor.',
@@ -12850,13 +12851,13 @@ const TRANSLATIONS = {
     teacher_roster_empty:'Henüz öğrenci yok — yukarıdan ilkini ekleyin.',
     teacher_student_plural:'öğrenci', teacher_student_singular:'öğrenci', teacher_toast_needstudent:'Önce listeye en az bir öğrenci ekleyin.',
     timeline_breakthrough_p1:'Atılım:', timeline_breakthrough_p2:'— önceki ortalama', timeline_breakthrough_p3:'idi',
-    timeline_empty:'Henüz bir şey kaydedilmedi — ilk gerçek değerlendirmeniz, atılımınız ya da seviye atlamanız hikayeyi burada başlatacak.',
+    timeline_empty:"Henüz bir şey yok: ilk değerlendirmen, atılımın ya da seviye atlaman çizelgeyi başlatır.",
     timeline_first_assessment:'İlk değerlendirme — 1. Gün referansı belirlendi', timeline_new_record_p1:'Yeni rekor:', levelup_why:'Seviye atladın: {list}', levelup_and:'ve', levelup_records_one:'{n} yeni rekor', levelup_records_other:'{n} yeni rekor', levelup_breakthroughs_one:'{n} atılım', levelup_breakthroughs_other:'{n} atılım', levelup_boss_wins_one:'{n} Boss Savaşı kazanıldı', levelup_boss_wins_other:'{n} Boss Savaşı kazanıldı', levelup_curriculum_one:'{n} program günü', levelup_curriculum_other:'{n} program günü', levelup_sessions_one:'{n} seans', levelup_sessions_other:'{n} seans', levelup_warmups_one:'{n} ısınma', levelup_warmups_other:'{n} ısınma', levelup_streak:'{n} günlük seri', timeline_reached_level_p1:'Ulaşılan Seviye',
     todaysplan_dayssince:'gündür son oturumunuzdan beri', todaysplan_finishchallenge:'Haftalık Meydan Okuma ile bitirin',
     todaysplan_goodhabit:'Her şeyden önce iyi bir alışkanlık', todaysplan_lowestscore:'En düşük Perde Profili skorunuz',
     todaysplan_nodata:'Henüz Perde Profili verisi yok — bu, verileri oluşturmaya başlar', todaysplan_practiceregister:'Register Koçu ile pratik yapın',
     todaysplan_shortcrossing:'Passaggio üzerindeki en uzun temiz geçişiniz hâlâ kısa',
-    todaysplan_signin:'Gerçek pratik verilerinize dayalı bir plan almak için oturum açın.', todaysplan_trypitch:'Bir Pitch Match egzersizi deneyin',
+    todaysplan_signin:"Çalışmana göre hazırlanmış bir plan için giriş yap.", todaysplan_trypitch:'Bir Pitch Match egzersizi deneyin',
     todaysplan_warmup:'Önce ısının', todaysplan_workon:'Şunun üzerinde çalışın:',
     weeklychallenge_done_badge:'TAMAMLANDI', weeklychallenge_signin:'Bu haftanın meydan okumasını takip etmek için oturum açın.', weeklychallenge_you:'Siz',
     home_voice_eyebrow:'Sesiniz', home_mission_eyebrow:"Bugünün odağı", home_start_training_btn:'Antrenmana başla',
@@ -12983,9 +12984,9 @@ const TRANSLATIONS = {
     skilltree_prog_pitch:'Henüz perde puanı yok.', skilltree_prog_range:'Henüz ses aralığı yakalanmadı.', skilltree_prog_agility:'Henüz Gam Çalışması verisi yok.',
     skilltree_bestcrossing:'En iyi temiz geçiş', skilltree_prog_chestvoice:'Henüz Nefes Antrenörü verisi yok.',
     skilltree_prog_mixedvoice:'Her iki dalın da açılması gerekir.',
-    skilltree_signin:'Gerçek yetenek ağacınızı büyütmek için oturum açın.', skilltree_unlockedcount_suffix:'açıldı', skilltree_next:'sıradaki',
+    skilltree_signin:"Beceri ağacını büyütmek için giriş yap.", skilltree_unlockedcount_suffix:'açıldı', skilltree_next:'sıradaki',
     skilltree_fullyunlocked:'Vokal Ustası — tamamen açıldı',
-    skilltree_fullyunlocked_desc:'Her düğüm, o anda sahip olunan gerçek bir yetenek seviyesini yansıtır — tek seferlik bir başarı değil. Bir kategorinin son ortalaması düşerse puanlar tekrar geri düşebilir.',
+    skilltree_fullyunlocked_desc:"Her düğüm şu an sahip olduğun bir seviyeyi gösterir, tek seferlik bir başarıyı değil: bir kategorinin son ortalaması düşerse düşebilir.",
     skilltree_keeppracticing:'Tüm kategorilerde pratik yapmaya devam edin — ağaçta daha yukarıdaki düğümler önce ebeveyn düğümlerinin açılmasını gerektirir.',
     vocallab_signin:'Gerçek Vokal Laboratuvarı verilerinizi oluşturmaya başlamak için oturum açın.',
     vocallab_needrangefinder:'Genişletilmiş ses aralığınızı belirlemek için Ses Aralığı Bulucu\'yu en az bir kez çalıştırın — diğer her şey buradan inşa edilir.',
@@ -12994,16 +12995,16 @@ const TRANSLATIONS = {
     vocallab_reliable:'Güvenilir', vocallab_reliable_sub:"3+ deneme, tutarlı şekilde doğru",
     vocallab_notenoughdata:'henüz yeterli veri yok',
     vocallab_notecount_suffix:"farklı nota; Nota Eşleştirme, Özel Meydan Okuma, Boss Battle ve Vokal Yarığı denemelerinizden takip edildi.",
-    passport_signin:'Gerçek Vokal Pasaportunuzu oluşturmaya başlamak için oturum açın.',
-    passport_needrangefinder:'Önce Ses Aralığı Bulucu\'yu ve birkaç gerçek egzersizi çalıştırın — Pasaportunuz aynı gerçek verilerden inşa edilir.',
+    passport_signin:"Vokal Pasaportunu başlatmak için giriş yap.",
+    passport_needrangefinder:"Önce Ses Aralığı Bulucu'yu ve birkaç egzersizi yap: pasaportun bunlardan oluşur.",
     passport_notenoughdata:'Henüz yeterli veri yok', passport_singfulltake:'Bunu belirlemek için Karaoke Coach\'ta tam bir performans söyleyin',
     passport_updated_prefix:'Canlı olarak güncellendi —', passport_updated_suffix:' itibarıyla, aylık bir toplu işlem değil.',
-    fingerprint_all5tracked:'Tüm 5 kategori takip ediliyor — gerçek, güncel Yetenek Profilinizden güncellendi.',
-    fingerprint_of5_suffix:'/5 kategoride şimdiye kadar gerçek veri var — kesikli noktalar gerçekten henüz takip edilmediği anlamına gelir, sıfır puan değil.',
+    fingerprint_all5tracked:"5 kategorinin tamamı puanlandı; güncel beceri profilinden.",
+    fingerprint_of5_suffix:"/5 kategori şimdilik puanlandı. Kesikli nokta, sıfır değil, henüz puanlanmadı demektir.",
     voicecard_title:'Bugün Sesim', voicecard_harmony:'Armoni', voicecard_nottracked:'Henüz takip edilmedi',
     voicecard_daystreak:'günlük seri', voicecard_level:'Seviye', voicecard_footer:"VoxCoach ile şarkı söyleyişinden ölçüldü",
-    voicecard_note_real:'Yukarıdaki her sayı gerçek — ekran görüntüsü için hiçbir şey ayarlanmadı.',
-    voicecard_note_practice:'Önce biraz pratik yapın — bu kart dürüst, bu yüzden gösterecek gerçek sayılara ihtiyacı var.',
+    voicecard_note_real:"Karttaki her sayı kayıtlı sonuçlarından gelir.",
+    voicecard_note_practice:"Önce biraz çalış: kart yalnızca ölçülmüş sayıları gösterir.",
     songdifficulty_alllevels:'Tüm seviyeler', songdifficulty_fitsrange:'Yakalanan ses aralığınıza rahatça sığıyor',
     songdifficulty_outsiderange:'Yakalanan ses aralığınızın kısmen dışında — farklı bir ses türü deneyin',
     songdifficulty_difficulty:'Zorluk', songdifficulty_highest:'En tiz', songdifficulty_lowest:'En pes',
@@ -13011,8 +13012,8 @@ const TRANSLATIONS = {
     songdna_register:'Register (passaggio geçişleri)', songdna_highsustained:'Tiz sürdürülen nota', songdna_bigjump:'Büyük sıçrama',
     songdna_to:'—', songdna_semitones:'yarım ton', songdna_descending:'Alçalan cümle', songdna_notes:'nota',
     songdna_practicethis:'Bunu antrenman et', songdna_shortsong:'Bu şarkı, hiçbir anın belirgin şekilde daha zor öne çıkmayacağı kadar kısa.',
-    unifiedprogress_trackedof3:'/3 takip edilen kategoride son 14 günde gerçek veri var.',
-    unifiedprogress_nodata:'Son 14 günde henüz gerçek veri yok — eğiliminizi burada görmek için biraz pratik yapın.',
+    unifiedprogress_trackedof3:"/3 kategorinin son 14 günde puanı var.",
+    unifiedprogress_nodata:"Son 14 günde henüz puan yok: eğilimini burada görmek için biraz çalış.",
     unifiedprogress_mostimproved:'Son zamanlarda en çok gelişen:', unifiedprogress_points:'puan', unifiedprogress_halves:'bu pencerenin ilk yarısı ile ikinci yarısı',
     proactive_climbed_p1:'', proactive_climbed_p2:'ortalaması yükseldi:', proactive_to:'→',
     proactive_climbed_p3:"yakın zamanda; oturumlarınızdan ölçüldü.",
@@ -13296,7 +13297,7 @@ const TRANSLATIONS = {
     you_week_tpl:"bu hafta %{p}",
     you_records_tpl:"{n} rekor",
     you_load_tpl:"ses yükü %{p}",
-    you_passport_title:"Ses Pasaportu",
+    you_passport_title:"Vokal Pasaportu",
     you_passport_desc:"Ses aralığın, seviyen ve dönüm noktaların tek yerde.",
     you_choir_desc:"Partilerinin hazırlığı",
     skill_status_label:"Durum",
@@ -18142,14 +18143,14 @@ function renderJourneyChoirMilestone(){
   let foot;
   if(m){
     const done = m.ts ? t('journey_cw_done_tpl').replace('{date}', cpDate(m.ts)).replace('{stage}', m.stage+1).replace('{score}', m.score) : t('journey_cw_done_nodate_tpl');
-    foot = `<p class="desc" style="margin-top:10px;color:var(--teal);">✓ ${done.replace('{part}', partName(m.part)).replace('{song}', songTitle(m.song))}</p>`;
+    foot = `<p class="desc journey-cw-done" style="margin-top:10px;"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg> ${done.replace('{part}', partName(m.part)).replace('{song}', songTitle(m.song))}</p>`;
   } else if(open){
     foot = `<button class="solid-btn teal" data-cw-go="" style="margin-top:12px;">${t('journey_cw_open_btn')}</button>`;
   } else {
     foot = `<p class="fine-print" style="margin-top:10px;">${cwReasonText()}</p><button class="solid-btn teal" data-cw-cta="plans" style="margin-top:12px;">${t('cw_cta_plans')}</button>`;
   }
   box.innerHTML = `<div class="step-label">${t('journey_cw_label')}${!m && !open ? ` <span class="mock-tag">${planLabel('choir')} · ${CW_PRICE}</span>` : ''}</div>
-    <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;">${m ? '✓ ' : ''}${t('journey_cw_title')}</h2>
+    <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;">${t('journey_cw_title')}</h2>
     <p class="desc">${t('journey_cw_desc_tpl').replace('{pct}', HM_PASS_PCT)}</p>${foot}`;
 }
 // "Continue rehearsing" / "Start rehearsing": straight into I Am the Part, on the song and part it names.
