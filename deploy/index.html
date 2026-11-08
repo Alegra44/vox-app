@@ -23439,10 +23439,12 @@ function renderTodaysCurriculum(dayNum){
   document.getElementById('curriculumDayLabel').textContent = `${t('curriculum_daylabel_p1')} ${dayData.day} (${t(levelLabelKey)})`;
   document.getElementById('curriculumObjective').textContent = dayData.objective;
   document.getElementById('curriculumTheme').textContent = dayData.theme;
-  document.getElementById('curriculumExercises').textContent = dayData.exercises;
+  // phase 7 review: "->" shown as "→", held to the word before it by a no-break space so the arrow never starts a line
+  const arrows = x => String(x||'').replace(/\s*->\s*/g, '\u00a0\u2192 ');
+  document.getElementById('curriculumExercises').textContent = arrows(dayData.exercises);
   document.getElementById('curriculumDuration').textContent = dayData.duration;
   document.getElementById('curriculumChallenge').textContent = dayData.challenge;
-  document.getElementById('curriculumMessage').textContent = dayData.message;
+  document.getElementById('curriculumMessage').textContent = arrows(dayData.message);
 
   const tool = findFirstCurriculumTool(dayData.exercises);
   const openBtn = document.getElementById('curriculumOpenBtn');
