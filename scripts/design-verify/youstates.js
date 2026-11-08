@@ -13,7 +13,7 @@
 //   and what follows from it there (summary, Today's focus, Passport strongest/focus, Pitch Master).
 // Every state's achievements are marked as already announced first, so the timeline doesn't grow while screens render.
 // Usage: node scripts/design-verify/youstates.js [--base <ref>, default master] [--branch-ref <ref>, default working copy]
-//        [--lang en]   Out: logs/youstates-<stamp>.json; exit 1 on an unexpected difference.
+//        [--branch-url <site>: the branch side is that site as served, e.g. production] [--lang en]   Out: logs/youstates-<stamp>.json; exit 1 on an unexpected difference.
 const fs = require('fs'), path = require('path');
 const C = require('./common');
 const { YOU_STATES, seedInPage } = require('./youSeed');
@@ -100,8 +100,8 @@ function expected(state, k, vals) {
 }
 
 (async () => {
-  const dirs = { master: C.buildDir(BASE), branch: C.buildDir(arg('--branch-ref') || null) };
-  const b = await C.chromium.launch(); const res = { base: BASE, branch: arg('--branch-ref') || 'working copy', lang: LANG, states: {} };
+  const dirs = { master: C.buildDir(BASE), branch: arg('--branch-url') || C.buildDir(arg('--branch-ref') || null) };
+  const b = await C.chromium.launch(); const res = { base: BASE, branch: arg('--branch-url') || arg('--branch-ref') || 'working copy', lang: LANG, states: {} };
   let unexpected = 0;
   try {
     const o0 = await C.openPage(b, { dir: dirs.master }); await C.signUp(o0.page, 'dvys', 'You States');

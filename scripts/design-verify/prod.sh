@@ -19,7 +19,7 @@
 #   startup state (bootcheck.js). It runs in every phase's checks too.
 #   phase 7 (2026-11-08): house and contrast cover the six phase 6 tools; measured on production 2026-11-08 house 46 min
 #   (also 46 in checks6), contrast 42 min, so their limit is 1.5× that (house 69, contrast 63), 75 min at most; prod.sh's
-#   old 45 / 30 min limits cut both off on the phase 6 deploy.
+#   old 45 / 30 min limits cut both off on the phase 6 deploy. youstates (phase 7's gate): SCORES_BASE served locally vs the site.
 cd "$(dirname "$0")/../.."
 P=https://deploy-alegra1122.vercel.app/
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/prod-$STAMP; mkdir -p "$OUT"
@@ -48,6 +48,7 @@ SUITES=(
   "stopcheck|7|env DV_URL=$P node scripts/design-verify/stopcheck.js"
   "scores4b|22|node scripts/design-verify/scores.js --base $SCORES_BASE --branch-url $P --tools onetake,mirror,rhythm,registerdrills,vibrato,voicequality,emotionmode"
   "live|7|node scripts/design-verify/live.js --base $SCORES_BASE --branch-url $P --runs 3 --at 4100,5100,7100"
+  "youstates|2|node scripts/design-verify/youstates.js --base $SCORES_BASE --branch-url $P"
   "navcheck|2|env DV_URL=$P node scripts/design-verify/navcheck.js"
   "livevq|3|node scripts/vq-verify/livevq.js $P"
   "tools-shots|20|env DV_URL=$P node scripts/design-verify/shots.js --tools-only --set 4b --out $SHOTS-tools"
