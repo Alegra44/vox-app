@@ -58,7 +58,8 @@ async function collectInPage() {
   });
   await show('journey');
   o['journey.inProgress'] = getComputedStyle(document.getElementById('journeyInProgress')).display !== 'none';
-  o['journey.day'] = (txt('journeyDayLabel').match(/\d+/) || [null])[0];
+  // the day only while the Journey runs (before Day 1 the label is hidden; master's markup held a placeholder there)
+  o['journey.day'] = o['journey.inProgress'] ? (txt('journeyDayLabel').match(/\d+/) || [null])[0] : null;
   const steps = () => { for (const s of ['range', 'tuner', 'interval', 'breath', 'scale']) o[`journey.step.${s}`] = txt('assessCheck' + s); };
   if (profile.day1StartDate) { // the steps as a singer with these results would see them before Day 1
     const keep = { d: profile.day1StartDate, s: profile.day1Snapshot };

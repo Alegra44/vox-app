@@ -1323,7 +1323,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .assess-step .as-title{font-weight:600;font-size:13.5px;}
   .assess-step .as-sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
   .assess-check{width:22px;height:22px;border-radius:50%;border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);flex-shrink:0;}
-  .assess-check.done{background:var(--hl-ok);border-color:var(--hl-ok);color:var(--hl-bg);}
+  .assess-check.done{background:var(--hl-ink);border-color:var(--hl-ink);color:var(--hl-bg);}
 
   .goal-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:16px 0;}
   .goal-card{
@@ -1350,11 +1350,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:14px;text-align:center;
   }
   /* not yet unlocked: dimmed by colour, not opacity, so the name stays readable */
-  .achievement-card:not(.unlocked) .a-icon{filter:grayscale(1);opacity:0.4;}
+  /* phase 7 (2.4): sprite icons; a locked one is ink-3, icon and name (no 40% opacity: it read 2.6:1 / 3.38:1) */
+  .achievement-card .a-icon{width:24px;height:24px;color:var(--hl-ink);display:block;margin:0 auto;}
+  .achievement-card:not(.unlocked) .a-icon{color:var(--hl-ink-3);}
   .achievement-card:not(.unlocked) .a-name{color:var(--hl-ink-3);}
-  .achievement-card.unlocked{opacity:1;border-color:var(--brass);background:var(--surface-raised);}
-  .achievement-card .a-icon{font-size:22px;}
-  .achievement-card .a-name{font-size:11.5px;font-weight:600;margin-top:6px;color:var(--cream);}
+  .achievement-card.unlocked{opacity:1;border-color:var(--hl-ink);background:var(--hl-raised);}
+  .achievement-card .a-name{font-size:var(--hl-t-small);font-weight:600;margin-top:6px;color:var(--hl-ink);}
 
   .snapshot-compare{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;margin-top:6px;}
   .snapshot-compare .sc-col{text-align:center;}
@@ -2096,6 +2097,29 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @media (min-width:960px){
     #panel-profile #profileSignedIn[style*="block"]{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;}
   }
+  /* ---- 21-DAY JOURNEY (phase 7, 2.4): the day as the header, curriculum rows, one stats row, achievements, Day 1 vs today ---- */
+  #panel-journey .journey-head{display:flex;flex-direction:column;gap:var(--hl-s2);margin-top:var(--hl-s5);}
+  #panel-journey .journey-head .hl-h2{color:var(--hl-ink);}
+  #panel-journey .journey-meter > i{background:var(--hl-ink);}
+  #panel-journey .journey-trial{margin:0;}
+  #panel-journey .journey-trial[hidden]{display:none;}
+  #panel-journey #journeyInProgress > .key-card, #panel-journey #journeyAssessmentCard{background:none;border:0;border-radius:0;box-shadow:none;padding:var(--hl-s5) 0 0;margin-top:var(--hl-s5) !important;border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-journey #journeyInProgress > .key-card:empty{display:none;}
+  #panel-journey .key-card .step-label{font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);font-weight:650;text-transform:uppercase;letter-spacing:.09em;color:var(--hl-ink-3);}
+  #panel-journey .key-card h2{font-family:var(--hl-font) !important;font-stretch:normal !important;font-size:var(--hl-t-h3) !important;font-weight:600 !important;color:var(--hl-ink);margin:var(--hl-s2) 0 var(--hl-s2) !important;}
+  #panel-journey .curriculum-detail-row{display:flex;justify-content:space-between;gap:var(--hl-s4);padding:var(--hl-s3) 0;border-bottom:0;border-top:var(--hl-hair) solid var(--hl-rule);font-size:var(--hl-t-body);}
+  #panel-journey .curriculum-detail-row .cd-label{width:auto;font-size:var(--hl-t-small);color:var(--hl-ink-2);text-transform:none;letter-spacing:0;}
+  #panel-journey .curriculum-detail-row span:last-child{color:var(--hl-ink);text-align:right;}
+  #panel-journey #curriculumMessage{color:var(--hl-ink-2) !important;}
+  #panel-journey .journey-stats{display:flex;gap:var(--hl-s7);margin-top:var(--hl-s5);padding-top:var(--hl-s5);border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-journey .journey-fig{font-size:var(--hl-t-body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--hl-ink);}
+  #panel-journey .journey-ach-sub{margin:var(--hl-s1) 0 var(--hl-s4);}
+  #panel-journey .assess-step{border-color:var(--hl-rule);}
+  #panel-journey .assess-step.done{border-color:var(--hl-ink-3);}
+  #panel-journey .vc-result-dims{margin-top:var(--hl-s3);}
+  #panel-journey .snapshot-row{border-bottom:0;padding:var(--hl-s3) 0;margin:0;}
+  #panel-journey .snapshot-delta{background:none !important;padding:0 !important;color:var(--hl-ink-2);margin-left:var(--hl-s2);}
+  #panel-journey .snapshot-delta.up{color:var(--hl-ok);}
   /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
   .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
   .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
@@ -2905,17 +2929,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <!-- IN-PROGRESS / DAY 21 VIEW (hidden until Day 1 complete) -->
     <div id="journeyInProgress" style="display:none;">
-      <div class="week-banner">
-        <div>
-          <div class="wb-day" id="journeyDayLabel">Day 1 of 21</div>
-          <div class="wb-theme" id="journeyWeekTheme">Week 1 — Control Your Voice</div>
-        </div>
-        <div class="week-progress-track"><div class="fill" id="journeyProgressFill" style="width:0%;"></div></div>
-      </div>
-
-      <div class="home-trial-row" id="journeyTrialRow" style="margin-top:12px;">
-        <div class="home-trial-text" id="journeyTrialText">Billing: Day 1 of 21 free access</div>
-        <div class="home-trial-track"><div class="fill" id="journeyTrialFill" style="width:0%;"></div></div>
+      <!-- phase 7 (PHASE7.md 2.4): the day and the week as the header; the trial is a quiet line, only while a trial runs -->
+      <div class="journey-head">
+        <div class="hl-label" id="journeyWeekTheme">—</div>
+        <h2 class="hl-h2" id="journeyDayLabel">—</h2>
+        <div class="hl-meter journey-meter"><i id="journeyProgressFill" style="width:0%;"></i></div>
+        <p class="hl-meta journey-trial" id="journeyTrialRow"><span id="journeyTrialText"></span><span id="journeyTrialFill" hidden></span></p>
       </div>
 
       <div class="key-card" id="curriculumCard" style="margin-top:16px;">
@@ -2935,15 +2954,15 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <!-- Choir World milestone (phase 9): filled by renderJourneyChoirMilestone() -->
       <div class="key-card" id="journeyChoirMilestone" style="margin-top:16px;"></div>
 
-      <div class="xp-level-row">
-        <div class="key-card xp-card" style="margin:0;"><div class="label" style="font-size:11px;text-transform:uppercase;color:var(--muted);" data-i18n="journey_level_label">Level</div><div class="big-val" id="journeyLevelVal">—</div></div>
-        <div class="key-card xp-card" style="margin:0;"><div class="label" style="font-size:11px;text-transform:uppercase;color:var(--muted);" data-i18n="journey_xp_label">XP</div><div class="big-val" id="journeyXpVal">0</div></div>
-        <div class="key-card xp-card" style="margin:0;"><div class="label" style="font-size:11px;text-transform:uppercase;color:var(--muted);" data-i18n="journey_streak_label">Streak</div><div class="big-val" id="journeyStreakVal">0</div></div>
+      <div class="journey-stats">
+        <div class="hl-stat"><span class="hl-label" data-i18n="journey_level_label">Level</span><span class="journey-fig" id="journeyLevelVal">—</span></div>
+        <div class="hl-stat"><span class="hl-label" data-i18n="journey_xp_label">XP</span><span class="journey-fig" id="journeyXpVal">0</span></div>
+        <div class="hl-stat"><span class="hl-label" data-i18n="journey_streak_label">Streak</span><span class="journey-fig" id="journeyStreakVal">0</span></div>
       </div>
 
       <div class="key-card">
         <div class="step-label" data-i18n="journey_achievements_label">Achievements</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 16px;" data-i18n="journey_achievements_h2">Every one of these is computed from real logged data — none are hand-awarded</h2>
+        <p class="hl-small journey-ach-sub" data-i18n="journey_achievements_h2">Every one of these is computed from real logged data — none are hand-awarded</p>
         <div class="achievement-grid" id="achievementGrid"></div>
       </div>
 
@@ -2951,7 +2970,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="step-label" data-i18n="journey_day1vtoday_label">Day 1 vs. Today</div>
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:18px;margin:8px 0 4px;" data-i18n="journey_day1vtoday_h2">Real numeric comparison — no audio replay yet</h2>
         <p class="desc" style="margin-bottom:16px;" data-i18n="journey_day1vtoday_desc">Honest scope: this compares your stored Day 1 Skill Profile snapshot to today's, numerically. Hearing your actual Day 1 vs. today recording side-by-side isn't built — that needs take storage this prototype doesn't have (see PRD §18.6).</p>
-        <div id="journeySnapshotCompare"></div>
+        <div class="vc-result-dims" id="journeySnapshotCompare"></div>
       </div>
 
       <div class="btn-row" style="justify-content:center;margin-top:20px;">
@@ -8351,6 +8370,10 @@ const TRANSLATIONS = {
     profile_account_title:"Account",
     profile_account_sub:"Reset local data erases the progress saved on your account: range, streak, sessions, scores and history. It can't be undone. Signing out keeps everything.",
     profile_reset_confirm:"Erase the progress saved on your account? This can't be undone.",
+    achievement_unlocked:"Unlocked",
+    achievement_locked:"Locked",
+    journey_step_auto:"Done: from your saved result",
+    journey_step_done:"Done",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9969,6 +9992,10 @@ const TRANSLATIONS = {
     profile_account_title:"Compte",
     profile_account_sub:"Réinitialiser les données efface la progression enregistrée sur votre compte : tessiture, série, séances, scores et historique. C'est irréversible. Se déconnecter garde tout.",
     profile_reset_confirm:"Effacer la progression enregistrée sur votre compte ? C'est irréversible.",
+    achievement_unlocked:"Débloqué",
+    achievement_locked:"Verrouillé",
+    journey_step_auto:"Fait : d'après votre résultat enregistré",
+    journey_step_done:"Fait",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11587,6 +11614,10 @@ const TRANSLATIONS = {
     profile_account_title:"Cuenta",
     profile_account_sub:"Restablecer los datos borra el progreso guardado en tu cuenta: registro, racha, sesiones, puntuaciones e historial. No se puede deshacer. Cerrar sesión lo conserva todo.",
     profile_reset_confirm:"¿Borrar el progreso guardado en tu cuenta? No se puede deshacer.",
+    achievement_unlocked:"Desbloqueado",
+    achievement_locked:"Bloqueado",
+    journey_step_auto:"Hecho: según tu resultado guardado",
+    journey_step_done:"Hecho",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13205,6 +13236,10 @@ const TRANSLATIONS = {
     profile_account_title:"Hesap",
     profile_account_sub:"Verileri sıfırlamak hesabında kayıtlı ilerlemeyi siler: ses aralığı, seri, oturumlar, puanlar ve geçmiş. Geri alınamaz. Çıkış yapmak her şeyi korur.",
     profile_reset_confirm:"Hesabında kayıtlı ilerleme silinsin mi? Bu geri alınamaz.",
+    achievement_unlocked:"Açıldı",
+    achievement_locked:"Kilitli",
+    journey_step_auto:"Tamam: kayıtlı sonucuna göre",
+    journey_step_done:"Tamam",
   },
 };
 let currentLanguage = 'en';
@@ -19562,23 +19597,44 @@ function renderGoalGrid(){
 ['range','tuner','interval','breath','scale'].forEach(step=>{
   document.getElementById('assessCheck'+step).addEventListener('click', ()=>toggleAssessStep(step));
 });
-function toggleAssessStep(step){
-  journeyStepsDone[step] = !journeyStepsDone[step];
+// What each Day 1 step's tool already stores (phase 7, 2.4): a saved range; a Tuner stability day; a Breath Control
+// score; a Scale Run score (the weekly log's 'agility' entries: only Scale Run writes them). Interval Match stores its
+// score where Pitch Match does (pitchScores, the 'pitch' log), so nothing stored tells the two apart: it stays manual.
+function journeyStepEvidence(){
+  if(!profile || !progress) return {};
+  return {
+    range: progress.lowestMidi!==null && progress.lowestMidi!==undefined && progress.highestMidi!==null && progress.highestMidi!==undefined,
+    tuner: Object.values(progress.dailyMetrics||{}).some(d=>(d.stability||[]).length>0),
+    breath: (progress.breathScores||[]).length>0,
+    scale: (progress.weeklyLog||[]).some(e=>e.type==='agility'),
+  };
+}
+function setAssessStep(step, done, auto){
+  journeyStepsDone[step] = done;
   const el = document.getElementById('assessCheck'+step);
-  el.classList.toggle('done', journeyStepsDone[step]);
-  el.textContent = journeyStepsDone[step] ? '✓' : '○';
-  document.querySelector(`.assess-step[data-step="${step}"]`).classList.toggle('done', journeyStepsDone[step]);
-
+  el.classList.toggle('done', done);
+  if(done){ el.innerHTML = '<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg>'; el.setAttribute('aria-label', t(auto ? 'journey_step_auto' : 'journey_step_done')); }
+  else { el.textContent = '○'; el.removeAttribute('aria-label'); }
+  el.title = done && auto ? t('journey_step_auto') : '';
+  document.querySelector(`.assess-step[data-step="${step}"]`).classList.toggle('done', done);
+}
+function syncAssessFromResults(){
+  const ev = journeyStepEvidence();
+  Object.keys(ev).forEach(step=>{ if(ev[step] && !journeyStepsDone[step]) setAssessStep(step, true, true); });
+  assessGoalCheck();
+}
+function assessGoalCheck(){
   const allDone = Object.values(journeyStepsDone).every(v=>v);
   document.getElementById('journeyGoalSection').style.display = allDone ? 'block' : 'none';
   if(allDone && !document.getElementById('goalGrid').children.length) renderGoalGrid();
 }
+function toggleAssessStep(step){
+  setAssessStep(step, !journeyStepsDone[step], false);
+
+  assessGoalCheck();
+}
 document.querySelectorAll('[data-goto-tab]').forEach(btn=>{
-  btn.addEventListener('click', ()=>{
-    const panel = btn.dataset.gotoTab;
-    document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active', b.dataset.panel===panel));
-    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+panel));
-  });
+  btn.addEventListener('click', ()=>enterPanel(btn.dataset.gotoTab)); // through enterPanel: the tool's hooks run, the tab bar follows
 });
 
 document.getElementById('journeyStartBtn').addEventListener('click', async ()=>{
@@ -19616,22 +19672,23 @@ function levelForXp(xp){
   return {level, name: tier.name};
 }
 
+// icons: the House Lights sprite (#hl-…), no emoji (phase 7, 2.4; streak7 had none and printed "undefined")
 const ACHIEVEMENTS = [
-  {id:'first_note', icon:'🎯', get name(){return t('achievement_first_note');}, check:()=>
+  {id:'first_note', icon:'check', get name(){return t('achievement_first_note');}, check:()=>
     ['pitchScores','agilityScores','breathScores'].some(k=>(progress[k]||[]).some(v=>v>=95))},
-  {id:'streak7', get name(){return t('achievement_streak7');}, check:()=>(progress.streak||0)>=7},
-  {id:'key_change', icon:'🎹', get name(){return t('achievement_key_change');}, check:()=>!!progress.usedKeyRecommendation},
-  {id:'harmony', icon:'🎤', get name(){return t('achievement_harmony');}, check:()=>!!progress.usedChoirSolo},
-  {id:'sustain10', icon:'💨', get name(){return t('achievement_sustain10');}, check:()=>(progress.bestBreathDuration||0)>=10},
-  {id:'first_run', icon:'🏃', get name(){return t('achievement_first_run');}, check:()=>(progress.agilityScores||[]).length>0},
-  {id:'range_explorer', icon:'🗺️', get name(){return t('achievement_range_explorer');}, check:()=>
+  {id:'streak7', icon:'flame', get name(){return t('achievement_streak7');}, check:()=>(progress.streak||0)>=7},
+  {id:'key_change', icon:'keys', get name(){return t('achievement_key_change');}, check:()=>!!progress.usedKeyRecommendation},
+  {id:'harmony', icon:'headphones', get name(){return t('achievement_harmony');}, check:()=>!!progress.usedChoirSolo},
+  {id:'sustain10', icon:'breath', get name(){return t('achievement_sustain10');}, check:()=>(progress.bestBreathDuration||0)>=10},
+  {id:'first_run', icon:'steps', get name(){return t('achievement_first_run');}, check:()=>(progress.agilityScores||[]).length>0},
+  {id:'range_explorer', icon:'range', get name(){return t('achievement_range_explorer');}, check:()=>
     progress.lowestMidi!==undefined && progress.highestMidi!==undefined && progress.lowestMidi!==null && (progress.highestMidi-progress.lowestMidi)>=24},
-  {id:'pitch_master', icon:'⭐', get name(){return t('achievement_pitch_master');}, check:()=>{ const s=computeSkillProfile(); return s.pitch!==null && s.pitch>=85; }},
-  {id:'perf_ready', icon:'🏆', get name(){return t('achievement_perf_ready');}, check:()=>!!progress.triedKaraoke || !!progress.triedEmotion},
+  {id:'pitch_master', icon:'score', get name(){return t('achievement_pitch_master');}, check:()=>{ const s=computeSkillProfile(); return s.pitch!==null && s.pitch>=85; }},
+  {id:'perf_ready', icon:'mic', get name(){return t('achievement_perf_ready');}, check:()=>!!progress.triedKaraoke || !!progress.triedEmotion},
   // Choir World (phase 9), from the account's stored readiness
-  {id:'cw_boss', icon:'👹', get name(){return t('achievement_cw_boss');}, check:()=>cwAnyPart(st=>(st.wins||0)>0 || (st.bossesBeaten||0)>0)},
-  {id:'cw_ready', icon:'🎼', get name(){return t('achievement_cw_ready');}, check:()=>cwAnyPart(st=>st.status==='ready')},
-  {id:'cw_yourchoir', icon:'🎤', get name(){return t('achievement_cw_yourchoir');}, check:()=>(rdAll().ycTakes||0)>0},
+  {id:'cw_boss', icon:'medal', get name(){return t('achievement_cw_boss');}, check:()=>cwAnyPart(st=>(st.wins||0)>0 || (st.bossesBeaten||0)>0)},
+  {id:'cw_ready', icon:'choir', get name(){return t('achievement_cw_ready');}, check:()=>cwAnyPart(st=>st.status==='ready')},
+  {id:'cw_yourchoir', icon:'record', get name(){return t('achievement_cw_yourchoir');}, check:()=>(rdAll().ycTakes||0)>0},
 ];
 
 function renderAchievements(gridId){
@@ -19640,9 +19697,11 @@ function renderAchievements(gridId){
   if(typeof checkNewAchievementsForTimeline==='function') checkNewAchievementsForTimeline();
   grid.innerHTML = ACHIEVEMENTS.map(a=>{
     const unlocked = profile ? a.check() : false;
+    const icon = document.getElementById('hl-'+a.icon) ? `<use href="#hl-${a.icon}"/>` : '<circle cx="12" cy="12" r="8"/>'; // a neutral badge
     return `<div class="achievement-card${unlocked?' unlocked':''}">
-      <div class="a-icon">${a.icon}</div>
+      <svg class="hl-icon a-icon" viewBox="0 0 24 24" aria-hidden="true">${icon}</svg>
       <div class="a-name">${a.name}</div>
+      <span class="vc-visually-hidden">${unlocked ? t('achievement_unlocked') : t('achievement_locked')}</span>
     </div>`;
   }).join('');
 }
@@ -19655,11 +19714,11 @@ function renderSnapshotCompare(){
   const rows = [{key:'pitch',label:t('skill_pitch')},{key:'range',label:t('skill_range')},{key:'breath',label:t('skill_breath')},{key:'agility',label:t('skill_agility')},{key:'expression',label:t('skill_expression')}];
   wrap.innerHTML = rows.map(r=>{
     const b = before[r.key], a = after[r.key];
-    if(b===null && a===null) return `<div class="snapshot-row"><span>${r.label}</span><span class="fine-print">${t('snapshot_nodatayet')}</span></div>`;
-    if(b===null) return `<div class="snapshot-row"><span>${r.label}</span><span class="fine-print">${t('snapshot_nobaselinefor')}</span></div>`;
+    if(b===null && a===null) return `<div class="vc-dim snapshot-row"><span>${r.label}</span><span class="hl-meta">${t('snapshot_nodatayet')}</span></div>`;
+    if(b===null) return `<div class="vc-dim snapshot-row"><span>${r.label}</span><span class="hl-meta">${t('snapshot_nobaselinefor')}</span></div>`;
     const delta = (a!==null ? a : b) - b;
     const deltaClass = delta>0 ? 'up' : 'flat';
-    return `<div class="snapshot-row">
+    return `<div class="vc-dim snapshot-row">
       <span>${r.label}</span>
       <span>${b}% → ${a!==null?a:'—'}% <span class="snapshot-delta ${deltaClass}">${delta>0?'+':''}${a!==null?delta:0}</span></span>
     </div>`;
@@ -19754,6 +19813,7 @@ function renderJourney(){
   if(!profile || !profile.day1StartDate){
     assessCard.style.display='block';
     inProgress.style.display='none';
+    syncAssessFromResults();
     return;
   }
   assessCard.style.display='none';
@@ -19775,6 +19835,7 @@ function renderJourney(){
   // since program day (from Day 1 assessment) and billing day (from account creation)
   // can genuinely differ if the assessment wasn't done immediately.
   const trialRow = document.getElementById('journeyTrialRow');
+  trialRow.hidden = hasActiveSubscription() || !isInTrial(); // a quiet line, only while a trial runs (phase 7, 2.4)
   if(hasActiveSubscription()){
     document.getElementById('journeyTrialText').textContent = `${t('journey_billing_prefix')} ${planLabel(profile.subscriptionPlan)}${t('journey_billing_activeplan_suffix')}`;
     document.getElementById('journeyTrialFill').style.width='100%';
