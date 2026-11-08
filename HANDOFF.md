@@ -511,6 +511,13 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   own commit); Expression "Not in your profile yet"; "How you compare" hidden; Dashboard → Progress; HOUSE_LIGHTS v2.0.
   Guards first (youstates.js), build 2.1–2.10, midway review/phase7-part1 after 2.3, then review/phase7. No merge or
   deploy before the user's review. Rollback target dpl_6EgEe6idPGDet91hDsVkkwc2YGXx.
+- 2.9 clarified by the user (PHASE7.md "2.9 clarified"): pool the last 20 solo pitch scores with the last 20 Choir World
+  run pitches (solo scores have no time). Guards 3fc88f0: youstates.js (gate; baseline equal on 4 states), youSeed.js,
+  voicecard.js (master 16/16), contrast --you, copyscan --you (baseline 145 §7 / 142 emoji). Logs logs/checks7/.
+- Built: 2.1 + 2.2 5e32178 (one commit, interleaved), 2.3 bec95e6. **review/phase7-part1 42a3ee5** pushed (midway
+  checkpoint, 40 shots, no contrast item, You lit). Found: the 14-day activity bars never showed (CSS, fixed); Today's
+  Plan Go skipped enterPanel (fixed); **Reset local data erases the account's saved progress** (saveProgress), its
+  confirm said "locally": copy made accurate, behaviour unchanged (decision for the user).
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
