@@ -2120,6 +2120,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-journey .snapshot-row{border-bottom:0;padding:var(--hl-s3) 0;margin:0;}
   #panel-journey .snapshot-delta{background:none !important;padding:0 !important;color:var(--hl-ink-2);margin-left:var(--hl-s2);}
   #panel-journey .snapshot-delta.up{color:var(--hl-ok);}
+  /* ---- PERSONAL RECORDS (phase 7, 2.5): plain sections of rows ---- */
+  #panel-records .records-sec{margin-top:var(--hl-s5);}
+  #panel-records .record-cat-head{margin:0 0 var(--hl-s1);font-family:inherit;font-size:var(--hl-t-label);color:var(--hl-ink-3);}
+  #panel-records .record-row{display:flex;justify-content:space-between;align-items:baseline;gap:var(--hl-s4);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);border-bottom:0;}
+  #panel-records .record-label{font-size:var(--hl-t-body);color:var(--hl-ink);}
+  #panel-records .record-val{font-size:var(--hl-t-body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--hl-ink);text-align:right;}
+  #panel-records .record-val.untracked{font-weight:400;font-size:var(--hl-t-small);color:var(--hl-ink-3);}
   /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
   .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
   .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
@@ -5300,21 +5307,26 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- PERSONAL RECORDS PANEL -->
   <section class="panel" id="panel-records">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="records_title">🏆 Personal Records</div>
-      <div class="j-sub" data-i18n="records_sub">Every real best, consolidated — nothing here is invented if the underlying activity hasn't happened yet.</div>
+      <div class="j-title" data-i18n="records_title">Personal Records</div>
+      <div class="j-sub" data-i18n="records_sub">Your bests, from what you've sung. A record appears once you've done the activity.</div>
     </div>
-    <div class="key-card">
-      <div class="record-cat-head" data-i18n="records_cat_voice">🎤 Vocal Range &amp; Technique</div>
+    <!-- phase 7 (PHASE7.md 2.5): headings without emoji; Songs from Karaoke's best per song; a Choir World section -->
+    <section class="hl-section records-sec">
+      <div class="record-cat-head hl-label" data-i18n="records_cat_voice">Vocal Range &amp; Technique</div>
       <div id="recordsListVoice"></div>
-    </div>
-    <div class="key-card" style="margin-top:16px;">
-      <div class="record-cat-head" data-i18n="records_cat_world">🗺️ Vocal World</div>
+    </section>
+    <section class="hl-section records-sec">
+      <div class="record-cat-head hl-label" data-i18n="records_cat_world">Vocal World</div>
       <div id="recordsListWorld"></div>
-    </div>
-    <div class="key-card" style="margin-top:16px;">
-      <div class="record-cat-head" data-i18n="records_cat_songs">🎵 Songs</div>
+    </section>
+    <section class="hl-section records-sec">
+      <div class="record-cat-head hl-label" data-i18n="records_cat_songs">Songs</div>
       <div id="recordsListSongs"></div>
-    </div>
+    </section>
+    <section class="hl-section records-sec" id="recordsChoirSec">
+      <div class="record-cat-head hl-label" data-i18n="cw_label">Choir World</div>
+      <div id="recordsListChoir"></div>
+    </section>
   </section>
 
   <!-- PROFILE PANEL -->
@@ -7698,9 +7710,9 @@ const TRANSLATIONS = {
     pricing_yearly_f2:'Billed once a year',
     pricing_yearly_f3:'Same real features, lower cost per month',
     pricing_yourjourney_label:'Your 21-Day Journey',
-    records_cat_songs:'🎵 Songs',
-    records_cat_voice:'🎤 Vocal Range & Technique',
-    records_cat_world:'🗺️ Vocal World',
+    records_cat_songs:"Songs",
+    records_cat_voice:"Vocal Range & Technique",
+    records_cat_world:"Vocal World",
     rift_desc:'Each round is randomly one of four real drills — Pitch, Interval Jump, Sustain Hold, or Quick Catch — with a fresh real target every time. Same capture engine as Pitch Match throughout; only which challenge shows up next is a surprise.',
     rift_h2:'60 seconds, unpredictable real rounds',
     rift_reuses_tag:'REUSES PITCH MATCH ENGINE',
@@ -8374,6 +8386,12 @@ const TRANSLATIONS = {
     achievement_locked:"Locked",
     journey_step_auto:"Done: from your saved result",
     journey_step_done:"Done",
+    record_label_best_pitch_last20:"Best pitch (of your last 20)",
+    record_label_song_best:"Best song (Karaoke Coach)",
+    record_label_cw_best_run:"Best run score",
+    record_label_cw_bosses:"Bosses beaten",
+    record_label_cw_ready:"Parts Ready",
+    record_note_cw_none:"None yet",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9320,9 +9338,9 @@ const TRANSLATIONS = {
     pricing_yearly_f2:'Facturé une fois par an',
     pricing_yearly_f3:'Mêmes vraies fonctionnalités, coût mensuel inférieur',
     pricing_yourjourney_label:'Votre parcours de 21 jours',
-    records_cat_songs:'🎵 Chansons',
-    records_cat_voice:'🎤 Tessiture vocale et technique',
-    records_cat_world:'🗺️ Monde Vocal',
+    records_cat_songs:"Chansons",
+    records_cat_voice:"Tessiture vocale et technique",
+    records_cat_world:"Monde Vocal",
     rift_desc:'Chaque tour est aléatoirement l\'un des quatre vrais exercices — Justesse, Saut d\'Intervalle, Tenue de Soutien, ou Capture Rapide — avec une nouvelle vraie cible à chaque fois. Même moteur de capture que Pitch Match tout du long ; seul le prochain défi est une surprise.',
     rift_h2:'60 secondes, vrais tours imprévisibles',
     rift_reuses_tag:'RÉUTILISE LE MOTEUR PITCH MATCH',
@@ -9996,6 +10014,12 @@ const TRANSLATIONS = {
     achievement_locked:"Verrouillé",
     journey_step_auto:"Fait : d'après votre résultat enregistré",
     journey_step_done:"Fait",
+    record_label_best_pitch_last20:"Meilleure justesse (sur vos 20 dernières)",
+    record_label_song_best:"Meilleure chanson (Coach Karaoké)",
+    record_label_cw_best_run:"Meilleur score de passage",
+    record_label_cw_bosses:"Boss vaincus",
+    record_label_cw_ready:"Voix prêtes",
+    record_note_cw_none:"Aucun pour l'instant",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10942,9 +10966,9 @@ const TRANSLATIONS = {
     pricing_yearly_f2:'Facturado una vez al año',
     pricing_yearly_f3:'Las mismas funciones reales, menor costo por mes',
     pricing_yourjourney_label:'Tu recorrido de 21 días',
-    records_cat_songs:'🎵 Canciones',
-    records_cat_voice:'🎤 Rango vocal y técnica',
-    records_cat_world:'🗺️ Mundo Vocal',
+    records_cat_songs:"Canciones",
+    records_cat_voice:"Rango vocal y técnica",
+    records_cat_world:"Mundo Vocal",
     rift_desc:'Cada ronda es aleatoriamente uno de cuatro ejercicios reales — Afinación, Salto de Intervalo, Sostenido, o Captura Rápida — con un nuevo objetivo real cada vez. Mismo motor de captura que Precisión de nota en todo momento; solo cuál desafío aparece a continuación es una sorpresa.',
     rift_h2:'60 segundos, rondas reales impredecibles',
     rift_reuses_tag:'REUTILIZA EL MOTOR DE PRECISIÓN DE NOTA',
@@ -11618,6 +11642,12 @@ const TRANSLATIONS = {
     achievement_locked:"Bloqueado",
     journey_step_auto:"Hecho: según tu resultado guardado",
     journey_step_done:"Hecho",
+    record_label_best_pitch_last20:"Mejor afinación (de tus últimas 20)",
+    record_label_song_best:"Mejor canción (Coach de Karaoke)",
+    record_label_cw_best_run:"Mejor puntuación de pasada",
+    record_label_cw_bosses:"Jefes vencidos",
+    record_label_cw_ready:"Voces listas",
+    record_note_cw_none:"Ninguno aún",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12564,9 +12594,9 @@ const TRANSLATIONS = {
     pricing_yearly_f2:'Yılda bir kez faturalandırılır',
     pricing_yearly_f3:'Aynı gerçek özellikler, aylık daha düşük maliyet',
     pricing_yourjourney_label:'21 Günlük Yolculuğunuz',
-    records_cat_songs:'🎵 Şarkılar',
-    records_cat_voice:'🎤 Ses Aralığı ve Teknik',
-    records_cat_world:'🗺️ Vokal Dünyası',
+    records_cat_songs:"Şarkılar",
+    records_cat_voice:"Ses Aralığı ve Teknik",
+    records_cat_world:"Vokal Dünyası",
     rift_desc:'Her tur, rastgele dört gerçek egzersizden biridir — Perde, Aralık Sıçraması, Sürdürme Tutuşu veya Hızlı Yakalama — her seferinde yeni bir gerçek hedefle. Boyunca Nota Eşleştirme ile aynı yakalama motoru; sadece bir sonraki hangi meydan okumanın geleceği bir sürprizdir.',
     rift_h2:'60 saniye, öngörülemez gerçek turlar',
     rift_reuses_tag:'NOTA EŞLEŞTİRME MOTORUNU YENİDEN KULLANIR',
@@ -13240,6 +13270,12 @@ const TRANSLATIONS = {
     achievement_locked:"Kilitli",
     journey_step_auto:"Tamam: kayıtlı sonucuna göre",
     journey_step_done:"Tamam",
+    record_label_best_pitch_last20:"En iyi perde (son 20 puanından)",
+    record_label_song_best:"En iyi şarkı (Karaoke Koçu)",
+    record_label_cw_best_run:"En iyi koşu puanı",
+    record_label_cw_bosses:"Yenilen boss'lar",
+    record_label_cw_ready:"Hazır partiler",
+    record_note_cw_none:"Henüz yok",
   },
 };
 let currentLanguage = 'en';
@@ -21594,7 +21630,7 @@ function renderRecordsList(){
   if(!voiceWrap) return;
   if(!profile){
     voiceWrap.innerHTML = `<p class="fine-print">${t('records_signin_msg')}</p>`;
-    worldWrap.innerHTML = ''; songsWrap.innerHTML = '';
+    worldWrap.innerHTML = ''; songsWrap.innerHTML = ''; document.getElementById('recordsListChoir').innerHTML = '';
     return;
   }
   const v = personalRecordValues();
@@ -21606,7 +21642,7 @@ function renderRecordsList(){
   const voiceRows = [
     {label:t('record_label_highest_note'), val: v.highestNote},
     {label:t('record_label_lowest_note'), val: v.lowestNote},
-    {label:t('record_label_best_pitch_acc'), val: v.bestPitchAcc},
+    {label:t('record_label_best_pitch_last20'), val: v.bestPitchAcc}, // the best of the last 20 kept (phase 7, 2.5)
     {label:t('record_label_best_agility'), val: v.bestAgility},
     {label:t('record_label_longest_breath'), val: v.longestBreath},
     {label:t('record_label_best_stability'), val: v.bestStability},
@@ -21618,14 +21654,32 @@ function renderRecordsList(){
     {label:t('record_label_boss_wins'), val: v.bossWins},
     {label:t('record_label_harmony_acc'), val: v.harmonyAcc},
   ];
-  const songsRows = [
-    {label:t('record_label_keychange'), val: null, note:t('record_note_keychange')},
-    {label:t('record_label_song_score'), val: null, note:t('record_note_song_score')},
+  // Songs: Karaoke Coach's best per song (progress.songBestScores, (pitch + timing) / 2); Choir World from the account's
+  // readiness record (phase 7, 2.5: the old rows said song scores weren't saved)
+  const r2 = recordValues2();
+  const songsRows = r2.songs.length ? r2.songs.map(x=>({label:x.title, val:x.score+'%'}))
+    : [{label:t('record_label_song_best'), val:null, note:t('passport_singfulltake')}];
+  const choirRows = [
+    {label:t('record_label_cw_best_run'), val: r2.cwBestRun!==null ? r2.cwBestRun+'%' : null, note:t('record_note_cw_none')},
+    {label:t('record_label_cw_bosses'), val: r2.cwBosses ? String(r2.cwBosses) : null, note:t('record_note_cw_none')},
+    {label:t('record_label_cw_ready'), val: r2.cwReady ? String(r2.cwReady) : null, note:t('record_note_cw_none')},
   ];
 
   voiceWrap.innerHTML = voiceRows.map(rowHtml).join('');
   worldWrap.innerHTML = worldRows.map(rowHtml).join('');
   songsWrap.innerHTML = songsRows.map(rowHtml).join('');
+  document.getElementById('recordsListChoir').innerHTML = choirRows.map(rowHtml).join('');
+}
+// The records personalRecordValues() doesn't hold (Coach and Home read that one): Karaoke's best per song, and Choir
+// World's best run score, bosses beaten and parts Ready (summed over the stored parts).
+function recordValues2(){
+  const sb = (progress && progress.songBestScores) || {};
+  const songs = Object.keys(sb).filter(id=>SONGS[id]).map(id=>({id, title:songTitle(id), score:sb[id]})).sort((a,b)=>b.score-a.score);
+  const cr = rdAll(), runs = cr.runs || [], parts = cwStoredParts();
+  return {songs,
+    cwBestRun: runs.length ? Math.max(...runs.map(r=>r.score||0)) : null,
+    cwBosses: parts.reduce((a,x)=>a+(x.st.bossesBeaten||0), 0),
+    cwReady: parts.filter(x=>x.st.status==='ready').length};
 }
 
 // The Coach tab (phase 3): Today's focus (signed in) and each tool's stored personal best ("Best 84%"; the Range Finder
@@ -21657,8 +21711,9 @@ function renderCoachHub(){
 /* ---------------- The You tab (phase 7, 2.1): who you are, the Skill Profile, every You screen as a row ---------------- */
 const YOU_LANG_NAMES = {en:'English', fr:'Français', es:'Español', tr:'Türkçe'};
 function youRecordsCount(){
-  const v = personalRecordValues();
-  return Object.values(v).filter(x=>x!==null && x!==undefined).length;
+  const v = personalRecordValues(), r2 = recordValues2();
+  return Object.values(v).filter(x=>x!==null && x!==undefined).length + r2.songs.length
+    + [r2.cwBestRun, r2.cwBosses || null, r2.cwReady || null].filter(x=>x!==null).length;
 }
 function renderYouHub(){
   const so = document.getElementById('youSignedOut'), si = document.getElementById('youSignedIn');
