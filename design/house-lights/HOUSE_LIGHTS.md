@@ -1,4 +1,29 @@
-# House Lights: the VoxCoach design system (v1.9)
+# House Lights: the VoxCoach design system (v2.0)
+
+v2.0 (2026-11-08, phase 7, spec `PHASE7.md`): Progress and identity, the You screens. **Structure:** (a) **You**
+(`panel-you-hub`) is the one place for you: signed out, one raised block with Sign in; signed in, an identity block
+(raised: avatar initial, name, "Level n · tier", an `.hl-meter` for XP to the next level from `levelForXp`, streak and
+sessions as two quiet figures), the **Skill Profile drawn only here** (the five rings; the summary as keyed rows from
+`skillSummary()`: Level read, Strongest, Needs work, Not scored yet; an `hl-measure` naming where each ring comes from),
+then every You screen as an `.hl-item` row with one value: Journey (day n of 21), Progress (this week's challenge %),
+Personal Records (n records), Vocal Passport (range), Voice Health (today's vocal load %), Choir World (parts'
+readiness, only with runs; opens the Choir Passport), Teacher Dashboard (Teacher plan only), Plan & Pricing, Profile &
+settings. (b) **Progress** (was Dashboard; `panel-dashboard` and every ID kept; fr Progrès, es Progreso, tr İlerleme):
+Today's Plan as rows through `enterPanel` with one rule-based `hl-measure` line, the Weekly Challenge as a raised block
+with its meter, range progress, the 14-day activity, Unified Progress (voice / ink / ink-3 dashed), Share. (c) **Profile
+& settings**: the Voice Card, then Settings (language, theme, playback volume, feedback) and Account (Sign out, Reset
+local data). (d) What lives elsewhere is hidden in place, IDs kept (`.dash-elsewhere`, `.profile-elsewhere`): the
+Fingerprint on the Passport, achievements on the Journey, records on Personal Records, the Skill Tree on Vocal World.
+(e) **Journey**: the day and week as the header, the trial a quiet line only during a trial, curriculum rows, one
+stats row, achievements with sprite icons (a locked one in ink-3, never opacity), Day 1 vs today as dimension rows;
+Day 1 steps tick themselves from stored results. (f) **Records**: plain sections; Songs from Karaoke's best per song; a
+Choir World section. (g) **Passport**: identity rows, the Fingerprint, the timeline rendered in the current language
+from each event's data, dates through `Intl`. (h) **Voice Health** adds vocal load (today on a meter, the last 14 days).
+(i) **The Voice Card** is drawn in House Lights: an ink card, paper text, voice bars, Archivo, the same in both themes.
+**Decisions:** Pitch pools the last 20 solo scores with the last 20 Choir World run pitches (2.9, its own commit);
+Expression stays out of the profile ("Not in your profile yet") until the scoring batch fixes it; "How you compare"
+(invented people) is hidden like the Director Dashboard; the UTC day is a later item. No stage on these screens: the
+house stays up. Locked achievements and every count on these screens pass 4.5:1 (`contrast.js --you`).
 
 v1.9 (2026-11-04, phase 6, spec `PHASE6.md`): the six Songs-tab solo tools and the Songs tab. Decisions: (a) Names:
 Choir World's report keeps "Performance Report"; Performance Director's result is "Your performance" (fr "Votre
@@ -211,6 +236,8 @@ to recreate (with `vc-` or area prefixes), not as a library.
 - Choir World song page: a sub-navigation (Rehearse · Song Lab · Trainers · Your Choir · Passport)
   that shows/hides the **existing** sections. Keep every element ID.
 - Every result ends with one "Next" action chosen from existing signals, plus "Sing it again".
+- **You (v2.0):** the hub holds who you are and the Skill Profile; every other You screen is a row on it. A section
+  that belongs to another screen is hidden in place (IDs kept), never duplicated.
 - Group overlaps without removing anything: the five progress screens under You; Smart Warmup
   and the pre-session warm-up become one warm-up (decide the merge in that phase, ask first).
 - **The hidden legacy tab bar (`nav.tabs.legacy-tabs`) stays. Never remove it.** It is the router:
@@ -322,7 +349,7 @@ time. Phases start only after `wip/noise-gate` and `warmup` are merged into mast
    Microscope, the mixer as channel strips.
 6. **Performance:** Studio as the stage; the Performance Report.
 7. **Progress and identity:** You hub, Journey, Dashboard, Records, both Passports, Voice
-   Health, Profile.
+   Health, Profile. Done in v2.0 (Dashboard renamed Progress; Choir World's Passport stays with Choir World).
 8. **Vocal World games.**
 9. **Everything else:** onboarding, sign-up, Plans, Teacher, Feedback, remaining copy in all
    four languages, all remaining emoji.

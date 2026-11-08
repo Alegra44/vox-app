@@ -467,9 +467,8 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **review/phase6-prod** (9555f0f, orphan): shots6.js on production (84 shots, the 6.1 fixes in them, sheets/phase6.jpg,
   states.json: no page errors, house down on all 24 stages), checks/ with every log. **The rollback target for the
   next deploy is dpl_6EgEe6idPGDet91hDsVkkwc2YGXx** (phase 6, live and checked).
-- Branch deletion (review/phase6 60173be, -before 24fa630, -fix fc9e3b5, review/phase5-prod 7532270, hotfix/splash
-  522a2d8, all pushed and identical on GitHub; hotfix/splash is in master) was blocked by Claude Code's permission
-  check; left for the user.
+- Deleted by the user 2026-11-08 (local and GitHub): review/phase6 60173be, -before 24fa630, -fix fc9e3b5,
+  review/phase5-prod 7532270, hotfix/splash 522a2d8 (in master).
 - 6.1 (PHASE6.md "6.1"): 564d63f the duet's link in ink; 9152993 Karaoke's stage up to 760 px; 6eae11c the startup
   safety net (#bootError) + bootcheck's forced-error case. Checks (logs checks61-*): hooks, bootcheck 9/0, house --only6
   172/0 on rerun (two Supabase 503s first), contrast, copyscan, warm-up tracking. review/phase6-fix fc9e3b5.
@@ -496,6 +495,38 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   (2a) the tuner drift-off colour fix, first commit on redesign/phase7, proven by 10 contrast runs of the drift-off
   moment in Light and Dark (0 below 3:1), ships with phase 7; (2b) the read-only phase 7 survey + review/phase7-before.
   Push both, report, stop.
+- **1 DONE** 2026-11-08 (4748c1f, master): house 46 → 69 min, contrast 42 → 63 min (measured on production 2026-11-08).
+- **2a DONE** 6372713: the lock fill's opacity is a registered property (`--hl-lock-a`); the ring's text reads its
+  colour from it (on-voice above 0.75, stage ink 0.75–0.15, own colour below), for the Tuner and Stay in Key; Breath's
+  timer no longer turns on-voice. contrast.js --drift 10 (f8c86c3): 0 below 3:1 in 10 drift-off runs × Light/Dark
+  (lowest 4.34); master fails 20/20. rings7.js: Stay in Key and Breath had the same fault on master (1:1), fixed.
+  contrast.js now reads color(srgb …) (color-mix): before, such colours were skipped. hooks 21/0. Logs
+  scripts/design-verify/logs/checks7-tuner/.
+- **2b DONE** ecbf1e2: design/house-lights/PHASE7_SURVEY.md, shots7before.js, survey7/copy7.py. review/phase7-before
+  d0d488b (orphan: 42 shots, sheets/before.jpg, states.json, notes.txt). Headlines: Expression never scored though two
+  tools store it; the "achievement icon" is the 7-day streak printing "undefined"; invented people in Dashboard's "How
+  you compare"; Records says song scores aren't saved; the day is the UTC date; Voice Health ignores Vocal Load; Choir
+  World vs Skill Profile: five options described. Waiting for the user's phase 7 spec.
+- **Phase 7 spec given 2026-11-08** (PHASE7.md "Phase 7 spec"): option 2 (Choir World run pitches in Pitch, 2.9, its
+  own commit); Expression "Not in your profile yet"; "How you compare" hidden; Dashboard → Progress; HOUSE_LIGHTS v2.0.
+  Guards first (youstates.js), build 2.1–2.10, midway review/phase7-part1 after 2.3, then review/phase7. No merge or
+  deploy before the user's review. Rollback target dpl_6EgEe6idPGDet91hDsVkkwc2YGXx.
+- 2.9 clarified by the user (PHASE7.md "2.9 clarified"): pool the last 20 solo pitch scores with the last 20 Choir World
+  run pitches (solo scores have no time). Guards 3fc88f0: youstates.js (gate; baseline equal on 4 states), youSeed.js,
+  voicecard.js (master 16/16), contrast --you, copyscan --you (baseline 145 §7 / 142 emoji). Logs logs/checks7/.
+- Built: 2.1 + 2.2 5e32178 (one commit, interleaved), 2.3 bec95e6. **review/phase7-part1 42a3ee5** pushed (midway
+  checkpoint, 40 shots, no contrast item, You lit). Found: the 14-day activity bars never showed (CSS, fixed); Today's
+  Plan Go skipped enterPanel (fixed); **Reset local data erases the account's saved progress** (saveProgress), its
+  confirm said "locally": copy made accurate, behaviour unchanged (decision for the user).
+- Built 2.4 bb91540, 2.5 4ca829d, 2.6 d2f204d, 2.7 17901f6, 2.8 cafdca3, 2.9 7abbf8d (own commit), 2.10 43a0cdc
+  (PHASE7_COPY.md, copyscan --you 0/0), HOUSE_LIGHTS v2.0 eacb477, checks7.sh. Interval Match's Day 1 step stays manual
+  (its score is stored with Pitch Match's). **Next:** `bash scripts/design-verify/checks7.sh all` (was started
+  2026-11-08), then shots7.js → review/phase7.
+- **Phase 7 DONE 2026-11-08, reported; waiting for the user's review.** Checks (logs checks7-*): youstates en/fr equal
+  except expected; contrast --you 0; full contrast: Profile row gone, Light Scale Run dots 4.42:1 on their color-mix tint
+  (existing, newly measured); copyscan --you 0/0; hooks 21/0, navcheck, bootcheck 9/0, home 102/0 (script updated for
+  2.5; first run a sign-up timeout), levelup, p9, voicecard 16/16, batch1, picker. **review/phase7 3c49ef9** (92 shots,
+  sheet, notes). No merge or deploy before the user's review.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
@@ -512,6 +543,16 @@ These change scores, so they wait until the redesign is finished (survey items i
    with the same formula and the same label.
 5. **Rhythm / Entrance & Cutoff latency** (from 4b 2.4, see "Later accuracy item" above): output and input latency land
    in every onset offset as "late".
+
+6. **Expression joins the Skill Profile after its fix** (PHASE7.md decision): Emotional Singing and Harmony Arena
+   already store `expressionScores`; once the batch fixes Expression's measurement (a steady tone scores 51), add it
+   to `computeSkillProfile` from those stored scores. Until then it reads "Not in your profile yet".
+
+## Later: the day is the UTC date (PHASE7_SURVEY.md item 5; decided in PHASE7.md, not in phase 7)
+
+`todayStr()` is `toISOString().slice(0,10)`: streaks, `history`, `dailyMetrics`, the Journey day and the vocal-load
+budget roll over at UTC midnight, and the 14-day labels print the day before west of UTC. Not fixed in phase 7 because
+the vocal-load budget and the server share that day; needs a plan that moves both together.
 
 ## Waiting on the user (don't start without a go-ahead)
 

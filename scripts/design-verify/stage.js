@@ -14,6 +14,20 @@ const STIM = {
   silence: path.join(TESTDATA, 'design-silence.wav'),
 };
 const STEADY_MIDI = 69; // A4: S1 is centred on it
+// "drift" (phase 7, 2a): S1 for 2.0 s, then the same voice 25 cents flat for 1.2 s (resampled), so the looping fake mic
+// locks the Tuner, drifts off it (-25 ct: off the 6 ct lock) and comes back every 3.2 s. Built once from S1.
+STIM.drift = path.join(TESTDATA, 'design-drift.wav');
+function ensureDrift() {
+  if (fs.existsSync(STIM.drift)) return;
+  execFileSync('python3', ['-I', '-c', [
+    'import sys, wave, array',
+    'r = wave.open(sys.argv[1]); fr = r.getframerate(); a = array.array("h", r.readframes(r.getnframes())); r.close()',
+    'on = a[fr*5 : fr*7]',                                   // 2.0 s of the held note, past its onset
+    'k = 2 ** (25/1200); n = int(fr*1.2); src = a[fr*10 : fr*10 + int(n*k) + 2]',
+    'off = array.array("h", (int(src[int(i*k)] + (src[int(i*k)+1] - src[int(i*k)]) * (i*k - int(i*k))) for i in range(n)))',
+    'w = wave.open(sys.argv[2], "wb"); w.setnchannels(1); w.setsampwidth(2); w.setframerate(fr)',
+    'w.writeframes((on + off).tobytes()); w.close()'].join('\n'), STIM.steady, STIM.drift]);
+}
 
 function ensureStimuli() {
   for (const k of ['steady', 'sharp']) if (!fs.existsSync(STIM[k])) throw new Error(`${STIM[k]} missing: run node scripts/vq-verify/vibfix.js ${k === 'steady' ? 'S1' : 'W2'} once first`);
@@ -121,4 +135,4 @@ async function runStates(page, stim, onState, only = null) {
 const STATE_STIM = { steady: ['tuner-idle', 'tuner-live-locked', 'tuner-result', 'pitch-idle', 'pitch-cue', 'pitch-live', 'pitch-result-heard', 'pitch-result-measure', 'breath-live', 'warmup-overlay'],
   sharp: ['tuner-live-unlocked'], silence: ['pitch-result-noheard'] };
 
-module.exports = { openWarmup, closeWarmup, houseIs, runStates, STATE_STIM, STIM, STEADY_MIDI, ensureStimuli, launchMic, warmMic, startTuner, tunerRunning, stopTuner, openPitch, clickPitch, pitchBusy, waitPitchDone };
+module.exports = { ensureDrift, openWarmup, closeWarmup, houseIs, runStates, STATE_STIM, STIM, STEADY_MIDI, ensureStimuli, launchMic, warmMic, startTuner, tunerRunning, stopTuner, openPitch, clickPitch, pitchBusy, waitPitchDone };
