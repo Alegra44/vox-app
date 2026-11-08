@@ -8078,7 +8078,7 @@ const TRANSLATIONS = {
     fingerprint_all5tracked:'All 5 categories tracked — updated from your real, current Skill Profile.',
     fingerprint_of5_suffix:'of 5 categories have real data so far — dashed points mean genuinely not tracked yet, not a zero score.',
     voicecard_title:'My Voice Today', voicecard_harmony:'Harmony', voicecard_nottracked:'Not tracked yet',
-    voicecard_daystreak:'day streak', voicecard_level:'Level', voicecard_footer:'Real data, real progress — VoxCoach',
+    voicecard_daystreak:'day streak', voicecard_level:'Level', voicecard_footer:"Measured from your singing with VoxCoach",
     voicecard_note_real:'Every number above is real — nothing staged for the screenshot.',
     voicecard_note_practice:'Practice a bit first — this card is honest, so it needs real numbers to show.',
     songdifficulty_alllevels:'All levels', songdifficulty_fitsrange:'Fits comfortably in your captured range',
@@ -9707,7 +9707,7 @@ const TRANSLATIONS = {
     fingerprint_all5tracked:'Les 5 catégories sont suivies — mis à jour depuis votre vrai Profil de compétences actuel.',
     fingerprint_of5_suffix:'catégories sur 5 ont de vraies données jusqu\'ici — les points en pointillés signifient qu\'ils ne sont vraiment pas encore suivis, pas un score nul.',
     voicecard_title:'Ma voix aujourd\'hui', voicecard_harmony:'Harmonie', voicecard_nottracked:'Pas encore suivi',
-    voicecard_daystreak:'jours de série', voicecard_level:'Niveau', voicecard_footer:'Données réelles, progrès réel — VoxCoach',
+    voicecard_daystreak:'jours de série', voicecard_level:'Niveau', voicecard_footer:"Mesuré à partir de votre chant avec VoxCoach",
     voicecard_note_real:'Chaque chiffre ci-dessus est réel — rien n\'est mis en scène pour la capture d\'écran.',
     voicecard_note_practice:'Pratiquez un peu d\'abord — cette carte est honnête, elle a donc besoin de vrais chiffres à afficher.',
     songdifficulty_alllevels:'Tous niveaux', songdifficulty_fitsrange:'S\'inscrit confortablement dans votre tessiture capturée',
@@ -11336,7 +11336,7 @@ const TRANSLATIONS = {
     fingerprint_all5tracked:'Las 5 categorías están registradas — actualizado desde tu verdadero Perfil de habilidades actual.',
     fingerprint_of5_suffix:'de 5 categorías tienen datos reales hasta ahora — los puntos discontinuos significan que genuinamente aún no están registrados, no una puntuación de cero.',
     voicecard_title:'Mi voz hoy', voicecard_harmony:'Armonía', voicecard_nottracked:'Aún no registrado',
-    voicecard_daystreak:'días de racha', voicecard_level:'Nivel', voicecard_footer:'Datos reales, progreso real — VoxCoach',
+    voicecard_daystreak:'días de racha', voicecard_level:'Nivel', voicecard_footer:"Medido a partir de tu canto con VoxCoach",
     voicecard_note_real:'Cada número de arriba es real — nada preparado para la captura de pantalla.',
     voicecard_note_practice:'Practica un poco primero — esta tarjeta es honesta, así que necesita números reales para mostrar.',
     songdifficulty_alllevels:'Todos los niveles', songdifficulty_fitsrange:'Encaja cómodamente en tu rango capturado',
@@ -12965,7 +12965,7 @@ const TRANSLATIONS = {
     fingerprint_all5tracked:'Tüm 5 kategori takip ediliyor — gerçek, güncel Yetenek Profilinizden güncellendi.',
     fingerprint_of5_suffix:'/5 kategoride şimdiye kadar gerçek veri var — kesikli noktalar gerçekten henüz takip edilmediği anlamına gelir, sıfır puan değil.',
     voicecard_title:'Bugün Sesim', voicecard_harmony:'Armoni', voicecard_nottracked:'Henüz takip edilmedi',
-    voicecard_daystreak:'günlük seri', voicecard_level:'Seviye', voicecard_footer:'Gerçek veri, gerçek ilerleme — VoxCoach',
+    voicecard_daystreak:'günlük seri', voicecard_level:'Seviye', voicecard_footer:"VoxCoach ile şarkı söyleyişinden ölçüldü",
     voicecard_note_real:'Yukarıdaki her sayı gerçek — ekran görüntüsü için hiçbir şey ayarlanmadı.',
     voicecard_note_practice:'Önce biraz pratik yapın — bu kart dürüst, bu yüzden gösterecek gerçek sayılara ihtiyacı var.',
     songdifficulty_alllevels:'Tüm seviyeler', songdifficulty_fitsrange:'Yakalanan ses aralığınıza rahatça sığıyor',
@@ -23725,65 +23725,54 @@ document.getElementById('eveRetryBtn')?.addEventListener('click', ()=>{
 function renderVoiceCard(){
   const canvas = document.getElementById('voiceCardCanvas');
   if(!canvas || !profile) return;
+  // House Lights (phase 7, 2.7): an ink card, paper text, your voice colour for the bars, Archivo only; the same in both
+  // themes (it's an image you share). The voice is the dark theme's (#8A96FF): on ink it reads, the light theme's doesn't.
+  const C = {ink:'#111316', paper:'#F2F3EF', ink2:'#B4B8BF', ink3:'#8C929B', track:'#3C414A', voice:'#8A96FF'}; // --hl-ink (light), --hl-bg (light), dark --hl-ink-2 / -3 / --hl-rule-strong / --hl-voice
+  const font = (getComputedStyle(document.documentElement).getPropertyValue('--hl-font') || 'Archivo, sans-serif').trim();
+  if(document.fonts && document.fonts.status!=='loaded' && !renderVoiceCard._waiting){
+    renderVoiceCard._waiting = true; document.fonts.ready.then(()=>{ renderVoiceCard._waiting = false; renderVoiceCard(); });
+  }
   const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-
-  ctx.fillStyle = '#0e0d0b';
-  ctx.fillRect(0,0,W,H);
-  const grad = ctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0, 'rgba(232,163,61,0.10)');
-  grad.addColorStop(1, 'rgba(79,214,196,0.06)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0,0,W,H);
-
-  ctx.fillStyle = '#e8a33d';
-  ctx.font = '600 28px Georgia, serif';
-  ctx.textAlign = 'left';
-  ctx.fillText('🎤 VoxCoach', 40, 70);
-
-  ctx.fillStyle = '#f1ead9';
-  ctx.font = '600 36px Georgia, serif';
-  ctx.fillText(t('voicecard_title'), 40, 140);
+  const W = canvas.width, H = canvas.height, M = 48;
+  ctx.fillStyle = C.ink; ctx.fillRect(0,0,W,H);
+  ctx.textBaseline = 'alphabetic';
+  if('fontStretch' in ctx) ctx.fontStretch = 'expanded';
+  ctx.fillStyle = C.paper; ctx.textAlign = 'left';
+  ctx.font = `650 26px ${font}`; ctx.fillText('VoxCoach', M, 76);
+  ctx.font = `650 40px ${font}`; ctx.fillText(t('voicecard_title'), M, 150);
+  if('fontStretch' in ctx) ctx.fontStretch = 'normal';
 
   const scores = computeSkillProfile();
   const tiers = typeof computeVocalLabTiers==='function' ? computeVocalLabTiers() : null;
   const rangeText = tiers && tiers.extended ? `${noteNameFromMidi(tiers.extended.lowMidi)}–${noteNameFromMidi(tiers.extended.highMidi)}` : null;
-
+  const pct = v=>v!==null && v!==undefined ? v+'%' : null;
   const rows = [
-    {label:t('skill_pitch'), text: scores.pitch!==null ? scores.pitch+'%' : null},
-    {label:t('skill_range'), text: rangeText},
-    {label:t('skill_breath'), text: scores.breath!==null ? scores.breath+'%' : null},
-    {label:t('skill_agility'), text: scores.agility!==null ? scores.agility+'%' : null},
+    {label:t('skill_pitch'), text:pct(scores.pitch), bar:scores.pitch},
+    {label:t('skill_range'), text:rangeText, bar:rangeText ? scores.range : null},
+    {label:t('skill_breath'), text:pct(scores.breath), bar:scores.breath},
+    {label:t('skill_agility'), text:pct(scores.agility), bar:scores.agility},
   ];
-  if(progress.harmonyBest) rows.push({label:t('voicecard_harmony'), text: progress.harmonyBest+'%'});
+  if(progress.harmonyBest) rows.push({label:t('voicecard_harmony'), text:progress.harmonyBest+'%', bar:progress.harmonyBest});
 
-  let y = 220;
-  ctx.font = '400 24px Archivo, sans-serif';
+  let y = 236;
   rows.forEach(r=>{
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#a89f8f';
-    ctx.fillText(r.label, 40, y);
-    ctx.textAlign = 'right';
-    ctx.fillStyle = r.text ? '#4fd6c4' : '#6b6355';
-    ctx.fillText(r.text || t('voicecard_nottracked'), W-40, y);
-    y += 60;
+    ctx.textAlign = 'left'; ctx.fillStyle = C.ink2; ctx.font = `400 22px ${font}`; ctx.fillText(r.label, M, y);
+    ctx.textAlign = 'right'; ctx.fillStyle = r.text ? C.paper : C.ink3; ctx.font = `600 24px ${font}`; ctx.fillText(r.text || '—', W-M, y);
+    ctx.fillStyle = C.track; ctx.fillRect(M, y+16, W-2*M, 6);
+    if(r.bar!==null && r.bar!==undefined){ ctx.fillStyle = C.voice; ctx.fillRect(M, y+16, (W-2*M)*Math.max(0, Math.min(100, r.bar))/100, 6); }
+    y += 76;
   });
 
-  y += 20;
-  ctx.textAlign = 'left';
-  ctx.fillStyle = '#e8735d';
-  ctx.font = '600 30px Georgia, serif';
-  ctx.fillText(`🔥 ${progress.streak||0} ${t('voicecard_daystreak')}`, 40, y);
-
-  y += 60;
+  y += 24;
+  ctx.textAlign = 'left'; ctx.fillStyle = C.paper; ctx.font = `600 26px ${font}`;
+  ctx.fillText(`${progress.streak||0} ${t('voicecard_daystreak')}`, M, y);
+  y += 44;
   const {level, name} = levelForXp(progress.xp||0);
-  ctx.fillStyle = '#f1ead9';
-  ctx.font = 'italic 22px Georgia, serif';
-  ctx.fillText(`${t('voicecard_level')} ${level} — ${name}`, 40, y);
+  ctx.fillStyle = C.ink2; ctx.font = `400 21px ${font}`;
+  ctx.fillText(`${t('voicecard_level')} ${level} — ${name}`, M, y);
 
-  ctx.fillStyle = '#6b6355';
-  ctx.font = '400 16px Archivo, sans-serif';
-  ctx.fillText(t('voicecard_footer'), 40, H-40);
+  ctx.fillStyle = C.ink3; ctx.font = `400 16px ${font}`;
+  ctx.fillText(t('voicecard_footer'), M, H-44);
 
   const hasAnyRealData = scores.pitch!==null || scores.breath!==null || scores.agility!==null || rangeText;
   const note = document.getElementById('voiceCardNote');
