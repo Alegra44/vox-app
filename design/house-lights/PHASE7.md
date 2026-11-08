@@ -96,3 +96,24 @@ The solo pitch scores (`progress.pitchScores`) carry no time, so "merged by time
 without storing something new. The user chose: Pitch = the mean of the last 20 solo pitch scores together with the last
 20 Choir World run pitches (by time; each finished run with a Performance Report pitch is one score). Nothing stored,
 reversible, no XP change.
+
+## Review fixes and deploy (2026-11-08)
+
+"Phase 7 review: approved. Before the merge, four small fixes (one commit each, four languages):
+1. "Reset local data" erases the account's progress, so the button becomes "Erase my progress" (fr "Effacer ma progression", es "Borrar mi progreso", tr "İlerlememi sil"), and it asks for confirmation first, naming what will be erased. Behaviour otherwise unchanged.
+2. The Journey's curriculum sequence: "->" becomes "→", with no line break inside an arrow.
+3. You → Progress row: "0% this week" becomes "Challenge 0%".
+4. Language buttons: remove the flags; the four names stay in their own language.
+Checks: hooks, copyscan, contrast (the You screens), bootcheck, youstates. Push fixshots to review/phase7-fix.
+
+Then the deploy, as before: merge redesign/phase7 into master with --no-ff, secret check, push, and wait for the user's Vercel line. If the production address doesn't move, give the user the promote line with the real ID. Production checks: prod.sh with WITH_CHOIR=1, plus youstates. Rollback target: dpl_6EgEe6idPGDet91hDsVkkwc2YGXx, same rule as before.
+
+If it passes: review/phase7-prod; delete review/phase7, review/phase7-before, review/phase7-fix and review/phase6-prod; update HANDOFF. If git deletion is blocked, give the user the delete line.
+
+Then a read-only survey for phases 8 and 9, in the same form as before, on redesign/phase8 with before-screenshots on review/phase8-before. It covers every screen not yet on House Lights:
+- Vocal World: the map, the Skill Tree, every game, the bosses, the Arcade;
+- onboarding, sign-in and sign-up, Plan & Pricing and the paywall, the Teacher Dashboard, the pre-session warm-up screens, and anything else you find.
+For each: what it is, whether you sing into it, its IDs, which scripts cover it, copy problems, and anything broken. Group them into two build phases (8: Vocal World; 9: everything else) and say how big each is. Push, report, stop."
+
+Done: fixes c463005, 18971f4, 2bae6b7, 4bc351f; fixshots7.js PASS 4/4 → review/phase7-fix 09c41f8. Checks hooks 21/0,
+copyscan --you 0/0 and full 0, contrast --you 0, bootcheck 9/0 (rerun after a sign-up timeout), youstates PASS.
