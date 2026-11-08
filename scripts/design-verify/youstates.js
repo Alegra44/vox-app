@@ -8,7 +8,8 @@
 //   two 14-day series), the Passport rows and timeline.
 // Gate: equal on both builds, except the changes PHASE7.md §3 expects (EXPECTED in the table, with the reason):
 //   Day 1 steps ticked from stored results (2.4); Records' Songs and Choir World rows and the best-pitch label (2.5);
-//   the Passport timeline's language and dates and its "Updated" line (2.6); the Pitch blend (2.9), in activecw only,
+//   the Passport timeline's language and dates and its "Updated" line (2.6); the Pitch blend (2.9): only in a state
+//   with Choir World runs and only when the branch's Pitch equals the pooled value youstates computes from the seed,
 //   and what follows from it there (summary, Today's focus, Passport strongest/focus, Pitch Master).
 // Every state's achievements are marked as already announced first, so the timeline doesn't grow while screens render.
 // Usage: node scripts/design-verify/youstates.js [--base <ref>, default master] [--branch-ref <ref>, default working copy]
@@ -36,6 +37,10 @@ async function collectInPage() {
   progress.notifiedAchievements = ACHIEVEMENTS.filter(a => a.check()).map(a => a.id);
   const sp = computeSkillProfile();
   for (const k of ['pitch', 'range', 'breath', 'agility', 'expression']) o[`skill.${k}`] = sp[k];
+  // 2.9's pooled Pitch, computed here from the seed: the last 20 solo scores with the last 20 Choir World run pitches
+  const runs = ((progress.choirReadiness || {}).runs || []).filter(r => typeof r.pitch === 'number').sort((a, b) => (a.ts || 0) - (b.ts || 0)).slice(-20);
+  const pool = [...(progress.pitchScores || []).slice(-20), ...runs.map(r => r.pitch)];
+  o.__cwRuns = runs.length; o.__pitchPooled = pool.length ? Math.round(pool.reduce((a, b) => a + b, 0) / pool.length) : null;
   const keys = ['pitch', 'range', 'breath', 'agility', 'expression'];
   const sum = typeof skillSummary === 'function' ? skillSummary(sp) : (() => { // master's rule (renderSkillProfile)
     const av = keys.filter(k => sp[k] !== null); if (!av.length) return { level: null, strongest: null, weakest: null, missing: keys };
@@ -79,14 +84,18 @@ async function collectInPage() {
 }
 
 // Why a difference is expected (PHASE7.md §3), or null.
-function expected(state, k) {
+function expected(state, k, vals) {
   if (k.startsWith('journey.step.')) return '2.4: the Day 1 steps tick from stored results';
   if (/^recordsDom\.recordsList(Songs|Choir)/.test(k)) return '2.5: Records\' Songs and Choir World rows';
   if (k === 'recordsDom.recordsListVoice.2') return '2.5: "best of your last 20" (label only; the value must match)';
   if (k.startsWith('records.') && !k.startsWith('recordsDom')) return null;
   if (k.startsWith('passport.timeline.') || k === 'passport.updated') return '2.6: the timeline\'s language and dates, the last change';
-  if (state === 'activecw' && (k === 'skill.pitch' || k.startsWith('summary.') || k.startsWith('focus.') ||
-    k === 'passport.strongest' || k === 'passport.focus' || k === 'achievements')) return '2.9: the Pitch blend (Choir World runs)';
+  // 2.9: only in a state with Choir World runs, and only if the branch's Pitch is exactly the pooled value computed from
+  // the seed; then what follows from Pitch there (the summary, Today's focus, the Passport's strongest/focus, Pitch Master)
+  const blend = vals && vals.branch.__cwRuns > 0 && vals.branch['skill.pitch'] === vals.branch.__pitchPooled;
+  if (k === 'skill.pitch') return blend ? `2.9: the Pitch blend (${vals.branch.__cwRuns} Choir World run(s); pooled ${vals.branch.__pitchPooled})` : null;
+  if (blend && (k.startsWith('summary.') || k.startsWith('focus.') || k === 'passport.strongest' || k === 'passport.focus' || k === 'achievements'))
+    return '2.9: follows from the Pitch blend';
   return null;
 }
 
@@ -110,11 +119,11 @@ function expected(state, k) {
         vals[side].__errors = errors.slice();
         await ctx.close();
       }
-      const keys = [...new Set([...Object.keys(vals.master), ...Object.keys(vals.branch)])].filter(k => k !== '__errors');
+      const keys = [...new Set([...Object.keys(vals.master), ...Object.keys(vals.branch)])].filter(k => !k.startsWith('__'));
       const rows = [];
       for (const k of keys) {
         const m = vals.master[k], br = vals.branch[k], same = JSON.stringify(m) === JSON.stringify(br);
-        let why = same ? null : expected(st, k);
+        let why = same ? null : expected(st, k, vals);
         // a label-only change on the best-pitch row: the value must still match
         if (!same && k === 'recordsDom.recordsListVoice.2' && String(m).split(' = ')[1] !== String(br).split(' = ')[1]) why = null;
         const verdict = same ? 'equal' : why ? 'EXPECTED' : 'DIFF';
