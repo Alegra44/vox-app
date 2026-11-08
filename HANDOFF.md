@@ -25,9 +25,9 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-07:
-phase 6 + 6.1, dpl_6EgEe6idPGDet91hDsVkkwc2YGXx (master 170c145); the rollback target for the next deploy. The table
-above predates phase 5; `review/phase6-prod` is the current review branch.
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-08:
+phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk (master 0c39e09; test-script commits b13d79d, 374bc33 after it); the rollback
+target for the next deploy. The table above predates phase 5; `review/phase7-prod` is the current review branch.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -489,7 +489,7 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **review/phase6** (60173be, orphan): 84 shots, sheets/phase6.jpg, states.json, notes.txt. No merge or deploy until
   the user has reviewed and types "deploy" (then the steps in PHASE6.md, including the promote check).
 
-### Phase 7 (`redesign/phase7`, spec `PHASE7.md`, given 2026-11-08)
+### Phase 7 (`redesign/phase7`, spec `PHASE7.md`): LIVE 2026-11-08, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk (master 0c39e09)
 - Phase 6 production approved, no rollback. **Rollback target from now on: dpl_6EgEe6idPGDet91hDsVkkwc2YGXx.**
 - Order: (1) prod.sh limits for house and contrast at 1.5× their measured times, 75 min at most (master);
   (2a) the tuner drift-off colour fix, first commit on redesign/phase7, proven by 10 contrast runs of the drift-off
@@ -527,6 +527,23 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   (existing, newly measured); copyscan --you 0/0; hooks 21/0, navcheck, bootcheck 9/0, home 102/0 (script updated for
   2.5; first run a sign-up timeout), levelup, p9, voicecard 16/16, batch1, picker. **review/phase7 3c49ef9** (92 shots,
   sheet, notes). No merge or deploy before the user's review.
+- **Review approved 2026-11-08 with four fixes** (PHASE7.md "Review fixes and deploy", verbatim): "Erase my progress"
+  with a confirmation naming what's erased (c463005, behaviour unchanged), 18971f4, 2bae6b7, 4bc351f, the curriculum "→" with no break inside, You →
+  Progress "Challenge 0%", flagless language buttons. fixshots7.js 4/4 languages; review/phase7-fix (deleted since).
+- **Deployed 2026-11-08.** Merge 0c39e09 (--no-ff), secret check clean, pushed. The user's first `vercel deploy --prod`
+  answered "Not authorized"; the same command again deployed dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk and moved the alias
+  itself (no promote). prod.sh now runs youstates (b13d79d).
+- **Production checks** (logs/prod-2026-11-08T13-43-52; summary in review/phase7-prod notes.txt): all suites pass first
+  run except pageload (a /api/me 404 at sign-up; rerun 10/10), cv-p8 (sign-up timeout; rerun PASS), youstates (a script
+  bug: the sign-in saved on the local origin doesn't apply on the site; fixed 374bc33, rerun PASS) and scores4b: the
+  Voice Quality vowel centroid failed both runs (961, 951 vs master 952–966). The Voice Quality code is byte-identical
+  to phase 6 and an A/A run (4748c1f against itself) fails the same reading (973 vs 968): the ±2 gate is tighter than
+  its noise. Judged noise → no rollback; reported to the user with the promote line. **Follow-up (not done):** gate the
+  Voice Quality centroid by its A/A spread (or ±1%), as for the other values in master's-range list.
+- **review/phase7-prod** (4d44b08, orphan): shots7.js on production (92 shots + 4 Voice Card images, 0 page errors,
+  0 below 4.5:1), sheets/phase7.jpg, checks/ with every log and rerun/. Deleted (local and GitHub): review/phase7,
+  -before, -fix, review/phase6-prod. review/phase7-part1 (42a3ee5) is still on GitHub (not in the delete list).
+  **The rollback target for the next deploy is dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk.**
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
