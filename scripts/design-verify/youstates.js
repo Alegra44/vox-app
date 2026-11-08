@@ -106,6 +106,8 @@ function expected(state, k, vals) {
   try {
     const o0 = await C.openPage(b, { dir: dirs.master }); await C.signUp(o0.page, 'dvys', 'You States');
     const state = await o0.ctx.storageState(); await o0.ctx.close();
+    // --branch-url: the sign-in was saved on the local origin; copy it to the site's origin (the same Supabase project).
+    if (/^https?:\/\//.test(dirs.branch)) { const o = new URL(dirs.branch).origin; state.origins = [...state.origins.filter(x => x.origin !== o), ...state.origins.map(x => ({ ...x, origin: o }))]; }
     console.log(`== youstates · ${BASE} vs ${res.branch} · ${LANG}`);
     for (const st of YOU_STATES) {
       const vals = {};
