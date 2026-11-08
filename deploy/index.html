@@ -2127,6 +2127,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-records .record-label{font-size:var(--hl-t-body);color:var(--hl-ink);}
   #panel-records .record-val{font-size:var(--hl-t-body);font-weight:600;font-variant-numeric:tabular-nums;color:var(--hl-ink);text-align:right;}
   #panel-records .record-val.untracked{font-weight:400;font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  /* ---- VOCAL PASSPORT (phase 7, 2.6): identity rows, the Fingerprint, the timeline ---- */
+  #panel-passport .key-card{background:none;border:0;border-radius:0;box-shadow:none;padding:var(--hl-s5) 0 0;margin-top:var(--hl-s5) !important;border-top:var(--hl-hair) solid var(--hl-rule);text-align:left !important;}
+  #panel-passport .key-card .step-label{font-size:var(--hl-t-label);font-stretch:var(--hl-w-condensed);font-weight:650;text-transform:uppercase;letter-spacing:.09em;color:var(--hl-ink-3);}
+  #panel-passport #passportEmpty{color:var(--hl-ink-2) !important;}
+  #panel-passport .curriculum-detail-row{display:flex;justify-content:space-between;gap:var(--hl-s4);padding:var(--hl-s3) 0;border-bottom:0;border-top:var(--hl-hair) solid var(--hl-rule);font-size:var(--hl-t-body);}
+  #panel-passport .curriculum-detail-row .cd-label{width:auto;font-size:var(--hl-t-small);color:var(--hl-ink-2);text-transform:none;letter-spacing:0;}
+  #panel-passport .curriculum-detail-row span:last-child{color:var(--hl-ink);text-align:right;font-weight:600;}
+  #panel-passport .timeline-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:baseline;gap:var(--hl-s3);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);border-bottom:0;}
+  #panel-passport .timeline-row .hl-icon{color:var(--hl-ink-2);align-self:center;}
+  #panel-passport .timeline-row .record-label{color:var(--hl-ink);font-size:var(--hl-t-body);}
+  #panel-passport .timeline-row .record-val{color:var(--hl-ink-3);font-size:var(--hl-t-small);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  #panel-passport #passportUpdatedStamp{text-align:left !important;color:var(--hl-ink-3);}
   /* ---- PERFORMANCE DIRECTOR (phase 6): the lanes on its stage; Stop the neutral active pill ---- */
   .pd-stage{display:grid;gap:var(--hl-s3);justify-items:center;text-align:center;}
   .pd-stage .cw-lanes-wrap{width:100%;justify-self:stretch;}
@@ -8392,6 +8404,7 @@ const TRANSLATIONS = {
     record_label_cw_bosses:"Bosses beaten",
     record_label_cw_ready:"Parts Ready",
     record_note_cw_none:"None yet",
+    passport_updated_tpl:"Last change: {date}",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -10020,6 +10033,7 @@ const TRANSLATIONS = {
     record_label_cw_bosses:"Boss vaincus",
     record_label_cw_ready:"Voix prêtes",
     record_note_cw_none:"Aucun pour l'instant",
+    passport_updated_tpl:"Dernière modification : {date}",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11648,6 +11662,7 @@ const TRANSLATIONS = {
     record_label_cw_bosses:"Jefes vencidos",
     record_label_cw_ready:"Voces listas",
     record_note_cw_none:"Ninguno aún",
+    passport_updated_tpl:"Último cambio: {date}",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13276,6 +13291,7 @@ const TRANSLATIONS = {
     record_label_cw_bosses:"Yenilen boss'lar",
     record_label_cw_ready:"Hazır partiler",
     record_note_cw_none:"Henüz yok",
+    passport_updated_tpl:"Son değişiklik: {date}",
   },
 };
 let currentLanguage = 'en';
@@ -13499,7 +13515,7 @@ function showLevelUp(level, name, why){
   overlay.classList.add('levelup-show');
   clearTimeout(window._levelupTimer);
   window._levelupTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), why ? 4500 : 2400); // time to read the line
-  if(typeof logTimelineEvent==='function') logTimelineEvent('levelup', `${t('timeline_reached_level_p1')} ${level} — ${name}`);
+  if(typeof logTimelineEvent==='function') logTimelineEvent('levelup', `${t('timeline_reached_level_p1')} ${level} — ${name}`, {level});
 }
 document.getElementById('levelupOverlay')?.addEventListener('click', ()=>{
   document.getElementById('levelupOverlay').classList.remove('levelup-show');
@@ -13514,7 +13530,7 @@ function triggerNewRecord(label, displayVal, deltaText){
   overlay.classList.add('levelup-show');
   clearTimeout(window._newRecordTimer);
   window._newRecordTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), 2400);
-  if(typeof logTimelineEvent==='function') logTimelineEvent('record', `${t('timeline_new_record_p1')} ${label} (${displayVal})`);
+  if(typeof logTimelineEvent==='function') logTimelineEvent('record', `${t('timeline_new_record_p1')} ${label} (${displayVal})`, {recordKey: TIMELINE_RECORD_KEYS.find(k=>t(k)===label) || null, value: displayVal});
 }
 document.getElementById('newRecordOverlay')?.addEventListener('click', ()=>{
   document.getElementById('newRecordOverlay').classList.remove('levelup-show');
@@ -13528,7 +13544,7 @@ function triggerBreakthrough(midi, priorAvg){
   overlay.classList.add('levelup-show');
   clearTimeout(window._breakthroughTimer);
   window._breakthroughTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), 3200);
-  if(typeof logTimelineEvent==='function') logTimelineEvent('breakthrough', `${t('timeline_breakthrough_p1')} ${noteNameFromMidi(midi)} ${t('timeline_breakthrough_p2')} ${priorAvg}% ${t('timeline_breakthrough_p3')}`);
+  if(typeof logTimelineEvent==='function') logTimelineEvent('breakthrough', `${t('timeline_breakthrough_p1')} ${noteNameFromMidi(midi)} ${t('timeline_breakthrough_p2')} ${priorAvg}% ${t('timeline_breakthrough_p3')}`, {midi, prior: priorAvg});
 }
 document.getElementById('breakthroughOverlay')?.addEventListener('click', ()=>{
   document.getElementById('breakthroughOverlay').classList.remove('levelup-show');
@@ -23369,6 +23385,39 @@ function renderTodaysCurriculum(dayNum){
 
 
 /* ---------------- Voice Fingerprint (real radar chart of the real Skill Profile) ---------------- */
+/* ---- the timeline in the current language (phase 7, 2.6): rendered from each event's type and data with t(); an
+   old entry without data is matched where its stored text allows (an achievement's name or a record's name in any of the
+   four languages, a level number); otherwise its stored text is shown. Dates through Intl, as a local calendar day. ---- */
+const TIMELINE_ICONS = {assessment:'calendar', breakthrough:'flame', achievement:'medal', levelup:'score', record:'medal'};
+const TIMELINE_RECORD_KEYS = ['record_popup_bridge_crossing','record_label_longest_breath','record_popup_glider_score','record_popup_bridge_score','record_popup_harmony_acc','record_popup_rift_avg'];
+function escapeHtmlText(x){ return String(x).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function levelTierName(level){ return levelForXp((level-1)*50).name; }
+function anyLangValue(key){ return ['en','fr','es','tr'].map(lg=>TRANSLATIONS[lg] && TRANSLATIONS[lg][key]).filter(Boolean); }
+function timelineLabel(e){
+  const d = e.data || {}, label = e.label || '';
+  if(e.type==='assessment') return t('timeline_first_assessment');
+  if(e.type==='achievement'){
+    const a = ACHIEVEMENTS.find(x=>x.id===d.id) || ACHIEVEMENTS.find(x=>anyLangValue('achievement_'+x.id).includes(label));
+    return a ? a.name : label;
+  }
+  if(e.type==='levelup'){
+    const lv = d.level || (label.match(/\d+/) ? +label.match(/\d+/)[0] : null);
+    return lv ? `${t('timeline_reached_level_p1')} ${lv} — ${levelTierName(lv)}` : label;
+  }
+  if(e.type==='breakthrough' && d.midi!==undefined)
+    return `${t('timeline_breakthrough_p1')} ${noteNameFromMidi(d.midi)} ${t('timeline_breakthrough_p2')} ${d.prior}% ${t('timeline_breakthrough_p3')}`;
+  if(e.type==='record'){
+    const key = d.recordKey || TIMELINE_RECORD_KEYS.find(k=>anyLangValue(k).some(v=>label.includes(v)));
+    const val = d.value || ((label.match(/\(([^()]*)\)\s*$/) || [])[1]);
+    if(key && val) return `${t('timeline_new_record_p1')} ${t(key)} (${val})`;
+  }
+  return label;
+}
+function timelineDate(e){
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(e.date || ''); if(!m) return e.date || '';
+  return new Intl.DateTimeFormat(localeForLang(), {day:'numeric', month:'short', year:'numeric'}).format(new Date(+m[1], +m[2]-1, +m[3]));
+}
+
 function renderVoiceFingerprint(svgId, noteId){
   const svg = document.getElementById(svgId || 'fingerprintSvg');
   if(!svg) return;
@@ -23479,24 +23528,25 @@ function renderVocalPassport(){
 
   renderVoiceFingerprint('passportFingerprintSvg', 'passportFingerprintNote');
 
-  const today = new Date();
-  document.getElementById('passportUpdatedStamp').textContent = `${t('passport_updated_prefix')} ${today.toLocaleDateString(localeForLang(),{year:'numeric',month:'long',day:'numeric'})}${t('passport_updated_suffix')}`;
 
-  const TIMELINE_ICONS = {assessment:'🎯', breakthrough:'🔥', achievement:'✅', levelup:'⭐', record:'🏆'};
-  const events = (progress.timelineEvents || []).slice().sort((a,b)=>a.ts-b.ts);
   const listEl = document.getElementById('timelineList');
+  const events = (progress.timelineEvents || []).slice().sort((a,b)=>a.ts-b.ts);
   if(listEl){
     listEl.innerHTML = events.length>0
-      ? events.map(e=>`<div class="record-row"><span class="record-label">${TIMELINE_ICONS[e.type]||'•'} ${e.label}</span><span class="record-val" style="color:var(--muted);">${e.date}</span></div>`).join('')
-      : `<p class="desc" style="color:var(--muted);">${t('timeline_empty')}</p>`;
+      ? events.map(e=>`<div class="record-row timeline-row"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-${TIMELINE_ICONS[e.type]||'info'}"/></svg><span class="record-label">${escapeHtmlText(timelineLabel(e))}</span><span class="record-val">${timelineDate(e)}</span></div>`).join('')
+      : `<p class="hl-small">${t('timeline_empty')}</p>`;
   }
+  // "Updated": the last change (the latest timeline event or practice day), not today
+  const last = [events.length ? events[events.length-1].date : null, progress.lastPracticeDate || null].filter(Boolean).sort().pop();
+  document.getElementById('passportUpdatedStamp').textContent = last ? t('passport_updated_tpl').replace('{date}', timelineDate({date:last})) : '';
 }
 
 /* ---------------- Breakthrough Timeline (real event log, no fabricated history) ---------------- */
-function logTimelineEvent(type, label){
+function logTimelineEvent(type, label, data){
   if(!profile) return;
   if(!progress.timelineEvents) progress.timelineEvents = [];
-  progress.timelineEvents.push({date: todayStr(), type, label, ts: Date.now()});
+  // label: the text in the language of the moment, kept for old readers; data: what timelineLabel() renders from
+  progress.timelineEvents.push({date: todayStr(), type, label, ts: Date.now(), ...(data ? {data} : {})});
   saveProgress();
 }
 function checkNewAchievementsForTimeline(){
@@ -23506,7 +23556,7 @@ function checkNewAchievementsForTimeline(){
   ACHIEVEMENTS.forEach(a=>{
     if(a.check() && !progress.notifiedAchievements.includes(a.id)){
       progress.notifiedAchievements.push(a.id);
-      logTimelineEvent('achievement', a.name);
+      logTimelineEvent('achievement', a.name, {id: a.id});
       fresh.push(a);
     }
   });
