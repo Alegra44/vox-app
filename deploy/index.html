@@ -405,11 +405,26 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     30%{filter:var(--hl-glow);}
     100%{filter:none;}
   }
-  /* locked: the voice fills the ring (a disc in --hl-lock) and the note reads on it */
-  #tunerLockFill, #stayKeyLockFill{opacity:0;transition:opacity var(--hl-d1) var(--hl-ease);}
-  .tuner-ring-wrap.locked-pulse #tunerLockFill, .tuner-ring-wrap.locked-pulse #stayKeyLockFill{opacity:1;}
-  .tuner-ring-wrap.locked-pulse .note-display, .tuner-ring-wrap.locked-pulse .note-display .oct,
-  .tuner-ring-wrap.locked-pulse .cents-display.locked{color:var(--hl-on-voice);}
+  /* locked: the voice fills the ring (a disc in --hl-lock) and the note reads on it. --hl-lock-a is the fill's opacity,
+     faded over --hl-d1 when the lock comes or goes; the text in the ring reads its colour from the same value, so it can
+     never sit on the half-faded fill in the wrong colour (phase 7, 2a): --hl-on-voice while the fill is above 0.75,
+     the stage ink from 0.75 down to 0.15, its own colour below 0.15 (each ≥ 4.2:1 on the fill at that opacity; one
+     switch can't do it: the octave and the off-note cents are too dim for the half-faded blue). Without @property the
+     value doesn't animate: fill and text change together at once. */
+  @property --hl-lock-a{syntax:'<number>';inherits:true;initial-value:0;}
+  #tunerRingWrap, #stayKeyRingWrap{--hl-lock-a:0;transition:--hl-lock-a var(--hl-d1) var(--hl-ease);}
+  #tunerRingWrap.locked-pulse, #stayKeyRingWrap.locked-pulse{--hl-lock-a:1;}
+  #tunerLockFill, #stayKeyLockFill{opacity:var(--hl-lock-a);}
+  :is(#tunerRingWrap, #stayKeyRingWrap) .note-display{--hl-lock-tx:var(--cream);}
+  :is(#tunerRingWrap, #stayKeyRingWrap) .note-display .oct{--hl-lock-tx:var(--muted);}
+  :is(#tunerRingWrap, #stayKeyRingWrap) .cents-display{--hl-lock-tx:var(--muted);}
+  :is(#tunerRingWrap, #stayKeyRingWrap) .cents-display:is(.flat, .sharp){--hl-lock-tx:var(--coral);}
+  #tunerRingWrap #centsDisplay:is(.flat, .sharp){--hl-lock-tx:var(--hl-ink-2);}
+  :is(#tunerRingWrap, #stayKeyRingWrap) .cents-display.locked{--hl-lock-tx:var(--teal);}
+  :is(#tunerRingWrap, #stayKeyRingWrap) :is(.note-display, .note-display .oct, .cents-display){
+    color:color-mix(in srgb, var(--hl-on-voice) calc(clamp(0, (var(--hl-lock-a) - 0.75) * 10000, 1) * 100%),
+      color-mix(in srgb, var(--hl-ink) calc(clamp(0, (var(--hl-lock-a) - 0.15) * 10000, 1) * 100%), var(--hl-lock-tx)));
+  }
   /* on the stage: a bigger ring, the note in the display style */
   .vc-stage.is-live .tuner-ring-wrap, .vc-stage.is-live .tuner-ring{width:min(76vw, 320px);height:min(76vw, 320px);}
   .vc-stage.is-live .note-display{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;}
@@ -423,7 +438,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @media (prefers-reduced-motion: reduce){
     .tuner-ring-wrap.locked-pulse{animation:none;}
     .tuner-ring-wrap #tunerRingFill{transition:none !important;}
-    #tunerLockFill{transition:none;}
+    #tunerRingWrap, #stayKeyRingWrap{transition:none;}
     #pitchMarker.marker-pulse{animation:none;}
   }
 
