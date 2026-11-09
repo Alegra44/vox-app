@@ -60,6 +60,9 @@ const ALLOWED_REMOVALS = {
   'data-i18n=rift_reuses_tag': 'phase 8 §2.7: the REUSES … ENGINE tags go; key stays in TRANSLATIONS',
   'data-i18n=rift_h2': 'phase 8 §2.7: the §7 heading ("unpredictable real rounds") goes; the page\'s one line (rift_line); key stays in TRANSLATIONS',
   'data-i18n=rift_desc': 'phase 8 §2.7: the §7 description goes; the rounds are in the method (rift_measure); key stays in TRANSLATIONS',
+  'data-i18n=skilltree_step_label': 'phase 8 §2.8: the step label (with its emoji) gives way to the page head; key stays in TRANSLATIONS',
+  'data-i18n=skilltree_h2': "phase 8 §2.8: the §7 heading goes; the page's one line (skilltree_line); key stays in TRANSLATIONS",
+  'data-i18n=skilltree_desc': 'phase 8 §2.8: the §7 description goes; key stays in TRANSLATIONS',
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {

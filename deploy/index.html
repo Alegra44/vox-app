@@ -1502,6 +1502,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .gw-round-kind{font-size:var(--hl-t-label);font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--hl-ink-3);}
   .gw-round-status{font-size:var(--hl-t-h3);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;min-height:1.4em;}
   .gw-rounds{max-height:280px;overflow-y:auto;}
+  /* Skill Tree (2.8) */
+  .gw-tree{display:block;width:100%;max-width:440px;height:auto;margin:0 auto;}
+  .gw-tree .st-line{stroke:var(--hl-rule);stroke-width:1.5;}
+  .gw-tree .st-line.unlocked{stroke:var(--hl-ink-2);}
+  .gw-tree .st-node-bg{fill:var(--hl-raised);stroke:var(--hl-rule);stroke-width:1.5;}
+  .gw-tree .st-node-bg.unlocked{stroke:var(--hl-ink);}
+  .gw-tree .st-node-bg.next{stroke:var(--hl-voice);stroke-width:3;stroke-dasharray:none;animation:none;}
+  .gw-tree .st-node-icon{color:var(--hl-ink);}
+  .gw-tree .st-node-icon.locked{color:var(--hl-ink-3);}
+  .gw-tree .st-node-label{font-family:var(--hl-font);font-size:14px;font-weight:600;text-anchor:middle;fill:var(--hl-ink-3);}
+  .gw-tree .st-node-label.unlocked{fill:var(--hl-ink);}
+  .gw-tree-detail.skilltree-detail{background:none;border:0;border-radius:0;padding:0;margin-top:var(--hl-s5);}
+  .gw-tree-detail .vc-dim > :first-child{color:var(--hl-ink-2);}
+  .gw-tree-detail .vc-dim > :last-child{text-align:right;max-width:65%;}
   @media (min-width:768px){ .gw-head .gw-mark{width:56px;height:56px;} }
   .arcade-canvas-wrap canvas{width:100%;display:block;}
   .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);}
@@ -3467,17 +3481,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <!-- SKILL TREE -->
-    <div id="gameSkillTree" style="display:none;">
-      <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
-      <div class="key-card">
-        <div class="step-label" data-i18n="skilltree_step_label">🌳 Vocal Skill Tree</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="skilltree_h2">Every node unlocks from a real measured threshold</h2>
-        <p class="desc" style="margin-bottom:18px;" data-i18n="skilltree_desc">No fake currency, no purchasing skill — a node lights up only when your actual Skill Profile, breath, or register data crosses its real threshold. Grey nodes are locked; the detail panel below shows exactly what's needed for the next one.</p>
-        <svg class="skilltree-svg" id="skillTreeSvg" viewBox="0 0 400 560"></svg>
-        <div class="skilltree-detail" id="skillTreeDetail"></div>
+    <div id="gameSkillTree" class="gw" style="display:none;">
+      <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
+      <!-- phase 8 (PHASE8.md 2.8): house up. The tree with the sprite's icons as nodes (unlocked in ink, the next one ringed
+           in the voice colour, locked in ink-3 with the lock), and the detail as rows. -->
+      <div class="key-card gw-card">
+        <div class="gw-head"><svg class="hl-icon gw-mark" aria-hidden="true"><use href="#hl-loc-tree"/></svg><div class="gw-head-text"><h2 class="gw-title" data-i18n="world_skilltree_title">Skill Tree</h2><p class="gw-line" data-i18n="skilltree_line">Each skill opens when your scores reach its mark, and can close again if they drop.</p></div></div>
+        <svg class="skilltree-svg gw-tree" id="skillTreeSvg" viewBox="0 0 400 600" role="img" aria-labelledby="skillTreeDetail"></svg>
+        <div class="skilltree-detail gw-tree-detail vc-result-dims" id="skillTreeDetail"></div>
       </div>
     </div>
-
     <!-- VOCAL RIFT -->
     <div id="gameRift" class="gw" style="display:none;">
       <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
@@ -8248,21 +8261,21 @@ const TRANSLATIONS = {
     warmup_defaultpattern:'1-2-3-4-5-4-3-2-1 pattern',
     warmup_completed_prefix:'Warmups completed:', warmup_signin_streaks:'Sign in to track warmup streaks.',
     genre_applied_prefix:'Applied — Smart Warmup and Vibrato feedback now use', genre_applied_suffix:'defaults.',
-    skilltree_label_control:'CONTROL', skilltree_label_pitch:'PITCH', skilltree_label_range:'RANGE', skilltree_label_agility:'AGILITY',
-    skilltree_label_headvoice:'HEAD VOICE', skilltree_label_chestvoice:'CHEST VOICE', skilltree_label_mixedvoice:'MIXED VOICE', skilltree_label_vocalmaster:'VOCAL MASTER',
-    skilltree_req_control:'Complete one Pitch Match or Interval Match attempt.',
-    skilltree_req_pitch:'Pitch Skill Profile score ≥ 65%.',
-    skilltree_req_range:'Range Skill Profile score ≥ 60% (captured in Range Finder).',
-    skilltree_req_agility:'Agility Skill Profile score ≥ 60% (from Scale Run).',
-    skilltree_req_headvoice:'3+ second clean crossing above your passaggio in Register Coach.',
-    skilltree_req_chestvoice:'Breath Skill Profile score ≥ 60% (from Breath Trainer).',
-    skilltree_req_mixedvoice:'Unlock both Head Voice and Chest Voice.',
-    skilltree_req_vocalmaster:'Mixed Voice unlocked, plus Pitch/Range/Agility/Breath all ≥ 70% and Expression ≥ 60%.',
-    skilltree_unlocked:'Unlocked', skilltree_prog_control:'No pitch attempts recorded yet.', skilltree_current:'Current',
+    skilltree_label_control:"Control", skilltree_label_pitch:"Pitch", skilltree_label_range:"Range", skilltree_label_agility:"Agility",
+    skilltree_label_headvoice:"Head voice", skilltree_label_chestvoice:"Chest voice", skilltree_label_mixedvoice:"Mixed voice", skilltree_label_vocalmaster:"Vocal master",
+    skilltree_req_control:"One Pitch Match or Interval Match attempt",
+    skilltree_req_pitch:"Pitch ≥ 65%",
+    skilltree_req_range:"Range ≥ 60% (Range Finder)",
+    skilltree_req_agility:"Agility ≥ 60% (Scale Run)",
+    skilltree_req_headvoice:"A clean crossing above your break, 3 s or more (Register Coach)",
+    skilltree_req_chestvoice:"Breath ≥ 60% (Breath Trainer)",
+    skilltree_req_mixedvoice:"Head voice and chest voice both open",
+    skilltree_req_vocalmaster:"Mixed voice open; pitch, range, agility and breath ≥ 70%; expression ≥ 60%",
+    skilltree_unlocked:"Unlocked", skilltree_prog_control:'No pitch attempts recorded yet.', skilltree_current:'Current',
     skilltree_prog_pitch:'No pitch score yet.', skilltree_prog_range:'No range captured yet.', skilltree_prog_agility:'No Scale Run data yet.',
     skilltree_bestcrossing:'Best clean crossing', skilltree_prog_chestvoice:'No Breath Trainer data yet.',
     skilltree_prog_mixedvoice:'Requires both branches unlocked.',
-    skilltree_signin:"Sign in to grow your skill tree.", skilltree_unlockedcount_suffix:'unlocked', skilltree_next:'next',
+    skilltree_signin:"Sign in to grow your skill tree.", skilltree_unlockedcount_suffix:'unlocked', skilltree_next:"Next",
     skilltree_fullyunlocked:'Vocal Master — fully unlocked',
     skilltree_fullyunlocked_desc:"Every node shows a skill level you hold now, not a one-time achievement: it can drop if a category's recent average drops.",
     skilltree_keeppracticing:'Keep practicing across categories — nodes further up the tree need their parent nodes unlocked first.',
@@ -8685,6 +8698,10 @@ const TRANSLATIONS = {
     rift_rounds_tpl:"{n} rounds, {h} with your pitch heard.",
     rift_again_btn:"Enter again",
     rift_measure:"Each round picks one of four kinds at random and a note from your range, plays it, then listens: a note held 1.4 s, an interval from the last note, a 2.4 s hold, or a 0.65 s catch. Each round is scored like Pitch Match, from how close your pitch sat to the note. Your average is over the rounds where a pitch was heard.",
+    skilltree_line:"Each skill opens when your scores reach its mark, and can close again if they drop.",
+    skilltree_needs:"Needs",
+    skilltree_now:"You now",
+    skilltree_now_tpl:"{v}",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9955,21 +9972,21 @@ const TRANSLATIONS = {
     warmup_defaultpattern:'Motif 1-2-3-4-5-4-3-2-1',
     warmup_completed_prefix:'Échauffements terminés :', warmup_signin_streaks:'Connectez-vous pour suivre vos séries d\'échauffement.',
     genre_applied_prefix:'Appliqué — l\'échauffement intelligent et le retour vibrato utilisent maintenant les réglages par défaut de', genre_applied_suffix:'.',
-    skilltree_label_control:'CONTRÔLE', skilltree_label_pitch:'JUSTESSE', skilltree_label_range:'TESSITURE', skilltree_label_agility:'AGILITÉ',
-    skilltree_label_headvoice:'VOIX DE TÊTE', skilltree_label_chestvoice:'VOIX DE POITRINE', skilltree_label_mixedvoice:'VOIX MIXTE', skilltree_label_vocalmaster:'MAÎTRE VOCAL',
-    skilltree_req_control:'Terminez une tentative de Précision de note ou de Reconnaissance d\'intervalles.',
-    skilltree_req_pitch:'Score de justesse du Profil de compétences ≥ 65 %.',
-    skilltree_req_range:'Score de tessiture du Profil de compétences ≥ 60 % (capturé dans le Détecteur de tessiture).',
-    skilltree_req_agility:'Score d\'agilité du Profil de compétences ≥ 60 % (depuis Gamme).',
-    skilltree_req_headvoice:'3+ secondes de passage propre au-dessus de votre passaggio dans Coach de registre.',
-    skilltree_req_chestvoice:'Score de souffle du Profil de compétences ≥ 60 % (depuis Entraîneur de souffle).',
-    skilltree_req_mixedvoice:'Débloquez à la fois la Voix de tête et la Voix de poitrine.',
-    skilltree_req_vocalmaster:'Voix mixte débloquée, plus Justesse/Tessiture/Agilité/Souffle tous ≥ 70 % et Expression ≥ 60 %.',
-    skilltree_unlocked:'Débloqué', skilltree_prog_control:'Aucune tentative de justesse enregistrée pour l\'instant.', skilltree_current:'Actuel',
+    skilltree_label_control:"Contrôle", skilltree_label_pitch:"Justesse", skilltree_label_range:"Tessiture", skilltree_label_agility:"Agilité",
+    skilltree_label_headvoice:"Voix de tête", skilltree_label_chestvoice:"Voix de poitrine", skilltree_label_mixedvoice:"Voix mixte", skilltree_label_vocalmaster:"Maître vocal",
+    skilltree_req_control:"Un essai de Précision de note ou de Reconnaissance d'intervalles",
+    skilltree_req_pitch:"Justesse ≥ 65 %",
+    skilltree_req_range:"Tessiture ≥ 60 % (Détecteur de tessiture)",
+    skilltree_req_agility:"Agilité ≥ 60 % (Gamme)",
+    skilltree_req_headvoice:"Un passage net au-dessus de votre passage, 3 s ou plus (Coach de registre)",
+    skilltree_req_chestvoice:"Souffle ≥ 60 % (Entraîneur de souffle)",
+    skilltree_req_mixedvoice:"Voix de tête et voix de poitrine ouvertes",
+    skilltree_req_vocalmaster:"Voix mixte ouverte ; justesse, tessiture, agilité et souffle ≥ 70 % ; expression ≥ 60 %",
+    skilltree_unlocked:"Ouvertes", skilltree_prog_control:'Aucune tentative de justesse enregistrée pour l\'instant.', skilltree_current:'Actuel',
     skilltree_prog_pitch:'Pas encore de score de justesse.', skilltree_prog_range:'Pas encore de tessiture capturée.', skilltree_prog_agility:'Pas encore de données de Gamme.',
     skilltree_bestcrossing:'Meilleur passage propre', skilltree_prog_chestvoice:'Pas encore de données d\'Entraîneur de souffle.',
     skilltree_prog_mixedvoice:'Nécessite les deux branches débloquées.',
-    skilltree_signin:"Connectez-vous pour faire pousser votre arbre de compétences.", skilltree_unlockedcount_suffix:'débloqués', skilltree_next:'suivant',
+    skilltree_signin:"Connectez-vous pour faire pousser votre arbre de compétences.", skilltree_unlockedcount_suffix:'débloqués', skilltree_next:"Suivante",
     skilltree_fullyunlocked:'Maître vocal — entièrement débloqué',
     skilltree_fullyunlocked_desc:"Chaque nœud montre un niveau que vous tenez maintenant, pas un succès ponctuel : il peut baisser si la moyenne récente d'une catégorie baisse.",
     skilltree_keeppracticing:'Continuez à pratiquer dans toutes les catégories — les nœuds plus haut dans l\'arbre nécessitent d\'abord leurs nœuds parents débloqués.',
@@ -10392,6 +10409,10 @@ const TRANSLATIONS = {
     rift_rounds_tpl:"{n} manches, {h} où votre hauteur a été entendue.",
     rift_again_btn:"Y retourner",
     rift_measure:"Chaque manche tire au hasard l'un des quatre types et une note de votre tessiture, la joue, puis écoute : une note tenue 1,4 s, un intervalle depuis la note précédente, une tenue de 2,4 s ou une prise rapide de 0,65 s. Chaque manche est notée comme Précision de note, selon la proximité de votre hauteur avec la note. Votre moyenne porte sur les manches où une hauteur a été entendue.",
+    skilltree_line:"Chaque compétence s'ouvre quand vos scores atteignent son seuil, et peut se refermer s'ils baissent.",
+    skilltree_needs:"Il faut",
+    skilltree_now:"Vous",
+    skilltree_now_tpl:"{v}",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11662,21 +11683,21 @@ const TRANSLATIONS = {
     warmup_defaultpattern:'Patrón 1-2-3-4-5-4-3-2-1',
     warmup_completed_prefix:'Calentamientos completados:', warmup_signin_streaks:'Inicia sesión para seguir tus rachas de calentamiento.',
     genre_applied_prefix:'Aplicado — el Calentamiento inteligente y el feedback de vibrato ahora usan los valores predeterminados de', genre_applied_suffix:'.',
-    skilltree_label_control:'CONTROL', skilltree_label_pitch:'AFINACIÓN', skilltree_label_range:'RANGO', skilltree_label_agility:'AGILIDAD',
-    skilltree_label_headvoice:'VOZ DE CABEZA', skilltree_label_chestvoice:'VOZ DE PECHO', skilltree_label_mixedvoice:'VOZ MIXTA', skilltree_label_vocalmaster:'MAESTRO VOCAL',
-    skilltree_req_control:'Completa un intento de Precisión de nota o Reconocimiento de intervalos.',
-    skilltree_req_pitch:'Puntuación de afinación del Perfil de habilidades ≥ 65%.',
-    skilltree_req_range:'Puntuación de rango del Perfil de habilidades ≥ 60% (capturada en el Buscador de rango).',
-    skilltree_req_agility:'Puntuación de agilidad del Perfil de habilidades ≥ 60% (desde Escala).',
-    skilltree_req_headvoice:'3+ segundos de cruce limpio por encima de tu passaggio en Coach de registro.',
-    skilltree_req_chestvoice:'Puntuación de respiración del Perfil de habilidades ≥ 60% (desde Entrenador de respiración).',
-    skilltree_req_mixedvoice:'Desbloquea tanto Voz de cabeza como Voz de pecho.',
-    skilltree_req_vocalmaster:'Voz mixta desbloqueada, más Afinación/Rango/Agilidad/Respiración todos ≥ 70% y Expresión ≥ 60%.',
-    skilltree_unlocked:'Desbloqueado', skilltree_prog_control:'Aún no hay intentos de afinación registrados.', skilltree_current:'Actual',
+    skilltree_label_control:"Control", skilltree_label_pitch:"Afinación", skilltree_label_range:"Rango", skilltree_label_agility:"Agilidad",
+    skilltree_label_headvoice:"Voz de cabeza", skilltree_label_chestvoice:"Voz de pecho", skilltree_label_mixedvoice:"Voz mixta", skilltree_label_vocalmaster:"Maestro vocal",
+    skilltree_req_control:"Un intento de Precisión de nota o Reconocimiento de intervalos",
+    skilltree_req_pitch:"Afinación ≥ 65 %",
+    skilltree_req_range:"Rango ≥ 60 % (Buscador de rango)",
+    skilltree_req_agility:"Agilidad ≥ 60 % (Escala)",
+    skilltree_req_headvoice:"Un paso limpio por encima de tu passaggio, 3 s o más (Coach de registro)",
+    skilltree_req_chestvoice:"Respiración ≥ 60 % (Entrenador de respiración)",
+    skilltree_req_mixedvoice:"Voz de cabeza y voz de pecho abiertas",
+    skilltree_req_vocalmaster:"Voz mixta abierta; afinación, rango, agilidad y respiración ≥ 70 %; expresión ≥ 60 %",
+    skilltree_unlocked:"Abiertas", skilltree_prog_control:'Aún no hay intentos de afinación registrados.', skilltree_current:'Actual',
     skilltree_prog_pitch:'Aún no hay puntuación de afinación.', skilltree_prog_range:'Aún no se ha capturado el rango.', skilltree_prog_agility:'Aún no hay datos de Escala.',
     skilltree_bestcrossing:'Mejor cruce limpio', skilltree_prog_chestvoice:'Aún no hay datos de Entrenador de respiración.',
     skilltree_prog_mixedvoice:'Requiere ambas ramas desbloqueadas.',
-    skilltree_signin:"Inicia sesión para hacer crecer tu árbol de habilidades.", skilltree_unlockedcount_suffix:'desbloqueados', skilltree_next:'siguiente',
+    skilltree_signin:"Inicia sesión para hacer crecer tu árbol de habilidades.", skilltree_unlockedcount_suffix:'desbloqueados', skilltree_next:"Siguiente",
     skilltree_fullyunlocked:'Maestro vocal — totalmente desbloqueado',
     skilltree_fullyunlocked_desc:"Cada nodo muestra un nivel que tienes ahora, no un logro de una vez: puede bajar si baja la media reciente de una categoría.",
     skilltree_keeppracticing:'Sigue practicando en todas las categorías — los nodos más arriba en el árbol necesitan que sus nodos padres estén desbloqueados primero.',
@@ -12099,6 +12120,10 @@ const TRANSLATIONS = {
     rift_rounds_tpl:"{n} rondas, {h} con tu altura oída.",
     rift_again_btn:"Entrar de nuevo",
     rift_measure:"Cada ronda elige al azar uno de cuatro tipos y una nota de tu rango, la toca y escucha: una nota de 1,4 s, un intervalo desde la nota anterior, una nota sostenida de 2,4 s o una captura de 0,65 s. Cada ronda se puntúa como Precisión de nota, según lo cerca que estuvo tu altura de la nota. Tu media cuenta las rondas en las que se oyó una altura.",
+    skilltree_line:"Cada habilidad se abre cuando tus puntuaciones llegan a su marca, y puede cerrarse si bajan.",
+    skilltree_needs:"Requiere",
+    skilltree_now:"Ahora",
+    skilltree_now_tpl:"{v}",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13369,21 +13394,21 @@ const TRANSLATIONS = {
     warmup_defaultpattern:'1-2-3-4-5-4-3-2-1 örüntüsü',
     warmup_completed_prefix:'Tamamlanan ısınmalar:', warmup_signin_streaks:'Isınma serilerinizi takip etmek için oturum açın.',
     genre_applied_prefix:'Uygulandı — Akıllı Isınma ve Vibrato geri bildirimi artık', genre_applied_suffix:'varsayılanlarını kullanıyor.',
-    skilltree_label_control:'KONTROL', skilltree_label_pitch:'PERDE', skilltree_label_range:'SES ARALIĞI', skilltree_label_agility:'ÇEVİKLİK',
-    skilltree_label_headvoice:'BAŞ SESİ', skilltree_label_chestvoice:'GÖĞÜS SESİ', skilltree_label_mixedvoice:'KARMA SES', skilltree_label_vocalmaster:'VOKAL USTASI',
-    skilltree_req_control:'Bir Nota Eşleştirme veya Aralık Eşleştirme denemesini tamamlayın.',
-    skilltree_req_pitch:'Perde Yetenek Profili puanı ≥ %65.',
-    skilltree_req_range:'Ses Aralığı Yetenek Profili puanı ≥ %60 (Ses Aralığı Bulucu\'da yakalanır).',
-    skilltree_req_agility:'Çeviklik Yetenek Profili puanı ≥ %60 (Gam Çalışmasından).',
-    skilltree_req_headvoice:'Register Koçu\'nda passaggio üzerinde 3+ saniyelik temiz geçiş.',
-    skilltree_req_chestvoice:'Nefes Yetenek Profili puanı ≥ %60 (Nefes Antrenöründen).',
-    skilltree_req_mixedvoice:'Hem Baş Sesi hem de Göğüs Sesini açın.',
-    skilltree_req_vocalmaster:'Karma Ses açık, ayrıca Perde/Ses Aralığı/Çeviklik/Nefes hepsi ≥ %70 ve İfade ≥ %60.',
-    skilltree_unlocked:'Açıldı', skilltree_prog_control:'Henüz kayıtlı perde denemesi yok.', skilltree_current:'Mevcut',
+    skilltree_label_control:"Kontrol", skilltree_label_pitch:"Perde", skilltree_label_range:"Ses aralığı", skilltree_label_agility:"Çeviklik",
+    skilltree_label_headvoice:"Baş sesi", skilltree_label_chestvoice:"Göğüs sesi", skilltree_label_mixedvoice:"Karma ses", skilltree_label_vocalmaster:"Vokal usta",
+    skilltree_req_control:"Bir Nota Eşleştirme ya da Aralık Eşleştirme denemesi",
+    skilltree_req_pitch:"Perde ≥ %65",
+    skilltree_req_range:"Ses aralığı ≥ %60 (Ses Aralığı Bulucu)",
+    skilltree_req_agility:"Çeviklik ≥ %60 (Gam Çalışması)",
+    skilltree_req_headvoice:"Geçiş bölgenin üstünde 3 sn veya daha uzun temiz geçiş (Register Koçu)",
+    skilltree_req_chestvoice:"Nefes ≥ %60 (Nefes Antrenörü)",
+    skilltree_req_mixedvoice:"Baş sesi ve göğüs sesi açık",
+    skilltree_req_vocalmaster:"Karma ses açık; perde, ses aralığı, çeviklik ve nefes ≥ %70; ifade ≥ %60",
+    skilltree_unlocked:"Açık", skilltree_prog_control:'Henüz kayıtlı perde denemesi yok.', skilltree_current:'Mevcut',
     skilltree_prog_pitch:'Henüz perde puanı yok.', skilltree_prog_range:'Henüz ses aralığı yakalanmadı.', skilltree_prog_agility:'Henüz Gam Çalışması verisi yok.',
     skilltree_bestcrossing:'En iyi temiz geçiş', skilltree_prog_chestvoice:'Henüz Nefes Antrenörü verisi yok.',
     skilltree_prog_mixedvoice:'Her iki dalın da açılması gerekir.',
-    skilltree_signin:"Beceri ağacını büyütmek için giriş yap.", skilltree_unlockedcount_suffix:'açıldı', skilltree_next:'sıradaki',
+    skilltree_signin:"Beceri ağacını büyütmek için giriş yap.", skilltree_unlockedcount_suffix:'açıldı', skilltree_next:"Sıradaki",
     skilltree_fullyunlocked:'Vokal Ustası — tamamen açıldı',
     skilltree_fullyunlocked_desc:"Her düğüm şu an sahip olduğun bir seviyeyi gösterir, tek seferlik bir başarıyı değil: bir kategorinin son ortalaması düşerse düşebilir.",
     skilltree_keeppracticing:'Tüm kategorilerde pratik yapmaya devam edin — ağaçta daha yukarıdaki düğümler önce ebeveyn düğümlerinin açılmasını gerektirir.',
@@ -13806,6 +13831,10 @@ const TRANSLATIONS = {
     rift_rounds_tpl:"{n} tur, {h} turda perden duyuldu.",
     rift_again_btn:"Yeniden gir",
     rift_measure:"Her tur dört türden birini ve aralığından bir notayı rastgele seçer, çalar ve dinler: 1,4 sn tutulan nota, önceki notadan bir aralık, 2,4 sn'lik tutuş ya da 0,65 sn'lik hızlı yakalama. Her tur, Nota Eşleştirme gibi, perdenin notaya ne kadar yakın olduğuna göre puanlanır. Ortalaman perdenin duyulduğu turlar üzerindendir.",
+    skilltree_line:"Her beceri, puanların eşiğine ulaştığında açılır; puanlar düşerse yeniden kapanabilir.",
+    skilltree_needs:"Gerekli",
+    skilltree_now:"Şu an",
+    skilltree_now_tpl:"{v}",
   },
 };
 let currentLanguage = 'en';
@@ -21741,31 +21770,31 @@ document.getElementById('harmonyStartBtn').addEventListener('click', ()=>{
 
 /* ---------------- Vocal Skill Tree (real thresholds, no fake currency) ---------------- */
 const SKILL_TREE_NODES = [
-  {id:'control',    get label(){return t('skilltree_label_control');},      icon:'🎯', x:200, y:520, requires:[],
+  {id:'control',    get label(){return t('skilltree_label_control');},      icon:'hl-breath', x:200, y:520, requires:[],
     isUnlocked:()=>(progress.pitchScores||[]).length>0,
     reqText:()=>t('skilltree_req_control'),
     progressText:()=>(progress.pitchScores||[]).length>0 ? t('skilltree_unlocked') : t('skilltree_prog_control')},
-  {id:'pitch',      get label(){return t('skilltree_label_pitch');},        icon:'🎵', x:200, y:430, requires:['control'],
+  {id:'pitch',      get label(){return t('skilltree_label_pitch');},        icon:'hl-pitch', x:200, y:430, requires:['control'],
     isUnlocked:()=>{ const s=computeSkillProfile(); return s.pitch!==null && s.pitch>=65; },
     reqText:()=>t('skilltree_req_pitch'),
-    progressText:()=>{ const s=computeSkillProfile(); return s.pitch!==null ? `${t('skilltree_current')}: ${s.pitch}% / 65%` : t('skilltree_prog_pitch'); }},
-  {id:'range',      get label(){return t('skilltree_label_range');},        icon:'📏', x:110, y:340, requires:['pitch'],
+    progressText:()=>{ const s=computeSkillProfile(); return s.pitch!==null ? t('skilltree_now_tpl').replace('{v}', s.pitch+'%') : t('skilltree_prog_pitch'); }},
+  {id:'range',      get label(){return t('skilltree_label_range');},        icon:'hl-range', x:110, y:340, requires:['pitch'],
     isUnlocked:()=>{ const s=computeSkillProfile(); return s.range!==null && s.range>=60; },
     reqText:()=>t('skilltree_req_range'),
-    progressText:()=>{ const s=computeSkillProfile(); return s.range!==null ? `${t('skilltree_current')}: ${s.range}% / 60%` : t('skilltree_prog_range'); }},
-  {id:'agility',    get label(){return t('skilltree_label_agility');},      icon:'⚡', x:290, y:340, requires:['pitch'],
+    progressText:()=>{ const s=computeSkillProfile(); return s.range!==null ? t('skilltree_now_tpl').replace('{v}', s.range+'%') : t('skilltree_prog_range'); }},
+  {id:'agility',    get label(){return t('skilltree_label_agility');},      icon:'hl-steps', x:290, y:340, requires:['pitch'],
     isUnlocked:()=>{ const s=computeSkillProfile(); return s.agility!==null && s.agility>=60; },
     reqText:()=>t('skilltree_req_agility'),
-    progressText:()=>{ const s=computeSkillProfile(); return s.agility!==null ? `${t('skilltree_current')}: ${s.agility}% / 60%` : t('skilltree_prog_agility'); }},
-  {id:'headvoice',  get label(){return t('skilltree_label_headvoice');},   icon:'🎐', x:110, y:250, requires:['range'],
+    progressText:()=>{ const s=computeSkillProfile(); return s.agility!==null ? t('skilltree_now_tpl').replace('{v}', s.agility+'%') : t('skilltree_prog_agility'); }},
+  {id:'headvoice',  get label(){return t('skilltree_label_headvoice');},   icon:'hl-head', x:110, y:250, requires:['range'],
     isUnlocked:()=>(progress.bestBridgeSeconds||0)>=3,
     reqText:()=>t('skilltree_req_headvoice'),
-    progressText:()=>`${t('skilltree_bestcrossing')}: ${progress.bestBridgeSeconds||0}s / 3s`},
-  {id:'chestvoice', get label(){return t('skilltree_label_chestvoice');},  x:290, y:250, requires:['agility'],
+    progressText:()=>t('skilltree_now_tpl').replace('{v}', (progress.bestBridgeSeconds||0)+' s')},
+  {id:'chestvoice', get label(){return t('skilltree_label_chestvoice');},  icon:'hl-chest', x:290, y:250, requires:['agility'],
     isUnlocked:()=>{ const s=computeSkillProfile(); return s.breath!==null && s.breath>=60; },
     reqText:()=>t('skilltree_req_chestvoice'),
-    progressText:()=>{ const s=computeSkillProfile(); return s.breath!==null ? `${t('skilltree_current')}: ${s.breath}% / 60%` : t('skilltree_prog_chestvoice'); }},
-  {id:'mixedvoice', get label(){return t('skilltree_label_mixedvoice');},  icon:'🌗', x:200, y:160, requires:['headvoice','chestvoice'],
+    progressText:()=>{ const s=computeSkillProfile(); return s.breath!==null ? t('skilltree_now_tpl').replace('{v}', s.breath+'%') : t('skilltree_prog_chestvoice'); }},
+  {id:'mixedvoice', get label(){return t('skilltree_label_mixedvoice');},  icon:'hl-mixed', x:200, y:160, requires:['headvoice','chestvoice'],
     isUnlocked:()=>{
       const head=SKILL_TREE_NODES.find(n=>n.id==='headvoice').isUnlocked();
       const chest=SKILL_TREE_NODES.find(n=>n.id==='chestvoice').isUnlocked();
@@ -21773,7 +21802,7 @@ const SKILL_TREE_NODES = [
     },
     reqText:()=>t('skilltree_req_mixedvoice'),
     progressText:()=>t('skilltree_prog_mixedvoice')},
-  {id:'vocalmaster',get label(){return t('skilltree_label_vocalmaster');}, icon:'👑', x:200, y:60,  requires:['mixedvoice'],
+  {id:'vocalmaster',get label(){return t('skilltree_label_vocalmaster');}, icon:'hl-master', x:200, y:60,  requires:['mixedvoice'],
     isUnlocked:()=>{
       const mixed=SKILL_TREE_NODES.find(n=>n.id==='mixedvoice').isUnlocked();
       const s=computeSkillProfile();
@@ -21787,7 +21816,7 @@ function renderSkillTree(){
   const svg = document.getElementById('skillTreeSvg');
   if(!svg) return;
   if(!profile){
-    svg.innerHTML = `<text x="200" y="280" text-anchor="middle" fill="var(--muted)" font-size="13">${t('skilltree_signin')}</text>`;
+    svg.innerHTML = `<text x="200" y="280" text-anchor="middle" fill="var(--hl-ink-2)" font-size="14">${t('skilltree_signin')}</text>`;
     document.getElementById('skillTreeDetail').innerHTML='';
     return;
   }
@@ -21806,9 +21835,11 @@ function renderSkillTree(){
     const parentsUnlocked = node.requires.every(rid=>SKILL_TREE_NODES.find(n=>n.id===rid).isUnlocked());
     const isNext = !unlocked && parentsUnlocked && !nextLockedNode;
     if(isNext) nextLockedNode = node;
+    // phase 8: the sprite's icon; unlocked in ink, the next ringed in the voice colour, locked in ink-3 with the lock
     return `<g>
-      <circle class="st-node-bg${unlocked?' unlocked':''}${isNext?' next':''}" cx="${node.x}" cy="${node.y}" r="30"/>
-      <text class="st-node-icon" x="${node.x}" y="${node.y+6}">${unlocked?node.icon:'🔒'}</text>
+      <circle class="st-node-bg${unlocked?' unlocked':''}${isNext?' next':''}" cx="${node.x}" cy="${node.y}" r="28"/>
+      <svg class="hl-icon st-node-icon${unlocked?'':' locked'}" x="${node.x-12}" y="${node.y-12}" width="24" height="24" viewBox="0 0 24 24"><use href="#${node.icon}"/></svg>
+      ${unlocked ? '' : `<svg class="hl-icon st-node-icon locked" x="${node.x+14}" y="${node.y-30}" width="14" height="14" viewBox="0 0 24 24"><use href="#hl-lock"/></svg>`}
       <text class="st-node-label${unlocked?' unlocked':''}" x="${node.x}" y="${node.y+46}">${node.label}</text>
     </g>`;
   }).join('');
@@ -21817,15 +21848,14 @@ function renderSkillTree(){
 
   const detail = document.getElementById('skillTreeDetail');
   const unlockedCount = SKILL_TREE_NODES.filter(n=>n.isUnlocked()).length;
+  const row = (k, v) => `<div class="vc-dim"><span>${k}</span><span>${v}</span></div>`;
+  const count = row(t('skilltree_unlocked'), t('boss_landed_tpl').replace('{n}', unlockedCount).replace('{m}', SKILL_TREE_NODES.length));
   if(nextLockedNode){
-    detail.innerHTML = `
-      <div class="std-title">${unlockedCount} ${t('word_of')} ${SKILL_TREE_NODES.length} ${t('skilltree_unlockedcount_suffix')} — ${t('skilltree_next')}: ${nextLockedNode.label}</div>
-      <div class="std-text">${nextLockedNode.reqText()}</div>
-      <div class="std-text" style="color:var(--brass);margin-top:6px;">${nextLockedNode.progressText()}</div>`;
+    detail.innerHTML = count + row(t('skilltree_next'), nextLockedNode.label) + row(t('skilltree_needs'), nextLockedNode.reqText()) + row(t('skilltree_now'), nextLockedNode.progressText());
   } else if(unlockedCount===SKILL_TREE_NODES.length){
-    detail.innerHTML = `<div class="std-title">👑 ${t('skilltree_fullyunlocked')}</div><div class="std-text">${t('skilltree_fullyunlocked_desc')}</div>`;
+    detail.innerHTML = count + row(t('skilltree_fullyunlocked'), t('skilltree_fullyunlocked_desc'));
   } else {
-    detail.innerHTML = `<div class="std-title">${unlockedCount} ${t('word_of')} ${SKILL_TREE_NODES.length} ${t('skilltree_unlockedcount_suffix')}</div><div class="std-text">${t('skilltree_keeppracticing')}</div>`;
+    detail.innerHTML = count + row(t('skilltree_next'), t('skilltree_keeppracticing'));
   }
 }
 
