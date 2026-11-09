@@ -553,6 +553,20 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   steps 1–6, checkout and posters English in every language. Phase 8 ≈ phase 6 in size, phase 9 ≈ phase 7; phase 9
   needs decisions first (demo checkout, Teacher Dashboard, Vocal Lab, legacy tabs). No app changes.
 - Follow-up from the phase 7 deploy: scores.js's Voice Quality centroid gate (±2 Hz) is tighter than its A/A noise.
+  **Decided in PHASE8.md:** no rollback was right; done in scores.js (below).
+
+### Phase 8 (`redesign/phase8`, spec `PHASE8.md`, given 2026-11-09)
+- **Decisions (PHASE8.md "DECISIONS"):**
+  - scores4b: not rolling back phase 7 was right. From now on Voice Quality's centroid, and any value whose own noise
+    is wider than ±2, is gated by master's A/A range or ±1% of master's median, whichever is wider (scores.js SPREAD;
+    a value newly found noisier than ±2 is added to SPREAD). Replayed on the phase 7 production runs: run 1 passes
+    (961 in 956.3–975.7), the rerun still misses by 1 Hz (951 vs 952–975.7), the A/A passes.
+  - Phase 9: the Teacher Dashboard is hidden like the Director Dashboard (it can't reach students without a
+    multi-user backend), and the Teacher plan card says "Coming later" instead of a button. Vocal Lab stays a Coach
+    tool. `.legacy-tabs` is removed in phase 10, after a grep of scripts/.
+- **Step 0 DONE** 41a74e5: every plan button opens "Paid plans aren't on sale yet…" (Close only, no plan change);
+  signed out "Sign in to choose a plan". The demo checkout stays in the code, unreachable. checkout.js 42/42 (master
+  fails it).
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
