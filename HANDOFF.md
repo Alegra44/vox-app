@@ -567,6 +567,33 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - **Step 0 DONE** 41a74e5: every plan button opens "Paid plans aren't on sale yet…" (Close only, no plan change);
   signed out "Sign in to choose a plan". The demo checkout stays in the code, unreachable. checkout.js 42/42 (master
   fails it).
+- **Guards** 604f326: games8.js (the five games through their globals; Math.random seeded before Start; Glider, Boss
+  and Harmony told a steered pitch per frame), gamestates.js (the gate), treecheck.js, stopcheck --only8 (+ the Rift's
+  back link), copyscan --world. Master baselines: gamestates A/A all equal; stopcheck --only8 0/14 on master (Start
+  left reading its running label, Harmony's notes sounding, the Rift running under the hub); copyscan --world 101 §7,
+  162 emoji, 90 English-in-other-languages texts.
+- **Built** (one commit each): 2.1 marks (14 + 5 tree icons, marks8.js), 2.2 hub, 2.3 Pitch Mountain (+ the shared game
+  page/stage/result, gameColors, gameStartIdle/Live), 2.4 Register Canyon (houseSession), 2.5 Boss Arena (Wraith via
+  houseSession), 2.6 Harmony Castle, 2.7 The Rift (back link stops all; captureAccuracyForTarget opts.active), 2.8 Skill
+  Tree, 2.9 copy (PHASE8_COPY.md, 178 keys). Midway checkpoint review/phase8-part1 8587076.
+- Found: on master no game dimmed the house (singingSession without a stage), not only Bridge and the Wraith. The
+  Skill Tree's Vocal Master needs Expression ≥ 60, which phase 7 made "Not in your profile yet": unreachable until the
+  scoring batch scores Expression. Glider "For you" maps the weakest of pitch/agility/range to Melody Road / Agility
+  Run / Interval Jump (no course recommendation existed). The tree's Control node uses hl-breath (spec's icon list).
+- **Fix after the checks** 93fa691: the Glider's course lines, the bosses' lines and the games' song line were set once at
+  load, so fr/es/tr showed English after a language change (copyscan --world 48); renderWorldCopy() refills them on
+  every language change, the song's name and key translated. Rest of the checks below.
+- **Checks (§3)**, checks8.sh, logs checks8-2026-11-09T06-10-24 (all) + T10-47-53 and T12-36-39 (reruns): all pass.
+  gamestates PASS (Register Canyon 307 vs 249 in the first run was noise: rerun 3 a side gives 174/172/84 on both,
+  master alone ranges 84–307); checkout 42/42; stopcheck pass; treecheck PASS; glider flight/courses, regfix, batch1
+  112/0, batch3a 169/0, batch3b 179/0, warm-up entries/tracking, loopback, house 1051/0, contrast, copyscan --world
+  0/0/0, hooks 21/0, navcheck, bootcheck 9/0, picker. Passed on rerun only: batch1, house, batch3a, copyscan, bootcheck
+  (each failed once on the production backend: "Failed to fetch", a sign-up timeout, a 6.7 s signed-in boot).
+  Test scripts changed for expected UI changes or harness gaps: batch3b (boss training is inside the result card),
+  batch1 (a non-best Glider run is titled "Score"), regfix (it served only the page, not vocal-load.js beside it:
+  broken since Vocal Load phase 2, not by phase 8).
+- **Screenshots** review/phase8 (shots8.js at 93fa691): 100 shots, house down on every stage and up elsewhere, 0
+  contrast items under 4.5:1, no page errors. Waiting for review: no merge, no deploy.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
