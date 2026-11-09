@@ -38,6 +38,8 @@ const ALLOWED_REMOVALS = {
   'data-i18n=dashboard_todaysplan_h2': 'phase 7 §2.2: Today\'s Plan as rows; the "not AI" heading goes; key stays in TRANSLATIONS',
   'data-i18n=dashboard_todaysplan_desc': 'phase 7 §2.2: the "not a language model" text goes; one hl-measure line (progress_plan_measure); key stays in TRANSLATIONS',
   'data-i18n=action_start_pro': 'phase 6 §2.1: the Songs tools\' Start reads "Start" with access, set by renderSongsStartLabels (Harmony Arena\'s keeps it)',
+  'data-i18n=glider_step_label': 'phase 8 §2.3: the step label (with its emoji) gives way to the page head (mark, title, one line); key stays in TRANSLATIONS',
+  'data-i18n=glider_course_desc': 'phase 8 §2.3: the line about "7 real courses" goes; the page has one line (glider_line); key stays in TRANSLATIONS',
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {

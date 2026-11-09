@@ -73,7 +73,7 @@ const Q = { type: 'jpeg', quality: 78 };
             await page.waitForFunction(`!(${g.busy})()`, null, { timeout: g.cap }).catch(() => {});
             if (await page.evaluate(`(${g.busy})()`)) await page.evaluate(id => document.getElementById(id).click(), g.start);
             await C.sleep(1800); await C.clearOverlays(page);
-            await page.evaluate(sel => { const e = document.querySelector(sel); if (e) e.scrollIntoView({ block: 'start' }); }, g.result);
+            await page.evaluate(() => window.scrollTo(0, 0)); // full page from the top (a scrolled page shows the sticky header mid-shot)
             await full(page, `${g.key}-result`);
           }
           states[`${combo}/games`] = { errors: errors.slice() };

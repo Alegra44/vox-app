@@ -1413,6 +1413,49 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .arcade-game-card .ag-best{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--brass);margin-top:10px;}
 
   .arcade-canvas-wrap{background:var(--hl-sunk);border:1px solid var(--hairline);border-radius:14px;overflow:hidden;margin-bottom:16px;}
+  /* ============ phase 8: Vocal World's game pages (PHASE8.md 2.3-2.7) ============
+     The page (house up): a back row, the location's mark, title and one line, the options (rows, tiles, .hl-seg), Start,
+     the best, the method. The stage (house down): a HUD row (condensed, tabular), the course or arena filling the stage
+     column (up to 760px), the neutral Stop pill. The result (house up): .vc-result with the score big. Game colours are
+     read from the tokens at draw time (gameColors): you in --hl-voice, terrain and lanes in the ink scale, rewards in
+     --hl-game-gold, hazards in --hl-miss. */
+  .gw .key-card.gw-card{background:none;border:0;padding:0;box-shadow:none;}
+  .gw-back{display:inline-flex;align-items:center;gap:6px;min-height:var(--hl-touch);padding:0;margin:0 0 var(--hl-s2);color:var(--hl-ink-2);font-size:var(--hl-t-small);text-decoration:none;}
+  .gw-back:hover{color:var(--hl-ink);}
+  .gw-back-chev{transform:scaleX(-1);}
+  .gw-head{display:flex;align-items:flex-start;gap:var(--hl-s4);margin-bottom:var(--hl-s5);}
+  .gw-head .gw-mark{width:48px;height:48px;color:var(--hl-ink);flex:none;}
+  .gw-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:var(--hl-t-h2);line-height:1.1;margin:0;color:var(--hl-ink);}
+  .gw-line{font-size:var(--hl-t-body);color:var(--hl-ink-2);margin:var(--hl-s2) 0 0;max-width:60ch;}
+  .gw-opt-label{display:block;margin:var(--hl-s5) 0 var(--hl-s2);color:var(--hl-ink-3);}
+  .gw-list{border-top:var(--hl-hair) solid var(--hl-rule);}
+  .gw-opt.hl-item{grid-template-columns:22px minmax(0,1fr) auto;min-height:56px;}
+  .gw-opt .gw-opt-tick{color:var(--hl-ink);visibility:hidden;}
+  .gw-opt[aria-pressed="true"] .gw-opt-tick{visibility:visible;}
+  .gw-opt .gw-opt-text{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .gw-opt .hl-item-meta{color:var(--hl-ink-2);}
+  .gw-foryou{font-size:var(--hl-t-label);font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--hl-ink);border:var(--hl-hair) solid var(--hl-ink);border-radius:var(--hl-r1);padding:2px 6px;white-space:nowrap;}
+  .gw-seg{display:flex;flex-wrap:wrap;max-width:100%;}
+  .gw-seg button{flex:1 1 auto;}
+  .gw-note{color:var(--hl-ink-2);margin:var(--hl-s4) 0 0;}
+  .gw-note:empty{display:none;}
+  .gw-stage{margin-top:var(--hl-s5);}
+  .gw-stage .gw-go{justify-content:flex-start;margin:0;}
+  .gw-stage .gw-start{background:var(--hl-voice);color:var(--hl-on-voice);border-color:var(--hl-voice);}
+  .gw-stage .gw-start.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
+  .gw-stage .gw-start.listening .dot-icon{display:none;}
+  .gw-best{font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;margin:var(--hl-s3) 0 0;}
+  .gw-stage:not(.is-live) .gw-canvas{display:none;}
+  .vc-stage.is-live.gw-stage{width:100%;max-width:760px;align-items:stretch;}
+  .vc-stage.is-live.gw-stage .gw-go{justify-content:center;}
+  .gw-canvas.arcade-canvas-wrap{background:transparent;border:var(--hl-hair) solid var(--hl-rule);border-radius:var(--hl-r2);margin:0;}
+  .gw-hud{display:flex;gap:var(--hl-s5);justify-content:space-between;font-stretch:var(--hl-w-cond, 85%);font-variant-numeric:tabular-nums;}
+  .gw-hud-i{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .gw-hud-k{font-size:var(--hl-t-label);font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--hl-ink-3);}
+  .gw-hud-v{font-size:var(--hl-t-h2);font-weight:500;color:var(--hl-ink);line-height:1.1;}
+  .gw-result .btn-row{justify-content:flex-start;margin-top:var(--hl-s2);}
+  .gw-measure{margin-top:var(--hl-s6);}
+  @media (min-width:768px){ .gw-head .gw-mark{width:56px;height:56px;} }
   .arcade-canvas-wrap canvas{width:100%;display:block;}
   .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);}
   .rift-round-card{
@@ -3101,68 +3144,84 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <!-- PITCH GLIDER / VOCAL JOURNEY -->
-    <div id="gameGlider" style="display:none;">
-      <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
-      <div class="key-card">
-        <div class="step-label" data-i18n="glider_step_label">🏔️ Pitch Mountain — Vocal Journey</div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="glider_choose_course">Choose your course</h2>
-        <p class="desc" style="margin-bottom:14px;" data-i18n="glider_course_desc">Sing to fly, go quiet to fall — 7 real courses, not reskins of the same obstacle generator.</p>
-
-        <div class="mode-card-grid" id="gliderModeRow">
-          <button class="ex-type-btn mode-card active" data-glider-mode="highway" aria-pressed="true">
-            <div class="mode-card-icon">🛣️</div>
-            <div class="mode-card-name" data-i18n="glider_mode_highway">Pitch Highway</div>
-            <div class="mode-card-tag"></div>
+    <div id="gameGlider" class="gw" style="display:none;">
+      <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
+      <!-- phase 8 (PHASE8.md 2.3): the page (house up): title, one line, the courses as rows ("For you" on the one for your
+           weakest skill), difficulty, Start, best, the method. The stage (house down): the HUD, the course full width, Stop.
+           The result (house up): .vc-result, the score big. -->
+      <div class="key-card gw-card">
+        <div class="gw-head"><svg class="hl-icon gw-mark" aria-hidden="true"><use href="#hl-loc-mountain"/></svg><div class="gw-head-text"><h2 class="gw-title" data-i18n="world_glider_title">Pitch Mountain</h2><p class="gw-line" data-i18n="glider_line">Your pitch sets your height. Sing to fly through the gaps; go quiet and you fall.</p></div></div>
+        <div class="gw-opt-label hl-label" data-i18n="glider_choose_course">Course</div>
+        <div class="hl-list gw-list" id="gliderModeRow" role="group">
+          <button type="button" class="hl-item gw-opt active" data-glider-mode="highway" aria-pressed="true">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_highway">Pitch Highway</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
-          <button class="ex-type-btn mode-card" data-glider-mode="melody" aria-pressed="false">
-            <div class="mode-card-icon">🎵</div>
-            <div class="mode-card-name" data-i18n="glider_mode_melody">Melody Road</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="hl-item gw-opt" data-glider-mode="melody" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_melody">Melody Road</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
-          <button class="ex-type-btn mode-card" data-glider-mode="interval" aria-pressed="false">
-            <div class="mode-card-icon">🎯</div>
-            <div class="mode-card-name" data-i18n="glider_mode_interval">Interval Jump</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="hl-item gw-opt" data-glider-mode="interval" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_interval">Interval Jump</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
-          <button class="ex-type-btn mode-card" data-glider-mode="sustain" aria-pressed="false">
-            <div class="mode-card-icon">🌉</div>
-            <div class="mode-card-name" data-i18n="glider_mode_sustain">Sustain Bridge</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="hl-item gw-opt" data-glider-mode="sustain" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_sustain">Sustain Bridge</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
-          <button class="ex-type-btn mode-card" data-glider-mode="agility" aria-pressed="false">
-            <div class="mode-card-icon">⚡</div>
-            <div class="mode-card-name" data-i18n="glider_mode_agility">Agility Run</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="hl-item gw-opt" data-glider-mode="agility" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_agility">Agility Run</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
-          <button class="ex-type-btn mode-card" data-glider-mode="keyshift" aria-pressed="false">
-            <div class="mode-card-icon">🔀</div>
-            <div class="mode-card-name" data-i18n="glider_mode_keyshift">Key Shift</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="hl-item gw-opt" data-glider-mode="keyshift" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_keyshift">Key Shift</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
-          <button class="ex-type-btn mode-card" data-glider-mode="memory" aria-pressed="false">
-            <div class="mode-card-icon">🌑</div>
-            <div class="mode-card-name" data-i18n="glider_mode_memory">Memory Run</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="hl-item gw-opt" data-glider-mode="memory" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title mode-card-name" data-i18n="glider_mode_memory">Memory Run</span><span class="hl-item-meta mode-card-tag"></span></span>
+            <span class="hl-item-end"><span class="gw-foryou" hidden data-i18n="game_for_you">For you</span></span>
           </button>
         </div>
-
-        <div class="ex-type-row" id="gliderDifficultyRow" style="margin-bottom:14px;">
-          <button class="ex-type-btn" data-glider-difficulty="beginner" aria-pressed="false" data-i18n="difficulty_beginner">Beginner</button>
-          <button class="ex-type-btn active" data-glider-difficulty="intermediate" aria-pressed="true" data-i18n="difficulty_intermediate">Intermediate</button>
-          <button class="ex-type-btn" data-glider-difficulty="professional" aria-pressed="false" data-i18n="difficulty_professional">Professional</button>
+        <div class="gw-opt-label hl-label" data-i18n="game_difficulty_label">Difficulty</div>
+        <div class="hl-seg gw-seg" id="gliderDifficultyRow" role="group">
+          <button type="button" data-glider-difficulty="beginner" aria-pressed="false" data-i18n="difficulty_beginner">Beginner</button>
+          <button type="button" class="active" data-glider-difficulty="intermediate" aria-pressed="true" data-i18n="difficulty_intermediate">Intermediate</button>
+          <button type="button" data-glider-difficulty="professional" aria-pressed="false" data-i18n="difficulty_professional">Professional</button>
         </div>
-
-        <p class="desc" style="margin-bottom:14px;" id="gliderAdaptiveNote"></p>
-        <div class="arcade-hud"><span id="gliderScoreLabel">Score: 0</span><span id="gliderComboLabel">Combo: 0</span><span id="gliderBestLabelLive">Best: 0</span></div>
-        <div class="arcade-canvas-wrap"><canvas id="gliderCanvas" width="600" height="320" role="img" aria-label="Vocal Journey flight course — sing higher to climb, quieter to descend, avoiding gaps in the course"></canvas></div>
-        <div class="btn-row" style="justify-content:center;">
-          <button class="mic-btn" id="gliderStartBtn"><span class="dot-icon"></span><span id="gliderStartLabel">Start flying</span></button>
+        <p class="gw-note hl-small" id="gliderAdaptiveNote"></p>
+        <div class="vc-stage gw-stage" id="gliderStage">
+          <div class="gw-hud vc-live-only" aria-hidden="true">
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_score">Score</span><span class="gw-hud-v" id="gliderScoreLabel">0</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_combo">Combo</span><span class="gw-hud-v" id="gliderComboLabel">0</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_coins">Coins</span><span class="gw-hud-v" id="gliderCoinsLabel">0</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_best">Best</span><span class="gw-hud-v" id="gliderHudBest">0</span></span>
+          </div>
+          <div class="arcade-canvas-wrap gw-canvas"><canvas id="gliderCanvas" width="600" height="320" role="img" aria-label="Pitch Mountain: sing higher to climb and lower to dive through the gaps"></canvas></div>
+          <div class="btn-row gw-go">
+            <button class="mic-btn vc-take-pill gw-start" id="gliderStartBtn"><span class="dot-icon"></span><span id="gliderStartLabel">Start flying</span></button>
+          </div>
+          <p class="gw-best vc-paper-only" id="gliderBestLabelLive">Best: 0</p>
+          <div class="vl-gauge" id="vlGaugeGlider" style="display:none;"></div>
         </div>
-        <div class="vl-gauge" id="vlGaugeGlider" style="display:none;"></div>
-        <div class="arcade-overlay-msg" id="gliderGameOver" style="display:none;margin-top:16px;">
-          <div class="om-title" id="gliderGameOverTitle">Crashed!</div>
-          <div class="om-sub" id="gliderGameOverSub"></div>
+        <div class="vc-result gw-result" id="gliderGameOver" role="status" aria-live="polite" style="display:none;">
+          <div class="vc-result-num" id="gliderResultScore">0</div>
+          <h3 class="hl-h3" id="gliderGameOverTitle">Score</h3>
+          <p class="hl-coach" id="gliderGameOverSub"></p>
+          <div class="vc-result-dims">
+            <div class="vc-dim"><span data-i18n="game_hud_best">Best</span><span id="gliderResBest">—</span></div>
+            <div class="vc-dim"><span data-i18n="game_hud_coins">Coins</span><span id="gliderResCoins">—</span></div>
+            <div class="vc-dim"><span data-i18n="game_hud_combo">Combo</span><span id="gliderResCombo">—</span></div>
+          </div>
+          <div class="btn-row"><button type="button" class="hl-btn hl-btn--ink" id="gliderAgainBtn" data-i18n="glider_again_btn">Fly again</button></div>
         </div>
+        <details class="hl-measure gw-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="glider_measure">Your pitch, read about 60 times a second, sets your height: the bottom of the course is the low end of your saved range and the top its high end. Go quiet and you fall. Your score is how far you flew; a coin counts when you pass it near the middle of a gap, and each one in a row adds to your combo.</p></details>
       </div>
     </div>
 
@@ -7667,7 +7726,7 @@ const TRANSLATIONS = {
     feedback_submit_btn:'Submit Feedback',
     feedback_thanks_desc:'Your feedback was saved. It genuinely helps shape what gets built next.',
     feedback_thanks_title:'Thank you',
-    glider_choose_course:'Choose your course',
+    glider_choose_course:"Course",
     glider_takeoff_hint:'Sing to take off',
     glider_course_desc:'Sing to fly, go quiet to fall — 7 real courses, not reskins of the same obstacle generator.',
     glider_mode_agility:'Agility Run',
@@ -7821,7 +7880,7 @@ const TRANSLATIONS = {
     teacher_scope_you:'you',
     teacher_signin_prompt:'Sign in to use the Teacher Dashboard.',
     teacher_viewplan_btn:'View Teacher plan',
-    world_back_link:'← Back to Vocal World',
+    world_back_link:"Vocal World",
     world_boss_desc:"Sing the Lead line well to beat a boss.",
     world_boss_title:"Boss Arena",
     world_bridge_desc:"Switch chest and head voice to change lanes.",
@@ -7916,7 +7975,7 @@ const TRANSLATIONS = {
     weeklychallenge_breath20_label:'Hold a note for 20 seconds', weeklychallenge_pitch90x3_label:'Score 90%+ on 3 Pitch/Interval attempts',
     weeklychallenge_scale80_label:'Average 80%+ on a Scale Run', weeklychallenge_bestweek_p1:'Best this week:',
     weeklychallenge_ofthree_p2:'of 3 attempts at 90%+',
-    action_go:'Go', action_start_pro:'Start (Pro)', action_stop:'Stop', action_start:'Start',
+    action_go:'Go', action_start_pro:'Start (Pro)', action_stop:"Stop", action_start:'Start',
     boss_defeated_title:'Boss defeated! 🎉', boss_draw_sub:"Close fight. One more clean note would've tipped it.",
     boss_draw_title:"Draw — nobody's out of health.", boss_evenwin_p1:'Even in a win,', boss_evenwin_p2:'was your weakest note',
     boss_evenwin_p3:'Worth a quick rep before your next fight.', boss_for_you_badge:'For you',
@@ -7934,7 +7993,7 @@ const TRANSLATIONS = {
     dash_not_captured:'Not captured yet — visit Range Finder', dash_recap_suffix:'Recap',
     game_best_p1:'Best:', game_new_best:'New best!', game_score_p1:'Score:',
     game_signin_savebest:'Sign in to save your best score', game_signin_savebest_short:'Sign in to save your best',
-    glider_coins:'coins', glider_crashed:'Crashed!', glider_start_label:'Start flying',
+    glider_coins:'coins', glider_crashed:'Crashed!', glider_start_label:"Start flying",
     home_continue_none:'No sessions yet — today is Day 1.', home_continue_p1:'Last session:', home_continue_p2:'total sessions',
     home_greeting_afternoon:'Good afternoon', home_greeting_evening:'Good evening', home_greeting_morning:'Good morning',
     home_level_p1:'Level', home_levelxp_p2:'XP',
@@ -8493,6 +8552,18 @@ const TRANSLATIONS = {
     arcade_level_tpl:"Level {n}",
     arcade_lock_msg_tpl:"Opens at Level {n}. You're Level {m}.",
     arcade_not_played:"Not played yet",
+    glider_line:"Your pitch sets your height. Sing to fly through the gaps; go quiet and you fall.",
+    game_difficulty_label:"Difficulty",
+    game_for_you:"For you",
+    game_hud_score:"Score",
+    game_hud_combo:"Combo",
+    game_hud_coins:"Coins",
+    game_hud_best:"Best",
+    game_score_label:"Score",
+    glider_again_btn:"Fly again",
+    glider_coach_fell:"You fell out of a gap. Sing a little before each gap moves, and hold the note steady through it.",
+    glider_coach_notakeoff:"You didn't take off. Sing any note to start flying.",
+    glider_measure:"Your pitch, read about 60 times a second, sets your height: the bottom of the course is the low end of your saved range and the top its high end. Go quiet and you fall. Your score is how far you flew; a coin counts when you pass it near the middle of a gap, and each one in a row adds to your combo.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9309,7 +9380,7 @@ const TRANSLATIONS = {
     feedback_submit_btn:'Envoyer l\'avis',
     feedback_thanks_desc:'Votre avis a été enregistré. Il aide vraiment à façonner ce qui sera construit ensuite.',
     feedback_thanks_title:'Merci',
-    glider_choose_course:'Choisissez votre parcours',
+    glider_choose_course:"Parcours",
     glider_takeoff_hint:'Chantez pour décoller',
     glider_course_desc:'Chantez pour voler, taisez-vous pour tomber — 7 vrais parcours, pas de simples re-habillages du même générateur d\'obstacles.',
     glider_mode_agility:'Course Agilité',
@@ -9463,7 +9534,7 @@ const TRANSLATIONS = {
     teacher_scope_you:'vous',
     teacher_signin_prompt:'Connectez-vous pour utiliser le Tableau de bord Enseignant.',
     teacher_viewplan_btn:'Voir le forfait Enseignant',
-    world_back_link:'← Retour au Monde Vocal',
+    world_back_link:"Monde vocal",
     world_boss_desc:"Chantez bien la ligne principale pour battre un boss.",
     world_boss_title:"Arène des Boss",
     world_bridge_desc:"Passez de la voix de poitrine à la voix de tête pour changer de voie.",
@@ -9558,7 +9629,7 @@ const TRANSLATIONS = {
     weeklychallenge_breath20_label:'Tenez une note pendant 20 secondes', weeklychallenge_pitch90x3_label:'Obtenez 90 %+ sur 3 tentatives de Justesse/Intervalle',
     weeklychallenge_scale80_label:'Obtenez 80 %+ de moyenne sur un passage de gammes', weeklychallenge_bestweek_p1:'Meilleur score cette semaine :',
     weeklychallenge_ofthree_p2:'tentatives sur 3 à 90 %+',
-    action_go:'Aller', action_start_pro:'Démarrer (Pro)', action_stop:'Arrêter', action_start:'Démarrer',
+    action_go:'Aller', action_start_pro:'Démarrer (Pro)', action_stop:"Arrêter", action_start:'Démarrer',
     boss_defeated_title:'Boss vaincu ! 🎉', boss_draw_sub:"Combat serré. Une note propre de plus aurait fait la différence.",
     boss_draw_title:"Égalité — personne n'est à court de santé.", boss_evenwin_p1:'Même en victoire,', boss_evenwin_p2:'était votre note la plus faible',
     boss_evenwin_p3:"Ça vaut le coup de vous entraîner rapidement avant votre prochain combat.", boss_for_you_badge:'Pour vous',
@@ -9576,7 +9647,7 @@ const TRANSLATIONS = {
     dash_not_captured:'Pas encore mesuré — allez sur Recherche de tessiture', dash_recap_suffix:'Récapitulatif',
     game_best_p1:'Meilleur score :', game_new_best:'Nouveau record !', game_score_p1:'Score :',
     game_signin_savebest:'Connectez-vous pour sauvegarder votre meilleur score', game_signin_savebest_short:'Connectez-vous pour sauvegarder votre meilleur score',
-    glider_coins:'pièces', glider_crashed:'Crash !', glider_start_label:'Commencer à voler',
+    glider_coins:'pièces', glider_crashed:'Crash !', glider_start_label:"Décoller",
     home_continue_none:"Aucune session encore — aujourd'hui, c'est le Jour 1.", home_continue_p1:'Dernière session :', home_continue_p2:'sessions au total',
     home_greeting_afternoon:'Bon après-midi', home_greeting_evening:'Bonsoir', home_greeting_morning:'Bonjour',
     home_level_p1:'Niveau', home_levelxp_p2:'XP',
@@ -10135,6 +10206,18 @@ const TRANSLATIONS = {
     arcade_level_tpl:"Niveau {n}",
     arcade_lock_msg_tpl:"S'ouvre au niveau {n}. Vous êtes au niveau {m}.",
     arcade_not_played:"Pas encore joué",
+    glider_line:"Votre hauteur de note fixe votre altitude. Chantez pour passer dans les trouées ; taisez-vous et vous tombez.",
+    game_difficulty_label:"Difficulté",
+    game_for_you:"Pour vous",
+    game_hud_score:"Score",
+    game_hud_combo:"Combo",
+    game_hud_coins:"Pièces",
+    game_hud_best:"Record",
+    game_score_label:"Score",
+    glider_again_btn:"Revoler",
+    glider_coach_fell:"Vous êtes sorti d'une trouée. Chantez un peu avant que la trouée ne bouge, et tenez la note stable pour la traverser.",
+    glider_coach_notakeoff:"Vous n'avez pas décollé. Chantez une note pour prendre votre envol.",
+    glider_measure:"Votre hauteur de note, lue environ 60 fois par seconde, fixe votre altitude : le bas du parcours est le grave de votre tessiture enregistrée, le haut son aigu. Taisez-vous et vous tombez. Votre score est la distance parcourue ; une pièce compte quand vous la passez près du centre d'une trouée, et chacune à la suite augmente votre combo.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10951,7 +11034,7 @@ const TRANSLATIONS = {
     feedback_submit_btn:'Enviar comentarios',
     feedback_thanks_desc:'Tu comentario fue guardado. Realmente ayuda a dar forma a lo que se construirá después.',
     feedback_thanks_title:'Gracias',
-    glider_choose_course:'Elige tu recorrido',
+    glider_choose_course:"Recorrido",
     glider_takeoff_hint:'Canta para despegar',
     glider_course_desc:'Canta para volar, guarda silencio para caer — 7 recorridos reales, no reskins del mismo generador de obstáculos.',
     glider_mode_agility:'Carrera de Agilidad',
@@ -11105,7 +11188,7 @@ const TRANSLATIONS = {
     teacher_scope_you:'tú',
     teacher_signin_prompt:'Inicia sesión para usar el Panel del Profesor.',
     teacher_viewplan_btn:'Ver plan Profesor',
-    world_back_link:'← Volver al Mundo Vocal',
+    world_back_link:"Mundo vocal",
     world_boss_desc:"Canta bien la línea principal para vencer a un jefe.",
     world_boss_title:"Arena de Jefes",
     world_bridge_desc:"Cambia entre voz de pecho y de cabeza para cambiar de carril.",
@@ -11200,7 +11283,7 @@ const TRANSLATIONS = {
     weeklychallenge_breath20_label:'Sostén una nota durante 20 segundos', weeklychallenge_pitch90x3_label:'Consigue 90 %+ en 3 intentos de Afinación/Intervalo',
     weeklychallenge_scale80_label:'Consigue un promedio de 80 %+ en una escala', weeklychallenge_bestweek_p1:'Mejor esta semana:',
     weeklychallenge_ofthree_p2:'de 3 intentos al 90 %+',
-    action_go:'Ir', action_start_pro:'Empezar (Pro)', action_stop:'Detener', action_start:'Empezar',
+    action_go:'Ir', action_start_pro:'Empezar (Pro)', action_stop:"Detener", action_start:'Empezar',
     boss_defeated_title:'¡Jefe derrotado! 🎉', boss_draw_sub:'Combate reñido. Una nota limpia más habría decidido todo.',
     boss_draw_title:'Empate — nadie se quedó sin salud.', boss_evenwin_p1:'Incluso ganando,', boss_evenwin_p2:'fue tu nota más débil',
     boss_evenwin_p3:'Vale la pena una repetición rápida antes de tu próxima batalla.', boss_for_you_badge:'Para ti',
@@ -11218,7 +11301,7 @@ const TRANSLATIONS = {
     dash_not_captured:'Aún sin medir — visita el Buscador de Registro', dash_recap_suffix:'Resumen',
     game_best_p1:'Mejor:', game_new_best:'¡Nuevo récord!', game_score_p1:'Puntuación:',
     game_signin_savebest:'Inicia sesión para guardar tu mejor puntuación', game_signin_savebest_short:'Inicia sesión para guardar tu mejor puntuación',
-    glider_coins:'monedas', glider_crashed:'¡Choque!', glider_start_label:'Empezar a volar',
+    glider_coins:'monedas', glider_crashed:'¡Choque!', glider_start_label:"Despegar",
     home_continue_none:'Aún sin sesiones — hoy es el Día 1.', home_continue_p1:'Última sesión:', home_continue_p2:'sesiones en total',
     home_greeting_afternoon:'Buenas tardes', home_greeting_evening:'Buenas noches', home_greeting_morning:'Buenos días',
     home_level_p1:'Nivel', home_levelxp_p2:'XP',
@@ -11777,6 +11860,18 @@ const TRANSLATIONS = {
     arcade_level_tpl:"Nivel {n}",
     arcade_lock_msg_tpl:"Se abre en el nivel {n}. Estás en el nivel {m}.",
     arcade_not_played:"Aún sin jugar",
+    glider_line:"Tu altura de nota marca tu altura de vuelo. Canta para pasar por los huecos; si callas, caes.",
+    game_difficulty_label:"Dificultad",
+    game_for_you:"Para ti",
+    game_hud_score:"Puntos",
+    game_hud_combo:"Combo",
+    game_hud_coins:"Monedas",
+    game_hud_best:"Récord",
+    game_score_label:"Puntuación",
+    glider_again_btn:"Volar de nuevo",
+    glider_coach_fell:"Te saliste de un hueco. Canta un poco antes de que el hueco se mueva y mantén la nota estable al cruzarlo.",
+    glider_coach_notakeoff:"No despegaste. Canta cualquier nota para empezar a volar.",
+    glider_measure:"Tu altura de nota, leída unas 60 veces por segundo, marca tu altura de vuelo: la parte baja del recorrido es el extremo grave de tu rango guardado y la alta, el agudo. Si callas, caes. Tu puntuación es la distancia volada; una moneda cuenta si la pasas cerca del centro de un hueco, y cada una seguida suma a tu combo.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12593,7 +12688,7 @@ const TRANSLATIONS = {
     feedback_submit_btn:'Geri Bildirim Gönder',
     feedback_thanks_desc:'Geri bildiriminiz kaydedildi. Bir sonraki yapılacakları gerçekten şekillendirmeye yardımcı oluyor.',
     feedback_thanks_title:'Teşekkürler',
-    glider_choose_course:'Parkurunuzu seçin',
+    glider_choose_course:"Parkur",
     glider_takeoff_hint:'Havalanmak için söyleyin',
     glider_course_desc:'Uçmak için söyleyin, düşmek için sessiz kalın — 7 gerçek parkur, aynı engel üretecinin yeniden kaplamaları değil.',
     glider_mode_agility:'Çeviklik Koşusu',
@@ -12747,7 +12842,7 @@ const TRANSLATIONS = {
     teacher_scope_you:'siz',
     teacher_signin_prompt:'Öğretmen Panelini kullanmak için oturum açın.',
     teacher_viewplan_btn:'Öğretmen planını görüntüle',
-    world_back_link:'← Vokal Dünyasına Dön',
+    world_back_link:"Vokal Dünya",
     world_boss_desc:"Bir boss'u yenmek için ana melodiyi iyi söyle.",
     world_boss_title:"Boss Arenası",
     world_bridge_desc:"Şerit değiştirmek için göğüs ve baş sesi arasında geçiş yap.",
@@ -12842,7 +12937,7 @@ const TRANSLATIONS = {
     weeklychallenge_breath20_label:'20 saniye boyunca bir notayı tutun', weeklychallenge_pitch90x3_label:'3 Perde/Aralık denemesinde %90+ skor yapın',
     weeklychallenge_scale80_label:'Bir Gam Koşusunda ortalama %80+ yapın', weeklychallenge_bestweek_p1:'Bu haftaki en iyi:',
     weeklychallenge_ofthree_p2:'/ 3 denemede %90+',
-    action_go:'Git', action_start_pro:'Başlat (Pro)', action_stop:'Durdur', action_start:'Başlat',
+    action_go:'Git', action_start_pro:'Başlat (Pro)', action_stop:"Durdur", action_start:'Başlat',
     boss_defeated_title:'Boss yenildi! 🎉', boss_draw_sub:'Çekişmeli maç. Bir temiz nota daha kazandırabilirdi.',
     boss_draw_title:'Berabere — kimse canını kaybetmedi.', boss_evenwin_p1:'Kazansanız bile,', boss_evenwin_p2:'en zayıf notanızdı',
     boss_evenwin_p3:'Bir sonraki savaştan önce hızlı bir tekrar iyi olur.', boss_for_you_badge:'Sizin için',
@@ -12860,7 +12955,7 @@ const TRANSLATIONS = {
     dash_not_captured:"Henüz ölçülmedi — Ses Aralığı Bulucu'yu ziyaret edin", dash_recap_suffix:'Özeti',
     game_best_p1:'En iyi:', game_new_best:'Yeni rekor!', game_score_p1:'Skor:',
     game_signin_savebest:'En iyi skorunuzu kaydetmek için oturum açın', game_signin_savebest_short:'En iyi skorunuzu kaydetmek için oturum açın',
-    glider_coins:'jeton', glider_crashed:'Çarpıştınız!', glider_start_label:'Uçmaya başla',
+    glider_coins:'jeton', glider_crashed:'Çarpıştınız!', glider_start_label:"Uçmaya başla",
     home_continue_none:'Henüz oturum yok — bugün 1. gün.', home_continue_p1:'Son oturum:', home_continue_p2:'toplam oturum',
     home_greeting_afternoon:'Tünaydın', home_greeting_evening:'İyi akşamlar', home_greeting_morning:'Günaydın',
     home_level_p1:'Seviye', home_levelxp_p2:'XP',
@@ -13419,6 +13514,18 @@ const TRANSLATIONS = {
     arcade_level_tpl:"Seviye {n}",
     arcade_lock_msg_tpl:"Açılış: Seviye {n}. Şu an Seviye {m}.",
     arcade_not_played:"Henüz oynanmadı",
+    glider_line:"Perden yüksekliğini belirler. Boşluklardan geçmek için söyle; susarsan düşersin.",
+    game_difficulty_label:"Zorluk",
+    game_for_you:"Sana göre",
+    game_hud_score:"Puan",
+    game_hud_combo:"Kombo",
+    game_hud_coins:"Jeton",
+    game_hud_best:"En iyi",
+    game_score_label:"Puan",
+    glider_again_btn:"Yeniden uç",
+    glider_coach_fell:"Bir boşluktan çıktın. Boşluk kaymadan biraz önce söyle ve geçerken notayı sabit tut.",
+    glider_coach_notakeoff:"Havalanmadın. Uçmaya başlamak için herhangi bir nota söyle.",
+    glider_measure:"Saniyede yaklaşık 60 kez okunan perden yüksekliğini belirler: parkurun altı kayıtlı aralığının pes ucu, üstü tiz ucudur. Susarsan düşersin. Puanın ne kadar uçtuğundur; bir jeton, onu bir boşluğun ortasına yakın geçtiğinde sayılır ve art arda gelen her biri kombona eklenir.",
   },
 };
 let currentLanguage = 'en';
@@ -20121,6 +20228,7 @@ function showArcadeGame(name){
   document.getElementById('gameSkillTree').style.display = name==='skilltree' ? 'block':'none';
   document.getElementById('gameRift').style.display = name==='rift' ? 'block':'none';
   if(name==='skilltree' && typeof renderSkillTree==='function') renderSkillTree();
+  if(name==='glider' && typeof renderGliderForYou==='function') renderGliderForYou();
   if(name==='boss' && typeof renderBossMemoryAndRecommendation==='function') renderBossMemoryAndRecommendation();
 }
 document.querySelectorAll('.arcade-game-card').forEach(card=>{
@@ -20158,6 +20266,29 @@ function updateArcadeBestLabels(){
   document.getElementById('riftBestLabel').textContent = (profile && progress.riftBest) ? best(progress.riftBest+'%') : none;
 }
 
+/* ---------------- phase 8: what the five games share ---------------- */
+// The stage colours, read from the tokens (house down gives the stage's own): you in the voice colour, terrain and lanes
+// in the ink scale, rewards in game gold, hazards in miss, the choir parts. Cached for 250 ms (read once per few frames).
+let gameColorCache = null, gameColorAt = 0;
+function gameColors(){
+  const now = performance.now();
+  if(gameColorCache && now-gameColorAt < 250) return gameColorCache;
+  const cs = getComputedStyle(document.body), v = n => cs.getPropertyValue(n).trim();
+  gameColorAt = now;
+  return gameColorCache = {bg:v('--hl-bg'), sunk:v('--hl-sunk'), rule:v('--hl-rule'), ruleStrong:v('--hl-rule-strong'), ink:v('--hl-ink'), ink2:v('--hl-ink-2'), ink3:v('--hl-ink-3'),
+    voice:v('--hl-voice'), gold:v('--hl-game-gold'), miss:v('--hl-miss'), parts:{Soprano:v('--hl-sop'), Lead:v('--hl-lead'), Alto:v('--hl-alto'), Tenor:v('--hl-ten'), Bass:v('--hl-bass')}};
+}
+// A game's Start back at rest: its idle label, not listening (also when it is left mid-run: stopAllActiveSessions).
+function gameStartIdle(btnId, labelId, labelKey){
+  const b = document.getElementById(btnId), l = document.getElementById(labelId);
+  if(b) b.classList.remove('listening');
+  if(l) l.textContent = t(labelKey);
+}
+function gameStartLive(btnId, labelId){
+  document.getElementById(labelId).textContent = t('action_stop');
+  document.getElementById(btnId).classList.add('listening');
+}
+
 /* ---------------- Game 1: Pitch Glider / Vocal Journey (free, unlimited) ---------------- */
 let gliderActive=false, gliderY=160, gliderScroll=0, gliderScoreVal=0, gliderRafId=null, gliderTookOff=false;
 let gliderPoints=[];
@@ -20187,19 +20318,19 @@ const GLIDER_DIFFICULTY = {
 let gliderMode = 'highway';
 let gliderDifficulty = 'intermediate';
 
-document.querySelectorAll('#gliderModeRow .ex-type-btn').forEach(btn=>{
+document.querySelectorAll('#gliderModeRow [data-glider-mode]').forEach(btn=>{
   const tagEl = btn.querySelector('.mode-card-tag');
   if(tagEl) tagEl.textContent = GLIDER_MODES[btn.dataset.gliderMode].tagline;
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#gliderModeRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    document.querySelectorAll('#gliderModeRow [data-glider-mode]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     gliderMode = btn.dataset.gliderMode;
   });
 });
-document.querySelectorAll('#gliderDifficultyRow .ex-type-btn').forEach(btn=>{
+document.querySelectorAll('#gliderDifficultyRow [data-glider-difficulty]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#gliderDifficultyRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    document.querySelectorAll('#gliderDifficultyRow [data-glider-difficulty]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     gliderDifficulty = btn.dataset.gliderDifficulty;
@@ -20325,6 +20456,14 @@ function gliderPitchToY(freq, H){
   const midi = 69+12*Math.log2(freq/440);
   return gliderMidiToY(midi, H);
 }
+// "For you": the course that trains the weakest of pitch, agility and range (the one gliderComputeDifficulty adapts to).
+const GLIDER_FOR_WEAKEST = {pitch:'melody', agility:'agility', range:'interval'};
+function renderGliderForYou(){
+  if(profile) gliderComputeDifficulty();
+  const k = profile ? GLIDER_FOR_WEAKEST[window._gliderWeakestKey] : null;
+  document.querySelectorAll('#gliderModeRow [data-glider-mode]').forEach(b=>{ const f = b.querySelector('.gw-foryou'); if(f) f.hidden = b.dataset.gliderMode !== k; });
+  document.getElementById('gliderAdaptiveNote').textContent = profile ? gliderFocusLabel : '';
+}
 async function startGlider(){
   if(!requireProFeature('Vocal Journey')) return;
   const tok = startGen;
@@ -20344,11 +20483,11 @@ async function startGlider(){
   gliderY = gliderPoints[0].gapY; // start in the middle of the lead-in gap
   gliderTookOff = false;          // held there, not scrolling or scoring, until the first sung note
   document.getElementById('gliderGameOver').style.display='none';
-  document.getElementById('gliderStartLabel').textContent='Flying — tap to stop';
-  document.getElementById('gliderStartBtn').classList.add('listening');
+  gameStartLive('gliderStartBtn', 'gliderStartLabel');
+  document.getElementById('gliderHudBest').textContent = profile ? (progress.gliderBest||0) : 0;
   if(profile) recordActivity();
   gliderLoop();
-  singingSession(()=>gliderActive);
+  singingSession(()=>gliderActive, document.getElementById('gliderStage'));
 }
 function gliderLoop(){
   if(!gliderActive) return;
@@ -20384,8 +20523,9 @@ function gliderLoop(){
     }
   });
 
-  ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#2a2419';
+  const col = gameColors();
+  ctx.fillStyle=col.bg; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=col.ruleStrong; // the rock: the ink scale
   for(let sx=0; sx<=W; sx+=8){
     const wx=gliderScroll+sx;
     let g=gliderGapAtWorldX(wx);
@@ -20396,7 +20536,7 @@ function gliderLoop(){
     ctx.fillRect(sx,0,9,Math.max(0,t));
     ctx.fillRect(sx,b,9,H-b);
   }
-  ctx.fillStyle='#e8a33d';
+  ctx.fillStyle=col.gold; // coins: rewards
   gliderPoints.forEach(p=>{
     if(p.hasCoin && !p.coinCollected){
       const sx=p.worldX-gliderScroll;
@@ -20405,16 +20545,17 @@ function gliderLoop(){
       }
     }
   });
-  ctx.fillStyle = crashed ? '#e8735d' : '#f1ead9';
+  ctx.fillStyle = crashed ? col.miss : col.voice; // you: the voice colour; a crash: miss
   ctx.beginPath(); ctx.arc(gliderScreenX, gliderY, 8, 0, Math.PI*2); ctx.fill();
   if(!gliderTookOff){
-    ctx.fillStyle='#f1ead9'; ctx.font='600 18px system-ui, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle=col.ink2; ctx.font='600 18px system-ui, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
     ctx.fillText(t('glider_takeoff_hint'), W/2, 28);
     ctx.textAlign='start'; ctx.textBaseline='alphabetic';
   }
 
-  document.getElementById('gliderScoreLabel').textContent='Score: '+gliderScoreVal;
-  document.getElementById('gliderComboLabel').textContent='🪙 '+gliderCoins+' · Combo: '+gliderCombo;
+  document.getElementById('gliderScoreLabel').textContent=gliderScoreVal;
+  document.getElementById('gliderComboLabel').textContent=gliderCombo;
+  document.getElementById('gliderCoinsLabel').textContent=gliderCoins;
 
   if(crashed){ finishGlider(); return; }
   gliderRafId=requestAnimationFrame(gliderLoop);
@@ -20422,8 +20563,7 @@ function gliderLoop(){
 function finishGlider(){
   gliderActive=false;
   cancelAnimationFrame(gliderRafId);
-  document.getElementById('gliderStartLabel').textContent=t('glider_start_label');
-  document.getElementById('gliderStartBtn').classList.remove('listening');
+  gameStartIdle('gliderStartBtn', 'gliderStartLabel', 'glider_start_label');
   let isBest=false;
   if(profile){
     // a run stopped before take-off never flew: no best, no XP (else start/stop would farm the new-best XP)
@@ -20437,12 +20577,18 @@ function finishGlider(){
     }
     recordActivity();
   }
-  document.getElementById('gliderGameOver').style.display='block';
-  document.getElementById('gliderGameOverTitle').textContent = isBest ? t('game_new_best') : t('glider_crashed');
-  document.getElementById('gliderGameOverSub').textContent = `${t('game_score_p1')} ${gliderScoreVal} · 🪙 ${gliderCoins} ${t('glider_coins')}` + (profile ? ` · ${t('game_best_p1')} ${progress.gliderBest||gliderScoreVal}` : ` · ${t('game_signin_savebest')}`);
+  // the result: the score big, its label (a new best says so), the coach line, then best, coins, combo
+  document.getElementById('gliderGameOver').style.display='';
+  document.getElementById('gliderResultScore').textContent = gliderScoreVal;
+  document.getElementById('gliderGameOverTitle').textContent = isBest ? t('game_new_best') : t('game_score_label');
+  document.getElementById('gliderGameOverSub').textContent = !gliderTookOff ? t('glider_coach_notakeoff') : (profile ? t('glider_coach_fell') : t('game_signin_savebest'));
+  document.getElementById('gliderResBest').textContent = profile ? (progress.gliderBest||gliderScoreVal) : '—';
+  document.getElementById('gliderResCoins').textContent = gliderCoins;
+  document.getElementById('gliderResCombo').textContent = gliderCombo;
   document.getElementById('gliderBestLabelLive').textContent=t('game_best_p1')+' '+(profile?(progress.gliderBest||0):0);
 }
-function stopGlider(){ if(gliderActive){ gliderActive=false; cancelAnimationFrame(gliderRafId); } }
+function stopGlider(){ if(gliderActive){ gliderActive=false; cancelAnimationFrame(gliderRafId); } gameStartIdle('gliderStartBtn', 'gliderStartLabel', 'glider_start_label'); }
+document.getElementById('gliderAgainBtn').addEventListener('click', ()=>{ if(!gliderActive) startGlider(); });
 document.getElementById('gliderStartBtn').addEventListener('click', ()=>{
   if(gliderActive) finishGlider(); else startGlider();
 });
@@ -21505,7 +21651,7 @@ function stopAllActiveSessions(){
   if(aiDuetActive) aiDuetStop();
   studioDiscard();
   stopBackingPad();
-  gliderActive = false;
+  stopGlider();
   bossActive = false;
   bridgeActive = false;
   harmonyActive = false;
