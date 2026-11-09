@@ -12,7 +12,8 @@
 //     the result shown and, where the game has a score, containing it. Master's house is reported (Bridge and the
 //     Wraith stay up there: an expected change).
 // Out: scripts/design-verify/logs/gamestates-<stamp>.log / .json.
-// Usage: node scripts/design-verify/gamestates.js [--base <ref>] [--branch-ref <ref> | --branch-url <site>] [--games glider,boss,…] [--runs n]
+// 8.1: then the branch once more at 390 wide: each result's big number inside the viewport when the game ends (--no-390 skips).
+// Usage: node scripts/design-verify/gamestates.js [--base <ref>] [--branch-ref <ref> | --branch-url <site>] [--games glider,boss,…] [--runs n] [--no-390]
 const fs = require('fs'), path = require('path');
 const C = require('./common'), S = require('./stage'), G = require('./games8');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
@@ -40,7 +41,10 @@ async function runGame(page, g, n) {
   await C.sleep(2000);
   const r = await page.evaluate(({ nums, result, vis }) => {
     const shown = new Function('return (' + vis + ')')()(result), el = document.querySelector(result);
-    return { nums: new Function('return (' + nums + ')()')(), feeds: window.__feeds, house: document.body.dataset.house, shown, text: el ? el.innerText : '' };
+    // the result's big number (.vc-result-num) inside the viewport, where the page is when the game has ended (8.1)
+    const num = el && el.querySelector('.vc-result-num'), rc = num && num.getBoundingClientRect();
+    const inView = rc ? { ok: rc.height > 0 && rc.top >= 0 && rc.bottom <= innerHeight, top: Math.round(rc.top), bottom: Math.round(rc.bottom), vh: innerHeight } : null;
+    return { nums: new Function('return (' + nums + ')()')(), feeds: window.__feeds, house: document.body.dataset.house, shown, inView, text: el ? el.innerText : '' };
   }, { nums: g.nums.toString(), result: g.result, vis: G.vis.toString() });
   await C.clearOverlays(page);
   return { started, ended, cappedAfter: ended ? null : Date.now() - t0, live, ...r };
@@ -67,6 +71,20 @@ async function runGame(page, g, n) {
           log(`  ${side} ${g.key} #${n + 1}: started ${r.started}, ${r.ended ? 'ended itself' : `ended at the ${g.cap / 1000} s cap`} · house live ${r.live.house}, after ${r.house} · vlFeed ${r.feeds} · ${JSON.stringify(r.nums)}`);
         }
         data[side + 'Errors'] = errors.slice();
+      } finally { await ctx.close(); }
+    }
+    // 8.1: at 390 wide, after each game ends, its result's big number is inside the viewport (the branch, one run each)
+    if (!arg('--no-390')) {
+      const { ctx, page, errors } = await C.openPage(b, { dir: dirs.branch, storageState: state, viewport: { width: 390, height: 844 }, prepare: async c => c.addInitScript(G.SEED_INIT) });
+      try {
+        await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+        await C.clearOverlays(page); await S.warmMic(page);
+        log('\n-- At 390: the result\'s big number in view when the game ends (branch)');
+        for (const g of games) {
+          const r = await runGame(page, g, 0), v = r.inView, ok = !!(v && v.ok && r.shown); if (!ok) fail++;
+          log(`   ${ok ? '✓' : '✗'} ${g.name.padEnd(30)} ${v ? `number at ${v.top}–${v.bottom} px of ${v.vh}` : 'no .vc-result-num'} · result shown ${r.shown}`);
+        }
+        if (errors.length) { fail++; log(`   ✗ page errors at 390: ${errors.slice(0, 3).join(' | ')}`); }
       } finally { await ctx.close(); }
     }
     const med = a => { const v = a.filter(x => typeof x === 'number').sort((x, y) => x - y); return v.length ? v[Math.floor(v.length / 2)] : (a.length ? a[0] : null); };

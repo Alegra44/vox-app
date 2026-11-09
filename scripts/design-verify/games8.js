@@ -46,7 +46,14 @@ const GAMES = [
     nums: () => ({ score: gliderScoreVal, coins: gliderCoins, combo: gliderCombo, 'took off': +gliderTookOff, best: progress.gliderBest || 0 }),
     flags: () => ({ glider: gliderActive }) },
   { key: 'bridge', name: 'Register Canyon', game: 'bridge', start: 'bridgeStartBtn', label: 'bridgeStartLabel', stage: '#bridgeStage', result: '#bridgeGameOver', cap: 45000, liveAt: 2500, regin: true,
-    setup: () => { window.__steerFn = null; }, // the lane follows the real register reading of the steady A4
+    // the lane scripted per frame (8.1): the real register reading of the looping A4 flips chest/head on a fixed cycle
+    // (158 frames chest, 27 head), but where the run starts in that loop moved by a frame or two between pages, and a
+    // two-frame shift changed which obstacles were hit (gamestates 307 vs 249 with identical games). The same cycle,
+    // counted from the run's first frame, makes the lane input identical on both sides; the audio and vlFeed stay real.
+    setup: () => { window.__steerFn = null; window.__laneFrame = 0;
+      if (!window.__laneTap) { window.__laneTap = true; const f = readRegisterFrame;
+        readRegisterFrame = function () { const r = f.apply(this, arguments); if (typeof bridgeActive === 'undefined' || !bridgeActive) return r;
+          const i = window.__laneFrame++; return { ...r, freq: r.freq > 0 ? r.freq : 440, chest: i % 185 < 158 ? 80 : 20 }; }; } },
     busy: () => bridgeActive,
     nums: () => ({ score: bridgeScoreVal, lives: bridgeLives, lane: bridgeLane, best: progress.bridgeBest || 0 }),
     flags: () => ({ bridge: bridgeActive }) },
