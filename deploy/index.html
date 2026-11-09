@@ -1456,6 +1456,39 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .gw-hud-v{font-size:var(--hl-t-h2);font-weight:500;color:var(--hl-ink);line-height:1.1;}
   .gw-result .btn-row{justify-content:flex-start;margin-top:var(--hl-s2);}
   .gw-measure{margin-top:var(--hl-s6);}
+  /* Boss Arena (2.5): the bosses as tiles (2 columns at 390, 4 from 768), the arena on the stage */
+  .gw-song{color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
+  .gw-memory{font-size:var(--hl-t-small);color:var(--hl-ink-2);border-left:2px solid var(--hl-rule-strong);padding:var(--hl-s1, 4px) 0 var(--hl-s1, 4px) var(--hl-s3);margin:0 0 var(--hl-s3);}
+  .gw-boss-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--hl-s2);}
+  @media (min-width:768px){ .gw-boss-grid{grid-template-columns:repeat(4,minmax(0,1fr));} }
+  .gw-boss{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:var(--hl-s1, 4px);min-height:132px;padding:var(--hl-s3);text-align:left;font:inherit;
+    background:var(--hl-raised);color:var(--hl-ink);border:var(--hl-hair) solid var(--hl-rule);border-radius:var(--hl-r2);cursor:pointer;}
+  .gw-boss[aria-pressed="true"]{border-color:var(--hl-ink);box-shadow:inset 0 0 0 1px var(--hl-ink);}
+  .gw-boss .gw-boss-tile-mark{width:36px;height:36px;color:var(--hl-ink);margin-bottom:var(--hl-s1, 4px);}
+  .gw-boss-name{font-weight:600;font-size:var(--hl-t-body);line-height:1.2;}
+  .gw-boss-tag{font-size:var(--hl-t-small);color:var(--hl-ink-2);line-height:1.35;}
+  .gw-boss .mode-card-recommend-badge{position:absolute;top:var(--hl-s2);right:var(--hl-s2);font-size:var(--hl-t-label);font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--hl-ink);border:var(--hl-hair) solid var(--hl-ink);border-radius:var(--hl-r1);padding:2px 6px;background:none;}
+  .gw-arena{display:grid;grid-template-columns:1fr 1fr;gap:var(--hl-s5);align-items:end;}
+  .gw-fighter{display:flex;flex-direction:column;align-items:center;gap:var(--hl-s2);}
+  .gw-boss-mark{width:84px;height:84px;color:var(--hl-ink);transition:transform var(--hl-d1) var(--hl-ease);}
+  .gw-boss-mark.hit, .gw-you-label.hit{transform:translateX(3px);}
+  .gw-fighter-name, .gw-you-label{font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);}
+  .gw-you-label{font-size:var(--hl-t-h3);color:var(--hl-ink);min-height:84px;display:flex;align-items:flex-end;}
+  .gw-hp{width:100%;height:8px;border-radius:4px;background:var(--hl-sunk);overflow:hidden;}
+  .gw-hp .fill{height:100%;transition:width var(--hl-d2) var(--hl-ease);}
+  .gw-hp .fill.enemy{background:var(--hl-miss);}
+  .gw-hp .fill.player{background:var(--hl-voice);}
+  .gw-note-big{font-size:var(--hl-t-display);font-stretch:var(--hl-w-wide);font-weight:300;text-align:center;font-variant-numeric:tabular-nums;color:var(--hl-ink);line-height:1;}
+  .gw-result .gw-note-big{font-size:var(--hl-t-h1);text-align:left;}
+  .gw-progress{width:100%;}
+  .gw-sub-label{display:block;margin:var(--hl-s3) 0 0;color:var(--hl-ink-3);}
+  .gw-why{max-width:60ch;color:var(--hl-ink-2);}
+  .gw-train{display:grid;gap:var(--hl-s2);border-top:var(--hl-hair) solid var(--hl-rule);padding-top:var(--hl-s3);}
+  .gw-train-row{display:flex;flex-wrap:wrap;align-items:center;gap:var(--hl-s3);}
+  .gw-train-row .gw-note-big{flex-basis:100%;}
+  .gw-sections{display:grid;gap:0;}
+  .gw-train .gw-sing{background:var(--hl-voice);color:var(--hl-on-voice);border-color:var(--hl-voice);}
   @media (min-width:768px){ .gw-head .gw-mark{width:56px;height:56px;} }
   .arcade-canvas-wrap canvas{width:100%;display:block;}
   .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);}
@@ -3227,119 +3260,121 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <!-- KARAOKE BOSS BATTLE -->
-    <div id="gameBoss" style="display:none;">
-      <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
-      <div class="key-card">
-        <div class="step-label"><span data-i18n="boss_step_label">🐉 Boss Arena — Vocal Boss Battle</span><span class="mock-tag" data-i18n="boss_reuses_tag">REUSES KARAOKE COACH ENGINE</span></div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="boss_choose_h2">Choose your boss and difficulty</h2>
-        <p class="desc" style="margin-bottom:6px;" data-i18n="boss_choose_desc">Same real engine, genuinely different scoring per boss — not reskins.</p>
-        <p class="fine-print" id="bossCurrentSongLabel" style="margin-bottom:14px;">Now practicing: Demo Hymn (C Major) — <button class="link-btn" data-enter-panel="choir">change song</button></p>
-
-        <div class="home-trial-row" id="bossMemoryBanner" style="display:none;margin-bottom:14px;">
-          <div class="home-trial-text" id="bossMemoryText"></div>
-        </div>
-        <p class="fine-print" id="bossRecommendText" style="display:none;margin-bottom:14px;color:var(--teal);"></p>
-
-        <div class="mode-card-grid" id="bossTypeRow">
-          <button class="ex-type-btn mode-card active" data-boss-type="pitch" aria-pressed="true">
-            <div class="mode-card-icon">🐲</div>
-            <div class="mode-card-name" data-i18n="boss_type_pitch">Pitch Dragon</div>
-            <div class="mode-card-tag"></div>
+    <div id="gameBoss" class="gw" style="display:none;">
+      <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
+      <!-- phase 8 (PHASE8.md 2.5): the page (bosses as tiles with their marks, "For you" on the one for your weakest skill,
+           difficulty), the stage (the boss's mark in ink with its health in miss, yours in the voice colour, the note to
+           sing), the result (.vc-result: your average note score big, the outcome, the weakest note to train, Rematch). -->
+      <div class="key-card gw-card">
+        <div class="gw-head"><svg class="hl-icon gw-mark" aria-hidden="true"><use href="#hl-loc-arena"/></svg><div class="gw-head-text"><h2 class="gw-title" data-i18n="world_boss_title">Boss Arena</h2><p class="gw-line" data-i18n="boss_line">Sing the Lead line. Each note you land hurts the boss; each miss hurts you.</p></div></div>
+        <p class="gw-song hl-small"><span id="bossCurrentSongLabel">Song: Demo Hymn (C Major)</span> <button type="button" class="link-btn" data-enter-panel="choir" data-i18n="game_change_song">Change song</button></p>
+        <div class="gw-memory" id="bossMemoryBanner" style="display:none;"><span class="home-trial-text" id="bossMemoryText"></span></div>
+        <p class="gw-note hl-small" id="bossRecommendText" style="display:none;"></p>
+        <div class="gw-opt-label hl-label" data-i18n="boss_choose_label">Boss</div>
+        <div class="gw-boss-grid" id="bossTypeRow" role="group">
+          <button type="button" class="gw-boss active" data-boss-type="pitch" aria-pressed="true">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-dragon"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_pitch">Pitch Dragon</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="sustain" aria-pressed="false">
-            <div class="mode-card-icon">🗿</div>
-            <div class="mode-card-name" data-i18n="boss_type_sustain">Sustain Giant</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="sustain" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-giant"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_sustain">Sustain Giant</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="range" aria-pressed="false">
-            <div class="mode-card-icon">🦅</div>
-            <div class="mode-card-name" data-i18n="boss_type_range">Range Phoenix</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="range" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-phoenix"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_range">Range Phoenix</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="agility" aria-pressed="false">
-            <div class="mode-card-icon">🌀</div>
-            <div class="mode-card-name" data-i18n="boss_type_agility">Agility Monster</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="agility" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-agility"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_agility">Agility Monster</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="register" aria-pressed="false">
-            <div class="mode-card-icon">👻</div>
-            <div class="mode-card-name" data-i18n="boss_type_register">Register Wraith</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="register" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-wraith"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_register">Register Wraith</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="volume" aria-pressed="false">
-            <div class="mode-card-icon">🫥</div>
-            <div class="mode-card-name" data-i18n="boss_type_volume">Volume Phantom</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="volume" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-phantom"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_volume">Volume Phantom</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="tempo" aria-pressed="false">
-            <div class="mode-card-icon">🪨</div>
-            <div class="mode-card-name" data-i18n="boss_type_tempo">Tempo Golem</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="tempo" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-golem"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_tempo">Tempo Golem</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-boss-type="tremor" aria-pressed="false">
-            <div class="mode-card-icon">🐍</div>
-            <div class="mode-card-name" data-i18n="boss_type_tremor">Tremor Serpent</div>
-            <div class="mode-card-tag"></div>
+          <button type="button" class="gw-boss" data-boss-type="tremor" aria-pressed="false">
+            <svg class="hl-icon gw-boss-tile-mark" aria-hidden="true"><use href="#hl-boss-serpent"/></svg>
+            <span class="gw-boss-name mode-card-name" data-i18n="boss_type_tremor">Tremor Serpent</span>
+            <span class="gw-boss-tag mode-card-tag"></span>
           </button>
         </div>
-
-        <div class="ex-type-row" id="bossDifficultyRow" style="margin-bottom:18px;">
-          <button class="ex-type-btn" data-boss-difficulty="beginner" aria-pressed="false" data-i18n="difficulty_beginner">Beginner</button>
-          <button class="ex-type-btn active" data-boss-difficulty="intermediate" aria-pressed="true" data-i18n="difficulty_intermediate">Intermediate</button>
-          <button class="ex-type-btn" data-boss-difficulty="professional" aria-pressed="false" data-i18n="difficulty_professional">Professional</button>
+        <div class="gw-opt-label hl-label" data-i18n="game_difficulty_label">Difficulty</div>
+        <div class="hl-seg gw-seg" id="bossDifficultyRow" role="group">
+          <button type="button" data-boss-difficulty="beginner" aria-pressed="false" data-i18n="difficulty_beginner">Beginner</button>
+          <button type="button" class="active" data-boss-difficulty="intermediate" aria-pressed="true" data-i18n="difficulty_intermediate">Intermediate</button>
+          <button type="button" data-boss-difficulty="professional" aria-pressed="false" data-i18n="difficulty_professional">Professional</button>
         </div>
-
-        <div class="boss-arena">
-          <div class="boss-side">
-            <div class="boss-emoji" id="bossEmoji">🐲</div>
-            <div class="boss-name" id="bossNameLabel">PITCH DRAGON</div>
-            <div class="boss-health-track"><div class="fill enemy" id="bossHealthFill" style="width:100%;"></div></div>
+        <div class="vc-stage gw-stage" id="bossStage">
+          <div class="gw-hud vc-live-only" aria-hidden="true">
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="boss_hud_boss">Boss</span><span class="gw-hud-v" id="bossHudBoss">100</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="boss_hud_you">You</span><span class="gw-hud-v" id="bossHudYou">100</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="boss_hud_wins">Wins</span><span class="gw-hud-v" id="bossHudWins">0</span></span>
           </div>
-          <div class="boss-side">
-            <div class="boss-emoji" id="playerEmoji">🎤</div>
-            <div class="boss-name" data-i18n="boss_you_label">YOU</div>
-            <div class="boss-health-track"><div class="fill player" id="playerHealthFill" style="width:100%;"></div></div>
+          <div class="gw-arena vc-live-only">
+            <div class="gw-fighter">
+              <svg class="hl-icon gw-boss-mark" id="bossEmoji" aria-hidden="true"><use id="bossMarkUse" href="#hl-boss-dragon"/></svg>
+              <div class="gw-fighter-name" id="bossNameLabel">Pitch Dragon</div>
+              <div class="gw-hp"><div class="fill enemy" id="bossHealthFill" style="width:100%;"></div></div>
+            </div>
+            <div class="gw-fighter gw-you">
+              <div class="gw-you-label" id="playerEmoji" data-i18n="boss_you_label">You</div>
+              <div class="gw-hp"><div class="fill player" id="playerHealthFill" style="width:100%;"></div></div>
+            </div>
           </div>
+          <div class="gw-note-big vc-live-only" id="bossNoteLabel">—</div>
+          <div class="progress-bar-thin gw-progress vc-live-only"><div class="fill" id="bossProgressFill"></div></div>
+          <div class="btn-row gw-go">
+            <button class="mic-btn vc-take-pill gw-start" id="bossStartBtn"><span class="dot-icon"></span><span id="bossStartLabel" data-i18n="boss_start_label">Start the battle</span></button>
+          </div>
+          <p class="gw-best vc-paper-only" id="bossBestLive"></p>
+          <div class="vl-gauge" id="vlGaugeBoss" style="display:none;"></div>
         </div>
-        <div class="chord-label-display" id="bossNoteLabel">—</div>
-        <div class="progress-bar-thin"><div class="fill" id="bossProgressFill"></div></div>
-        <div class="btn-row" style="justify-content:center;">
-          <button class="mic-btn" id="bossStartBtn"><span class="dot-icon"></span><span id="bossStartLabel" data-i18n="boss_start_label">Start battle (Pro)</span></button>
-        </div>
-        <div class="vl-gauge" id="vlGaugeBoss" style="display:none;"></div>
-        <div class="arcade-overlay-msg" id="bossGameOver" style="display:none;margin-top:16px;">
-          <div class="om-title" id="bossGameOverTitle" role="status" aria-live="assertive">—</div>
-          <div class="om-sub" id="bossGameOverSub"></div>
-          <button class="link-btn" id="bossWhyBtn" style="margin-top:8px;">WHY?</button>
-          <div id="bossWhyDetail" style="display:none;margin-top:10px;padding:12px;background:var(--surface);border:1px solid var(--hairline);border-radius:10px;font-size:12.5px;color:var(--cream);line-height:1.6;"></div>
-        </div>
-
-        <div id="bossSectionBreakdown" style="display:none;margin-top:16px;">
-          <div class="step-label" data-i18n="boss_section_breakdown">Section Breakdown</div>
-          <div id="bossSectionRows" style="margin-top:10px;"></div>
-        </div>
-
-        <div id="bossTrainingSection" style="display:none;margin-top:16px;">
-          <div class="step-label" data-i18n="boss_training_flow">Problem → Exercise → Improvement → Reward</div>
-          <p class="desc" style="margin:8px 0 14px;" id="bossWeakNoteText"></p>
-          <div class="ex-target-card" style="text-align:center;">
-            <div class="ex-target-note" id="bossTrainNoteDisplay">—</div>
-            <div class="btn-row" style="justify-content:center;margin-top:16px;">
-              <button class="solid-btn" id="bossTrainPlayBtn" data-i18n="boss_play_note_btn">Play the note</button>
-              <button class="solid-btn teal vc-sing" id="bossTrainListenBtn" data-i18n="boss_listen_score_btn">Listen &amp; score</button>
+        <div class="vc-result gw-result" id="bossGameOver" role="status" aria-live="polite" style="display:none;">
+          <div class="vc-result-num" id="bossResultNum">—</div>
+          <h3 class="hl-h3" id="bossGameOverTitle">—</h3>
+          <p class="hl-coach" id="bossGameOverSub"></p>
+          <div class="vc-result-dims">
+            <div class="vc-dim"><span data-i18n="boss_res_landed">Notes landed</span><span id="bossResLanded">—</span></div>
+            <div class="vc-dim"><span data-i18n="boss_hud_you">You</span><span id="bossResYou">—</span></div>
+            <div class="vc-dim"><span data-i18n="boss_hud_boss">Boss</span><span id="bossResBoss">—</span></div>
+            <div class="vc-dim"><span data-i18n="boss_hud_wins">Wins</span><span id="bossResWins">—</span></div>
+          </div>
+          <div class="gw-sections" id="bossSectionBreakdown" style="display:none;"><div class="gw-sub-label hl-label" data-i18n="boss_section_breakdown">By section</div><div id="bossSectionRows" class="vc-result-dims"></div></div>
+          <div class="btn-row">
+            <button type="button" class="hl-btn hl-btn--ink" id="bossRematchBtn" data-i18n="boss_rematch_btn">Rematch</button>
+            <button type="button" class="link-btn" id="bossWhyBtn" data-i18n="boss_why_btn">Why?</button>
+          </div>
+          <p class="hl-small gw-why" id="bossWhyDetail" style="display:none;"></p>
+          <div id="bossTrainingSection" class="gw-train" style="display:none;">
+            <div class="gw-sub-label hl-label" data-i18n="boss_training_flow">Train that note</div>
+            <p class="hl-small" id="bossWeakNoteText"></p>
+            <div class="gw-train-row">
+              <div class="gw-note-big" id="bossTrainNoteDisplay">—</div>
+              <button type="button" class="hl-btn" id="bossTrainPlayBtn" data-i18n="boss_play_note_btn">Play the note</button>
+              <button type="button" class="hl-btn gw-sing vc-sing" id="bossTrainListenBtn" data-i18n="boss_listen_score_btn">Listen &amp; score</button>
             </div>
-            <div class="ex-result" id="bossTrainResult" style="display:none;margin-top:14px;">
-              <div class="ex-accuracy" id="bossTrainAccVal">—</div>
-            </div>
+            <div class="ex-result" id="bossTrainResult" style="display:none;"><div class="ex-accuracy" id="bossTrainAccVal">—</div></div>
             <div class="vl-gauge" id="vlGaugeBossTrain" style="display:none;"></div>
           </div>
-          <div class="btn-row" style="justify-content:center;margin-top:18px;">
-            <button class="solid-btn teal vc-sing" id="bossRematchBtn" data-i18n="boss_rematch_btn">🐉 Rematch the boss</button>
-          </div>
         </div>
+        <details class="hl-measure gw-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="boss_measure">Each chord of the song is one note of the Lead line to sing. Your pitch is read about 60 times a second and compared with that note, natural vibrato taken out; a note you sing within the boss's threshold hurts the boss, a miss hurts you. Each boss judges a different thing: a steady hold, a note a fifth up, only the first half-second, your register, steady loudness, landing on time, or controlled vibrato.</p></details>
       </div>
     </div>
-
     <!-- HARMONY ARENA -->
     <div id="gameHarmony" style="display:none;">
       <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
@@ -7227,11 +7262,11 @@ const TRANSLATIONS = {
     boss_choose_h2:'Choose your boss and difficulty',
     boss_listen_score_btn:'Listen & score',
     boss_play_note_btn:'Play the note',
-    boss_rematch_btn:'🐉 Rematch the boss',
+    boss_rematch_btn:"Rematch",
     boss_reuses_tag:'REUSES KARAOKE COACH ENGINE',
-    boss_section_breakdown:'Section Breakdown',
+    boss_section_breakdown:"By section",
     boss_step_label:'🐉 Boss Arena — Vocal Boss Battle',
-    boss_training_flow:'Problem → Exercise → Improvement → Reward',
+    boss_training_flow:"Train that note",
     boss_type_agility:'Agility Monster',
     boss_type_pitch:'Pitch Dragon',
     boss_type_range:'Range Phoenix',
@@ -7240,7 +7275,7 @@ const TRANSLATIONS = {
     boss_type_tempo:'Tempo Golem',
     boss_type_tremor:'Tremor Serpent',
     boss_type_volume:'Volume Phantom',
-    boss_you_label:'YOU',
+    boss_you_label:"You",
     bridge_h2:'Chest voice = bottom lane, head voice = top lane',
     bridge_reuses_tag:'REUSES REGISTER COACH ENGINE',
     bridge_step_label:'Register Runner',
@@ -7990,14 +8025,14 @@ const TRANSLATIONS = {
     weeklychallenge_scale80_label:'Average 80%+ on a Scale Run', weeklychallenge_bestweek_p1:'Best this week:',
     weeklychallenge_ofthree_p2:'of 3 attempts at 90%+',
     action_go:'Go', action_start_pro:'Start (Pro)', action_stop:"Stop", action_start:'Start',
-    boss_defeated_title:'Boss defeated! 🎉', boss_draw_sub:"Close fight. One more clean note would've tipped it.",
+    boss_defeated_title:"Boss defeated", boss_draw_sub:"Close fight. One more clean note would've tipped it.",
     boss_draw_title:"Draw — nobody's out of health.", boss_evenwin_p1:'Even in a win,', boss_evenwin_p2:'was your weakest note',
     boss_evenwin_p3:'Worth a quick rep before your next fight.', boss_for_you_badge:'For you',
     boss_lose_sub:"Pitch accuracy is what deals damage here — let's find exactly which note cost you.", boss_lose_title_suffix:'got you.',
     boss_memory_lead_close:'Last time was close —', boss_memory_lead_lost:'It got you last time —', boss_memory_lead_won:'You won, but',
     boss_memory_p1:'was your weak point at', boss_memory_p2:"Let's see if it's stronger today.", boss_no_signal:'No signal',
     boss_recommend_p1:'is recommended — your', boss_recommend_p2:'is your lowest real Skill Profile score',
-    boss_start_label:'Start battle (Pro)', boss_weakestsection_p1:'Your weakest section was the', boss_weakestsection_p2:'at',
+    boss_start_label:"Start the battle", boss_weakestsection_p1:'Your weakest section was the', boss_weakestsection_p2:'at',
     boss_weaknote_p1:'Your weakest single note this battle was', boss_weaknote_p2:'at', boss_weaknote_p3:'accuracy.',
     boss_weaknote_p4:'Train the note below, then rematch the boss.', boss_win_sub_p1:'You dealt more damage than you took. Player health remaining:',
     breakthrough_detail_p1:'5 accurate attempts in a row — this was averaging', breakthrough_detail_p2:'before. Something just clicked.',
@@ -8586,6 +8621,27 @@ const TRANSLATIONS = {
     bridge_coach_hits:"Three blocks hit. Switch a little earlier: the change from chest to head takes a moment to read.",
     bridge_coach_stopped:"You stopped the run.",
     bridge_measure:"Each frame reads your register, chest or head, from how your voice's energy sits across its harmonics: the same reading as Register Coach. Chest puts you in the low lane, head in the high one; with no voice you stay where you were. Blocks come in either lane at random; your score is how far you ran.",
+    boss_line:"Sing the Lead line. Each note you land hurts the boss; each miss hurts you.",
+    game_change_song:"Change song",
+    game_song_tpl:"Song: {name} ({key})",
+    boss_choose_label:"Boss",
+    boss_hud_boss:"Boss",
+    boss_hud_you:"You",
+    boss_hud_wins:"Wins",
+    boss_res_landed:"Notes landed",
+    boss_landed_tpl:"{n} of {m}",
+    boss_why_btn:"Why?",
+    boss_recommend_tpl:"{boss} is for you: {skill} is your lowest Skill Profile score ({v}%).",
+    boss_why_none:"No clear pitch was caught this time. Sing a little louder or closer to the mic.",
+    boss_why_tpl:"Your weakest note was {note} in the {section}, at {v}%.",
+    boss_why_flat_tpl:"You sat about {c} cents flat through it.",
+    boss_why_sharp_tpl:"You sat about {c} cents sharp through it.",
+    boss_why_piece:"piece",
+    section_verse:"Verse",
+    section_prechorus:"Pre-chorus",
+    section_chorus:"Chorus",
+    section_bridge:"Bridge",
+    boss_measure:"Each chord of the song is one note of the Lead line to sing. Your pitch is read about 60 times a second and compared with that note, natural vibrato taken out; a note you sing within the boss's threshold hurts the boss, a miss hurts you. Each boss judges a different thing: a steady hold, a note a fifth up, only the first half-second, your register, steady loudness, landing on time, or controlled vibrato.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8889,11 +8945,11 @@ const TRANSLATIONS = {
     boss_choose_h2:'Choisissez votre boss et votre difficulté',
     boss_listen_score_btn:'Écouter et noter',
     boss_play_note_btn:'Jouer la note',
-    boss_rematch_btn:'🐉 Revanche contre le boss',
+    boss_rematch_btn:"Revanche",
     boss_reuses_tag:'RÉUTILISE LE MOTEUR DU COACH KARAOKÉ',
-    boss_section_breakdown:'Détail par section',
+    boss_section_breakdown:"Par section",
     boss_step_label:'🐉 Arène des Boss — Combat Vocal de Boss',
-    boss_training_flow:'Problème → Exercice → Amélioration → Récompense',
+    boss_training_flow:"Travaillez cette note",
     boss_type_agility:'Monstre Agilité',
     boss_type_pitch:'Dragon Justesse',
     boss_type_range:'Phénix Tessiture',
@@ -8902,7 +8958,7 @@ const TRANSLATIONS = {
     boss_type_tempo:'Golem Tempo',
     boss_type_tremor:'Serpent Tremblement',
     boss_type_volume:'Fantôme Volume',
-    boss_you_label:'VOUS',
+    boss_you_label:"Vous",
     bridge_h2:'Voix de poitrine = voie du bas, voix de tête = voie du haut',
     bridge_reuses_tag:'RÉUTILISE LE MOTEUR DU COACH DE REGISTRE',
     bridge_step_label:'Coureur de Registre',
@@ -9652,14 +9708,14 @@ const TRANSLATIONS = {
     weeklychallenge_scale80_label:'Obtenez 80 %+ de moyenne sur un passage de gammes', weeklychallenge_bestweek_p1:'Meilleur score cette semaine :',
     weeklychallenge_ofthree_p2:'tentatives sur 3 à 90 %+',
     action_go:'Aller', action_start_pro:'Démarrer (Pro)', action_stop:"Arrêter", action_start:'Démarrer',
-    boss_defeated_title:'Boss vaincu ! 🎉', boss_draw_sub:"Combat serré. Une note propre de plus aurait fait la différence.",
+    boss_defeated_title:"Boss vaincu", boss_draw_sub:"Combat serré. Une note propre de plus aurait fait la différence.",
     boss_draw_title:"Égalité — personne n'est à court de santé.", boss_evenwin_p1:'Même en victoire,', boss_evenwin_p2:'était votre note la plus faible',
     boss_evenwin_p3:"Ça vaut le coup de vous entraîner rapidement avant votre prochain combat.", boss_for_you_badge:'Pour vous',
     boss_lose_sub:"La précision de justesse est ce qui inflige des dégâts ici — trouvons exactement quelle note vous a coûté cher.", boss_lose_title_suffix:"vous a eu.",
     boss_memory_lead_close:'La dernière fois était serrée —', boss_memory_lead_lost:'Il vous a eu la dernière fois —', boss_memory_lead_won:'Vous avez gagné, mais',
     boss_memory_p1:'était votre point faible à', boss_memory_p2:"Voyons si c'est plus solide aujourd'hui.", boss_no_signal:'Aucun signal',
     boss_recommend_p1:'est recommandé — votre', boss_recommend_p2:'est votre score de Profil Vocal le plus bas',
-    boss_start_label:'Démarrer le combat (Pro)', boss_weakestsection_p1:'Votre section la plus faible était', boss_weakestsection_p2:'à',
+    boss_start_label:"Lancer le combat", boss_weakestsection_p1:'Votre section la plus faible était', boss_weakestsection_p2:'à',
     boss_weaknote_p1:'Votre note la plus faible de ce combat était', boss_weaknote_p2:'à', boss_weaknote_p3:'de précision.',
     boss_weaknote_p4:'Entraînez la note ci-dessous, puis affrontez à nouveau le boss.', boss_win_sub_p1:"Vous avez infligé plus de dégâts que vous n'en avez subi. Santé restante :",
     breakthrough_detail_p1:"5 tentatives réussies d'affilée — la moyenne était de", breakthrough_detail_p2:'avant. Quelque chose vient de se déclencher.',
@@ -10248,6 +10304,27 @@ const TRANSLATIONS = {
     bridge_coach_hits:"Trois blocs touchés. Changez un peu plus tôt : le passage de la poitrine à la tête met un instant à être lu.",
     bridge_coach_stopped:"Vous avez arrêté la course.",
     bridge_measure:"Chaque image lit votre registre, poitrine ou tête, d'après la répartition de l'énergie de votre voix sur ses harmoniques : la même lecture que le Coach de registre. La poitrine vous met dans la voie basse, la tête dans la voie haute ; sans voix, vous restez où vous étiez. Les blocs arrivent au hasard dans l'une ou l'autre voie ; votre score est la distance parcourue.",
+    boss_line:"Chantez la ligne principale. Chaque note réussie blesse le boss ; chaque note manquée vous blesse.",
+    game_change_song:"Changer de chanson",
+    game_song_tpl:"Chanson : {name} ({key})",
+    boss_choose_label:"Boss",
+    boss_hud_boss:"Boss",
+    boss_hud_you:"Vous",
+    boss_hud_wins:"Victoires",
+    boss_res_landed:"Notes réussies",
+    boss_landed_tpl:"{n} sur {m}",
+    boss_why_btn:"Pourquoi ?",
+    boss_recommend_tpl:"{boss} est pour vous : {skill} est votre score le plus bas du profil de compétences ({v} %).",
+    boss_why_none:"Aucune hauteur nette n'a été captée cette fois. Chantez un peu plus fort ou plus près du micro.",
+    boss_why_tpl:"Votre note la plus faible était {note} dans la section {section}, à {v} %.",
+    boss_why_flat_tpl:"Vous étiez environ {c} cents trop bas tout du long.",
+    boss_why_sharp_tpl:"Vous étiez environ {c} cents trop haut tout du long.",
+    boss_why_piece:"morceau",
+    section_verse:"Couplet",
+    section_prechorus:"Pré-refrain",
+    section_chorus:"Refrain",
+    section_bridge:"Pont",
+    boss_measure:"Chaque accord de la chanson est une note de la ligne principale à chanter. Votre hauteur est lue environ 60 fois par seconde et comparée à cette note, vibrato naturel retiré ; une note chantée dans le seuil du boss le blesse, une note manquée vous blesse. Chaque boss juge autre chose : une tenue stable, une note une quinte plus haut, la première demi-seconde seulement, votre registre, un volume stable, l'arrivée à temps ou un vibrato maîtrisé.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10551,11 +10628,11 @@ const TRANSLATIONS = {
     boss_choose_h2:'Elige tu jefe y dificultad',
     boss_listen_score_btn:'Escuchar y puntuar',
     boss_play_note_btn:'Reproducir la nota',
-    boss_rematch_btn:'🐉 Revancha contra el jefe',
+    boss_rematch_btn:"Revancha",
     boss_reuses_tag:'REUTILIZA EL MOTOR DEL COACH DE KARAOKE',
-    boss_section_breakdown:'Desglose por sección',
+    boss_section_breakdown:"Por sección",
     boss_step_label:'🐉 Arena de Jefes — Batalla Vocal de Jefes',
-    boss_training_flow:'Problema → Ejercicio → Mejora → Recompensa',
+    boss_training_flow:"Entrena esa nota",
     boss_type_agility:'Monstruo de Agilidad',
     boss_type_pitch:'Dragón de Afinación',
     boss_type_range:'Fénix de Rango',
@@ -10564,7 +10641,7 @@ const TRANSLATIONS = {
     boss_type_tempo:'Gólem de Tempo',
     boss_type_tremor:'Serpiente de Temblor',
     boss_type_volume:'Fantasma de Volumen',
-    boss_you_label:'TÚ',
+    boss_you_label:"Tú",
     bridge_h2:'Voz de pecho = carril inferior, voz de cabeza = carril superior',
     bridge_reuses_tag:'REUTILIZA EL MOTOR DEL COACH DE REGISTRO',
     bridge_step_label:'Corredor de Registro',
@@ -11314,14 +11391,14 @@ const TRANSLATIONS = {
     weeklychallenge_scale80_label:'Consigue un promedio de 80 %+ en una escala', weeklychallenge_bestweek_p1:'Mejor esta semana:',
     weeklychallenge_ofthree_p2:'de 3 intentos al 90 %+',
     action_go:'Ir', action_start_pro:'Empezar (Pro)', action_stop:"Detener", action_start:'Empezar',
-    boss_defeated_title:'¡Jefe derrotado! 🎉', boss_draw_sub:'Combate reñido. Una nota limpia más habría decidido todo.',
+    boss_defeated_title:"Jefe vencido", boss_draw_sub:'Combate reñido. Una nota limpia más habría decidido todo.',
     boss_draw_title:'Empate — nadie se quedó sin salud.', boss_evenwin_p1:'Incluso ganando,', boss_evenwin_p2:'fue tu nota más débil',
     boss_evenwin_p3:'Vale la pena una repetición rápida antes de tu próxima batalla.', boss_for_you_badge:'Para ti',
     boss_lose_sub:'La precisión de afinación es lo que causa daño aquí — averigüemos exactamente qué nota te costó caro.', boss_lose_title_suffix:'te venció.',
     boss_memory_lead_close:'La última vez estuvo reñido —', boss_memory_lead_lost:'Te venció la última vez —', boss_memory_lead_won:'Ganaste, pero',
     boss_memory_p1:'fue tu punto débil con', boss_memory_p2:'Veamos si hoy está más fuerte.', boss_no_signal:'Sin señal',
     boss_recommend_p1:'es recomendado — tu', boss_recommend_p2:'es tu puntuación más baja del Perfil Vocal',
-    boss_start_label:'Iniciar batalla (Pro)', boss_weakestsection_p1:'Tu sección más débil fue', boss_weakestsection_p2:'con',
+    boss_start_label:"Empezar el combate", boss_weakestsection_p1:'Tu sección más débil fue', boss_weakestsection_p2:'con',
     boss_weaknote_p1:'Tu nota más débil en esta batalla fue', boss_weaknote_p2:'con', boss_weaknote_p3:'de precisión.',
     boss_weaknote_p4:'Entrena la nota de abajo y luego reta al jefe de nuevo.', boss_win_sub_p1:'Infligiste más daño del que recibiste. Salud restante:',
     breakthrough_detail_p1:'5 intentos correctos seguidos — antes promediabas', breakthrough_detail_p2:'. Algo acaba de hacer clic.',
@@ -11910,6 +11987,27 @@ const TRANSLATIONS = {
     bridge_coach_hits:"Tres bloques golpeados. Cambia un poco antes: el paso de pecho a cabeza tarda un momento en leerse.",
     bridge_coach_stopped:"Detuviste la carrera.",
     bridge_measure:"Cada fotograma lee tu registro, pecho o cabeza, según cómo se reparte la energía de tu voz entre sus armónicos: la misma lectura que el Coach de registro. El pecho te pone en el carril bajo y la cabeza en el alto; sin voz te quedas donde estabas. Los bloques llegan al azar por cualquier carril; tu puntuación es la distancia recorrida.",
+    boss_line:"Canta la línea principal. Cada nota que aciertas daña al jefe; cada fallo te daña a ti.",
+    game_change_song:"Cambiar canción",
+    game_song_tpl:"Canción: {name} ({key})",
+    boss_choose_label:"Jefe",
+    boss_hud_boss:"Jefe",
+    boss_hud_you:"Tú",
+    boss_hud_wins:"Victorias",
+    boss_res_landed:"Notas acertadas",
+    boss_landed_tpl:"{n} de {m}",
+    boss_why_btn:"¿Por qué?",
+    boss_recommend_tpl:"{boss} es para ti: {skill} es tu puntuación más baja del perfil de habilidades ({v} %).",
+    boss_why_none:"Esta vez no se captó una altura clara. Canta un poco más fuerte o más cerca del micrófono.",
+    boss_why_tpl:"Tu nota más débil fue {note} en la sección {section}, con {v} %.",
+    boss_why_flat_tpl:"Estuviste unos {c} cents bajo durante toda la nota.",
+    boss_why_sharp_tpl:"Estuviste unos {c} cents alto durante toda la nota.",
+    boss_why_piece:"pieza",
+    section_verse:"Estrofa",
+    section_prechorus:"Pre-estribillo",
+    section_chorus:"Estribillo",
+    section_bridge:"Puente",
+    boss_measure:"Cada acorde de la canción es una nota de la línea principal que cantar. Tu altura se lee unas 60 veces por segundo y se compara con esa nota, sin el vibrato natural; una nota dentro del umbral del jefe lo daña, un fallo te daña a ti. Cada jefe juzga algo distinto: una nota sostenida estable, una nota una quinta más arriba, solo el primer medio segundo, tu registro, un volumen estable, llegar a tiempo o un vibrato controlado.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12213,11 +12311,11 @@ const TRANSLATIONS = {
     boss_choose_h2:'Boss ve zorluk seçin',
     boss_listen_score_btn:'Dinle ve puanla',
     boss_play_note_btn:'Notayı çal',
-    boss_rematch_btn:'🐉 Boss ile rövanş',
+    boss_rematch_btn:"Rövanş",
     boss_reuses_tag:'KARAOKE KOÇU MOTORUNU YENİDEN KULLANIR',
-    boss_section_breakdown:'Bölüm Dökümü',
+    boss_section_breakdown:"Bölüme göre",
     boss_step_label:'🐉 Boss Arenası — Vokal Boss Savaşı',
-    boss_training_flow:'Sorun → Egzersiz → Gelişim → Ödül',
+    boss_training_flow:"O notayı çalış",
     boss_type_agility:'Çeviklik Canavarı',
     boss_type_pitch:'Perde Ejderhası',
     boss_type_range:'Ses Aralığı Anka Kuşu',
@@ -12226,7 +12324,7 @@ const TRANSLATIONS = {
     boss_type_tempo:'Tempo Golemi',
     boss_type_tremor:'Titreme Yılanı',
     boss_type_volume:'Ses Düzeyi Hayaleti',
-    boss_you_label:'SEN',
+    boss_you_label:"Sen",
     bridge_h2:'Göğüs sesi = alt şerit, baş sesi = üst şerit',
     bridge_reuses_tag:'REGISTER KOÇU MOTORUNU YENİDEN KULLANIR',
     bridge_step_label:'Register Koşucusu',
@@ -12976,14 +13074,14 @@ const TRANSLATIONS = {
     weeklychallenge_scale80_label:'Bir Gam Koşusunda ortalama %80+ yapın', weeklychallenge_bestweek_p1:'Bu haftaki en iyi:',
     weeklychallenge_ofthree_p2:'/ 3 denemede %90+',
     action_go:'Git', action_start_pro:'Başlat (Pro)', action_stop:"Durdur", action_start:'Başlat',
-    boss_defeated_title:'Boss yenildi! 🎉', boss_draw_sub:'Çekişmeli maç. Bir temiz nota daha kazandırabilirdi.',
+    boss_defeated_title:"Boss yenildi", boss_draw_sub:'Çekişmeli maç. Bir temiz nota daha kazandırabilirdi.',
     boss_draw_title:'Berabere — kimse canını kaybetmedi.', boss_evenwin_p1:'Kazansanız bile,', boss_evenwin_p2:'en zayıf notanızdı',
     boss_evenwin_p3:'Bir sonraki savaştan önce hızlı bir tekrar iyi olur.', boss_for_you_badge:'Sizin için',
     boss_lose_sub:'Burada hasarı belirleyen perde doğruluğu — size tam olarak hangi nota pahalıya patladı bulalım.', boss_lose_title_suffix:'sizi yendi.',
     boss_memory_lead_close:'Geçen sefer çok yakındı —', boss_memory_lead_lost:'Geçen sefer sizi yendi —', boss_memory_lead_won:'Kazandınız ama',
     boss_memory_p1:'zayıf noktanızdı, oranı', boss_memory_p2:'Bugün daha güçlü mü bakalım.', boss_no_signal:'Sinyal yok',
     boss_recommend_p1:'öneriliyor — en düşük gerçek Perde Profili skorunuz', boss_recommend_p2:'kategorisinde',
-    boss_start_label:'Savaşı başlat (Pro)', boss_weakestsection_p1:'En zayıf bölümünüz', boss_weakestsection_p2:'bölümüydü, oranı',
+    boss_start_label:"Savaşı başlat", boss_weakestsection_p1:'En zayıf bölümünüz', boss_weakestsection_p2:'bölümüydü, oranı',
     boss_weaknote_p1:'Bu savaştaki en zayıf notanız', boss_weaknote_p2:'oranı', boss_weaknote_p3:'doğruluk.',
     boss_weaknote_p4:'Aşağıdaki notayı çalışın, sonra boss ile tekrar karşılaşın.', boss_win_sub_p1:'Aldığınızdan daha fazla hasar verdiniz. Kalan can:',
     breakthrough_detail_p1:'Üst üste 5 doğru deneme — önceki ortalamanız', breakthrough_detail_p2:'idi. Az önce bir şey oturdu.',
@@ -13572,6 +13670,27 @@ const TRANSLATIONS = {
     bridge_coach_hits:"Üç bloğa çarptın. Biraz daha erken geç: göğüsten başa geçişin okunması bir an sürer.",
     bridge_coach_stopped:"Koşuyu durdurdun.",
     bridge_measure:"Her karede, sesinin enerjisinin harmoniklerine nasıl dağıldığından registerin (göğüs ya da baş) okunur: Register Koçu ile aynı okuma. Göğüs seni alt şeride, baş üst şeride koyar; ses yoksa olduğun yerde kalırsın. Bloklar rastgele iki şeritten birine gelir; puanın ne kadar koştuğundur.",
+    boss_line:"Ana melodiyi söyle. Tutturduğun her nota boss'a, kaçırdığın her nota sana zarar verir.",
+    game_change_song:"Şarkıyı değiştir",
+    game_song_tpl:"Şarkı: {name} ({key})",
+    boss_choose_label:"Boss",
+    boss_hud_boss:"Boss",
+    boss_hud_you:"Sen",
+    boss_hud_wins:"Galibiyet",
+    boss_res_landed:"Tutturulan nota",
+    boss_landed_tpl:"{m} notadan {n}",
+    boss_why_btn:"Neden?",
+    boss_recommend_tpl:"{boss} sana göre: {skill}, Beceri Profilindeki en düşük puanın (%{v}).",
+    boss_why_none:"Bu sefer net bir perde yakalanmadı. Biraz daha yüksek sesle ya da mikrofona daha yakın söyle.",
+    boss_why_tpl:"En zayıf notan {section} bölümündeki {note} oldu: %{v}.",
+    boss_why_flat_tpl:"Nota boyunca yaklaşık {c} sent pesteydin.",
+    boss_why_sharp_tpl:"Nota boyunca yaklaşık {c} sent tizdeydin.",
+    boss_why_piece:"parça",
+    section_verse:"Kıta",
+    section_prechorus:"Nakarat öncesi",
+    section_chorus:"Nakarat",
+    section_bridge:"Köprü",
+    boss_measure:"Şarkının her akoru, söylenecek ana melodiden bir notadır. Perden saniyede yaklaşık 60 kez okunur ve doğal vibrato çıkarılarak o notayla karşılaştırılır; boss'un eşiği içinde söylediğin nota boss'a, kaçırdığın nota sana zarar verir. Her boss başka bir şeyi ölçer: sabit tutuş, beşli yukarıdaki nota, yalnızca ilk yarım saniye, registerin, sabit ses yüksekliği, zamanında giriş ya da kontrollü vibrato.",
   },
 };
 let currentLanguage = 'en';
@@ -20276,6 +20395,8 @@ function showArcadeGame(name){
   if(name==='skilltree' && typeof renderSkillTree==='function') renderSkillTree();
   if(name==='glider' && typeof renderGliderForYou==='function') renderGliderForYou();
   if(name==='boss' && typeof renderBossMemoryAndRecommendation==='function') renderBossMemoryAndRecommendation();
+  if((name==='boss' || name==='harmony') && typeof SONG!=='undefined'){ const el = document.getElementById(name==='boss' ? 'bossCurrentSongLabel' : 'harmonyCurrentSongLabel'); if(el) el.textContent = t('game_song_tpl').replace('{name}', SONG.name).replace('{key}', SONG.key); }
+  if(name==='boss'){ const bl = document.getElementById('bossBestLive'); if(bl) bl.textContent = profile ? t('arcade_won_template').replace('{n}', progress.bossVictories||0) : ''; }
 }
 document.querySelectorAll('.arcade-game-card').forEach(card=>{
   card.addEventListener('click', ()=>{
@@ -20853,14 +20974,14 @@ let bossNoteResults=[]; // per-note pitchAcc, real data used to find the actual 
 let bossCurrentTargetMidi=null;
 
 const BOSS_TYPES = {
-  pitch:    {key:'pitch',    get name(){return t('boss_type_pitch');},    emoji:'🐲', get tagline(){return t('boss_tagline_pitch');}},
-  sustain:  {key:'sustain',  get name(){return t('boss_type_sustain');},  emoji:'🗿', get tagline(){return t('boss_tagline_sustain');}},
-  range:    {key:'range',    get name(){return t('boss_type_range');},    emoji:'🦅', get tagline(){return t('boss_tagline_range');}},
-  agility:  {key:'agility',  get name(){return t('boss_type_agility');},  emoji:'🌀', get tagline(){return t('boss_tagline_agility');}},
-  register: {key:'register', get name(){return t('boss_type_register');}, emoji:'👻', get tagline(){return t('boss_tagline_register');}},
-  volume:   {key:'volume',   get name(){return t('boss_type_volume');},   emoji:'🫥', get tagline(){return t('boss_tagline_volume');}},
-  tempo:    {key:'tempo',    get name(){return t('boss_type_tempo');},    emoji:'🪨', get tagline(){return t('boss_tagline_tempo');}},
-  tremor:   {key:'tremor',   get name(){return t('boss_type_tremor');},   emoji:'🐍', get tagline(){return t('boss_tagline_tremor');}},
+  pitch:    {key:'pitch',    get name(){return t('boss_type_pitch');},    mark:'hl-boss-dragon', get tagline(){return t('boss_tagline_pitch');}},
+  sustain:  {key:'sustain',  get name(){return t('boss_type_sustain');},  mark:'hl-boss-giant', get tagline(){return t('boss_tagline_sustain');}},
+  range:    {key:'range',    get name(){return t('boss_type_range');},    mark:'hl-boss-phoenix', get tagline(){return t('boss_tagline_range');}},
+  agility:  {key:'agility',  get name(){return t('boss_type_agility');},  mark:'hl-boss-agility', get tagline(){return t('boss_tagline_agility');}},
+  register: {key:'register', get name(){return t('boss_type_register');}, mark:'hl-boss-wraith', get tagline(){return t('boss_tagline_register');}},
+  volume:   {key:'volume',   get name(){return t('boss_type_volume');},   mark:'hl-boss-phantom', get tagline(){return t('boss_tagline_volume');}},
+  tempo:    {key:'tempo',    get name(){return t('boss_type_tempo');},    mark:'hl-boss-golem', get tagline(){return t('boss_tagline_tempo');}},
+  tremor:   {key:'tremor',   get name(){return t('boss_type_tremor');},   mark:'hl-boss-serpent', get tagline(){return t('boss_tagline_tremor');}},
 };
 const BOSS_DIFFICULTY = {
   beginner:      {get label(){return t('skill_level_beginner');},      thresholdAdjust:-10, playerDamage:9,  bossDamage:22},
@@ -20870,24 +20991,24 @@ const BOSS_DIFFICULTY = {
 let selectedBossType = 'pitch';
 let selectedBossDifficulty = 'intermediate';
 
-document.querySelectorAll('#bossTypeRow .ex-type-btn').forEach(btn=>{
+document.querySelectorAll('#bossTypeRow [data-boss-type]').forEach(btn=>{
   // populate each card's tagline from the config object — single source of truth, not hand-duplicated in HTML
   const tagEl = btn.querySelector('.mode-card-tag');
   if(tagEl) tagEl.textContent = BOSS_TYPES[btn.dataset.bossType].tagline;
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#bossTypeRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    document.querySelectorAll('#bossTypeRow [data-boss-type]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     selectedBossType = btn.dataset.bossType;
     const boss = BOSS_TYPES[selectedBossType];
     renderVocalLoadGauge();
-    document.getElementById('bossEmoji').textContent = boss.emoji;
-    document.getElementById('bossNameLabel').textContent = boss.name.toUpperCase();
+    document.getElementById('bossMarkUse').setAttribute('href', '#'+boss.mark);
+    document.getElementById('bossNameLabel').textContent = boss.name;
   });
 });
-document.querySelectorAll('#bossDifficultyRow .ex-type-btn').forEach(btn=>{
+document.querySelectorAll('#bossDifficultyRow [data-boss-difficulty]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#bossDifficultyRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    document.querySelectorAll('#bossDifficultyRow [data-boss-difficulty]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     selectedBossDifficulty = btn.dataset.bossDifficulty;
@@ -20909,10 +21030,13 @@ async function startBoss(){
   document.getElementById('bossSectionBreakdown').style.display='none';
   document.getElementById('bossHealthFill').style.width='100%';
   document.getElementById('playerHealthFill').style.width='100%';
-  document.getElementById('bossStartLabel').textContent='Battling — tap to flee';
-  document.getElementById('bossStartBtn').classList.add('listening');
+  gameStartLive('bossStartBtn', 'bossStartLabel');
+  document.getElementById('bossHudBoss').textContent = 100; document.getElementById('bossHudYou').textContent = 100;
+  document.getElementById('bossHudWins').textContent = profile ? (progress.bossVictories||0) : 0;
   bossLoop();
-  if(!bossUsesRegisterInput) singingSession(()=>bossActive);
+  // the Register Wraith reads the register input and feeds the load itself (bossLoop): the house only
+  if(!bossUsesRegisterInput) singingSession(()=>bossActive, document.getElementById('bossStage'));
+  else houseSession(()=>bossActive, document.getElementById('bossStage'));
 }
 function bossFinalizeNote(idx){
   if(idx<0) return;
@@ -20988,10 +21112,12 @@ function bossFinalizeNote(idx){
   if(pitchAcc>=threshold){
     bossHealth=Math.max(0, bossHealth-diff.bossDamage);
     document.getElementById('bossHealthFill').style.width=bossHealth+'%';
+    document.getElementById('bossHudBoss').textContent=Math.round(bossHealth);
     bossEmoji.classList.add('hit'); setTimeout(()=>bossEmoji.classList.remove('hit'),150);
   } else {
     playerHealth=Math.max(0, playerHealth-diff.playerDamage);
     document.getElementById('playerHealthFill').style.width=playerHealth+'%';
+    document.getElementById('bossHudYou').textContent=Math.round(playerHealth);
     playerEmoji.classList.add('hit'); setTimeout(()=>playerEmoji.classList.remove('hit'),150);
   }
 }
@@ -21037,7 +21163,7 @@ function bossLoop(){
 // whether the active song has 8 chords or 12 (or any other length).
 function getSongSections(){
   const total = SONG.parts.Lead.notes.length;
-  const names = ['Verse','Pre-Chorus','Chorus','Bridge'];
+  const names = [t('section_verse'), t('section_prechorus'), t('section_chorus'), t('section_bridge')];
   const base = Math.floor(total/4), extra = total%4;
   let start = 0;
   return names.map((name,i)=>{
@@ -21065,17 +21191,24 @@ function finishBoss(result){
   if(bossUsesRegisterInput) vlEnd();
   cancelAnimationFrame(bossRafId);
   stopBackingPad();
-  document.getElementById('bossStartLabel').textContent=t('boss_start_label');
-  document.getElementById('bossStartBtn').classList.remove('listening');
+  gameStartIdle('bossStartBtn', 'bossStartLabel', 'boss_start_label');
   document.getElementById('bossNoteLabel').textContent='—';
 
   const titleEl=document.getElementById('bossGameOverTitle');
   const subEl=document.getElementById('bossGameOverSub');
-  document.getElementById('bossGameOver').style.display='block';
+  document.getElementById('bossGameOver').style.display='';
+  document.getElementById('bossWhyDetail').style.display='none';
+  // the result: your average note score big (the score), the outcome, then notes landed, both healths, wins
+  { const heard = bossNoteResults.filter(r=>r && r.heard), thr = 70 + BOSS_DIFFICULTY[selectedBossDifficulty].thresholdAdjust;
+    document.getElementById('bossResultNum').textContent = heard.length ? Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length)+'%' : '—';
+    document.getElementById('bossResLanded').textContent = t('boss_landed_tpl').replace('{n}', heard.filter(r=>r.pitchAcc>=thr).length).replace('{m}', SONG.parts.Lead.notes.length);
+    document.getElementById('bossResYou').textContent = Math.round(playerHealth)+'%';
+    document.getElementById('bossResBoss').textContent = Math.round(bossHealth)+'%'; }
   if(result==='win'){
     titleEl.textContent=t('boss_defeated_title');
     subEl.textContent=`${t('boss_win_sub_p1')} ${Math.round(playerHealth)}%`;
     if(profile){ progress.bossVictories=(progress.bossVictories||0)+1; progress.xp=(progress.xp||0)+50; saveProgress(); }
+    document.getElementById('bossHudWins').textContent = profile ? progress.bossVictories : 0;
   } else if(result==='lose'){
     titleEl.textContent=`${BOSS_TYPES[selectedBossType].name} ${t('boss_lose_title_suffix')}`;
     subEl.textContent=t('boss_lose_sub');
@@ -21098,13 +21231,14 @@ function finishBoss(result){
     };
     saveProgress();
   }
+  document.getElementById('bossResWins').textContent = profile ? (progress.bossVictories||0) : '—';
   const sectionScores = bossFindSectionScores();
   const heardSections = sectionScores.filter(s=>s.avg!==null);
   const sectionBreakdownEl = document.getElementById('bossSectionBreakdown');
   if(heardSections.length>0){
-    sectionBreakdownEl.style.display='block';
+    sectionBreakdownEl.style.display='';
     document.getElementById('bossSectionRows').innerHTML = sectionScores.map(s=>
-      `<div class="record-row"><span class="record-label">${s.name}</span><span class="record-val${s.avg===null?' untracked':''}">${s.avg!==null?s.avg+'%':t('boss_no_signal')}</span></div>`
+      `<div class="vc-dim"><span>${s.name}</span><span>${s.avg!==null?s.avg+'%':t('boss_no_signal')}</span></div>`
     ).join('');
   } else {
     sectionBreakdownEl.style.display='none';
@@ -21132,7 +21266,7 @@ function finishBoss(result){
   }
   registerExerciseCompletion();
 }
-function stopBoss(){ if(bossActive){ bossActive=false; cancelAnimationFrame(bossRafId); stopBackingPad(); } }
+function stopBoss(){ if(bossActive){ bossActive=false; cancelAnimationFrame(bossRafId); stopBackingPad(); if(bossUsesRegisterInput) vlEnd(); } gameStartIdle('bossStartBtn', 'bossStartLabel', 'boss_start_label'); }
 document.getElementById('bossStartBtn').addEventListener('click', ()=>{
   if(bossActive) finishBoss(bossHealth<playerHealth?'win':(playerHealth<bossHealth?'lose':'draw'));
   else startBoss();
@@ -21156,7 +21290,7 @@ document.getElementById('bossTrainListenBtn').addEventListener('click', async ()
 document.getElementById('bossRematchBtn').addEventListener('click', ()=>{
   document.getElementById('bossTrainingSection').style.display='none';
   document.getElementById('bossGameOver').style.display='none';
-  startBoss();
+  if(!bossActive) startBoss();
 });
 
 /* ---------------- Game 3: Register Runner (Pro) ---------------- */
@@ -21704,7 +21838,7 @@ function stopAllActiveSessions(){
   studioDiscard();
   stopBackingPad();
   stopGlider();
-  bossActive = false;
+  stopBoss();
   stopBridgeRunner();
   harmonyActive = false;
   if(typeof stopResonanceVisualizer==='function' && resonanceActive) stopResonanceVisualizer(); // 4b: the button and readings reset
@@ -22667,7 +22801,7 @@ function selectSong(id){
   document.getElementById('bossSectionBreakdown')?.style.setProperty('display','none');
   ['bossCurrentSongLabel','harmonyCurrentSongLabel'].forEach(id2=>{
     const el = document.getElementById(id2);
-    if(el) el.textContent = `Now practicing: ${s.name} (${s.key})`;
+    if(el) el.textContent = t('game_song_tpl').replace('{name}', s.name).replace('{key}', s.key);
   });
 }
 document.querySelectorAll('#songSelectRow .ex-type-btn').forEach(btn=>{
@@ -22821,14 +22955,14 @@ function renderBossMemoryAndRecommendation(){
     const lw = progress.lastBossWeakness;
     banner.style.display = 'flex';
     const lead = lw.result==='win' ? t('boss_memory_lead_won') : lw.result==='lose' ? t('boss_memory_lead_lost') : t('boss_memory_lead_close');
-    bannerText.textContent = `🐉 ${lw.bossName}: "${lead} ${lw.noteName} ${t('boss_memory_p1')} ${lw.pitchAcc}%. ${t('boss_memory_p2')}"`;
+    bannerText.textContent = `${lw.bossName}: ${lead} ${lw.noteName} ${t('boss_memory_p1')} ${lw.pitchAcc}%. ${t('boss_memory_p2')}`;
   } else {
     banner.style.display = 'none';
   }
 
   // Real adaptive targeting: recommends whichever boss type maps to the player's actual current weakest Skill Profile category
   document.querySelectorAll('.mode-card-recommend-badge').forEach(b=>b.remove());
-  document.querySelectorAll('#bossTypeRow .mode-card').forEach(c=>c.classList.remove('recommended'));
+  document.querySelectorAll('#bossTypeRow [data-boss-type]').forEach(c=>c.classList.remove('recommended'));
   const recommendText = document.getElementById('bossRecommendText');
   if(!profile){ recommendText.style.display='none'; return; }
 
@@ -22848,7 +22982,7 @@ function renderBossMemoryAndRecommendation(){
     card.appendChild(badge);
   }
   recommendText.style.display = 'block';
-  recommendText.textContent = `⭐ ${BOSS_TYPES[bossKey].name} ${t('boss_recommend_p1')} ${weakest.label} ${t('boss_recommend_p2')} (${scores[weakest.key]}%).`;
+  recommendText.textContent = t('boss_recommend_tpl').replace('{boss}', BOSS_TYPES[bossKey].name).replace('{skill}', weakest.label).replace('{v}', scores[weakest.key]);
 }
 
 /* ---------------- Voice-Reactive Ambient (scoped to real mic-active screens only) ---------------- */
@@ -23667,16 +23801,16 @@ document.getElementById('bossWhyBtn')?.addEventListener('click', ()=>{
   if(detail.style.display==='block'){ detail.style.display='none'; return; }
   const weakest = bossFindWeakestNote();
   if(!weakest){
-    detail.textContent = 'No clear pitch was captured this attempt — try singing a bit louder or closer to the mic.';
+    detail.textContent = t('boss_why_none');
     detail.style.display='block';
     return;
   }
   const idx = bossNoteResults.indexOf(weakest);
   const sections = getSongSections();
-  const sectionName = sections.find(s=>s.indices.includes(idx))?.name || 'the piece';
-  const direction = (weakest.signedAvgCents===null || weakest.signedAvgCents===undefined) ? ''
-    : (weakest.signedAvgCents<0 ? `about ${Math.abs(weakest.signedAvgCents)} cents flat` : `about ${weakest.signedAvgCents} cents sharp`);
-  detail.innerHTML = `Your real weakest moment was <strong>${noteNameFromMidi(weakest.midi)}</strong> in the ${sectionName}, scoring ${weakest.pitchAcc}%.${direction ? ` You were consistently ${direction} through that note, not just a brief wobble.` : ''} That's the one worth isolating before your next attempt.`;
+  const sectionName = sections.find(s=>s.indices.includes(idx))?.name || t('boss_why_piece');
+  const c = weakest.signedAvgCents;
+  const dir = (c===null || c===undefined) ? '' : ' ' + t(c<0 ? 'boss_why_flat_tpl' : 'boss_why_sharp_tpl').replace('{c}', Math.abs(c));
+  detail.textContent = t('boss_why_tpl').replace('{note}', noteNameFromMidi(weakest.midi)).replace('{section}', sectionName).replace('{v}', weakest.pitchAcc) + dir;
   detail.style.display='block';
 });
 

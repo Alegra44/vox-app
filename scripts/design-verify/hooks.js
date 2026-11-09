@@ -43,6 +43,10 @@ const ALLOWED_REMOVALS = {
   'data-i18n=bridge_step_label': 'phase 8 §2.4: the step label gives way to the page head (mark, title, one line); key stays in TRANSLATIONS',
   'data-i18n=bridge_reuses_tag': 'phase 8 §2.4: the REUSES … ENGINE tags go (PHASE8.md 2.3-2.7); key stays in TRANSLATIONS',
   'data-i18n=bridge_h2': "phase 8 §2.4: the lanes are told in the page's one line (bridge_line); key stays in TRANSLATIONS",
+  'data-i18n=boss_step_label': 'phase 8 §2.5: the step label (with its emoji) gives way to the page head; key stays in TRANSLATIONS',
+  'data-i18n=boss_reuses_tag': 'phase 8 §2.5: the REUSES … ENGINE tags go; key stays in TRANSLATIONS',
+  'data-i18n=boss_choose_h2': 'phase 8 §2.5: the page head and the Boss label replace the heading; key stays in TRANSLATIONS',
+  'data-i18n=boss_choose_desc': 'phase 8 §2.5: the §7 line ("Same real engine, genuinely different scoring") goes; key stays in TRANSLATIONS',
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {
