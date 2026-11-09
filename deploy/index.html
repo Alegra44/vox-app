@@ -614,7 +614,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .solid-btn.teal{background:var(--hl-ink);color:var(--hl-bg);}
   .solid-btn.teal.vc-sing{background:var(--hl-voice);color:var(--hl-on-voice);} /* rule 1: starts singing directly */
   .fine-print{color:var(--muted);font-size:12px;margin-top:6px;}
-  .link-btn{background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;text-decoration:underline;cursor:pointer;padding:0;}
+  .link-btn{background:none;border:none;color:var(--hl-ink);font-size:inherit;font-weight:600;text-decoration:underline;text-underline-offset:2px;cursor:pointer;padding:0;} /* ink: voice blue is only the singer and the start buttons (8.1) */
 
   .transpose-stepper{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--hairline);border-radius:12px;padding:10px 16px;width:fit-content;}
   .transpose-stepper button{
@@ -857,7 +857,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .pr-report{margin-top:12px;padding-top:10px;border-top:1px solid var(--hairline);}
   .pr-report .record-label small{display:block;color:var(--muted);font-size:11px;margin-top:2px;line-height:1.4;}
   .why-btn{margin-left:8px;font-size:11px;}
-  .link-btn.why-btn{color:var(--hl-ink);text-decoration:underline;text-underline-offset:2px;} /* a disclosure, not a link: ink (5.1) */
   .why-detail{margin:4px 0 10px;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--bg);}
   .why-detail .why-k{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:8px;}
   .why-detail .why-k:first-child{margin-top:0;}
@@ -2285,7 +2284,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vc-stage.is-live #aiDuetStartBtn.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
   .duet-after{margin-top:var(--hl-s3);}
   .duet-after[hidden]{display:none;}
-  .duet-after .link-btn{color:var(--hl-ink);font-size:inherit;text-decoration:underline;text-underline-offset:2px;} /* a quiet link: ink, like "Why?" (5.1) */
   /* ---- EMOTIONAL SINGING (phase 6) ---- */
   .emotion-stage{display:grid;justify-items:center;gap:var(--hl-s4);}
   #emotionChordLabel{color:var(--hl-ink);}
@@ -2552,17 +2550,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- phase 8: Vocal World. The six locations and the eight bosses (each boss's tell is what it tests), and the Skill
        Tree's nodes. Same system: 24px grid, 1.6 stroke, round caps, currentColor; drawn to read from 24 to 96px. -->
   <symbol id="hl-loc-mountain" viewBox="0 0 24 24"><path d="M2.5 20h19"/><path d="M4 20l6-9.5 3.2 4.6 2.3-3.1L20 20"/><path d="M3 7.2c3-2.3 5.8-.5 8.6-1.1S16.7 3.7 21 5.2"/><circle cx="21" cy="5.2" r="1" fill="currentColor" stroke="none"/></symbol>
-  <symbol id="hl-loc-canyon" viewBox="0 0 24 24"><path d="M4.5 3v4.2L3 10.5l1.5 3.2V17l-1 4"/><path d="M19.5 3v4.2l1.5 3.3-1.5 3.2V17l1 4"/><path d="M8 9h8M8 15h8"/></symbol>
+  <symbol id="hl-loc-canyon" viewBox="0 0 24 24"><path d="M6.6 3 5.2 6l1.8 2.2-2.4 3.4 1.8 2.2-2.6 3.6 1.7 2L3 21"/><path d="M17.4 3l1.4 3-1.8 2.2 2.4 3.4-1.8 2.2 2.6 3.6-1.7 2L21 21"/><path d="M9.6 10h4.8M9.6 15h4.8"/></symbol>
   <symbol id="hl-loc-arena" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 7.9 7.5 9.5 4.3-1.6 7.5-4.9 7.5-9.5V6z"/><path d="m8.5 10.5 3.5 3 3.5-3"/></symbol>
-  <symbol id="hl-loc-castle" viewBox="0 0 24 24"><path d="M6 21V8.5h12V21"/><path d="M6 8.5V4h2.4v2h2.4V4h2.4v2h2.4V4H18v4.5"/><path d="M9 12.5h6M9 15.5h6M9 18.5h6"/></symbol>
+  <symbol id="hl-loc-castle" viewBox="0 0 24 24"><path d="M2 20V5.5h2.2v2.6h2V5.5h2.2V20"/><path d="M15.6 20V5.5h2.2v2.6h2V5.5H22V20"/><path d="M8.4 11h7.2M1.5 20h21"/><path d="M10.6 13.6h2.8M10.6 15.7h2.8M10.6 17.8h2.8"/></symbol>
   <symbol id="hl-loc-tree" viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="2.4"/><circle cx="6" cy="18.5" r="2.4"/><circle cx="18" cy="18.5" r="2.4"/><path d="M10.9 7.7 7.1 16.3M13.1 7.7l3.8 8.6M8.4 18.5h7.2"/></symbol>
   <symbol id="hl-loc-rift" viewBox="0 0 24 24"><path d="M2.5 12h7.5l1.4-3.4"/><path d="M21.5 12H14l-1.4 3.4"/><path d="M12 3.5v2M12 18.5v2"/></symbol>
   <symbol id="hl-boss-dragon" viewBox="0 0 24 24"><path d="M3.5 19.5V13a6 6 0 0 1 6-6h2l3-3.5V7.6l3.5 2.4-2.1 2.6H11"/><circle cx="10" cy="10.2" r=".9" fill="currentColor" stroke="none"/><path d="M11 16.5c1.4-2.2 2.7-2.2 4 0s2.7 2.2 4 0 1.6-1.6 2.5-.8"/></symbol>
   <symbol id="hl-boss-giant" viewBox="0 0 24 24"><rect x="9.5" y="3" width="5" height="4.2" rx=".6"/><rect x="7" y="8.5" width="10" height="8" rx=".8"/><path d="M2.5 20.5h19"/></symbol>
-  <symbol id="hl-boss-phoenix" viewBox="0 0 24 24"><path d="M12 21V9.5"/><path d="M12 13.5C8.8 12.6 5.2 10 3.8 5c2.6 1.2 5.3 1.5 8.2 5.2"/><path d="M12 13.5c3.2-.9 6.8-3.5 8.2-8.5-2.6 1.2-5.3 1.5-8.2 5.2"/><path d="m9.6 5.6 2.4-2.6 2.4 2.6"/></symbol>
+  <symbol id="hl-boss-phoenix" viewBox="0 0 24 24"><path d="M10.4 12C6.6 11 3.8 8 2.6 3.4l2.6 1.8L5.6 2.6l2 2.4L9 3.4c-.2 3.4.4 6 1.8 7.4"/><path d="M13.6 12c3.8-1 6.6-4 7.8-8.6l-2.6 1.8-.4-2.6-2 2.4L15 3.4c.2 3.4-.4 6-1.8 7.4"/><circle cx="12" cy="6.6" r="1.4"/><path d="m13.3 6.1 1.9.5-1.7.8"/><path d="M12 9.8c1.2 0 1.7 1.3 1.7 2.5s-.7 2.3-1.7 2.3-1.7-1.1-1.7-2.3.5-2.5 1.7-2.5z"/><path d="M11.1 15c-.5 1.6-1.3 2.8-2.6 3.6M12 15c.3 1.9 0 3.5-.8 5M12.9 15c.5 1.6 1.3 2.8 2.6 3.6"/></symbol>
   <symbol id="hl-boss-agility" viewBox="0 0 24 24"><path d="M2.5 18l3.3-7 3.3 7 3.3-7 3.3 7 3.3-7"/><circle cx="19.5" cy="7.5" r="1.8"/></symbol>
   <symbol id="hl-boss-wraith" viewBox="0 0 24 24"><path d="M2.5 12h19" stroke-dasharray="1.6 2.2"/><path d="M5.5 10V7a3.5 3.5 0 0 1 7 0v3"/><path d="M11.5 14v5.5l1.5-1.3 1.5 1.3 1.5-1.3 1.5 1.3V14"/></symbol>
-  <symbol id="hl-boss-phantom" viewBox="0 0 24 24"><path d="M3.5 17.5a8.5 8.5 0 0 1 8.5-8.5"/><path d="M12 9a8.5 8.5 0 0 1 8.5 8.5" stroke-dasharray="1.2 2.4"/><path d="M8 17.5a4 4 0 0 1 4-4"/><path d="M12 13.5a4 4 0 0 1 4 4" stroke-dasharray="1.2 2.4"/></symbol>
+  <symbol id="hl-boss-phantom" viewBox="0 0 24 24"><path d="M15.6 5.6A6.8 6.8 0 0 0 5.2 11.3v9l2.3-1.6 2.3 1.6 2.3-1.6"/><path d="M18.8 10.6v2.6M18.8 16v2.2M16.4 20l-1.4.9"/><circle cx="9.6" cy="11.4" r="1.1" fill="currentColor" stroke="none"/><circle cx="13.8" cy="11.4" r="1.1" fill="currentColor" stroke="none"/></symbol>
   <symbol id="hl-boss-golem" viewBox="0 0 24 24"><rect x="4.5" y="14" width="15" height="6.5" rx=".8"/><rect x="7.5" y="8" width="9" height="6" rx=".8"/><path d="M12 11 17.5 3"/><circle cx="12" cy="11" r="1" fill="currentColor" stroke="none"/></symbol>
   <symbol id="hl-boss-serpent" viewBox="0 0 24 24"><path d="M2.5 15c1.9-4 3.8-4 5.7 0s3.8 4 5.7 0 2.9-3.6 4.6-1.6"/><circle cx="20.3" cy="12.3" r="1.7"/></symbol>
   <symbol id="hl-pitch" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"/></symbol>
@@ -3377,8 +3375,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <p class="hl-coach" id="bossGameOverSub"></p>
           <div class="vc-result-dims">
             <div class="vc-dim"><span data-i18n="boss_res_landed">Notes landed</span><span id="bossResLanded">—</span></div>
-            <div class="vc-dim"><span data-i18n="boss_hud_you">You</span><span id="bossResYou">—</span></div>
-            <div class="vc-dim"><span data-i18n="boss_hud_boss">Boss</span><span id="bossResBoss">—</span></div>
+            <div class="vc-dim"><span data-i18n="boss_res_your_health">Your health</span><span id="bossResYou">—</span></div>
+            <div class="vc-dim"><span data-i18n="boss_res_boss_health">Boss health</span><span id="bossResBoss">—</span></div>
             <div class="vc-dim"><span data-i18n="boss_hud_wins">Wins</span><span id="bossResWins">—</span></div>
           </div>
           <div class="gw-sections" id="bossSectionBreakdown" style="display:none;"><div class="gw-sub-label hl-label" data-i18n="boss_section_breakdown">By section</div><div id="bossSectionRows" class="vc-result-dims"></div></div>
@@ -8066,7 +8064,7 @@ const TRANSLATIONS = {
     boss_recommend_p1:'is recommended — your', boss_recommend_p2:'is your lowest real Skill Profile score',
     boss_start_label:"Start the battle", boss_weakestsection_p1:'Your weakest section was the', boss_weakestsection_p2:'at',
     boss_weaknote_p1:'Your weakest single note this battle was', boss_weaknote_p2:'at', boss_weaknote_p3:'accuracy.',
-    boss_weaknote_p4:'Train the note below, then rematch the boss.', boss_win_sub_p1:"You dealt more damage than you took. Your health left:",
+    boss_weaknote_p4:'Train the note below, then rematch the boss.', boss_win_sub_p1:"You dealt more damage than you took.",
     breakthrough_detail_p1:'5 accurate attempts in a row — this was averaging', breakthrough_detail_p2:'before. Something just clicked.',
     bridgerunner_start_label:"Start running", bridgerunner_wipedout:"Out of lives",
     curriculum_daylabel_p1:"Today's Curriculum — Day", curriculum_done_today:'✓ Done today', curriculum_mark_done:'Mark done',
@@ -8709,6 +8707,8 @@ const TRANSLATIONS = {
     glider_adapt_range:"Adapted to {skill}, your lowest score ({v}%): the gaps swing wider across your range.",
     song_key_c_major:"C Major",
     song_key_a_minor:"A Minor",
+    boss_res_your_health:"Your health",
+    boss_res_boss_health:"Boss health",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9784,7 +9784,7 @@ const TRANSLATIONS = {
     boss_recommend_p1:'est recommandé — votre', boss_recommend_p2:'est votre score de Profil Vocal le plus bas',
     boss_start_label:"Lancer le combat", boss_weakestsection_p1:'Votre section la plus faible était', boss_weakestsection_p2:'à',
     boss_weaknote_p1:'Votre note la plus faible de ce combat était', boss_weaknote_p2:'à', boss_weaknote_p3:'de précision.',
-    boss_weaknote_p4:'Entraînez la note ci-dessous, puis affrontez à nouveau le boss.', boss_win_sub_p1:"Vous avez infligé plus de dégâts que vous n'en avez reçu. Votre santé restante :",
+    boss_weaknote_p4:'Entraînez la note ci-dessous, puis affrontez à nouveau le boss.', boss_win_sub_p1:"Vous avez infligé plus de dégâts que vous n'en avez reçu.",
     breakthrough_detail_p1:"5 tentatives réussies d'affilée — la moyenne était de", breakthrough_detail_p2:'avant. Quelque chose vient de se déclencher.',
     bridgerunner_start_label:"Commencer la course", bridgerunner_wipedout:"Plus de vies",
     curriculum_daylabel_p1:'Programme du jour — Jour', curriculum_done_today:"✓ Fait aujourd'hui", curriculum_mark_done:'Marquer comme fait',
@@ -10427,6 +10427,8 @@ const TRANSLATIONS = {
     glider_adapt_range:"Adapté à {skill}, votre score le plus bas ({v} %) : les trouées balaient plus largement votre tessiture.",
     song_key_c_major:"Do majeur",
     song_key_a_minor:"La mineur",
+    boss_res_your_health:"Votre santé",
+    boss_res_boss_health:"Santé du boss",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11502,7 +11504,7 @@ const TRANSLATIONS = {
     boss_recommend_p1:'es recomendado — tu', boss_recommend_p2:'es tu puntuación más baja del Perfil Vocal',
     boss_start_label:"Empezar el combate", boss_weakestsection_p1:'Tu sección más débil fue', boss_weakestsection_p2:'con',
     boss_weaknote_p1:'Tu nota más débil en esta batalla fue', boss_weaknote_p2:'con', boss_weaknote_p3:'de precisión.',
-    boss_weaknote_p4:'Entrena la nota de abajo y luego reta al jefe de nuevo.', boss_win_sub_p1:"Hiciste más daño del que recibiste. Tu salud restante:",
+    boss_weaknote_p4:'Entrena la nota de abajo y luego reta al jefe de nuevo.', boss_win_sub_p1:"Hiciste más daño del que recibiste.",
     breakthrough_detail_p1:'5 intentos correctos seguidos — antes promediabas', breakthrough_detail_p2:'. Algo acaba de hacer clic.',
     bridgerunner_start_label:"Empezar a correr", bridgerunner_wipedout:"Sin vidas",
     curriculum_daylabel_p1:'Plan de hoy — Día', curriculum_done_today:'✓ Hecho hoy', curriculum_mark_done:'Marcar como hecho',
@@ -12145,6 +12147,8 @@ const TRANSLATIONS = {
     glider_adapt_range:"Adaptado a {skill}, tu puntuación más baja ({v} %): los huecos recorren más tu rango.",
     song_key_c_major:"Do mayor",
     song_key_a_minor:"La menor",
+    boss_res_your_health:"Tu salud",
+    boss_res_boss_health:"Salud del jefe",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13220,7 +13224,7 @@ const TRANSLATIONS = {
     boss_recommend_p1:'öneriliyor — en düşük gerçek Perde Profili skorunuz', boss_recommend_p2:'kategorisinde',
     boss_start_label:"Savaşı başlat", boss_weakestsection_p1:'En zayıf bölümünüz', boss_weakestsection_p2:'bölümüydü, oranı',
     boss_weaknote_p1:'Bu savaştaki en zayıf notanız', boss_weaknote_p2:'oranı', boss_weaknote_p3:'doğruluk.',
-    boss_weaknote_p4:'Aşağıdaki notayı çalışın, sonra boss ile tekrar karşılaşın.', boss_win_sub_p1:"Aldığından fazla hasar verdin. Kalan sağlığın:",
+    boss_weaknote_p4:'Aşağıdaki notayı çalışın, sonra boss ile tekrar karşılaşın.', boss_win_sub_p1:"Aldığından fazla hasar verdin.",
     breakthrough_detail_p1:'Üst üste 5 doğru deneme — önceki ortalamanız', breakthrough_detail_p2:'idi. Az önce bir şey oturdu.',
     bridgerunner_start_label:"Koşmaya başla", bridgerunner_wipedout:"Can kalmadı",
     curriculum_daylabel_p1:'Bugünün Programı — Gün', curriculum_done_today:'✓ Bugün tamamlandı', curriculum_mark_done:'Tamamlandı olarak işaretle',
@@ -13863,6 +13867,8 @@ const TRANSLATIONS = {
     glider_adapt_range:"En düşük puanın {skill} (%{v}) için uyarlandı: boşluklar aralığında daha geniş salınır.",
     song_key_c_major:"Do majör",
     song_key_a_minor:"La minör",
+    boss_res_your_health:"Sağlığın",
+    boss_res_boss_health:"Boss'un sağlığı",
   },
 };
 let currentLanguage = 'en';
@@ -21390,7 +21396,7 @@ function finishBoss(result){
     document.getElementById('bossResBoss').textContent = Math.round(bossHealth)+'%'; }
   if(result==='win'){
     titleEl.textContent=t('boss_defeated_title');
-    subEl.textContent=`${t('boss_win_sub_p1')} ${Math.round(playerHealth)}%`;
+    subEl.textContent=t('boss_win_sub_p1'); // the health is its own row (8.1)
     if(profile){ progress.bossVictories=(progress.bossVictories||0)+1; progress.xp=(progress.xp||0)+50; saveProgress(); }
     document.getElementById('bossHudWins').textContent = profile ? progress.bossVictories : 0;
   } else if(result==='lose'){

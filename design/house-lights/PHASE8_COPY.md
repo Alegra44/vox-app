@@ -8,7 +8,7 @@ status lines "Flying — tap to stop", "Battling — tap to flee", "Running — 
 "Why?" text, the section names, the Glider's adaptive notes, the Harmony mode toggles' "On/Off" labels) are
 now keys in this table.
 
-178 keys.
+182 keys.
 
 | Key | Lang | Old | New |
 |---|---|---|---|
@@ -92,10 +92,18 @@ now keys in this table.
 | `boss_rematch_btn` | fr | 🐉 Revanche contre le boss | Revanche |
 | `boss_rematch_btn` | es | 🐉 Revancha contra el jefe | Revancha |
 | `boss_rematch_btn` | tr | 🐉 Boss ile rövanş | Rövanş |
+| `boss_res_boss_health` | en | (new key) | Boss health |
+| `boss_res_boss_health` | fr | (new key) | Santé du boss |
+| `boss_res_boss_health` | es | (new key) | Salud del jefe |
+| `boss_res_boss_health` | tr | (new key) | Boss'un sağlığı |
 | `boss_res_landed` | en | (new key) | Notes landed |
 | `boss_res_landed` | fr | (new key) | Notes réussies |
 | `boss_res_landed` | es | (new key) | Notas acertadas |
 | `boss_res_landed` | tr | (new key) | Tutturulan nota |
+| `boss_res_your_health` | en | (new key) | Your health |
+| `boss_res_your_health` | fr | (new key) | Votre santé |
+| `boss_res_your_health` | es | (new key) | Tu salud |
+| `boss_res_your_health` | tr | (new key) | Sağlığın |
 | `boss_section_breakdown` | en | Section Breakdown | By section |
 | `boss_section_breakdown` | fr | Détail par section | Par section |
 | `boss_section_breakdown` | es | Desglose por sección | Por sección |
@@ -184,10 +192,10 @@ now keys in this table.
 | `boss_why_tpl` | fr | (new key) | Votre note la plus faible était {note} dans la section {section}, à {v} %. |
 | `boss_why_tpl` | es | (new key) | Tu nota más débil fue {note} en la sección {section}, con {v} %. |
 | `boss_why_tpl` | tr | (new key) | En zayıf notan {section} bölümündeki {note} oldu: %{v}. |
-| `boss_win_sub_p1` | en | You dealt more damage than you took. Player health remaining: | You dealt more damage than you took. Your health left: |
-| `boss_win_sub_p1` | fr | Vous avez infligé plus de dégâts que vous n'en avez subi. Santé restante : | Vous avez infligé plus de dégâts que vous n'en avez reçu. Votre santé restante : |
-| `boss_win_sub_p1` | es | Infligiste más daño del que recibiste. Salud restante: | Hiciste más daño del que recibiste. Tu salud restante: |
-| `boss_win_sub_p1` | tr | Aldığınızdan daha fazla hasar verdiniz. Kalan can: | Aldığından fazla hasar verdin. Kalan sağlığın: |
+| `boss_win_sub_p1` | en | You dealt more damage than you took. Player health remaining: | You dealt more damage than you took. |
+| `boss_win_sub_p1` | fr | Vous avez infligé plus de dégâts que vous n'en avez subi. Santé restante : | Vous avez infligé plus de dégâts que vous n'en avez reçu. |
+| `boss_win_sub_p1` | es | Infligiste más daño del que recibiste. Salud restante: | Hiciste más daño del que recibiste. |
+| `boss_win_sub_p1` | tr | Aldığınızdan daha fazla hasar verdiniz. Kalan can: | Aldığından fazla hasar verdin. |
 | `boss_you_label` | en | YOU | You |
 | `boss_you_label` | fr | VOUS | Vous |
 | `boss_you_label` | es | TÚ | Tú |
@@ -642,6 +650,14 @@ now keys in this table.
 | `skilltree_unlocked` | fr | Débloqué | Ouvertes |
 | `skilltree_unlocked` | es | Desbloqueado | Abiertas |
 | `skilltree_unlocked` | tr | Açıldı | Açık |
+| `song_key_a_minor` | en | (new key) | A Minor |
+| `song_key_a_minor` | fr | (new key) | La mineur |
+| `song_key_a_minor` | es | (new key) | La menor |
+| `song_key_a_minor` | tr | (new key) | La minör |
+| `song_key_c_major` | en | (new key) | C Major |
+| `song_key_c_major` | fr | (new key) | Do majeur |
+| `song_key_c_major` | es | (new key) | Do mayor |
+| `song_key_c_major` | tr | (new key) | Do majör |
 | `world_back_link` | en | ← Back to Vocal World | Vocal World |
 | `world_back_link` | fr | ← Retour au Monde Vocal | Monde vocal |
 | `world_back_link` | es | ← Volver al Mundo Vocal | Mundo vocal |
