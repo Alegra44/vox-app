@@ -116,7 +116,7 @@ const RESULT = {
   staykey: () => ({ shown: document.getElementById('stayKeyAccuracyVal').textContent, inKeyShare: +(stayKeyInKeyFrames / Math.max(1, stayKeyTotalFrames)).toFixed(3) }),
   karaoke: () => ({ notes: karaokeResults.map(r => r ? `${r.pitchAcc}/${r.timingScore}/${r.heard ? 'h' : '-'}` : 'x').join(' '), pitch: document.getElementById('karaokePitchVal').textContent, timing: document.getElementById('karaokeTimingVal').textContent }),
   hmem: () => ({ held: harmonyMemory.lastRun?.results.map(r => r.held ? 1 : 0).join(''), score: harmonyMemory.lastRun?.score, passed: harmonyMemory.lastRun?.passed }),
-  glider: () => ({ score: gliderScoreVal, coins: gliderCoins, title: document.getElementById('gliderGameOverTitle').textContent.replace(/New best!?|Crashed!?/i, 'end'),
+  glider: () => ({ score: gliderScoreVal, coins: gliderCoins, title: document.getElementById('gliderGameOverTitle').textContent.replace(/New best!?|Crashed!?|^Score$/i, 'end') /* phase 8: a run that isn't a best is titled Score */,
     startY: __gstart && __gstart.y, firstGapY: __gstart && __gstart.first, tookOffOnFrame: __gstart && __gstart.offAt }),
   boss: () => ({ boss: Math.round(bossHealth), player: Math.round(playerHealth), notes: bossNoteResults.map(r => r && r.pitchAcc !== undefined ? r.pitchAcc : (typeof r === 'number' ? r : JSON.stringify(r))).join(' ') }),
 };

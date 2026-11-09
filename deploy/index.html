@@ -8707,6 +8707,8 @@ const TRANSLATIONS = {
     glider_adapt_agility:"Adapted to {skill}, your lowest score ({v}%): the gaps narrow faster.",
     glider_adapt_pitch:"Adapted to {skill}, your lowest score ({v}%): bigger jumps between gaps.",
     glider_adapt_range:"Adapted to {skill}, your lowest score ({v}%): the gaps swing wider across your range.",
+    song_key_c_major:"C Major",
+    song_key_a_minor:"A Minor",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -10423,6 +10425,8 @@ const TRANSLATIONS = {
     glider_adapt_agility:"Adapté à {skill}, votre score le plus bas ({v} %) : les trouées se resserrent plus vite.",
     glider_adapt_pitch:"Adapté à {skill}, votre score le plus bas ({v} %) : des sauts plus grands entre les trouées.",
     glider_adapt_range:"Adapté à {skill}, votre score le plus bas ({v} %) : les trouées balaient plus largement votre tessiture.",
+    song_key_c_major:"Do majeur",
+    song_key_a_minor:"La mineur",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -12139,6 +12143,8 @@ const TRANSLATIONS = {
     glider_adapt_agility:"Adaptado a {skill}, tu puntuación más baja ({v} %): los huecos se estrechan más rápido.",
     glider_adapt_pitch:"Adaptado a {skill}, tu puntuación más baja ({v} %): saltos más grandes entre huecos.",
     glider_adapt_range:"Adaptado a {skill}, tu puntuación más baja ({v} %): los huecos recorren más tu rango.",
+    song_key_c_major:"Do mayor",
+    song_key_a_minor:"La menor",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13855,6 +13861,8 @@ const TRANSLATIONS = {
     glider_adapt_agility:"En düşük puanın {skill} (%{v}) için uyarlandı: boşluklar daha hızlı daralır.",
     glider_adapt_pitch:"En düşük puanın {skill} (%{v}) için uyarlandı: boşluklar arası daha büyük sıçramalar.",
     glider_adapt_range:"En düşük puanın {skill} (%{v}) için uyarlandı: boşluklar aralığında daha geniş salınır.",
+    song_key_c_major:"Do majör",
+    song_key_a_minor:"La minör",
   },
 };
 let currentLanguage = 'en';
@@ -13899,6 +13907,7 @@ function applyTranslations(){
     ()=>typeof renderVocalLoadGauge==='function' && renderVocalLoadGauge(),
     ()=>typeof renderWarmupContext==='function' && document.getElementById('warmupContext') && renderWarmupContext(),
     ()=>typeof renderSkillTree==='function' && renderSkillTree(),
+    ()=>typeof renderWorldCopy==='function' && renderWorldCopy(),
     ()=>typeof renderVocalLab==='function' && renderVocalLab(),
     ()=>typeof renderVocalPassport==='function' && renderVocalPassport(),
     ()=>typeof renderVoiceCard==='function' && renderVoiceCard(),
@@ -20569,7 +20578,7 @@ function showArcadeGame(name){
   if(name==='bridge'){ const bb = document.getElementById('bridgeBestLabelLive'); if(bb) bb.textContent = profile ? t('game_best_p1')+' '+(progress.bridgeBest||0) : ''; }
   if(name==='boss' && typeof BOSS_TYPES!=='undefined'){ const bt = BOSS_TYPES[selectedBossType]; document.getElementById('bossMarkUse').setAttribute('href', '#'+bt.mark); document.getElementById('bossNameLabel').textContent = bt.name; }
   if(name==='boss' && typeof renderBossMemoryAndRecommendation==='function') renderBossMemoryAndRecommendation();
-  if((name==='boss' || name==='harmony') && typeof SONG!=='undefined'){ const el = document.getElementById(name==='boss' ? 'bossCurrentSongLabel' : 'harmonyCurrentSongLabel'); if(el) el.textContent = t('game_song_tpl').replace('{name}', SONG.name).replace('{key}', SONG.key); }
+  if((name==='boss' || name==='harmony') && typeof SONG!=='undefined'){ const el = document.getElementById(name==='boss' ? 'bossCurrentSongLabel' : 'harmonyCurrentSongLabel'); if(el) el.textContent = songLabelText(); }
   if(name==='rift'){ const rb = document.getElementById('riftBestLive'); if(rb) rb.textContent = profile && progress.riftBest ? t('arcade_best_template').replace('{n}', progress.riftBest+'%') : ''; }
   if(name==='harmony'){ const hb = document.getElementById('harmonyBestLive'); if(hb) hb.textContent = profile && progress.harmonyBest ? t('arcade_best_template').replace('{n}', progress.harmonyBest+'%') : ''; }
   if(name==='boss'){ const bl = document.getElementById('bossBestLive'); if(bl) bl.textContent = profile ? t('arcade_won_template').replace('{n}', progress.bossVictories||0) : ''; }
@@ -22973,10 +22982,18 @@ function selectSong(id){
   if(typeof harmonyNoteResults!=='undefined') harmonyNoteResults=[];
   if(typeof renderYourChoir==='function') renderYourChoir();
   document.getElementById('bossSectionBreakdown')?.style.setProperty('display','none');
-  ['bossCurrentSongLabel','harmonyCurrentSongLabel'].forEach(id2=>{
-    const el = document.getElementById(id2);
-    if(el) el.textContent = t('game_song_tpl').replace('{name}', s.name).replace('{key}', s.key);
-  });
+  renderWorldCopy();
+}
+// Vocal World's JS-filled copy (the course and boss lines, the games' song line), in the current language: at load and
+// on every language change (applyTranslations), and when the song changes.
+function songLabelText(){
+  const nk = 'choir_song_' + currentSongId + '_name', kk = 'song_key_' + String(SONG.key).toLowerCase().replace(/\s+/g, '_');
+  return t('game_song_tpl').replace('{name}', nk in TRANSLATIONS.en ? t(nk) : SONG.name).replace('{key}', kk in TRANSLATIONS.en ? t(kk) : SONG.key);
+}
+function renderWorldCopy(){
+  document.querySelectorAll('#gliderModeRow [data-glider-mode]').forEach(b=>{ const e = b.querySelector('.mode-card-tag'); if(e && GLIDER_MODES[b.dataset.gliderMode]) e.textContent = GLIDER_MODES[b.dataset.gliderMode].tagline; });
+  document.querySelectorAll('#bossTypeRow [data-boss-type]').forEach(b=>{ const e = b.querySelector('.mode-card-tag'); if(e && BOSS_TYPES[b.dataset.bossType]) e.textContent = BOSS_TYPES[b.dataset.bossType].tagline; });
+  ['bossCurrentSongLabel','harmonyCurrentSongLabel'].forEach(id=>{ const el = document.getElementById(id); if(el) el.textContent = songLabelText(); });
 }
 document.querySelectorAll('#songSelectRow .ex-type-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>selectSong(btn.dataset.songId));
@@ -25822,6 +25839,7 @@ document.getElementById('feedbackAnotherBtn')?.addEventListener('click', ()=>{
 
 setExerciseLevel('beginner');
 updateExCapNote();
+renderWorldCopy();
 appFullyLoaded = true;
 window.__vcBooted = true; // the startup safety net stands down (it ran to here)
 </script>
