@@ -1383,6 +1383,24 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   /* ---- VOICE ARCADE ---- */
   .arcade-hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px;}
+  /* phase 8 (2.2): the World hub's tiles. House up, on paper: a hairline tile, the location's mark in ink, one name, one
+     line, and the best (or the lock and the level) at the foot. Locked: the mark and name in ink-3, no opacity. */
+  .arcade-hub-grid.wh-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--hl-s3);margin-top:var(--hl-s5);}
+  @media (min-width:768px){ .arcade-hub-grid.wh-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  .arcade-game-card.wh-tile{display:flex;flex-direction:column;align-items:flex-start;gap:var(--hl-s2);min-height:176px;padding:var(--hl-s4);
+    background:var(--hl-raised);color:var(--hl-ink);border:var(--hl-hair) solid var(--hl-rule);border-radius:var(--hl-r2);box-shadow:none;
+    font:inherit;text-align:left;cursor:pointer;transition:border-color var(--hl-d1) var(--hl-ease);}
+  .arcade-game-card.wh-tile:hover:not(.locked){border-color:var(--hl-ink-3);}
+  .arcade-game-card.wh-tile .wh-mark{width:44px;height:44px;color:var(--hl-ink);margin-bottom:var(--hl-s2);}
+  .arcade-game-card.wh-tile .wh-name{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:var(--hl-t-body);color:var(--hl-ink);margin:0;line-height:1.2;}
+  .arcade-game-card.wh-tile .wh-line{font-size:var(--hl-t-small);color:var(--hl-ink-2);margin:0;line-height:1.4;}
+  .arcade-game-card.wh-tile .wh-end{margin-top:auto;padding-top:var(--hl-s2);font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
+  .arcade-game-card.wh-tile .wh-end .ag-best{font-family:inherit;font-size:inherit;color:inherit;margin:0;}
+  .wh-tile .wh-lock{display:none;align-items:center;gap:6px;color:var(--hl-ink-3);}
+  .wh-tile.locked .wh-lock{display:inline-flex;}
+  .wh-tile.locked .ag-best{display:none;}
+  .arcade-game-card.wh-tile.locked .wh-mark, .arcade-game-card.wh-tile.locked .wh-name{color:var(--hl-ink-3);}
+  .wh-tile.locked{cursor:pointer;}
   .arcade-game-card{
     background:var(--surface);
     border:1px solid var(--hairline);border-radius:16px;padding:20px;cursor:pointer;text-align:left;
@@ -3036,47 +3054,49 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <!-- HUB -->
     <div id="arcadeHub">
+      <!-- phase 8 (PHASE8.md 2.2): house up. The title, one line, and the six places as tiles (2 columns at 390, 3 from 768):
+           each its drawn mark, one name, one line, and its best or, locked, the lock and the level it opens at. -->
       <div class="journey-hero">
         <div class="j-title" data-i18n="hub_world_title">Vocal World</div>
-        <div class="j-sub" data-i18n="hub_world_sub">Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines as the rest of the app; nothing here is a separate fake game bolted on.</div>
+        <div class="j-sub" data-i18n="hub_world_sub">Six places to play with your voice. Each opens as your level rises.</div>
       </div>
-      <div class="arcade-hub-grid">
-        <div class="arcade-game-card" data-game="glider" data-required-level="1">
-          <div class="ag-emoji">🏔️</div>
-          <div class="ag-title" data-i18n="world_glider_title">Pitch Mountain — Vocal Journey</div>
-          <div class="ag-desc" data-i18n="world_glider_desc">Sing higher to climb, lower to dive. Difficulty adapts to your real weakest Skill Profile category. Coins + combo.</div>
-          <div class="ag-best" id="gliderBestLabel">Included in your 21-day trial</div>
-        </div>
-        <div class="arcade-game-card" data-game="bridge" data-required-level="3">
-          <div class="ag-emoji">🌉</div>
-          <div class="ag-title" data-i18n="world_bridge_title">Register Canyon — Runner</div>
-          <div class="ag-desc" data-i18n="world_bridge_desc">Switch between chest and head voice to dodge obstacles in the right lane.</div>
-          <div class="ag-best" id="bridgeBestLabel">Pro · Level 3</div>
-        </div>
-        <div class="arcade-game-card" data-game="boss" data-required-level="5">
-          <div class="ag-emoji">🐉</div>
-          <div class="ag-title" data-i18n="world_boss_title">Boss Arena — Vocal Boss Battle</div>
-          <div class="ag-desc" data-i18n="world_boss_desc">Fight the Pitch Dragon with the Lead melody. Lose, and it tells you your real weakest note — train it, then rematch.</div>
-          <div class="ag-best" id="bossBestLabel">Pro · Level 5</div>
-        </div>
-        <div class="arcade-game-card" data-game="harmony" data-required-level="10">
-          <div class="ag-emoji">🎼</div>
-          <div class="ag-title" data-i18n="world_harmony_title">Harmony Castle — Harmony Arena</div>
-          <div class="ag-desc" data-i18n="world_harmony_desc">Pick a voice part, hold your line while the other parts get louder through 5 real levels — including a random-key boss level.</div>
-          <div class="ag-best" id="harmonyBestLabel">Pro · Level 10</div>
-        </div>
-        <div class="arcade-game-card" data-game="skilltree" data-required-level="1">
-          <div class="ag-emoji">🌳</div>
-          <div class="ag-title" data-i18n="world_skilltree_title">Vocal Skill Tree</div>
-          <div class="ag-desc" data-i18n="world_skilltree_desc">Every node unlocks from a real measured threshold — nothing here is bought with XP, only earned by actually improving that skill.</div>
-          <div class="ag-best" id="skillTreeBestLabel" data-i18n="arcade_always_open">Always open</div>
-        </div>
-        <div class="arcade-game-card" data-game="rift" data-required-level="7">
-          <div class="ag-emoji">🌀</div>
-          <div class="ag-title" data-i18n="world_rift_title">The Vocal Rift</div>
-          <div class="ag-desc" data-i18n="world_rift_desc">60 real seconds, unpredictable rounds — pitch, interval jump, sustain hold, quick catch, randomly picked. You don't know what's next, so you have to actually react.</div>
-          <div class="ag-best" id="riftBestLabel">Pro · Level 7</div>
-        </div>
+      <div class="arcade-hub-grid wh-grid">
+        <button type="button" class="arcade-game-card wh-tile" data-game="glider" data-required-level="1">
+          <svg class="hl-icon wh-mark" aria-hidden="true"><use href="#hl-loc-mountain"/></svg>
+          <span class="ag-title wh-name" data-i18n="world_glider_title">Pitch Mountain</span>
+          <span class="ag-desc wh-line" data-i18n="world_glider_desc">Sing higher to climb, lower to dive.</span>
+          <span class="wh-end"><span class="ag-best" id="gliderBestLabel"></span><span class="wh-lock"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-lock"/></svg><span class="wh-lock-lv"></span></span></span>
+        </button>
+        <button type="button" class="arcade-game-card wh-tile" data-game="bridge" data-required-level="3">
+          <svg class="hl-icon wh-mark" aria-hidden="true"><use href="#hl-loc-canyon"/></svg>
+          <span class="ag-title wh-name" data-i18n="world_bridge_title">Register Canyon</span>
+          <span class="ag-desc wh-line" data-i18n="world_bridge_desc">Switch chest and head voice to change lanes.</span>
+          <span class="wh-end"><span class="ag-best" id="bridgeBestLabel"></span><span class="wh-lock"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-lock"/></svg><span class="wh-lock-lv"></span></span></span>
+        </button>
+        <button type="button" class="arcade-game-card wh-tile" data-game="boss" data-required-level="5">
+          <svg class="hl-icon wh-mark" aria-hidden="true"><use href="#hl-loc-arena"/></svg>
+          <span class="ag-title wh-name" data-i18n="world_boss_title">Boss Arena</span>
+          <span class="ag-desc wh-line" data-i18n="world_boss_desc">Sing the Lead line well to beat a boss.</span>
+          <span class="wh-end"><span class="ag-best" id="bossBestLabel"></span><span class="wh-lock"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-lock"/></svg><span class="wh-lock-lv"></span></span></span>
+        </button>
+        <button type="button" class="arcade-game-card wh-tile" data-game="harmony" data-required-level="10">
+          <svg class="hl-icon wh-mark" aria-hidden="true"><use href="#hl-loc-castle"/></svg>
+          <span class="ag-title wh-name" data-i18n="world_harmony_title">Harmony Castle</span>
+          <span class="ag-desc wh-line" data-i18n="world_harmony_desc">Hold your part while the others get louder.</span>
+          <span class="wh-end"><span class="ag-best" id="harmonyBestLabel"></span><span class="wh-lock"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-lock"/></svg><span class="wh-lock-lv"></span></span></span>
+        </button>
+        <button type="button" class="arcade-game-card wh-tile" data-game="skilltree" data-required-level="1">
+          <svg class="hl-icon wh-mark" aria-hidden="true"><use href="#hl-loc-tree"/></svg>
+          <span class="ag-title wh-name" data-i18n="world_skilltree_title">Skill Tree</span>
+          <span class="ag-desc wh-line" data-i18n="world_skilltree_desc">Skills that open as your scores rise.</span>
+          <span class="wh-end"><span class="ag-best" id="skillTreeBestLabel" data-i18n="arcade_always_open">Always open</span><span class="wh-lock"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-lock"/></svg><span class="wh-lock-lv"></span></span></span>
+        </button>
+        <button type="button" class="arcade-game-card wh-tile" data-game="rift" data-required-level="7">
+          <svg class="hl-icon wh-mark" aria-hidden="true"><use href="#hl-loc-rift"/></svg>
+          <span class="ag-title wh-name" data-i18n="world_rift_title">The Rift</span>
+          <span class="ag-desc wh-line" data-i18n="world_rift_desc">Sixty seconds of surprise rounds.</span>
+          <span class="wh-end"><span class="ag-best" id="riftBestLabel"></span><span class="wh-lock"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-lock"/></svg><span class="wh-lock-lv"></span></span></span>
+        </button>
       </div>
     </div>
 
@@ -6862,7 +6882,7 @@ const TRANSLATIONS = {
     hub_songs_title:'Songs', hub_songs_sub:'Rehearse your choir part, or practice a song on your own.',
     hub_you_title:'You', hub_you_sub:'Your range, progress and plan.',
     hub_world_title:'Vocal World',
-    hub_world_sub:"Four connected locations, one persistent world — unlocked as your real Level rises (same XP/Level system as the 21-Day Journey). Every mechanic below reuses the same detection engines as the rest of the app; nothing here is a separate fake game bolted on.",
+    hub_world_sub:"Six places to play with your voice. Each opens as your level rises.",
     settings_theme_title:'Theme', settings_theme_sub:'System follows your device\'s light or dark setting.',
     theme_default:'Default', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Liquid Aurora', theme_velvetopera:'Velvet Opera', theme_system:'System', theme_light:'Light', theme_dark:'Dark',
     settings_feedback_title:"Feedback", settings_feedback_sub:"Specific feedback is stored so it can be acted on.",
@@ -7802,18 +7822,18 @@ const TRANSLATIONS = {
     teacher_signin_prompt:'Sign in to use the Teacher Dashboard.',
     teacher_viewplan_btn:'View Teacher plan',
     world_back_link:'← Back to Vocal World',
-    world_boss_desc:'Fight the Pitch Dragon with the Lead melody. Lose, and it tells you your real weakest note — train it, then rematch.',
-    world_boss_title:'Boss Arena — Vocal Boss Battle',
-    world_bridge_desc:'Switch between chest and head voice to dodge obstacles in the right lane.',
-    world_bridge_title:'Register Canyon — Runner',
-    world_glider_desc:'Sing higher to climb, lower to dive. Difficulty adapts to your real weakest Skill Profile category. Coins + combo.',
-    world_glider_title:'Pitch Mountain — Vocal Journey',
-    world_harmony_desc:'Pick a voice part, hold your line while the other parts get louder through 5 real levels — including a random-key boss level.',
-    world_harmony_title:'Harmony Castle — Harmony Arena',
-    world_rift_desc:'60 real seconds, unpredictable rounds — pitch, interval jump, sustain hold, quick catch, randomly picked. You don\'t know what\'s next, so you have to actually react.',
-    world_rift_title:'The Vocal Rift',
-    world_skilltree_desc:'Every node unlocks from a real measured threshold — nothing here is bought with XP, only earned by actually improving that skill.',
-    world_skilltree_title:'Vocal Skill Tree',
+    world_boss_desc:"Sing the Lead line well to beat a boss.",
+    world_boss_title:"Boss Arena",
+    world_bridge_desc:"Switch chest and head voice to change lanes.",
+    world_bridge_title:"Register Canyon",
+    world_glider_desc:"Sing higher to climb, lower to dive.",
+    world_glider_title:"Pitch Mountain",
+    world_harmony_desc:"Hold your part while the others get louder.",
+    world_harmony_title:"Harmony Castle",
+    world_rift_desc:"Sixty seconds of surprise rounds.",
+    world_rift_title:"The Rift",
+    world_skilltree_desc:"Skills that open as your scores rise.",
+    world_skilltree_title:"Skill Tree",
     profile_21dayprogress_label:'21-Day Progress',
     profile_achievements_label:'Achievements',
     profile_agility_label:'Agility',
@@ -8235,7 +8255,7 @@ const TRANSLATIONS = {
     paywall_trialended_p1:'Your 21-day free access has ended.', paywall_trialended_p2:'continues on a paid plan — your progress is still saved.',
     paywall_ispartof_tpl:'{feature} is part of the {plan} plan.',
     paywall_trialended_choir_tpl:'Your 21-day free access has ended. {feature} continues on the {plan} plan ({price}) — your progress is still saved.',
-    arcade_pro_level_template:'Pro · Level {n}', arcade_won_template:'Won {n}x', arcade_best_template:'Best: {n}',
+    arcade_pro_level_template:'Pro · Level {n}', arcade_won_template:"Wins: {n}", arcade_best_template:'Best: {n}',
     arcade_trial_included:'Included in your 21-day trial', arcade_always_open:'Always open', arcade_unlocks_at_level_template:'🔒 Unlocks at Level {n}',
     pricing_planname_monthly:'🎤 Monthly', pricing_planname_yearly:'⭐ Yearly', pricing_planname_teacher:'🎓 Teacher', pricing_planname_choir:'🎹 Choir / Studio',
     trialcompare_nobaseline:"No Day 1 baseline was recorded (the 21-Day Journey assessment wasn't completed), so there's no before/after to show — your saved progress is still intact.",
@@ -8470,6 +8490,9 @@ const TRANSLATIONS = {
     plans_soon_body:"Your current access continues; we'll tell you when they open.",
     plans_soon_close:"Close",
     signin_choose_plan:"Sign in to choose a plan",
+    arcade_level_tpl:"Level {n}",
+    arcade_lock_msg_tpl:"Opens at Level {n}. You're Level {m}.",
+    arcade_not_played:"Not played yet",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8501,7 +8524,7 @@ const TRANSLATIONS = {
     hub_songs_title:'Chansons', hub_songs_sub:'Répétez votre voix du chœur, ou travaillez une chanson seul.',
     hub_you_title:'Vous', hub_you_sub:'Votre tessiture, vos progrès et votre forfait.',
     hub_world_title:'Monde Vocal',
-    hub_world_sub:"Quatre lieux connectés, un monde persistant — débloqué à mesure que votre vrai Niveau augmente (même système XP/Niveau que le Parcours de 21 jours). Chaque mécanique ci-dessous réutilise les mêmes moteurs de détection que le reste de l'application ; rien ici n'est un faux jeu séparé ajouté après coup.",
+    hub_world_sub:"Six lieux où jouer avec votre voix. Chacun s'ouvre à mesure que votre niveau monte.",
     settings_theme_title:'Thème', settings_theme_sub:'Système suit le réglage clair ou sombre de votre appareil.',
     theme_default:'Par défaut', theme_cyberpunk:'Néon Cyberpunk', theme_aurora:'Aurore Liquide', theme_velvetopera:'Opéra Velours', theme_system:'Système', theme_light:'Clair', theme_dark:'Sombre',
     settings_feedback_title:"Avis", settings_feedback_sub:"Les avis précis sont enregistrés pour pouvoir y donner suite.",
@@ -9441,18 +9464,18 @@ const TRANSLATIONS = {
     teacher_signin_prompt:'Connectez-vous pour utiliser le Tableau de bord Enseignant.',
     teacher_viewplan_btn:'Voir le forfait Enseignant',
     world_back_link:'← Retour au Monde Vocal',
-    world_boss_desc:'Combattez le Dragon Justesse avec la mélodie principale. Perdez, et il vous dit votre vraie note la plus faible — entraînez-la, puis revanche.',
-    world_boss_title:'Arène des Boss — Combat Vocal de Boss',
-    world_bridge_desc:'Alternez entre voix de poitrine et de tête pour esquiver les obstacles dans la bonne voie.',
-    world_bridge_title:'Canyon Registre — Coureur',
-    world_glider_desc:'Chantez plus haut pour grimper, plus bas pour plonger. La difficulté s\'adapte à votre vraie catégorie de Profil de compétences la plus faible. Pièces + combo.',
-    world_glider_title:'Montagne de la Justesse — Voyage Vocal',
-    world_harmony_desc:'Choisissez une voix, tenez votre ligne pendant que les autres voix deviennent plus fortes à travers 5 vrais niveaux — dont un niveau boss en tonalité aléatoire.',
-    world_harmony_title:'Château Harmonie — Arène Harmonie',
-    world_rift_desc:'60 vraies secondes, tours imprévisibles — justesse, saut d\'intervalle, tenue de soutien, capture rapide, choisis aléatoirement. Vous ne savez pas ce qui vient ensuite, alors vous devez vraiment réagir.',
-    world_rift_title:'La Faille Vocale',
-    world_skilltree_desc:'Chaque nœud se débloque à partir d\'un vrai seuil mesuré — rien ici n\'est acheté avec de l\'XP, seulement gagné en améliorant réellement cette compétence.',
-    world_skilltree_title:'Arbre de Compétences Vocales',
+    world_boss_desc:"Chantez bien la ligne principale pour battre un boss.",
+    world_boss_title:"Arène des Boss",
+    world_bridge_desc:"Passez de la voix de poitrine à la voix de tête pour changer de voie.",
+    world_bridge_title:"Canyon des Registres",
+    world_glider_desc:"Chantez plus aigu pour monter, plus grave pour descendre.",
+    world_glider_title:"Mont des Notes",
+    world_harmony_desc:"Tenez votre voix pendant que les autres montent en volume.",
+    world_harmony_title:"Château de l'Harmonie",
+    world_rift_desc:"Soixante secondes de manches surprises.",
+    world_rift_title:"La Faille",
+    world_skilltree_desc:"Des compétences qui s'ouvrent à mesure que vos scores montent.",
+    world_skilltree_title:"Arbre des compétences",
     profile_21dayprogress_label:'Progrès sur 21 jours',
     profile_achievements_label:'Succès',
     profile_agility_label:'Agilité',
@@ -9874,7 +9897,7 @@ const TRANSLATIONS = {
     paywall_trialended_p1:'Votre accès gratuit de 21 jours a pris fin.', paywall_trialended_p2:'continue sur un forfait payant — votre progression reste enregistrée.',
     paywall_ispartof_tpl:'{feature} fait partie du forfait {plan}.',
     paywall_trialended_choir_tpl:'Votre accès gratuit de 21 jours a pris fin. {feature} continue avec le forfait {plan} ({price}) — votre progression reste enregistrée.',
-    arcade_pro_level_template:'Pro · Niveau {n}', arcade_won_template:'Gagné {n}x', arcade_best_template:'Meilleur : {n}',
+    arcade_pro_level_template:'Pro · Niveau {n}', arcade_won_template:"Victoires : {n}", arcade_best_template:'Meilleur : {n}',
     arcade_trial_included:'Inclus dans votre essai de 21 jours', arcade_always_open:'Toujours ouvert', arcade_unlocks_at_level_template:'🔒 Débloqué au niveau {n}',
     pricing_planname_monthly:'🎤 Mensuel', pricing_planname_yearly:'⭐ Annuel', pricing_planname_teacher:'🎓 Enseignant', pricing_planname_choir:'🎹 Chorale / Studio',
     trialcompare_nobaseline:"Aucune référence du jour 1 n'a été enregistrée (l'évaluation du parcours de 21 jours n'a pas été terminée), donc il n'y a pas d'avant/après à afficher — votre progression enregistrée est toujours intacte.",
@@ -10109,6 +10132,9 @@ const TRANSLATIONS = {
     plans_soon_body:"Votre accès actuel continue ; nous vous préviendrons quand ils ouvriront.",
     plans_soon_close:"Fermer",
     signin_choose_plan:"Connectez-vous pour choisir un forfait",
+    arcade_level_tpl:"Niveau {n}",
+    arcade_lock_msg_tpl:"S'ouvre au niveau {n}. Vous êtes au niveau {m}.",
+    arcade_not_played:"Pas encore joué",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10140,7 +10166,7 @@ const TRANSLATIONS = {
     hub_songs_title:'Canciones', hub_songs_sub:'Ensaya tu voz del coro o practica una canción por tu cuenta.',
     hub_you_title:'Tú', hub_you_sub:'Tu rango, tu progreso y tu plan.',
     hub_world_title:'Mundo Vocal',
-    hub_world_sub:'Cuatro ubicaciones conectadas, un mundo persistente — desbloqueado a medida que sube tu Nivel real (el mismo sistema de XP/Nivel que el Programa de 21 Días). Cada mecánica de abajo reutiliza los mismos motores de detección que el resto de la aplicación; nada aquí es un juego falso añadido por separado.',
+    hub_world_sub:"Seis lugares para jugar con tu voz. Cada uno se abre a medida que sube tu nivel.",
     settings_theme_title:'Tema', settings_theme_sub:'Sistema sigue el ajuste claro u oscuro de tu dispositivo.',
     theme_default:'Predeterminado', theme_cyberpunk:'Neón Cyberpunk', theme_aurora:'Aurora Líquida', theme_velvetopera:'Ópera de Terciopelo', theme_system:'Sistema', theme_light:'Claro', theme_dark:'Oscuro',
     settings_feedback_title:"Comentarios", settings_feedback_sub:"Los comentarios concretos se guardan para poder actuar en consecuencia.",
@@ -11080,18 +11106,18 @@ const TRANSLATIONS = {
     teacher_signin_prompt:'Inicia sesión para usar el Panel del Profesor.',
     teacher_viewplan_btn:'Ver plan Profesor',
     world_back_link:'← Volver al Mundo Vocal',
-    world_boss_desc:'Lucha contra el Dragón de Afinación con la melodía principal. Pierde, y te dice tu nota real más débil — entrénala, luego revancha.',
-    world_boss_title:'Arena de Jefes — Batalla Vocal de Jefes',
-    world_bridge_desc:'Alterna entre voz de pecho y cabeza para esquivar obstáculos en el carril correcto.',
-    world_bridge_title:'Cañón de Registro — Corredor',
-    world_glider_desc:'Canta más alto para subir, más bajo para bajar. La dificultad se adapta a tu categoría real más débil del Perfil de habilidades. Monedas + combo.',
-    world_glider_title:'Montaña de Afinación — Viaje Vocal',
-    world_harmony_desc:'Elige una voz, mantén tu línea mientras las otras voces se hacen más fuertes a través de 5 niveles reales — incluyendo un nivel de jefe en tono aleatorio.',
-    world_harmony_title:'Castillo de Armonía — Arena de Armonía',
-    world_rift_desc:'60 segundos reales, rondas impredecibles — afinación, salto de intervalo, sostenido, captura rápida, elegidas al azar. No sabes qué sigue, así que tienes que reaccionar de verdad.',
-    world_rift_title:'La Grieta Vocal',
-    world_skilltree_desc:'Cada nodo se desbloquea desde un umbral medido real — nada aquí se compra con XP, solo se gana mejorando realmente esa habilidad.',
-    world_skilltree_title:'Árbol de Habilidades Vocales',
+    world_boss_desc:"Canta bien la línea principal para vencer a un jefe.",
+    world_boss_title:"Arena de Jefes",
+    world_bridge_desc:"Cambia entre voz de pecho y de cabeza para cambiar de carril.",
+    world_bridge_title:"Cañón de Registros",
+    world_glider_desc:"Canta más agudo para subir, más grave para bajar.",
+    world_glider_title:"Monte del Tono",
+    world_harmony_desc:"Mantén tu voz mientras las demás suben de volumen.",
+    world_harmony_title:"Castillo de la Armonía",
+    world_rift_desc:"Sesenta segundos de rondas sorpresa.",
+    world_rift_title:"La Grieta",
+    world_skilltree_desc:"Habilidades que se abren a medida que suben tus puntuaciones.",
+    world_skilltree_title:"Árbol de habilidades",
     profile_21dayprogress_label:'Progreso de 21 días',
     profile_achievements_label:'Logros',
     profile_agility_label:'Agilidad',
@@ -11513,7 +11539,7 @@ const TRANSLATIONS = {
     paywall_trialended_p1:'Tu acceso gratuito de 21 días ha terminado.', paywall_trialended_p2:'continúa en un plan de pago — tu progreso sigue guardado.',
     paywall_ispartof_tpl:'{feature} es parte del plan {plan}.',
     paywall_trialended_choir_tpl:'Tu acceso gratuito de 21 días ha terminado. {feature} continúa con el plan {plan} ({price}) — tu progreso sigue guardado.',
-    arcade_pro_level_template:'Pro · Nivel {n}', arcade_won_template:'Ganado {n}x', arcade_best_template:'Mejor: {n}',
+    arcade_pro_level_template:'Pro · Nivel {n}', arcade_won_template:"Victorias: {n}", arcade_best_template:'Mejor: {n}',
     arcade_trial_included:'Incluido en tu prueba de 21 días', arcade_always_open:'Siempre abierto', arcade_unlocks_at_level_template:'🔒 Se desbloquea en el nivel {n}',
     pricing_planname_monthly:'🎤 Mensual', pricing_planname_yearly:'⭐ Anual', pricing_planname_teacher:'🎓 Profesor', pricing_planname_choir:'🎹 Coro / Estudio',
     trialcompare_nobaseline:"No se registró una línea base del día 1 (no se completó la evaluación del recorrido de 21 días), por lo que no hay un antes/después que mostrar — tu progreso guardado sigue intacto.",
@@ -11748,6 +11774,9 @@ const TRANSLATIONS = {
     plans_soon_body:"Tu acceso actual continúa; te avisaremos cuando abran.",
     plans_soon_close:"Cerrar",
     signin_choose_plan:"Inicia sesión para elegir un plan",
+    arcade_level_tpl:"Nivel {n}",
+    arcade_lock_msg_tpl:"Se abre en el nivel {n}. Estás en el nivel {m}.",
+    arcade_not_played:"Aún sin jugar",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -11779,7 +11808,7 @@ const TRANSLATIONS = {
     hub_songs_title:'Şarkılar', hub_songs_sub:'Koro partini çalış ya da bir şarkıyı tek başına çalış.',
     hub_you_title:'Sen', hub_you_sub:'Ses aralığın, ilerlemen ve planın.',
     hub_world_title:'Vokal Dünyası',
-    hub_world_sub:'Dört bağlantılı konum, tek bir kalıcı dünya — gerçek Seviyeniz yükseldikçe açılır (21 Günlük Yolculuk ile aynı XP/Seviye sistemi). Aşağıdaki her mekanik, uygulamanın geri kalanıyla aynı algılama motorlarını kullanır; burada ayrı, sahte bir oyun eklenmiş değildir.',
+    hub_world_sub:"Sesinle oynayabileceğin altı yer. Her biri seviyen yükseldikçe açılır.",
     settings_theme_title:'Tema', settings_theme_sub:'Sistem, cihazının açık veya koyu ayarını izler.',
     theme_default:'Varsayılan', theme_cyberpunk:'Cyberpunk Neon', theme_aurora:'Sıvı Aurora', theme_velvetopera:'Kadife Opera', theme_system:'Sistem', theme_light:'Açık', theme_dark:'Koyu',
     settings_feedback_title:"Geri Bildirim", settings_feedback_sub:"Belirli geri bildirimler, üzerinde çalışılabilsin diye saklanır.",
@@ -12719,18 +12748,18 @@ const TRANSLATIONS = {
     teacher_signin_prompt:'Öğretmen Panelini kullanmak için oturum açın.',
     teacher_viewplan_btn:'Öğretmen planını görüntüle',
     world_back_link:'← Vokal Dünyasına Dön',
-    world_boss_desc:'Lead melodisiyle Perde Ejderhası ile savaşın. Kaybedin, ve size gerçek en zayıf notanızı söyler — onu eğitin, sonra rövanş yapın.',
-    world_boss_title:'Boss Arenası — Vokal Boss Savaşı',
-    world_bridge_desc:'Doğru şeritteki engellerden kaçınmak için göğüs ve baş sesi arasında geçiş yapın.',
-    world_bridge_title:'Register Kanyonu — Koşucu',
-    world_glider_desc:'Tırmanmak için daha yüksek, dalmak için daha alçak söyleyin. Zorluk, gerçek en zayıf Yetenek Profili kategorinize uyum sağlar. Jetonlar + kombo.',
-    world_glider_title:'Perde Dağı — Vokal Yolculuğu',
-    world_harmony_desc:'Bir ses grubu seçin, diğer sesler 5 gerçek seviye boyunca yükselirken çizginizi koruyun — rastgele tonlu bir boss seviyesi dahil.',
-    world_harmony_title:'Armoni Kalesi — Armoni Arenası',
-    world_rift_desc:'60 gerçek saniye, öngörülemez turlar — perde, aralık sıçraması, sürdürme tutuşu, hızlı yakalama, rastgele seçilir. Sırada ne olduğunu bilmiyorsunuz, bu yüzden gerçekten tepki vermeniz gerekiyor.',
-    world_rift_title:'Vokal Yarığı',
-    world_skilltree_desc:'Her düğüm gerçek ölçülen bir eşikten kilidi açılır — burada hiçbir şey XP ile satın alınmaz, yalnızca o yeteneği gerçekten geliştirerek kazanılır.',
-    world_skilltree_title:'Vokal Yetenek Ağacı',
+    world_boss_desc:"Bir boss'u yenmek için ana melodiyi iyi söyle.",
+    world_boss_title:"Boss Arenası",
+    world_bridge_desc:"Şerit değiştirmek için göğüs ve baş sesi arasında geçiş yap.",
+    world_bridge_title:"Register Kanyonu",
+    world_glider_desc:"Tırmanmak için tizleş, dalmak için pesleş.",
+    world_glider_title:"Perde Dağı",
+    world_harmony_desc:"Diğerleri yükselirken kendi partini koru.",
+    world_harmony_title:"Armoni Kalesi",
+    world_rift_desc:"Altmış saniyelik sürpriz turlar.",
+    world_rift_title:"Yarık",
+    world_skilltree_desc:"Puanların yükseldikçe açılan beceriler.",
+    world_skilltree_title:"Beceri Ağacı",
     profile_21dayprogress_label:'21 Günlük İlerleme',
     profile_achievements_label:'Başarılar',
     profile_agility_label:'Çeviklik',
@@ -13152,7 +13181,7 @@ const TRANSLATIONS = {
     paywall_trialended_p1:'21 günlük ücretsiz erişiminiz sona erdi.', paywall_trialended_p2:'ücretli bir planda devam ediyor — ilerlemeniz hâlâ kaydedildi.',
     paywall_ispartof_tpl:'{feature} özelliği {plan} planının bir parçasıdır.',
     paywall_trialended_choir_tpl:'21 günlük ücretsiz erişiminiz sona erdi. {feature} özelliği {plan} planıyla devam ediyor ({price}) — ilerlemeniz hâlâ kaydedildi.',
-    arcade_pro_level_template:'Pro · Seviye {n}', arcade_won_template:'{n}x Kazanıldı', arcade_best_template:'En iyi: {n}',
+    arcade_pro_level_template:'Pro · Seviye {n}', arcade_won_template:"Galibiyet: {n}", arcade_best_template:'En iyi: {n}',
     arcade_trial_included:'21 günlük deneme sürenize dahildir', arcade_always_open:'Her zaman açık', arcade_unlocks_at_level_template:'🔒 Seviye {n} içinde açılır',
     pricing_planname_monthly:'🎤 Aylık', pricing_planname_yearly:'⭐ Yıllık', pricing_planname_teacher:'🎓 Öğretmen', pricing_planname_choir:'🎹 Koro / Stüdyo',
     trialcompare_nobaseline:"1. Gün temel ölçümü kaydedilmedi (21 Günlük Yolculuk değerlendirmesi tamamlanmadı), bu yüzden gösterilecek bir öncesi/sonrası yok — kayıtlı ilerlemeniz hâlâ korunuyor.",
@@ -13387,6 +13416,9 @@ const TRANSLATIONS = {
     plans_soon_body:"Mevcut erişiminiz devam ediyor; açıldıklarında size haber vereceğiz.",
     plans_soon_close:"Kapat",
     signin_choose_plan:"Plan seçmek için giriş yapın",
+    arcade_level_tpl:"Seviye {n}",
+    arcade_lock_msg_tpl:"Açılış: Seviye {n}. Şu an Seviye {m}.",
+    arcade_not_played:"Henüz oynanmadı",
   },
 };
 let currentLanguage = 'en';
@@ -20096,7 +20128,7 @@ document.querySelectorAll('.arcade-game-card').forEach(card=>{
     const required = parseInt(card.dataset.requiredLevel,10)||1;
     if(!gameUnlockedAtLevel(required)){
       if(!profile){ requireSignIn('Vocal World'); return; }
-      showToast(`This location unlocks at Level ${required}. You're currently Level ${levelForXp(progress.xp||0).level} — keep practicing to level up.`);
+      showToast(t('arcade_lock_msg_tpl').replace('{n}', required).replace('{m}', levelForXp(progress.xp||0).level));
       return;
     }
     showArcadeGame(card.dataset.game);
@@ -20106,31 +20138,24 @@ document.querySelectorAll('[data-back-to-hub]').forEach(btn=>{
   btn.addEventListener('click', showArcadeHub);
 });
 function renderArcadeLocks(){
+  // phase 8: a locked tile shows the lock and the level it opens at in its own foot (no badge, no opacity)
   document.querySelectorAll('.arcade-game-card').forEach(card=>{
     const required = parseInt(card.dataset.requiredLevel,10)||1;
     const unlocked = gameUnlockedAtLevel(required);
     card.classList.toggle('locked', !unlocked);
-    let badge = card.querySelector('.arcade-lock-badge');
-    if(!unlocked){
-      if(!badge){
-        badge = document.createElement('div');
-        badge.className='arcade-lock-badge';
-        card.appendChild(badge);
-      }
-      badge.textContent = t('arcade_unlocks_at_level_template').replace('{n}', required);
-    } else if(badge){
-      badge.remove();
-    }
+    const lv = card.querySelector('.wh-lock-lv');
+    if(lv) lv.textContent = t('arcade_level_tpl').replace('{n}', required);
+    card.setAttribute('aria-label', `${card.querySelector('.ag-title').textContent}${unlocked ? '' : ' · ' + t('arcade_level_tpl').replace('{n}', required)}`);
   });
 }
 function updateArcadeBestLabels(){
-  const proLevel = n => t('arcade_pro_level_template').replace('{n}', n);
-  const best = v => t('arcade_best_template').replace('{n}', v);
-  document.getElementById('gliderBestLabel').textContent = (profile && progress.gliderBest) ? best(progress.gliderBest) : t('arcade_trial_included');
-  document.getElementById('bossBestLabel').textContent = (profile && progress.bossVictories) ? t('arcade_won_template').replace('{n}', progress.bossVictories) : proLevel(5);
-  document.getElementById('bridgeBestLabel').textContent = (profile && progress.bridgeBest) ? best(progress.bridgeBest) : proLevel(3);
-  document.getElementById('harmonyBestLabel').textContent = (profile && progress.harmonyBest) ? best(progress.harmonyBest+'%') : proLevel(10);
-  document.getElementById('riftBestLabel').textContent = (profile && progress.riftBest) ? best(progress.riftBest+'%') : proLevel(7);
+  // phase 8: the tile's foot is the best (or boss wins); nothing played yet reads "Not played yet"
+  const best = v => t('arcade_best_template').replace('{n}', v), none = t('arcade_not_played');
+  document.getElementById('gliderBestLabel').textContent = (profile && progress.gliderBest) ? best(progress.gliderBest) : none;
+  document.getElementById('bossBestLabel').textContent = (profile && progress.bossVictories) ? t('arcade_won_template').replace('{n}', progress.bossVictories) : none;
+  document.getElementById('bridgeBestLabel').textContent = (profile && progress.bridgeBest) ? best(progress.bridgeBest) : none;
+  document.getElementById('harmonyBestLabel').textContent = (profile && progress.harmonyBest) ? best(progress.harmonyBest+'%') : none;
+  document.getElementById('riftBestLabel').textContent = (profile && progress.riftBest) ? best(progress.riftBest+'%') : none;
 }
 
 /* ---------------- Game 1: Pitch Glider / Vocal Journey (free, unlimited) ---------------- */
