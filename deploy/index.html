@@ -1497,6 +1497,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .gw-toggle .hl-item-meta{white-space:normal;}
   .gw-ribbon{width:100%;max-width:560px;height:auto;}
   .gw-hint{color:var(--hl-ink-3);text-align:center;margin:0;}
+  /* The Rift (2.7) */
+  .gw-round{display:flex;flex-direction:column;align-items:center;gap:var(--hl-s2);}
+  .gw-round-kind{font-size:var(--hl-t-label);font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--hl-ink-3);}
+  .gw-round-status{font-size:var(--hl-t-h3);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;min-height:1.4em;}
+  .gw-rounds{max-height:280px;overflow-y:auto;}
   @media (min-width:768px){ .gw-head .gw-mark{width:56px;height:56px;} }
   .arcade-canvas-wrap canvas{width:100%;display:block;}
   .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);}
@@ -3474,30 +3479,40 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <!-- VOCAL RIFT -->
-    <div id="gameRift" style="display:none;">
-      <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
-      <div class="key-card">
-        <div class="step-label"><span data-i18n="rift_step_label">🌀 The Vocal Rift</span><span class="mock-tag" data-i18n="rift_reuses_tag">REUSES PITCH MATCH ENGINE</span></div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="rift_h2">60 seconds, unpredictable real rounds</h2>
-        <p class="desc" style="margin-bottom:18px;" data-i18n="rift_desc">Each round is randomly one of four real drills — Pitch, Interval Jump, Sustain Hold, or Quick Catch — with a fresh real target every time. Same capture engine as Pitch Match throughout; only which challenge shows up next is a surprise.</p>
-
-        <div class="arcade-hud"><span id="riftRoundsLabel">Rounds: 0</span><span id="riftAvgLabel">Avg: —</span><span id="riftTimeLabel">Time: 60s</span></div>
-        <div class="rift-round-card" id="riftRoundCard">
-          <div class="rift-round-type" id="riftRoundType">—</div>
-          <div class="chord-label-display" id="riftRoundTarget">—</div>
-          <div class="desc" id="riftRoundStatus"></div>
+    <div id="gameRift" class="gw" style="display:none;">
+      <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
+      <!-- phase 8 (PHASE8.md 2.7): the page, the stage (the round's kind, its note big, what was heard), the result
+           (.vc-result: your average big, then rounds, best, and each round as a row). -->
+      <div class="key-card gw-card">
+        <div class="gw-head"><svg class="hl-icon gw-mark" aria-hidden="true"><use href="#hl-loc-rift"/></svg><div class="gw-head-text"><h2 class="gw-title" data-i18n="world_rift_title">The Rift</h2><p class="gw-line" data-i18n="rift_line">Sixty seconds of rounds you can't predict: match a note, jump an interval, hold one steady, or catch one fast.</p></div></div>
+        <div class="vc-stage gw-stage" id="riftStage">
+          <div class="gw-hud vc-live-only" aria-hidden="true">
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="rift_hud_rounds">Rounds</span><span class="gw-hud-v" id="riftRoundsLabel">0</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="rift_hud_avg">Average</span><span class="gw-hud-v" id="riftAvgLabel">—</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="rift_hud_time">Time</span><span class="gw-hud-v" id="riftTimeLabel">60</span></span>
+          </div>
+          <div class="gw-round vc-live-only" id="riftRoundCard">
+            <div class="gw-round-kind" id="riftRoundType">—</div>
+            <div class="gw-note-big" id="riftRoundTarget">—</div>
+            <div class="gw-round-status" id="riftRoundStatus"></div>
+          </div>
+          <div class="btn-row gw-go">
+            <button class="mic-btn vc-take-pill gw-start" id="riftStartBtn"><span class="dot-icon"></span><span id="riftStartLabel" data-i18n="rift_start_label">Enter the Rift</span></button>
+          </div>
+          <p class="gw-best vc-paper-only" id="riftBestLive"></p>
+          <div class="vl-gauge" id="vlGaugeRift" style="display:none;"></div>
         </div>
-
-        <div class="btn-row" style="justify-content:center;">
-          <button class="mic-btn" id="riftStartBtn"><span class="dot-icon"></span><span id="riftStartLabel" data-i18n="rift_start_label">Enter the Rift (Pro)</span></button>
+        <div class="vc-result gw-result" id="riftResultCard" role="status" aria-live="polite" style="display:none;">
+          <div class="vc-result-num" id="riftResultAvg">—</div>
+          <h3 class="hl-h3" data-i18n="rift_res_avg">Average</h3>
+          <p class="hl-coach" id="riftResultRounds"></p>
+          <div class="vc-result-dims">
+            <div class="vc-dim"><span data-i18n="game_hud_best">Best</span><span id="riftResBest">—</span></div>
+          </div>
+          <div class="vc-result-dims gw-rounds" id="riftResultRows"></div>
+          <div class="btn-row"><button type="button" class="hl-btn hl-btn--ink" id="riftAgainBtn" data-i18n="rift_again_btn">Enter again</button></div>
         </div>
-        <div class="vl-gauge" id="vlGaugeRift" style="display:none;"></div>
-
-        <div class="ex-result" id="riftResultCard" style="display:none;text-align:center;margin-top:20px;">
-          <div class="ex-accuracy" id="riftResultAvg">—</div>
-          <div class="ex-feedback-text" id="riftResultRounds">rounds completed</div>
-          <div id="riftResultRows" style="margin-top:16px;text-align:left;max-height:260px;overflow-y:auto;"></div>
-        </div>
+        <details class="hl-measure gw-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="rift_measure">Each round picks one of four kinds at random and a note from your range, plays it, then listens: a note held 1.4 s, an interval from the last note, a 2.4 s hold, or a 0.65 s catch. Each round is scored like Pitch Match, from how close your pitch sat to the note. Your average is over the rounds where a pitch was heard.</p></details>
       </div>
     </div>
 
@@ -8101,7 +8116,7 @@ const TRANSLATIONS = {
     wu_after:"Nice! Try another, or start your session.",
     wu_mic_needed:"The warm-up needs your microphone. Allow it and try again, or skip.",
     rift_avg_p1:'Avg:', rift_closed:'Rift closed', rift_missed:'Missed', rift_no_pitch_heard:'No clear pitch heard',
-    rift_rounds_completed:'rounds completed', rift_rounds_p1:'Rounds:', rift_start_label:'Enter the Rift (Pro)', rift_time_p1:'Time:',
+    rift_rounds_completed:'rounds completed', rift_rounds_p1:'Rounds:', rift_start_label:"Enter the Rift", rift_time_p1:'Time:',
     rift_type_interval:'Interval Jump', rift_type_quick:'Quick Catch', rift_type_sustain:'Sustain Hold',
     teacher_assignment_plural:'assignments', teacher_assignment_singular:'assignment', teacher_assignments_empty:'No assignments yet.',
     teacher_billing_active:"You're on the Teacher plan — full roster & assignment access continues.",
@@ -8662,6 +8677,14 @@ const TRANSLATIONS = {
     harmony_coach_good:"You held your part through the piece. Try the next level.",
     harmony_coach_more:"You landed {n} of {m} notes. Turn on the piano guide, or try a lower level first.",
     harmony_measure:"Your part's line is the target, note by note, natural vibrato taken out. Pitch is how close you sang across the piece; Timing is how much of it you were heard; Part accuracy is the share of notes you landed within about 40 cents; Independence is Pitch, weighted up by how loud the other parts were at your level. Overall is the average of the four.",
+    rift_line:"Sixty seconds of rounds you can't predict: match a note, jump an interval, hold one steady, or catch one fast.",
+    rift_hud_rounds:"Rounds",
+    rift_hud_avg:"Average",
+    rift_hud_time:"Time",
+    rift_res_avg:"Average",
+    rift_rounds_tpl:"{n} rounds, {h} with your pitch heard.",
+    rift_again_btn:"Enter again",
+    rift_measure:"Each round picks one of four kinds at random and a note from your range, plays it, then listens: a note held 1.4 s, an interval from the last note, a 2.4 s hold, or a 0.65 s catch. Each round is scored like Pitch Match, from how close your pitch sat to the note. Your average is over the rounds where a pitch was heard.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9800,7 +9823,7 @@ const TRANSLATIONS = {
     wu_after:"Bien joué ! Essayez-en un autre, ou commencez votre séance.",
     wu_mic_needed:"L’échauffement a besoin de votre micro. Autorisez-le et réessayez, ou passez.",
     rift_avg_p1:'Moy. :', rift_closed:'Faille fermée', rift_missed:'Manqué', rift_no_pitch_heard:'Aucune hauteur claire détectée',
-    rift_rounds_completed:'manches terminées', rift_rounds_p1:'Manches :', rift_start_label:'Entrer dans la Faille (Pro)', rift_time_p1:'Temps :',
+    rift_rounds_completed:'manches terminées', rift_rounds_p1:'Manches :', rift_start_label:"Entrer dans la Faille", rift_time_p1:'Temps :',
     rift_type_interval:"Saut d'intervalle", rift_type_quick:'Prise rapide', rift_type_sustain:'Tenue soutenue',
     teacher_assignment_plural:'devoirs', teacher_assignment_singular:'devoir', teacher_assignments_empty:'Aucun devoir pour le moment.',
     teacher_billing_active:'Vous êtes sur le forfait Enseignant — accès complet à la liste et aux devoirs.',
@@ -10361,6 +10384,14 @@ const TRANSLATIONS = {
     harmony_coach_good:"Vous avez tenu votre voix tout du long. Essayez le niveau suivant.",
     harmony_coach_more:"Vous avez réussi {n} notes sur {m}. Activez le guide piano, ou essayez d'abord un niveau plus bas.",
     harmony_measure:"La ligne de votre voix est la cible, note par note, vibrato naturel retiré. Justesse : à quel point vous avez chanté juste sur tout le morceau ; Rythme : la part du morceau où l'on vous a entendu ; Justesse de la voix : la part des notes réussies à environ 40 cents près ; Indépendance : la justesse, pondérée selon le volume des autres voix à votre niveau. Global est la moyenne des quatre.",
+    rift_line:"Soixante secondes de manches imprévisibles : reproduire une note, sauter un intervalle, en tenir une stable ou en attraper une vite.",
+    rift_hud_rounds:"Manches",
+    rift_hud_avg:"Moyenne",
+    rift_hud_time:"Temps",
+    rift_res_avg:"Moyenne",
+    rift_rounds_tpl:"{n} manches, {h} où votre hauteur a été entendue.",
+    rift_again_btn:"Y retourner",
+    rift_measure:"Chaque manche tire au hasard l'un des quatre types et une note de votre tessiture, la joue, puis écoute : une note tenue 1,4 s, un intervalle depuis la note précédente, une tenue de 2,4 s ou une prise rapide de 0,65 s. Chaque manche est notée comme Précision de note, selon la proximité de votre hauteur avec la note. Votre moyenne porte sur les manches où une hauteur a été entendue.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11499,7 +11530,7 @@ const TRANSLATIONS = {
     wu_after:"¡Bien! Prueba otro o empieza tu sesión.",
     wu_mic_needed:"El calentamiento necesita tu micrófono. Permítelo e inténtalo de nuevo, o sáltalo.",
     rift_avg_p1:'Prom.:', rift_closed:'Grieta cerrada', rift_missed:'Fallado', rift_no_pitch_heard:'No se detectó una nota clara',
-    rift_rounds_completed:'rondas completadas', rift_rounds_p1:'Rondas:', rift_start_label:'Entrar en la Grieta (Pro)', rift_time_p1:'Tiempo:',
+    rift_rounds_completed:'rondas completadas', rift_rounds_p1:'Rondas:', rift_start_label:"Entrar en la Grieta", rift_time_p1:'Tiempo:',
     rift_type_interval:'Salto de intervalo', rift_type_quick:'Captura rápida', rift_type_sustain:'Sostenido',
     teacher_assignment_plural:'tareas', teacher_assignment_singular:'tarea', teacher_assignments_empty:'Aún no hay tareas.',
     teacher_billing_active:'Estás en el plan Profesor — acceso completo a la lista y las tareas continúa.',
@@ -12060,6 +12091,14 @@ const TRANSLATIONS = {
     harmony_coach_good:"Mantuviste tu voz durante toda la pieza. Prueba el siguiente nivel.",
     harmony_coach_more:"Acertaste {n} de {m} notas. Activa la guía de piano o prueba antes un nivel más bajo.",
     harmony_measure:"La línea de tu voz es el objetivo, nota a nota, sin el vibrato natural. Afinación: cuánto te acercaste en toda la pieza; Tiempo: cuánto de ella se te oyó; Precisión de la voz: la parte de notas que acertaste a unos 40 cents; Independencia: la afinación, ponderada según el volumen de las otras voces en tu nivel. Global es la media de las cuatro.",
+    rift_line:"Sesenta segundos de rondas imprevisibles: igualar una nota, saltar un intervalo, sostener una estable o atrapar una rápido.",
+    rift_hud_rounds:"Rondas",
+    rift_hud_avg:"Media",
+    rift_hud_time:"Tiempo",
+    rift_res_avg:"Media",
+    rift_rounds_tpl:"{n} rondas, {h} con tu altura oída.",
+    rift_again_btn:"Entrar de nuevo",
+    rift_measure:"Cada ronda elige al azar uno de cuatro tipos y una nota de tu rango, la toca y escucha: una nota de 1,4 s, un intervalo desde la nota anterior, una nota sostenida de 2,4 s o una captura de 0,65 s. Cada ronda se puntúa como Precisión de nota, según lo cerca que estuvo tu altura de la nota. Tu media cuenta las rondas en las que se oyó una altura.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13198,7 +13237,7 @@ const TRANSLATIONS = {
     wu_after:"Güzel! Başka birini deneyin ya da seansınızı başlatın.",
     wu_mic_needed:"Isınma için mikrofonunuz gerekiyor. İzin verip tekrar deneyin ya da atlayın.",
     rift_avg_p1:'Ort.:', rift_closed:'Yarık kapandı', rift_missed:'Kaçırıldı', rift_no_pitch_heard:'Net bir perde algılanmadı',
-    rift_rounds_completed:'tur tamamlandı', rift_rounds_p1:'Tur:', rift_start_label:'Yarığa gir (Pro)', rift_time_p1:'Süre:',
+    rift_rounds_completed:'tur tamamlandı', rift_rounds_p1:'Tur:', rift_start_label:"Yarığa gir", rift_time_p1:'Süre:',
     rift_type_interval:'Aralık Sıçraması', rift_type_quick:'Hızlı Yakalama', rift_type_sustain:'Uzun Tutuş',
     teacher_assignment_plural:'ödev', teacher_assignment_singular:'ödev', teacher_assignments_empty:'Henüz ödev yok.',
     teacher_billing_active:'Öğretmen planındasınız — tam liste ve ödev erişimi devam ediyor.',
@@ -13759,6 +13798,14 @@ const TRANSLATIONS = {
     harmony_coach_good:"Parça boyunca partini korudun. Bir sonraki seviyeyi dene.",
     harmony_coach_more:"{m} notadan {n} tanesini tutturdun. Piyano rehberini aç ya da önce daha düşük bir seviye dene.",
     harmony_measure:"Hedef, doğal vibrato çıkarılarak not not partinin melodisidir. Perde: parça boyunca ne kadar yakın söylediğin; Zamanlama: ne kadarında duyulduğun; Parti doğruluğu: yaklaşık 40 sent içinde tutturduğun notaların payı; Bağımsızlık: seviyendeki diğer partilerin yüksekliğine göre ağırlıklandırılmış Perde. Genel, dördünün ortalamasıdır.",
+    rift_line:"Tahmin edemeyeceğin altmış saniyelik turlar: bir notayı eşle, bir aralık atla, birini sabit tut ya da birini hızlı yakala.",
+    rift_hud_rounds:"Tur",
+    rift_hud_avg:"Ortalama",
+    rift_hud_time:"Süre",
+    rift_res_avg:"Ortalama",
+    rift_rounds_tpl:"{n} tur, {h} turda perden duyuldu.",
+    rift_again_btn:"Yeniden gir",
+    rift_measure:"Her tur dört türden birini ve aralığından bir notayı rastgele seçer, çalar ve dinler: 1,4 sn tutulan nota, önceki notadan bir aralık, 2,4 sn'lik tutuş ya da 0,65 sn'lik hızlı yakalama. Her tur, Nota Eşleştirme gibi, perdenin notaya ne kadar yakın olduğuna göre puanlanır. Ortalaman perdenin duyulduğu turlar üzerindendir.",
   },
 };
 let currentLanguage = 'en';
@@ -19071,6 +19118,8 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
   let voiceAt = opts.waitForVoiceMs ? null : 0, frameErr = false;
   return new Promise(resolve=>{
     function frame(){
+      // opts.active (phase 8, the Rift): once it returns false the capture ends at once, unscored (its game was stopped)
+      if(opts.active && !opts.active()){ resolve({accuracy:0, heard:false, cancelled:true, confidence:computeCaptureConfidence(0, 1)}); return; }
       analyser.getFloatTimeDomainData(dataArray);
       const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
       const now = performance.now()-start;
@@ -20438,18 +20487,23 @@ function gameUnlockedAtLevel(requiredLevel){
   return level>=requiredLevel;
 }
 function showArcadeHub(){
+  // phase 8: back to the hub ends whatever was running, as leaving does (a Rift round's capture under way included)
+  if(typeof stopAllActiveSessions==='function') stopAllActiveSessions();
   document.getElementById('arcadeHub').style.display='block';
   document.getElementById('gameGlider').style.display='none';
   document.getElementById('gameBoss').style.display='none';
   document.getElementById('gameBridge').style.display='none';
   document.getElementById('gameHarmony').style.display='none';
   document.getElementById('gameSkillTree').style.display='none';
+  document.getElementById('gameRift').style.display='none';
+  if(typeof stopRift==='function') stopRift(); // phase 8: the back link stops a run and the house comes up
   if(typeof stopGlider==='function') stopGlider();
   if(typeof stopBoss==='function') stopBoss();
   if(typeof stopBridgeRunner==='function') stopBridgeRunner();
   if(typeof stopHarmonyArena==='function') stopHarmonyArena();
   updateArcadeBestLabels();
   renderArcadeLocks();
+  if(typeof houseUpNow==='function' && document.body.dataset.house==='down') houseUpNow();
 }
 function showArcadeGame(name){
   if(typeof stopAllActiveSessions==='function') stopAllActiveSessions();
@@ -20464,6 +20518,7 @@ function showArcadeGame(name){
   if(name==='glider' && typeof renderGliderForYou==='function') renderGliderForYou();
   if(name==='boss' && typeof renderBossMemoryAndRecommendation==='function') renderBossMemoryAndRecommendation();
   if((name==='boss' || name==='harmony') && typeof SONG!=='undefined'){ const el = document.getElementById(name==='boss' ? 'bossCurrentSongLabel' : 'harmonyCurrentSongLabel'); if(el) el.textContent = t('game_song_tpl').replace('{name}', SONG.name).replace('{key}', SONG.key); }
+  if(name==='rift'){ const rb = document.getElementById('riftBestLive'); if(rb) rb.textContent = profile && progress.riftBest ? t('arcade_best_template').replace('{n}', progress.riftBest+'%') : ''; }
   if(name==='harmony'){ const hb = document.getElementById('harmonyBestLive'); if(hb) hb.textContent = profile && progress.harmonyBest ? t('arcade_best_template').replace('{n}', progress.harmonyBest+'%') : ''; }
   if(name==='boss'){ const bl = document.getElementById('bossBestLive'); if(bl) bl.textContent = profile ? t('arcade_won_template').replace('{n}', progress.bossVictories||0) : ''; }
 }
@@ -21914,7 +21969,7 @@ function stopAllActiveSessions(){
   if(typeof rhythmStop==='function') rhythmStop();
   mirrorActive = false;
   if(typeof mirrorStop==='function') mirrorStop();
-  riftActive = false;
+  stopRift(); // phase 8: its Start back at rest too
   eveActive = false;
   emoActive = false;
   if(typeof emoStop==='function') emoStop();
@@ -23698,22 +23753,21 @@ document.getElementById('riftStartBtn')?.addEventListener('click', async ()=>{
   riftRounds = [];
   riftPrevMidi = null;
   document.getElementById('riftResultCard').style.display='none';
-  document.getElementById('riftStartLabel').textContent = 'Stop';
-  document.getElementById('riftStartBtn').classList.add('listening');
+  gameStartLive('riftStartBtn', 'riftStartLabel');
   riftTimerTick();
   riftRunNextRound();
-  singingSession(()=>riftActive);
+  singingSession(()=>riftActive, document.getElementById('riftStage'));
 });
 
 function riftTimerTick(){
   if(!riftActive) return;
   const elapsed = performance.now()-riftStartTime;
   const remaining = Math.max(0, Math.ceil((60000-elapsed)/1000));
-  document.getElementById('riftTimeLabel').textContent = `${t('rift_time_p1')} ${remaining}s`;
-  document.getElementById('riftRoundsLabel').textContent = `${t('rift_rounds_p1')} ${riftRounds.length}`;
+  document.getElementById('riftTimeLabel').textContent = remaining;
+  document.getElementById('riftRoundsLabel').textContent = riftRounds.length;
   const heard = riftRounds.filter(r=>r.heard);
   const avg = heard.length ? Math.round(heard.reduce((a,b)=>a+b.accuracy,0)/heard.length) : null;
-  document.getElementById('riftAvgLabel').textContent = `${t('rift_avg_p1')} ${avg!==null?avg+'%':'—'}`;
+  document.getElementById('riftAvgLabel').textContent = avg!==null ? avg+'%' : '—';
   if(elapsed < 60000 && riftActive){
     riftLastRafCheck = requestAnimationFrame(riftTimerTick);
   } else if(riftActive){
@@ -23738,7 +23792,7 @@ async function riftRunNextRound(){
   await new Promise(r=>setTimeout(r, 450));
   if(!riftActive) return;
 
-  const result = await captureAccuracyForTarget(targetMidi, params.durationMs, {accuracyMultiplier: params.accuracyMultiplier});
+  const result = await captureAccuracyForTarget(targetMidi, params.durationMs, {accuracyMultiplier: params.accuracyMultiplier, active: ()=>riftActive});
   if(!riftActive) return;
   riftRounds.push({type: params.label, targetMidi, accuracy: result.accuracy, heard: result.heard});
   riftPrevMidi = targetMidi;
@@ -23748,24 +23802,28 @@ async function riftRunNextRound(){
   riftRunNextRound();
 }
 
+// Stopped without a result (left, or the back link): nothing scored, Start back at rest.
+function stopRift(){
+  if(riftActive){ riftActive = false; cancelAnimationFrame(riftLastRafCheck); }
+  gameStartIdle('riftStartBtn', 'riftStartLabel', 'rift_start_label');
+}
 function finishRift(){
   riftActive = false;
   cancelAnimationFrame(riftLastRafCheck);
-  document.getElementById('riftStartBtn').classList.remove('listening');
-  document.getElementById('riftStartLabel').textContent = t('rift_start_label');
+  gameStartIdle('riftStartBtn', 'riftStartLabel', 'rift_start_label');
   document.getElementById('riftRoundType').textContent = t('rift_closed');
   document.getElementById('riftRoundTarget').textContent = '—';
   document.getElementById('riftRoundStatus').textContent = '';
 
   const heard = riftRounds.filter(r=>r.heard);
   const avg = heard.length ? Math.round(heard.reduce((a,b)=>a+b.accuracy,0)/heard.length) : 0;
-  document.getElementById('riftResultCard').style.display='block';
+  document.getElementById('riftResultCard').style.display='';
   const avgEl = document.getElementById('riftResultAvg');
   avgEl.textContent = avg+'%';
-  avgEl.className = 'ex-accuracy '+accuracyClass(avg);
-  document.getElementById('riftResultRounds').textContent = `${riftRounds.length} ${t('rift_rounds_completed')}`;
+  avgEl.className = 'vc-result-num';
+  document.getElementById('riftResultRounds').textContent = t('rift_rounds_tpl').replace('{n}', riftRounds.length).replace('{h}', heard.length);
   document.getElementById('riftResultRows').innerHTML = riftRounds.map((r,i)=>
-    `<div class="record-row"><span class="record-label">${i+1}. ${r.type} — ${noteNameFromMidi(r.targetMidi)}</span><span class="record-val${!r.heard?' untracked':''}">${r.heard?r.accuracy+'%':t('rift_missed')}</span></div>`
+    `<div class="vc-dim"><span>${i+1}. ${r.type} · ${noteNameFromMidi(r.targetMidi)}</span><span>${r.heard?r.accuracy+'%':t('rift_missed')}</span></div>`
   ).join('');
 
   if(profile && heard.length>0){
@@ -23779,8 +23837,11 @@ function finishRift(){
     }
     recordSkillScore('agility', avg); // reactive, unpredictable pitch-matching is fundamentally an agility skill
   }
+  document.getElementById('riftResBest').textContent = profile && progress.riftBest ? progress.riftBest+'%' : '—';
+  { const rb = document.getElementById('riftBestLive'); if(rb) rb.textContent = profile && progress.riftBest ? t('arcade_best_template').replace('{n}', progress.riftBest+'%') : ''; }
   registerExerciseCompletion();
 }
+document.getElementById('riftAgainBtn').addEventListener('click', ()=>{ if(!riftActive) document.getElementById('riftStartBtn').click(); });
 
 /* ---------------- Vocal Lab (real Extended / Comfortable / Reliable range tiers) ---------------- */
 function recordNoteAttempt(midi, accuracy){
