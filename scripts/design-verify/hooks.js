@@ -47,6 +47,15 @@ const ALLOWED_REMOVALS = {
   'data-i18n=boss_reuses_tag': 'phase 8 §2.5: the REUSES … ENGINE tags go; key stays in TRANSLATIONS',
   'data-i18n=boss_choose_h2': 'phase 8 §2.5: the page head and the Boss label replace the heading; key stays in TRANSLATIONS',
   'data-i18n=boss_choose_desc': 'phase 8 §2.5: the §7 line ("Same real engine, genuinely different scoring") goes; key stays in TRANSLATIONS',
+  'data-i18n=harmony_step_label': 'phase 8 §2.6: the step label (with its emoji) gives way to the page head; key stays in TRANSLATIONS',
+  'data-i18n=harmony_reuses_tag': 'phase 8 §2.6: the REUSES … tags go; key stays in TRANSLATIONS',
+  'data-i18n=harmony_hold_h2': "phase 8 §2.6: the page's one line (harmony_line) replaces the heading; key stays in TRANSLATIONS",
+  'data-i18n=harmony_part_soprano_tag': "phase 8 §2.6: the parts become Choir World's part chooser (.hl-seg, names only); key stays in TRANSLATIONS",
+  'data-i18n=harmony_part_lead_tag': "phase 8 §2.6: the parts become Choir World's part chooser; key stays in TRANSLATIONS",
+  'data-i18n=harmony_part_alto_tag': "phase 8 §2.6: the parts become Choir World's part chooser; key stays in TRANSLATIONS",
+  'data-i18n=harmony_part_tenor_tag': "phase 8 §2.6: the parts become Choir World's part chooser; key stays in TRANSLATIONS",
+  'data-i18n=harmony_part_bass_tag': "phase 8 §2.6: the parts become Choir World's part chooser; key stays in TRANSLATIONS",
+  'data-i18n=harmony_overall_desc': "phase 8 §2.6: the result's label is Overall (harmony_overall_label), the four scores are explained in the method; key stays in TRANSLATIONS",
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {

@@ -1489,6 +1489,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .gw-train-row .gw-note-big{flex-basis:100%;}
   .gw-sections{display:grid;gap:0;}
   .gw-train .gw-sing{background:var(--hl-voice);color:var(--hl-on-voice);border-color:var(--hl-voice);}
+  /* Harmony Castle (2.6): parts as Choir World's chooser, levels as numbers at 390 and names from 768, the ribbon */
+  .gw-parts button{display:inline-flex;align-items:center;gap:6px;}
+  .gw-parts button .mode-card-name{color:inherit;font:inherit;margin:0;}
+  .gw-levels .gw-lv-name{display:none;}
+  @media (min-width:768px){ .gw-levels .gw-lv-n{display:none;} .gw-levels .gw-lv-name{display:inline;} }
+  .gw-toggle .hl-item-meta{white-space:normal;}
+  .gw-ribbon{width:100%;max-width:560px;height:auto;}
+  .gw-hint{color:var(--hl-ink-3);text-align:center;margin:0;}
   @media (min-width:768px){ .gw-head .gw-mark{width:56px;height:56px;} }
   .arcade-canvas-wrap canvas{width:100%;display:block;}
   .arcade-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;color:var(--cream);}
@@ -3376,84 +3384,80 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
     </div>
     <!-- HARMONY ARENA -->
-    <div id="gameHarmony" style="display:none;">
-      <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
-      <div class="key-card">
-        <div class="step-label"><span data-i18n="harmony_step_label">🎼 Harmony Castle — Harmony Arena</span><span class="mock-tag" data-i18n="harmony_reuses_tag">REUSES CHOIR WORKSPACE MIXER</span></div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 6px;" data-i18n="harmony_hold_h2">Hold your part while the others get louder</h2>
-        <p class="fine-print" id="harmonyCurrentSongLabel" style="margin-bottom:14px;">Now practicing: Demo Hymn (C Major) — <button class="link-btn" data-enter-panel="choir">change song</button></p>
-
-        <div class="mode-card-grid" id="harmonyPartRow" style="grid-template-columns:1fr 1fr 1fr;">
-          <button class="ex-type-btn mode-card active" data-harmony-part="Soprano" aria-pressed="true">
-            <div class="mode-card-icon" style="color:var(--hl-sop);">●</div>
-            <div class="mode-card-name" data-part-name="Soprano">Soprano</div>
-            <div class="mode-card-tag" data-i18n="harmony_part_soprano_tag">Top voice, highest range</div>
+    <div id="gameHarmony" class="gw" style="display:none;">
+      <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
+      <!-- phase 8 (PHASE8.md 2.6): the page (your part, as Choir World's part chooser; the level; three modes), the stage
+           (your part's note big, the ribbon: your voice against the line, the song's progress), the result (.vc-result). -->
+      <div class="key-card gw-card">
+        <div class="gw-head"><svg class="hl-icon gw-mark" aria-hidden="true"><use href="#hl-loc-castle"/></svg><div class="gw-head-text"><h2 class="gw-title" data-i18n="world_harmony_title">Harmony Castle</h2><p class="gw-line" data-i18n="harmony_line">Hold your part while the other parts play around you, louder at each level.</p></div></div>
+        <p class="gw-song hl-small"><span id="harmonyCurrentSongLabel">Song: Demo Hymn (C Major)</span> <button type="button" class="link-btn" data-enter-panel="choir" data-i18n="game_change_song">Change song</button></p>
+        <div class="gw-opt-label hl-label" data-i18n="harmony_part_label">Your part</div>
+        <div class="hl-seg gw-seg gw-parts" id="harmonyPartRow" role="group">
+          <button type="button" class="active" data-harmony-part="Soprano" aria-pressed="true"><span class="hl-part-dot" style="--part:var(--hl-sop)"></span><span class="mode-card-name" data-part-name="Soprano">Soprano</span></button>
+          <button type="button" data-harmony-part="Lead" aria-pressed="false"><span class="hl-part-dot" style="--part:var(--hl-lead)"></span><span class="mode-card-name" data-part-name="Lead">Lead</span></button>
+          <button type="button" data-harmony-part="Alto" aria-pressed="false"><span class="hl-part-dot" style="--part:var(--hl-alto)"></span><span class="mode-card-name" data-part-name="Alto">Alto</span></button>
+          <button type="button" data-harmony-part="Tenor" aria-pressed="false"><span class="hl-part-dot" style="--part:var(--hl-ten)"></span><span class="mode-card-name" data-part-name="Tenor">Tenor</span></button>
+          <button type="button" data-harmony-part="Bass" aria-pressed="false"><span class="hl-part-dot" style="--part:var(--hl-bass)"></span><span class="mode-card-name" data-part-name="Bass">Bass</span></button>
+        </div>
+        <div class="gw-opt-label hl-label" data-i18n="harmony_level_label">Level</div>
+        <div class="hl-seg gw-seg gw-levels" id="harmonyLevelRow" role="group">
+          <button type="button" class="active" data-harmony-level="1" aria-pressed="true"><span class="gw-lv-n">1</span><span class="gw-lv-name" data-i18n="harmony_level1">Solo</span></button>
+          <button type="button" data-harmony-level="2" aria-pressed="false"><span class="gw-lv-n">2</span><span class="gw-lv-name" data-i18n="harmony_level2">Quiet others</span></button>
+          <button type="button" data-harmony-level="3" aria-pressed="false"><span class="gw-lv-n">3</span><span class="gw-lv-name" data-i18n="harmony_level3">Medium mix</span></button>
+          <button type="button" data-harmony-level="4" aria-pressed="false"><span class="gw-lv-n">4</span><span class="gw-lv-name" data-i18n="harmony_level4">Full choir</span></button>
+          <button type="button" data-harmony-level="5" aria-pressed="false"><span class="gw-lv-n">5</span><span class="gw-lv-name" data-i18n="harmony_level5">Random key</span></button>
+        </div>
+        <div class="gw-opt-label hl-label" data-i18n="harmony_modes_label">Modes</div>
+        <div class="hl-list gw-list">
+          <button type="button" class="hl-item gw-opt gw-toggle" id="harmonyPianoGuideBtn" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title" data-i18n="harmony_mode_guide">Piano guide</span><span class="hl-item-meta" id="harmonyPianoGuideTagline" data-i18n="harmony_pianoguide_tagline">A soft tone plays your part's note as each chord changes.</span></span>
+            <span class="hl-item-end"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-harmony-part="Lead" aria-pressed="false">
-            <div class="mode-card-icon" style="color:var(--hl-lead);">●</div>
-            <div class="mode-card-name" data-part-name="Lead">Lead</div>
-            <div class="mode-card-tag" data-i18n="harmony_part_lead_tag">Independent melody line</div>
+          <button type="button" class="hl-item gw-opt gw-toggle" id="harmonyDistractionBtn" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title" data-i18n="harmony_mode_distraction">Distraction</span><span class="hl-item-meta" data-i18n="harmony_distraction_tagline">An unrelated arpeggio plays under the choir.</span></span>
+            <span class="hl-item-end"></span>
           </button>
-          <button class="ex-type-btn mode-card" data-harmony-part="Alto" aria-pressed="false">
-            <div class="mode-card-icon" style="color:var(--hl-alto);">●</div>
-            <div class="mode-card-name" data-part-name="Alto">Alto</div>
-            <div class="mode-card-tag" data-i18n="harmony_part_alto_tag">Mid-upper harmony</div>
-          </button>
-          <button class="ex-type-btn mode-card" data-harmony-part="Tenor" aria-pressed="false">
-            <div class="mode-card-icon" style="color:var(--hl-ten);">●</div>
-            <div class="mode-card-name" data-part-name="Tenor">Tenor</div>
-            <div class="mode-card-tag" data-i18n="harmony_part_tenor_tag">Mid-lower harmony</div>
-          </button>
-          <button class="ex-type-btn mode-card" data-harmony-part="Bass" aria-pressed="false">
-            <div class="mode-card-icon" style="color:var(--hl-bass);">●</div>
-            <div class="mode-card-name" data-part-name="Bass">Bass</div>
-            <div class="mode-card-tag" data-i18n="harmony_part_bass_tag">Foundation, lowest voice</div>
+          <button type="button" class="hl-item gw-opt gw-toggle" id="harmonyMemoryBtn" aria-pressed="false">
+            <span class="gw-opt-tick" aria-hidden="true"><svg class="hl-icon hl-icon--s"><use href="#hl-check"/></svg></span>
+            <span class="gw-opt-text"><span class="hl-item-title" data-i18n="harmony_mode_memory">Memory</span><span class="hl-item-meta" data-i18n="harmony_memory_tagline">The note name shows briefly, then you sing from memory.</span></span>
+            <span class="hl-item-end"></span>
           </button>
         </div>
-        <div class="ex-type-row" id="harmonyLevelRow" style="margin-top:10px;">
-          <button class="ex-type-btn active" data-harmony-level="1" aria-pressed="true" data-i18n="harmony_level1">Lvl 1 — Solo</button>
-          <button class="ex-type-btn" data-harmony-level="2" aria-pressed="false" data-i18n="harmony_level2">Lvl 2 — Quiet others</button>
-          <button class="ex-type-btn" data-harmony-level="3" aria-pressed="false" data-i18n="harmony_level3">Lvl 3 — Medium mix</button>
-          <button class="ex-type-btn" data-harmony-level="4" aria-pressed="false" data-i18n="harmony_level4">Lvl 4 — Full choir</button>
-          <button class="ex-type-btn" data-harmony-level="5" aria-pressed="false" data-i18n="harmony_level5">Lvl 5 — Boss: random key</button>
-        </div>
-
-        <button class="ex-type-btn" id="harmonyPianoGuideBtn" style="margin-top:10px;" aria-pressed="false">🎹 Piano Guide: Off</button>
-        <p class="fine-print" id="harmonyPianoGuideTagline" style="margin:6px 0 0;" data-i18n="harmony_pianoguide_tagline">A soft reference tone plays your part's actual note as each chord changes — real training wheels, not a fixed animation.</p>
-
-        <button class="ex-type-btn" id="harmonyDistractionBtn" style="margin-top:10px;" aria-pressed="false">🌀 Distraction Mode: Off</button>
-        <p class="fine-print" style="margin:6px 0 0;" data-i18n="harmony_distraction_tagline">A real, audibly unrelated arpeggio plays underneath the mix — genuine competing audio, not a volume slider.</p>
-
-        <button class="ex-type-btn" id="harmonyMemoryBtn" style="margin-top:10px;" aria-pressed="false">🌑 Memory Mode: Off</button>
-        <p class="fine-print" style="margin:6px 0 0;" data-i18n="harmony_memory_tagline">The note label shows briefly, then blanks for the rest of each note — you sing from real recall, not a live readout.</p>
-
-        <div class="chord-label-display" id="harmonyNoteLabel" style="margin-top:18px;">—</div>
-
-        <svg class="harmony-ribbon-svg" id="harmonyRibbonSvg" viewBox="0 0 400 100">
-          <line x1="0" y1="50" x2="400" y2="50" stroke="var(--hairline)" stroke-width="1" stroke-dasharray="4 4"/>
-          <rect id="harmonyRibbonShape" x="30" y="42" width="340" height="16" rx="8" fill="var(--hairline)" style="transition:transform .08s linear, fill .15s ease;"/>
-        </svg>
-        <p class="fine-print" id="harmonyRibbonHint" style="text-align:center;margin-top:2px;" data-i18n="harmony_ribbon_hint">Sing your part — the ribbon snaps flush when you're aligned, and skews off-axis when you drift.</p>
-
-        <div class="progress-bar-thin"><div class="fill" id="harmonyProgressFill"></div></div>
-
-        <div class="btn-row" style="justify-content:center;">
-          <button class="mic-btn" id="harmonyStartBtn"><span class="dot-icon"></span><span id="harmonyStartLabel" data-i18n="action_start_pro">Start (Pro)</span></button>
-        </div>
-        <div class="vl-gauge" id="vlGaugeHarmony" style="display:none;"></div>
-
-        <div class="ex-result" id="harmonyResult" style="display:none;text-align:center;margin-top:18px;">
-          <div class="ex-accuracy" id="harmonyAccVal">—</div>
-          <div class="ex-feedback-text" data-i18n="harmony_overall_desc">Overall — average of the 4 real scores below</div>
-          <div class="reg-stat-row" style="margin-top:16px;">
-            <div class="stat-chip"><div class="label" data-i18n="harmony_pitch_label">Pitch</div><div class="val" id="harmonyPitchVal">—</div></div>
-            <div class="stat-chip"><div class="label" data-i18n="harmony_timing_label">Timing</div><div class="val" id="harmonyTimingVal">—</div></div>
+        <div class="vc-stage gw-stage" id="harmonyStage">
+          <div class="gw-hud vc-live-only" aria-hidden="true">
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="harmony_hud_part">Part</span><span class="gw-hud-v" id="harmonyHudPart">—</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="harmony_hud_level">Level</span><span class="gw-hud-v" id="harmonyHudLevel">1</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_best">Best</span><span class="gw-hud-v" id="harmonyHudBest">—</span></span>
           </div>
-          <div class="reg-stat-row" style="margin-top:10px;">
-            <div class="stat-chip"><div class="label" data-i18n="harmony_partaccuracy_label">Part Accuracy</div><div class="val" id="harmonyPartVal">—</div></div>
-            <div class="stat-chip"><div class="label" data-i18n="harmony_independence_label">Independence</div><div class="val" id="harmonyIndependenceVal">—</div></div>
+          <div class="gw-note-big vc-live-only" id="harmonyNoteLabel">—</div>
+          <svg class="harmony-ribbon-svg gw-ribbon vc-live-only" id="harmonyRibbonSvg" viewBox="0 0 400 100" aria-hidden="true">
+            <line x1="0" y1="50" x2="400" y2="50" stroke="var(--hl-rule-strong)" stroke-width="1" stroke-dasharray="4 4"/>
+            <rect id="harmonyRibbonShape" x="30" y="42" width="340" height="16" rx="8" fill="var(--hl-rule)" style="transition:transform .08s linear, fill .15s ease;"/>
+          </svg>
+          <p class="hl-small gw-hint vc-live-only" id="harmonyRibbonHint" data-i18n="harmony_ribbon_hint">The bar sits level when you're on your note and tilts when you drift.</p>
+          <div class="progress-bar-thin gw-progress vc-live-only"><div class="fill" id="harmonyProgressFill"></div></div>
+          <div class="btn-row gw-go">
+            <button class="mic-btn vc-take-pill gw-start" id="harmonyStartBtn"><span class="dot-icon"></span><span id="harmonyStartLabel" data-i18n="harmony_start_label">Start singing</span></button>
           </div>
+          <p class="gw-best vc-paper-only" id="harmonyBestLive"></p>
+          <div class="vl-gauge" id="vlGaugeHarmony" style="display:none;"></div>
         </div>
+        <div class="vc-result gw-result" id="harmonyResult" role="status" aria-live="polite" style="display:none;">
+          <div class="vc-result-num" id="harmonyAccVal">—</div>
+          <h3 class="hl-h3" data-i18n="harmony_overall_label">Overall</h3>
+          <p class="hl-coach" id="harmonyCoach"></p>
+          <div class="vc-result-dims">
+            <div class="vc-dim"><span data-i18n="game_hud_best">Best</span><span id="harmonyResBest">—</span></div>
+            <div class="vc-dim"><span data-i18n="harmony_pitch_label">Pitch</span><span id="harmonyPitchVal">—</span></div>
+            <div class="vc-dim"><span data-i18n="harmony_timing_label">Timing</span><span id="harmonyTimingVal">—</span></div>
+            <div class="vc-dim"><span data-i18n="harmony_partaccuracy_label">Part accuracy</span><span id="harmonyPartVal">—</span></div>
+            <div class="vc-dim"><span data-i18n="harmony_independence_label">Independence</span><span id="harmonyIndependenceVal">—</span></div>
+          </div>
+          <div class="btn-row"><button type="button" class="hl-btn hl-btn--ink" id="harmonyAgainBtn" data-i18n="harmony_again_btn">Sing again</button></div>
+        </div>
+        <details class="hl-measure gw-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="harmony_measure">Your part's line is the target, note by note, natural vibrato taken out. Pitch is how close you sang across the piece; Timing is how much of it you were heard; Part accuracy is the share of notes you landed within about 40 cents; Independence is Pitch, weighted up by how loud the other parts were at your level. Overall is the average of the four.</p></details>
       </div>
     </div>
 
@@ -7786,26 +7790,26 @@ const TRANSLATIONS = {
     glider_mode_memory:'Memory Run',
     glider_mode_sustain:'Sustain Bridge',
     glider_step_label:'🏔️ Pitch Mountain — Vocal Journey',
-    harmony_distraction_tagline:'A real, audibly unrelated arpeggio plays underneath the mix — genuine competing audio, not a volume slider.',
+    harmony_distraction_tagline:"An unrelated arpeggio plays under the choir.",
     harmony_hold_h2:'Hold your part while the others get louder',
     harmony_independence_label:'Independence',
-    harmony_level1:'Lvl 1 — Solo',
-    harmony_level2:'Lvl 2 — Quiet others',
-    harmony_level3:'Lvl 3 — Medium mix',
-    harmony_level4:'Lvl 4 — Full choir',
-    harmony_level5:'Lvl 5 — Boss: random key',
-    harmony_memory_tagline:'The note label shows briefly, then blanks for the rest of each note — you sing from real recall, not a live readout.',
+    harmony_level1:"Solo",
+    harmony_level2:"Quiet others",
+    harmony_level3:"Medium mix",
+    harmony_level4:"Full choir",
+    harmony_level5:"Random key",
+    harmony_memory_tagline:"The note name shows briefly, then you sing from memory.",
     harmony_overall_desc:'Overall — average of the 4 real scores below',
     harmony_part_alto_tag:'Mid-upper harmony',
     harmony_part_bass_tag:'Foundation, lowest voice',
     harmony_part_lead_tag:'Independent melody line',
     harmony_part_soprano_tag:'Top voice, highest range',
     harmony_part_tenor_tag:'Mid-lower harmony',
-    harmony_partaccuracy_label:'Part Accuracy',
-    harmony_pianoguide_tagline:'A soft reference tone plays your part\'s actual note as each chord changes — real training wheels, not a fixed animation.',
+    harmony_partaccuracy_label:"Part accuracy",
+    harmony_pianoguide_tagline:"A soft tone plays your part's note as each chord changes.",
     harmony_pitch_label:'Pitch',
     harmony_reuses_tag:'REUSES CHOIR WORKSPACE MIXER',
-    harmony_ribbon_hint:'Sing your part — the ribbon snaps flush when you\'re aligned, and skews off-axis when you drift.',
+    harmony_ribbon_hint:"The bar sits level when you're on your note and tilts when you drift.",
     harmony_step_label:'🎼 Harmony Castle — Harmony Arena',
     harmony_timing_label:'Timing',
     journey_achievements_h2:"Each one unlocks from your saved results.",
@@ -8642,6 +8646,22 @@ const TRANSLATIONS = {
     section_chorus:"Chorus",
     section_bridge:"Bridge",
     boss_measure:"Each chord of the song is one note of the Lead line to sing. Your pitch is read about 60 times a second and compared with that note, natural vibrato taken out; a note you sing within the boss's threshold hurts the boss, a miss hurts you. Each boss judges a different thing: a steady hold, a note a fifth up, only the first half-second, your register, steady loudness, landing on time, or controlled vibrato.",
+    harmony_line:"Hold your part while the other parts play around you, louder at each level.",
+    harmony_part_label:"Your part",
+    harmony_level_label:"Level",
+    harmony_modes_label:"Modes",
+    harmony_mode_guide:"Piano guide",
+    harmony_mode_distraction:"Distraction",
+    harmony_mode_memory:"Memory",
+    harmony_hud_part:"Part",
+    harmony_hud_level:"Level",
+    harmony_start_label:"Start singing",
+    harmony_overall_label:"Overall",
+    harmony_again_btn:"Sing again",
+    harmony_coach_none:"Too little of your voice was heard to score. Sing a little louder, or closer to the mic.",
+    harmony_coach_good:"You held your part through the piece. Try the next level.",
+    harmony_coach_more:"You landed {n} of {m} notes. Turn on the piano guide, or try a lower level first.",
+    harmony_measure:"Your part's line is the target, note by note, natural vibrato taken out. Pitch is how close you sang across the piece; Timing is how much of it you were heard; Part accuracy is the share of notes you landed within about 40 cents; Independence is Pitch, weighted up by how loud the other parts were at your level. Overall is the average of the four.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9469,26 +9489,26 @@ const TRANSLATIONS = {
     glider_mode_memory:'Course Mémoire',
     glider_mode_sustain:'Pont de Tenue',
     glider_step_label:'🏔️ Montagne de la Justesse — Voyage Vocal',
-    harmony_distraction_tagline:'Un vrai arpège, audiblement sans rapport, joue sous le mixage — un vrai audio concurrent, pas un simple curseur de volume.',
+    harmony_distraction_tagline:"Un arpège sans rapport joue sous le chœur.",
     harmony_hold_h2:'Tenez votre voix pendant que les autres deviennent plus fortes',
     harmony_independence_label:'Indépendance',
-    harmony_level1:'Niv 1 — Solo',
-    harmony_level2:'Niv 2 — Autres discrets',
-    harmony_level3:'Niv 3 — Mix moyen',
-    harmony_level4:'Niv 4 — Chœur complet',
-    harmony_level5:'Niv 5 — Boss : tonalité aléatoire',
-    harmony_memory_tagline:'L\'étiquette de la note s\'affiche brièvement, puis s\'efface pour le reste de chaque note — vous chantez de mémoire réelle, pas d\'un affichage en direct.',
+    harmony_level1:"Solo",
+    harmony_level2:"Autres en sourdine",
+    harmony_level3:"Mélange moyen",
+    harmony_level4:"Chœur complet",
+    harmony_level5:"Tonalité au hasard",
+    harmony_memory_tagline:"Le nom de la note s'affiche un instant, puis vous chantez de mémoire.",
     harmony_overall_desc:'Global — moyenne des 4 vrais scores ci-dessous',
     harmony_part_alto_tag:'Harmonie médium-aigu',
     harmony_part_bass_tag:'Fondation, voix la plus grave',
     harmony_part_lead_tag:'Ligne mélodique indépendante',
     harmony_part_soprano_tag:'Voix supérieure, tessiture la plus haute',
     harmony_part_tenor_tag:'Harmonie médium-grave',
-    harmony_partaccuracy_label:'Précision de la voix',
-    harmony_pianoguide_tagline:'Une douce tonalité de référence joue la vraie note de votre voix à chaque changement d\'accord — de vraies roues stabilisatrices, pas une animation fixe.',
+    harmony_partaccuracy_label:"Justesse de la voix",
+    harmony_pianoguide_tagline:"Un son doux joue la note de votre voix à chaque changement d'accord.",
     harmony_pitch_label:'Justesse',
     harmony_reuses_tag:'RÉUTILISE LE MIXEUR DE L\'ESPACE CHORALE',
-    harmony_ribbon_hint:'Chantez votre voix — le ruban s\'aligne net quand vous êtes juste, et dévie quand vous vous éloignez.',
+    harmony_ribbon_hint:"La barre reste droite quand vous êtes sur votre note et penche quand vous dérivez.",
     harmony_step_label:'🎼 Château Harmonie — Arène Harmonie',
     harmony_timing_label:'Rythme',
     journey_achievements_h2:"Chacun se débloque d'après vos résultats enregistrés.",
@@ -10325,6 +10345,22 @@ const TRANSLATIONS = {
     section_chorus:"Refrain",
     section_bridge:"Pont",
     boss_measure:"Chaque accord de la chanson est une note de la ligne principale à chanter. Votre hauteur est lue environ 60 fois par seconde et comparée à cette note, vibrato naturel retiré ; une note chantée dans le seuil du boss le blesse, une note manquée vous blesse. Chaque boss juge autre chose : une tenue stable, une note une quinte plus haut, la première demi-seconde seulement, votre registre, un volume stable, l'arrivée à temps ou un vibrato maîtrisé.",
+    harmony_line:"Tenez votre voix pendant que les autres voix jouent autour de vous, plus fort à chaque niveau.",
+    harmony_part_label:"Votre voix",
+    harmony_level_label:"Niveau",
+    harmony_modes_label:"Modes",
+    harmony_mode_guide:"Guide piano",
+    harmony_mode_distraction:"Distraction",
+    harmony_mode_memory:"Mémoire",
+    harmony_hud_part:"Voix",
+    harmony_hud_level:"Niveau",
+    harmony_start_label:"Commencer à chanter",
+    harmony_overall_label:"Global",
+    harmony_again_btn:"Rechanter",
+    harmony_coach_none:"Trop peu de votre voix a été entendu pour noter. Chantez un peu plus fort, ou plus près du micro.",
+    harmony_coach_good:"Vous avez tenu votre voix tout du long. Essayez le niveau suivant.",
+    harmony_coach_more:"Vous avez réussi {n} notes sur {m}. Activez le guide piano, ou essayez d'abord un niveau plus bas.",
+    harmony_measure:"La ligne de votre voix est la cible, note par note, vibrato naturel retiré. Justesse : à quel point vous avez chanté juste sur tout le morceau ; Rythme : la part du morceau où l'on vous a entendu ; Justesse de la voix : la part des notes réussies à environ 40 cents près ; Indépendance : la justesse, pondérée selon le volume des autres voix à votre niveau. Global est la moyenne des quatre.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11152,26 +11188,26 @@ const TRANSLATIONS = {
     glider_mode_memory:'Carrera de Memoria',
     glider_mode_sustain:'Puente de Sostenido',
     glider_step_label:'🏔️ Montaña de Afinación — Viaje Vocal',
-    harmony_distraction_tagline:'Un arpegio real, audiblemente no relacionado, suena debajo de la mezcla — audio competidor genuino, no un control deslizante de volumen.',
+    harmony_distraction_tagline:"Un arpegio sin relación suena bajo el coro.",
     harmony_hold_h2:'Mantén tu voz mientras las otras se hacen más fuertes',
     harmony_independence_label:'Independencia',
-    harmony_level1:'Niv 1 — Solo',
-    harmony_level2:'Niv 2 — Otras suaves',
-    harmony_level3:'Niv 3 — Mezcla media',
-    harmony_level4:'Niv 4 — Coro completo',
-    harmony_level5:'Niv 5 — Jefe: tono aleatorio',
-    harmony_memory_tagline:'La etiqueta de la nota se muestra brevemente, luego se borra el resto de cada nota — cantas desde la memoria real, no desde una lectura en vivo.',
+    harmony_level1:"Solo",
+    harmony_level2:"Otras suaves",
+    harmony_level3:"Mezcla media",
+    harmony_level4:"Coro completo",
+    harmony_level5:"Tonalidad al azar",
+    harmony_memory_tagline:"El nombre de la nota aparece un momento y luego cantas de memoria.",
     harmony_overall_desc:'General — promedio de las 4 puntuaciones reales de abajo',
     harmony_part_alto_tag:'Armonía media-alta',
     harmony_part_bass_tag:'Fundamento, voz más grave',
     harmony_part_lead_tag:'Línea melódica independiente',
     harmony_part_soprano_tag:'Voz superior, rango más alto',
     harmony_part_tenor_tag:'Armonía media-baja',
-    harmony_partaccuracy_label:'Precisión de voz',
-    harmony_pianoguide_tagline:'Un suave tono de referencia reproduce la nota real de tu voz mientras cada acorde cambia — ruedines de entrenamiento reales, no una animación fija.',
+    harmony_partaccuracy_label:"Precisión de la voz",
+    harmony_pianoguide_tagline:"Un tono suave toca la nota de tu voz en cada cambio de acorde.",
     harmony_pitch_label:'Afinación',
     harmony_reuses_tag:'REUTILIZA EL MEZCLADOR DEL ESPACIO DE CORO',
-    harmony_ribbon_hint:'Canta tu voz — la cinta se alinea cuando estás afinado, y se desvía cuando te desvías.',
+    harmony_ribbon_hint:"La barra queda recta cuando estás en tu nota y se inclina cuando te desvías.",
     harmony_step_label:'🎼 Castillo de Armonía — Arena de Armonía',
     harmony_timing_label:'Ritmo',
     journey_achievements_h2:"Cada uno se desbloquea con tus resultados guardados.",
@@ -12008,6 +12044,22 @@ const TRANSLATIONS = {
     section_chorus:"Estribillo",
     section_bridge:"Puente",
     boss_measure:"Cada acorde de la canción es una nota de la línea principal que cantar. Tu altura se lee unas 60 veces por segundo y se compara con esa nota, sin el vibrato natural; una nota dentro del umbral del jefe lo daña, un fallo te daña a ti. Cada jefe juzga algo distinto: una nota sostenida estable, una nota una quinta más arriba, solo el primer medio segundo, tu registro, un volumen estable, llegar a tiempo o un vibrato controlado.",
+    harmony_line:"Mantén tu voz mientras las demás suenan a tu alrededor, más fuerte en cada nivel.",
+    harmony_part_label:"Tu voz",
+    harmony_level_label:"Nivel",
+    harmony_modes_label:"Modos",
+    harmony_mode_guide:"Guía de piano",
+    harmony_mode_distraction:"Distracción",
+    harmony_mode_memory:"Memoria",
+    harmony_hud_part:"Voz",
+    harmony_hud_level:"Nivel",
+    harmony_start_label:"Empezar a cantar",
+    harmony_overall_label:"Global",
+    harmony_again_btn:"Cantar de nuevo",
+    harmony_coach_none:"Se oyó muy poco de tu voz para puntuar. Canta un poco más fuerte o más cerca del micrófono.",
+    harmony_coach_good:"Mantuviste tu voz durante toda la pieza. Prueba el siguiente nivel.",
+    harmony_coach_more:"Acertaste {n} de {m} notas. Activa la guía de piano o prueba antes un nivel más bajo.",
+    harmony_measure:"La línea de tu voz es el objetivo, nota a nota, sin el vibrato natural. Afinación: cuánto te acercaste en toda la pieza; Tiempo: cuánto de ella se te oyó; Precisión de la voz: la parte de notas que acertaste a unos 40 cents; Independencia: la afinación, ponderada según el volumen de las otras voces en tu nivel. Global es la media de las cuatro.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12835,26 +12887,26 @@ const TRANSLATIONS = {
     glider_mode_memory:'Hafıza Koşusu',
     glider_mode_sustain:'Sürdürme Köprüsü',
     glider_step_label:'🏔️ Perde Dağı — Vokal Yolculuğu',
-    harmony_distraction_tagline:'Karışımın altında gerçek, duyulabilir şekilde ilgisiz bir arpej çalar — gerçek rakip ses, bir ses düzeyi kaydırıcısı değil.',
+    harmony_distraction_tagline:"Koronun altında ilgisiz bir arpej çalar.",
     harmony_hold_h2:'Diğerleri yükselirken sesinizi koruyun',
     harmony_independence_label:'Bağımsızlık',
-    harmony_level1:'Sv 1 — Solo',
-    harmony_level2:'Sv 2 — Diğerleri sessiz',
-    harmony_level3:'Sv 3 — Orta karışım',
-    harmony_level4:'Sv 4 — Tam koro',
-    harmony_level5:'Sv 5 — Boss: rastgele ton',
-    harmony_memory_tagline:'Nota etiketi kısaca gösterilir, ardından her notanın geri kalanında boş kalır — canlı bir okuma değil, gerçek hafızadan söylersiniz.',
+    harmony_level1:"Solo",
+    harmony_level2:"Diğerleri kısık",
+    harmony_level3:"Orta karışım",
+    harmony_level4:"Tam koro",
+    harmony_level5:"Rastgele ton",
+    harmony_memory_tagline:"Nota adı kısa bir süre görünür, sonra ezberden söylersin.",
     harmony_overall_desc:'Genel — aşağıdaki 4 gerçek puanın ortalaması',
     harmony_part_alto_tag:'Orta-üst armoni',
     harmony_part_bass_tag:'Temel, en pes ses',
     harmony_part_lead_tag:'Bağımsız melodi çizgisi',
     harmony_part_soprano_tag:'Üst ses, en yüksek aralık',
     harmony_part_tenor_tag:'Orta-alt armoni',
-    harmony_partaccuracy_label:'Ses Doğruluğu',
-    harmony_pianoguide_tagline:'Her akor değiştiğinde yumuşak bir referans sesi sesinizin gerçek notasını çalar — sabit bir animasyon değil, gerçek eğitim tekerlekleri.',
+    harmony_partaccuracy_label:"Parti doğruluğu",
+    harmony_pianoguide_tagline:"Her akor değişiminde partinin notasını yumuşak bir ton çalar.",
     harmony_pitch_label:'Perde',
     harmony_reuses_tag:'KORO ÇALIŞMA ALANI MİKSERİNİ YENİDEN KULLANIR',
-    harmony_ribbon_hint:'Sesinizi söyleyin — hizalandığınızda kurdele düz oturur, kaydığınızda eksenden sapar.',
+    harmony_ribbon_hint:"Notandayken çubuk düz durur, kaydığında eğilir.",
     harmony_step_label:'🎼 Armoni Kalesi — Armoni Arenası',
     harmony_timing_label:'Zamanlama',
     journey_achievements_h2:"Her biri kayıtlı sonuçlarınla açılır.",
@@ -13691,6 +13743,22 @@ const TRANSLATIONS = {
     section_chorus:"Nakarat",
     section_bridge:"Köprü",
     boss_measure:"Şarkının her akoru, söylenecek ana melodiden bir notadır. Perden saniyede yaklaşık 60 kez okunur ve doğal vibrato çıkarılarak o notayla karşılaştırılır; boss'un eşiği içinde söylediğin nota boss'a, kaçırdığın nota sana zarar verir. Her boss başka bir şeyi ölçer: sabit tutuş, beşli yukarıdaki nota, yalnızca ilk yarım saniye, registerin, sabit ses yüksekliği, zamanında giriş ya da kontrollü vibrato.",
+    harmony_line:"Diğer partiler etrafında çalarken kendi partini koru; her seviyede daha yüksek.",
+    harmony_part_label:"Partin",
+    harmony_level_label:"Seviye",
+    harmony_modes_label:"Modlar",
+    harmony_mode_guide:"Piyano rehberi",
+    harmony_mode_distraction:"Dikkat dağıtıcı",
+    harmony_mode_memory:"Hafıza",
+    harmony_hud_part:"Parti",
+    harmony_hud_level:"Seviye",
+    harmony_start_label:"Söylemeye başla",
+    harmony_overall_label:"Genel",
+    harmony_again_btn:"Yeniden söyle",
+    harmony_coach_none:"Puanlamak için sesinden çok az duyuldu. Biraz daha yüksek sesle ya da mikrofona daha yakın söyle.",
+    harmony_coach_good:"Parça boyunca partini korudun. Bir sonraki seviyeyi dene.",
+    harmony_coach_more:"{m} notadan {n} tanesini tutturdun. Piyano rehberini aç ya da önce daha düşük bir seviye dene.",
+    harmony_measure:"Hedef, doğal vibrato çıkarılarak not not partinin melodisidir. Perde: parça boyunca ne kadar yakın söylediğin; Zamanlama: ne kadarında duyulduğun; Parti doğruluğu: yaklaşık 40 sent içinde tutturduğun notaların payı; Bağımsızlık: seviyendeki diğer partilerin yüksekliğine göre ağırlıklandırılmış Perde. Genel, dördünün ortalamasıdır.",
   },
 };
 let currentLanguage = 'en';
@@ -20396,6 +20464,7 @@ function showArcadeGame(name){
   if(name==='glider' && typeof renderGliderForYou==='function') renderGliderForYou();
   if(name==='boss' && typeof renderBossMemoryAndRecommendation==='function') renderBossMemoryAndRecommendation();
   if((name==='boss' || name==='harmony') && typeof SONG!=='undefined'){ const el = document.getElementById(name==='boss' ? 'bossCurrentSongLabel' : 'harmonyCurrentSongLabel'); if(el) el.textContent = t('game_song_tpl').replace('{name}', SONG.name).replace('{key}', SONG.key); }
+  if(name==='harmony'){ const hb = document.getElementById('harmonyBestLive'); if(hb) hb.textContent = profile && progress.harmonyBest ? t('arcade_best_template').replace('{n}', progress.harmonyBest+'%') : ''; }
   if(name==='boss'){ const bl = document.getElementById('bossBestLive'); if(bl) bl.textContent = profile ? t('arcade_won_template').replace('{n}', progress.bossVictories||0) : ''; }
 }
 document.querySelectorAll('.arcade-game-card').forEach(card=>{
@@ -21232,6 +21301,7 @@ function finishBoss(result){
     saveProgress();
   }
   document.getElementById('bossResWins').textContent = profile ? (progress.bossVictories||0) : '—';
+  { const bl = document.getElementById('bossBestLive'); if(bl) bl.textContent = profile ? t('arcade_won_template').replace('{n}', progress.bossVictories||0) : ''; }
   const sectionScores = bossFindSectionScores();
   const heardSections = sectionScores.filter(s=>s.avg!==null);
   const sectionBreakdownEl = document.getElementById('bossSectionBreakdown');
@@ -21407,7 +21477,6 @@ let harmonyPianoGuideOn = false;
 document.getElementById('harmonyPianoGuideBtn')?.addEventListener('click', ()=>{
   harmonyPianoGuideOn = !harmonyPianoGuideOn;
   const btn = document.getElementById('harmonyPianoGuideBtn');
-  btn.textContent = `🎹 Piano Guide: ${harmonyPianoGuideOn ? 'On' : 'Off'}`;
   btn.classList.toggle('active', harmonyPianoGuideOn); btn.setAttribute('aria-pressed', harmonyPianoGuideOn?'true':'false');
 });
 
@@ -21415,7 +21484,6 @@ let harmonyDistractionOn = false;
 document.getElementById('harmonyDistractionBtn')?.addEventListener('click', ()=>{
   harmonyDistractionOn = !harmonyDistractionOn;
   const btn = document.getElementById('harmonyDistractionBtn');
-  btn.textContent = `🌀 Distraction Mode: ${harmonyDistractionOn ? 'On' : 'Off'}`;
   btn.classList.toggle('active', harmonyDistractionOn); btn.setAttribute('aria-pressed', harmonyDistractionOn?'true':'false');
 });
 
@@ -21423,7 +21491,6 @@ let harmonyMemoryModeOn = false;
 document.getElementById('harmonyMemoryBtn')?.addEventListener('click', ()=>{
   harmonyMemoryModeOn = !harmonyMemoryModeOn;
   const btn = document.getElementById('harmonyMemoryBtn');
-  btn.textContent = `🌑 Memory Mode: ${harmonyMemoryModeOn ? 'On' : 'Off'}`;
   btn.classList.toggle('active', harmonyMemoryModeOn); btn.setAttribute('aria-pressed', harmonyMemoryModeOn?'true':'false');
 });
 function scheduleHarmonyDistraction(){
@@ -21441,21 +21508,17 @@ function scheduleHarmonyDistraction(){
 }
 
 const HARMONY_PART_COLORS = {Soprano:'var(--hl-sop)', Lead:'var(--hl-lead)', Alto:'var(--hl-alto)', Tenor:'var(--hl-ten)', Bass:'var(--hl-bass)'};
-document.querySelectorAll('#harmonyPartRow .ex-type-btn').forEach(btn=>{
+document.querySelectorAll('#harmonyPartRow [data-harmony-part]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#harmonyPartRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); b.style.borderColor=''; b.style.background=''; });
+    document.querySelectorAll('#harmonyPartRow [data-harmony-part]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
-    const color = HARMONY_PART_COLORS[btn.dataset.harmonyPart];
-    btn.style.borderColor = color;
     harmonySelectedPart = btn.dataset.harmonyPart;
   });
 });
-// apply the same real color to whichever part starts active by default
-document.querySelector('#harmonyPartRow .ex-type-btn.active')?.style.setProperty('border-color', HARMONY_PART_COLORS[harmonySelectedPart]);
-document.querySelectorAll('#harmonyLevelRow .ex-type-btn').forEach(btn=>{
+document.querySelectorAll('#harmonyLevelRow [data-harmony-level]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#harmonyLevelRow .ex-type-btn').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
+    document.querySelectorAll('#harmonyLevelRow [data-harmony-level]').forEach(b=>{ b.classList.remove('active'); b.setAttribute('aria-pressed','false'); });
     btn.classList.add('active');
     btn.setAttribute('aria-pressed','true');
     harmonySelectedLevel = parseInt(btn.dataset.harmonyLevel,10);
@@ -21471,7 +21534,7 @@ async function startHarmonyArena(){
   if(tok!==startGen) return;
   ensureChoirGainNodes();
   const ribbon0 = document.getElementById('harmonyRibbonShape');
-  if(ribbon0){ ribbon0.style.transform = 'translateY(0px) rotate(0deg)'; ribbon0.setAttribute('fill','var(--hairline)'); }
+  if(ribbon0){ ribbon0.style.transform = 'translateY(0px) rotate(0deg)'; ribbon0.setAttribute('fill','var(--hl-rule)'); }
 
   harmonyTransposeShift = harmonySelectedLevel===5 ? (Math.floor(Math.random()*8)-4 || 3) : 0;
   const otherVol = HARMONY_LEVEL_MIX[harmonySelectedLevel];
@@ -21492,10 +21555,12 @@ async function startHarmonyArena(){
   harmonyActive=true; harmonyStartTime=performance.now(); harmonyCentsSamples=[];
   harmonyTotalFrames=0; harmonyHeardFrames=0; harmonyCurrentIdx=-1; harmonyNoteBuf=[]; harmonyNoteResults=[];
   document.getElementById('harmonyResult').style.display='none';
-  document.getElementById('harmonyStartLabel').textContent='Singing — tap to stop';
-  document.getElementById('harmonyStartBtn').classList.add('listening');
+  gameStartLive('harmonyStartBtn', 'harmonyStartLabel');
+  document.getElementById('harmonyHudPart').textContent = partName(harmonySelectedPart);
+  document.getElementById('harmonyHudLevel').textContent = harmonySelectedLevel;
+  document.getElementById('harmonyHudBest').textContent = profile && progress.harmonyBest ? progress.harmonyBest+'%' : '—';
   harmonyLoop();
-  singingSession(()=>harmonyActive);
+  singingSession(()=>harmonyActive, document.getElementById('harmonyStage'));
 }
 function harmonyFinalizeNote(idx){
   if(harmonyNoteBuf.length===0){ harmonyNoteResults[idx] = null; return; }
@@ -21519,9 +21584,7 @@ function harmonyLoop(){
   const chordDur = songChordDurMs();
   const elapsedWithinNote = elapsedMs - idx*chordDur;
   const showLabel = !harmonyMemoryModeOn || elapsedWithinNote < chordDur*0.35;
-  document.getElementById('harmonyNoteLabel').textContent = showLabel
-    ? `${partName(harmonySelectedPart)}: ${noteNameFromMidi(targetMidi)}`
-    : `${partName(harmonySelectedPart)}: —`;
+  document.getElementById('harmonyNoteLabel').textContent = showLabel ? noteNameFromMidi(targetMidi) : '—'; // the part is in the HUD
   document.getElementById('harmonyProgressFill').style.width=Math.min(100,(elapsedMs/totalMs)*100)+'%';
 
   if(idx!==harmonyCurrentIdx){
@@ -21549,12 +21612,12 @@ function harmonyLoop(){
         const angle = (clamped/50)*8;
         ribbon.style.transform = `translateY(${offsetY.toFixed(1)}px) rotate(${angle.toFixed(1)}deg)`;
         ribbon.style.transformOrigin = '200px 50px';
-        ribbon.setAttribute('fill', Math.abs(cents)<=25 ? 'var(--teal)' : 'var(--coral)');
+        ribbon.setAttribute('fill', Math.abs(cents)<=25 ? HARMONY_PART_COLORS[harmonySelectedPart] : 'var(--hl-miss)');
       }
     }
   } else if(ribbon){
     ribbon.style.transform = 'translateY(0px) rotate(0deg)';
-    ribbon.setAttribute('fill', 'var(--hairline)');
+    ribbon.setAttribute('fill', 'var(--hl-rule)');
   }
 
   harmonyRafId=requestAnimationFrame(harmonyLoop);
@@ -21567,8 +21630,7 @@ function finishHarmonyArena(){
   harmonyActive=false;
   cancelAnimationFrame(harmonyRafId);
   stopChoirOscillatorsOnly();
-  document.getElementById('harmonyStartLabel').textContent=t('action_start_pro');
-  document.getElementById('harmonyStartBtn').classList.remove('listening');
+  gameStartIdle('harmonyStartBtn', 'harmonyStartLabel', 'harmony_start_label');
   document.getElementById('harmonyNoteLabel').textContent='—';
 
   // Real 4-way score split, not one blended number — each dimension is a genuinely
@@ -21590,10 +21652,12 @@ function finishHarmonyArena(){
   const independence = Math.min(100, Math.round(pitchAcc*distractionFactor));
   const overall = Math.round((pitchAcc+timingScore+partAccuracy+independence)/4);
 
-  document.getElementById('harmonyResult').style.display='block';
+  document.getElementById('harmonyResult').style.display='';
   const accEl=document.getElementById('harmonyAccVal');
   accEl.textContent=overall+'%';
-  accEl.className='ex-accuracy '+accuracyClass(overall);
+  accEl.className='vc-result-num';
+  document.getElementById('harmonyCoach').textContent = harmonyCentsSamples.length<=10 ? t('harmony_coach_none')
+    : partAccuracy>=75 ? t('harmony_coach_good') : t('harmony_coach_more').replace('{n}', landedNotes).replace('{m}', totalNotes);
   document.getElementById('harmonyPitchVal').textContent = pitchAcc+'%';
   document.getElementById('harmonyTimingVal').textContent = timingScore+'%';
   document.getElementById('harmonyPartVal').textContent = partAccuracy+'%';
@@ -21610,9 +21674,12 @@ function finishHarmonyArena(){
     }
     recordSkillScore('expression', overall); // holding an independent line under distraction is an expression/control skill
   }
+  document.getElementById('harmonyResBest').textContent = profile && progress.harmonyBest ? progress.harmonyBest+'%' : '—';
+  { const hb = document.getElementById('harmonyBestLive'); if(hb) hb.textContent = profile && progress.harmonyBest ? t('arcade_best_template').replace('{n}', progress.harmonyBest+'%') : ''; }
   registerExerciseCompletion();
 }
-function stopHarmonyArena(){ if(harmonyActive){ harmonyActive=false; cancelAnimationFrame(harmonyRafId); stopChoirOscillatorsOnly(); } }
+function stopHarmonyArena(){ if(harmonyActive){ harmonyActive=false; cancelAnimationFrame(harmonyRafId); stopChoirOscillatorsOnly(); } gameStartIdle('harmonyStartBtn', 'harmonyStartLabel', 'harmony_start_label'); }
+document.getElementById('harmonyAgainBtn').addEventListener('click', ()=>{ if(!harmonyActive) startHarmonyArena(); });
 document.getElementById('harmonyStartBtn').addEventListener('click', ()=>{
   if(harmonyActive) finishHarmonyArena(); else startHarmonyArena();
 });
@@ -21840,7 +21907,7 @@ function stopAllActiveSessions(){
   stopGlider();
   stopBoss();
   stopBridgeRunner();
-  harmonyActive = false;
+  stopHarmonyArena(); // and its scheduled choir notes
   if(typeof stopResonanceVisualizer==='function' && resonanceActive) stopResonanceVisualizer(); // 4b: the button and readings reset
   resonanceActive = false;
   rhythmActive = false;
