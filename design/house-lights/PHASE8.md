@@ -108,3 +108,26 @@ YOUR THREE QUESTIONS: yes to all three, as you built them. Record them in HANDOF
 CHECKS: gamestates, hooks, copyscan --world, contrast (Vocal World and Choir World), bootcheck.
 SCREENSHOTS on review/phase8: the new marks sheet; the hub, Boss Arena page and result, Harmony Castle page and Register Canyon page at 390 and 1280, Light and Dark. Secret check, push both branches.
 REPORT, then stop.
+
+## 8.2
+
+8.1 approved, with one change: I've drawn the Range Phoenix myself (yours still reads as an insect at 24–32 px). Then phase 8 goes live. Add this message to the end of design/house-lights/PHASE8.md under "8.2" and commit it first. AC power only, one verify script at a time.
+
+1. THE PHOENIX
+- Replace the hl-boss-phoenix symbol in deploy/index.html with exactly this (a bird in profile rising to the right: crest, raised wing, two long tail plumes):
+<symbol id="hl-boss-phoenix" viewBox="0 0 24 24"><path d="M15.4 4.6c1.4-.9 3.1-.7 4.1.5l1.9.3-1.8 1.2c-.2 4.4-3.5 8.6-8.6 9.6-2.4.5-4 1.8-4.8 4.2"/><path d="M15.4 4.6c-1 3.8-3.6 7-8.6 8.8-2.2.8-3.6 2-4.2 3.6"/><path d="M13.2 8.8C10.6 5.8 7.6 3.6 3.6 2.8l2.4 3.4-2.6.5 3.8 2.6-2.2 1.2 3.2.9"/><path d="M16.6 4.1c-.2-1.1.2-2.1 1-2.8M18.4 4.3c.3-.8.9-1.4 1.7-1.6"/></symbol>
+- Make the marks sheet again with marks8.js and look at it yourself: the Phoenix must read as a bird at 24 px in Light and Dark. Run hooks and bootcheck. Push review/phase8 with the new sheet. No other change.
+
+2. DEPLOY (only after I type "deploy" here)
+- When step 1 is done, say you're ready and wait for me to type "deploy".
+- Then merge redesign/phase8 into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself.
+- After my Vercel line, check that the production address serves the new deployment. If it doesn't, give me the exact vercel promote line with the real dpl id (no placeholders).
+- Rollback target: dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk.
+
+3. PRODUCTION CHECKS (once production serves phase 8)
+- prod.sh with WITH_CHOIR=1, plus gamestates and checkout against production.
+- Rollback rule: a failure that repeats on a rerun and isn't a network error or a Supabase 503 means rolling back to dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk. Give me the line to run, and stop.
+- Clean up the test accounts. Push the results to review/phase8-prod.
+- When everything passes: delete review/phase8, review/phase8-part1, review/phase8-before, review/phase7-prod and review/phase7-part1 (ask me if that needs my OK). Update HANDOFF: phase 8 live with its dpl id, which becomes the rollback target for phase 9.
+
+REPORT, then stop.
