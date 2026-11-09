@@ -77,3 +77,34 @@ Expected changes (nothing else may change): the checkout sheet and the sign-in t
 The hub (new, active, all locked, all open), each game's page, stage and result, the Skill Tree, and the checkout sheet (signed in and out), at 390 and 1280, Light and Dark, on review/phase8 with a contact sheet. Secret check, push both branches.
 
 5. REPORT, then stop.
+
+## 8.1
+
+Phase 8 review: it passes. One short fix round, 8.1, on redesign/phase8, then push review/phase8 and stop. Add this message to the end of design/house-lights/PHASE8.md under "8.1" and commit it first. No merge or deploy yet. AC power only, one verify script at a time.
+
+YOUR THREE QUESTIONS: yes to all three, as you built them. Record them in HANDOFF.
+- "For you" on Pitch Mountain picks a course from the weakest of pitch, agility and range: yes.
+- The Skill Tree's Control node uses the breath icon: yes.
+- "All locked" can't happen, so the signed-out hub stands in for it: yes.
+
+1. FOUR MARKS REDRAWN (same system: 24 px grid, 1.6 stroke, currentColor; each must read at 24 px)
+- Range Phoenix (reads as a plant): a bird rising, seen from the front. Two wings raised high in a wide V, each ending in three feather points; a small head with the beak turned to one side; a short body; two or three flame strokes for a tail. No single stem running down the middle.
+- Volume Phantom (too faint at 24 px): a ghost. A domed head, two dot eyes, straight sides and a wavy hem, with the right side breaking into two or three bold dashes for the fade. Fewer, heavier pieces than now.
+- Register Canyon ("{=}" reads as code): the two cliff walls as angular zigzags (straight segments, sharp corners, three notches each, a little wider at the base), with the two lane lines between them not touching the walls.
+- Harmony Castle (reads as a notepad at 24 px): wider than tall. Two towers with battlements on either side of a lower wall; the three stacked lines short, inside the wall.
+- Make the marks sheet again (all 14 at 24, 48 and 96 px, Light and Dark), with the four old marks next to the new ones.
+
+2. LINKS IN INK (Rule 1: voice blue is only the singer and the start buttons)
+- The base .link-btn rule becomes: color var(--hl-ink), font-size inherit, underlined with text-underline-offset 2px. Remove the two overrides that already did this (.link-btn.why-btn and .duet-after .link-btn).
+- This fixes "Change song" (Boss Arena, Harmony Castle, the Choir World rehearsal) and the Boss "Why?". Nothing else uses .link-btn.
+
+3. BOSS RESULT
+- The rows "You" and "Boss" become "Your health" and "Boss health" (four languages).
+- The coach line drops "Your health left: 86%", since the row now shows it; "You dealt more damage than you took." stays. If it's one key, change it in all four languages.
+
+4. A CHECK, NOT A CHANGE UNLESS IT FAILS
+- At 390, after each of the five games ends, the result's big number is inside the viewport. Add this to gamestates. If it fails for a game, scroll the number into view when the house comes up, as the vcTake tools do.
+
+CHECKS: gamestates, hooks, copyscan --world, contrast (Vocal World and Choir World), bootcheck.
+SCREENSHOTS on review/phase8: the new marks sheet; the hub, Boss Arena page and result, Harmony Castle page and Register Canyon page at 390 and 1280, Light and Dark. Secret check, push both branches.
+REPORT, then stop.
