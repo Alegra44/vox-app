@@ -5646,6 +5646,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
   </div>
 
+  <!-- Phase 8 step 0: every plan button opens this sheet until Stripe is wired (the demo checkout below is unreachable). -->
+  <div class="modal-overlay" id="plansSoonOverlay" role="dialog" aria-modal="true" aria-labelledby="plansSoonTitle" style="display:none;">
+    <div class="modal-card">
+      <h2 class="trial-modal-title" id="plansSoonTitle" data-i18n="plans_soon_title">Paid plans aren't on sale yet</h2>
+      <p class="trial-modal-sub" data-i18n="plans_soon_body">Your current access continues; we'll tell you when they open.</p>
+      <div class="btn-row" style="margin-top:20px;">
+        <button class="ghost-btn" id="plansSoonCloseBtn" data-i18n="plans_soon_close">Close</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="checkoutModalOverlay" role="dialog" aria-modal="true" aria-labelledby="checkoutPlanName" style="display:none;">
     <div class="modal-card">
       <div class="step-label">Demo checkout — no real payment</div>
@@ -8432,6 +8443,11 @@ const TRANSLATIONS = {
     voicehealth_load14_h2:"Vocal load — last 14 days",
     voicehealth_warn_minutes_tpl:"You've been singing for {n} minutes straight. Consider a short break before continuing.",
     voicehealth_warn_stability_tpl:"Your pitch stability has dropped {n} points since you started this session. A short break before continuing might help.",
+    // phase 8 (PHASE8.md)
+    plans_soon_title:"Paid plans aren't on sale yet",
+    plans_soon_body:"Your current access continues; we'll tell you when they open.",
+    plans_soon_close:"Close",
+    signin_choose_plan:"Sign in to choose a plan",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -10066,6 +10082,11 @@ const TRANSLATIONS = {
     voicehealth_load14_h2:"Charge vocale — 14 derniers jours",
     voicehealth_warn_minutes_tpl:"Vous chantez depuis {n} minutes d'affilée. Pensez à faire une courte pause avant de continuer.",
     voicehealth_warn_stability_tpl:"Votre stabilité de justesse a baissé de {n} points depuis le début de cette séance. Une courte pause avant de continuer pourrait aider.",
+    // phase 8 (PHASE8.md)
+    plans_soon_title:"Les forfaits payants ne sont pas encore en vente",
+    plans_soon_body:"Votre accès actuel continue ; nous vous préviendrons quand ils ouvriront.",
+    plans_soon_close:"Fermer",
+    signin_choose_plan:"Connectez-vous pour choisir un forfait",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11700,6 +11721,11 @@ const TRANSLATIONS = {
     voicehealth_load14_h2:"Carga vocal — últimos 14 días",
     voicehealth_warn_minutes_tpl:"Llevas {n} minutos seguidos cantando. Considera una pausa corta antes de seguir.",
     voicehealth_warn_stability_tpl:"Tu estabilidad de afinación ha bajado {n} puntos desde que empezaste esta sesión. Una pausa corta antes de seguir podría ayudar.",
+    // phase 8 (PHASE8.md)
+    plans_soon_title:"Los planes de pago aún no están a la venta",
+    plans_soon_body:"Tu acceso actual continúa; te avisaremos cuando abran.",
+    plans_soon_close:"Cerrar",
+    signin_choose_plan:"Inicia sesión para elegir un plan",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13334,6 +13360,11 @@ const TRANSLATIONS = {
     voicehealth_load14_h2:"Ses yükü — son 14 gün",
     voicehealth_warn_minutes_tpl:"{n} dakikadır aralıksız söylüyorsun. Devam etmeden önce kısa bir mola vermeyi düşün.",
     voicehealth_warn_stability_tpl:"Bu oturumun başından beri perde kararlılığın {n} puan düştü. Devam etmeden önce kısa bir mola işe yarayabilir.",
+    // phase 8 (PHASE8.md)
+    plans_soon_title:"Ücretli planlar henüz satışta değil",
+    plans_soon_body:"Mevcut erişiminiz devam ediyor; açıldıklarında size haber vereceğiz.",
+    plans_soon_close:"Kapat",
+    signin_choose_plan:"Plan seçmek için giriş yapın",
   },
 };
 let currentLanguage = 'en';
@@ -18402,7 +18433,7 @@ const FEATURE_LABEL_KEYS = {
   'Tuner':'tool_tuner', 'Range Finder':'tool_range_finder', 'Key recommendation':'feature_key_recommendation',
   'Register Coach':'tool_register_coach', 'Stay in Key':'hub_songs_staykey_title', 'Emotional Singing':'hub_songs_emotion_title',
   'Genre Coach':'tool_genre_coach', 'Karaoke Coach':'hub_songs_karaoke_title', 'Real-Time Feedback':'tool_live_feedback',
-  'Per-part mixing':'feature_perpart_mixing', 'Teacher Dashboard':'hub_you_teacher_title', 'Exercises':'tool_exercises',
+  'Per-part mixing':'feature_perpart_mixing', 'Teacher Dashboard':'hub_you_teacher_title', 'Choose a plan':'signin_choose_plan', 'Exercises':'tool_exercises',
   'Smart Warmup':'tool_warmup', '21-Day Journey':'hub_you_journey_title', 'Vocal World':'hub_world_title',
   'Vocal Journey':'feature_vocal_journey', 'Karaoke Boss Battle':'feature_boss_battle', 'Register Runner':'feature_register_runner',
   'Harmony Arena':'feature_harmony_arena', 'Resonance Visualizer':'tool_resonance', 'Hear Yourself Improve':'pricing_hearyourself_label',
@@ -18505,14 +18536,29 @@ document.getElementById('signinRequiredCreateBtn').addEventListener('click', ()=
 });
 
 let pendingCheckoutPlan = null;
+// Paid plans aren't on sale until Stripe is wired (PHASE8.md step 0): every plan button opens #plansSoonOverlay,
+// which changes nothing. Signed out, it asks to sign in "to choose a plan". The demo checkout (openDemoCheckout,
+// #checkoutModalOverlay, #checkoutConfirmBtn) stays in the code, unreachable: nothing calls openDemoCheckout.
+function openPlansSoon(){
+  document.getElementById('plansSoonOverlay').style.display='flex';
+  openModalWithA11y(document.getElementById('plansSoonOverlay'), closePlansSoon);
+}
+function closePlansSoon(){
+  document.getElementById('plansSoonOverlay').style.display='none';
+  closeModalWithA11y(document.getElementById('plansSoonOverlay'));
+}
+document.getElementById('plansSoonCloseBtn').addEventListener('click', closePlansSoon);
+function openDemoCheckout(btn){
+  pendingCheckoutPlan = btn.dataset.plan;
+  document.getElementById('checkoutPlanName').textContent = `${t('plan_upgrade_prefix')} ${planLabel(btn.dataset.plan)}`;
+  document.getElementById('checkoutPlanPrice').textContent = btn.dataset.price;
+  document.getElementById('checkoutModalOverlay').style.display='flex';
+  openModalWithA11y(document.getElementById('checkoutModalOverlay'), closeCheckoutModal);
+}
 document.querySelectorAll('.plan-btn[data-plan]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    if(!profile){ requireSignIn('Teacher Dashboard'); return; }
-    pendingCheckoutPlan = btn.dataset.plan;
-    document.getElementById('checkoutPlanName').textContent = `${t('plan_upgrade_prefix')} ${planLabel(btn.dataset.plan)}`;
-    document.getElementById('checkoutPlanPrice').textContent = btn.dataset.price;
-    document.getElementById('checkoutModalOverlay').style.display='flex';
-    openModalWithA11y(document.getElementById('checkoutModalOverlay'), closeCheckoutModal);
+    if(!profile){ requireSignIn('Choose a plan'); return; }
+    openPlansSoon();
   });
 });
 function closeCheckoutModal(){
