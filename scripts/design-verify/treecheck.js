@@ -1,7 +1,7 @@
 // Phase 8 (PHASE8.md §1c): the Vocal Skill Tree on master (--base, default master) and the branch (the working copy, or
 // --branch-ref), for youSeed.js's seeded "new" and "active" states (and signed out): per node, unlocked or not and which
 // one is "next" (from SKILL_TREE_NODES, the model both builds keep), the nodes the SVG draws as unlocked
-// (.st-node-bg.unlocked) and next (.next), and the detail panel: the next node's label and every number in it (sorted,
+// (.st-node-bg.unlocked) and next (.next), and the detail panel: the next node's label and every number in it (as a sorted set,
 // so a reworded panel that shows the same values passes: "Current: 58% / 60%" and "Breath ≥ 60% · now 58%" are equal).
 // Gate: all equal. No page errors. Out: logs/treecheck-<stamp>.json.
 // Usage: node scripts/design-verify/treecheck.js [--base <ref>] [--branch-ref <ref>]
@@ -24,7 +24,7 @@ const READ = () => {
   const drawnUnlocked = document.querySelectorAll('#skillTreeSvg .st-node-bg.unlocked').length, drawnNext = document.querySelectorAll('#skillTreeSvg .st-node-bg.next').length;
   const nextLabel = next ? SKILL_TREE_NODES.find(n => n.id === next).label : null;
   return { signedIn: true, nodes, next, drawnUnlocked, drawnNext, nextLabelShown: nextLabel ? text.toLowerCase().includes(nextLabel.toLowerCase()) : null,
-    numbers: (text.match(/\d+/g) || []).map(Number).sort((a, b) => a - b), text };
+    numbers: [...new Set((text.match(/\d+/g) || []).map(Number))].sort((a, b) => a - b), text };
 };
 
 (async () => {
