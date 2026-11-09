@@ -584,8 +584,8 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   load, so fr/es/tr showed English after a language change (copyscan --world 48); renderWorldCopy() refills them on
   every language change, the song's name and key translated. Rest of the checks below.
 - **Checks (§3)**, checks8.sh, logs checks8-2026-11-09T06-10-24 (all) + T10-47-53 and T12-36-39 (reruns): all pass.
-  gamestates PASS (Register Canyon 307 vs 249 in the first run was noise: rerun 3 a side gives 174/172/84 on both,
-  master alone ranges 84–307); checkout 42/42; stopcheck pass; treecheck PASS; glider flight/courses, regfix, batch1
+  gamestates PASS (Register Canyon 307 vs 249 in the first run: not noise, see 8.1; rerun alone 3 a side gave
+  174/172/84 on both); checkout 42/42; stopcheck pass; treecheck PASS; glider flight/courses, regfix, batch1
   112/0, batch3a 169/0, batch3b 179/0, warm-up entries/tracking, loopback, house 1051/0, contrast, copyscan --world
   0/0/0, hooks 21/0, navcheck, bootcheck 9/0, picker. Passed on rerun only: batch1, house, batch3a, copyscan, bootcheck
   (each failed once on the production backend: "Failed to fetch", a sign-up timeout, a 6.7 s signed-in boot).
@@ -594,6 +594,24 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   broken since Vocal Load phase 2, not by phase 8).
 - **Screenshots** review/phase8 (shots8.js at 93fa691): 100 shots, house down on every stage and up elsewhere, 0
   contrast items under 4.5:1, no page errors. Waiting for review: no merge, no deploy.
+- **Review (2026-11-09): passes.** The three questions, all yes as built: Pitch Mountain's "For you" picks a course from
+  the weakest of pitch, agility and range; the Skill Tree's Control node uses the breath icon; "All locked" can't
+  happen, so the signed-out hub stands in for it.
+- **8.1** (PHASE8.md "8.1"): 338a15d app, d7552f1 checks.
+  - Marks redrawn: Range Phoenix (a bird rising, front on), Volume Phantom (a ghost, the right side in bold dashes),
+    Register Canyon (angular cliff walls, lanes clear of them), Harmony Castle (wider than tall, two towers, a lower
+    wall). marks8.js --old <ref> draws old next to new.
+  - .link-btn in ink (font-size inherit, underline offset 2px); the why-btn and duet-after overrides removed.
+  - Boss result rows "Your health" / "Boss health"; the win line without the health number (one key, four languages).
+  - gamestates at 390: every game's big result number in view when it ends (259–366 px of 844): no scroll fix.
+  - Register Canyon's 307 vs 249 was the test, not the game: the lane followed the real register reading of the
+    looping A4 (158 frames chest, 27 head), and the branch's run started two frames later in that loop, so different
+    obstacles were hit. games8's bridge now scripts that cycle per frame from the run's first frame: master and branch
+    match (307/307, 172/172). contrast.js --panels a,b (arcade also opens each Vocal World page).
+  - Checks (logs checks81-2026-11-09T15-48-33): gamestates PASS (all equal to master, Register Canyon 307 → 307; at
+    390 all six numbers in view), hooks 21/0, copyscan --world 0/0/0, contrast --panels arcade,choir,partrehearsal,
+    choirpassport,aiduet 0 of 434 per theme, bootcheck 9/0. Screenshots: review/phase8, folder 8.1/. Waiting for
+    review: no merge, no deploy.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 

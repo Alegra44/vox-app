@@ -25,8 +25,11 @@
 const path = require('path'), fs = require('fs');
 const C = require('./common'), S = require('./stage'), H = require('./homeStates'), T = require('./tools'), TOOLSET = require('./tools4b').toolSet().tools;
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const TOOLS_ONLY = process.argv.includes('--tools-only'), TOOLS = !process.argv.includes('--no-tools');
-const STATES = !process.argv.includes('--no-states') && !TOOLS_ONLY, HOME = !process.argv.includes('--no-home') && !TOOLS_ONLY;
+// --panels a,b,… (8.1): only those panels and the shell, no states/tools/home; "arcade" also opens each Vocal World page
+// (arcade:glider, arcade:bridge, arcade:boss, arcade:harmony, arcade:rift, arcade:skilltree).
+const PANELS = (() => { const i = process.argv.indexOf('--panels'); return i > 0 ? process.argv[i + 1].split(',') : null; })();
+const TOOLS_ONLY = process.argv.includes('--tools-only'), TOOLS = !process.argv.includes('--no-tools') && !PANELS;
+const STATES = !process.argv.includes('--no-states') && !TOOLS_ONLY && !PANELS, HOME = !process.argv.includes('--no-home') && !TOOLS_ONLY && !PANELS;
 const BASE = arg('--base'), THEMES = (arg('--themes') || (BASE ? 'dark' : 'light,dark')).split(',');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const JSON_OUT = arg('--json') || path.join(__dirname, 'logs', `contrast-${BASE ? BASE.replace(/\W/g, '_') : 'branch'}-${stamp}.json`);
@@ -283,7 +286,7 @@ async function runYou(b, dir, state, report) {
       if (!TOOLS_ONLY) {
       const { ctx, page } = await C.openPage(b, { dir, theme, storageState: state });
       await C.clearOverlays(page);
-      const keys = await C.panelKeys(page);
+      const keys = (await C.panelKeys(page)).filter(k => !PANELS || PANELS.includes(k));
       // the shell, and a toast
       await C.showPanel(page, 'home');
       panels['shell: header'] = await page.evaluate(measure, 'header.shell-topbar');
@@ -294,6 +297,11 @@ async function runYou(b, dir, state, report) {
       for (const k of keys) {
         const shown = await C.showPanel(page, k); await C.clearOverlays(page);
         panels[k] = shown ? await page.evaluate(measure, `#panel-${k}`) : [{ status: 'unknown', why: 'panel did not open', text: '', path: '' }];
+        if (PANELS && k === 'arcade') for (const g of ['glider', 'bridge', 'boss', 'harmony', 'rift', 'skilltree']) {
+          await page.evaluate(g => showArcadeGame(g), g); await C.sleep(600); await C.clearOverlays(page); await page.evaluate(() => window.scrollTo(0, 0));
+          panels[`arcade:${g}`] = await page.evaluate(measure, '#panel-arcade');
+          await page.evaluate(() => showArcadeHub()); await C.sleep(300);
+        }
       }
       await ctx.close();
       }
