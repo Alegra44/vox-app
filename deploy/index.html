@@ -1444,7 +1444,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .gw-stage .gw-start{background:var(--hl-voice);color:var(--hl-on-voice);border-color:var(--hl-voice);}
   .gw-stage .gw-start.listening{background:transparent;color:var(--hl-ink-2);border:var(--hl-hair) solid var(--hl-rule-strong);}
   .gw-stage .gw-start.listening .dot-icon{display:none;}
-  .gw-best{font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;margin:var(--hl-s3) 0 0;}
+  .gw-best{font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;margin:var(--hl-s3) 0 0;text-align:center;}
+  .gw-best:empty{display:none;}
   .gw-stage:not(.is-live) .gw-canvas{display:none;}
   .vc-stage.is-live.gw-stage{width:100%;max-width:760px;align-items:stretch;}
   .vc-stage.is-live.gw-stage .gw-go{justify-content:center;}
@@ -3462,24 +3463,37 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <!-- REGISTER RUNNER -->
-    <div id="gameBridge" style="display:none;">
-      <button class="arcade-back-link" data-back-to-hub data-i18n="world_back_link">← Back to Vocal World</button>
-      <div class="key-card">
-        <div class="step-label"><span data-i18n="bridge_step_label">Register Runner</span><span class="mock-tag" data-i18n="bridge_reuses_tag">REUSES REGISTER COACH ENGINE</span></div>
-        <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 14px;" data-i18n="bridge_h2">Chest voice = bottom lane, head voice = top lane</h2>
-        <div class="arcade-hud"><span id="bridgeScoreLabel">Score: 0</span><span id="bridgeBestLabelLive">Best: 0</span></div>
-        <div class="arcade-canvas-wrap"><canvas id="bridgeCanvas" width="600" height="240" role="img" aria-label="Register Canyon runner — switch between chest and head voice to dodge obstacles in the correct lane"></canvas></div>
-        <div class="btn-row" style="justify-content:center;">
-          <button class="mic-btn" id="bridgeStartBtn"><span class="dot-icon"></span><span id="bridgeStartLabel" data-i18n="bridgerunner_start_label">Start running (Pro)</span></button>
+    <div id="gameBridge" class="gw" style="display:none;">
+      <button type="button" class="arcade-back-link gw-back" data-back-to-hub><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="world_back_link">Vocal World</span></button>
+      <!-- phase 8 (PHASE8.md 2.4): the page, the stage (house down through houseSession: it reads the register input and
+           feeds the load itself), the result. Chest voice runs the low lane, head voice the high one. -->
+      <div class="key-card gw-card">
+        <div class="gw-head"><svg class="hl-icon gw-mark" aria-hidden="true"><use href="#hl-loc-canyon"/></svg><div class="gw-head-text"><h2 class="gw-title" data-i18n="world_bridge_title">Register Canyon</h2><p class="gw-line" data-i18n="bridge_line">Chest voice runs the low lane, head voice the high one. Switch to dodge the blocks; three hits and the run ends.</p></div></div>
+        <div class="vc-stage gw-stage" id="bridgeStage">
+          <div class="gw-hud vc-live-only" aria-hidden="true">
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_score">Score</span><span class="gw-hud-v" id="bridgeScoreLabel">0</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_lives">Lives</span><span class="gw-hud-v" id="bridgeLivesLabel">3</span></span>
+            <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_best">Best</span><span class="gw-hud-v" id="bridgeHudBest">0</span></span>
+          </div>
+          <div class="arcade-canvas-wrap gw-canvas"><canvas id="bridgeCanvas" width="600" height="240" role="img" aria-label="Register Canyon: chest voice runs the low lane, head voice the high lane"></canvas></div>
+          <div class="btn-row gw-go">
+            <button class="mic-btn vc-take-pill gw-start" id="bridgeStartBtn"><span class="dot-icon"></span><span id="bridgeStartLabel" data-i18n="bridgerunner_start_label">Start running</span></button>
+          </div>
+          <p class="gw-best vc-paper-only" id="bridgeBestLabelLive">Best: 0</p>
+          <div class="vl-gauge" id="vlGaugeBridge" style="display:none;"></div>
         </div>
-        <div class="vl-gauge" id="vlGaugeBridge" style="display:none;"></div>
-        <div class="arcade-overlay-msg" id="bridgeGameOver" style="display:none;margin-top:16px;">
-          <div class="om-title" id="bridgeGameOverTitle">Wiped out!</div>
-          <div class="om-sub" id="bridgeGameOverSub"></div>
+        <div class="vc-result gw-result" id="bridgeGameOver" role="status" aria-live="polite" style="display:none;">
+          <div class="vc-result-num" id="bridgeResultScore">0</div>
+          <h3 class="hl-h3" id="bridgeGameOverTitle">Score</h3>
+          <p class="hl-coach" id="bridgeGameOverSub"></p>
+          <div class="vc-result-dims">
+            <div class="vc-dim"><span data-i18n="game_hud_best">Best</span><span id="bridgeResBest">—</span></div>
+          </div>
+          <div class="btn-row"><button type="button" class="hl-btn hl-btn--ink" id="bridgeAgainBtn" data-i18n="bridge_again_btn">Run again</button></div>
         </div>
+        <details class="hl-measure gw-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="bridge_measure">Each frame reads your register, chest or head, from how your voice's energy sits across its harmonics: the same reading as Register Coach. Chest puts you in the low lane, head in the high one; with no voice you stay where you were. Blocks come in either lane at random; your score is how far you ran.</p></details>
       </div>
     </div>
-
   </section>
 
   <!-- TUNER PANEL -->
@@ -7987,7 +8001,7 @@ const TRANSLATIONS = {
     boss_weaknote_p1:'Your weakest single note this battle was', boss_weaknote_p2:'at', boss_weaknote_p3:'accuracy.',
     boss_weaknote_p4:'Train the note below, then rematch the boss.', boss_win_sub_p1:'You dealt more damage than you took. Player health remaining:',
     breakthrough_detail_p1:'5 accurate attempts in a row — this was averaging', breakthrough_detail_p2:'before. Something just clicked.',
-    bridgerunner_start_label:'Start running (Pro)', bridgerunner_wipedout:'Wiped out!',
+    bridgerunner_start_label:"Start running", bridgerunner_wipedout:'Wiped out!',
     curriculum_daylabel_p1:"Today's Curriculum — Day", curriculum_done_today:'✓ Done today', curriculum_mark_done:'Mark done',
     curriculum_open_firsttool:"Open today's first tool", curriculum_open_p1:'Open',
     dash_not_captured:'Not captured yet — visit Range Finder', dash_recap_suffix:'Recap',
@@ -8564,6 +8578,14 @@ const TRANSLATIONS = {
     glider_coach_fell:"You fell out of a gap. Sing a little before each gap moves, and hold the note steady through it.",
     glider_coach_notakeoff:"You didn't take off. Sing any note to start flying.",
     glider_measure:"Your pitch, read about 60 times a second, sets your height: the bottom of the course is the low end of your saved range and the top its high end. Go quiet and you fall. Your score is how far you flew; a coin counts when you pass it near the middle of a gap, and each one in a row adds to your combo.",
+    bridge_line:"Chest voice runs the low lane, head voice the high one. Switch to dodge the blocks; three hits and the run ends.",
+    game_hud_lives:"Lives",
+    bridge_lane_head:"Head",
+    bridge_lane_chest:"Chest",
+    bridge_again_btn:"Run again",
+    bridge_coach_hits:"Three blocks hit. Switch a little earlier: the change from chest to head takes a moment to read.",
+    bridge_coach_stopped:"You stopped the run.",
+    bridge_measure:"Each frame reads your register, chest or head, from how your voice's energy sits across its harmonics: the same reading as Register Coach. Chest puts you in the low lane, head in the high one; with no voice you stay where you were. Blocks come in either lane at random; your score is how far you ran.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9641,7 +9663,7 @@ const TRANSLATIONS = {
     boss_weaknote_p1:'Votre note la plus faible de ce combat était', boss_weaknote_p2:'à', boss_weaknote_p3:'de précision.',
     boss_weaknote_p4:'Entraînez la note ci-dessous, puis affrontez à nouveau le boss.', boss_win_sub_p1:"Vous avez infligé plus de dégâts que vous n'en avez subi. Santé restante :",
     breakthrough_detail_p1:"5 tentatives réussies d'affilée — la moyenne était de", breakthrough_detail_p2:'avant. Quelque chose vient de se déclencher.',
-    bridgerunner_start_label:'Démarrer la course (Pro)', bridgerunner_wipedout:'Chute !',
+    bridgerunner_start_label:"Commencer la course", bridgerunner_wipedout:'Chute !',
     curriculum_daylabel_p1:'Programme du jour — Jour', curriculum_done_today:"✓ Fait aujourd'hui", curriculum_mark_done:'Marquer comme fait',
     curriculum_open_firsttool:'Ouvrir le premier outil du jour', curriculum_open_p1:'Ouvrir',
     dash_not_captured:'Pas encore mesuré — allez sur Recherche de tessiture', dash_recap_suffix:'Récapitulatif',
@@ -10218,6 +10240,14 @@ const TRANSLATIONS = {
     glider_coach_fell:"Vous êtes sorti d'une trouée. Chantez un peu avant que la trouée ne bouge, et tenez la note stable pour la traverser.",
     glider_coach_notakeoff:"Vous n'avez pas décollé. Chantez une note pour prendre votre envol.",
     glider_measure:"Votre hauteur de note, lue environ 60 fois par seconde, fixe votre altitude : le bas du parcours est le grave de votre tessiture enregistrée, le haut son aigu. Taisez-vous et vous tombez. Votre score est la distance parcourue ; une pièce compte quand vous la passez près du centre d'une trouée, et chacune à la suite augmente votre combo.",
+    bridge_line:"La voix de poitrine court dans la voie basse, la voix de tête dans la voie haute. Changez pour éviter les blocs ; trois chocs et la course s'arrête.",
+    game_hud_lives:"Vies",
+    bridge_lane_head:"Tête",
+    bridge_lane_chest:"Poitrine",
+    bridge_again_btn:"Recourir",
+    bridge_coach_hits:"Trois blocs touchés. Changez un peu plus tôt : le passage de la poitrine à la tête met un instant à être lu.",
+    bridge_coach_stopped:"Vous avez arrêté la course.",
+    bridge_measure:"Chaque image lit votre registre, poitrine ou tête, d'après la répartition de l'énergie de votre voix sur ses harmoniques : la même lecture que le Coach de registre. La poitrine vous met dans la voie basse, la tête dans la voie haute ; sans voix, vous restez où vous étiez. Les blocs arrivent au hasard dans l'une ou l'autre voie ; votre score est la distance parcourue.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11295,7 +11325,7 @@ const TRANSLATIONS = {
     boss_weaknote_p1:'Tu nota más débil en esta batalla fue', boss_weaknote_p2:'con', boss_weaknote_p3:'de precisión.',
     boss_weaknote_p4:'Entrena la nota de abajo y luego reta al jefe de nuevo.', boss_win_sub_p1:'Infligiste más daño del que recibiste. Salud restante:',
     breakthrough_detail_p1:'5 intentos correctos seguidos — antes promediabas', breakthrough_detail_p2:'. Algo acaba de hacer clic.',
-    bridgerunner_start_label:'Empezar a correr (Pro)', bridgerunner_wipedout:'¡Fuera de pista!',
+    bridgerunner_start_label:"Empezar a correr", bridgerunner_wipedout:'¡Fuera de pista!',
     curriculum_daylabel_p1:'Plan de hoy — Día', curriculum_done_today:'✓ Hecho hoy', curriculum_mark_done:'Marcar como hecho',
     curriculum_open_firsttool:'Abrir la primera herramienta de hoy', curriculum_open_p1:'Abrir',
     dash_not_captured:'Aún sin medir — visita el Buscador de Registro', dash_recap_suffix:'Resumen',
@@ -11872,6 +11902,14 @@ const TRANSLATIONS = {
     glider_coach_fell:"Te saliste de un hueco. Canta un poco antes de que el hueco se mueva y mantén la nota estable al cruzarlo.",
     glider_coach_notakeoff:"No despegaste. Canta cualquier nota para empezar a volar.",
     glider_measure:"Tu altura de nota, leída unas 60 veces por segundo, marca tu altura de vuelo: la parte baja del recorrido es el extremo grave de tu rango guardado y la alta, el agudo. Si callas, caes. Tu puntuación es la distancia volada; una moneda cuenta si la pasas cerca del centro de un hueco, y cada una seguida suma a tu combo.",
+    bridge_line:"La voz de pecho corre por el carril bajo y la de cabeza por el alto. Cambia para esquivar los bloques; tres golpes y la carrera termina.",
+    game_hud_lives:"Vidas",
+    bridge_lane_head:"Cabeza",
+    bridge_lane_chest:"Pecho",
+    bridge_again_btn:"Correr de nuevo",
+    bridge_coach_hits:"Tres bloques golpeados. Cambia un poco antes: el paso de pecho a cabeza tarda un momento en leerse.",
+    bridge_coach_stopped:"Detuviste la carrera.",
+    bridge_measure:"Cada fotograma lee tu registro, pecho o cabeza, según cómo se reparte la energía de tu voz entre sus armónicos: la misma lectura que el Coach de registro. El pecho te pone en el carril bajo y la cabeza en el alto; sin voz te quedas donde estabas. Los bloques llegan al azar por cualquier carril; tu puntuación es la distancia recorrida.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12949,7 +12987,7 @@ const TRANSLATIONS = {
     boss_weaknote_p1:'Bu savaştaki en zayıf notanız', boss_weaknote_p2:'oranı', boss_weaknote_p3:'doğruluk.',
     boss_weaknote_p4:'Aşağıdaki notayı çalışın, sonra boss ile tekrar karşılaşın.', boss_win_sub_p1:'Aldığınızdan daha fazla hasar verdiniz. Kalan can:',
     breakthrough_detail_p1:'Üst üste 5 doğru deneme — önceki ortalamanız', breakthrough_detail_p2:'idi. Az önce bir şey oturdu.',
-    bridgerunner_start_label:'Koşmaya başla (Pro)', bridgerunner_wipedout:'Düştünüz!',
+    bridgerunner_start_label:"Koşmaya başla", bridgerunner_wipedout:'Düştünüz!',
     curriculum_daylabel_p1:'Bugünün Programı — Gün', curriculum_done_today:'✓ Bugün tamamlandı', curriculum_mark_done:'Tamamlandı olarak işaretle',
     curriculum_open_firsttool:'Bugünün ilk aracını aç', curriculum_open_p1:'Aç:',
     dash_not_captured:"Henüz ölçülmedi — Ses Aralığı Bulucu'yu ziyaret edin", dash_recap_suffix:'Özeti',
@@ -13526,6 +13564,14 @@ const TRANSLATIONS = {
     glider_coach_fell:"Bir boşluktan çıktın. Boşluk kaymadan biraz önce söyle ve geçerken notayı sabit tut.",
     glider_coach_notakeoff:"Havalanmadın. Uçmaya başlamak için herhangi bir nota söyle.",
     glider_measure:"Saniyede yaklaşık 60 kez okunan perden yüksekliğini belirler: parkurun altı kayıtlı aralığının pes ucu, üstü tiz ucudur. Susarsan düşersin. Puanın ne kadar uçtuğundur; bir jeton, onu bir boşluğun ortasına yakın geçtiğinde sayılır ve art arda gelen her biri kombona eklenir.",
+    bridge_line:"Göğüs sesi alt şeritte, baş sesi üst şeritte koşar. Bloklardan kaçmak için geçiş yap; üç çarpmada koşu biter.",
+    game_hud_lives:"Can",
+    bridge_lane_head:"Baş",
+    bridge_lane_chest:"Göğüs",
+    bridge_again_btn:"Yeniden koş",
+    bridge_coach_hits:"Üç bloğa çarptın. Biraz daha erken geç: göğüsten başa geçişin okunması bir an sürer.",
+    bridge_coach_stopped:"Koşuyu durdurdun.",
+    bridge_measure:"Her karede, sesinin enerjisinin harmoniklerine nasıl dağıldığından registerin (göğüs ya da baş) okunur: Register Koçu ile aynı okuma. Göğüs seni alt şeride, baş üst şeride koyar; ses yoksa olduğun yerde kalırsın. Bloklar rastgele iki şeritten birine gelir; puanın ne kadar koştuğundur.",
   },
 };
 let currentLanguage = 'en';
@@ -21124,10 +21170,12 @@ async function startBridgeRunner(){
   if(!await openRegisterInput() || tok!==startGen) return;
   bridgeActive=true; bridgeScroll=0; bridgeLane='chest'; bridgeLives=3; bridgeScoreVal=0; bridgeObstacles=[]; bridgeLastSpawnWorldX=400;
   document.getElementById('bridgeGameOver').style.display='none';
-  document.getElementById('bridgeStartLabel').textContent='Running — tap to stop';
-  document.getElementById('bridgeStartBtn').classList.add('listening');
+  gameStartLive('bridgeStartBtn', 'bridgeStartLabel');
+  document.getElementById('bridgeHudBest').textContent = profile ? (progress.bridgeBest||0) : 0;
+  document.getElementById('bridgeLivesLabel').textContent = bridgeLives;
   recordActivity();
   bridgeLoop();
+  houseSession(()=>bridgeActive, document.getElementById('bridgeStage')); // it feeds the load itself (vlFeed in bridgeLoop)
 }
 function bridgeSpawnIfNeeded(){
   while(bridgeLastSpawnWorldX < bridgeScroll+700){
@@ -21161,27 +21209,29 @@ function bridgeLoop(){
     }
   });
 
-  ctx.fillStyle='#0a0908'; ctx.fillRect(0,0,W,H);
-  ctx.strokeStyle='#33301f'; ctx.lineWidth=1;
+  const col = gameColors();
+  ctx.fillStyle=col.bg; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle=col.rule; ctx.lineWidth=1; // the lanes: the ink scale
   ctx.beginPath(); ctx.moveTo(0,120); ctx.lineTo(W,120); ctx.stroke();
-  ctx.fillStyle='#8a8272'; ctx.font='11px monospace';
-  ctx.fillText('HEAD LANE', 10, 40);
-  ctx.fillText('CHEST LANE', 10, 210);
+  ctx.fillStyle=col.ink3; ctx.font='600 18px system-ui, sans-serif'; // read at 390 too (the canvas is drawn at 600 and scaled)
+  ctx.fillText(t('bridge_lane_head'), 10, 26);
+  ctx.fillText(t('bridge_lane_chest'), 10, 230);
 
   bridgeObstacles.forEach(o=>{
     const sx=o.worldX-bridgeScroll;
     if(sx<-30||sx>W+30) return;
-    ctx.fillStyle = o.lane==='chest' ? '#e8a33d' : '#4fd6c4';
+    ctx.fillStyle = col.miss; // blocks: hazards
     ctx.fillRect(sx-10, BRIDGE_LANE_Y[o.lane]-14, 20, 28);
   });
 
-  ctx.fillStyle='#f1ead9';
+  ctx.fillStyle = hitObstacle ? col.miss : col.voice; // you: the voice colour; a hit: miss
   ctx.beginPath(); ctx.arc(runnerScreenX, BRIDGE_LANE_Y[bridgeLane], 10, 0, Math.PI*2); ctx.fill();
 
-  document.getElementById('bridgeScoreLabel').textContent='Score: '+bridgeScoreVal;
+  document.getElementById('bridgeScoreLabel').textContent=bridgeScoreVal;
 
   if(hitObstacle){
     bridgeLives--;
+    document.getElementById('bridgeLivesLabel').textContent=Math.max(0, bridgeLives);
     if(bridgeLives<=0){ finishBridgeRunner(); return; }
   }
   bridgeRafId=requestAnimationFrame(bridgeLoop);
@@ -21190,8 +21240,7 @@ function finishBridgeRunner(){
   bridgeActive=false;
   vlEnd();
   cancelAnimationFrame(bridgeRafId);
-  document.getElementById('bridgeStartLabel').textContent=t('bridgerunner_start_label');
-  document.getElementById('bridgeStartBtn').classList.remove('listening');
+  gameStartIdle('bridgeStartBtn', 'bridgeStartLabel', 'bridgerunner_start_label');
   let isBest=false;
   if(profile){
     if(!progress.bridgeBest || bridgeScoreVal>progress.bridgeBest){
@@ -21203,13 +21252,16 @@ function finishBridgeRunner(){
       if(hadPriorBest) triggerNewRecord(t('record_popup_bridge_score'), bridgeScoreVal, `${delta>0?'+':''}${delta} ${t('record_delta_suffix')}`);
     }
   }
-  document.getElementById('bridgeGameOver').style.display='block';
-  document.getElementById('bridgeGameOverTitle').textContent = isBest ? t('game_new_best') : t('bridgerunner_wipedout');
-  document.getElementById('bridgeGameOverSub').textContent = `${t('game_score_p1')} ${bridgeScoreVal}` + (profile ? ` · ${t('game_best_p1')} ${progress.bridgeBest||bridgeScoreVal}` : ` · ${t('game_signin_savebest_short')}`);
+  document.getElementById('bridgeGameOver').style.display='';
+  document.getElementById('bridgeResultScore').textContent = bridgeScoreVal;
+  document.getElementById('bridgeGameOverTitle').textContent = isBest ? t('game_new_best') : t('game_score_label');
+  document.getElementById('bridgeGameOverSub').textContent = !profile ? t('game_signin_savebest_short') : (bridgeLives<=0 ? t('bridge_coach_hits') : t('bridge_coach_stopped'));
+  document.getElementById('bridgeResBest').textContent = profile ? (progress.bridgeBest||bridgeScoreVal) : '—';
   document.getElementById('bridgeBestLabelLive').textContent=t('game_best_p1')+' '+(profile?(progress.bridgeBest||0):0);
   registerExerciseCompletion();
 }
-function stopBridgeRunner(){ if(bridgeActive){ bridgeActive=false; cancelAnimationFrame(bridgeRafId); vlEnd(); } }
+function stopBridgeRunner(){ if(bridgeActive){ bridgeActive=false; cancelAnimationFrame(bridgeRafId); vlEnd(); } gameStartIdle('bridgeStartBtn', 'bridgeStartLabel', 'bridgerunner_start_label'); }
+document.getElementById('bridgeAgainBtn').addEventListener('click', ()=>{ if(!bridgeActive) startBridgeRunner(); });
 document.getElementById('bridgeStartBtn').addEventListener('click', ()=>{
   if(bridgeActive) finishBridgeRunner(); else startBridgeRunner();
 });
@@ -21653,7 +21705,7 @@ function stopAllActiveSessions(){
   stopBackingPad();
   stopGlider();
   bossActive = false;
-  bridgeActive = false;
+  stopBridgeRunner();
   harmonyActive = false;
   if(typeof stopResonanceVisualizer==='function' && resonanceActive) stopResonanceVisualizer(); // 4b: the button and readings reset
   resonanceActive = false;

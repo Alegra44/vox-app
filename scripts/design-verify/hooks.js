@@ -40,6 +40,9 @@ const ALLOWED_REMOVALS = {
   'data-i18n=action_start_pro': 'phase 6 §2.1: the Songs tools\' Start reads "Start" with access, set by renderSongsStartLabels (Harmony Arena\'s keeps it)',
   'data-i18n=glider_step_label': 'phase 8 §2.3: the step label (with its emoji) gives way to the page head (mark, title, one line); key stays in TRANSLATIONS',
   'data-i18n=glider_course_desc': 'phase 8 §2.3: the line about "7 real courses" goes; the page has one line (glider_line); key stays in TRANSLATIONS',
+  'data-i18n=bridge_step_label': 'phase 8 §2.4: the step label gives way to the page head (mark, title, one line); key stays in TRANSLATIONS',
+  'data-i18n=bridge_reuses_tag': 'phase 8 §2.4: the REUSES … ENGINE tags go (PHASE8.md 2.3-2.7); key stays in TRANSLATIONS',
+  'data-i18n=bridge_h2': "phase 8 §2.4: the lanes are told in the page's one line (bridge_line); key stays in TRANSLATIONS",
 };
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {
