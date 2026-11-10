@@ -12,9 +12,11 @@ const ROOT = path.resolve(__dirname, '../..'), DEPLOY = path.join(ROOT, 'deploy'
 const REMOTE = process.env.DV_URL || null, PAGE_URL = REMOTE || LOCAL;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// The build to serve: null = the working copy's deploy/, or a git ref whose deploy/ files are written to a temp dir.
+// The build to serve: null = the working copy's deploy/, or a git ref whose deploy/ files are written to a temp dir, or a
+// site URL (https://…, production), returned as it is: openPage opens that site for this side only.
 function buildDir(ref) {
   if (!ref) return DEPLOY;
+  if (/^https?:\/\//.test(ref)) return ref;
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'vc-design-'));
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', ref, 'deploy/'], { cwd: ROOT, encoding: 'utf8' }).split('\n').filter(Boolean);
   for (const f of files) fs.writeFileSync(path.join(dir, path.basename(f)), execFileSync('git', ['show', `${ref}:${f}`], { cwd: ROOT, maxBuffer: 64 << 20 }));
@@ -38,9 +40,13 @@ const panelKeys = page => page.evaluate(() => [...document.querySelectorAll('.pa
 // dir may also be a site URL (https://…): that site is opened as it is, like DV_URL, for this page only.
 // prepare(ctx) is awaited before the page opens (extra routes and init scripts: synthmic.js).
 async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en', prepare } = {}) {
+  const site = /^https?:\/\//.test(dir) ? dir : REMOTE;
+  if (site && storageState && typeof storageState === 'object' && storageState.origins) { // a session made on the local side: copied to the site's origin
+    const o = new URL(site).origin;
+    if (!storageState.origins.some(x => x.origin === o)) storageState = { ...storageState, origins: [...storageState.origins, ...storageState.origins.map(x => ({ ...x, origin: o }))] };
+  }
   const ctx = await b.newContext({ viewport, deviceScaleFactor: 1, ...(storageState ? { storageState } : {}),
     colorScheme: scheme || (theme === 'light' ? 'light' : 'dark'), ...(reducedMotion ? { reducedMotion } : {}) });
-  const site = /^https?:\/\//.test(dir) ? dir : REMOTE;
   if (!site) await ctx.route(LOCAL + '**', r => {
     const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html', f = path.join(dir, p);
     if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });
