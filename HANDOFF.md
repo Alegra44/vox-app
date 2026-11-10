@@ -638,6 +638,20 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
     button. Vocal Lab stays a Coach tool. `.legacy-tabs` goes in phase 10.
   - Expression is no longer offered as an onboarding priority; accounts that chose it keep it, nothing is migrated.
   - Share posters are always paper (light) in both themes, so a shared image looks the same whoever made it.
+- **Built and checked, 2026-11-10; waiting on the user's review of the shots.** redesign/phase9 at fae5ef9 (pushed):
+  step 0, the guards (a46ce64), 2.1–2.11 one commit each, then review fixes (9a3e94e, 19bf82d, fae5ef9). §3: all 20
+  checks pass (logs on review/phase9 `checks/`); states9's 9 differences are all expected (Teacher button and
+  dashboard, Expression, Vocal Lab's back row). review/phase9 (orphan, pushed): before | after contact sheets per
+  combo, every shot, the exported poster PNGs, states.json, notes.txt. Run the checks with
+  `bash scripts/design-verify/checks9.sh all` (AC power, one at a time, ~3 h).
+- **Found on master (= production), to tell the user, not changed in phase 9:** an empty Feedback submit inserts a
+  blank row (hasAnyContent counts submittedAt); voice types read in English on Range Finder and Profile (translated
+  only on the poster); Pricing's Choir plan still lists "Director dashboard", which is hidden. **Fixed by phase 9:**
+  the poster export failed on every poster (html2canvas can't draw color-mix).
+- **Kept as on master:** the moment sheets still close on their own timers (Continue closes sooner); a breakthrough
+  can fire mid-exercise. Sonic X-Ray's paywall title reads "Song Lab" (its Choir World section).
+- Six feedback rows the first states9/feedback runs inserted into public.feedback were deleted by id; both scripts
+  now stub the insert (feedback.js inserts one real row, reads it back and deletes it).
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
