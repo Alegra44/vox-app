@@ -14243,6 +14243,21 @@ function t(key){
 function localeForLang(){
   return {en:'en-US', fr:'fr-FR', es:'es-ES', tr:'tr-TR'}[currentLanguage] || 'en-US';
 }
+// Phase 10 A1: dates in English follow the device's region (navigator.language): month-day only for en-US (and a
+// device with no region); every other region, English or not (en-GB, en-IN, en-AU, de-DE…), gets 'en-<region>' when
+// Intl writes it day-month, else en-GB. French, Spanish and Turkish keep the locale each call used before (prev). Numbers keep
+// localeForLang.
+function dateLocale(prev){
+  if(currentLanguage!=='en') return prev;
+  try{
+    const region = new Intl.Locale(navigator.language || 'en-US').region;
+    if(!region || region==='US') return 'en-US';
+    const loc = 'en-' + region;
+    if(!Intl.DateTimeFormat.supportedLocalesOf([loc]).length) return 'en-GB';
+    const order = new Intl.DateTimeFormat(loc, {day:'numeric', month:'long'}).formatToParts(new Date(2026,10,3)).map(p=>p.type).filter(t=>t==='day'||t==='month');
+    return order[0]==='day' ? loc : 'en-GB'; // en-CA and en-PH write month first in Intl: day-month all the same
+  }catch(e){ return 'en-US'; }
+}
 function applyTranslations(){
   // the page's language, so CSS uppercase follows its rules (Turkish i → İ); runs on load and on every switch
   document.documentElement.lang = currentLanguage;
@@ -14742,7 +14757,7 @@ function renderDashboard(){
   days.forEach(d=>{
     const count = progress.history[d]||0;
     const heightPct = Math.max(4, (count/maxCount)*100);
-    const dayLabel = new Date(d).toLocaleDateString(localeForLang(),{weekday:'narrow'});
+    const dayLabel = new Date(d).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
     const col = document.createElement('div');
     col.className='bar-col';
     col.innerHTML = `<div class="bar${count>0?' active':''}" style="height:${heightPct}%"></div><div class="day-label">${dayLabel}</div>`;
@@ -14829,7 +14844,7 @@ function renderPosterKeys(loMidi, hiMidi){
 }
 
 document.getElementById('shareRecapBtn').addEventListener('click', ()=>{
-  const monthName = new Date().toLocaleDateString(localeForLang(),{month:'long'});
+  const monthName = new Date().toLocaleDateString(dateLocale(localeForLang()),{month:'long'});
   document.getElementById('posterRecapMonth').textContent = t('poster_recap_label_tpl').replace('{month}', monthName);
   document.getElementById('posterStreak').textContent = progress.streak||0;
   document.getElementById('posterStreakUnit').textContent = t((progress.streak||0)===1 ? 'poster_streak_one' : 'poster_streak_other');
@@ -18484,7 +18499,7 @@ async function ycExport(){
 }
 
 // A take's date and time, through Intl in the current language (e.g. "Nov 3, 2:26 PM" in English)
-const ycWhen = ms=>new Intl.DateTimeFormat(localeForLang(), {day:'numeric', month:'short', hour:'numeric', minute:'2-digit'}).format(new Date(ms));
+const ycWhen = ms=>new Intl.DateTimeFormat(dateLocale(localeForLang()), {day:'numeric', month:'short', hour:'numeric', minute:'2-digit'}).format(new Date(ms));
 function ycPeaksHtml(takes){
   const list = YC_PARTS.filter(p=>takes[p]).map(p=>t('yc_peak_item_tpl').replace('{part}', partName(p))
     .replace('{db}', (20*Math.log10(takes[p].peak)).toLocaleString(localeForLang(), {maximumFractionDigits:1, minimumFractionDigits:1})));
@@ -19210,7 +19225,7 @@ function cpRunLabel(r){
   const dir = String(r.slot).replace(/\d+$/, ''), rung = +String(r.slot).replace(/^\D+/, '');
   return `${t('tk_title')} · ${tkRungText(rung, dir)}`;
 }
-const cpDate = ts=>new Date(ts).toLocaleDateString(localeForLang(), {year:'numeric', month:'short', day:'numeric'});
+const cpDate = ts=>new Date(ts).toLocaleDateString(dateLocale(localeForLang()), {year:'numeric', month:'short', day:'numeric'});
 function renderChoirPassport(){
   const empty = document.getElementById('cpEmpty'), content = document.getElementById('cpContent');
   if(!empty || !content) return;
@@ -20316,7 +20331,7 @@ function renderVoiceHealthChart(elId, type){
   wrap.innerHTML = days.map((d,i)=>{
     const v = values[i];
     const heightPct = v!==null ? Math.max(8,(v/maxVal)*100) : 8;
-    const dayLabel = new Date(d).toLocaleDateString(localeForLang(),{weekday:'narrow'});
+    const dayLabel = new Date(d).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
     return `<div class="h-bar-col"><div class="h-bar${v!==null?' has-data':' no-data'}" style="height:${heightPct}%" title="${v!==null?v+'%':t('voicehealth_nodata_tooltip')}"></div><div class="h-day-label">${dayLabel}</div></div>`;
   }).join('');
   return values;
@@ -20337,7 +20352,7 @@ async function renderVoiceHealthLoad(){
     const values = days.map(d=>d===today ? pct : (vhLoadCache[uid+d]!==undefined ? vhLoadCache[uid+d] : null));
     chart.innerHTML = days.map((d,i)=>{
       const v = values[i], h = v!==null && v>0 ? Math.max(8, Math.min(100, v)) : 8;
-      const dayLabel = new Date(d).toLocaleDateString(localeForLang(),{weekday:'narrow'});
+      const dayLabel = new Date(d).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
       const tip = v!==null ? t('vl_gauge_pct_tpl').replace('{p}', Math.round(v)) : t('voicehealth_nodata_tooltip');
       return `<div class="h-bar-col"><div class="h-bar${v!==null && v>0 ? ' has-data' : v===0 ? ' zero' : ' no-data'}" style="height:${h}%" title="${tip}"></div><div class="h-day-label">${dayLabel}</div></div>`;
     }).join('');
@@ -22571,7 +22586,7 @@ function renderHomeScreen(){
   const greetWord = hour<12 ? t('home_greeting_morning') : hour<18 ? t('home_greeting_afternoon') : t('home_greeting_evening');
   document.getElementById('homeGreeting').textContent = profile ? `${greetWord}, ${profile.name}` : greetWord;
   document.getElementById('homeStreakLine').textContent = profile ? `${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}` : t('home_signin_streak');
-  document.getElementById('homeDate').textContent = new Intl.DateTimeFormat(currentLanguage, {weekday:'long', day:'numeric', month:'long'}).format(new Date());
+  document.getElementById('homeDate').textContent = new Intl.DateTimeFormat(dateLocale(currentLanguage), {weekday:'long', day:'numeric', month:'long'}).format(new Date());
   document.getElementById('homePickup').hidden = !profile;
   document.getElementById('homePickupLabel').hidden = !profile;
   document.getElementById('homeNumbers').hidden = true; // shown below once the focus block is
@@ -22657,7 +22672,7 @@ function renderHomeScreen(){
   }
 
   document.getElementById('homeContinueText').textContent = progress.lastPracticeDate
-    ? `${t('home_continue_p1')} ${new Intl.DateTimeFormat(currentLanguage, {day:'numeric', month:'long'}).format(new Date(...progress.lastPracticeDate.split('-').map((v,i)=>i===1?v-1:+v)))} · ${progress.totalSessions||0} ${t('home_continue_p2')}`
+    ? `${t('home_continue_p1')} ${new Intl.DateTimeFormat(dateLocale(currentLanguage), {day:'numeric', month:'long'}).format(new Date(...progress.lastPracticeDate.split('-').map((v,i)=>i===1?v-1:+v)))} · ${progress.totalSessions||0} ${t('home_continue_p2')}`
     : t('home_continue_none');
 
   const {level}=levelForXp(progress.xp||0);
@@ -24509,7 +24524,7 @@ function timelineLabel(e){
 }
 function timelineDate(e){
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(e.date || ''); if(!m) return e.date || '';
-  return new Intl.DateTimeFormat(localeForLang(), {day:'numeric', month:'short', year:'numeric'}).format(new Date(+m[1], +m[2]-1, +m[3]));
+  return new Intl.DateTimeFormat(dateLocale(localeForLang()), {day:'numeric', month:'short', year:'numeric'}).format(new Date(+m[1], +m[2]-1, +m[3]));
 }
 
 function renderVoiceFingerprint(svgId, noteId){
@@ -25336,7 +25351,7 @@ function renderStudioTakes(){
     wrap.innerHTML = `<p class="desc" style="color:var(--muted);">${t('studio_notakes')}</p>`;
     return;
   }
-  const when = iso=>{ try{ return new Intl.DateTimeFormat(currentLanguage, {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'}).format(new Date(iso)); }catch(e){ return ''; } };
+  const when = iso=>{ try{ return new Intl.DateTimeFormat(dateLocale(currentLanguage), {month:'short', day:'numeric', hour:'numeric', minute:'2-digit'}).format(new Date(iso)); }catch(e){ return ''; } };
   wrap.innerHTML = takes.map((take,i)=>`
     <div class="studio-take">
       <div class="studio-take-head"><span><span class="vc-label">${t('studio_take_label')} ${String(i+1).padStart(2,'0')}</span><span class="hl-item-meta">${when(take.recordedAt)}</span></span>
