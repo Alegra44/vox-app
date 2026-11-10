@@ -25,9 +25,11 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-08:
-phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk (master 0c39e09; test-script commits b13d79d, 374bc33 after it); the rollback
-target for the next deploy. The table above predates phase 5; `review/phase7-prod` is the current review branch.
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-09:
+phase 8, **dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx** (deployed by the user from `redesign/phase8` 547dbf7), **the rollback
+target for phase 9**. master is still phase 7 (1fca2ec) until the user types "deploy" (then: --no-ff merge of
+redesign/phase8, secret check, push). The previous target was phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk. The table
+above predates phase 5; `review/phase8-prod` is the current review branch.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -555,7 +557,7 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
 - Follow-up from the phase 7 deploy: scores.js's Voice Quality centroid gate (±2 Hz) is tighter than its A/A noise.
   **Decided in PHASE8.md:** no rollback was right; done in scores.js (below).
 
-### Phase 8 (`redesign/phase8`, spec `PHASE8.md`, given 2026-11-09)
+### Phase 8 (`redesign/phase8`, spec `PHASE8.md`, given 2026-11-09): LIVE 2026-11-09, dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx
 - **Decisions (PHASE8.md "DECISIONS"):**
   - scores4b: not rolling back phase 7 was right. From now on Voice Quality's centroid, and any value whose own noise
     is wider than ±2, is gated by master's A/A range or ±1% of master's median, whichever is wider (scores.js SPREAD;
@@ -612,6 +614,20 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
     390 all six numbers in view), hooks 21/0, copyscan --world 0/0/0, contrast --panels arcade,choir,partrehearsal,
     choirpassport,aiduet 0 of 434 per theme, bootcheck 9/0. Screenshots: review/phase8, folder 8.1/. Waiting for
     review: no merge, no deploy.
+- **8.2** (PHASE8.md "8.2"): 547dbf7, the Range Phoenix replaced exactly with the user's drawing; marks sheet looked at
+  (a bird at 24 px, Light and Dark), hooks 21/0, bootcheck 9/0.
+- **Deployed 2026-11-09** by the user from deploy/ (first `vercel deploy --prod` "Not authorized", the retry deployed):
+  dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx, deploy-di7cgbnem-alegra1122.vercel.app. The main address was checked before the
+  checks: byte-identical page (same etag), same vocal-load scripts, the 8.2 Phoenix in it; no promote needed.
+- **Production checks** against deploy-alegra1122 (review/phase8-prod, notes.txt): prod.sh WITH_CHOIR=1 SCORES_BASE=
+  master (log prod-2026-11-09T17-16-30; SCORES_BASE set explicitly because master isn't merged and the default would
+  pick phase 6), gamestates --branch-url, checkout DV_URL. 45 of 52 passed first; the rest passed on rerun, none
+  repeated: scores, cv-p5, cv-p10 and gamestates sign-up timeouts (Supabase auth; a probe signed up 3/3 in 2–4 s;
+  gamestates' own was on the local master page), gamestates and checkout ERR_INTERNET_DISCONNECTED, live Resonance
+  ripple once, scores4b a different reading each run (brightness, then Register Drills chest %) then a clean third
+  run; neither tool's code differs from master. No rollback. 0 test accounts left.
+- Deleted after the checks (8.2 §3): review/phase8, review/phase8-part1, review/phase8-before, review/phase7-prod,
+  review/phase7-part1. Open: the master merge on "deploy".
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
