@@ -2622,6 +2622,25 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .poster .p-footer{display:flex;align-items:center;justify-content:flex-start;margin-top:auto;padding-top:16px;}
   .poster .p-footer .wordmark{font-size:14px;font-weight:700;color:#111316;letter-spacing:.01em;}
   .share-actions .hl-btn{min-width:120px;}
+
+  /* ---- PHASE 9 (2.10): Vocal Lab as a Coach tool: the tiers as rows with bars on one keyboard axis ---- */
+  .vlab-back{margin-bottom:var(--hl-s2);background:none;border:0;cursor:pointer;font-family:var(--hl-font);}
+  #panel-vocallab .vlab-row{padding:var(--hl-s4) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  #panel-vocallab .vlab-row:first-child{border-top:0;padding-top:0;}
+  .vlab-row-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--hl-s3);}
+  #panel-vocallab .vlab-row-label{font-size:var(--hl-t-body);font-weight:600;font-stretch:var(--hl-w-normal);color:var(--hl-ink);}
+  #panel-vocallab .vlab-row-notes{font-size:var(--hl-t-body);color:var(--hl-ink);margin:0;}
+  #panel-vocallab .vlab-row-sub{font-size:var(--hl-t-small);color:var(--hl-ink-3);margin:2px 0 var(--hl-s2);}
+  #panel-vocallab .vlab-track{display:flex;height:22px;gap:1px;background:none;border:0;border-radius:0;overflow:hidden;}
+  .vlab-key{flex:1;display:block;background:var(--hl-sunk);}
+  .vlab-key.b{background:var(--hl-rule-strong);}
+  .vlab-key.on{background:var(--hl-voice);}
+  .vlab-key.b.on{background:var(--hl-voice);box-shadow:inset 0 -8px 0 var(--hl-ink);}
+  .vlab-nodata{margin:0;}
+  .vlab-axis{position:relative;height:18px;margin:var(--hl-s1) 0 var(--hl-s4);font-size:var(--hl-t-label);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
+  .vlab-axis span{position:absolute;transform:translateX(-50%);}
+  #vocalLabNoteCount{margin:0 0 var(--hl-s2);}
+  #vocalLabEmpty{margin:0;}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
@@ -5037,14 +5056,16 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <!-- VOCAL LAB PANEL -->
   <section class="panel" id="panel-vocallab">
+    <button type="button" class="gw-back vlab-back" id="vocalLabBackBtn"><svg class="hl-icon hl-icon--s gw-back-chev" aria-hidden="true"><use href="#hl-chev"/></svg><span data-i18n="nav_train">Coach</span></button>
     <div class="journey-hero">
       <div class="j-title" data-i18n="vocallab_title">Vocal Lab</div>
-      <div class="j-sub" data-i18n="vocallab_sub">Not one range number — three. A note you hit once isn't the same as a note you can rely on. Every tier here comes from real captured attempts, not a guess.</div>
+      <div class="j-sub" data-i18n="vocallab_sub">Not one range number but three. A note you hit once isn't the same as a note you can rely on.</div>
     </div>
     <div class="key-card">
-      <div id="vocalLabEmpty" style="display:none;color:var(--muted);"></div>
+      <p class="hl-meta" id="vocalLabEmpty" style="display:none;"></p>
       <div id="vocalLabRangesCard" style="display:none;"></div>
-      <p class="fine-print" id="vocalLabNoteCount" style="margin-top:16px;"></p>
+      <p class="hl-meta" id="vocalLabNoteCount"></p>
+      <details class="hl-measure vlab-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="vocallab_measure">Extended: the lowest and highest notes the Range Finder heard. Comfortable: every note you've sung at least once with 55% accuracy or better. Reliable: notes with 3 or more attempts averaging 75% or better. From your Pitch Match, Custom Challenge, Boss Arena and Rift attempts.</p></details>
     </div>
   </section>
 
@@ -7327,7 +7348,7 @@ const TRANSLATIONS = {
     emotionmode_differences_label:"Measured differences",
     emotionmode_retry_btn:'Try two different intentions',
     vocallab_title:'Vocal Lab',
-    vocallab_sub:"Not one range number but three. A note you hit once isn't the same as a note you can rely on. Every tier comes from your captured attempts.",
+    vocallab_sub:"Not one range number but three. A note you hit once isn't the same as a note you can rely on.",
     passport_title:"Vocal Passport",
     passport_sub:'Your long-term identity, consolidated in one place. Every field here is pulled from data already tracked elsewhere — nothing new is measured, nothing is invented to fill a gap.',
     passport_identity_label:'Identity',
@@ -8349,13 +8370,13 @@ const TRANSLATIONS = {
     skilltree_fullyunlocked:'Vocal Master — fully unlocked',
     skilltree_fullyunlocked_desc:"Every node shows a skill level you hold now, not a one-time achievement: it can drop if a category's recent average drops.",
     skilltree_keeppracticing:'Keep practicing across categories — nodes further up the tree need their parent nodes unlocked first.',
-    vocallab_signin:'Sign in to start building your real Vocal Lab data.',
+    vocallab_signin:"Sign in to build your Vocal Lab.",
     vocallab_needrangefinder:'Run the Range Finder at least once to establish your Extended range — everything else builds from there.',
     vocallab_extended:'Extended', vocallab_extended_sub:'What you can physically reach',
     vocallab_comfortable:'Comfortable', vocallab_comfortable_sub:"Sung accurately at least once",
     vocallab_reliable:'Reliable', vocallab_reliable_sub:"3+ attempts, consistently accurate",
-    vocallab_notenoughdata:'not enough data yet',
-    vocallab_notecount_suffix:"distinct notes tracked from your Pitch Match, Custom Challenge, Boss Battle and Vocal Rift attempts.",
+    vocallab_notenoughdata:"Not enough data yet",
+    
     passport_signin:"Sign in to start your Vocal Passport.",
     passport_needrangefinder:"Run the Range Finder and a few exercises first: your Passport is built from them.",
     passport_notenoughdata:'Not enough data yet', passport_singfulltake:'Sing a full take in Karaoke Coach to set this',
@@ -8842,6 +8863,9 @@ const TRANSLATIONS = {
     voicetype_alto:"Alto",
     voicetype_mezzosoprano:"Mezzo-soprano",
     voicetype_soprano:"Soprano",
+    vocallab_notes_one:"1 note tracked",
+    vocallab_notes_other:"{n} notes tracked",
+    vocallab_measure:"Extended: the lowest and highest notes the Range Finder heard. Comfortable: every note you've sung at least once with 55% accuracy or better. Reliable: notes with 3 or more attempts averaging 75% or better. From your Pitch Match, Custom Challenge, Boss Arena and Rift attempts.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9108,7 +9132,7 @@ const TRANSLATIONS = {
     emotionmode_differences_label:"Différences mesurées",
     emotionmode_retry_btn:'Essayer deux intentions différentes',
     vocallab_title:'Labo Vocal',
-    vocallab_sub:"Pas un chiffre de tessiture, mais trois. Une note atteinte une fois n'est pas une note sur laquelle vous pouvez compter. Chaque niveau vient de vos tentatives enregistrées.",
+    vocallab_sub:"Pas une seule tessiture, mais trois. Une note atteinte une fois n'est pas une note sur laquelle compter.",
     passport_title:"Passeport vocal",
     passport_sub:'Votre identité à long terme, consolidée en un seul endroit. Chaque champ ici est tiré de données déjà suivies ailleurs — rien de nouveau n\'est mesuré, rien n\'est inventé pour combler un vide.',
     passport_identity_label:'Identité',
@@ -10130,13 +10154,13 @@ const TRANSLATIONS = {
     skilltree_fullyunlocked:'Maître vocal — entièrement débloqué',
     skilltree_fullyunlocked_desc:"Chaque nœud montre un niveau que vous tenez maintenant, pas un succès ponctuel : il peut baisser si la moyenne récente d'une catégorie baisse.",
     skilltree_keeppracticing:'Continuez à pratiquer dans toutes les catégories — les nœuds plus haut dans l\'arbre nécessitent d\'abord leurs nœuds parents débloqués.',
-    vocallab_signin:'Connectez-vous pour commencer à construire vos vraies données de Laboratoire vocal.',
+    vocallab_signin:"Connectez-vous pour construire votre Vocal Lab.",
     vocallab_needrangefinder:'Lancez le Détecteur de tessiture au moins une fois pour établir votre tessiture étendue — tout le reste se construit à partir de là.',
     vocallab_extended:'Étendue', vocallab_extended_sub:'Ce que vous pouvez physiquement atteindre',
     vocallab_comfortable:'Confortable', vocallab_comfortable_sub:"Chantée juste au moins une fois",
     vocallab_reliable:'Fiable', vocallab_reliable_sub:"3+ tentatives, toujours justes",
-    vocallab_notenoughdata:'pas encore assez de données',
-    vocallab_notecount_suffix:"notes distinctes suivies depuis vos tentatives de Pitch Match, Défi personnalisé, Combat de boss et Faille vocale.",
+    vocallab_notenoughdata:"Pas encore assez de données",
+    
     passport_signin:"Connectez-vous pour commencer votre passeport vocal.",
     passport_needrangefinder:"Faites d'abord le Détecteur de tessiture et quelques exercices : votre passeport en est construit.",
     passport_notenoughdata:'Pas encore assez de données', passport_singfulltake:'Chantez une prise complète dans Karaoke Coach pour définir ceci',
@@ -10623,6 +10647,9 @@ const TRANSLATIONS = {
     voicetype_alto:"Alto",
     voicetype_mezzosoprano:"Mezzo-soprano",
     voicetype_soprano:"Soprano",
+    vocallab_notes_one:"1 note suivie",
+    vocallab_notes_other:"{n} notes suivies",
+    vocallab_measure:"Étendue : les notes la plus grave et la plus aiguë entendues par la Recherche de tessiture. Confortable : chaque note chantée au moins une fois avec 55 % de justesse ou plus. Fiable : les notes avec 3 essais ou plus, en moyenne à 75 % ou plus. D'après vos essais en Justesse, Défi personnalisé, Arène des boss et la Faille.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10889,7 +10916,7 @@ const TRANSLATIONS = {
     emotionmode_differences_label:"Diferencias medidas",
     emotionmode_retry_btn:'Prueba dos intenciones diferentes',
     vocallab_title:'Laboratorio Vocal',
-    vocallab_sub:"No un número de rango, sino tres. Una nota que alcanzas una vez no es una nota en la que puedes confiar. Cada nivel sale de tus intentos registrados.",
+    vocallab_sub:"No un rango, sino tres. Una nota que alcanzas una vez no es una nota en la que puedas confiar.",
     passport_title:"Pasaporte vocal",
     passport_sub:'Tu identidad a largo plazo, consolidada en un solo lugar. Cada campo aquí se extrae de datos ya rastreados en otro lugar — nada nuevo se mide, nada se inventa para llenar un vacío.',
     passport_identity_label:'Identidad',
@@ -11911,13 +11938,13 @@ const TRANSLATIONS = {
     skilltree_fullyunlocked:'Maestro vocal — totalmente desbloqueado',
     skilltree_fullyunlocked_desc:"Cada nodo muestra un nivel que tienes ahora, no un logro de una vez: puede bajar si baja la media reciente de una categoría.",
     skilltree_keeppracticing:'Sigue practicando en todas las categorías — los nodos más arriba en el árbol necesitan que sus nodos padres estén desbloqueados primero.',
-    vocallab_signin:'Inicia sesión para empezar a construir tus datos reales de Laboratorio Vocal.',
+    vocallab_signin:"Inicia sesión para crear tu Vocal Lab.",
     vocallab_needrangefinder:'Ejecuta el Buscador de rango al menos una vez para establecer tu rango extendido — todo lo demás se construye desde ahí.',
     vocallab_extended:'Extendido', vocallab_extended_sub:'Lo que puedes alcanzar físicamente',
     vocallab_comfortable:'Cómodo', vocallab_comfortable_sub:"Cantada con precisión al menos una vez",
     vocallab_reliable:'Fiable', vocallab_reliable_sub:"3+ intentos, precisos de forma constante",
-    vocallab_notenoughdata:'aún no hay suficientes datos',
-    vocallab_notecount_suffix:"notas distintas registradas de tus intentos de Precisión de nota, Desafío personalizado, Combate de jefe y Grieta Vocal.",
+    vocallab_notenoughdata:"Aún no hay suficientes datos",
+    
     passport_signin:"Inicia sesión para empezar tu pasaporte vocal.",
     passport_needrangefinder:"Haz primero el Buscador de rango y algunos ejercicios: tu pasaporte se construye con ellos.",
     passport_notenoughdata:'Aún no hay suficientes datos', passport_singfulltake:'Canta una toma completa en Karaoke Coach para fijar esto',
@@ -12404,6 +12431,9 @@ const TRANSLATIONS = {
     voicetype_alto:"Alto",
     voicetype_mezzosoprano:"Mezzosoprano",
     voicetype_soprano:"Soprano",
+    vocallab_notes_one:"1 nota registrada",
+    vocallab_notes_other:"{n} notas registradas",
+    vocallab_measure:"Extendido: las notas más grave y más aguda que oyó el Buscador de Registro. Cómodo: cada nota que cantaste al menos una vez con un 55 % de precisión o más. Fiable: notas con 3 intentos o más y una media del 75 % o más. A partir de tus intentos en Afinación, Desafío personalizado, Arena de jefes y la Grieta.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12670,7 +12700,7 @@ const TRANSLATIONS = {
     emotionmode_differences_label:"Ölçülen farklar",
     emotionmode_retry_btn:'İki farklı niyet deneyin',
     vocallab_title:'Vokal Laboratuvarı',
-    vocallab_sub:"Tek bir aralık sayısı değil, üç. Bir kez ulaştığınız nota, güvenebileceğiniz bir nota değildir. Her katman kaydedilen denemelerinizden gelir.",
+    vocallab_sub:"Tek bir aralık değil, üç. Bir kez ulaştığın nota, güvenebileceğin nota değildir.",
     passport_title:"Vokal Pasaportu",
     passport_sub:'Uzun vadeli kimliğiniz, tek bir yerde birleştirilmiş. Buradaki her alan başka yerde zaten izlenen verilerden alınır — yeni hiçbir şey ölçülmez, bir boşluğu doldurmak için hiçbir şey uydurulmaz.',
     passport_identity_label:'Kimlik',
@@ -13692,13 +13722,13 @@ const TRANSLATIONS = {
     skilltree_fullyunlocked:'Vokal Ustası — tamamen açıldı',
     skilltree_fullyunlocked_desc:"Her düğüm şu an sahip olduğun bir seviyeyi gösterir, tek seferlik bir başarıyı değil: bir kategorinin son ortalaması düşerse düşebilir.",
     skilltree_keeppracticing:'Tüm kategorilerde pratik yapmaya devam edin — ağaçta daha yukarıdaki düğümler önce ebeveyn düğümlerinin açılmasını gerektirir.',
-    vocallab_signin:'Gerçek Vokal Laboratuvarı verilerinizi oluşturmaya başlamak için oturum açın.',
+    vocallab_signin:"Vocal Lab'ini oluşturmak için giriş yap.",
     vocallab_needrangefinder:'Genişletilmiş ses aralığınızı belirlemek için Ses Aralığı Bulucu\'yu en az bir kez çalıştırın — diğer her şey buradan inşa edilir.',
     vocallab_extended:'Genişletilmiş', vocallab_extended_sub:'Fiziksel olarak ulaşabildikleriniz',
     vocallab_comfortable:'Rahat', vocallab_comfortable_sub:"En az bir kez doğru söylendi",
     vocallab_reliable:'Güvenilir', vocallab_reliable_sub:"3+ deneme, tutarlı şekilde doğru",
-    vocallab_notenoughdata:'henüz yeterli veri yok',
-    vocallab_notecount_suffix:"farklı nota; Nota Eşleştirme, Özel Meydan Okuma, Boss Battle ve Vokal Yarığı denemelerinizden takip edildi.",
+    vocallab_notenoughdata:"Henüz yeterli veri yok",
+    
     passport_signin:"Vokal Pasaportunu başlatmak için giriş yap.",
     passport_needrangefinder:"Önce Ses Aralığı Bulucu'yu ve birkaç egzersizi yap: pasaportun bunlardan oluşur.",
     passport_notenoughdata:'Henüz yeterli veri yok', passport_singfulltake:'Bunu belirlemek için Karaoke Coach\'ta tam bir performans söyleyin',
@@ -14185,6 +14215,9 @@ const TRANSLATIONS = {
     voicetype_alto:"Alto",
     voicetype_mezzosoprano:"Mezzosoprano",
     voicetype_soprano:"Soprano",
+    vocallab_notes_one:"1 nota izlendi",
+    vocallab_notes_other:"{n} nota izlendi",
+    vocallab_measure:"Geniş: Ses Aralığı Bulucu'nun duyduğu en pes ve en tiz notalar. Rahat: en az bir kez %55 ya da daha iyi doğrulukla söylediğin her nota. Güvenilir: en az 3 denemede ortalaması %75 ya da üstü olan notalar. Perde Eşleme, Özel Meydan Okuma, Boss Arenası ve Yarık denemelerinden.",
   },
 };
 let currentLanguage = 'en';
@@ -24304,29 +24337,27 @@ function renderVocalLab(){
   if(!tiers.extended){ card.style.display='none'; empty.style.display='block'; empty.textContent=t('vocallab_needrangefinder'); return; }
   card.style.display='block'; empty.style.display='none';
 
-  // shared scale across all three bars — spans the widest real data we have, with a little margin
+  // the shared scale: the widest data we have, a semitone of margin each side, drawn as keys (phase 9, 2.10)
   const allLows = [tiers.extended.lowMidi, tiers.comfortable?.lowMidi, tiers.reliable?.lowMidi].filter(v=>v!=null);
   const allHighs = [tiers.extended.highMidi, tiers.comfortable?.highMidi, tiers.reliable?.highMidi].filter(v=>v!=null);
   const scaleLow = Math.min(...allLows)-1, scaleHigh = Math.max(...allHighs)+1;
-  const scaleSpan = Math.max(1, scaleHigh-scaleLow);
-
+  const BLACK = [1,3,6,8,10];
+  const keysFor = d=>{ let h=''; for(let m=scaleLow; m<=scaleHigh; m++) h += `<i class="vlab-key${BLACK.includes(m%12)?' b':''}${d && m>=d.lowMidi && m<=d.highMidi?' on':''}"></i>`; return h; };
   const rows = [
-    {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended, color:'var(--hl-ink-3)'}, // a record of past attempts, not the live voice: ink by how much you can rely on it
-    {label:t('vocallab_comfortable'), sub:t('vocallab_comfortable_sub'), data:tiers.comfortable, color:'var(--hl-ink-2)'},
-    {label:t('vocallab_reliable'), sub:t('vocallab_reliable_sub'), data:tiers.reliable, color:'var(--hl-ink)'},
+    {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended},
+    {label:t('vocallab_comfortable'), sub:t('vocallab_comfortable_sub'), data:tiers.comfortable},
+    {label:t('vocallab_reliable'), sub:t('vocallab_reliable_sub'), data:tiers.reliable},
   ];
-  document.getElementById('vocalLabRangesCard').innerHTML = rows.map(r=>{
-    if(!r.data) return `<div class="vlab-row"><div class="vlab-row-label">${r.label}</div><div class="vlab-row-sub">${r.sub} — ${t('vocallab_notenoughdata')}</div></div>`;
-    const leftPct = ((r.data.lowMidi-scaleLow)/scaleSpan)*100;
-    const widthPct = ((r.data.highMidi-r.data.lowMidi)/scaleSpan)*100;
-    return `<div class="vlab-row">
-      <div class="vlab-row-label">${r.label} <span class="vlab-row-notes">${noteNameFromMidi(r.data.lowMidi)} – ${noteNameFromMidi(r.data.highMidi)}</span></div>
+  const axis = []; for(let m=scaleLow; m<=scaleHigh; m++) if(m%12===0) axis.push(`<span style="left:${((m-scaleLow+0.5)/(scaleHigh-scaleLow+1))*100}%">${noteNameFromMidi(m)}</span>`);
+  card.innerHTML = rows.map(r=>`<div class="vlab-row">
+      <div class="vlab-row-head"><span class="vlab-row-label">${r.label}</span>${r.data ? `<span class="hl-note vlab-row-notes">${noteNameFromMidi(r.data.lowMidi)}–${noteNameFromMidi(r.data.highMidi)}</span>` : ''}</div>
       <div class="vlab-row-sub">${r.sub}</div>
-      <div class="vlab-track"><div class="vlab-fill" style="left:min(${leftPct}%, calc(100% - 8px));width:max(${widthPct}%, 8px);background:${r.color};"></div></div>
-    </div>`;
-  }).join('');
-  document.getElementById('vocalLabNoteCount').textContent = `${tiers.totalNotesAttempted} ${t('vocallab_notecount_suffix')}`;
+      ${r.data ? `<div class="vlab-track" aria-hidden="true">${keysFor(r.data)}</div>` : `<p class="hl-meta vlab-nodata">${t('vocallab_notenoughdata')}</p>`}
+    </div>`).join('') + `<div class="vlab-axis" aria-hidden="true">${axis.join('')}</div>`;
+  const n = tiers.totalNotesAttempted;
+  document.getElementById('vocalLabNoteCount').textContent = t(n===1 ? 'vocallab_notes_one' : 'vocallab_notes_other').replace('{n}', n);
 }
+document.getElementById('vocalLabBackBtn')?.addEventListener('click', ()=>showShellSection('train'));
 
 document.getElementById('bossWhyBtn')?.addEventListener('click', ()=>{
   const detail = document.getElementById('bossWhyDetail');
