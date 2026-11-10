@@ -1,0 +1,33 @@
+Phase 9 on production: dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H (deploy-n0n6rz9s9-alegra1122.vercel.app), deployed 2026-11-10
+by the user from deploy/ after "deploy" (master 4c2aa7f, the --no-ff merge of redesign/phase9 2dbf4bd; the first
+`vercel deploy --prod` answered "Not authorized", the same command again deployed). https://deploy-alegra1122.vercel.app/
+checked before the checks: its page is byte-identical to the deployment's own URL and to deploy/index.html at 4c2aa7f
+(sha256 9b67307c54092486…). No promote needed.
+Rollback target was dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx, phase 8 (not used).
+
+All checks against https://deploy-alegra1122.vercel.app/, one script at a time, on AC power.
+
+checks/phase9/ (prod9.sh): phase 9's own checks. checkout and posters with DV_URL=the site; onboard, feedback, moments9
+  with master = 27eab03 (phase 8, the previous production code) served locally and the branch side = the site.
+  onboard PASS, feedback PASS (5 Feedback rows it sent deleted), posters PASS (172 checks, PNGs 1020x1800 opaque),
+  moments9 PASS (the four timer cases). checkout: the test sign-up timed out (account created, the page not signed in
+  within 30 s) → rerun PASS (46 checks, checks/rerun/prod9-2026-11-10T18-06-53).
+checks/prodsh/ prod.sh WITH_CHOIR=1 SCORES_BASE=27eab03, 12:44–18:06 UTC. 42 of 47 pass first run: bootcheck 9/0,
+  house 1051/0 (46 min), system, contrast 0 below 3:1 (light: 8 at 3–4.5, Scale Run's step dots 4.42:1, graphics,
+  the same as on the branch; phase 10 A1 marks them non-text), batch1, batch3c, warm-up tracking, levelup, listenwin,
+  picker, glider-courses, pageload (10/10, ready median 1.4 s, p90 3.2 s), the four shot sets, modecheck, scores,
+  live, youstates, navcheck, livevq, and 20 of the 21 choir scripts.
+  warmup-entries, stopcheck, cv-live: the test sign-in timed out → reruns PASS (checks/rerun/prod-2026-11-10T18-09-51:
+    entries 52/0, stopcheck all passed, cv-live pass).
+  scores4b: run 1, Voice Quality centroid 952 vs master 962–968 and brightness 216 vs 219–220; rerun, sign-up timed
+    out; third run (checks/rerun/prod-2026-11-10T18-49-37) every gated value within its gate, master itself reading
+    949–969 Hz this time. Measurement spread, not repeated; phase 9 doesn't touch Voice Quality.
+  Sign-up probe (checks/rerun/probe-signup.js, the page's own sheet, between reruns): 3 of 3 in 2.5–4.7 s. Phase 9's
+    sign-up sheet works; the timeouts were Supabase being slow.
+  No failure repeated → no rollback.
+
+shots/ prod.sh's screenshots of the site: prod9 (hubs at 390), prod9-home (Home in the seeded states), prod9-states,
+  prod9-tools.
+
+Test accounts: every script deleted its own. Query after the last run: 0 voxcoach-%@example.com accounts from the
+  last 2 days, 0 Feedback rows from @example.com accounts, 0 Feedback rows submitted in the last 2 days.

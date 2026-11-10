@@ -1,0 +1,39 @@
+live sha 9b67307c54092486 local sha 9b67307c54092486 IDENTICAL
+signed up voxcoach-cvlive5-1794329856783@example.com
+panel active: true
+button: Fight The Drowner
+Drowner mid-run: {"status":"The Drowner — chord 2/8: sing B4 · hits: 1, misses: 0","trim":0.195,"fx":{"Soprano":1.6,"Lead":1.6,"Alto":1,"Tenor":1.6,"Bass":1.6},"mix":{"Soprano":0.65,"Lead":0.85,"Alto":0.35,"Tenor":0.7,"Bass":0.75}}
+Drowner output peak: {"peak":0.829,"peakDbfs":-1.63,"samplesOver1":0,"samples":1459200,"rmsDbfs":-11.54,"trimAfter":0.22585435211658478}
+Drowner result:  |     The Drowner — result |     100% |     8/8 notes held in tune (within ±50 cents) |     You beat The Drowner. Boss 2 is unlocked. |     
+switched to fr via setLanguage (no language button visible on this panel)
+FR boss names: [
+  'Le Noyeur',
+  'Le Dériveur',
+  'Le Sprinteur',
+  'Le Fantôme',
+  'Le Transpositeur',
+  'Le Silence'
+]
+FR boss card: {"title":"Boss de la chorale","desc":"Toutes les autres voix sont désaccordées de 40 cents : trop haut sur un accord, trop bas sur le suivant. Votre guide est à 25 %. Tenez votre justesse, pas la leur.","button":"Affronter Le Dériveur","bars":"Coups encore nécessaires : 6 / Erreurs restantes : 3","result":" |     Le Noyeur — résultat |     100% |     8/8 notes tenues justes (à ±50 cents) |     Vous avez battu Le Noyeur. Le boss 2 est débloqué. |     "}
+FR chaos button: Lancer un essai Chaos
+plan: [null,{"type":"dropout"},{"type":"dropout"},null,{"type":"surge","target":"Tenor"},{"type":"drift","cents":35},{"type":"drift","cents":-35},{"type":"dropout"}]
+FR chaos status: Chaos — accord 3/8 : chantez A4 · toutes les autres voix se taisent
+FR chaos results:
+
+    Résultat de l’essai Chaos
+    25%
+    2/8 notes tenues justes (à ±50 cents)
+    Accords chaotiques : 0 sur 6 tenus · accords calmes : 2 sur 2 tenus.
+    
+    Votre performance
+    Notes tenues2/8 notes tenues à ±50 cents25JustesseEn général à 69 cents de la cible sur les 8 notes entendues59Timing8/8 notes entendues : votre voix est arrivée dans les premiers 40 % de la note · médiane 13 ms après son début100
+    Travaillez ensuite notes tenues : c'est votre point le plus bas (25).
+    Comment c'est mesuréMême notation que le Directeur de Performance. La justesse vaut 100 moins 0,6 × votre écart moyen en cents sur chaque note. Le timing vaut 100 quand votre voix arrive dans les premiers 40 % d'une note, 50 si elle arrive plus tard. Les deux ne comptent que les notes entendues. Touchez « Pourquoi ? » sur une note manquée pour voir ce qui était attendu à côté de ce que le micro a entendu.
+  
+    Accord 1 · cible G4 · calme+2 cents · justeAccord 2 · cible B4 · toutes les autres voix se taisent Pourquoi ?+91 cents · pas justeAccord 3 · cible A4 · toutes les autres voix se taisent Pourquoi ?+91 cents · pas justeAccord 4 · cible A4 · calme+1 cents · justeAccord 5 · cible G4 · Ténor monte à 2× Pourquoi ?+91 cents · pas justeAccord 6 · cible A4 · la chorale dérive de +35 cents Pourquoi ?+91 cents · pas justeAccord 7 · cible B4 · la chorale dérive de -35 cents Pourquoi ?+91 cents · pas justeAccord 8 · cible G4 · toutes les autres voix se taisent Pourquoi ?+91 cents · pas juste
+  
+FR chaos best: Meilleur score sur cette voix : 25 %
+shots in /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-cvlive5-1794329856783@example.com

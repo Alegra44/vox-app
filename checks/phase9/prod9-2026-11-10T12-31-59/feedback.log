@@ -1,0 +1,27 @@
+-- signed in
+✓ one row each (master 1, branch 1)
+✓ the saved row equals master's: {"add_feature":"A metronome.","bugs":"None seen.","confusing":"What the load % means.","difficult":"Finding the warm-up again.","disliked":"The menus move around.","email":"voxcoach-dvfb-1794314143742@example.com","improve":"Range Finder","liked":"The tuner is quick.","most_used":"Pitch Match","other_notes":"Keep going. <b>&\"quotes\"</b>","rating":4,"user_id":"de1997aa-682e-4147-a9f0-f737a9a051d1"}
+✓ user and e-mail the account
+✓ rating 4 (the control's state falsefalsefalsetruefalse; master truetruetruetruefalse)
+✓ the thanks state shows: "Thank you Your feedback was sent to the VoxCoach team. Send more feedback" (master "✅ Thank you Your feedback was saved. It genuinely helps shape what gets built next. Submit more feedback")
+✓ "Submit more feedback": an empty form, no rating
+✓ page errors: master 0, branch 0
+-- signed out
+✓ one row each (master 1, branch 1)
+✓ the saved row equals master's: {"add_feature":"A metronome.","bugs":"None seen.","confusing":"What the load % means.","difficult":"Finding the warm-up again.","disliked":"The menus move around.","email":null,"improve":"Range Finder","liked":"The tuner is quick.","most_used":"Pitch Match","other_notes":"Keep going. <b>&\"quotes\"</b>","rating":4,"user_id":null}
+✓ user and e-mail null
+✓ rating 4 (the control's state falsefalsefalsetruefalse; master truetruetruetruefalse)
+✓ the thanks state shows: "Thank you Your feedback was sent to the VoxCoach team. Send more feedback" (master "✅ Thank you Your feedback was saved. It genuinely helps shape what gets built next. Submit more feedback")
+✓ "Submit more feedback": an empty form, no rating
+✓ page errors: master 0, branch 0
+-- 9.1: an empty Send, then a rating alone (branch, signed in)
+✓ empty Send: no row saved (0), the form stays
+✓ empty Send: "Write at least one answer first." under the button
+✓ the note goes once a rating is chosen
+✓ rating alone: one row, rating 2, answers empty true, thanks true
+✓ page errors: 0
+
+FEEDBACK: PASS
+[feedback rows] deleted 5
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvfb-1794314143742@example.com

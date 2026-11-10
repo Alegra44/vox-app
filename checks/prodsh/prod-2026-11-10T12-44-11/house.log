@@ -1,0 +1,1066 @@
+== house · https://deploy-alegra1122.vercel.app/
+
+-- light · 390px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 665 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 269 ms · dim again in 283 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1266 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              951 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #F2F3EF, #F2F3EF → #F2F3EF, #F2F3EF
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              361 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 7 cents sharp | 17 cents flat | 16 cents flat | 8 cents flat | 13 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              38 of 110 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 937 ms · result true · trace true · 99%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  99%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Interval Match: down within 1.5 s of the start, the stage live           403 ms
+  ✓ 6 Interval Match: never up while the take runs (100 ms samples)            0 up of 35 busy
+  ✓ 6 Interval Match: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Interval Match: #intervalListenBtn topmost on the stage                  {"found":true,"shown":true,"top":true}
+  ✓ 6 Interval Match: up within 1.5 s after, result shown, no marks left       945 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Interval Match: no console errors during the take                        none
+  ✓ 6 Interval Match: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: down within 1.5 s of the start, the stage live                407 ms
+  ✓ 6 Scale Run: never up while the take runs (100 ms samples)                 0 up of 128 busy
+  ✓ 6 Scale Run: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Scale Run: #scaleStartBtn topmost on the stage                           {"found":true,"shown":true,"top":true}
+  ✓ 6 Scale Run: up within 1.5 s after, result shown, no marks left            950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: no console errors during the take                             none
+  ✓ 6 Scale Run: stopAllActiveSessions() brings it up within 100 ms, no marks  0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: down within 1.5 s of the start, the stage live         413 ms
+  ✓ 6 Custom Challenge: never up while the take runs (100 ms samples)          0 up of 155 busy
+  ✓ 6 Custom Challenge: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Custom Challenge: #customStartBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 6 Custom Challenge: up within 1.5 s after, result shown, no marks left     933 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: no console errors during the take                      none
+  ✓ 6 Custom Challenge: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: down within 1.5 s of the start, the stage live        410 ms
+  ✓ 6 Ear → Voice → Ear: never up while the take runs (100 ms samples)         0 up of 70 busy
+  ✓ 6 Ear → Voice → Ear: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Ear → Voice → Ear: #eveStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Ear → Voice → Ear: up within 1.5 s after, result shown, no marks left    948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: no console errors during the take                     none
+  ✓ 6 Ear → Voice → Ear: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: down within 1.5 s of the start, the stage live           404 ms
+  ✓ 6 Sing It 5 Ways: never up while the take runs (100 ms samples)            0 up of 150 busy
+  ✓ 6 Sing It 5 Ways: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Sing It 5 Ways: #fiveStartBtn topmost on the stage                       {"found":true,"shown":true,"top":true}
+  ✓ 6 Sing It 5 Ways: up within 1.5 s after, result shown, no marks left       950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: no console errors during the take                        none
+  ✓ 6 Sing It 5 Ways: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: down within 1.5 s of the start, the stage live 399 ms
+  ✓ 6 Can You Hear Your Mistake?: never up while the take runs (100 ms samples) 0 up of 17 busy
+  ✓ 6 Can You Hear Your Mistake?: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Can You Hear Your Mistake?: #hmSingStatus topmost on the stage           {"found":true,"shown":true,"top":true}
+  ✓ 6 Can You Hear Your Mistake?: up within 1.5 s after, result shown, no marks left 960 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: no console errors during the take            none
+  ✓ 6 Can You Hear Your Mistake?: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: down within 1.5 s of the start, the stage live             414 ms
+  ✓ 6 Range Finder: never up while the take runs (100 ms samples)              0 up of 46 busy
+  ✓ 6 Range Finder: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Range Finder: #captureLowBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 6 Range Finder: up within 1.5 s after, result shown, no marks left         937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: no console errors during the take                          none
+  ✓ 6 Range Finder: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: down within 1.5 s of the start, the stage live           409 ms
+  ✓ 6 Breath Trainer: never up while the take runs (100 ms samples)            0 up of 55 busy
+  ✓ 6 Breath Trainer: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Breath Trainer: #breathStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Breath Trainer: up within 1.5 s after, result shown, no marks left       939 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: no console errors during the take                        none
+  ✓ 6 Breath Trainer: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Key Trainer (not sung): data-house="up" throughout, nothing staged       14 samples: up
+  ✓ 6 Vocal Lab (not sung): data-house="up" throughout, nothing staged         28 samples: up
+  ✓ 6 Genre Coach (not sung): data-house="up" throughout, nothing staged       15 samples: up
+  ✓ 6 Smart Warmup (not sung): data-house="up" throughout, nothing staged      15 samples: up
+  ✓ 6 Ear Training (not sung): data-house="up" throughout, nothing staged      31 samples: up
+  ✓ 6 Vocal Puzzle (not sung): data-house="up" throughout, nothing staged      44 samples: up
+  ✓ 11 One Take: down within 1.5 s of the start, #oneTakeStage live            404 ms
+  ✓ 11 One Take: never up while the exercise runs (100 ms samples)             0 up of 72 busy
+  ✓ 11 One Take: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 11 One Take: #oneTakeStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 One Take: up within 1.5 s after, result shown, no marks left            934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 One Take: no console errors                                             none
+  ✓ 11 One Take: stopAllActiveSessions() brings it up within 100 ms, no marks  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: down within 1.5 s of the start, #mirrorStage live               402 ms
+  ✓ 11 Mirror: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Mirror: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Mirror: #mirrorPlayBtn topmost on the stage                             {"found":true,"shown":true,"top":true}
+  ✓ 11 Mirror: up within 1.5 s after, result shown, no marks left              947 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: no console errors                                               none
+  ✓ 11 Mirror: stopAllActiveSessions() brings it up within 100 ms, no marks    1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: down within 1.5 s of the start, #rhythmStage live               408 ms
+  ✓ 11 Rhythm: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Rhythm: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Rhythm: #rhythmStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 11 Rhythm: up within 1.5 s after, result shown, no marks left              949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: no console errors                                               none
+  ✓ 11 Rhythm: stopAllActiveSessions() brings it up within 100 ms, no marks    1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: down within 1.5 s of the start, #drillStage live       399 ms
+  ✓ 11 Register Drills: never up while the exercise runs (100 ms samples)      0 up of 150 busy
+  ✓ 11 Register Drills: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Drills: #drillStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Drills: up within 1.5 s after, result shown, no marks left     951 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: no console errors                                      none
+  ✓ 11 Register Drills: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: down within 1.5 s of the start, #vibratoStage live             400 ms
+  ✓ 11 Vibrato: never up while the exercise runs (100 ms samples)              0 up of 40 busy
+  ✓ 11 Vibrato: #vlBreak displayed on its stage, not offstage                  {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Vibrato: #vibratoStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 11 Vibrato: up within 1.5 s after, result shown, no marks left             959 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: no console errors                                              none
+  ✓ 11 Vibrato: stopAllActiveSessions() brings it up within 100 ms, no marks   0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: down within 1.5 s of the start, #vqStage live            407 ms
+  ✓ 11 Voice Quality: never up while the exercise runs (100 ms samples)        0 up of 40 busy
+  ✓ 11 Voice Quality: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Voice Quality: #vqStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Voice Quality: up within 1.5 s after, result shown, no marks left       960 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: no console errors                                        none
+  ✓ 11 Voice Quality: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: down within 1.5 s of the start, #emoStage live            405 ms
+  ✓ 11 Emotion Mode: never up while the exercise runs (100 ms samples)         0 up of 78 busy
+  ✓ 11 Emotion Mode: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Emotion Mode: #emoStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Emotion Mode: up within 1.5 s after, result shown, no marks left        933 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: no console errors                                         none
+  ✓ 11 Emotion Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: down within 1.5 s of Start, #registerStage live         405 ms
+  ✓ 11 Register Coach: never up while listening (100 ms samples)               0 up of 22 busy
+  ✓ 11 Register Coach: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Coach: #regMicBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Coach: up within 1.5 s of Stop, no marks left                  938 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: no console errors                                       none
+  ✓ 11 Register Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: down within 1.5 s of Start, #liveFeedbackStage live      408 ms
+  ✓ 11 Live Feedback: never up while listening (100 ms samples)                0 up of 22 busy
+  ✓ 11 Live Feedback: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Live Feedback: #liveFeedbackStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 11 Live Feedback: up within 1.5 s of Stop, no marks left                   956 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: no console errors                                        none
+  ✓ 11 Live Feedback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: down within 1.5 s of Start, #resonanceStage live             404 ms
+  ✓ 11 Resonance: never up while listening (100 ms samples)                    0 up of 22 busy
+  ✓ 11 Resonance: #vlBreak displayed on its stage, not offstage                {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Resonance: #resonanceStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 11 Resonance: up within 1.5 s of Stop, no marks left                       955 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: no console errors                                            none
+  ✓ 11 Resonance: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: down within 1.5 s of Start, #rehearsalStage live    400 ms
+  ✓ 12 Rehearsal playback: never up while listening (100 ms samples)           0 up of 37 busy
+  ✓ 12 Rehearsal playback: #vlBreak displayed on its stage, not offstage       {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback: #rehearsalStopBtn topmost on the stage              {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback: up within 1.5 s of Stop, no marks left              945 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: no console errors                                   none
+  ✓ 12 Rehearsal playback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: down within 1.5 s of Start, #rehearsalStage live 412 ms
+  ✓ 12 Rehearsal playback, Hear me on: never up while listening (100 ms samples) 0 up of 37 busy
+  ✓ 12 Rehearsal playback, Hear me on: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback, Hear me on: #rehearsalStopBtn topmost on the stage  {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback, Hear me on: up within 1.5 s of Stop, no marks left  957 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: no console errors                       none
+  ✓ 12 Rehearsal playback, Hear me on: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: down within 1.5 s of the start, #hmemStage live         409 ms
+  ✓ 12 Harmony Memory: never up while the exercise runs (100 ms samples)       0 up of 303 busy
+  ✓ 12 Harmony Memory: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Harmony Memory: #hmemStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Harmony Memory: up within 1.5 s after, result shown, no marks left      938 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: no console errors                                       none
+  ✓ 12 Harmony Memory: stopAllActiveSessions() brings it up within 100 ms, no marks 4 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: down within 1.5 s of the start, #cbStage live             401 ms
+  ✓ 12 Choir Bosses: never up while the exercise runs (100 ms samples)         0 up of 198 busy
+  ✓ 12 Choir Bosses: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Choir Bosses: #cbStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 12 Choir Bosses: up within 1.5 s after, result shown, no marks left        937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: no console errors                                         none
+  ✓ 12 Choir Bosses: stopAllActiveSessions() brings it up within 100 ms, no marks 7 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: down within 1.5 s of the start, #cxStage live               406 ms
+  ✓ 12 Chaos Mode: never up while the exercise runs (100 ms samples)           0 up of 303 busy
+  ✓ 12 Chaos Mode: #vlBreak displayed on its stage, not offstage               {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Chaos Mode: #cxStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 12 Chaos Mode: up within 1.5 s after, result shown, no marks left          938 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: no console errors                                           none
+  ✓ 12 Chaos Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 10 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: down within 1.5 s of the start, #tkStage live         407 ms
+  ✓ 12 Tempo/Key Ladder: never up while the exercise runs (100 ms samples)     0 up of 303 busy
+  ✓ 12 Tempo/Key Ladder: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Tempo/Key Ladder: #tkStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Tempo/Key Ladder: up within 1.5 s after, result shown, no marks left    935 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: no console errors                                     none
+  ✓ 12 Tempo/Key Ladder: stopAllActiveSessions() brings it up within 100 ms, no marks 13 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: down within 1.5 s of the start, #ttStage live        412 ms
+  ✓ 12 Entrance & Cutoff: never up while the exercise runs (100 ms samples)    0 up of 306 busy
+  ✓ 12 Entrance & Cutoff: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Entrance & Cutoff: #ttStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 12 Entrance & Cutoff: up within 1.5 s after, result shown, no marks left   934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: no console errors                                    none
+  ✓ 12 Entrance & Cutoff: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: down within 1.5 s of the start, #ycStage live          400 ms
+  ✓ 12 Your Choir take: never up while the exercise runs (100 ms samples)      0 up of 306 busy
+  ✓ 12 Your Choir take: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Your Choir take: #ycStopBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 12 Your Choir take: up within 1.5 s after, result shown, no marks left     899 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: no console errors                                      none
+  ✓ 12 Your Choir take: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 13 Choir World landing: data-house="up" throughout, nothing staged         14 samples: up
+  ✓ 13 Rehearse tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Song Lab tab, the mixer playing: data-house="up" throughout, nothing staged 29 samples: up
+  ✓ 13 Trainers tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Your Choir tab, your stacked takes playing: data-house="up" throughout, nothing staged 29 samples: up
+  ✓ 13 Passport tab: data-house="up" throughout, nothing staged                15 samples: up
+  ✓ 13 Sonic X-Ray lightbox: a data-house="down" inset holding #xraySvg; the body stays up (a tap included) {"inset":true,"svgInside":true} · up
+  ✓ 14 Studio Mode: down within 1.5 s of the start, #studioStage live          404 ms
+  ✓ 14 Studio Mode: never up while the exercise runs (100 ms samples)          0 up of 150 busy
+  ✓ 14 Studio Mode: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Studio Mode: #studioRecordBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Studio Mode: up within 1.5 s after, result shown, no marks left         934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Studio Mode: no console errors                                          none
+  ✓ 14 Studio Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: down within 1.5 s of the start, #pdStage live     409 ms
+  ✓ 14 Performance Director: never up while the exercise runs (100 ms samples) 0 up of 266 busy
+  ✓ 14 Performance Director: #vlBreak displayed on its stage, not offstage     {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Performance Director: #pdStopBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 14 Performance Director: up within 1.5 s after, result shown, no marks left 949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: no console errors                                 none
+  ✓ 14 Performance Director: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: down within 1.5 s of Start, #aiDuetStage live      406 ms
+  ✓ 14 Sing With the Choir: never up while listening (100 ms samples)          0 up of 47 busy
+  ✓ 14 Sing With the Choir: #vlBreak displayed on its stage, not offstage      {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Sing With the Choir: #aiDuetStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 14 Sing With the Choir: up within 1.5 s of Stop, no marks left             957 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: no console errors                                  none
+  ✓ 14 Sing With the Choir: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: down within 1.5 s of the start, #stayKeyStage live         411 ms
+  ✓ 14 Stay in Key: never up while the exercise runs (100 ms samples)          0 up of 266 busy
+  ✓ 14 Stay in Key: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Stay in Key: #stayKeyStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Stay in Key: up within 1.5 s after, result shown, no marks left         932 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: no console errors                                          none
+  ✓ 14 Stay in Key: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: down within 1.5 s of the start, #karaokeStage live       404 ms
+  ✓ 14 Karaoke Coach: never up while the exercise runs (100 ms samples)        0 up of 266 busy
+  ✓ 14 Karaoke Coach: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Karaoke Coach: #karaokeStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 14 Karaoke Coach: up within 1.5 s after, result shown, no marks left       949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: no console errors                                        none
+  ✓ 14 Karaoke Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: down within 1.5 s of the start, #emotionStage live   405 ms
+  ✓ 14 Emotional Singing: never up while the exercise runs (100 ms samples)    0 up of 266 busy
+  ✓ 14 Emotional Singing: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Emotional Singing: #emotionStartBtn topmost on the stage                {"found":true,"shown":true,"top":true}
+  ✓ 14 Emotional Singing: up within 1.5 s after, result shown, no marks left   945 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: no console errors                                    none
+  ✓ 14 Emotional Singing: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          20 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             607 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- light · 1280px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 666 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 267 ms · dim again in 283 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1268 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              956 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #F2F3EF, #F2F3EF → #F2F3EF, #F2F3EF
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              352 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 158 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 6 cents sharp | 19 cents flat | 15 cents flat | 8 cents flat | 14 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              38 of 111 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 951 ms · result true · trace true · 99%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  99%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Interval Match: down within 1.5 s of the start, the stage live           406 ms
+  ✓ 6 Interval Match: never up while the take runs (100 ms samples)            0 up of 35 busy
+  ✓ 6 Interval Match: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Interval Match: #intervalListenBtn topmost on the stage                  {"found":true,"shown":true,"top":true}
+  ✓ 6 Interval Match: up within 1.5 s after, result shown, no marks left       961 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Interval Match: no console errors during the take                        none
+  ✓ 6 Interval Match: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: down within 1.5 s of the start, the stage live                401 ms
+  ✓ 6 Scale Run: never up while the take runs (100 ms samples)                 0 up of 128 busy
+  ✓ 6 Scale Run: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Scale Run: #scaleStartBtn topmost on the stage                           {"found":true,"shown":true,"top":true}
+  ✓ 6 Scale Run: up within 1.5 s after, result shown, no marks left            950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: no console errors during the take                             none
+  ✓ 6 Scale Run: stopAllActiveSessions() brings it up within 100 ms, no marks  0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: down within 1.5 s of the start, the stage live         400 ms
+  ✓ 6 Custom Challenge: never up while the take runs (100 ms samples)          0 up of 155 busy
+  ✓ 6 Custom Challenge: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Custom Challenge: #customStartBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 6 Custom Challenge: up within 1.5 s after, result shown, no marks left     951 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: no console errors during the take                      none
+  ✓ 6 Custom Challenge: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: down within 1.5 s of the start, the stage live        406 ms
+  ✓ 6 Ear → Voice → Ear: never up while the take runs (100 ms samples)         0 up of 70 busy
+  ✓ 6 Ear → Voice → Ear: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Ear → Voice → Ear: #eveStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Ear → Voice → Ear: up within 1.5 s after, result shown, no marks left    949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: no console errors during the take                     none
+  ✓ 6 Ear → Voice → Ear: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: down within 1.5 s of the start, the stage live           408 ms
+  ✓ 6 Sing It 5 Ways: never up while the take runs (100 ms samples)            0 up of 150 busy
+  ✓ 6 Sing It 5 Ways: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Sing It 5 Ways: #fiveStartBtn topmost on the stage                       {"found":true,"shown":true,"top":true}
+  ✓ 6 Sing It 5 Ways: up within 1.5 s after, result shown, no marks left       934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: no console errors during the take                        none
+  ✓ 6 Sing It 5 Ways: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: down within 1.5 s of the start, the stage live 406 ms
+  ✓ 6 Can You Hear Your Mistake?: never up while the take runs (100 ms samples) 0 up of 17 busy
+  ✓ 6 Can You Hear Your Mistake?: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Can You Hear Your Mistake?: #hmSingStatus topmost on the stage           {"found":true,"shown":true,"top":true}
+  ✓ 6 Can You Hear Your Mistake?: up within 1.5 s after, result shown, no marks left 960 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: no console errors during the take            none
+  ✓ 6 Can You Hear Your Mistake?: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: down within 1.5 s of the start, the stage live             416 ms
+  ✓ 6 Range Finder: never up while the take runs (100 ms samples)              0 up of 45 busy
+  ✓ 6 Range Finder: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Range Finder: #captureLowBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 6 Range Finder: up within 1.5 s after, result shown, no marks left         954 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: no console errors during the take                          none
+  ✓ 6 Range Finder: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: down within 1.5 s of the start, the stage live           400 ms
+  ✓ 6 Breath Trainer: never up while the take runs (100 ms samples)            0 up of 55 busy
+  ✓ 6 Breath Trainer: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Breath Trainer: #breathStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Breath Trainer: up within 1.5 s after, result shown, no marks left       949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: no console errors during the take                        none
+  ✓ 6 Breath Trainer: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Key Trainer (not sung): data-house="up" throughout, nothing staged       15 samples: up
+  ✓ 6 Vocal Lab (not sung): data-house="up" throughout, nothing staged         26 samples: up
+  ✓ 6 Genre Coach (not sung): data-house="up" throughout, nothing staged       14 samples: up
+  ✓ 6 Smart Warmup (not sung): data-house="up" throughout, nothing staged      15 samples: up
+  ✓ 6 Ear Training (not sung): data-house="up" throughout, nothing staged      30 samples: up
+  ✓ 6 Vocal Puzzle (not sung): data-house="up" throughout, nothing staged      44 samples: up
+  ✓ 11 One Take: down within 1.5 s of the start, #oneTakeStage live            407 ms
+  ✓ 11 One Take: never up while the exercise runs (100 ms samples)             0 up of 73 busy
+  ✓ 11 One Take: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 11 One Take: #oneTakeStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 One Take: up within 1.5 s after, result shown, no marks left            936 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 One Take: no console errors                                             none
+  ✓ 11 One Take: stopAllActiveSessions() brings it up within 100 ms, no marks  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: down within 1.5 s of the start, #mirrorStage live               400 ms
+  ✓ 11 Mirror: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Mirror: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Mirror: #mirrorPlayBtn topmost on the stage                             {"found":true,"shown":true,"top":true}
+  ✓ 11 Mirror: up within 1.5 s after, result shown, no marks left              964 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: no console errors                                               none
+  ✓ 11 Mirror: stopAllActiveSessions() brings it up within 100 ms, no marks    1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: down within 1.5 s of the start, #rhythmStage live               411 ms
+  ✓ 11 Rhythm: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Rhythm: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Rhythm: #rhythmStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 11 Rhythm: up within 1.5 s after, result shown, no marks left              949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: no console errors                                               none
+  ✓ 11 Rhythm: stopAllActiveSessions() brings it up within 100 ms, no marks    0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: down within 1.5 s of the start, #drillStage live       406 ms
+  ✓ 11 Register Drills: never up while the exercise runs (100 ms samples)      0 up of 150 busy
+  ✓ 11 Register Drills: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Drills: #drillStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Drills: up within 1.5 s after, result shown, no marks left     935 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: no console errors                                      none
+  ✓ 11 Register Drills: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: down within 1.5 s of the start, #vibratoStage live             407 ms
+  ✓ 11 Vibrato: never up while the exercise runs (100 ms samples)              0 up of 40 busy
+  ✓ 11 Vibrato: #vlBreak displayed on its stage, not offstage                  {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Vibrato: #vibratoStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 11 Vibrato: up within 1.5 s after, result shown, no marks left             977 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: no console errors                                              none
+  ✓ 11 Vibrato: stopAllActiveSessions() brings it up within 100 ms, no marks   1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: down within 1.5 s of the start, #vqStage live            404 ms
+  ✓ 11 Voice Quality: never up while the exercise runs (100 ms samples)        0 up of 40 busy
+  ✓ 11 Voice Quality: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Voice Quality: #vqStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Voice Quality: up within 1.5 s after, result shown, no marks left       959 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: no console errors                                        none
+  ✓ 11 Voice Quality: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: down within 1.5 s of the start, #emoStage live            402 ms
+  ✓ 11 Emotion Mode: never up while the exercise runs (100 ms samples)         0 up of 78 busy
+  ✓ 11 Emotion Mode: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Emotion Mode: #emoStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Emotion Mode: up within 1.5 s after, result shown, no marks left        934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: no console errors                                         none
+  ✓ 11 Emotion Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: down within 1.5 s of Start, #registerStage live         403 ms
+  ✓ 11 Register Coach: never up while listening (100 ms samples)               0 up of 22 busy
+  ✓ 11 Register Coach: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Coach: #regMicBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Coach: up within 1.5 s of Stop, no marks left                  951 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: no console errors                                       none
+  ✓ 11 Register Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: down within 1.5 s of Start, #liveFeedbackStage live      409 ms
+  ✓ 11 Live Feedback: never up while listening (100 ms samples)                0 up of 22 busy
+  ✓ 11 Live Feedback: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Live Feedback: #liveFeedbackStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 11 Live Feedback: up within 1.5 s of Stop, no marks left                   962 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: no console errors                                        none
+  ✓ 11 Live Feedback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: down within 1.5 s of Start, #resonanceStage live             402 ms
+  ✓ 11 Resonance: never up while listening (100 ms samples)                    0 up of 22 busy
+  ✓ 11 Resonance: #vlBreak displayed on its stage, not offstage                {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Resonance: #resonanceStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 11 Resonance: up within 1.5 s of Stop, no marks left                       952 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: no console errors                                            none
+  ✓ 11 Resonance: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: down within 1.5 s of Start, #rehearsalStage live    402 ms
+  ✓ 12 Rehearsal playback: never up while listening (100 ms samples)           0 up of 37 busy
+  ✓ 12 Rehearsal playback: #vlBreak displayed on its stage, not offstage       {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback: #rehearsalStopBtn topmost on the stage              {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback: up within 1.5 s of Stop, no marks left              975 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: no console errors                                   none
+  ✓ 12 Rehearsal playback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: down within 1.5 s of Start, #rehearsalStage live 409 ms
+  ✓ 12 Rehearsal playback, Hear me on: never up while listening (100 ms samples) 0 up of 37 busy
+  ✓ 12 Rehearsal playback, Hear me on: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback, Hear me on: #rehearsalStopBtn topmost on the stage  {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback, Hear me on: up within 1.5 s of Stop, no marks left  957 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: no console errors                       none
+  ✓ 12 Rehearsal playback, Hear me on: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: down within 1.5 s of the start, #hmemStage live         403 ms
+  ✓ 12 Harmony Memory: never up while the exercise runs (100 ms samples)       0 up of 303 busy
+  ✓ 12 Harmony Memory: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Harmony Memory: #hmemStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Harmony Memory: up within 1.5 s after, result shown, no marks left      956 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: no console errors                                       none
+  ✓ 12 Harmony Memory: stopAllActiveSessions() brings it up within 100 ms, no marks 5 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: down within 1.5 s of the start, #cbStage live             408 ms
+  ✓ 12 Choir Bosses: never up while the exercise runs (100 ms samples)         0 up of 198 busy
+  ✓ 12 Choir Bosses: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Choir Bosses: #cbStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 12 Choir Bosses: up within 1.5 s after, result shown, no marks left        937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: no console errors                                         none
+  ✓ 12 Choir Bosses: stopAllActiveSessions() brings it up within 100 ms, no marks 7 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: down within 1.5 s of the start, #cxStage live               409 ms
+  ✓ 12 Chaos Mode: never up while the exercise runs (100 ms samples)           0 up of 303 busy
+  ✓ 12 Chaos Mode: #vlBreak displayed on its stage, not offstage               {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Chaos Mode: #cxStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 12 Chaos Mode: up within 1.5 s after, result shown, no marks left          937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: no console errors                                           none
+  ✓ 12 Chaos Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 10 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: down within 1.5 s of the start, #tkStage live         417 ms
+  ✓ 12 Tempo/Key Ladder: never up while the exercise runs (100 ms samples)     0 up of 304 busy
+  ✓ 12 Tempo/Key Ladder: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Tempo/Key Ladder: #tkStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Tempo/Key Ladder: up within 1.5 s after, result shown, no marks left    935 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: no console errors                                     none
+  ✓ 12 Tempo/Key Ladder: stopAllActiveSessions() brings it up within 100 ms, no marks 13 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: down within 1.5 s of the start, #ttStage live        401 ms
+  ✓ 12 Entrance & Cutoff: never up while the exercise runs (100 ms samples)    0 up of 306 busy
+  ✓ 12 Entrance & Cutoff: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Entrance & Cutoff: #ttStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 12 Entrance & Cutoff: up within 1.5 s after, result shown, no marks left   934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: no console errors                                    none
+  ✓ 12 Entrance & Cutoff: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: down within 1.5 s of the start, #ycStage live          400 ms
+  ✓ 12 Your Choir take: never up while the exercise runs (100 ms samples)      0 up of 306 busy
+  ✓ 12 Your Choir take: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Your Choir take: #ycStopBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 12 Your Choir take: up within 1.5 s after, result shown, no marks left     918 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: no console errors                                      none
+  ✓ 12 Your Choir take: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 13 Choir World landing: data-house="up" throughout, nothing staged         14 samples: up
+  ✓ 13 Rehearse tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Song Lab tab, the mixer playing: data-house="up" throughout, nothing staged 30 samples: up
+  ✓ 13 Trainers tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Your Choir tab, your stacked takes playing: data-house="up" throughout, nothing staged 29 samples: up
+  ✓ 13 Passport tab: data-house="up" throughout, nothing staged                15 samples: up
+  ✓ 13 Sonic X-Ray lightbox: a data-house="down" inset holding #xraySvg; the body stays up (a tap included) {"inset":true,"svgInside":true} · up
+  ✓ 14 Studio Mode: down within 1.5 s of the start, #studioStage live          402 ms
+  ✓ 14 Studio Mode: never up while the exercise runs (100 ms samples)          0 up of 150 busy
+  ✓ 14 Studio Mode: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Studio Mode: #studioRecordBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Studio Mode: up within 1.5 s after, result shown, no marks left         949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Studio Mode: no console errors                                          none
+  ✓ 14 Studio Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: down within 1.5 s of the start, #pdStage live     405 ms
+  ✓ 14 Performance Director: never up while the exercise runs (100 ms samples) 0 up of 266 busy
+  ✓ 14 Performance Director: #vlBreak displayed on its stage, not offstage     {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Performance Director: #pdStopBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 14 Performance Director: up within 1.5 s after, result shown, no marks left 948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: no console errors                                 none
+  ✓ 14 Performance Director: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: down within 1.5 s of Start, #aiDuetStage live      402 ms
+  ✓ 14 Sing With the Choir: never up while listening (100 ms samples)          0 up of 47 busy
+  ✓ 14 Sing With the Choir: #vlBreak displayed on its stage, not offstage      {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Sing With the Choir: #aiDuetStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 14 Sing With the Choir: up within 1.5 s of Stop, no marks left             953 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: no console errors                                  none
+  ✓ 14 Sing With the Choir: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: down within 1.5 s of the start, #stayKeyStage live         407 ms
+  ✓ 14 Stay in Key: never up while the exercise runs (100 ms samples)          0 up of 266 busy
+  ✓ 14 Stay in Key: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Stay in Key: #stayKeyStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Stay in Key: up within 1.5 s after, result shown, no marks left         948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: no console errors                                          none
+  ✓ 14 Stay in Key: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: down within 1.5 s of the start, #karaokeStage live       402 ms
+  ✓ 14 Karaoke Coach: never up while the exercise runs (100 ms samples)        0 up of 266 busy
+  ✓ 14 Karaoke Coach: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Karaoke Coach: #karaokeStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 14 Karaoke Coach: up within 1.5 s after, result shown, no marks left       949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: no console errors                                        none
+  ✓ 14 Karaoke Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: down within 1.5 s of the start, #emotionStage live   419 ms
+  ✓ 14 Emotional Singing: never up while the exercise runs (100 ms samples)    0 up of 266 busy
+  ✓ 14 Emotional Singing: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Emotional Singing: #emotionStartBtn topmost on the stage                {"found":true,"shown":true,"top":true}
+  ✓ 14 Emotional Singing: up within 1.5 s after, result shown, no marks left   945 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: no console errors                                    none
+  ✓ 14 Emotional Singing: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          19 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             608 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- dark · 390px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 657 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 269 ms · dim again in 283 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1258 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              937 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #16181C, #16181C → #16181C, #16181C
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              353 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 8 cents sharp | 11 cents flat | 17 cents flat | 13 cents flat | 14 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              34 of 111 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 950 ms · result true · trace true · 99%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  99%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Interval Match: down within 1.5 s of the start, the stage live           404 ms
+  ✓ 6 Interval Match: never up while the take runs (100 ms samples)            0 up of 35 busy
+  ✓ 6 Interval Match: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Interval Match: #intervalListenBtn topmost on the stage                  {"found":true,"shown":true,"top":true}
+  ✓ 6 Interval Match: up within 1.5 s after, result shown, no marks left       962 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Interval Match: no console errors during the take                        none
+  ✓ 6 Interval Match: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: down within 1.5 s of the start, the stage live                411 ms
+  ✓ 6 Scale Run: never up while the take runs (100 ms samples)                 0 up of 127 busy
+  ✓ 6 Scale Run: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Scale Run: #scaleStartBtn topmost on the stage                           {"found":true,"shown":true,"top":true}
+  ✓ 6 Scale Run: up within 1.5 s after, result shown, no marks left            953 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: no console errors during the take                             none
+  ✓ 6 Scale Run: stopAllActiveSessions() brings it up within 100 ms, no marks  0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: down within 1.5 s of the start, the stage live         404 ms
+  ✓ 6 Custom Challenge: never up while the take runs (100 ms samples)          0 up of 155 busy
+  ✓ 6 Custom Challenge: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Custom Challenge: #customStartBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 6 Custom Challenge: up within 1.5 s after, result shown, no marks left     950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: no console errors during the take                      none
+  ✓ 6 Custom Challenge: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: down within 1.5 s of the start, the stage live        401 ms
+  ✓ 6 Ear → Voice → Ear: never up while the take runs (100 ms samples)         0 up of 70 busy
+  ✓ 6 Ear → Voice → Ear: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Ear → Voice → Ear: #eveStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Ear → Voice → Ear: up within 1.5 s after, result shown, no marks left    933 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: no console errors during the take                     none
+  ✓ 6 Ear → Voice → Ear: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: down within 1.5 s of the start, the stage live           406 ms
+  ✓ 6 Sing It 5 Ways: never up while the take runs (100 ms samples)            0 up of 150 busy
+  ✓ 6 Sing It 5 Ways: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Sing It 5 Ways: #fiveStartBtn topmost on the stage                       {"found":true,"shown":true,"top":true}
+  ✓ 6 Sing It 5 Ways: up within 1.5 s after, result shown, no marks left       933 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: no console errors during the take                        none
+  ✓ 6 Sing It 5 Ways: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: down within 1.5 s of the start, the stage live 411 ms
+  ✓ 6 Can You Hear Your Mistake?: never up while the take runs (100 ms samples) 0 up of 15 busy
+  ✓ 6 Can You Hear Your Mistake?: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Can You Hear Your Mistake?: #hmSingStatus topmost on the stage           {"found":true,"shown":true,"top":true}
+  ✓ 6 Can You Hear Your Mistake?: up within 1.5 s after, result shown, no marks left 944 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: no console errors during the take            none
+  ✓ 6 Can You Hear Your Mistake?: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: down within 1.5 s of the start, the stage live             413 ms
+  ✓ 6 Range Finder: never up while the take runs (100 ms samples)              0 up of 45 busy
+  ✓ 6 Range Finder: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Range Finder: #captureLowBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 6 Range Finder: up within 1.5 s after, result shown, no marks left         949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: no console errors during the take                          none
+  ✓ 6 Range Finder: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: down within 1.5 s of the start, the stage live           401 ms
+  ✓ 6 Breath Trainer: never up while the take runs (100 ms samples)            0 up of 55 busy
+  ✓ 6 Breath Trainer: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Breath Trainer: #breathStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Breath Trainer: up within 1.5 s after, result shown, no marks left       943 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: no console errors during the take                        none
+  ✓ 6 Breath Trainer: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Key Trainer (not sung): data-house="up" throughout, nothing staged       14 samples: up
+  ✓ 6 Vocal Lab (not sung): data-house="up" throughout, nothing staged         26 samples: up
+  ✓ 6 Genre Coach (not sung): data-house="up" throughout, nothing staged       15 samples: up
+  ✓ 6 Smart Warmup (not sung): data-house="up" throughout, nothing staged      14 samples: up
+  ✓ 6 Ear Training (not sung): data-house="up" throughout, nothing staged      30 samples: up
+  ✓ 6 Vocal Puzzle (not sung): data-house="up" throughout, nothing staged      44 samples: up
+  ✓ 11 One Take: down within 1.5 s of the start, #oneTakeStage live            410 ms
+  ✓ 11 One Take: never up while the exercise runs (100 ms samples)             0 up of 72 busy
+  ✓ 11 One Take: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 11 One Take: #oneTakeStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 One Take: up within 1.5 s after, result shown, no marks left            953 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 One Take: no console errors                                             none
+  ✓ 11 One Take: stopAllActiveSessions() brings it up within 100 ms, no marks  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: down within 1.5 s of the start, #mirrorStage live               400 ms
+  ✓ 11 Mirror: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Mirror: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Mirror: #mirrorPlayBtn topmost on the stage                             {"found":true,"shown":true,"top":true}
+  ✓ 11 Mirror: up within 1.5 s after, result shown, no marks left              964 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: no console errors                                               none
+  ✓ 11 Mirror: stopAllActiveSessions() brings it up within 100 ms, no marks    1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: down within 1.5 s of the start, #rhythmStage live               411 ms
+  ✓ 11 Rhythm: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Rhythm: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Rhythm: #rhythmStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 11 Rhythm: up within 1.5 s after, result shown, no marks left              949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: no console errors                                               none
+  ✓ 11 Rhythm: stopAllActiveSessions() brings it up within 100 ms, no marks    0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: down within 1.5 s of the start, #drillStage live       406 ms
+  ✓ 11 Register Drills: never up while the exercise runs (100 ms samples)      0 up of 150 busy
+  ✓ 11 Register Drills: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Drills: #drillStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Drills: up within 1.5 s after, result shown, no marks left     935 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: no console errors                                      none
+  ✓ 11 Register Drills: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: down within 1.5 s of the start, #vibratoStage live             401 ms
+  ✓ 11 Vibrato: never up while the exercise runs (100 ms samples)              0 up of 40 busy
+  ✓ 11 Vibrato: #vlBreak displayed on its stage, not offstage                  {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Vibrato: #vibratoStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 11 Vibrato: up within 1.5 s after, result shown, no marks left             960 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: no console errors                                              none
+  ✓ 11 Vibrato: stopAllActiveSessions() brings it up within 100 ms, no marks   1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: down within 1.5 s of the start, #vqStage live            408 ms
+  ✓ 11 Voice Quality: never up while the exercise runs (100 ms samples)        0 up of 40 busy
+  ✓ 11 Voice Quality: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Voice Quality: #vqStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Voice Quality: up within 1.5 s after, result shown, no marks left       959 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: no console errors                                        none
+  ✓ 11 Voice Quality: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: down within 1.5 s of the start, #emoStage live            405 ms
+  ✓ 11 Emotion Mode: never up while the exercise runs (100 ms samples)         0 up of 78 busy
+  ✓ 11 Emotion Mode: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Emotion Mode: #emoStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Emotion Mode: up within 1.5 s after, result shown, no marks left        934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: no console errors                                         none
+  ✓ 11 Emotion Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: down within 1.5 s of Start, #registerStage live         408 ms
+  ✓ 11 Register Coach: never up while listening (100 ms samples)               0 up of 22 busy
+  ✓ 11 Register Coach: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Coach: #regMicBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Coach: up within 1.5 s of Stop, no marks left                  958 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: no console errors                                       none
+  ✓ 11 Register Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: down within 1.5 s of Start, #liveFeedbackStage live      402 ms
+  ✓ 11 Live Feedback: never up while listening (100 ms samples)                0 up of 22 busy
+  ✓ 11 Live Feedback: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Live Feedback: #liveFeedbackStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 11 Live Feedback: up within 1.5 s of Stop, no marks left                   959 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: no console errors                                        none
+  ✓ 11 Live Feedback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: down within 1.5 s of Start, #resonanceStage live             408 ms
+  ✓ 11 Resonance: never up while listening (100 ms samples)                    0 up of 22 busy
+  ✓ 11 Resonance: #vlBreak displayed on its stage, not offstage                {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Resonance: #resonanceStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 11 Resonance: up within 1.5 s of Stop, no marks left                       959 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: no console errors                                            none
+  ✓ 11 Resonance: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: down within 1.5 s of Start, #rehearsalStage live    405 ms
+  ✓ 12 Rehearsal playback: never up while listening (100 ms samples)           0 up of 37 busy
+  ✓ 12 Rehearsal playback: #vlBreak displayed on its stage, not offstage       {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback: #rehearsalStopBtn topmost on the stage              {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback: up within 1.5 s of Stop, no marks left              954 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: no console errors                                   none
+  ✓ 12 Rehearsal playback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: down within 1.5 s of Start, #rehearsalStage live 412 ms
+  ✓ 12 Rehearsal playback, Hear me on: never up while listening (100 ms samples) 0 up of 37 busy
+  ✓ 12 Rehearsal playback, Hear me on: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback, Hear me on: #rehearsalStopBtn topmost on the stage  {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback, Hear me on: up within 1.5 s of Stop, no marks left  957 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: no console errors                       none
+  ✓ 12 Rehearsal playback, Hear me on: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: down within 1.5 s of the start, #hmemStage live         400 ms
+  ✓ 12 Harmony Memory: never up while the exercise runs (100 ms samples)       0 up of 303 busy
+  ✓ 12 Harmony Memory: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Harmony Memory: #hmemStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Harmony Memory: up within 1.5 s after, result shown, no marks left      941 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: no console errors                                       none
+  ✓ 12 Harmony Memory: stopAllActiveSessions() brings it up within 100 ms, no marks 4 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: down within 1.5 s of the start, #cbStage live             400 ms
+  ✓ 12 Choir Bosses: never up while the exercise runs (100 ms samples)         0 up of 198 busy
+  ✓ 12 Choir Bosses: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Choir Bosses: #cbStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 12 Choir Bosses: up within 1.5 s after, result shown, no marks left        937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: no console errors                                         none
+  ✓ 12 Choir Bosses: stopAllActiveSessions() brings it up within 100 ms, no marks 7 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: down within 1.5 s of the start, #cxStage live               408 ms
+  ✓ 12 Chaos Mode: never up while the exercise runs (100 ms samples)           0 up of 303 busy
+  ✓ 12 Chaos Mode: #vlBreak displayed on its stage, not offstage               {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Chaos Mode: #cxStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 12 Chaos Mode: up within 1.5 s after, result shown, no marks left          938 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: no console errors                                           none
+  ✓ 12 Chaos Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 10 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: down within 1.5 s of the start, #tkStage live         404 ms
+  ✓ 12 Tempo/Key Ladder: never up while the exercise runs (100 ms samples)     0 up of 304 busy
+  ✓ 12 Tempo/Key Ladder: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Tempo/Key Ladder: #tkStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Tempo/Key Ladder: up within 1.5 s after, result shown, no marks left    938 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: no console errors                                     none
+  ✓ 12 Tempo/Key Ladder: stopAllActiveSessions() brings it up within 100 ms, no marks 12 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: down within 1.5 s of the start, #ttStage live        400 ms
+  ✓ 12 Entrance & Cutoff: never up while the exercise runs (100 ms samples)    0 up of 306 busy
+  ✓ 12 Entrance & Cutoff: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Entrance & Cutoff: #ttStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 12 Entrance & Cutoff: up within 1.5 s after, result shown, no marks left   934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: no console errors                                    none
+  ✓ 12 Entrance & Cutoff: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: down within 1.5 s of the start, #ycStage live          403 ms
+  ✓ 12 Your Choir take: never up while the exercise runs (100 ms samples)      0 up of 306 busy
+  ✓ 12 Your Choir take: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Your Choir take: #ycStopBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 12 Your Choir take: up within 1.5 s after, result shown, no marks left     901 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: no console errors                                      none
+  ✓ 12 Your Choir take: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 13 Choir World landing: data-house="up" throughout, nothing staged         14 samples: up
+  ✓ 13 Rehearse tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Song Lab tab, the mixer playing: data-house="up" throughout, nothing staged 30 samples: up
+  ✓ 13 Trainers tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Your Choir tab, your stacked takes playing: data-house="up" throughout, nothing staged 30 samples: up
+  ✓ 13 Passport tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Sonic X-Ray lightbox: a data-house="down" inset holding #xraySvg; the body stays up (a tap included) {"inset":true,"svgInside":true} · up
+  ✓ 14 Studio Mode: down within 1.5 s of the start, #studioStage live          409 ms
+  ✓ 14 Studio Mode: never up while the exercise runs (100 ms samples)          0 up of 150 busy
+  ✓ 14 Studio Mode: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Studio Mode: #studioRecordBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Studio Mode: up within 1.5 s after, result shown, no marks left         949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Studio Mode: no console errors                                          none
+  ✓ 14 Studio Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: down within 1.5 s of the start, #pdStage live     410 ms
+  ✓ 14 Performance Director: never up while the exercise runs (100 ms samples) 0 up of 266 busy
+  ✓ 14 Performance Director: #vlBreak displayed on its stage, not offstage     {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Performance Director: #pdStopBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 14 Performance Director: up within 1.5 s after, result shown, no marks left 949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: no console errors                                 none
+  ✓ 14 Performance Director: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: down within 1.5 s of Start, #aiDuetStage live      400 ms
+  ✓ 14 Sing With the Choir: never up while listening (100 ms samples)          0 up of 47 busy
+  ✓ 14 Sing With the Choir: #vlBreak displayed on its stage, not offstage      {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Sing With the Choir: #aiDuetStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 14 Sing With the Choir: up within 1.5 s of Stop, no marks left             961 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: no console errors                                  none
+  ✓ 14 Sing With the Choir: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: down within 1.5 s of the start, #stayKeyStage live         405 ms
+  ✓ 14 Stay in Key: never up while the exercise runs (100 ms samples)          0 up of 266 busy
+  ✓ 14 Stay in Key: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Stay in Key: #stayKeyStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Stay in Key: up within 1.5 s after, result shown, no marks left         932 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: no console errors                                          none
+  ✓ 14 Stay in Key: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: down within 1.5 s of the start, #karaokeStage live       406 ms
+  ✓ 14 Karaoke Coach: never up while the exercise runs (100 ms samples)        0 up of 266 busy
+  ✓ 14 Karaoke Coach: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Karaoke Coach: #karaokeStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 14 Karaoke Coach: up within 1.5 s after, result shown, no marks left       948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: no console errors                                        none
+  ✓ 14 Karaoke Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: down within 1.5 s of the start, #emotionStage live   404 ms
+  ✓ 14 Emotional Singing: never up while the exercise runs (100 ms samples)    0 up of 266 busy
+  ✓ 14 Emotional Singing: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Emotional Singing: #emotionStartBtn topmost on the stage                {"found":true,"shown":true,"top":true}
+  ✓ 14 Emotional Singing: up within 1.5 s after, result shown, no marks left   944 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: no console errors                                    none
+  ✓ 14 Emotional Singing: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          27 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             623 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- dark · 1280px
+  ✓ 1 Tuner start: down, stage live, panel staged, title offstage, shell dimmed by colour, tabs hit (≤1.0 s) 665 ms
+  ✓ 1 hover on the tab bar: usual colours back (active tab ink, playhead voice); dim again on leaving back in 278 ms · dim again in 293 ms
+  ✓ 8 while down: every meta theme-color is #060708                            #060708, #060708
+  ✓ 2 Tuner lock: "In tune" and #tunerLockFill at opacity 1                    1317 ms
+  ✓ 10 break banner: #vlBreak displayed (not offstage), #micBtn still topmost  {"shown":true,"off":false,"top":true}
+  ✓ 3 Tuner stop: up within 1.5 s                                              953 ms
+  ✓ 3 Tuner stop: no is-live / is-staged / data-offstage / data-stage-path left {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 3 Tuner stop: #tunerResult visible with a number                           {"shown":true,"text":"85% Average stability 0:03 How this is measuredStability is ","stats":false}
+  ✓ 3 Tuner stop: the live .stat-row hidden while the result shows             stats hidden
+  ✓ 8 after: meta theme-color restored                                         #16181C, #16181C → #16181C, #16181C
+  ✓ 4 navigation mid-session: up within 100 ms, no marks left                  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 5 Pitch Match: down within 1.5 s of the click                              351 ms
+  ✓ 5 Pitch Match: never up while the button is disabled (100 ms samples)      0 samples up of 85 busy
+  ✓ 5 Pitch Match: #pitchLane voice path gains points while singing            max 157 points
+  ✓ 5 Pitch Match: #pitchCentsRead reads pm_live_on at some point              On the note | 19 cents flat | 12 cents flat | 7 cents flat | 21 cents flat | 8 cents flat
+  ✓ 5 Pitch Match: #pitchTargetNote gets .pm-locked at some point              36 of 110 samples
+  ✓ 5 Pitch Match: no console errors during the take                           none
+  ✓ 5 Pitch Match: after the result up within 1.5 s, #pitchResult visible, #pitchTrace has a path 951 ms · result true · trace true · 99%
+  ✓ 5 Pitch Match: the big number in --hl-ink                                  99%
+  ✓ 5 Pitch Match: "Sing it again (A4)" shown with the result                  {"shown":true,"text":"Sing it again (A4)"}
+  ✓ 6 Interval Match: down within 1.5 s of the start, the stage live           405 ms
+  ✓ 6 Interval Match: never up while the take runs (100 ms samples)            0 up of 35 busy
+  ✓ 6 Interval Match: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Interval Match: #intervalListenBtn topmost on the stage                  {"found":true,"shown":true,"top":true}
+  ✓ 6 Interval Match: up within 1.5 s after, result shown, no marks left       960 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Interval Match: no console errors during the take                        none
+  ✓ 6 Interval Match: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: down within 1.5 s of the start, the stage live                401 ms
+  ✓ 6 Scale Run: never up while the take runs (100 ms samples)                 0 up of 128 busy
+  ✓ 6 Scale Run: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Scale Run: #scaleStartBtn topmost on the stage                           {"found":true,"shown":true,"top":true}
+  ✓ 6 Scale Run: up within 1.5 s after, result shown, no marks left            951 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Scale Run: no console errors during the take                             none
+  ✓ 6 Scale Run: stopAllActiveSessions() brings it up within 100 ms, no marks  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: down within 1.5 s of the start, the stage live         401 ms
+  ✓ 6 Custom Challenge: never up while the take runs (100 ms samples)          0 up of 155 busy
+  ✓ 6 Custom Challenge: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Custom Challenge: #customStartBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 6 Custom Challenge: up within 1.5 s after, result shown, no marks left     950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Custom Challenge: no console errors during the take                      none
+  ✓ 6 Custom Challenge: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: down within 1.5 s of the start, the stage live        404 ms
+  ✓ 6 Ear → Voice → Ear: never up while the take runs (100 ms samples)         0 up of 70 busy
+  ✓ 6 Ear → Voice → Ear: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Ear → Voice → Ear: #eveStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Ear → Voice → Ear: up within 1.5 s after, result shown, no marks left    933 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Ear → Voice → Ear: no console errors during the take                     none
+  ✓ 6 Ear → Voice → Ear: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: down within 1.5 s of the start, the stage live           404 ms
+  ✓ 6 Sing It 5 Ways: never up while the take runs (100 ms samples)            0 up of 150 busy
+  ✓ 6 Sing It 5 Ways: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Sing It 5 Ways: #fiveStartBtn topmost on the stage                       {"found":true,"shown":true,"top":true}
+  ✓ 6 Sing It 5 Ways: up within 1.5 s after, result shown, no marks left       950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Sing It 5 Ways: no console errors during the take                        none
+  ✓ 6 Sing It 5 Ways: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: down within 1.5 s of the start, the stage live 410 ms
+  ✓ 6 Can You Hear Your Mistake?: never up while the take runs (100 ms samples) 0 up of 16 busy
+  ✓ 6 Can You Hear Your Mistake?: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Can You Hear Your Mistake?: #hmSingStatus topmost on the stage           {"found":true,"shown":true,"top":true}
+  ✓ 6 Can You Hear Your Mistake?: up within 1.5 s after, result shown, no marks left 943 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Can You Hear Your Mistake?: no console errors during the take            none
+  ✓ 6 Can You Hear Your Mistake?: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: down within 1.5 s of the start, the stage live             404 ms
+  ✓ 6 Range Finder: never up while the take runs (100 ms samples)              0 up of 46 busy
+  ✓ 6 Range Finder: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Range Finder: #captureLowBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 6 Range Finder: up within 1.5 s after, result shown, no marks left         954 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Range Finder: no console errors during the take                          none
+  ✓ 6 Range Finder: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: down within 1.5 s of the start, the stage live           406 ms
+  ✓ 6 Breath Trainer: never up while the take runs (100 ms samples)            0 up of 55 busy
+  ✓ 6 Breath Trainer: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 6 Breath Trainer: #breathStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 6 Breath Trainer: up within 1.5 s after, result shown, no marks left       948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Breath Trainer: no console errors during the take                        none
+  ✓ 6 Breath Trainer: stopAllActiveSessions() brings it up within 100 ms, no marks 0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 6 Key Trainer (not sung): data-house="up" throughout, nothing staged       15 samples: up
+  ✓ 6 Vocal Lab (not sung): data-house="up" throughout, nothing staged         26 samples: up
+  ✓ 6 Genre Coach (not sung): data-house="up" throughout, nothing staged       15 samples: up
+  ✓ 6 Smart Warmup (not sung): data-house="up" throughout, nothing staged      15 samples: up
+  ✓ 6 Ear Training (not sung): data-house="up" throughout, nothing staged      31 samples: up
+  ✓ 6 Vocal Puzzle (not sung): data-house="up" throughout, nothing staged      43 samples: up
+  ✓ 11 One Take: down within 1.5 s of the start, #oneTakeStage live            411 ms
+  ✓ 11 One Take: never up while the exercise runs (100 ms samples)             0 up of 73 busy
+  ✓ 11 One Take: #vlBreak displayed on its stage, not offstage                 {"shown":true,"off":false,"house":"down"}
+  ✓ 11 One Take: #oneTakeStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 One Take: up within 1.5 s after, result shown, no marks left            952 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 One Take: no console errors                                             none
+  ✓ 11 One Take: stopAllActiveSessions() brings it up within 100 ms, no marks  1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: down within 1.5 s of the start, #mirrorStage live               409 ms
+  ✓ 11 Mirror: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Mirror: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Mirror: #mirrorPlayBtn topmost on the stage                             {"found":true,"shown":true,"top":true}
+  ✓ 11 Mirror: up within 1.5 s after, result shown, no marks left              962 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Mirror: no console errors                                               none
+  ✓ 11 Mirror: stopAllActiveSessions() brings it up within 100 ms, no marks    1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: down within 1.5 s of the start, #rhythmStage live               406 ms
+  ✓ 11 Rhythm: never up while the exercise runs (100 ms samples)               0 up of 60 busy
+  ✓ 11 Rhythm: #vlBreak displayed on its stage, not offstage                   {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Rhythm: #rhythmStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 11 Rhythm: up within 1.5 s after, result shown, no marks left              934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Rhythm: no console errors                                               none
+  ✓ 11 Rhythm: stopAllActiveSessions() brings it up within 100 ms, no marks    0 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: down within 1.5 s of the start, #drillStage live       403 ms
+  ✓ 11 Register Drills: never up while the exercise runs (100 ms samples)      0 up of 150 busy
+  ✓ 11 Register Drills: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Drills: #drillStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Drills: up within 1.5 s after, result shown, no marks left     934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Drills: no console errors                                      none
+  ✓ 11 Register Drills: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: down within 1.5 s of the start, #vibratoStage live             409 ms
+  ✓ 11 Vibrato: never up while the exercise runs (100 ms samples)              0 up of 39 busy
+  ✓ 11 Vibrato: #vlBreak displayed on its stage, not offstage                  {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Vibrato: #vibratoStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 11 Vibrato: up within 1.5 s after, result shown, no marks left             942 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Vibrato: no console errors                                              none
+  ✓ 11 Vibrato: stopAllActiveSessions() brings it up within 100 ms, no marks   1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: down within 1.5 s of the start, #vqStage live            403 ms
+  ✓ 11 Voice Quality: never up while the exercise runs (100 ms samples)        0 up of 40 busy
+  ✓ 11 Voice Quality: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Voice Quality: #vqStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Voice Quality: up within 1.5 s after, result shown, no marks left       943 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Voice Quality: no console errors                                        none
+  ✓ 11 Voice Quality: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: down within 1.5 s of the start, #emoStage live            400 ms
+  ✓ 11 Emotion Mode: never up while the exercise runs (100 ms samples)         0 up of 78 busy
+  ✓ 11 Emotion Mode: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Emotion Mode: #emoStartBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Emotion Mode: up within 1.5 s after, result shown, no marks left        950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Emotion Mode: no console errors                                         none
+  ✓ 11 Emotion Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: down within 1.5 s of Start, #registerStage live         401 ms
+  ✓ 11 Register Coach: never up while listening (100 ms samples)               0 up of 22 busy
+  ✓ 11 Register Coach: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Register Coach: #regMicBtn topmost on the stage                         {"found":true,"shown":true,"top":true}
+  ✓ 11 Register Coach: up within 1.5 s of Stop, no marks left                  961 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Register Coach: no console errors                                       none
+  ✓ 11 Register Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: down within 1.5 s of Start, #liveFeedbackStage live      403 ms
+  ✓ 11 Live Feedback: never up while listening (100 ms samples)                0 up of 22 busy
+  ✓ 11 Live Feedback: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Live Feedback: #liveFeedbackStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 11 Live Feedback: up within 1.5 s of Stop, no marks left                   943 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Live Feedback: no console errors                                        none
+  ✓ 11 Live Feedback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: down within 1.5 s of Start, #resonanceStage live             401 ms
+  ✓ 11 Resonance: never up while listening (100 ms samples)                    0 up of 22 busy
+  ✓ 11 Resonance: #vlBreak displayed on its stage, not offstage                {"shown":true,"off":false,"house":"down"}
+  ✓ 11 Resonance: #resonanceStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 11 Resonance: up within 1.5 s of Stop, no marks left                       960 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 11 Resonance: no console errors                                            none
+  ✓ 11 Resonance: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: down within 1.5 s of Start, #rehearsalStage live    405 ms
+  ✓ 12 Rehearsal playback: never up while listening (100 ms samples)           0 up of 37 busy
+  ✓ 12 Rehearsal playback: #vlBreak displayed on its stage, not offstage       {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback: #rehearsalStopBtn topmost on the stage              {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback: up within 1.5 s of Stop, no marks left              963 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback: no console errors                                   none
+  ✓ 12 Rehearsal playback: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: down within 1.5 s of Start, #rehearsalStage live 410 ms
+  ✓ 12 Rehearsal playback, Hear me on: never up while listening (100 ms samples) 0 up of 37 busy
+  ✓ 12 Rehearsal playback, Hear me on: #vlBreak displayed on its stage, not offstage {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Rehearsal playback, Hear me on: #rehearsalStopBtn topmost on the stage  {"found":true,"shown":true,"top":true}
+  ✓ 12 Rehearsal playback, Hear me on: up within 1.5 s of Stop, no marks left  957 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Rehearsal playback, Hear me on: no console errors                       none
+  ✓ 12 Rehearsal playback, Hear me on: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: down within 1.5 s of the start, #hmemStage live         409 ms
+  ✓ 12 Harmony Memory: never up while the exercise runs (100 ms samples)       0 up of 303 busy
+  ✓ 12 Harmony Memory: #vlBreak displayed on its stage, not offstage           {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Harmony Memory: #hmemStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Harmony Memory: up within 1.5 s after, result shown, no marks left      939 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Harmony Memory: no console errors                                       none
+  ✓ 12 Harmony Memory: stopAllActiveSessions() brings it up within 100 ms, no marks 4 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: down within 1.5 s of the start, #cbStage live             413 ms
+  ✓ 12 Choir Bosses: never up while the exercise runs (100 ms samples)         0 up of 198 busy
+  ✓ 12 Choir Bosses: #vlBreak displayed on its stage, not offstage             {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Choir Bosses: #cbStartBtn topmost on the stage                          {"found":true,"shown":true,"top":true}
+  ✓ 12 Choir Bosses: up within 1.5 s after, result shown, no marks left        937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Choir Bosses: no console errors                                         none
+  ✓ 12 Choir Bosses: stopAllActiveSessions() brings it up within 100 ms, no marks 7 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: down within 1.5 s of the start, #cxStage live               405 ms
+  ✓ 12 Chaos Mode: never up while the exercise runs (100 ms samples)           0 up of 303 busy
+  ✓ 12 Chaos Mode: #vlBreak displayed on its stage, not offstage               {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Chaos Mode: #cxStartBtn topmost on the stage                            {"found":true,"shown":true,"top":true}
+  ✓ 12 Chaos Mode: up within 1.5 s after, result shown, no marks left          937 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Chaos Mode: no console errors                                           none
+  ✓ 12 Chaos Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 10 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: down within 1.5 s of the start, #tkStage live         401 ms
+  ✓ 12 Tempo/Key Ladder: never up while the exercise runs (100 ms samples)     0 up of 303 busy
+  ✓ 12 Tempo/Key Ladder: #vlBreak displayed on its stage, not offstage         {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Tempo/Key Ladder: #tkStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 12 Tempo/Key Ladder: up within 1.5 s after, result shown, no marks left    934 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Tempo/Key Ladder: no console errors                                     none
+  ✓ 12 Tempo/Key Ladder: stopAllActiveSessions() brings it up within 100 ms, no marks 13 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: down within 1.5 s of the start, #ttStage live        401 ms
+  ✓ 12 Entrance & Cutoff: never up while the exercise runs (100 ms samples)    0 up of 306 busy
+  ✓ 12 Entrance & Cutoff: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Entrance & Cutoff: #ttStartBtn topmost on the stage                     {"found":true,"shown":true,"top":true}
+  ✓ 12 Entrance & Cutoff: up within 1.5 s after, result shown, no marks left   949 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Entrance & Cutoff: no console errors                                    none
+  ✓ 12 Entrance & Cutoff: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: down within 1.5 s of the start, #ycStage live          400 ms
+  ✓ 12 Your Choir take: never up while the exercise runs (100 ms samples)      0 up of 306 busy
+  ✓ 12 Your Choir take: #vlBreak displayed on its stage, not offstage          {"shown":true,"off":false,"house":"down"}
+  ✓ 12 Your Choir take: #ycStopBtn topmost on the stage                        {"found":true,"shown":true,"top":true}
+  ✓ 12 Your Choir take: up within 1.5 s after, result shown, no marks left     917 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 12 Your Choir take: no console errors                                      none
+  ✓ 12 Your Choir take: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 13 Choir World landing: data-house="up" throughout, nothing staged         14 samples: up
+  ✓ 13 Rehearse tab: data-house="up" throughout, nothing staged                14 samples: up
+  ✓ 13 Song Lab tab, the mixer playing: data-house="up" throughout, nothing staged 30 samples: up
+  ✓ 13 Trainers tab: data-house="up" throughout, nothing staged                15 samples: up
+  ✓ 13 Your Choir tab, your stacked takes playing: data-house="up" throughout, nothing staged 30 samples: up
+  ✓ 13 Passport tab: data-house="up" throughout, nothing staged                15 samples: up
+  ✓ 13 Sonic X-Ray lightbox: a data-house="down" inset holding #xraySvg; the body stays up (a tap included) {"inset":true,"svgInside":true} · up
+  ✓ 14 Studio Mode: down within 1.5 s of the start, #studioStage live          404 ms
+  ✓ 14 Studio Mode: never up while the exercise runs (100 ms samples)          0 up of 150 busy
+  ✓ 14 Studio Mode: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Studio Mode: #studioRecordBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Studio Mode: up within 1.5 s after, result shown, no marks left         950 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Studio Mode: no console errors                                          none
+  ✓ 14 Studio Mode: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: down within 1.5 s of the start, #pdStage live     408 ms
+  ✓ 14 Performance Director: never up while the exercise runs (100 ms samples) 0 up of 266 busy
+  ✓ 14 Performance Director: #vlBreak displayed on its stage, not offstage     {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Performance Director: #pdStopBtn topmost on the stage                   {"found":true,"shown":true,"top":true}
+  ✓ 14 Performance Director: up within 1.5 s after, result shown, no marks left 946 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Performance Director: no console errors                                 none
+  ✓ 14 Performance Director: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: down within 1.5 s of Start, #aiDuetStage live      406 ms
+  ✓ 14 Sing With the Choir: never up while listening (100 ms samples)          0 up of 47 busy
+  ✓ 14 Sing With the Choir: #vlBreak displayed on its stage, not offstage      {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Sing With the Choir: #aiDuetStartBtn topmost on the stage               {"found":true,"shown":true,"top":true}
+  ✓ 14 Sing With the Choir: up within 1.5 s of Stop, no marks left             956 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Sing With the Choir: no console errors                                  none
+  ✓ 14 Sing With the Choir: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: down within 1.5 s of the start, #stayKeyStage live         406 ms
+  ✓ 14 Stay in Key: never up while the exercise runs (100 ms samples)          0 up of 266 busy
+  ✓ 14 Stay in Key: #vlBreak displayed on its stage, not offstage              {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Stay in Key: #stayKeyStartBtn topmost on the stage                      {"found":true,"shown":true,"top":true}
+  ✓ 14 Stay in Key: up within 1.5 s after, result shown, no marks left         948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Stay in Key: no console errors                                          none
+  ✓ 14 Stay in Key: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: down within 1.5 s of the start, #karaokeStage live       402 ms
+  ✓ 14 Karaoke Coach: never up while the exercise runs (100 ms samples)        0 up of 266 busy
+  ✓ 14 Karaoke Coach: #vlBreak displayed on its stage, not offstage            {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Karaoke Coach: #karaokeStartBtn topmost on the stage                    {"found":true,"shown":true,"top":true}
+  ✓ 14 Karaoke Coach: up within 1.5 s after, result shown, no marks left       948 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Karaoke Coach: no console errors                                        none
+  ✓ 14 Karaoke Coach: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: down within 1.5 s of the start, #emotionStage live   404 ms
+  ✓ 14 Emotional Singing: never up while the exercise runs (100 ms samples)    0 up of 266 busy
+  ✓ 14 Emotional Singing: #vlBreak displayed on its stage, not offstage        {"shown":true,"off":false,"house":"down"}
+  ✓ 14 Emotional Singing: #emotionStartBtn topmost on the stage                {"found":true,"shown":true,"top":true}
+  ✓ 14 Emotional Singing: up within 1.5 s after, result shown, no marks left   942 ms · result true · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 14 Emotional Singing: no console errors                                    none
+  ✓ 14 Emotional Singing: stopAllActiveSessions() brings it up within 100 ms, no marks 1 ms · {"live":0,"staged":0,"off":0,"path":0}
+  ✓ 9 #warmupOverlay has data-house="down"                                     down
+  ✓ no page errors                                                             
+  ✓ 7 reduced motion: down within 100 ms of the start                          27 ms
+  ✓ 7 reduced motion: up 600 ms after the stop, at once (≤ 700 ms)             622 ms
+  ✓ 7 reduced motion: the dimmer never gets .is-on                             0 times
+
+-- sharp stimulus · light · 390px
+  ✓ 5 sharp: #pitchCentsRead reads pm_live_sharp with a number                 44 cents sharp | 37 cents sharp | 43 cents sharp | 48 cents sharp | 34 cents sharp | 26 cents sharp
+  ✓ 5 sharp: #pitchTargetNote never gets .pm-locked                            0 of 85 samples locked
+  ✓ 5 sharp: no console errors during the take                                 none
+
+1051 passed, 0 failed
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvh-1794314766025@example.com

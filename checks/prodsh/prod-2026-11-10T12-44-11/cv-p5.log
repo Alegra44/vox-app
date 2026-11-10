@@ -1,0 +1,291 @@
+signed up voxcoach-cvp5-1794330508024@example.com
+== Fresh state: {
+  bosses: [
+    'O:The Drowner',
+    'L:The Drifter',
+    'L:The Sprinter',
+    'L:The Ghost',
+    'L:The Shifter',
+    'L:The Silence'
+  ],
+  rungs: [
+    'O:100% · written key',
+    'L:110% · written key',
+    'L:110% · +1 semitone',
+    'L:120% · +1 semitone',
+    'L:120% · +2 semitones',
+    'L:130% · +2 semitones'
+  ],
+  rungDesc: '72 BPM (100% of 72) in the written key, C Major.',
+  cx: 'The rest of the choir misbehaves: each run draws a new random plan of surges, drop-outs and drifts.'
+}
+
+== Boss 1: drowner — The other four parts play at 1.6× their mixer volume while your guide drops to 50%.
+{"level":2,"acappella":false,"memory":false,"tempo":72,"chordDur":3.3333,"songLen":26.667,"altoNotes":"67,71,69,69,67,69,71,67","label":"Demo Hymn (C Major)","chord5":"I — C Major"}
+t=5.008 chord 2 tempo 72 | Soprano mix 0.65 fx 1.6 rms 0.6614 Δ0¢ | Lead mix 0.85 fx 1.6 rms 0.8647 Δ0¢ | Alto mix 0.35 fx 1 rms 0.2226 Δ0¢ | Tenor mix 0.7 fx 1.6 rms 0.7133 Δ0¢ | Bass mix 0.75 fx 1.6 rms 0.7595 Δ0¢
+t=18.341 chord 6 tempo 72 | Soprano mix 0.65 fx 1.6 rms 0.6618 Δ0¢ | Lead mix 0.85 fx 1.6 rms 0.8646 Δ0¢ | Alto mix 0.35 fx 1 rms 0.2229 Δ1¢ | Tenor mix 0.7 fx 1.6 rms 0.7138 Δ0¢ | Bass mix 0.75 fx 1.6 rms 0.7614 Δ0¢
+status: The Drowner — chord 6/8: sing A4 · hits: 5, misses: 0 | tones: []
+after stop: {"level":0,"ac":false,"mem":false,"songIsBase":true,"fx":[1.600000023841858,1.600000023841858,1,1.600000023841858,1.600000023841858],"label":"Demo Hymn (C Major)"}
+
+== Boss 2: drifter — Every other part is detuned by 40 cents: sharp on one chord, flat on the next. Your guide is at 25%. Hold your own pitch, not theirs.
+{"level":3,"acappella":false,"memory":false,"tempo":72,"chordDur":3.3333,"songLen":26.667,"altoNotes":"67,71,69,69,67,69,71,67","label":"Demo Hymn (C Major)","chord5":"I — C Major"}
+t=5.008 chord 2 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4135 Δ-40¢ | Lead mix 0.85 fx 1 rms 0.5409 Δ-40¢ | Alto mix 0.175 fx 1 rms 0.1115 Δ2¢ | Tenor mix 0.7 fx 1 rms 0.4449 Δ-40¢ | Bass mix 0.75 fx 1 rms 0.4736 Δ-39¢
+t=18.336 chord 6 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4136 Δ-40¢ | Lead mix 0.85 fx 1 rms 0.5411 Δ-40¢ | Alto mix 0.175 fx 1 rms 0.1114 Δ2¢ | Tenor mix 0.7 fx 1 rms 0.4453 Δ-40¢ | Bass mix 0.75 fx 1 rms 0.4722 Δ-39¢
+status: The Drifter — chord 6/8: sing A4 · hits: 5, misses: 0 | tones: []
+after stop: {"level":0,"ac":false,"mem":false,"songIsBase":true,"fx":[1,1,1,1,1],"label":"Demo Hymn (C Major)"}
+
+== Boss 3: sprinter — The whole song at 130% speed (94 BPM instead of 72), with your guide at 25%.
+{"level":3,"acappella":false,"memory":false,"tempo":93.60000000000001,"chordDur":2.5641,"songLen":20.513,"altoNotes":"67,71,69,69,67,69,71,67","label":"Demo Hymn (C Major)","chord5":"I — C Major"}
+t=3.847 chord 2 tempo 93.6 | Soprano mix 0.65 fx 1 rms 0.4138 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5404 Δ0¢ | Alto mix 0.175 fx 1 rms 0.1112 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4457 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4751 Δ1¢
+t=14.113 chord 6 tempo 93.6 | Soprano mix 0.65 fx 1 rms 0.414 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5404 Δ0¢ | Alto mix 0.175 fx 1 rms 0.1113 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4459 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4779 Δ1¢
+status: The Sprinter — chord 6/8: sing A4 · hits: 5, misses: 0 | tones: []
+after stop: {"level":0,"ac":false,"mem":false,"songIsBase":true,"fx":[1,1,1,1,1],"label":"Demo Hymn (C Major)"}
+
+== Boss 4: ghost — Your guide plays at full volume for the first 4 chords, then cuts out for the rest of the song. No fade, no warning.
+{"level":0,"acappella":false,"memory":false,"tempo":72,"chordDur":3.3333,"songLen":26.667,"altoNotes":"67,71,69,69,67,69,71,67","label":"Demo Hymn (C Major)","chord5":"I — C Major"}
+t=5.019 chord 2 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4134 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5414 Δ0¢ | Alto mix 0.7 fx 1 rms 0.4457 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4453 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4795 Δ1¢
+t=18.341 chord 6 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4136 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5411 Δ0¢ | Alto mix 0.7 fx 0 rms 0 Δnull¢ | Tenor mix 0.7 fx 1 rms 0.4446 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4759 Δ1¢
+status: The Ghost — chord 6/8: sing A4 · hits: 5, misses: 0 | tones: []
+after stop: {"level":0,"ac":false,"mem":false,"songIsBase":true,"fx":[1,1,0,1,1],"label":"Demo Hymn (C Major)"}
+
+== Boss 5: shifter — From chord 5, the whole choir moves up a semitone and stays there. Your guide is at 25%; follow the new key.
+{"level":3,"acappella":false,"memory":false,"tempo":72,"chordDur":3.3333,"songLen":26.667,"altoNotes":"67,71,69,69,68,70,72,68","label":"Demo Hymn (C Major)","chord5":"I — C# Major"}
+t=5.008 chord 2 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4138 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5413 Δ0¢ | Alto mix 0.175 fx 1 rms 0.1115 Δ2¢ | Tenor mix 0.7 fx 1 rms 0.4453 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4795 Δ1¢
+t=18.336 chord 6 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4139 Δ100¢ | Lead mix 0.85 fx 1 rms 0.5406 Δ100¢ | Alto mix 0.175 fx 1 rms 0.1112 Δ101¢ | Tenor mix 0.7 fx 1 rms 0.4458 Δ100¢ | Bass mix 0.75 fx 1 rms 0.4764 Δ101¢
+status: The Shifter — chord 6/8: sing A#4 · hits: 5, misses: 0 | tones: []
+after stop: {"level":0,"ac":false,"mem":false,"songIsBase":true,"fx":[1,1,1,1,1],"label":"Demo Hymn (C Major)"}
+
+== Boss 6: silence — Final boss. Nothing plays, at 110% speed (79 BPM): you hear your starting note during the count-in, then sing your line from memory with no notes on screen.
+{"level":0,"acappella":true,"memory":true,"tempo":79.2,"chordDur":3.0303,"songLen":24.242,"altoNotes":"67,71,69,69,67,69,71,67","label":"Demo Hymn (C Major)","chord5":"I — C Major"}
+t=4.548 chord 2 tempo 79.2 | Soprano mix 0 fx 1 rms 0 Δnull¢ | Lead mix 0 fx 1 rms 0 Δnull¢ | Alto mix 0 fx 1 rms 0 Δnull¢ | Tenor mix 0 fx 1 rms 0 Δnull¢ | Bass mix 0 fx 1 rms 0 Δnull¢
+t=16.676 chord 6 tempo 79.2 | Soprano mix 0 fx 1 rms 0 Δnull¢ | Lead mix 0 fx 1 rms 0 Δnull¢ | Alto mix 0 fx 1 rms 0 Δnull¢ | Tenor mix 0 fx 1 rms 0 Δnull¢ | Bass mix 0 fx 1 rms 0 Δnull¢
+status: The Silence — chord 6/8 · hits: 5, misses: 0 | tones: [{"f":392,"d":2.173,"atSongT":-3.03}]
+after stop: {"level":0,"ac":false,"mem":false,"songIsBase":true,"fx":[1,1,1,1,1],"label":"Demo Hymn (C Major)"}
+
+== Chaos run (hymn Alto, rehearsal level 1)
+plan: [null,{"type":"surge","target":"Lead"},{"type":"drift","cents":-35},{"type":"drift","cents":35},{"type":"dropout"},null,null,{"type":"surge","target":"Tenor"}]
+t=1.669 chord 1 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4139 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5411 Δ0¢ | Alto mix 0.7 fx 1 rms 0.4452 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4447 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4749 Δ1¢ | status: Chaos — chord 1/8: sing G4 · calm
+t=5.019 chord 2 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4134 Δ0¢ | Lead mix 0.85 fx 2 rms 1.0826 Δ0¢ | Alto mix 0.7 fx 1 rms 0.4461 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4453 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4795 Δ1¢ | status: Chaos — chord 2/8: sing B4 · Lead surges to 2×
+t=8.336 chord 3 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4136 Δ-35¢ | Lead mix 0.85 fx 1 rms 0.5417 Δ-35¢ | Alto mix 0.7 fx 1 rms 0.4458 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4457 Δ-35¢ | Bass mix 0.75 fx 1 rms 0.4773 Δ-34¢ | status: Chaos — chord 3/8: sing A4 · choir drifts -35 cents
+t=11.669 chord 4 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4135 Δ35¢ | Lead mix 0.85 fx 1 rms 0.5406 Δ35¢ | Alto mix 0.7 fx 1 rms 0.4454 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4454 Δ35¢ | Bass mix 0.75 fx 1 rms 0.4802 Δ36¢ | status: Chaos — chord 4/8: sing A4 · choir drifts +35 cents
+t=15.008 chord 5 tempo 72 | Soprano mix 0.65 fx 0 rms 0 Δnull¢ | Lead mix 0.85 fx 0 rms 0 Δnull¢ | Alto mix 0.7 fx 1 rms 0.4458 Δ0¢ | Tenor mix 0.7 fx 0 rms 0 Δnull¢ | Bass mix 0.75 fx 0 rms 0 Δnull¢ | status: Chaos — chord 5/8: sing G4 · everyone else drops out
+t=18.336 chord 6 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4139 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5404 Δ0¢ | Alto mix 0.7 fx 1 rms 0.4458 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4463 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4762 Δ1¢ | status: Chaos — chord 6/8: sing A4 · calm
+t=21.669 chord 7 tempo 72 | Soprano mix 0.65 fx 1 rms 0.414 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5404 Δ0¢ | Alto mix 0.7 fx 1 rms 0.4452 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4457 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4806 Δ1¢ | status: Chaos — chord 7/8: sing B4 · calm
+t=25.008 chord 8 tempo 72 | Soprano mix 0.65 fx 1 rms 0.4136 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5411 Δ0¢ | Alto mix 0.7 fx 1 rms 0.4455 Δ0¢ | Tenor mix 0.7 fx 2 rms 0.8926 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4749 Δ1¢ | status: Chaos — chord 8/8: sing G4 · Tenor surges to 2×
+
+== Ladder rung 6 up (130%, +2) then rung 3 down (110%, −1)
+{
+  desc: '94 BPM (130% of 72) in D Major (+2 semitones; written in C Major).',
+  rungs: [
+    'O:100% · written key',
+    'O:110% · written key',
+    'O:110% · +1 semitone',
+    'O:120% · +1 semitone',
+    'O:120% · +2 semitones',
+    'O:130% · +2 semitones'
+  ]
+}
+t=3.857 chord 2 tempo 93.6 | Soprano mix 0.65 fx 1 rms 0.4137 Δ200¢ | Lead mix 0.85 fx 1 rms 0.5409 Δ200¢ | Alto mix 0.7 fx 1 rms 0.4458 Δ200¢ | Tenor mix 0.7 fx 1 rms 0.4457 Δ200¢ | Bass mix 0.75 fx 1 rms 0.4759 Δ201¢
+status: Rung 6 · 94 BPM · D Major — chord 2/8: sing C#5
+{
+  desc: '72 BPM (100% of 72) in the written key, C Major.',
+  rungs: [
+    'O:100% · written key',
+    'L:110% · written key',
+    'L:110% · −1 semitone',
+    'L:120% · −1 semitone',
+    'L:120% · −2 semitones',
+    'L:130% · −2 semitones'
+  ]
+}
+t=5.013 chord 2 tempo 72 | Soprano mix 0.65 fx 1 rms 0.414 Δ0¢ | Lead mix 0.85 fx 1 rms 0.5412 Δ0¢ | Alto mix 0.7 fx 1 rms 0.446 Δ0¢ | Tenor mix 0.7 fx 1 rms 0.4454 Δ0¢ | Bass mix 0.75 fx 1 rms 0.4801 Δ1¢
+status: Rung 1 · 72 BPM · C Major — chord 2/8: sing B4
+
+== Boss 1 win: stand-in sings chords 1–7 in tune, chord 3 +80¢, chord 8 silent (6/8 = 75%)
+mid-run: {
+  status: 'The Drowner — chord 4/8: sing A4 · hits: 2, misses: 1',
+  hp: 'Hits still needed: 4',
+  lives: 'Misses left: 2',
+  hpW: '66.6667%',
+  livesW: '66.6667%'
+}
+{
+  results: '\n' +
+    '    The Drowner — result\n' +
+    '    75%\n' +
+    '    6/8 notes held in tune (within ±50 cents)\n' +
+    '    You beat The Drowner. Boss 2 is unlocked.\n' +
+    '    \n' +
+    '    Your performance\n' +
+    '    Notes held6/8 notes held within ±50 cents75PitchTypically 13 cents from the target across the 7 notes heard92Timing7/7 notes heard: your voice arrived in the first 40% of the note · median 16 ms after it started100\n' +
+    "    Work on notes held next: it's your lowest (75).\n" +
+    '    How this is measuredScored the same way as Performance Director. Pitch is 100 minus 0.6 × your average cents off in each note. Timing is 100 when your voice arrived in the first 40% of a note and 50 when it came later. Both count only notes that were heard. Tap "Why?" on a missed note to see what was expected next to what the mic heard.\n' +
+    '  \n' +
+    '    Chord 1 · target G4+2 cents · in tuneChord 2 · target B4+2 cents · in tuneChord 3 · target A4 Why?+81 cents · off pitchChord 4 · target A4+2 cents · in tuneChord 5 · target G4+2 cents · in tuneChord 6 · target A4+2 cents · in tuneChord 7 · target B4+2 cents · in tuneChord 8 · target G4 Why?not heard\n' +
+    '  ',
+  sel: 1,
+  stored: '{"boss":{"hymn":{"Alto":{"0":75}}}}',
+  bosses: [
+    'O:Best 75% · defeated',
+    'O:Not tried yet',
+    'L:Locked — beat boss 2',
+    'L:Locked — beat boss 3',
+    'L:Locked — beat boss 4',
+    'L:Locked — beat boss 5'
+  ]
+}
+
+== Boss 2 lose early: silent from chord 2 → 3 misses end the fight after chord 4
+{
+  endedAtSongT: 13.168,
+  playing: false,
+  results: '\n' +
+    '    The Drifter — result\n' +
+    '    13%\n' +
+    '    1/8 notes held in tune (within ±50 cents)\n' +
+    '    The Drifter won early: 3 misses ended the fight after chord 4.\n' +
+    '    \n' +
+    '    Your performance\n' +
+    '    Notes held1/8 notes held within ±50 cents13PitchTypically 2 cents from the target across the 1 notes heard99Timing1/1 notes heard: your voice arrived in the first 40% of the note · median 16 ms after it started100\n' +
+    "    Work on notes held next: it's your lowest (13).\n" +
+    '    How this is measuredScored the same way as Performance Director. Pitch is 100 minus 0.6 × your average cents off in each note. Timing is 100 when your voice arrived in the first 40% of a note and 50 when it came later. Both count only notes that were heard. Tap "Why?" on a missed note to see what was expected next to what the mic heard.\n' +
+    '  \n' +
+    '    Chord 1 · target G4+2 cents · in tuneChord 2 · target B4 Why?not heardChord 3 · target A4 Why?not heardChord 4 · target A4 Why?not heardChord 5 · target G4 Why?not reachedChord 6 · target A4 Why?not reachedChord 7 · target B4 Why?not reachedChord 8 · target G4 Why?not reached\n' +
+    '  ',
+  hp: 'Hits still needed: 5',
+  lives: 'Misses left: 0',
+  sel: 1
+} wall s 16.567
+
+== Ladder rung 1 pass, then rung 2 (110%) sung against the transposed line
+{
+  results: '\n' +
+    '    Rung 1 result — 100% · written key\n' +
+    '    100%\n' +
+    '    8/8 notes held in tune (within ±50 cents)\n' +
+    '    Passed — rung 2 is unlocked.\n' +
+    '    \n' +
+    '    Your performance\n' +
+    '    Notes held8/8 notes held within ±50 cents100PitchTypically 2 cents from the target across the 8 notes heard99Timing8/8 notes heard: your voice',
+  sel: 1,
+  rungs: [
+    'O:Best 100% · passed',
+    'O:Not tried yet',
+    'L:Locked — pass rung 2',
+    'L:Locked — pass rung 3',
+    'L:Locked — pass rung 4',
+    'L:Locked — pass rung 5'
+  ]
+}
+
+== Chaos scoring: stand-in in tune on calm chords, +90¢ on chaos chords
+plan [null,{"type":"dropout"},null,{"type":"dropout"},{"type":"drift","cents":35},null,null,{"type":"surge","target":"Tenor"}]
+{
+  results: '\n' +
+    '    Chaos run result\n' +
+    '    50%\n' +
+    '    4/8 notes held in tune (within ±50 cents)\n' +
+    '    Chaos chords: 0 of 4 held · calm chords: 4 of 4 held.\n' +
+    '    \n' +
+    '    Your performance\n' +
+    '    Notes held4/8 notes held within ±50 cents50PitchTypically 46 cents from the target across the 8 notes heard72Timing8/8 notes heard: your voice arrived in the first 40% of the note · median 11 ms after it started100\n' +
+    "    Work on notes held next: it's your lowest (50).\n" +
+    '    How this is measuredScored the same way as Performance Director. Pitch is 100 minus 0.6 × your average cents off in each note. Timing is 100 when your voice arrived in the first 40% of a note and 50 when it came later. Both count only notes that were heard. Tap "Why?" on a missed note to see what was expected next to what the mic heard.\n' +
+    '  \n' +
+    '    Chord 1 · target G4 · calm+2 cents · in tuneChord 2 · target B4 · everyone else drops out Why?+91 cents · off pitchChord 3 · target A4 · calm+1 cents · in tuneChord 4 · target A4 · everyone else drops out Why?+91 cents · off pitchChord 5 · target G4 · choir drifts +35 cents Why?+92 cents · off pitchChord 6 · target A4 · calm+1 cents · in tuneChord 7 · target B4 · calm+2 cents · in tuneChord 8 · target G4 · Tenor surges to 2× Why?+91 cents · off pitch\n' +
+    '  ',
+  best: 'Best on this part: 50%'
+}
+
+== fr
+{
+  cb: 'Six boss, chacun change ce qui joue autour de vous. Tenez 75 % de vos notes à ±50 cents près pour gagner.',
+  boss: 'Toutes les autres voix sont désaccordées de 40 cents : trop haut sur un accord, trop bas sur le suivant. Votre guide est à 25 %. Tenez votre justesse, pas la leur.',
+  bosses: ' BOSS 1/6 Le Noyeur Meilleur 75 % · battu BOSS 2/6 Le Dériveur Meilleur 13 % BOSS 3/6 Le Sprinteur Verrouillé — battez le boss 2 BOSS 4/6 Le Fantôme Verrouillé — battez le boss 3 BOSS 5/6 Le Transpositeur Verrouillé — battez le boss 4 BOSS 6/6 Le Silence Verrouillé — battez le boss 5 ',
+  bars: 'Coups encore nécessaires : 5 / Erreurs restantes : 0',
+  cx: 'Le reste de la chorale se dérègle : chaque essai tire un nouveau plan au hasard de poussées, de silences et de dérives.',
+  cxBest: 'Meilleur score sur cette voix : 50 %',
+  tk: 'Six échelons, chacun plus rapide ou plus loin de la tonalité écrite, et toute la chorale suit. Tenez 75 % de vos notes pour monter.',
+  rung: '79 BPM (110 % de 72) dans la tonalité écrite, C Major.',
+  rungs: ' ÉCHELON 1/6 100% · tonalité écrite Meilleur 100 % · réussie ÉCHELON 2/6 110% · tonalité écrite Pas encore essayée ÉCHELON 3/6 110% · −1 demi-ton Verrouillé — réussissez l’échelon 2 ÉCHELON 4/6 120% · −1 demi-ton Verrouillé — réussissez l’échelon 3 ÉCHELON 5/6 120% · −2 demi-tons Verrouillé — réussissez l’échelon 4 ÉCHELON 6/6 130% · −2 demi-tons Verrouillé — réussissez l’échelon 5 ',
+  start: [
+    'Affronter Le Dériveur',
+    'Lancer un essai Chaos',
+    'Monter à l’échelon 2'
+  ],
+  results: '\n' +
+    '    Résultat de l’essai Chaos\n' +
+    '    50%\n' +
+    '    4/8 notes tenues justes (à ±50 cents)\n' +
+    '    Accords chaotiques : 0 sur 4 tenus · accords calmes : 4 sur 4 tenus.\n' +
+    '    \n' +
+    ' '
+}
+
+== es
+{
+  cb: 'Seis jefes, cada uno cambia lo que suena a tu alrededor. Sostén el 75% de tus notas a ±50 cents para ganar.',
+  boss: 'Todas las demás voces están desafinadas 40 cents: altas en un acorde, bajas en el siguiente. Tu guía está al 25%. Mantén tu afinación, no la suya.',
+  bosses: ' JEFE 1/6 El Ahogador Mejor 75 % · vencido JEFE 2/6 El Desafinador Mejor 13 % JEFE 3/6 El Velocista Bloqueado — vence al jefe 2 JEFE 4/6 El Fantasma Bloqueado — vence al jefe 3 JEFE 5/6 El Transpositor Bloqueado — vence al jefe 4 JEFE 6/6 El Silencio Bloqueado — vence al jefe 5 ',
+  bars: 'Golpes que faltan: 5 / Fallos restantes: 0',
+  cx: 'El resto del coro se descontrola: cada intento sortea un plan nuevo de subidas, silencios y desafinaciones.',
+  cxBest: 'Mejor resultado en esta voz: 50%',
+  tk: 'Seis peldaños, cada uno más rápido o más lejos de la tonalidad escrita, y todo el coro lo sigue. Sostén el 75% de tus notas para subir.',
+  rung: '79 BPM (110% de 72) en la tonalidad escrita, C Major.',
+  rungs: ' PELDAÑO 1/6 100% · tonalidad escrita Mejor 100 % · superada PELDAÑO 2/6 110% · tonalidad escrita Aún sin intentar PELDAÑO 3/6 110% · −1 semitono Bloqueado — supera el peldaño 2 PELDAÑO 4/6 120% · −1 semitono Bloqueado — supera el peldaño 3 PELDAÑO 5/6 120% · −2 semitonos Bloqueado — supera el peldaño 4 PELDAÑO 6/6 130% · −2 semitonos Bloqueado — supera el peldaño 5 ',
+  start: [
+    'Enfrentar a El Desafinador',
+    'Empezar un intento de Caos',
+    'Subir al peldaño 2'
+  ],
+  results: '\n' +
+    '    Resultado del intento de Caos\n' +
+    '    50%\n' +
+    '    4/8 notas afinadas (a ±50 cents)\n' +
+    '    Acordes con caos: 0 de 4 sostenidos · acordes en calma: 4 de 4 sostenidos.\n' +
+    ' '
+}
+
+== tr
+{
+  cb: "Altı boss; her biri etrafınızda çalanı değiştirir. Kazanmak için notalarınızın %75'ini ±50 sent içinde tutun.",
+  boss: 'Diğer tüm partiler 40 sent kaydırılmıştır: bir akorda tiz, sonrakinde pes. Rehberiniz %25 seviyesinde. Onların perdesini değil, kendi perdenizi koruyun.',
+  bosses: ' BOSS 1/6 Boğucu En iyi %75 · yenildi BOSS 2/6 Kaydırıcı En iyi %13 BOSS 3/6 Sprinter Kilitli — 2. boss’u yenin BOSS 4/6 Hayalet Kilitli — 3. boss’u yenin BOSS 5/6 Ton Değiştirici Kilitli — 4. boss’u yenin BOSS 6/6 Sessizlik Kilitli — 5. boss’u yenin ',
+  bars: 'Kazanmak için 5 vuruş daha / 0 ıskalama hakkı kaldı',
+  cx: 'Koronun geri kalanı yoldan çıkar: her deneme yeni bir rastgele yükselme, susma ve kayma planı çeker.',
+  cxBest: 'Bu partideki en iyi skor: %50',
+  tk: "Altı basamak; her biri daha hızlı ya da yazılı tondan daha uzak ve tüm koro onunla gelir. Çıkmak için notalarınızın %75'ini tutun.",
+  rung: 'Yazılı ton C Major içinde 79 BPM (72 BPM’in %110’i).',
+  rungs: ' BASAMAK 1/6 100% · yazılı ton En iyi %100 · geçildi BASAMAK 2/6 110% · yazılı ton Henüz denenmedi BASAMAK 3/6 110% · −1 yarım ses Kilitli — 2. basamağı geçin BASAMAK 4/6 120% · −1 yarım ses Kilitli — 3. basamağı geçin BASAMAK 5/6 120% · −2 yarım ses Kilitli — 4. basamağı geçin BASAMAK 6/6 130% · −2 yarım ses Kilitli — 5. basamağı geçin ',
+  start: [ 'Kaydırıcı ile savaş', 'Kaos denemesi başlat', '2. basamağa çık' ],
+  results: '\n' +
+    '    Kaos denemesi sonucu\n' +
+    '    50%\n' +
+    '    4/8 nota doğru tutuldu (±50 cent içinde)\n' +
+    '    Kaos akorları: 4 akorun 0 tanesi tutuldu · sakin akorlar: 4 akorun 4 tanesi t'
+}
+
+== en
+{
+  cb: 'Six bosses, each changing what plays around you. Hold 75% of your notes within ±50 cents to win.',
+  boss: 'Every other part is detuned by 40 cents: sharp on one chord, flat on the next. Your guide is at 25%. Hold your own pitch, not theirs.',
+  bosses: ' BOSS 1/6 The Drowner Best 75% · defeated BOSS 2/6 The Drifter Best 13% BOSS 3/6 The Sprinter Locked — beat boss 2 BOSS 4/6 The Ghost Locked — beat boss 3 BOSS 5/6 The Shifter Locked — beat boss 4 BOSS 6/6 The Silence Locked — beat boss 5 ',
+  bars: 'Hits still needed: 5 / Misses left: 0',
+  cx: 'The rest of the choir misbehaves: each run draws a new random plan of surges, drop-outs and drifts.',
+  cxBest: 'Best on this part: 50%',
+  tk: 'Six rungs, each faster or further from the written key, and the whole choir moves with it. Hold 75% of your notes to climb.',
+  rung: '79 BPM (110% of 72) in the written key, C Major.',
+  rungs: ' RUNG 1/6 100% · written key Best 100% · passed RUNG 2/6 110% · written key Not tried yet RUNG 3/6 110% · −1 semitone Locked — pass rung 2 RUNG 4/6 120% · −1 semitone Locked — pass rung 3 RUNG 5/6 120% · −2 semitones Locked — pass rung 4 RUNG 6/6 130% · −2 semitones Locked — pass rung 5 ',
+  start: [ 'Fight The Drifter', 'Start a Chaos run', 'Climb rung 2' ],
+  results: '\n' +
+    '    Chaos run result\n' +
+    '    50%\n' +
+    '    4/8 notes held in tune (within ±50 cents)\n' +
+    '    Chaos chords: 0 of 4 held · calm chords: 4 of 4 held.\n' +
+    '    \n' +
+    '    Your performance\n'
+}
+
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-cvp5-1794330508024@example.com

@@ -1,0 +1,1531 @@
+{
+ "master": {
+  "values": {
+   "obSingerTypeGrid": [
+    "solo",
+    "choir",
+    "both",
+    "fun"
+   ],
+   "obLevelGrid": [
+    "beginner",
+    "intermediate",
+    "professional"
+   ],
+   "obGenreGrid": [
+    "pop",
+    "rock",
+    "gospel",
+    "opera",
+    "musicaltheatre",
+    "carnatic",
+    "metal",
+    "jazz",
+    "arabic",
+    "reggae",
+    "celtic",
+    "flamenco",
+    "bossanova",
+    "salsa",
+    "kpop",
+    "bluegrass"
+   ],
+   "obGoalsGrid": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+   ],
+   "obPriorityGrid": [
+    "pitch",
+    "range",
+    "breath",
+    "agility",
+    "expression"
+   ]
+  },
+  "paths": {
+   "none": {
+    "log": [],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Not set — defaulting to Beginner"
+     ],
+     [
+      "Genres",
+      "Not set"
+     ],
+     [
+      "Starting priority",
+      "Not set — Today's Mission will pick from your first real scores"
+     ]
+    ],
+    "saved": {
+     "singerType": null,
+     "level": "beginner",
+     "genre": null,
+     "goals": [],
+     "priority": null
+    },
+    "closed": true
+   },
+   "pick 0": {
+    "log": [
+     "1:solo",
+     "2:beginner",
+     "3:pop",
+     "3:rock",
+     "4:0",
+     "4:1",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Pop, Rock"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "beginner",
+     "genre": "pop",
+     "goals": [
+      "I want to sing higher",
+      "I want to stop singing flat"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "pick 1": {
+    "log": [
+     "1:choir",
+     "2:intermediate",
+     "3:rock",
+     "3:gospel",
+     "4:1",
+     "4:2",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Rock, Gospel"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "intermediate",
+     "genre": "rock",
+     "goals": [
+      "I want to stop singing flat",
+      "I want to improve my head voice"
+     ],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "pick 2": {
+    "log": [
+     "1:both",
+     "2:professional",
+     "3:gospel",
+     "3:opera",
+     "4:2",
+     "4:3",
+     "5:breath"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Gospel, Opera / Classical"
+     ],
+     [
+      "Starting priority",
+      "Breath"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "professional",
+     "genre": "gospel",
+     "goals": [
+      "I want to improve my head voice",
+      "I want to sing confidently"
+     ],
+     "priority": "breath"
+    },
+    "closed": true
+   },
+   "pick 3": {
+    "log": [
+     "1:fun",
+     "2:beginner",
+     "3:opera",
+     "3:musicaltheatre",
+     "4:3",
+     "4:4",
+     "5:agility"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Opera / Classical, Musical Theatre"
+     ],
+     [
+      "Starting priority",
+      "Agility"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "beginner",
+     "genre": "opera",
+     "goals": [
+      "I want to sing confidently",
+      "I want to improve my runs"
+     ],
+     "priority": "agility"
+    },
+    "closed": true
+   },
+   "pick 4": {
+    "log": [
+     "1:solo",
+     "2:intermediate",
+     "3:musicaltheatre",
+     "3:carnatic",
+     "4:4",
+     "4:5",
+     "5:expression"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Musical Theatre, Carnatic / Hindustani"
+     ],
+     [
+      "Starting priority",
+      "Expression"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "intermediate",
+     "genre": "musicaltheatre",
+     "goals": [
+      "I want to improve my runs",
+      "I want to sing harmonies"
+     ],
+     "priority": "expression"
+    },
+    "closed": true
+   },
+   "pick 5": {
+    "log": [
+     "1:choir",
+     "2:professional",
+     "3:carnatic",
+     "3:metal",
+     "4:5",
+     "4:6",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Carnatic / Hindustani, Metal"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "professional",
+     "genre": "carnatic",
+     "goals": [
+      "I want to sing harmonies",
+      "I want to prepare for a performance"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "pick 6": {
+    "log": [
+     "1:both",
+     "2:beginner",
+     "3:metal",
+     "3:jazz",
+     "4:6",
+     "4:7",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Metal, Jazz"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "beginner",
+     "genre": "metal",
+     "goals": [
+      "I want to prepare for a performance",
+      "I want to become a better overall singer"
+     ],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "pick 7": {
+    "log": [
+     "1:fun",
+     "2:intermediate",
+     "3:jazz",
+     "3:arabic",
+     "4:7",
+     "4:0",
+     "5:breath"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Jazz, Arabic"
+     ],
+     [
+      "Starting priority",
+      "Breath"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "intermediate",
+     "genre": "jazz",
+     "goals": [
+      "I want to become a better overall singer",
+      "I want to sing higher"
+     ],
+     "priority": "breath"
+    },
+    "closed": true
+   },
+   "pick 8": {
+    "log": [
+     "1:solo",
+     "2:professional",
+     "3:arabic",
+     "3:reggae",
+     "4:0",
+     "4:1",
+     "5:agility"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Arabic, Reggae"
+     ],
+     [
+      "Starting priority",
+      "Agility"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "professional",
+     "genre": "arabic",
+     "goals": [
+      "I want to sing higher",
+      "I want to stop singing flat"
+     ],
+     "priority": "agility"
+    },
+    "closed": true
+   },
+   "pick 9": {
+    "log": [
+     "1:choir",
+     "2:beginner",
+     "3:reggae",
+     "3:celtic",
+     "4:1",
+     "4:2",
+     "5:expression"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Reggae, Celtic"
+     ],
+     [
+      "Starting priority",
+      "Expression"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "beginner",
+     "genre": "reggae",
+     "goals": [
+      "I want to stop singing flat",
+      "I want to improve my head voice"
+     ],
+     "priority": "expression"
+    },
+    "closed": true
+   },
+   "pick 10": {
+    "log": [
+     "1:both",
+     "2:intermediate",
+     "3:celtic",
+     "3:flamenco",
+     "4:2",
+     "4:3",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Celtic, Flamenco"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "intermediate",
+     "genre": "celtic",
+     "goals": [
+      "I want to improve my head voice",
+      "I want to sing confidently"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "pick 11": {
+    "log": [
+     "1:fun",
+     "2:professional",
+     "3:flamenco",
+     "3:bossanova",
+     "4:3",
+     "4:4",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Flamenco, Bossa Nova"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "professional",
+     "genre": "flamenco",
+     "goals": [
+      "I want to sing confidently",
+      "I want to improve my runs"
+     ],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "pick 12": {
+    "log": [
+     "1:solo",
+     "2:beginner",
+     "3:bossanova",
+     "3:salsa",
+     "4:4",
+     "4:5",
+     "5:breath"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Bossa Nova, Salsa"
+     ],
+     [
+      "Starting priority",
+      "Breath"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "beginner",
+     "genre": "bossanova",
+     "goals": [
+      "I want to improve my runs",
+      "I want to sing harmonies"
+     ],
+     "priority": "breath"
+    },
+    "closed": true
+   },
+   "pick 13": {
+    "log": [
+     "1:choir",
+     "2:intermediate",
+     "3:salsa",
+     "3:kpop",
+     "4:5",
+     "4:6",
+     "5:agility"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Salsa, K-pop"
+     ],
+     [
+      "Starting priority",
+      "Agility"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "intermediate",
+     "genre": "salsa",
+     "goals": [
+      "I want to sing harmonies",
+      "I want to prepare for a performance"
+     ],
+     "priority": "agility"
+    },
+    "closed": true
+   },
+   "pick 14": {
+    "log": [
+     "1:both",
+     "2:professional",
+     "3:kpop",
+     "3:bluegrass",
+     "4:6",
+     "4:7",
+     "5:expression"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "K-pop, Bluegrass"
+     ],
+     [
+      "Starting priority",
+      "Expression"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "professional",
+     "genre": "kpop",
+     "goals": [
+      "I want to prepare for a performance",
+      "I want to become a better overall singer"
+     ],
+     "priority": "expression"
+    },
+    "closed": true
+   },
+   "pick 15": {
+    "log": [
+     "1:fun",
+     "2:beginner",
+     "3:bluegrass",
+     "3:pop",
+     "4:7",
+     "4:0",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Bluegrass, Pop"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "beginner",
+     "genre": "bluegrass",
+     "goals": [
+      "I want to become a better overall singer",
+      "I want to sing higher"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "toggle": {
+    "log": [
+     "3:pop",
+     "3:pop",
+     "3:rock",
+     "4:0",
+     "4:0"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Not set — defaulting to Beginner"
+     ],
+     [
+      "Genres",
+      "Rock"
+     ],
+     [
+      "Starting priority",
+      "Not set — Today's Mission will pick from your first real scores"
+     ]
+    ],
+    "saved": {
+     "singerType": null,
+     "level": "beginner",
+     "genre": "rock",
+     "goals": [],
+     "priority": null
+    },
+    "closed": true
+   },
+   "back": {
+    "log": [
+     "1:solo",
+     "2:beginner",
+     "5:pitch",
+     "back to 2",
+     "2:intermediate",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Not set"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "intermediate",
+     "genre": "rock",
+     "goals": [],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "back-to-0": {
+    "log": [
+     "back to 0",
+     "1:choir"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Not set — defaulting to Beginner"
+     ],
+     [
+      "Genres",
+      "Not set"
+     ],
+     [
+      "Starting priority",
+      "Not set — Today's Mission will pick from your first real scores"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "intermediate",
+     "genre": "rock",
+     "goals": [],
+     "priority": null
+    },
+    "closed": true
+   }
+  },
+  "errors": []
+ },
+ "branch": {
+  "values": {
+   "obSingerTypeGrid": [
+    "solo",
+    "choir",
+    "both",
+    "fun"
+   ],
+   "obLevelGrid": [
+    "beginner",
+    "intermediate",
+    "professional"
+   ],
+   "obGenreGrid": [
+    "pop",
+    "rock",
+    "gospel",
+    "opera",
+    "musicaltheatre",
+    "carnatic",
+    "metal",
+    "jazz",
+    "arabic",
+    "reggae",
+    "celtic",
+    "flamenco",
+    "bossanova",
+    "salsa",
+    "kpop",
+    "bluegrass"
+   ],
+   "obGoalsGrid": [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+   ],
+   "obPriorityGrid": [
+    "pitch",
+    "range",
+    "breath",
+    "agility"
+   ]
+  },
+  "paths": {
+   "none": {
+    "log": [],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner (you can change it later)"
+     ],
+     [
+      "Genres",
+      "Not set"
+     ],
+     [
+      "Starting priority",
+      "Picked from your first scores"
+     ]
+    ],
+    "saved": {
+     "singerType": null,
+     "level": "beginner",
+     "genre": null,
+     "goals": [],
+     "priority": null
+    },
+    "closed": true
+   },
+   "pick 0": {
+    "log": [
+     "1:solo",
+     "2:beginner",
+     "3:pop",
+     "3:rock",
+     "4:0",
+     "4:1",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Pop, Rock"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "beginner",
+     "genre": "pop",
+     "goals": [
+      "I want to sing higher",
+      "I want to stop singing flat"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "pick 1": {
+    "log": [
+     "1:choir",
+     "2:intermediate",
+     "3:rock",
+     "3:gospel",
+     "4:1",
+     "4:2",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Rock, Gospel"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "intermediate",
+     "genre": "rock",
+     "goals": [
+      "I want to stop singing flat",
+      "I want to improve my head voice"
+     ],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "pick 2": {
+    "log": [
+     "1:both",
+     "2:professional",
+     "3:gospel",
+     "3:opera",
+     "4:2",
+     "4:3",
+     "5:breath"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Gospel, Opera / Classical"
+     ],
+     [
+      "Starting priority",
+      "Breath"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "professional",
+     "genre": "gospel",
+     "goals": [
+      "I want to improve my head voice",
+      "I want to sing confidently"
+     ],
+     "priority": "breath"
+    },
+    "closed": true
+   },
+   "pick 3": {
+    "log": [
+     "1:fun",
+     "2:beginner",
+     "3:opera",
+     "3:musicaltheatre",
+     "4:3",
+     "4:4",
+     "5:agility"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Opera / Classical, Musical Theatre"
+     ],
+     [
+      "Starting priority",
+      "Agility"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "beginner",
+     "genre": "opera",
+     "goals": [
+      "I want to sing confidently",
+      "I want to improve my runs"
+     ],
+     "priority": "agility"
+    },
+    "closed": true
+   },
+   "pick 4": {
+    "log": [
+     "1:solo",
+     "2:intermediate",
+     "3:musicaltheatre",
+     "3:carnatic",
+     "4:4",
+     "4:5",
+     "5:expression (absent)"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Musical Theatre, Carnatic / Hindustani"
+     ],
+     [
+      "Starting priority",
+      "Picked from your first scores"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "intermediate",
+     "genre": "musicaltheatre",
+     "goals": [
+      "I want to improve my runs",
+      "I want to sing harmonies"
+     ],
+     "priority": null
+    },
+    "closed": true
+   },
+   "pick 5": {
+    "log": [
+     "1:choir",
+     "2:professional",
+     "3:carnatic",
+     "3:metal",
+     "4:5",
+     "4:6",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Carnatic / Hindustani, Metal"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "professional",
+     "genre": "carnatic",
+     "goals": [
+      "I want to sing harmonies",
+      "I want to prepare for a performance"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "pick 6": {
+    "log": [
+     "1:both",
+     "2:beginner",
+     "3:metal",
+     "3:jazz",
+     "4:6",
+     "4:7",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Metal, Jazz"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "beginner",
+     "genre": "metal",
+     "goals": [
+      "I want to prepare for a performance",
+      "I want to become a better overall singer"
+     ],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "pick 7": {
+    "log": [
+     "1:fun",
+     "2:intermediate",
+     "3:jazz",
+     "3:arabic",
+     "4:7",
+     "4:0",
+     "5:breath"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Jazz, Arabic"
+     ],
+     [
+      "Starting priority",
+      "Breath"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "intermediate",
+     "genre": "jazz",
+     "goals": [
+      "I want to become a better overall singer",
+      "I want to sing higher"
+     ],
+     "priority": "breath"
+    },
+    "closed": true
+   },
+   "pick 8": {
+    "log": [
+     "1:solo",
+     "2:professional",
+     "3:arabic",
+     "3:reggae",
+     "4:0",
+     "4:1",
+     "5:agility"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Arabic, Reggae"
+     ],
+     [
+      "Starting priority",
+      "Agility"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "professional",
+     "genre": "arabic",
+     "goals": [
+      "I want to sing higher",
+      "I want to stop singing flat"
+     ],
+     "priority": "agility"
+    },
+    "closed": true
+   },
+   "pick 9": {
+    "log": [
+     "1:choir",
+     "2:beginner",
+     "3:reggae",
+     "3:celtic",
+     "4:1",
+     "4:2",
+     "5:expression (absent)"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Reggae, Celtic"
+     ],
+     [
+      "Starting priority",
+      "Picked from your first scores"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "beginner",
+     "genre": "reggae",
+     "goals": [
+      "I want to stop singing flat",
+      "I want to improve my head voice"
+     ],
+     "priority": null
+    },
+    "closed": true
+   },
+   "pick 10": {
+    "log": [
+     "1:both",
+     "2:intermediate",
+     "3:celtic",
+     "3:flamenco",
+     "4:2",
+     "4:3",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Celtic, Flamenco"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "intermediate",
+     "genre": "celtic",
+     "goals": [
+      "I want to improve my head voice",
+      "I want to sing confidently"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "pick 11": {
+    "log": [
+     "1:fun",
+     "2:professional",
+     "3:flamenco",
+     "3:bossanova",
+     "4:3",
+     "4:4",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "Flamenco, Bossa Nova"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "professional",
+     "genre": "flamenco",
+     "goals": [
+      "I want to sing confidently",
+      "I want to improve my runs"
+     ],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "pick 12": {
+    "log": [
+     "1:solo",
+     "2:beginner",
+     "3:bossanova",
+     "3:salsa",
+     "4:4",
+     "4:5",
+     "5:breath"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Bossa Nova, Salsa"
+     ],
+     [
+      "Starting priority",
+      "Breath"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "beginner",
+     "genre": "bossanova",
+     "goals": [
+      "I want to improve my runs",
+      "I want to sing harmonies"
+     ],
+     "priority": "breath"
+    },
+    "closed": true
+   },
+   "pick 13": {
+    "log": [
+     "1:choir",
+     "2:intermediate",
+     "3:salsa",
+     "3:kpop",
+     "4:5",
+     "4:6",
+     "5:agility"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Salsa, K-pop"
+     ],
+     [
+      "Starting priority",
+      "Agility"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "intermediate",
+     "genre": "salsa",
+     "goals": [
+      "I want to sing harmonies",
+      "I want to prepare for a performance"
+     ],
+     "priority": "agility"
+    },
+    "closed": true
+   },
+   "pick 14": {
+    "log": [
+     "1:both",
+     "2:professional",
+     "3:kpop",
+     "3:bluegrass",
+     "4:6",
+     "4:7",
+     "5:expression (absent)"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Professional"
+     ],
+     [
+      "Genres",
+      "K-pop, Bluegrass"
+     ],
+     [
+      "Starting priority",
+      "Picked from your first scores"
+     ]
+    ],
+    "saved": {
+     "singerType": "both",
+     "level": "professional",
+     "genre": "kpop",
+     "goals": [
+      "I want to prepare for a performance",
+      "I want to become a better overall singer"
+     ],
+     "priority": null
+    },
+    "closed": true
+   },
+   "pick 15": {
+    "log": [
+     "1:fun",
+     "2:beginner",
+     "3:bluegrass",
+     "3:pop",
+     "4:7",
+     "4:0",
+     "5:pitch"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner"
+     ],
+     [
+      "Genres",
+      "Bluegrass, Pop"
+     ],
+     [
+      "Starting priority",
+      "Pitch"
+     ]
+    ],
+    "saved": {
+     "singerType": "fun",
+     "level": "beginner",
+     "genre": "bluegrass",
+     "goals": [
+      "I want to become a better overall singer",
+      "I want to sing higher"
+     ],
+     "priority": "pitch"
+    },
+    "closed": true
+   },
+   "toggle": {
+    "log": [
+     "3:pop",
+     "3:pop",
+     "3:rock",
+     "4:0",
+     "4:0"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner (you can change it later)"
+     ],
+     [
+      "Genres",
+      "Rock"
+     ],
+     [
+      "Starting priority",
+      "Picked from your first scores"
+     ]
+    ],
+    "saved": {
+     "singerType": null,
+     "level": "beginner",
+     "genre": "rock",
+     "goals": [],
+     "priority": null
+    },
+    "closed": true
+   },
+   "back": {
+    "log": [
+     "1:solo",
+     "2:beginner",
+     "5:pitch",
+     "back to 2",
+     "2:intermediate",
+     "5:range"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Intermediate"
+     ],
+     [
+      "Genres",
+      "Not set"
+     ],
+     [
+      "Starting priority",
+      "Range"
+     ]
+    ],
+    "saved": {
+     "singerType": "solo",
+     "level": "intermediate",
+     "genre": "rock",
+     "goals": [],
+     "priority": "range"
+    },
+    "closed": true
+   },
+   "back-to-0": {
+    "log": [
+     "back to 0",
+     "1:choir"
+    ],
+    "atLast": 6,
+    "summary": [
+     [
+      "Level",
+      "Beginner (you can change it later)"
+     ],
+     [
+      "Genres",
+      "Not set"
+     ],
+     [
+      "Starting priority",
+      "Picked from your first scores"
+     ]
+    ],
+    "saved": {
+     "singerType": "choir",
+     "level": "intermediate",
+     "genre": "rock",
+     "goals": [],
+     "priority": null
+    },
+    "closed": true
+   }
+  },
+  "errors": []
+ }
+}

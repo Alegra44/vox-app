@@ -1,0 +1,69 @@
+== master: choices {"obSingerTypeGrid":["solo","choir","both","fun"],"obLevelGrid":["beginner","intermediate","professional"],"obGenreGrid":["pop","rock","gospel","opera","musicaltheatre","carnatic","metal","jazz","arabic","reggae","celtic","flamenco","bossanova","salsa","kpop","bluegrass"],"obGoalsGrid":["0","1","2","3","4","5","6","7"],"obPriorityGrid":["pitch","range","breath","agility","expression"]}; page errors 0
+== branch: choices {"obSingerTypeGrid":["solo","choir","both","fun"],"obLevelGrid":["beginner","intermediate","professional"],"obGenreGrid":["pop","rock","gospel","opera","musicaltheatre","carnatic","metal","jazz","arabic","reggae","celtic","flamenco","bossanova","salsa","kpop","bluegrass"],"obGoalsGrid":["0","1","2","3","4","5","6","7"],"obPriorityGrid":["pitch","range","breath","agility"]}; page errors 0
+✓ obSingerTypeGrid: same choices
+✓ obLevelGrid: same choices
+✓ obGenreGrid: same choices
+✓ obGoalsGrid: same choices
+✓ obPriorityGrid: master pitch,range,breath,agility,expression → branch pitch,range,breath,agility (gone: expression, expected: Expression off the list)
+✓ none: saved {"singerType":null,"level":"beginner","genre":null,"goals":[],"priority":null}; last step 6; closed true
+   summary  master [["Level","Not set — defaulting to Beginner"],["Genres","Not set"],["Starting priority","Not set — Today's Mission will pick from your first real scores"]]
+            branch [["Level","Beginner (you can change it later)"],["Genres","Not set"],["Starting priority","Picked from your first scores"]]
+✓ none: the summary's set values equal (labels and unset values may read differently, 2.3)
+✓ pick 0: saved {"singerType":"solo","level":"beginner","genre":"pop","goals":["I want to sing higher","I want to stop singing flat"],"priority":"pitch"}; last step 6; closed true
+   summary  master [["Level","Beginner"],["Genres","Pop, Rock"],["Starting priority","Pitch"]]
+            branch [["Level","Beginner"],["Genres","Pop, Rock"],["Starting priority","Pitch"]]  (equal)
+✓ pick 1: saved {"singerType":"choir","level":"intermediate","genre":"rock","goals":["I want to stop singing flat","I want to improve my head voice"],"priority":"range"}; last step 6; closed true
+   summary  master [["Level","Intermediate"],["Genres","Rock, Gospel"],["Starting priority","Range"]]
+            branch [["Level","Intermediate"],["Genres","Rock, Gospel"],["Starting priority","Range"]]  (equal)
+✓ pick 2: saved {"singerType":"both","level":"professional","genre":"gospel","goals":["I want to improve my head voice","I want to sing confidently"],"priority":"breath"}; last step 6; closed true
+   summary  master [["Level","Professional"],["Genres","Gospel, Opera / Classical"],["Starting priority","Breath"]]
+            branch [["Level","Professional"],["Genres","Gospel, Opera / Classical"],["Starting priority","Breath"]]  (equal)
+✓ pick 3: saved {"singerType":"fun","level":"beginner","genre":"opera","goals":["I want to sing confidently","I want to improve my runs"],"priority":"agility"}; last step 6; closed true
+   summary  master [["Level","Beginner"],["Genres","Opera / Classical, Musical Theatre"],["Starting priority","Agility"]]
+            branch [["Level","Beginner"],["Genres","Opera / Classical, Musical Theatre"],["Starting priority","Agility"]]  (equal)
+· pick 4: picks Expression on master ({"singerType":"solo","level":"intermediate","genre":"musicaltheatre","goals":["I want to improve my runs","I want to sing harmonies"],"priority":"expression"}); on the branch {"singerType":"solo","level":"intermediate","genre":"musicaltheatre","goals":["I want to improve my runs","I want to sing harmonies"],"priority":null}, expected: not offered
+✓ pick 5: saved {"singerType":"choir","level":"professional","genre":"carnatic","goals":["I want to sing harmonies","I want to prepare for a performance"],"priority":"pitch"}; last step 6; closed true
+   summary  master [["Level","Professional"],["Genres","Carnatic / Hindustani, Metal"],["Starting priority","Pitch"]]
+            branch [["Level","Professional"],["Genres","Carnatic / Hindustani, Metal"],["Starting priority","Pitch"]]  (equal)
+✓ pick 6: saved {"singerType":"both","level":"beginner","genre":"metal","goals":["I want to prepare for a performance","I want to become a better overall singer"],"priority":"range"}; last step 6; closed true
+   summary  master [["Level","Beginner"],["Genres","Metal, Jazz"],["Starting priority","Range"]]
+            branch [["Level","Beginner"],["Genres","Metal, Jazz"],["Starting priority","Range"]]  (equal)
+✓ pick 7: saved {"singerType":"fun","level":"intermediate","genre":"jazz","goals":["I want to become a better overall singer","I want to sing higher"],"priority":"breath"}; last step 6; closed true
+   summary  master [["Level","Intermediate"],["Genres","Jazz, Arabic"],["Starting priority","Breath"]]
+            branch [["Level","Intermediate"],["Genres","Jazz, Arabic"],["Starting priority","Breath"]]  (equal)
+✓ pick 8: saved {"singerType":"solo","level":"professional","genre":"arabic","goals":["I want to sing higher","I want to stop singing flat"],"priority":"agility"}; last step 6; closed true
+   summary  master [["Level","Professional"],["Genres","Arabic, Reggae"],["Starting priority","Agility"]]
+            branch [["Level","Professional"],["Genres","Arabic, Reggae"],["Starting priority","Agility"]]  (equal)
+· pick 9: picks Expression on master ({"singerType":"choir","level":"beginner","genre":"reggae","goals":["I want to stop singing flat","I want to improve my head voice"],"priority":"expression"}); on the branch {"singerType":"choir","level":"beginner","genre":"reggae","goals":["I want to stop singing flat","I want to improve my head voice"],"priority":null}, expected: not offered
+✓ pick 10: saved {"singerType":"both","level":"intermediate","genre":"celtic","goals":["I want to improve my head voice","I want to sing confidently"],"priority":"pitch"}; last step 6; closed true
+   summary  master [["Level","Intermediate"],["Genres","Celtic, Flamenco"],["Starting priority","Pitch"]]
+            branch [["Level","Intermediate"],["Genres","Celtic, Flamenco"],["Starting priority","Pitch"]]  (equal)
+✓ pick 11: saved {"singerType":"fun","level":"professional","genre":"flamenco","goals":["I want to sing confidently","I want to improve my runs"],"priority":"range"}; last step 6; closed true
+   summary  master [["Level","Professional"],["Genres","Flamenco, Bossa Nova"],["Starting priority","Range"]]
+            branch [["Level","Professional"],["Genres","Flamenco, Bossa Nova"],["Starting priority","Range"]]  (equal)
+✓ pick 12: saved {"singerType":"solo","level":"beginner","genre":"bossanova","goals":["I want to improve my runs","I want to sing harmonies"],"priority":"breath"}; last step 6; closed true
+   summary  master [["Level","Beginner"],["Genres","Bossa Nova, Salsa"],["Starting priority","Breath"]]
+            branch [["Level","Beginner"],["Genres","Bossa Nova, Salsa"],["Starting priority","Breath"]]  (equal)
+✓ pick 13: saved {"singerType":"choir","level":"intermediate","genre":"salsa","goals":["I want to sing harmonies","I want to prepare for a performance"],"priority":"agility"}; last step 6; closed true
+   summary  master [["Level","Intermediate"],["Genres","Salsa, K-pop"],["Starting priority","Agility"]]
+            branch [["Level","Intermediate"],["Genres","Salsa, K-pop"],["Starting priority","Agility"]]  (equal)
+· pick 14: picks Expression on master ({"singerType":"both","level":"professional","genre":"kpop","goals":["I want to prepare for a performance","I want to become a better overall singer"],"priority":"expression"}); on the branch {"singerType":"both","level":"professional","genre":"kpop","goals":["I want to prepare for a performance","I want to become a better overall singer"],"priority":null}, expected: not offered
+✓ pick 15: saved {"singerType":"fun","level":"beginner","genre":"bluegrass","goals":["I want to become a better overall singer","I want to sing higher"],"priority":"pitch"}; last step 6; closed true
+   summary  master [["Level","Beginner"],["Genres","Bluegrass, Pop"],["Starting priority","Pitch"]]
+            branch [["Level","Beginner"],["Genres","Bluegrass, Pop"],["Starting priority","Pitch"]]  (equal)
+✓ toggle: saved {"singerType":null,"level":"beginner","genre":"rock","goals":[],"priority":null}; last step 6; closed true
+   summary  master [["Level","Not set — defaulting to Beginner"],["Genres","Rock"],["Starting priority","Not set — Today's Mission will pick from your first real scores"]]
+            branch [["Level","Beginner (you can change it later)"],["Genres","Rock"],["Starting priority","Picked from your first scores"]]
+✓ toggle: the summary's set values equal (labels and unset values may read differently, 2.3)
+✓ back: saved {"singerType":"solo","level":"intermediate","genre":"rock","goals":[],"priority":"range"}; last step 6; closed true
+   summary  master [["Level","Intermediate"],["Genres","Not set"],["Starting priority","Range"]]
+            branch [["Level","Intermediate"],["Genres","Not set"],["Starting priority","Range"]]  (equal)
+✓ back-to-0: saved {"singerType":"choir","level":"intermediate","genre":"rock","goals":[],"priority":null}; last step 6; closed true
+   summary  master [["Level","Not set — defaulting to Beginner"],["Genres","Not set"],["Starting priority","Not set — Today's Mission will pick from your first real scores"]]
+            branch [["Level","Beginner (you can change it later)"],["Genres","Not set"],["Starting priority","Picked from your first scores"]]
+✓ back-to-0: the summary's set values equal (labels and unset values may read differently, 2.3)
+✓ page errors: master 0, branch 0 
+
+ONBOARD: PASS
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvob-1794314031485@example.com
