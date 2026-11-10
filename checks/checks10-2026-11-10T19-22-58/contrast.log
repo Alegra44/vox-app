@@ -1,0 +1,630 @@
+== contrast · branch (working copy) · light, dark
+   tools · light · 390
+   tools · light · 1280
+
+-- light: panel                       fail<3  fail3-4.5  unknown  checked
+   shell: header                             0          0        0        2
+   shell: tab bar                            0          0        0        5
+   shell: toast                              0          0        0        2
+   home                                      0          0        0       28
+   train-hub                                 0          0        0       43
+   songs-hub                                 0          0        0       18
+   you-hub                                   0          0        0       39
+   journey                                   0          0        0       27
+   arcade                                    0          0        0       20
+   tuner                                     0          0        0       10
+   warmup                                    0          0        0       14
+   range                                     0          0        0       11
+   key                                       0          0        0       21
+   exercises                                 0          0        0       48
+   dashboard                                 0          0        0       44
+   register                                  0          0        0       11
+   registerdrills                            0          0        0        8
+   breath                                    0          0        0        7
+   vibrato                                   0          0        0        6
+   voicequality                              0          0        0        6
+   voicehealth                               0          0        0       51
+   staykey                                   0          0        0        6
+   emotion                                   0          0        0        6
+   genre                                     0          0        0       38
+   karaoke                                   0          0        0        6
+   livefeedback                              0          0        0       10
+   resonance                                 0          0        0        7
+   custom                                    0          0        0       12
+   rhythm                                    0          0        0       18
+   earvoiceear                               0          0        0        6
+   fiveways                                  0          0        0        6
+   onetake                                   0          0        0        6
+   vocalpuzzle                               0          0        0        4
+   hearmistake                               0          0        0        4
+   studio                                    0          0        0       17
+   aiduet                                    0          0        0       12
+   performancedirector                       0          0        0       11
+   mirror                                    0          0        0        5
+   emotionmode                               0          0        0       12
+   vocallab                                  0          0        0        6
+   passport                                  0          0        0        3
+   choirpassport                             0          0        0       48
+   choir                                     0          0        0      111
+   partrehearsal                             0          0        0      113
+   pricing                                   0          0        0       44
+   records                                   0          0        0       36
+   profile                                   0          0        0       28
+   feedback                                  0          0        0       21
+   teacher                                   0          0        1        1
+   state: tuner-live-locked                  0          0        0        6
+   state: tuner-live-locked · header + tab bar      0          0        0        7
+   state: tuner-result                       0          0        0       11
+   state: tuner-result · header + tab bar      0          0        0        7
+   state: pitch-cue                          0          0        0       11
+   state: pitch-cue · header + tab bar       0          0        0        7
+   state: pitch-live                         0          0        0       12
+   state: pitch-live · header + tab bar      0          0        0        7
+   state: pitch-result-heard                 0          0        0       56
+   state: pitch-result-heard · header + tab bar      0          0        0        7
+   state: pitch-result-measure               0          0        0       57
+   state: pitch-result-measure · header + tab bar      0          0        0        7
+   state: warmup-overlay                     0          0        0       17
+   state: warmup-overlay · header + tab bar      0          0        0        7
+   state: tuner-live-unlocked                0          0        0        6
+   state: tuner-live-unlocked · header + tab bar      0          0        0        7
+   state: pitch-result-noheard               0          0        0       50
+   state: pitch-result-noheard · header + tab bar      0          0        0        7
+   tool 390: interval-idle                   0          0        0       60
+   tool 390: interval-stage                  0          0        0       22
+   tool 390: interval-result                 0          0        0       71
+   tool 390: scale-idle                      0          0        0       63
+   tool 390: scale-stage                     0          0        0       27
+   tool 390: scale-result                    0          0        0       87
+   tool 390: custom-idle                     0          0        0       30
+   tool 390: custom-stage                    0          0        0       25
+   tool 390: custom-result                   0          0        0       37
+   tool 390: eve-idle                        0          0        0       13
+   tool 390: eve-stage                       0          0        0       15
+   tool 390: eve-result                      0          0        0       24
+   tool 390: five-idle                       0          0        0       13
+   tool 390: five-stage                      0          0        0       19
+   tool 390: five-result                     0          0        0       24
+   tool 390: hearmistake-idle                0          0        0       11
+   tool 390: hearmistake-stage               0          0        0       20
+   tool 390: hearmistake-result              0          0        0       17
+   tool 390: range-idle                      0          0        0       18
+   tool 390: range-stage                     0          0        0       15
+   tool 390: range-result                    0          0        0       25
+   tool 390: breath-idle                     0          0        0       14
+   tool 390: breath-stage                    0          0        0       13
+   tool 390: breath-result                   0          0        0       24
+   tool 390: key-idle                        0          0        0       28
+   tool 390: key-result                      0          0        0       48
+   tool 390: vocallab-idle                   0          0        0       24
+   tool 390: vocallab-result                 0          0        0       27
+   tool 390: genre-idle                      0          0        0       45
+   tool 390: genre-result                    0          0        0       46
+   tool 390: warmup-idle                     0          0        0       21
+   tool 390: warmup-result                   0          0        0       21
+   tool 390: ear-idle                        0          0        0       61
+   tool 390: ear-result                      0          0        0       58
+   tool 390: vocalpuzzle-idle                0          0        0       11
+   tool 390: vocalpuzzle-result              0          0        0       16
+   tool 390: onetake-idle                    0          0        0       13
+   tool 390: onetake-stage                   0          0        0       13
+   tool 390: onetake-result                  0          0        0       21
+   tool 390: mirror-idle                     0          0        0       12
+   tool 390: mirror-stage                    0          0        0       16
+   tool 390: mirror-result                   0          0        0       39
+   tool 390: rhythm-idle                     0          0        0       25
+   tool 390: rhythm-stage                    0          0        0       20
+   tool 390: rhythm-result                   0          0        0       60
+   tool 390: registerdrills-idle             0          0        0       15
+   tool 390: registerdrills-stage            0          0        0       26
+   tool 390: registerdrills-result           0          0        0       32
+   tool 390: vibrato-idle                    0          0        0       13
+   tool 390: vibrato-stage                   0          0        0       16
+   tool 390: vibrato-result                  0          0        0       23
+   tool 390: voicequality-idle               0          0        0       13
+   tool 390: voicequality-stage              0          0        0       16
+   tool 390: voicequality-result             0          0        0       25
+   tool 390: emotionmode-idle                0          0        0       19
+   tool 390: emotionmode-stage               0          0        0       13
+   tool 390: emotionmode-result              0          0        0       30
+   tool 390: register-idle                   0          0        0       18
+   tool 390: register-stage                  0          0        0       19
+   tool 390: register-stopped                0          0        0       18
+   tool 390: livefeedback-idle               0          0        0       17
+   tool 390: livefeedback-stage              0          0        0       18
+   tool 390: livefeedback-stopped            0          0        0       17
+   tool 390: resonance-idle                  0          0        0       14
+   tool 390: resonance-stage                 0          0        0       15
+   tool 390: resonance-stopped               0          0        0       14
+   tool 390: rehearsal-idle                  0          0        0      120
+   tool 390: rehearsal-stage                 0          0        0       24
+   tool 390: rehearsal-stopped               0          0        0      120
+   tool 390: rehearsalhear-idle              0          0        0      120
+   tool 390: rehearsalhear-stage             0          0        0       24
+   tool 390: rehearsalhear-stopped           0          0        0      120
+   tool 390: hm-idle                         0          0        0       27
+   tool 390: hm-stage                        0          0        0       21
+   tool 390: hm-result                       0          0        0       64
+   tool 390: boss-idle                       0          0        0       30
+   tool 390: boss-stage                      0          0        0       25
+   tool 390: boss-result                     0          0        0       68
+   tool 390: chaos-idle                      0          0        0       22
+   tool 390: chaos-stage                     0          0        0       21
+   tool 390: chaos-result                    0          0        0       67
+   tool 390: ladder-idle                     0          0        0       28
+   tool 390: ladder-stage                    0          0        0       21
+   tool 390: ladder-result                   0          0        0       65
+   tool 390: timing-idle                     0          0        0       23
+   tool 390: timing-stage                    0          0        0       21
+   tool 390: timing-result                   0          0        0       49
+   tool 390: yctake-idle                     0          0        0       40
+   tool 390: yctake-stage                    0          0        0       22
+   tool 390: yctake-result                   0          0        0       43
+   tool 390: cw-landing-idle                 0          0        0       19
+   tool 390: cw-rehearse-idle                0          0        0      120
+   tool 390: cw-songlab-idle                 0          0        0      118
+   tool 390: cw-trainers-idle                0          0        0       28
+   tool 390: cw-yourchoir-idle               0          0        0       43
+   tool 390: cw-passport-idle                0          0        0       66
+   tool 390: cw-xray-idle                    0          0        0      118
+   tool 390: studio-idle                     0          0        0       24
+   tool 390: studio-stage                    0          0        0       12
+   tool 390: studio-result                   0          0        0       27
+   tool 390: pd-idle                         0          0        0       18
+   tool 390: pd-stage                        0          0        0       22
+   tool 390: pd-result                       0          0        0       29
+   tool 390: duet-idle                       0          0        0       19
+   tool 390: duet-stage                      0          0        0       20
+   tool 390: duet-stopped                    0          0        0       21
+   tool 390: staykey-idle                    0          0        0       13
+   tool 390: staykey-stage                   0          0        0       12
+   tool 390: staykey-result                  0          0        0       17
+   tool 390: karaoke-idle                    0          0        0       13
+   tool 390: karaoke-stage                   0          0        0       11
+   tool 390: karaoke-result                  0          0        0       50
+   tool 390: emotion-idle                    0          0        0       13
+   tool 390: emotion-stage                   0          0        0       12
+   tool 390: emotion-result                  0          0        0       21
+   tool 390: songs-idle                      0          0        0       27
+   tool 1280: interval-idle                  0          0        0       61
+   tool 1280: interval-stage                 0          0        0       22
+   tool 1280: interval-result                0          0        0       72
+   tool 1280: scale-idle                     0          0        0       64
+   tool 1280: scale-stage                    0          0        0       27
+   tool 1280: scale-result                   0          0        0       89
+   tool 1280: custom-idle                    0          0        0       30
+   tool 1280: custom-stage                   0          0        0       25
+   tool 1280: custom-result                  0          0        0       37
+   tool 1280: eve-idle                       0          0        0       13
+   tool 1280: eve-stage                      0          0        0       15
+   tool 1280: eve-result                     0          0        0       24
+   tool 1280: five-idle                      0          0        0       13
+   tool 1280: five-stage                     0          0        0       19
+   tool 1280: five-result                    0          0        0       24
+   tool 1280: hearmistake-idle               0          0        0       11
+   tool 1280: hearmistake-stage              0          0        0       20
+   tool 1280: hearmistake-result             0          0        0       17
+   tool 1280: range-idle                     0          0        0       18
+   tool 1280: range-stage                    0          0        0       15
+   tool 1280: range-result                   0          0        0       25
+   tool 1280: breath-idle                    0          0        0       14
+   tool 1280: breath-stage                   0          0        0       13
+   tool 1280: breath-result                  0          0        0       24
+   tool 1280: key-idle                       0          0        0       28
+   tool 1280: key-result                     0          0        0       48
+   tool 1280: vocallab-idle                  0          0        0       27
+   tool 1280: vocallab-result                0          0        0       27
+   tool 1280: genre-idle                     0          0        0       46
+   tool 1280: genre-result                   0          0        0       46
+   tool 1280: warmup-idle                    0          0        0       21
+   tool 1280: warmup-result                  0          0        0       21
+   tool 1280: ear-idle                       0          0        0       62
+   tool 1280: ear-result                     0          0        0       59
+   tool 1280: vocalpuzzle-idle               0          0        0       11
+   tool 1280: vocalpuzzle-result             0          0        0       16
+   tool 1280: onetake-idle                   0          0        0       13
+   tool 1280: onetake-stage                  0          0        0       13
+   tool 1280: onetake-result                 0          0        0       21
+   tool 1280: mirror-idle                    0          0        0       12
+   tool 1280: mirror-stage                   0          0        0       16
+   tool 1280: mirror-result                  0          0        0       39
+   tool 1280: rhythm-idle                    0          0        0       25
+   tool 1280: rhythm-stage                   0          0        0       20
+   tool 1280: rhythm-result                  0          0        0       60
+   tool 1280: registerdrills-idle            0          0        0       15
+   tool 1280: registerdrills-stage           0          0        0       26
+   tool 1280: registerdrills-result          0          0        0       32
+   tool 1280: vibrato-idle                   0          0        0       13
+   tool 1280: vibrato-stage                  0          0        0       16
+   tool 1280: vibrato-result                 0          0        0       23
+   tool 1280: voicequality-idle              0          0        0       13
+   tool 1280: voicequality-stage             0          0        0       16
+   tool 1280: voicequality-result            0          0        0       25
+   tool 1280: emotionmode-idle               0          0        0       19
+   tool 1280: emotionmode-stage              0          0        0       13
+   tool 1280: emotionmode-result             0          0        0       30
+   tool 1280: register-idle                  0          0        0       18
+   tool 1280: register-stage                 0          0        0       19
+   tool 1280: register-stopped               0          0        0       18
+   tool 1280: livefeedback-idle              0          0        0       17
+   tool 1280: livefeedback-stage             0          0        0       18
+   tool 1280: livefeedback-stopped           0          0        0       17
+   tool 1280: resonance-idle                 0          0        0       14
+   tool 1280: resonance-stage                0          0        0       15
+   tool 1280: resonance-stopped              0          0        0       14
+   tool 1280: rehearsal-idle                 0          0        0      124
+   tool 1280: rehearsal-stage                0          0        0       24
+   tool 1280: rehearsal-stopped              0          0        0      124
+   tool 1280: rehearsalhear-idle             0          0        0      124
+   tool 1280: rehearsalhear-stage            0          0        0       24
+   tool 1280: rehearsalhear-stopped          0          0        0      124
+   tool 1280: hm-idle                        0          0        0       27
+   tool 1280: hm-stage                       0          0        0       21
+   tool 1280: hm-result                      0          0        0       64
+   tool 1280: boss-idle                      0          0        0       30
+   tool 1280: boss-stage                     0          0        0       25
+   tool 1280: boss-result                    0          0        0       68
+   tool 1280: chaos-idle                     0          0        0       22
+   tool 1280: chaos-stage                    0          0        0       21
+   tool 1280: chaos-result                   0          0        0       67
+   tool 1280: ladder-idle                    0          0        0       28
+   tool 1280: ladder-stage                   0          0        0       21
+   tool 1280: ladder-result                  0          0        0       65
+   tool 1280: timing-idle                    0          0        0       23
+   tool 1280: timing-stage                   0          0        0       21
+   tool 1280: timing-result                  0          0        0       49
+   tool 1280: yctake-idle                    0          0        0       40
+   tool 1280: yctake-stage                   0          0        0       22
+   tool 1280: yctake-result                  0          0        0       43
+   tool 1280: cw-landing-idle                0          0        0       19
+   tool 1280: cw-rehearse-idle               0          0        0      124
+   tool 1280: cw-songlab-idle                0          0        0      118
+   tool 1280: cw-trainers-idle               0          0        0       28
+   tool 1280: cw-yourchoir-idle              0          0        0       43
+   tool 1280: cw-passport-idle               0          0        0       78
+   tool 1280: cw-xray-idle                   0          0        0      118
+   tool 1280: studio-idle                    0          0        0       24
+   tool 1280: studio-stage                   0          0        0       12
+   tool 1280: studio-result                  0          0        0       27
+   tool 1280: pd-idle                        0          0        0       18
+   tool 1280: pd-stage                       0          0        0       22
+   tool 1280: pd-result                      0          0        0       29
+   tool 1280: duet-idle                      0          0        0       19
+   tool 1280: duet-stage                     0          0        0       20
+   tool 1280: duet-stopped                   0          0        0       21
+   tool 1280: staykey-idle                   0          0        0       13
+   tool 1280: staykey-stage                  0          0        0       12
+   tool 1280: staykey-result                 0          0        0       17
+   tool 1280: karaoke-idle                   0          0        0       13
+   tool 1280: karaoke-stage                  0          0        0       11
+   tool 1280: karaoke-result                 0          0        0       50
+   tool 1280: emotion-idle                   0          0        0       13
+   tool 1280: emotion-stage                  0          0        0       12
+   tool 1280: emotion-result                 0          0        0       21
+   tool 1280: songs-idle                     0          0        0       27
+   home: new                                 0          0        0       35
+   home: priority                            0          0        0       35
+   home: weakest                             0          0        0       43
+   coach: signed in                          0          0        0       48
+   home: struggling                          0          0        0       43
+   home: today                               0          0        0       51
+   home: expired                             0          0        0       25
+   home: signedout                           0          0        0       14
+   coach: signed out                         0          0        0       39
+   TOTAL                                     0          0        1     9245
+   tools · dark · 390
+   tools · dark · 1280
+
+-- dark: panel                       fail<3  fail3-4.5  unknown  checked
+   shell: header                             0          0        0        2
+   shell: tab bar                            0          0        0        5
+   shell: toast                              0          0        0        2
+   home                                      0          0        0       40
+   train-hub                                 0          0        0       48
+   songs-hub                                 0          0        0       20
+   you-hub                                   0          0        0       54
+   journey                                   0          0        0       27
+   arcade                                    0          0        0       20
+   tuner                                     0          0        0       10
+   warmup                                    0          0        0       14
+   range                                     0          0        0       11
+   key                                       0          0        0       21
+   exercises                                 0          0        0       48
+   dashboard                                 0          0        0       45
+   register                                  0          0        0       11
+   registerdrills                            0          0        0        8
+   breath                                    0          0        0        7
+   vibrato                                   0          0        0        6
+   voicequality                              0          0        0        6
+   voicehealth                               0          0        0       51
+   staykey                                   0          0        0        6
+   emotion                                   0          0        0        6
+   genre                                     0          0        0       39
+   karaoke                                   0          0        0        6
+   livefeedback                              0          0        0       10
+   resonance                                 0          0        0        7
+   custom                                    0          0        0       12
+   rhythm                                    0          0        0       18
+   earvoiceear                               0          0        0        6
+   fiveways                                  0          0        0        6
+   onetake                                   0          0        0       12
+   vocalpuzzle                               0          0        0        4
+   hearmistake                               0          0        0        4
+   studio                                    0          0        0       17
+   aiduet                                    0          0        0       12
+   performancedirector                       0          0        0       11
+   mirror                                    0          0        0        5
+   emotionmode                               0          0        0       12
+   vocallab                                  0          0        0       20
+   passport                                  0          0        0       87
+   choirpassport                             0          0        0       71
+   choir                                     0          0        0      111
+   partrehearsal                             0          0        0      113
+   pricing                                   0          0        0       44
+   records                                   0          0        0       36
+   profile                                   0          0        0       28
+   feedback                                  0          0        0       21
+   teacher                                   0          0        1        1
+   state: tuner-live-locked                  0          0        0        6
+   state: tuner-live-locked · header + tab bar      0          0        0        7
+   state: tuner-result                       0          0        0       11
+   state: tuner-result · header + tab bar      0          0        0        7
+   state: pitch-cue                          0          0        0       11
+   state: pitch-cue · header + tab bar       0          0        0        7
+   state: pitch-live                         0          0        0       12
+   state: pitch-live · header + tab bar      0          0        0        7
+   state: pitch-result-heard                 0          0        0       57
+   state: pitch-result-heard · header + tab bar      0          0        0        7
+   state: pitch-result-measure               0          0        0       58
+   state: pitch-result-measure · header + tab bar      0          0        0        7
+   state: warmup-overlay                     0          0        0       17
+   state: warmup-overlay · header + tab bar      0          0        0        7
+   state: tuner-live-unlocked                0          0        0        6
+   state: tuner-live-unlocked · header + tab bar      0          0        0        7
+   state: pitch-result-noheard               0          0        0       51
+   state: pitch-result-noheard · header + tab bar      0          0        0        7
+   tool 390: interval-idle                   0          0        0       61
+   tool 390: interval-stage                  0          0        0       22
+   tool 390: interval-result                 0          0        0       72
+   tool 390: scale-idle                      0          0        0       64
+   tool 390: scale-stage                     0          0        0       27
+   tool 390: scale-result                    0          0        0       89
+   tool 390: custom-idle                     0          0        0       30
+   tool 390: custom-stage                    0          0        0       25
+   tool 390: custom-result                   0          0        0       37
+   tool 390: eve-idle                        0          0        0       13
+   tool 390: eve-stage                       0          0        0       15
+   tool 390: eve-result                      0          0        0       24
+   tool 390: five-idle                       0          0        0       13
+   tool 390: five-stage                      0          0        0       19
+   tool 390: five-result                     0          0        0       24
+   tool 390: hearmistake-idle                0          0        0       11
+   tool 390: hearmistake-stage               0          0        0       20
+   tool 390: hearmistake-result              0          0        0       17
+   tool 390: range-idle                      0          0        0       18
+   tool 390: range-stage                     0          0        0       15
+   tool 390: range-result                    0          0        0       25
+   tool 390: breath-idle                     0          0        0       14
+   tool 390: breath-stage                    0          0        0       13
+   tool 390: breath-result                   0          0        0       24
+   tool 390: key-idle                        0          0        0       28
+   tool 390: key-result                      0          0        0       48
+   tool 390: vocallab-idle                   0          0        0       27
+   tool 390: vocallab-result                 0          0        0       27
+   tool 390: genre-idle                      0          0        0       46
+   tool 390: genre-result                    0          0        0       46
+   tool 390: warmup-idle                     0          0        0       21
+   tool 390: warmup-result                   0          0        0       21
+   tool 390: ear-idle                        0          0        0       62
+   tool 390: ear-result                      0          0        0       59
+   tool 390: vocalpuzzle-idle                0          0        0       11
+   tool 390: vocalpuzzle-result              0          0        0       16
+   tool 390: onetake-idle                    0          0        0       13
+   tool 390: onetake-stage                   0          0        0       13
+   tool 390: onetake-result                  0          0        0       21
+   tool 390: mirror-idle                     0          0        0       12
+   tool 390: mirror-stage                    0          0        0       16
+   tool 390: mirror-result                   0          0        0       39
+   tool 390: rhythm-idle                     0          0        0       25
+   tool 390: rhythm-stage                    0          0        0       20
+   tool 390: rhythm-result                   0          0        0       60
+   tool 390: registerdrills-idle             0          0        0       15
+   tool 390: registerdrills-stage            0          0        0       26
+   tool 390: registerdrills-result           0          0        0       32
+   tool 390: vibrato-idle                    0          0        0       13
+   tool 390: vibrato-stage                   0          0        0       16
+   tool 390: vibrato-result                  0          0        0       23
+   tool 390: voicequality-idle               0          0        0       13
+   tool 390: voicequality-stage              0          0        0       16
+   tool 390: voicequality-result             0          0        0       25
+   tool 390: emotionmode-idle                0          0        0       19
+   tool 390: emotionmode-stage               0          0        0       13
+   tool 390: emotionmode-result              0          0        0       30
+   tool 390: register-idle                   0          0        0       18
+   tool 390: register-stage                  0          0        0       19
+   tool 390: register-stopped                0          0        0       18
+   tool 390: livefeedback-idle               0          0        0       17
+   tool 390: livefeedback-stage              0          0        0       18
+   tool 390: livefeedback-stopped            0          0        0       17
+   tool 390: resonance-idle                  0          0        0       14
+   tool 390: resonance-stage                 0          0        0       15
+   tool 390: resonance-stopped               0          0        0       14
+   tool 390: rehearsal-idle                  0          0        0      120
+   tool 390: rehearsal-stage                 0          0        0       24
+   tool 390: rehearsal-stopped               0          0        0      120
+   tool 390: rehearsalhear-idle              0          0        0      120
+   tool 390: rehearsalhear-stage             0          0        0       24
+   tool 390: rehearsalhear-stopped           0          0        0      120
+   tool 390: hm-idle                         0          0        0       27
+   tool 390: hm-stage                        0          0        0       21
+   tool 390: hm-result                       0          0        0       64
+   tool 390: boss-idle                       0          0        0       30
+   tool 390: boss-stage                      0          0        0       25
+   tool 390: boss-result                     0          0        0       68
+   tool 390: chaos-idle                      0          0        0       22
+   tool 390: chaos-stage                     0          0        0       21
+   tool 390: chaos-result                    0          0        0       67
+   tool 390: ladder-idle                     0          0        0       28
+   tool 390: ladder-stage                    0          0        0       21
+   tool 390: ladder-result                   0          0        0       65
+   tool 390: timing-idle                     0          0        0       23
+   tool 390: timing-stage                    0          0        0       21
+   tool 390: timing-result                   0          0        0       49
+   tool 390: yctake-idle                     0          0        0       40
+   tool 390: yctake-stage                    0          0        0       22
+   tool 390: yctake-result                   0          0        0       43
+   tool 390: cw-landing-idle                 0          0        0       19
+   tool 390: cw-rehearse-idle                0          0        0      120
+   tool 390: cw-songlab-idle                 0          0        0      118
+   tool 390: cw-trainers-idle                0          0        0       28
+   tool 390: cw-yourchoir-idle               0          0        0       43
+   tool 390: cw-passport-idle                0          0        0       90
+   tool 390: cw-xray-idle                    0          0        0      118
+   tool 390: studio-idle                     0          0        0       24
+   tool 390: studio-stage                    0          0        0       12
+   tool 390: studio-result                   0          0        0       27
+   tool 390: pd-idle                         0          0        0       18
+   tool 390: pd-stage                        0          0        0       22
+   tool 390: pd-result                       0          0        0       29
+   tool 390: duet-idle                       0          0        0       19
+   tool 390: duet-stage                      0          0        0       20
+   tool 390: duet-stopped                    0          0        0       21
+   tool 390: staykey-idle                    0          0        0       13
+   tool 390: staykey-stage                   0          0        0       12
+   tool 390: staykey-result                  0          0        0       17
+   tool 390: karaoke-idle                    0          0        0       13
+   tool 390: karaoke-stage                   0          0        0       11
+   tool 390: karaoke-result                  0          0        0       50
+   tool 390: emotion-idle                    0          0        0       13
+   tool 390: emotion-stage                   0          0        0       12
+   tool 390: emotion-result                  0          0        0       21
+   tool 390: songs-idle                      0          0        0       27
+   tool 1280: interval-idle                  0          0        0       61
+   tool 1280: interval-stage                 0          0        0       22
+   tool 1280: interval-result                0          0        0       72
+   tool 1280: scale-idle                     0          0        0       64
+   tool 1280: scale-stage                    0          0        0       27
+   tool 1280: scale-result                   0          0        0       89
+   tool 1280: custom-idle                    0          0        0       30
+   tool 1280: custom-stage                   0          0        0       25
+   tool 1280: custom-result                  0          0        0       37
+   tool 1280: eve-idle                       0          0        0       13
+   tool 1280: eve-stage                      0          0        0       15
+   tool 1280: eve-result                     0          0        0       24
+   tool 1280: five-idle                      0          0        0       13
+   tool 1280: five-stage                     0          0        0       19
+   tool 1280: five-result                    0          0        0       24
+   tool 1280: hearmistake-idle               0          0        0       11
+   tool 1280: hearmistake-stage              0          0        0       20
+   tool 1280: hearmistake-result             0          0        0       17
+   tool 1280: range-idle                     0          0        0       18
+   tool 1280: range-stage                    0          0        0       15
+   tool 1280: range-result                   0          0        0       25
+   tool 1280: breath-idle                    0          0        0       14
+   tool 1280: breath-stage                   0          0        0       13
+   tool 1280: breath-result                  0          0        0       24
+   tool 1280: key-idle                       0          0        0       28
+   tool 1280: key-result                     0          0        0       48
+   tool 1280: vocallab-idle                  0          0        0       27
+   tool 1280: vocallab-result                0          0        0       27
+   tool 1280: genre-idle                     0          0        0       46
+   tool 1280: genre-result                   0          0        0       46
+   tool 1280: warmup-idle                    0          0        0       21
+   tool 1280: warmup-result                  0          0        0       21
+   tool 1280: ear-idle                       0          0        0       62
+   tool 1280: ear-result                     0          0        0       59
+   tool 1280: vocalpuzzle-idle               0          0        0       11
+   tool 1280: vocalpuzzle-result             0          0        0       16
+   tool 1280: onetake-idle                   0          0        0       13
+   tool 1280: onetake-stage                  0          0        0       13
+   tool 1280: onetake-result                 0          0        0       21
+   tool 1280: mirror-idle                    0          0        0       12
+   tool 1280: mirror-stage                   0          0        0       16
+   tool 1280: mirror-result                  0          0        0       39
+   tool 1280: rhythm-idle                    0          0        0       25
+   tool 1280: rhythm-stage                   0          0        0       20
+   tool 1280: rhythm-result                  0          0        0       60
+   tool 1280: registerdrills-idle            0          0        0       15
+   tool 1280: registerdrills-stage           0          0        0       26
+   tool 1280: registerdrills-result          0          0        0       32
+   tool 1280: vibrato-idle                   0          0        0       13
+   tool 1280: vibrato-stage                  0          0        0       16
+   tool 1280: vibrato-result                 0          0        0       23
+   tool 1280: voicequality-idle              0          0        0       13
+   tool 1280: voicequality-stage             0          0        0       16
+   tool 1280: voicequality-result            0          0        0       25
+   tool 1280: emotionmode-idle               0          0        0       19
+   tool 1280: emotionmode-stage              0          0        0       13
+   tool 1280: emotionmode-result             0          0        0       30
+   tool 1280: register-idle                  0          0        0       18
+   tool 1280: register-stage                 0          0        0       19
+   tool 1280: register-stopped               0          0        0       18
+   tool 1280: livefeedback-idle              0          0        0       17
+   tool 1280: livefeedback-stage             0          0        0       18
+   tool 1280: livefeedback-stopped           0          0        0       17
+   tool 1280: resonance-idle                 0          0        0       14
+   tool 1280: resonance-stage                0          0        0       15
+   tool 1280: resonance-stopped              0          0        0       14
+   tool 1280: rehearsal-idle                 0          0        0      124
+   tool 1280: rehearsal-stage                0          0        0       24
+   tool 1280: rehearsal-stopped              0          0        0      124
+   tool 1280: rehearsalhear-idle             0          0        0      124
+   tool 1280: rehearsalhear-stage            0          0        0       24
+   tool 1280: rehearsalhear-stopped          0          0        0      124
+   tool 1280: hm-idle                        0          0        0       27
+   tool 1280: hm-stage                       0          0        0       21
+   tool 1280: hm-result                      0          0        0       64
+   tool 1280: boss-idle                      0          0        0       30
+   tool 1280: boss-stage                     0          0        0       25
+   tool 1280: boss-result                    0          0        0       68
+   tool 1280: chaos-idle                     0          0        0       22
+   tool 1280: chaos-stage                    0          0        0       21
+   tool 1280: chaos-result                   0          0        0       67
+   tool 1280: ladder-idle                    0          0        0       28
+   tool 1280: ladder-stage                   0          0        0       21
+   tool 1280: ladder-result                  0          0        0       65
+   tool 1280: timing-idle                    0          0        0       23
+   tool 1280: timing-stage                   0          0        0       21
+   tool 1280: timing-result                  0          0        0       49
+   tool 1280: yctake-idle                    0          0        0       40
+   tool 1280: yctake-stage                   0          0        0       22
+   tool 1280: yctake-result                  0          0        0       43
+   tool 1280: cw-landing-idle                0          0        0       19
+   tool 1280: cw-rehearse-idle               0          0        0      124
+   tool 1280: cw-songlab-idle                0          0        0      118
+   tool 1280: cw-trainers-idle               0          0        0       28
+   tool 1280: cw-yourchoir-idle              0          0        0       43
+   tool 1280: cw-passport-idle               0          0        0       90
+   tool 1280: cw-xray-idle                   0          0        0      118
+   tool 1280: studio-idle                    0          0        0       24
+   tool 1280: studio-stage                   0          0        0       12
+   tool 1280: studio-result                  0          0        0       27
+   tool 1280: pd-idle                        0          0        0       18
+   tool 1280: pd-stage                       0          0        0       22
+   tool 1280: pd-result                      0          0        0       29
+   tool 1280: duet-idle                      0          0        0       19
+   tool 1280: duet-stage                     0          0        0       20
+   tool 1280: duet-stopped                   0          0        0       21
+   tool 1280: staykey-idle                   0          0        0       13
+   tool 1280: staykey-stage                  0          0        0       12
+   tool 1280: staykey-result                 0          0        0       17
+   tool 1280: karaoke-idle                   0          0        0       13
+   tool 1280: karaoke-stage                  0          0        0       11
+   tool 1280: karaoke-result                 0          0        0       50
+   tool 1280: emotion-idle                   0          0        0       13
+   tool 1280: emotion-stage                  0          0        0       12
+   tool 1280: emotion-result                 0          0        0       21
+   tool 1280: songs-idle                     0          0        0       27
+   home: new                                 0          0        0       35
+   home: priority                            0          0        0       35
+   home: weakest                             0          0        0       43
+   coach: signed in                          0          0        0       48
+   home: struggling                          0          0        0       43
+   home: today                               0          0        0       51
+   home: expired                             0          0        0       25
+   home: signedout                           0          0        0       14
+   coach: signed out                         0          0        0       39
+   TOTAL                                     0          0        1     9458
+json: scripts/design-verify/logs/checks10-2026-11-10T19-22-58/contrast.json
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvc-1794340007616@example.com

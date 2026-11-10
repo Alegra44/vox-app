@@ -1,0 +1,3553 @@
+{
+ "master": {
+  "signup-signedout": {
+   "openError": null,
+   "overlays": [
+    "authModalOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#authName",
+   "overlayHouse": null,
+   "controls": {
+    "#authCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": "Add an email and password to continue. | Add an email and password to continue."
+    },
+    "#authCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#authModeToggle": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "authModalOverlay"
+   ]
+  },
+  "signin-signedout": {
+   "openError": null,
+   "overlays": [
+    "authModalOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#authEmail",
+   "overlayHouse": null,
+   "controls": {
+    "#authCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": "Add an email and password to continue. | Add an email and password to continue."
+    },
+    "#authCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#authModeToggle": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "authModalOverlay"
+   ]
+  },
+  "signinrequired-signedout": {
+   "openError": null,
+   "overlays": [
+    "signinRequiredOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#signinRequiredCreateBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#signinRequiredCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#signinRequiredCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "signinRequiredOverlay"
+   ]
+  },
+  "signinplan-signedout": {
+   "openError": null,
+   "overlays": [
+    "signinRequiredOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#signinRequiredCreateBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#signinRequiredCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#signinRequiredCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "signinRequiredOverlay"
+   ]
+  },
+  "language-signedout": {
+   "openError": null,
+   "overlays": [
+    "languageSelectOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-lang=en": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-lang=fr": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {
+      "ls.language": "fr"
+     },
+     "toast": null
+    },
+    "data-lang=es": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {
+      "ls.language": "es"
+     },
+     "toast": null
+    },
+    "data-lang=tr": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {
+      "ls.language": "tr"
+     },
+     "toast": null
+    }
+   },
+   "escape": [
+    "languageSelectOverlay"
+   ],
+   "scrim": [
+    "languageSelectOverlay"
+   ]
+  },
+  "pricing-signedout": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "signinRequiredOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "signinRequiredOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "signinRequiredOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "feedback-signedout": {
+   "openError": null,
+   "overlays": [],
+   "panel": "feedback",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-star=1": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=2": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=3": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=4": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=5": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#feedbackSubmitBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.__fbRows": "[{\"user_id\":null,\"email\":null,\"liked\":\"\",\"disliked\":\"\",\"confusing\":\"\",\"difficult\":\"\",\"most"
+     },
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "vocallab-signedout": {
+   "openError": null,
+   "overlays": [],
+   "panel": "vocallab",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#vocalLabBackBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "train-hub",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "errors-signedout": [],
+  "onboarding0-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding1-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=solo": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=choir": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=both": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=fun": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding2-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=beginner": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=intermediate": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=professional": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding3-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=pop": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=rock": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=gospel": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=opera": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=musicaltheatre": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=carnatic": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=metal": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=jazz": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=arabic": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=reggae": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=celtic": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=flamenco": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=bossanova": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=salsa": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=kpop": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=bluegrass": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding4-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=0": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=1": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=2": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=3": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=4": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=5": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=6": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=7": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding5-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=pitch": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=range": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=breath": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=agility": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding6-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "journey",
+     "house": "up",
+     "saved": {
+      "profile.onboardingGoals": "[]"
+     },
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding6set-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "journey",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "journey",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "journey",
+     "house": "up",
+     "saved": {
+      "profile.exerciseLevel": "\"intermediate\"",
+      "profile.genre": "\"pop\"",
+      "profile.onboardingSingerType": "\"solo\"",
+      "profile.onboardingPriority": "\"pitch\"",
+      "profile.onboardingGoals": "[\"I want to stop singing flat\"]"
+     },
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "pricing-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "plansoon-new": {
+   "openError": null,
+   "overlays": [
+    "plansSoonOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#plansSoonCloseBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#plansSoonCloseBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "plansSoonOverlay"
+   ]
+  },
+  "paywall-new": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "feedback-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "feedback",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-star=1": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=2": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=3": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=4": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=5": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#feedbackSubmitBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.__fbRows": "[{\"user_id\":\"<id>\",\"email\":\"<email>\",\"liked\":\"\",\"disliked\":\"\",\"confusing\":\"\",\"difficult\":\""
+     },
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "feedbackthanks-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "feedback",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#feedbackAnotherBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "warmup-new": {
+   "openError": null,
+   "overlays": [
+    "warmupOverlay"
+   ],
+   "panel": "feedback",
+   "house": "up",
+   "focus": "#warmupSkipBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#warmupSkipBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.warmup:b5361d94-8e15-4cb9-b6e6-779c098d406a:2026-11-10": "skipped"
+     },
+     "toast": null
+    },
+    "data-wu-mode=exercises": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-mode=song": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=trill": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=siren": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=glide": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=hum": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "warmupOverlay"
+   ]
+  },
+  "warmupsong-new": {
+   "openError": null,
+   "overlays": [
+    "warmupOverlay"
+   ],
+   "panel": "feedback",
+   "house": "up",
+   "focus": "#warmupSkipBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#warmupSkipBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.warmup:b5361d94-8e15-4cb9-b6e6-779c098d406a:2026-11-10": "skipped"
+     },
+     "toast": null
+    },
+    "data-wu-mode=exercises": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-mode=song": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=song:hymn": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=song:ballad": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "warmupOverlay"
+   ]
+  },
+  "warmupstage-new": {
+   "openError": null,
+   "overlays": [
+    "warmupOverlay"
+   ],
+   "panel": "feedback",
+   "house": "up",
+   "focus": "#warmupSkipBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#warmupSkipBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.warmup:b5361d94-8e15-4cb9-b6e6-779c098d406a:2026-11-10": "skipped"
+     },
+     "toast": null
+    },
+    "data-wu-mode=exercises": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-mode=song": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=trill": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=siren": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=glide": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=hum": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "warmupOverlay"
+   ]
+  },
+  "vocallab-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "vocallab",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#vocalLabBackBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "train-hub",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#vocalLabFindRange": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "range",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "errors-new": [],
+  "pricing-active": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "levelup-active": {
+   "openError": null,
+   "overlays": [
+    "levelupOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "button:moment_continue",
+   "overlayHouse": null,
+   "controls": {},
+   "escape": [],
+   "scrim": []
+  },
+  "newrecord-active": {
+   "openError": null,
+   "overlays": [
+    "newRecordOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "button:moment_continue",
+   "overlayHouse": null,
+   "controls": {},
+   "escape": [],
+   "scrim": []
+  },
+  "breakthrough-active": {
+   "openError": null,
+   "overlays": [
+    "breakthroughOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "button:moment_continue",
+   "overlayHouse": null,
+   "controls": {},
+   "escape": [],
+   "scrim": []
+  },
+  "sharerange-active": {
+   "openError": null,
+   "overlays": [
+    "shareRangeOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#downloadRangePosterBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#downloadRangePosterBtn": {
+     "clicked": true,
+     "overlays": [
+      "shareRangeOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#closeRangePosterBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "shareRangeOverlay"
+   ],
+   "scrim": [
+    "shareRangeOverlay"
+   ]
+  },
+  "sharerecap-active": {
+   "openError": null,
+   "overlays": [
+    "shareRecapOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#downloadRecapPosterBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#downloadRecapPosterBtn": {
+     "clicked": true,
+     "overlays": [
+      "shareRecapOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#closeRecapPosterBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "shareRecapOverlay"
+   ],
+   "scrim": [
+    "shareRecapOverlay"
+   ]
+  },
+  "vocallab-active": {
+   "openError": null,
+   "overlays": [],
+   "panel": "vocallab",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#vocalLabBackBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "train-hub",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "errors-active": [],
+  "pricing-expired": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "plansoon-expired": {
+   "openError": null,
+   "overlays": [
+    "plansSoonOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#plansSoonCloseBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#plansSoonCloseBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "plansSoonOverlay"
+   ]
+  },
+  "paywall-expired": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "paywallreal-expired": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "paywallchoir-expired": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "errors-expired": [],
+  "teacher-teacher": {
+   "absent": "phase 9 hides the Teacher Dashboard (nothing opens it)"
+  },
+  "errors-teacher": []
+ },
+ "branch": {
+  "signup-signedout": {
+   "openError": null,
+   "overlays": [
+    "authModalOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#authName",
+   "overlayHouse": null,
+   "controls": {
+    "#authCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": "Add an email and password to continue. | Add an email and password to continue."
+    },
+    "#authCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#authModeToggle": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "authModalOverlay"
+   ]
+  },
+  "signin-signedout": {
+   "openError": null,
+   "overlays": [
+    "authModalOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#authEmail",
+   "overlayHouse": null,
+   "controls": {
+    "#authCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": "Add an email and password to continue. | Add an email and password to continue."
+    },
+    "#authCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#authModeToggle": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "authModalOverlay"
+   ]
+  },
+  "signinrequired-signedout": {
+   "openError": null,
+   "overlays": [
+    "signinRequiredOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#signinRequiredCreateBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#signinRequiredCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#signinRequiredCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "signinRequiredOverlay"
+   ]
+  },
+  "signinplan-signedout": {
+   "openError": null,
+   "overlays": [
+    "signinRequiredOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#signinRequiredCreateBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#signinRequiredCreateBtn": {
+     "clicked": true,
+     "overlays": [
+      "authModalOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#signinRequiredCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "signinRequiredOverlay"
+   ]
+  },
+  "language-signedout": {
+   "openError": null,
+   "overlays": [
+    "languageSelectOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-lang=en": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-lang=fr": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {
+      "ls.language": "fr"
+     },
+     "toast": null
+    },
+    "data-lang=es": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {
+      "ls.language": "es"
+     },
+     "toast": null
+    },
+    "data-lang=tr": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {
+      "ls.language": "tr"
+     },
+     "toast": null
+    }
+   },
+   "escape": [
+    "languageSelectOverlay"
+   ],
+   "scrim": [
+    "languageSelectOverlay"
+   ]
+  },
+  "pricing-signedout": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "signinRequiredOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "signinRequiredOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "signinRequiredOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "feedback-signedout": {
+   "openError": null,
+   "overlays": [],
+   "panel": "feedback",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-star=1": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=2": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=3": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=4": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=5": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#feedbackSubmitBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.__fbRows": "[{\"user_id\":null,\"email\":null,\"liked\":\"\",\"disliked\":\"\",\"confusing\":\"\",\"difficult\":\"\",\"most"
+     },
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "vocallab-signedout": {
+   "openError": null,
+   "overlays": [],
+   "panel": "vocallab",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#vocalLabBackBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "train-hub",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "errors-signedout": [],
+  "onboarding0-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding1-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=solo": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=choir": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=both": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=fun": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding2-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=beginner": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=intermediate": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=professional": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding3-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=pop": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=rock": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=gospel": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=opera": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=musicaltheatre": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=carnatic": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=metal": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=jazz": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=arabic": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=reggae": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=celtic": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=flamenco": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=bossanova": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=salsa": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=kpop": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=bluegrass": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding4-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=0": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=1": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=2": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=3": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=4": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=5": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=6": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=7": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding5-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "data-ob-value=pitch": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=range": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=breath": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-ob-value=agility": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding6-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "home",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "home",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "journey",
+     "house": "up",
+     "saved": {
+      "profile.onboardingGoals": "[]"
+     },
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "onboarding6set-new": {
+   "openError": null,
+   "overlays": [
+    "onboardingOverlay"
+   ],
+   "panel": "journey",
+   "house": "up",
+   "focus": "#obNextBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#obBackBtn": {
+     "clicked": true,
+     "overlays": [
+      "onboardingOverlay"
+     ],
+     "panel": "journey",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#obNextBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "journey",
+     "house": "up",
+     "saved": {
+      "profile.exerciseLevel": "\"intermediate\"",
+      "profile.genre": "\"pop\"",
+      "profile.onboardingSingerType": "\"solo\"",
+      "profile.onboardingPriority": "\"pitch\"",
+      "profile.onboardingGoals": "[\"I want to stop singing flat\"]"
+     },
+     "toast": null
+    }
+   },
+   "escape": [
+    "onboardingOverlay"
+   ],
+   "scrim": [
+    "onboardingOverlay"
+   ]
+  },
+  "pricing-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "plansoon-new": {
+   "openError": null,
+   "overlays": [
+    "plansSoonOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#plansSoonCloseBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#plansSoonCloseBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "plansSoonOverlay"
+   ]
+  },
+  "paywall-new": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "feedback-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "feedback",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-star=1": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=2": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=3": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=4": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-star=5": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#feedbackSubmitBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.__fbRows": "[{\"user_id\":\"<id>\",\"email\":\"<email>\",\"liked\":\"\",\"disliked\":\"\",\"confusing\":\"\",\"difficult\":\""
+     },
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "feedbackthanks-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "feedback",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#feedbackAnotherBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "warmup-new": {
+   "openError": null,
+   "overlays": [
+    "warmupOverlay"
+   ],
+   "panel": "feedback",
+   "house": "up",
+   "focus": "#warmupSkipBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#warmupSkipBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.warmup:b5361d94-8e15-4cb9-b6e6-779c098d406a:2026-11-10": "skipped"
+     },
+     "toast": null
+    },
+    "data-wu-mode=exercises": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-mode=song": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=trill": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=siren": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=glide": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=hum": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "warmupOverlay"
+   ]
+  },
+  "warmupsong-new": {
+   "openError": null,
+   "overlays": [
+    "warmupOverlay"
+   ],
+   "panel": "feedback",
+   "house": "up",
+   "focus": "#warmupSkipBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#warmupSkipBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.warmup:b5361d94-8e15-4cb9-b6e6-779c098d406a:2026-11-10": "skipped"
+     },
+     "toast": null
+    },
+    "data-wu-mode=exercises": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-mode=song": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=song:hymn": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=song:ballad": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "warmupOverlay"
+   ]
+  },
+  "warmupstage-new": {
+   "openError": null,
+   "overlays": [
+    "warmupOverlay"
+   ],
+   "panel": "feedback",
+   "house": "up",
+   "focus": "#warmupSkipBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#warmupSkipBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {
+      "ls.warmup:b5361d94-8e15-4cb9-b6e6-779c098d406a:2026-11-10": "skipped"
+     },
+     "toast": null
+    },
+    "data-wu-mode=exercises": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-mode=song": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=trill": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=siren": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=glide": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-wu-item=hum": {
+     "clicked": true,
+     "overlays": [
+      "warmupOverlay"
+     ],
+     "panel": "feedback",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "warmupOverlay"
+   ]
+  },
+  "vocallab-new": {
+   "openError": null,
+   "overlays": [],
+   "panel": "vocallab",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#vocalLabBackBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "train-hub",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#vocalLabFindRange": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "range",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "errors-new": [],
+  "pricing-active": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "levelup-active": {
+   "openError": null,
+   "overlays": [
+    "levelupOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "button:moment_continue",
+   "overlayHouse": null,
+   "controls": {},
+   "escape": [],
+   "scrim": []
+  },
+  "newrecord-active": {
+   "openError": null,
+   "overlays": [
+    "newRecordOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "button:moment_continue",
+   "overlayHouse": null,
+   "controls": {},
+   "escape": [],
+   "scrim": []
+  },
+  "breakthrough-active": {
+   "openError": null,
+   "overlays": [
+    "breakthroughOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "button:moment_continue",
+   "overlayHouse": null,
+   "controls": {},
+   "escape": [],
+   "scrim": []
+  },
+  "sharerange-active": {
+   "openError": null,
+   "overlays": [
+    "shareRangeOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#downloadRangePosterBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#downloadRangePosterBtn": {
+     "clicked": true,
+     "overlays": [
+      "shareRangeOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#closeRangePosterBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "shareRangeOverlay"
+   ],
+   "scrim": [
+    "shareRangeOverlay"
+   ]
+  },
+  "sharerecap-active": {
+   "openError": null,
+   "overlays": [
+    "shareRecapOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#downloadRecapPosterBtn",
+   "overlayHouse": "down",
+   "controls": {
+    "#downloadRecapPosterBtn": {
+     "clicked": true,
+     "overlays": [
+      "shareRecapOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#closeRecapPosterBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [
+    "shareRecapOverlay"
+   ],
+   "scrim": [
+    "shareRecapOverlay"
+   ]
+  },
+  "vocallab-active": {
+   "openError": null,
+   "overlays": [],
+   "panel": "vocallab",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "#vocalLabBackBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "train-hub",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "errors-active": [],
+  "pricing-expired": {
+   "openError": null,
+   "overlays": [],
+   "panel": "pricing",
+   "house": "up",
+   "focus": null,
+   "overlayHouse": null,
+   "controls": {
+    "data-plan=monthly data-price=$9.99/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=yearly data-price=$79/yr": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "data-plan=choir data-price=$79/mo": {
+     "clicked": true,
+     "overlays": [
+      "plansSoonOverlay"
+     ],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": null,
+   "scrim": null
+  },
+  "plansoon-expired": {
+   "openError": null,
+   "overlays": [
+    "plansSoonOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#plansSoonCloseBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#plansSoonCloseBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "plansSoonOverlay"
+   ]
+  },
+  "paywall-expired": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "paywallreal-expired": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "paywallchoir-expired": {
+   "openError": null,
+   "overlays": [
+    "paywallModalOverlay"
+   ],
+   "panel": "pricing",
+   "house": "up",
+   "focus": "#paywallCancelBtn",
+   "overlayHouse": null,
+   "controls": {
+    "#paywallCancelBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    },
+    "#paywallViewPlansBtn": {
+     "clicked": true,
+     "overlays": [],
+     "panel": "pricing",
+     "house": "up",
+     "saved": {},
+     "toast": null
+    }
+   },
+   "escape": [],
+   "scrim": [
+    "paywallModalOverlay"
+   ]
+  },
+  "errors-expired": [],
+  "teacher-teacher": {
+   "absent": "phase 9 hides the Teacher Dashboard (nothing opens it)"
+  },
+  "errors-teacher": []
+ },
+ "diffs": []
+}

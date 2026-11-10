@@ -1,0 +1,280 @@
+[data-part="sop"]
+[data-part="lead"]
+[data-part="alto"]
+[data-part="ten"]
+[data-part="bass"]
+.hl-mark
+.hl-mark[aria-current="true"]
+.hl-btn:focus-visible, .hl-key:focus-visible, .hl-transport:focus-visible, .hl-seg button:focus-visible, .hl-item:focus-visible, .hl-tab:focus-visible
+.hl-btn[disabled]
+.hl-fader:focus-visible
+.hl-steps
+.hl-steps li
+.hl-steps li::before
+.hl-steps li[data-state="done"]
+.hl-steps li[data-state="done"]::before
+.hl-steps li[data-state="active"]
+.hl-steps li[data-state="active"]::before
+.hl-dimmer.is-on
+.hl-steps li[data-state="active"]::before
+header.top
+.eyebrow
+.tuner-ring-wrap.locked-pulse
+#tunerRingWrap.locked-pulse, #stayKeyRingWrap.locked-pulse
+:is(#tunerRingWrap, #stayKeyRingWrap) .note-display .oct
+:is(#tunerRingWrap, #stayKeyRingWrap) .cents-display:is(.flat, .sharp)
+#tunerRingWrap #centsDisplay:is(.flat, .sharp)
+:is(#tunerRingWrap, #stayKeyRingWrap) .cents-display.locked
+.vc-stage.is-live .tuner-ring-wrap, .vc-stage.is-live .tuner-ring
+.vc-stage.is-live .note-display
+.vc-stage.is-live .mic-btn
+#pitchMarker.marker-pulse
+.tuner-ring-wrap.locked-pulse
+#pitchMarker.marker-pulse
+.note-display .oct
+.cents-display.flat
+.cents-display.sharp
+#centsDisplay.flat, #centsDisplay.sharp
+.cents-display.locked
+.vc-stage.is-live .range-step h2
+.vc-stage.is-live .range-step .step-label
+.vc-stage.is-live .range-note-live
+.vc-stage.is-live .capture-btn
+.vc-stage.is-live #breathTimerVal
+.vc-stage.is-live :is(#regMicBtn, #liveFeedbackStartBtn, #resonanceStartBtn).listening, .vc-stage.is-live #breathStartBtn.listening
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, [tabindex]:focus-visible
+.snb-item:focus-visible
+.teacher-roster-row
+.teacher-roster-row:last-child
+.teacher-roster-avatar
+.roster-remove
+.assignment-card
+.assignment-head
+.assignment-title
+.assignment-progress
+.assignment-note
+.assignment-student-row
+.assignment-student-row input[type="checkbox"]
+.reg-feedback.warn
+.vl-gauge.over .vl-gauge-fill
+.vl-break
+.vl-break.over
+.vl-break-msg
+.vl-break .vl-disclaimer
+.vl-break-close
+.track-toggle.on-mute
+.track-toggle.on-solo
+.practice-chip.active-part
+.rh-level.passed
+#panel-partrehearsal.acappella-on .rh-hide-ac
+#panel-partrehearsal.acappella-on .ac-note
+#acappellaBtn[aria-pressed="true"]
+.pr-report
+.pr-report .record-label small
+.why-btn
+.why-detail
+.why-detail .why-k
+.why-detail .why-k:first-child
+.why-detail p
+.why-detail svg
+.rd-status.ready
+.record-val.hm-off
+.record-val.hm-silent
+.cx-event
+.cx-event.calm
+.bm-live.now
+.mx-head
+.mx-zoom-row
+.mx-zoom-row .fine-print
+.mx-table
+.mx-table th
+.mx-table td
+.mx-table td.mono
+.mx-table-wrap
+.mx-offsets
+.plan-btn.current
+.feedback-star.filled
+.ex-accuracy.good
+.ex-accuracy.mid
+.ex-accuracy.low
+.vc-stage.is-live .scale-dots
+.ear-choice-btn.correct
+.ear-choice-btn.wrong
+.scale-dot.current
+.pm-lane .pm-grid
+.pm-lane .pm-target
+.pm-lane text
+.pm-lane .pm-lane-voice, .pm-trace .pm-trace-voice
+.pm-lane .pm-lane-head
+.pm-cents-meter .pm-tick
+.pm-cents-meter .pm-tick-big
+.pm-cents-meter .pm-needle
+.vc-take-note.pm-locked
+.vc-stage.is-live .vc-take-note
+.vc-stage.is-live .vc-take-pill:disabled
+.vc-stage.is-live .vc-take-pill
+.vc-stage.is-live .btn-row
+.pm-trace :is(line, path)
+.pm-trace .pm-target
+.conf-high
+.conf-mid
+.conf-low
+.conf-reason
+.health-status-banner.warn
+.challenge-done-badge
+.plan-step-row
+.plan-step-row .ps-text
+.vc-stage.is-live.karaoke-stage
+.vc-stage.is-live .karaoke-roll-wrap
+.vc-stage.is-live #karaokeStartBtn.listening
+.karaoke-obj
+.karaoke-obj .hl-icon
+.karaoke-ring
+.wu-top .ghost-btn
+.wu-item.done .wu-go
+.checklist-icon.good
+.checklist-icon.warn
+.checklist-icon .hl-icon
+.checklist-icon.state-pulse
+.checklist-icon.state-pulse
+.vc-stage.is-live .lf-rows
+.vc-stage.is-live .checklist-row
+.vc-stage.is-live .checklist-text
+.assess-step.done
+.assess-check.done
+.goal-card
+.goal-card.selected
+.gw-stage .gw-start.listening
+.gw-stage .gw-start.listening .dot-icon
+.vc-stage.is-live.gw-stage
+.vc-stage.is-live.gw-stage .gw-go
+.gw-boss-mark.hit, .gw-you-label.hit
+[data-offstage]
+[data-stage-path]
+.vc-stage.is-live .vc-paper-only
+.vc-stage.is-live
+.vc-stage.is-live
+body[data-house="down"] :is(header.shell-topbar, nav.shell-bottomnav):not(:hover):not(:focus-within) :is(.vc-brand, .vc-avatar, .vc-signin, .hl-tab)
+body[data-house="down"] header.shell-topbar:not(:hover):not(:focus-within) .vc-mark
+body[data-house="down"] nav.shell-bottomnav:not(:hover):not(:focus-within) .hl-tab[aria-current="page"]::before
+.vc-result .vc-result-num.vc-result-none
+.hl-measure[open] > summary
+.hl-measure[open] > summary .vc-measure-chev
+#tunerStage.vc-has-result .stat-row
+.vc-result-dims dt
+.vc-result-dims dd
+.vc-take-runner[style*="block"]
+.vc-stage.is-live.eve-unguided .pm-lane, .vc-stage.is-live.eve-unguided .pm-cents
+.vc-stage.is-live #eveStepNote
+.vc-result .vc-dim > .vc-not-heard, .vc-dim .dual-val.vc-not-heard, .vc-take-note.vc-not-heard
+#panel-vocallab .vlab-fill
+#earChoiceGrid .ear-choice-btn.correct
+#earChoiceGrid .ear-choice-btn.wrong
+#earChoiceGrid .ear-mark
+.reg-marker.is-pushing
+.vc-stage.is-live.reg-stage .bridge-svg
+.vc-stage.is-live .reg-stats .vc-dim
+.vc-stage.is-live.hold-stage .step-label
+.vc-stage.is-live #vibratoStartBtn.listening, .vc-stage.is-live #vqStartBtn.listening
+.vc-stage.is-live .drill-target
+#drillStage.is-live, #drillStage .vc-take-runner[style*="block"]
+.vc-stage.is-live .drill-reg
+.vc-stage.is-live #drillDots
+#drillDots .scale-dot.current
+.drill-mark
+.drill-mark.is-match
+.drill-mark.is-drift
+.vc-stage.is-live .rhythm-tempo
+.rhythm-cdots i.on
+.vc-stage.is-live .rhythm-beat-dots
+#rhythmBeatDots .scale-dot.current
+.rhythm-plot
+.rhythm-axis-col
+.rhythm-miss-label
+.rhythm-plot svg
+.rhythm-plot line
+.rhythm-zero
+.rhythm-edge
+.rhythm-axis
+.rhythm-dot, .rhythm-miss
+.rhythm-dot
+.rhythm-missrow
+.rhythm-miss
+.rhythm-beats
+.rhythm-beats span
+.mirror-chart :is(line, polyline)
+.mirror-ref
+.mirror-you
+.mirror-playhead
+.mirror-notes span
+#panel-partrehearsal[data-cw-trainer] #cwTrainerList
+#panel-partrehearsal[data-cw-trainer="hm"] [data-cw-card]:not([data-cw-card="hm"]), #panel-partrehearsal[data-cw-trainer="boss"] [data-cw-card]:not([data-cw-card="boss"]), #panel-partrehearsal[data-cw-trainer="chaos"] [data-cw-card]:not([data-cw-card="chaos"]), #panel-partrehearsal[data-cw-trainer="ladder"] [data-cw-card]:not([data-cw-card="ladder"]), #panel-partrehearsal[data-cw-trainer="timing"] [data-cw-card]:not([data-cw-card="timing"])
+#panel-partrehearsal[data-cw-trainer] [data-cw-card]
+.cw-subnav[data-fade~="start"][data-fade~="end"]
+.cw-stage.is-live
+.cw-stage.is-live
+.cw-stage.is-live > .cw-lanes-wrap, .cw-stage.is-live > svg.cw-lanes, .cw-stage.is-live > .hv-box, .cw-stage.is-live > .cw-cue
+.cw-stage.is-live .cw-transport
+.cw-cue.now
+.cw-stage.is-live .hv-line
+.cw-stage.is-live ~ .rh-notes
+.cw-stage.is-live > svg.cw-lanes, .cw-stage.is-live > p, .cw-stage.is-live > .cb-arena
+.cw-stage.is-live .cw-status
+.cw-stage.is-live [data-i18n="tt_headphones"]
+.cw-stage.is-live .mic-btn
+.cw-stage.is-live .mic-btn .dot-icon
+.cw-stage.is-live .transport-row
+.cw-result .pr-report
+.cw-result .pr-report .hl-label
+.cw-result .record-row.vc-dim .record-label small
+.cw-result .record-val.hm-silent, .cw-result .record-val.untracked
+.cw-result .desc.hl-coach
+.cw-note-rows
+.why-detail .why-reason
+.cw-chips .hl-chip.active-part
+.mx-table thead
+.mx-table, .mx-table tbody
+.mx-table tr
+.mx-table td
+.mx-table td:nth-child(5)
+.vc-avatar:focus-visible
+.app-toast
+.app-toast .hl-icon
+.app-toast
+#homeTodaysReportRows .record-val.home-report-up
+#homeTodaysReportRows .record-val.home-report-weakest
+.home-choir-line--delta
+#panel-journey .journey-trial[hidden]
+#panel-journey .assess-step.done
+#panel-voicehealth .vh-load-meter.over > i
+.vc-stage.is-live #aiDuetStartBtn.listening
+.vc-stage.is-live #emotionChordLabel
+.vc-stage.is-live #emotionStartBtn.listening
+.vc-stage.is-live .staykey-chord
+.vc-stage.is-live #stayKeyStartBtn.listening
+.vc-stage.is-live #pdStopBtn
+.vc-stage.is-live #studioRecordBtn.listening
+.studio-take
+.studio-take:first-child
+.studio-take-head
+.studio-take-head .hl-item-meta
+.studio-take audio
+.home-sec-link:focus-visible, .home-range-find:focus-visible
+.onboarding-card .goal-grid
+.onboarding-card .goal-card
+.home-trial-row.expired
+.boot-error
+.boot-error p
+.mode-card.recommended
+.pricing-notonsale[hidden]
+.plan-row .plan-btn.current
+.feedback-star-row.hl-seg .feedback-star[aria-pressed="true"]
+.wu-item.done .wu-go
+.record-val.tt-early
+.record-val.tt-late
+.record-val.tt-ontime
+.scale-dot.done-good
+.scale-dot.done-mid
+.scale-dot.done-low
+.cw-result .record-val, .cw-result .record-val.hm-held, .cw-result .record-val.tt-ontime, .cw-result .record-val.tt-early
+.cw-result .record-val.hm-off, .cw-result .record-val.tt-late
