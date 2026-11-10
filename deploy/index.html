@@ -2556,6 +2556,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .feedback-rating-ends{display:flex;justify-content:space-between;width:100%;max-width:360px;}
   .feedback-submit{width:100%;margin-top:var(--hl-s5);}
   .feedback-note{margin:var(--hl-s3) 0 0;}
+  .feedback-empty-note{margin:var(--hl-s3) 0 0;color:var(--hl-ink);font-weight:600;} /* 9.1: an empty Send saves nothing */
+  .feedback-empty-note[hidden]{display:none;}
   .feedback-thanks{justify-items:start;}
 
   /* ---- PHASE 9 (2.7): the warm-up card on the stage's own controls (house down) ---- */
@@ -2629,14 +2631,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-vocallab .vlab-row-label{font-size:var(--hl-t-body);font-weight:600;font-stretch:var(--hl-w-normal);color:var(--hl-ink);}
   #panel-vocallab .vlab-row-notes{font-size:var(--hl-t-body);color:var(--hl-ink);margin:0;}
   #panel-vocallab .vlab-row-sub{font-size:var(--hl-t-small);color:var(--hl-ink-3);margin:2px 0 var(--hl-s2);}
-  #panel-vocallab .vlab-track{display:flex;height:22px;gap:1px;background:none;border:0;border-radius:0;overflow:hidden;}
-  .vlab-key{flex:1;display:block;background:var(--hl-sunk);}
-  .vlab-key.b{background:var(--hl-rule-strong);}
-  .vlab-key.on{background:var(--hl-voice);}
-  .vlab-key.b.on{background:var(--hl-voice);box-shadow:inset 0 -8px 0 var(--hl-ink);}
+  #panel-vocallab .vlab-track{display:block;position:relative;height:8px;background:var(--hl-rule);border:0;border-radius:4px;overflow:hidden;}
+  .vlab-seg{position:absolute;top:0;bottom:0;display:block;background:var(--hl-voice);border-radius:4px;}
   .vlab-nodata{margin:0;}
-  .vlab-axis{position:relative;height:18px;margin:var(--hl-s1) 0 var(--hl-s4);font-size:var(--hl-t-label);color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
-  .vlab-axis span{position:absolute;transform:translateX(-50%);}
+  .vlab-axis{position:relative;height:16px;margin:var(--hl-s1) 0 0;font-size:var(--hl-t-label);line-height:16px;color:var(--hl-ink-3);font-variant-numeric:tabular-nums;}
+  .vlab-axis span{position:absolute;top:0;white-space:nowrap;}
+  .vlab-find{margin:var(--hl-s1) 0 0;min-height:44px;font-size:var(--hl-t-small);}
+  .vlab-find[hidden]{display:none;}
   #vocalLabNoteCount{margin:0 0 var(--hl-s2);}
   #vocalLabEmpty{margin:0;}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
@@ -5064,6 +5065,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <div class="key-card">
       <p class="hl-meta" id="vocalLabEmpty" style="display:none;"></p>
+      <button type="button" class="link-btn vlab-find" id="vocalLabFindRange" data-i18n="home_range_find" hidden>Find your range</button>
       <div id="vocalLabRangesCard" style="display:none;"></div>
       <p class="hl-meta" id="vocalLabNoteCount"></p>
       <details class="hl-measure vlab-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="vocallab_measure">Extended: the lowest and highest notes the Range Finder heard. Comfortable: every note you've sung at least once with 55% accuracy or better. Reliable: notes with 3 or more attempts averaging 75% or better. From your Pitch Match, Custom Challenge, Boss Arena and Rift attempts.</p></details>
@@ -5567,7 +5569,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <section class="hl-section pricing-plans">
       <div class="hl-label" data-i18n="pricing_plans_label">Plans</div>
       <h2 class="hl-h2 pricing-h2" data-i18n="pricing_continue_h2">Continue your vocal journey</h2>
-      <p class="pricing-desc" data-i18n="pricing_trialgates_desc">Every new account gets 21 days of full access first — no feature gates during the trial. These plans are what continues after.</p>
       <div class="plan-rows">
         <div class="plan-row highlight" data-plan-row="monthly">
           <div class="plan-row-head"><h3 class="plan-name" data-i18n="pricing_planname_monthly">Monthly</h3><span class="plan-badge hl-label" data-i18n="pricing_mostpopular_badge">Most popular</span></div>
@@ -5611,7 +5612,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <ul class="plan-features">
             <li data-i18n="pricing_choir_f1">Full choir mixer — mute/solo/volume per part</li>
             <li data-i18n="pricing_choir_f2">Pre-separated licensed track catalog</li>
-            <li data-i18n="pricing_choir_f3">Director dashboard</li>
             <li data-i18n="pricing_choir_f4">Flat rate, no per-seat pricing</li>
             <li data-i18n="pricing_choir_f5">Choir World: part rehearsal, trainers, Harmony Memory, Choir Bosses, Your Choir and Choir Passport</li>
           </ul>
@@ -5821,6 +5821,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <textarea class="text-input" id="fbOther" rows="2"></textarea>
       </div>
       <button class="hl-btn hl-btn--ink feedback-submit" id="feedbackSubmitBtn" data-i18n="feedback_submit_btn">Send feedback</button>
+      <p class="hl-small feedback-empty-note" id="feedbackEmptyNote" role="status" aria-live="polite" data-i18n="feedback_empty_note" hidden>Write at least one answer first.</p>
       <p class="hl-meta feedback-note" id="feedbackFormNote" data-i18n="feedback_storage_note">Sent to the VoxCoach team, with your e-mail if you're signed in.</p>
     </div>
 
@@ -6688,6 +6689,8 @@ function classifyVoice(lowMidi, highMidi){
   });
   return best.name;
 }
+// 9.1 (2): the voice type as shown, in the page's language (classifyVoice's English name stays the value)
+function voiceTypeLabel(name){ const k = 'voicetype_' + String(name).toLowerCase().replace(/[^a-z]/g,''); const v = t(k); return v && v!==k ? v : name; }
 
 function renderRangeResult(){
   if(!lowNote || !highNote) return;
@@ -6695,7 +6698,7 @@ function renderRangeResult(){
   if(lo.midi > hi.midi){ const t=lo; lo=hi; hi=t; } // swap if sung out of order
 
   const voiceType = classifyVoice(lo.midi, hi.midi);
-  document.getElementById('voiceTypeOut').textContent = voiceType;
+  document.getElementById('voiceTypeOut').textContent = voiceTypeLabel(voiceType);
   document.getElementById('rangeSpanOut').textContent = `${lo.name}${lo.octave}–${hi.name}${hi.octave}`;
   document.getElementById('rangeSemitones').textContent = hi.midi - lo.midi;
   document.getElementById('rangeHighSoFar').textContent = `${highNote.name}${highNote.octave}`;
@@ -7984,7 +7987,7 @@ const TRANSLATIONS = {
     pricing_choir_audience:'Unlimited singers',
     pricing_choir_f1:'Full choir mixer — mute/solo/volume per part',
     pricing_choir_f2:'Pre-separated licensed track catalog',
-    pricing_choir_f3:'Director dashboard',
+    
     pricing_choir_f5:"Choir World: part rehearsal, trainers, Harmony Memory, Choir Bosses, Your Choir and Choir Passport",
     pricing_choir_f4:'Flat rate, no per-seat pricing',
     pricing_comefar_h2:'Your voice has come this far.',
@@ -8018,7 +8021,7 @@ const TRANSLATIONS = {
     pricing_teacher_f3:'Student progress reports',
     pricing_teacher_f4:"Roster and assignment tools",
     pricing_today_label:'Today',
-    pricing_trialgates_desc:'Every new account gets 21 days of full access first — no feature gates during the trial. These plans are what continues after.',
+    
     pricing_yearly_audience:'~$6.60/mo — 2 months free vs. Monthly',
     pricing_yearly_f1:'Everything in Monthly',
     pricing_yearly_f2:'Billed once a year',
@@ -8829,7 +8832,7 @@ const TRANSLATIONS = {
     paywall_seeplans_btn:"See the plans",
     feedback_rating_low:"Poor",
     feedback_rating_high:"Great",
-    feedback_toast_empty:"Add a rating or a note before sending.",
+    
     feedback_toast_failed:"Couldn't send your feedback. Try again.",
     moment_levelup:"Level up",
     moment_level_name:"Level",
@@ -8875,6 +8878,7 @@ const TRANSLATIONS = {
     key_rank_down_other:"Down {n} semitones",
     key_rank_fit_tpl:"Fit {n}/5",
     voicecard_canvas_aria:"Preview of your Voice Card: an image to share with your Pitch, Range, Breath, Agility and streak",
+    feedback_empty_note:"Write at least one answer first.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9781,7 +9785,7 @@ const TRANSLATIONS = {
     pricing_choir_audience:'Chanteurs illimités',
     pricing_choir_f1:'Mixeur de chorale complet — muet/solo/volume par voix',
     pricing_choir_f2:'Catalogue de pistes sous licence pré-séparées',
-    pricing_choir_f3:'Tableau de bord du directeur',
+    
     pricing_choir_f5:"Monde Chorale : répétition par voix, entraîneurs, Mémoire harmonique, Boss de la chorale, Votre chorale et Passeport Chorale",
     pricing_choir_f4:'Tarif fixe, pas de tarification par place',
     pricing_comefar_h2:'Votre voix est arrivée jusqu\'ici.',
@@ -9815,7 +9819,7 @@ const TRANSLATIONS = {
     pricing_teacher_f3:'Rapports de progression des élèves',
     pricing_teacher_f4:"Outils de liste d'élèves et de devoirs",
     pricing_today_label:'Aujourd\'hui',
-    pricing_trialgates_desc:'Chaque nouveau compte bénéficie d\'abord de 21 jours d\'accès complet — aucune restriction de fonctionnalité pendant l\'essai. Ces forfaits sont ce qui continue après.',
+    
     pricing_yearly_audience:'~6,60 $/mois — 2 mois gratuits vs Mensuel',
     pricing_yearly_f1:'Tout ce qui est dans Mensuel',
     pricing_yearly_f2:'Facturé une fois par an',
@@ -10626,7 +10630,7 @@ const TRANSLATIONS = {
     paywall_seeplans_btn:"Voir les forfaits",
     feedback_rating_low:"Mauvais",
     feedback_rating_high:"Excellent",
-    feedback_toast_empty:"Ajoutez une note ou un commentaire avant d'envoyer.",
+    
     feedback_toast_failed:"Impossible d'envoyer votre avis. Réessayez.",
     moment_levelup:"Niveau supérieur",
     moment_level_name:"Niveau",
@@ -10672,6 +10676,7 @@ const TRANSLATIONS = {
     key_rank_down_other:"{n} demi-tons plus bas",
     key_rank_fit_tpl:"Adéquation {n}/5",
     voicecard_canvas_aria:"Aperçu de votre carte vocale : une image à partager avec votre justesse, votre tessiture, votre souffle, votre agilité et votre série",
+    feedback_empty_note:"Écrivez d'abord au moins une réponse.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -11578,7 +11583,7 @@ const TRANSLATIONS = {
     pricing_choir_audience:'Cantantes ilimitados',
     pricing_choir_f1:'Mezclador de coro completo — silenciar/solo/volumen por voz',
     pricing_choir_f2:'Catálogo de pistas con licencia pre-separadas',
-    pricing_choir_f3:'Panel del director',
+    
     pricing_choir_f5:"Mundo Coral: ensayo por voz, entrenadores, Memoria armónica, Jefes del coro, Tu coro y Pasaporte Coral",
     pricing_choir_f4:'Tarifa fija, sin precios por asiento',
     pricing_comefar_h2:'Tu voz ha llegado hasta aquí.',
@@ -11612,7 +11617,7 @@ const TRANSLATIONS = {
     pricing_teacher_f3:'Informes de progreso de estudiantes',
     pricing_teacher_f4:"Herramientas de lista y tareas",
     pricing_today_label:'Hoy',
-    pricing_trialgates_desc:'Cada cuenta nueva obtiene primero 21 días de acceso completo — sin restricciones de funciones durante la prueba. Estos planes son lo que continúa después.',
+    
     pricing_yearly_audience:'~$6.60/mes — 2 meses gratis vs Mensual',
     pricing_yearly_f1:'Todo en Mensual',
     pricing_yearly_f2:'Facturado una vez al año',
@@ -12423,7 +12428,7 @@ const TRANSLATIONS = {
     paywall_seeplans_btn:"Ver los planes",
     feedback_rating_low:"Mala",
     feedback_rating_high:"Excelente",
-    feedback_toast_empty:"Añade una valoración o un comentario antes de enviar.",
+    
     feedback_toast_failed:"No se pudieron enviar tus comentarios. Inténtalo de nuevo.",
     moment_levelup:"Subiste de nivel",
     moment_level_name:"Nivel",
@@ -12469,6 +12474,7 @@ const TRANSLATIONS = {
     key_rank_down_other:"{n} semitonos más bajo",
     key_rank_fit_tpl:"Ajuste {n}/5",
     voicecard_canvas_aria:"Vista previa de tu tarjeta vocal: una imagen para compartir con tu afinación, rango, respiración, agilidad y racha",
+    feedback_empty_note:"Escribe primero al menos una respuesta.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13375,7 +13381,7 @@ const TRANSLATIONS = {
     pricing_choir_audience:'Sınırsız şarkıcı',
     pricing_choir_f1:'Tam koro mikseri — ses grubu başına sessize alma/solo/ses düzeyi',
     pricing_choir_f2:'Önceden ayrılmış lisanslı parça kataloğu',
-    pricing_choir_f3:'Yönetmen paneli',
+    
     pricing_choir_f5:"Koro Dünyası: parti provası, çalışmalar, Armoni Hafızası, Koro Boss’ları, Senin Koron ve Koro Pasaportu",
     pricing_choir_f4:'Sabit ücret, koltuk başına fiyatlandırma yok',
     pricing_comefar_h2:'Sesiniz buraya kadar geldi.',
@@ -13409,7 +13415,7 @@ const TRANSLATIONS = {
     pricing_teacher_f3:'Öğrenci ilerleme raporları',
     pricing_teacher_f4:"Öğrenci listesi ve ödev araçları",
     pricing_today_label:'Bugün',
-    pricing_trialgates_desc:'Her yeni hesap önce 21 gün tam erişim alır — deneme sırasında özellik kısıtlaması yoktur. Bu planlar sonrasında devam edenlerdir.',
+    
     pricing_yearly_audience:'~6.60$/ay — Aylığa göre 2 ay ücretsiz',
     pricing_yearly_f1:'Aylık plandaki her şey',
     pricing_yearly_f2:'Yılda bir kez faturalandırılır',
@@ -14220,7 +14226,7 @@ const TRANSLATIONS = {
     paywall_seeplans_btn:"Planları gör",
     feedback_rating_low:"Kötü",
     feedback_rating_high:"Harika",
-    feedback_toast_empty:"Göndermeden önce bir puan ya da not ekle.",
+    
     feedback_toast_failed:"Geri bildirimin gönderilemedi. Tekrar dene.",
     moment_levelup:"Seviye atladın",
     moment_level_name:"Seviye",
@@ -14266,6 +14272,7 @@ const TRANSLATIONS = {
     key_rank_down_other:"{n} yarım ses aşağı",
     key_rank_fit_tpl:"Uyum {n}/5",
     voicecard_canvas_aria:"Ses kartının önizlemesi: perde, ses aralığı, nefes, çeviklik ve serini içeren paylaşılabilir bir görsel",
+    feedback_empty_note:"Önce en az bir soruyu yanıtla.",
   },
 };
 let currentLanguage = 'en';
@@ -14484,6 +14491,24 @@ async function saveProgress(){
     }
   }
 }
+// 9.1 (4): the moment sheets stay 6 s (level up with its why-line, breakthrough) or 4 s (level up without, new record).
+// Any pointer, touch or key inside the sheet stops its timer; then only Continue, Escape or the scrim close it.
+const MOMENT_MS = { long: 6000, short: 4000 };
+const MOMENT_TIMERS = { levelupOverlay:'_levelupTimer', newRecordOverlay:'_newRecordTimer', breakthroughOverlay:'_breakthroughTimer' };
+function momentStop(o){ clearTimeout(window[MOMENT_TIMERS[o.id]]); }
+function momentClose(o){ momentStop(o); momentHide(o); }
+Object.keys(MOMENT_TIMERS).forEach(id=>{
+  const o = document.getElementById(id); if(!o) return;
+  const card = o.querySelector('.moment-sheet');
+  o.addEventListener('pointerdown', e=>{ if(card && card.contains(e.target)) momentStop(o); });
+  o.addEventListener('keydown', e=>{ if(e.key!=='Escape') momentStop(o); });
+  o.addEventListener('click', e=>{ if(e.target===o || e.target.closest('[data-moment-close]')) momentClose(o); }); // the scrim, or Continue
+});
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Escape') return;
+  const open = Object.keys(MOMENT_TIMERS).map(id=>document.getElementById(id)).filter(o=>o && o.classList.contains('levelup-show'));
+  if(open.length){ e.preventDefault(); open.forEach(momentClose); }
+});
 function momentShown(o){
   if(!o.contains(document.activeElement)) o._prevFocus = document.activeElement;
   const b = o.querySelector('[data-moment-close]'); if(!b) return;
@@ -14503,13 +14528,9 @@ function showLevelUp(level, name, why){
   const overlay = document.getElementById('levelupOverlay');
   overlay.classList.add('levelup-show'); momentShown(overlay);
   clearTimeout(window._levelupTimer);
-  window._levelupTimer = setTimeout(()=>momentHide(overlay), why ? 4500 : 2400); // time to read the line
+  window._levelupTimer = setTimeout(()=>momentHide(overlay), why ? MOMENT_MS.long : MOMENT_MS.short); // 9.1: time to read it
   if(typeof logTimelineEvent==='function') logTimelineEvent('levelup', `${t('timeline_reached_level_p1')} ${level} — ${name}`, {level});
 }
-document.getElementById('levelupOverlay')?.addEventListener('click', ()=>{
-  momentHide(document.getElementById('levelupOverlay'));
-  clearTimeout(window._levelupTimer);
-});
 
 function triggerNewRecord(label, displayVal, deltaText){
   document.getElementById('newRecordLabel').textContent = label;
@@ -14518,13 +14539,9 @@ function triggerNewRecord(label, displayVal, deltaText){
   const overlay = document.getElementById('newRecordOverlay');
   overlay.classList.add('levelup-show'); momentShown(overlay);
   clearTimeout(window._newRecordTimer);
-  window._newRecordTimer = setTimeout(()=>momentHide(overlay), 2400);
+  window._newRecordTimer = setTimeout(()=>momentHide(overlay), MOMENT_MS.short);
   if(typeof logTimelineEvent==='function') logTimelineEvent('record', `${t('timeline_new_record_p1')} ${label} (${displayVal})`, {recordKey: TIMELINE_RECORD_KEYS.find(k=>t(k)===label) || null, value: displayVal});
 }
-document.getElementById('newRecordOverlay')?.addEventListener('click', ()=>{
-  momentHide(document.getElementById('newRecordOverlay'));
-  clearTimeout(window._newRecordTimer);
-});
 
 function triggerBreakthrough(midi, priorAvg){
   document.getElementById('breakthroughNote').textContent = noteNameFromMidi(midi);
@@ -14532,13 +14549,9 @@ function triggerBreakthrough(midi, priorAvg){
   const overlay = document.getElementById('breakthroughOverlay');
   overlay.classList.add('levelup-show'); momentShown(overlay);
   clearTimeout(window._breakthroughTimer);
-  window._breakthroughTimer = setTimeout(()=>momentHide(overlay), 3200);
+  window._breakthroughTimer = setTimeout(()=>momentHide(overlay), MOMENT_MS.long);
   if(typeof logTimelineEvent==='function') logTimelineEvent('breakthrough', `${t('timeline_breakthrough_p1')} ${noteNameFromMidi(midi)} ${t('timeline_breakthrough_p2')} ${priorAvg}% ${t('timeline_breakthrough_p3')}`, {midi, prior: priorAvg});
 }
-document.getElementById('breakthroughOverlay')?.addEventListener('click', ()=>{
-  momentHide(document.getElementById('breakthroughOverlay'));
-  clearTimeout(window._breakthroughTimer);
-});
 
 async function recordActivity(){
   if(!profile) return; // only track once signed in
@@ -14845,7 +14858,7 @@ document.getElementById('shareRangeBtn').addEventListener('click', ()=>{
   let lo=lowNote, hi=highNote;
   if(lo.midi>hi.midi){ const t=lo; lo=hi; hi=t; }
   const voiceType = classifyVoice(lo.midi, hi.midi);
-  document.getElementById('posterVoiceType').textContent = t('voicetype_'+voiceType.toLowerCase().replace(/[^a-z]/g,'')) || voiceType;
+  document.getElementById('posterVoiceType').textContent = voiceTypeLabel(voiceType);
   document.getElementById('posterRangeSpan').textContent = `${lo.name}${lo.octave} → ${hi.name}${hi.octave}`;
   const semis = hi.midi - lo.midi;
   document.getElementById('posterSpanVal').textContent = t(semis===1 ? 'poster_semitones_one' : 'poster_semitones_other').replace('{n}', semis);
@@ -14883,7 +14896,9 @@ document.getElementById('closeRecapPosterBtn').addEventListener('click', ()=>clo
 async function exportPoster(elementId, filename){
   const el = document.getElementById(elementId);
   try{
-    const canvas = await html2canvas(el, {backgroundColor:null, scale:2});
+    // 9.1 (6): opaque, the poster's paper behind its rounded corners (a clean rectangle), at 3× (1020 × 1800)
+    const paper = getComputedStyle(el).backgroundColor;
+    const canvas = await html2canvas(el, {backgroundColor:paper, scale:3});
     const link = document.createElement('a');
     link.download = filename;
     link.href = canvas.toDataURL('image/png');
@@ -22728,6 +22743,7 @@ function renderHomeNumbers(scores){
 }
 document.getElementById('homeNumbersLink')?.addEventListener('click', ()=>enterPanel('dashboard'));
 document.getElementById('homeRangeFind')?.addEventListener('click', ()=>enterPanel('range'));
+document.getElementById('vocalLabFindRange')?.addEventListener('click', ()=>enterPanel('range')); // 9.1: as Home's link
 document.getElementById('homeWorldRow')?.addEventListener('click', ()=>document.querySelector('.snb-item[data-shell="world"]').click());
 document.getElementById('homeLevelRow')?.addEventListener('click', ()=>enterPanel('journey'));
 
@@ -23028,7 +23044,7 @@ function renderProfile(){
   const rangeEl = document.getElementById('profileRangeLine');
   if(progress.lowestMidi!==null && progress.lowestMidi!==undefined && progress.highestMidi!==null && progress.highestMidi!==undefined){
     const voiceType = classifyVoice(progress.lowestMidi, progress.highestMidi);
-    rangeEl.textContent = `${noteNameFromMidi(progress.lowestMidi)} – ${noteNameFromMidi(progress.highestMidi)} · ${voiceType}`;
+    rangeEl.textContent = `${noteNameFromMidi(progress.lowestMidi)} – ${noteNameFromMidi(progress.highestMidi)} · ${voiceTypeLabel(voiceType)}`;
   } else {
     rangeEl.textContent = t('dash_not_captured');
   }
@@ -24390,29 +24406,33 @@ function renderVocalLab(){
   const card = document.getElementById('vocalLabRangesCard');
   const empty = document.getElementById('vocalLabEmpty');
   if(!card) return;
+  const find = document.getElementById('vocalLabFindRange'); find.hidden = true;
   if(!profile){ card.style.display='none'; empty.style.display='block'; empty.textContent=t('vocallab_signin'); return; }
 
   const tiers = computeVocalLabTiers();
-  if(!tiers.extended){ card.style.display='none'; empty.style.display='block'; empty.textContent=t('vocallab_needrangefinder'); return; }
+  if(!tiers.extended){ card.style.display='none'; empty.style.display='block'; empty.textContent=t('vocallab_needrangefinder'); find.hidden = false; return; } // 9.1: one action
   card.style.display='block'; empty.style.display='none';
 
-  // the shared scale: the widest data we have, a semitone of margin each side, drawn as keys (phase 9, 2.10)
+  // the shared scale: the widest data we have, a semitone of margin each side (2.10); 9.1: a plain bar per tier, the
+  // range one voice-colour segment on a rule-colour track, its Cs right under it (the same axis for all three)
   const allLows = [tiers.extended.lowMidi, tiers.comfortable?.lowMidi, tiers.reliable?.lowMidi].filter(v=>v!=null);
   const allHighs = [tiers.extended.highMidi, tiers.comfortable?.highMidi, tiers.reliable?.highMidi].filter(v=>v!=null);
   const scaleLow = Math.min(...allLows)-1, scaleHigh = Math.max(...allHighs)+1;
-  const BLACK = [1,3,6,8,10];
-  const keysFor = d=>{ let h=''; for(let m=scaleLow; m<=scaleHigh; m++) h += `<i class="vlab-key${BLACK.includes(m%12)?' b':''}${d && m>=d.lowMidi && m<=d.highMidi?' on':''}"></i>`; return h; };
+  const pct = m => ((m-scaleLow)/(scaleHigh-scaleLow))*100;
+  let marks = []; for(let m=scaleLow; m<=scaleHigh; m++) if(m%12===0) marks.push(m);
+  if(!marks.length) marks = [scaleLow+1, scaleHigh-1]; // no C in a narrow range: its two ends
+  const labels = marks.map(m=>{ const p = pct(m); return `<span style="left:${p}%;transform:translateX(${p<6?'0':p>94?'-100%':'-50%'})">${noteNameFromMidi(m)}</span>`; }).join('');
+  const barFor = d=>`<div class="vlab-track" aria-hidden="true"><i class="vlab-seg" style="left:${pct(d.lowMidi)}%;width:max(4px, ${pct(d.highMidi)-pct(d.lowMidi)}%)"></i></div><div class="vlab-axis" aria-hidden="true">${labels}</div>`;
   const rows = [
     {label:t('vocallab_extended'), sub:t('vocallab_extended_sub'), data:tiers.extended},
     {label:t('vocallab_comfortable'), sub:t('vocallab_comfortable_sub'), data:tiers.comfortable},
     {label:t('vocallab_reliable'), sub:t('vocallab_reliable_sub'), data:tiers.reliable},
   ];
-  const axis = []; for(let m=scaleLow; m<=scaleHigh; m++) if(m%12===0) axis.push(`<span style="left:${((m-scaleLow+0.5)/(scaleHigh-scaleLow+1))*100}%">${noteNameFromMidi(m)}</span>`);
   card.innerHTML = rows.map(r=>`<div class="vlab-row">
       <div class="vlab-row-head"><span class="vlab-row-label">${r.label}</span>${r.data ? `<span class="hl-note vlab-row-notes">${noteNameFromMidi(r.data.lowMidi)}–${noteNameFromMidi(r.data.highMidi)}</span>` : ''}</div>
       <div class="vlab-row-sub">${r.sub}</div>
-      ${r.data ? `<div class="vlab-track" aria-hidden="true">${keysFor(r.data)}</div>` : `<p class="hl-meta vlab-nodata">${t('vocallab_notenoughdata')}</p>`}
-    </div>`).join('') + `<div class="vlab-axis" aria-hidden="true">${axis.join('')}</div>`;
+      ${r.data ? barFor(r.data) : `<p class="hl-meta vlab-nodata">${t('vocallab_notenoughdata')}</p>`}
+    </div>`).join('');
   const n = tiers.totalNotesAttempted;
   document.getElementById('vocalLabNoteCount').textContent = t(n===1 ? 'vocallab_notes_one' : 'vocallab_notes_other').replace('{n}', n);
 }
@@ -26218,11 +26238,12 @@ document.getElementById('feedbackSubmitBtn')?.addEventListener('click', async ()
     userEmail: (typeof profile!=='undefined' && profile) ? profile.email : null,
   };
 
-  const hasAnyContent = Object.keys(entry).some(k => typeof entry[k]==='string' && entry[k].length>0) || entry.rating>0;
-  if(!hasAnyContent){
-    showToast(t('feedback_toast_empty'), 'warn');
-    return;
-  }
+  // 9.1: only the answers count (submittedAt and the e-mail are always there): nothing written and no rating saves nothing
+  const ANSWERS = ['like','dislike','confusing','difficult','mostUsed','improve','addFeature','bugs','other'];
+  const hasAnyContent = ANSWERS.some(k => entry[k].length>0) || entry.rating>0;
+  const emptyNote = document.getElementById('feedbackEmptyNote');
+  if(!hasAnyContent){ emptyNote.hidden = false; return; }
+  emptyNote.hidden = true;
 
   try{
     const { data:{ session } } = await sb.auth.getSession();
@@ -26251,7 +26272,11 @@ document.getElementById('feedbackSubmitBtn')?.addEventListener('click', async ()
   document.getElementById('feedbackThanksCard').style.display = 'block';
 });
 
+// the empty-send note goes once something is answered
+document.getElementById('feedbackFormCard')?.addEventListener('input', ()=>{ document.getElementById('feedbackEmptyNote').hidden = true; });
+document.querySelectorAll('.feedback-star').forEach(b=>b.addEventListener('click', ()=>{ document.getElementById('feedbackEmptyNote').hidden = true; }));
 document.getElementById('feedbackAnotherBtn')?.addEventListener('click', ()=>{
+  document.getElementById('feedbackEmptyNote').hidden = true;
   ['fbLike','fbDislike','fbConfusing','fbDifficult','fbMostUsed','fbImprove','fbAddFeature','fbBugs','fbOther'].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.value = '';
