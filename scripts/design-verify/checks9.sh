@@ -37,6 +37,9 @@ case $SET in
   all) LIST="states9 onboard checkout feedback posters moments9 levelup home cv-paywall cv-p8 warmup-entries warmup-tracking tools house contrast copyscan-all hooks navcheck bootcheck youstates";;
   *) LIST=${SET//,/ };;
 esac
+case " $LIST " in *" cv-paywall "*|*" cv-p8 "*) # the choir scripts take the working build at :8765 (as in checks7)
+  (cd deploy && exec python3 -m http.server 8765 >/dev/null 2>&1) & DS=$!; trap 'kill $DS 2>/dev/null' EXIT; sleep 2;;
+esac
 echo "checks9 $SET on $(git rev-parse --short HEAD)$(git diff --quiet || echo ' + working changes')" > "$OUT/progress.txt"
 for n in $LIST; do
   while pmset -g batt | head -1 | grep -q "Battery Power"; do echo "$(date -u +%H:%M:%S) on battery: waiting for AC before $n" >> "$OUT/progress.txt"; sleep 300; done

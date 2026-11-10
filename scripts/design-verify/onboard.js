@@ -45,7 +45,7 @@ async function runPath(page, plan) {
 }
 
 (async () => {
-  fs.mkdirSync(OUT, { recursive: true }); const b = await C.chromium.launch(); const out = {}; let fails = 0;
+  fs.mkdirSync(OUT, { recursive: true }); const b = await C.chromium.launch(); const out = {}; let fails = 0, plans;
   try {
     const a = await C.openPage(b, { dir: SIDES.master }); await C.signUp(a.page, 'dvob', 'Onboard Check'); const state = await a.ctx.storageState(); await a.ctx.close();
     for (const side of ['master', 'branch']) {
@@ -53,8 +53,10 @@ async function runPath(page, plan) {
       await C.clearOverlays(page);
       await page.evaluate(() => { window.saveProgress = async () => {}; enterPanel = () => {}; }); // the last Next opens the Journey: kept on this page
       const values = await page.evaluate(g => { openOnboarding(); const o = {}; for (const [id] of g) o[id] = [...document.querySelectorAll(`#${id} [data-ob-value]`)].map(x => x.dataset.obValue); return o; }, GRIDS);
+      // the paths are built from master's choices and run by value on both sides (Expression is absent on the branch)
+      if (side === 'master') {
       const n = Math.max(...Object.values(values).map(v => v.length));
-      const plans = { none: {} };
+      plans = { none: {} };
       for (let i = 0; i < n; i++) {
         const picks = {}; for (const [g, s] of GRIDS) { const v = values[g]; if (!v.length) continue; picks[s] = MULTI[g] ? [v[i % v.length], v[(i + 1) % v.length]].filter((x, j, a) => a.indexOf(x) === j) : [v[i % v.length]]; }
         plans[`pick ${i}`] = { picks };
@@ -62,6 +64,7 @@ async function runPath(page, plan) {
       plans.toggle = { picks: { 3: [values.obGenreGrid[0], values.obGenreGrid[0], values.obGenreGrid[1]], 4: [values.obGoalsGrid[0], values.obGoalsGrid[0]] } };
       plans.back = { picks: { 1: [values.obSingerTypeGrid[0]], 2: [values.obLevelGrid[0]], 5: [values.obPriorityGrid[0]] }, backTo: 2, after: { 2: [values.obLevelGrid[1]], 5: [values.obPriorityGrid[1]] } };
       plans['back-to-0'] = { backFrom1: true, picks: { 1: [values.obSingerTypeGrid[1]] } };
+      }
       out[side] = { values, paths: {} };
       for (const [name, plan] of Object.entries(plans)) out[side].paths[name] = await runPath(page, plan);
       out[side].errors = errors.slice();
@@ -83,9 +86,11 @@ async function runPath(page, plan) {
       const rowsEq = eq(m.summary, br.summary);
       console.log(`   summary  master ${JSON.stringify(m.summary)}\n            branch ${JSON.stringify(br.summary)}${rowsEq ? '  (equal)' : ''}`);
       if (!rowsEq) { // only the unset values may read differently (2.3)
-        const setRows = (rows, s) => rows.filter((r, i) => !(i === 0 && !s.level) && !(i === 1 && !s.genre) && !(i === 2 && !s.priority));
+        // a row is set when the path chose on its step (level 2, genres 3, priority 5); a default level isn't a choice
+        const chose = st => m.log.some(l => l.startsWith(st + ':') && !l.includes('(absent)'));
+        const setRows = rows => rows.filter((r, i) => chose([2, 3, 5][i]));
         const val = r => r[1];
-        check(eq(setRows(m.summary, m.saved || {}).map(val), setRows(br.summary, br.saved || {}).map(val)), `${name}: the summary's set values equal (labels and unset values may read differently, 2.3)`);
+        check(eq(setRows(m.summary).map(val), setRows(br.summary).map(val)), `${name}: the summary's set values equal (labels and unset values may read differently, 2.3)`);
       }
     }
     check(!M.errors.length && !B.errors.length, `page errors: master ${M.errors.length}, branch ${B.errors.length} ${[...M.errors, ...B.errors].slice(0, 2).join(' | ')}`);

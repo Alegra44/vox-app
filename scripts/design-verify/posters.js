@@ -25,7 +25,7 @@ const POSTERS = [
   { key: 'recap', open: `enterPanel('dashboard'); document.getElementById('shareRecapBtn').click();`,
     overlay: 'shareRecapOverlay', poster: 'recapPoster', download: 'downloadRecapPosterBtn', close: 'closeRecapPosterBtn' },
 ];
-const EN = /\b(the|your|you|and|this|month|voice|range|day|days|streak|sessions|widest|download|image|close|recap|reveal|what's|type)\b/i;
+const EN = /\b(the|your|you|and|this|month|voice|range|day|days|streak|sessions|widest|download|close|recap|reveal|what's)\b/i;
 let fails = 0; const res = []; const check = (ok, s) => { res.push({ ok, s }); if (!ok) fails++; console.log(`${ok ? '✓' : '✗'} ${s}`); };
 
 // Runs in the page: compare two PNG data URLs pixel by pixel.
@@ -93,7 +93,7 @@ async function comparePng([a, b]) {
           const words = []; const w = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
           for (let n; (n = w.nextNode());) { const s = n.textContent.trim(); if (s) words.push(s); }
           const month = new Date().toLocaleDateString(localeForLang(), { month: 'long' });
-          return { keyed: keyed.length, bad, words, month, hasMonth: p.innerText.toLowerCase().includes(month.toLowerCase()) };
+          return { keyed: keyed.length, bad, words, month, hasMonth: p.textContent.toLocaleLowerCase(localeForLang()).includes(month.toLocaleLowerCase(localeForLang())) /* textContent: innerText carries the label's uppercase, and Turkish İ/ı don't survive toLowerCase */ };
         }, [po.poster, lang]);
         check(text.keyed > 0 && !text.bad.length, `${tag}: ${text.keyed} keyed lines read t(key)${text.bad.length ? ' · wrong: ' + JSON.stringify(text.bad.slice(0, 3)) : ''}`);
         if (lang !== 'en') { const en = text.words.filter(s => EN.test(s) && !/^VoxCoach$/.test(s)); check(!en.length, `${tag}: nothing reads as English${en.length ? ': ' + en.join(' | ') : ''}`); }

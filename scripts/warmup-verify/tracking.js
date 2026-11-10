@@ -140,7 +140,7 @@ const RUN = async ({ what, seq }) => {
       const after = await page.evaluate(id => ({ go: document.querySelector(`[data-wu-item="${id}"] .wu-go`).textContent, cont: getComputedStyle(document.getElementById('warmupContinueBtn')).display,
         status: document.getElementById('warmupStatus').textContent }), id);
       check(`${id.padEnd(5)}: starts on the voice, dot on C4 (±3 px), trace drawn, runs 20 s, ✓ Done`,
-        started && Math.abs(s.y - yC4) <= 3 && s.voiced > 0.9 && s.stage === 'block' && s.go === 'Stop' && done && after.go === '✓ Done' && after.cont !== 'none',
+        started && Math.abs(s.y - yC4) <= 3 && s.voiced > 0.9 && s.stage === 'block' && s.go === 'Stop' && done && /^(✓ )?Done$/.test(after.go) /* phase 9 2.7: "Done" with the sprite's check, no ✓ character */ && after.cont !== 'none',
         `y ${s.y && s.y.toFixed(1)} vs ${yC4.toFixed(1)} · voiced ${(s.voiced * 100).toFixed(0)}% · dot px ${s.px} · during "${s.go}" · after "${after.go}", continue ${after.cont}, "${after.status}"`);
     }
     const waiting = await page.evaluate(() => !window.__sessionGo && !!wuPending);

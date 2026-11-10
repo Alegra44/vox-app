@@ -25,6 +25,30 @@ const hlCss = fs.readFileSync(path.join(ROOT, 'design/house-lights/house-lights.
 
 // Removals the spec allows, each with its reason. Anything else missing is a failure.
 const ALLOWED_REMOVALS = {
+  'data-i18n=auth_feature_ai_coach': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_personalized_training': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_vocal_analysis': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_song_practice': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_vocal_world': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_vocal_games': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_harmony_training': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_progress_tracking': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_feature_21day_program': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
+  'data-i18n=auth_banner_title': 'phase 9 §2.2: the "21 DAYS FREE" box goes; key removed',
+  'data-i18n=auth_banner_sub': 'phase 9 §2.2: the "21 DAYS FREE" box goes; key removed',
+  'data-i18n=hub_you_teacher_title': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden, its You row goes; key stays in TRANSLATIONS',
+  'data-i18n=hub_you_teacher_desc': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden, its You row goes; key stays in TRANSLATIONS',
+  'data-i18n=pricing_continue_teacher_btn': 'phase 9 step 0 (decision): the Teacher card says "Coming later" (pricing_teacher_coming), no button; key stays in TRANSLATIONS',
+  'data-i18n=pricing_aboutcheckout_label': "phase 9 §2.5: Pricing's checkout disclosure goes while plans aren't on sale (pricing_notonsale); key removed",
+  'data-i18n=pricing_disclosure_p1': "phase 9 §2.5: Pricing's checkout disclosure goes while plans aren't on sale (pricing_notonsale); key removed",
+  'data-i18n=pricing_disclosure_p2': "phase 9 §2.5: Pricing's checkout disclosure goes while plans aren't on sale (pricing_notonsale); key removed",
+  'data-i18n=pricing_disclosure_p3': "phase 9 §2.5: Pricing's checkout disclosure goes while plans aren't on sale (pricing_notonsale); key removed",
+  'id=teacherTabBtn': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden; its legacy tab goes (.legacy-tabs itself goes in phase 10)',
+  'id=youTeacherRow': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden; its You row goes',
+  'id=youValTeacher': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden; its You row goes',
+  'id=posterRangeFill': "phase 9 §2.9: the range poster's fill bar becomes the C2-C6 keyboard strip (#posterRangeKeys)",
+  'data-panel=teacher': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden, nothing opens it (panel-teacher stays in the markup)',
+  'data-enter-panel=teacher': 'phase 9 step 0 (decision): the Teacher Dashboard is hidden, nothing opens it (panel-teacher stays in the markup)',
   'data-i18n=theme_default': 'phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)',
   'data-i18n=theme_cyberpunk': 'phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)',
   'data-i18n=theme_aurora': 'phase 1 §2.8: the four theme swatches become System / Light / Dark (key stays in TRANSLATIONS)',
@@ -137,7 +161,24 @@ function translations(src) {
     check('every TRANSLATIONS key exists in en, es, fr and tr', gaps.length === 0,
       gaps.length ? gaps.map(([l, ks]) => `${l} lacks ${ks.length}: ${ks.slice(0, 12).join(', ')}${ks.length > 12 ? '…' : ''}`).join(' | ') : `${all.size} keys`);
     // keys a spec removes on purpose: key → where it says so
-    const INTENDED = { warmup_stylescale_suffix: 'PHASE4A.md 4a.1 fix 4 (replaced by the template warmup_stylescale)' };
+    const INTENDED = { warmup_stylescale_suffix: 'PHASE4A.md 4a.1 fix 4 (replaced by the template warmup_stylescale)',
+      auth_feature_ai_coach: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_personalized_training: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_vocal_analysis: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_song_practice: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_vocal_world: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_vocal_games: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_harmony_training: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_progress_tracking: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_feature_21day_program: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_banner_title: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      auth_banner_sub: 'PHASE9.md 2.2 (the feature list and the 21-days box go)',
+      pricing_aboutcheckout_label: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
+      pricing_disclosure_p1: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
+      pricing_disclosure_p2: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
+      pricing_disclosure_p3: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
+      vocallab_notecount_suffix: 'PHASE9.md 2.10 (replaced by the plural keys vocallab_notes_one/other)',
+    };
     const T0 = translations(master), gone = Object.keys(T0.en).filter(k => !(k in T.en));
     const dropped = gone.filter(k => !(k in INTENDED)), meant = gone.filter(k => k in INTENDED);
     check(`no TRANSLATIONS key from ${BASE} removed`, dropped.length === 0,
@@ -236,6 +277,13 @@ const literals = [];
       let exempt = exemptBy(i);
       if (!exempt && /^rgba?\(\s*0\s*,\s*0\s*,\s*0\s*[,)]/.test(lit)) exempt = 'black shadow / backdrop';
       if (!exempt && /<meta name="theme-color"/.test(l)) exempt = 'theme-color meta tag';
+      // phase 9 (decision: share posters are always paper): .poster restates the light theme's tokens, since v1.2 has no
+      // selector that puts a subtree in the light theme; exempt only while each value equals House Lights' light one
+      if (!exempt && /^\s*\.poster\{--hl-/.test(l)) {
+        const light = {}; for (const [, k, v] of hlCss.matchAll(/(--hl-[\w-]+):\s*(#[0-9A-Fa-f]{3,8})/g)) if (!(k in light)) light[k] = v.toUpperCase();
+        const pairs = [...l.matchAll(/(--hl-[\w-]+):\s*(#[0-9A-Fa-f]{3,8})/g)], off = pairs.filter(([, k, v]) => light[k] !== v.toUpperCase());
+        if (!off.length) exempt = 'the posters\' paper tokens (= the House Lights light values)';
+      }
       if (!exempt && new RegExp(`drawResonanceFrame\\([^)]*${esc(lit)}`).test(l)) exempt = 'drawResonanceFrame (argument: canvas colour)';
       literals.push({ line: i + 1, literal: lit, exempt, text: l.trim().slice(0, 100) });
     }
