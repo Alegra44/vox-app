@@ -131,3 +131,24 @@ YOUR QUESTIONS
 CHECKS: feedback, posters, levelup, moments9, states9, checkout, tools, youstates, copyscan --all, contrast, hooks, bootcheck.
 SCREENSHOTS on review/phase9 under 9.1/: Feedback with the empty-send note; Range Finder's result and Profile in French; Plans (new and expired); the three moment sheets; Vocal Lab (active, new, signed out); both posters on screen and their PNGs; onboarding steps 1 and 3 with choices made (I haven't seen the chosen state yet). 390 and 1280, Light and Dark. Secret check, push both branches.
 REPORT, then stop.
+
+## Deploy
+
+9.1 approved. Phase 9 goes live. Add this message to the end of design/house-lights/PHASE9.md under "Deploy" and commit it first. AC power only, one verify script at a time.
+
+1. WAIT FOR "deploy"
+- Say you're ready and wait for me to type "deploy" here. Do nothing else first.
+
+2. AFTER I TYPE "deploy"
+- Merge redesign/phase9 into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself after that.
+- After my Vercel line: confirm that https://deploy-alegra1122.vercel.app serves the new deployment (check its page). If it doesn't, give me the exact vercel promote line with the real dpl id (no placeholders), and wait.
+- Rollback target: dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx.
+
+3. PRODUCTION CHECKS (against deploy-alegra1122.vercel.app, once it serves phase 9)
+- prod.sh with WITH_CHOIR=1, plus checkout, onboard, feedback, posters and moments9.
+- Phase 9 changed the sign-up sheet, so a sign-up timeout isn't automatically Supabase: if one repeats, sign up through the page once more by script. If that works in a few seconds, it was Supabase being slow.
+- Rollback rule: a failure that repeats on a rerun and isn't a network error or a Supabase 503 means rolling back to dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx. Give me the line and stop.
+- Delete the test accounts and every Feedback row they sent. Push the results to review/phase9-prod.
+- When everything passes: delete review/phase9 and review/phase8-prod. Update HANDOFF: phase 9 live with its dpl id, which becomes the rollback target for phase 10.
+
+REPORT, then stop.
