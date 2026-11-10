@@ -1,0 +1,61 @@
+// PHASE9.md 1d: the Feedback form, on master and the branch (the working copy, or --branch-ref). Signed in (a test
+// account) and signed out, each side: every field filled through the page (the same text both sides, tagged with the
+// run), the rating chosen with its own control ([data-star="4"]), Submit. The row the app inserted into public.feedback
+// is read back with the service role and compared: every column except id and submitted_at must equal master's (user_id
+// and email: the test account signed in, null signed out). The thanks state shows (#feedbackThanksCard visible, the
+// form hidden) and "Submit more feedback" brings back an empty form with no rating. (An empty Submit isn't tried: on
+// master it inserts an all-blank row, since the content check counts the timestamp; reported, not changed.) The rows this run inserted are deleted at the end.
+// Usage: node scripts/design-verify/feedback.js [--base master] [--branch-ref <ref>]
+const C = require('./common');
+const { db } = require('../choir-verify/testAccounts');
+const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
+const SIDES = { master: C.buildDir(arg('--base') || 'master'), branch: C.buildDir(arg('--branch-ref') || null) };
+const TAG = 'dvfb-' + Date.now();
+const FIELDS = { fbLike: 'The tuner is quick.', fbDislike: "The menus move around.", fbConfusing: 'What the load % means.', fbDifficult: 'Finding the warm-up again.',
+  fbMostUsed: 'Pitch Match', fbImprove: 'Range Finder', fbAddFeature: 'A metronome.', fbBugs: 'None seen.', fbOther: `Keep going. <b>${'&'}"quotes"</b>` };
+const COLS = 'user_id, email, liked, disliked, confusing, difficult, most_used, improve, add_feature, bugs, rating, other_notes';
+let fails = 0; const check = (ok, s) => { if (!ok) fails++; console.log(`${ok ? '✓' : '✗'} ${s}`); };
+
+async function submit(b, dir, state, side, signed) {
+  const { ctx, page, errors } = await C.openPage(b, { dir, storageState: signed ? state : undefined });
+  try {
+    await C.clearOverlays(page); await page.evaluate(() => enterPanel('feedback')); await C.sleep(500);
+    const tag = `${TAG} ${side} ${signed ? 'in' : 'out'}`;
+    for (const [id, v] of Object.entries(FIELDS)) await page.locator('#' + id).fill(id === 'fbOther' ? `${v} ${tag}` : v);
+    await page.locator('#panel-feedback [data-star="4"]').click();
+    const pressed = await page.evaluate(() => [...document.querySelectorAll('#panel-feedback [data-star]')].map(e => e.getAttribute('aria-pressed') || e.getAttribute('aria-checked') || (e.checked ? 'true' : 'false')).join(''));
+    await page.locator('#feedbackSubmitBtn').click();
+    await page.waitForFunction(() => getComputedStyle(document.getElementById('feedbackThanksCard')).display !== 'none', null, { timeout: 15000 }).catch(() => {});
+    const thanks = await page.evaluate(() => ({ shown: getComputedStyle(document.getElementById('feedbackThanksCard')).display !== 'none', formHidden: getComputedStyle(document.getElementById('feedbackFormCard')).display === 'none',
+      text: document.getElementById('feedbackThanksCard').innerText.replace(/\s+/g, ' ').trim() }));
+    await page.locator('#feedbackAnotherBtn').click(); await C.sleep(300);
+    const reset = await page.evaluate(ids => ({ empty: ids.every(id => !document.getElementById(id).value), rating: [...document.querySelectorAll('#panel-feedback [data-star]')].some(e => e.getAttribute('aria-pressed') === 'true' || e.getAttribute('aria-checked') === 'true' || e.checked),
+      form: getComputedStyle(document.getElementById('feedbackFormCard')).display !== 'none' }), Object.keys(FIELDS));
+    const rows = db(`select ${COLS} from public.feedback where other_notes like '%${tag}' order by submitted_at`);
+    return { tag, pressed, thanks, reset, rows, errors: errors.slice() };
+  } finally { await ctx.close(); }
+}
+
+(async () => {
+  const b = await C.chromium.launch(); const out = {};
+  try {
+    const a = await C.openPage(b, { dir: SIDES.master }); const acct = await C.signUp(a.page, 'dvfb', 'Feedback Check'); const state = await a.ctx.storageState(); await a.ctx.close();
+    for (const signed of [true, false]) for (const side of ['master', 'branch']) out[`${side} ${signed ? 'signed in' : 'signed out'}`] = await submit(b, SIDES[side], state, side, signed);
+    for (const signed of ['signed in', 'signed out']) {
+      const m = out[`master ${signed}`], br = out[`branch ${signed}`];
+      console.log(`-- ${signed}`);
+      check(m.rows.length === 1 && br.rows.length === 1, `one row each (master ${m.rows.length}, branch ${br.rows.length})`);
+      const norm = r => r && { ...r, other_notes: (r.other_notes || '').replace(/ dvfb-\d+ (master|branch) (in|out)$/, '') };
+      check(JSON.stringify(norm(m.rows[0])) === JSON.stringify(norm(br.rows[0])), `the saved row equals master's: ${JSON.stringify(norm(br.rows[0]))}`);
+      check(signed === 'signed in' ? br.rows[0] && br.rows[0].email === acct.email && !!br.rows[0].user_id : br.rows[0] && br.rows[0].user_id === null && br.rows[0].email === null, `user and e-mail ${signed === 'signed in' ? 'the account' : 'null'}`);
+      check(br.rows[0] && br.rows[0].rating === 4, `rating 4 (the control's state ${br.pressed}; master ${m.pressed})`);
+      check(br.thanks.shown && br.thanks.formHidden, `the thanks state shows: "${br.thanks.text}" (master "${m.thanks.text}")`);
+      check(br.reset.empty && !br.reset.rating && br.reset.form, `"Submit more feedback": an empty form, no rating`);
+      check(!m.errors.length && !br.errors.length, `page errors: master ${m.errors.length}, branch ${br.errors.length}`);
+    }
+    console.log(`\nFEEDBACK: ${fails ? `FAIL: ${fails}` : 'PASS'}`); process.exitCode = fails ? 1 : 0;
+  } finally {
+    try { const n = db(`delete from public.feedback where other_notes like '%${TAG}%' returning id`).length; console.log(`[feedback rows] deleted ${n}`); } catch (e) { console.log('[feedback rows] delete failed: ' + e.message); }
+    await b.close(); await C.cleanup();
+  }
+})();
