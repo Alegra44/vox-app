@@ -2589,6 +2589,23 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .feedback-submit{width:100%;margin-top:var(--hl-s5);}
   .feedback-note{margin:var(--hl-s3) 0 0;}
   .feedback-thanks{justify-items:start;}
+
+  /* ---- PHASE 9 (2.7): the warm-up card on the stage's own controls (house down) ---- */
+  .wu-card .wu-top{align-items:center;margin-bottom:var(--hl-s2);}
+  .wu-card .wu-top .trial-modal-title{margin:0;}
+  .wu-card .hl-seg.wu-tabs{display:flex;margin:0 0 var(--hl-s4);}
+  .wu-card .hl-seg.wu-tabs button{flex:1;}
+  .wu-card .hl-seg.wu-tabs button.active{background:var(--hl-ink);color:var(--hl-bg);}
+  .wu-list{gap:0;border-top:var(--hl-hair) solid var(--hl-rule);margin-bottom:var(--hl-s4);}
+  .wu-item{background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;min-height:60px;color:var(--hl-ink);}
+  .wu-item:hover{border-color:var(--hl-rule);background:none;}
+  .wu-item.running{border-color:var(--hl-rule);box-shadow:inset 3px 0 0 var(--hl-voice);padding-left:var(--hl-s3);}
+  .wu-text b{font-size:var(--hl-t-body);color:var(--hl-ink);}
+  .wu-text small{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .wu-go{display:inline-flex;align-items:center;gap:4px;font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);}
+  .wu-item.running .wu-go{color:var(--hl-voice);}
+  .wu-item.done .wu-go{color:var(--hl-ok);}
+  .wu-status{color:var(--hl-ink-2);font-size:var(--hl-t-small);}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
@@ -5887,18 +5904,18 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="modal-card wu-card">
       <div class="wu-top">
         <h2 class="trial-modal-title" id="warmupTitle" data-i18n="wu_title">Warm up first?</h2>
-        <button class="ghost-btn" id="warmupSkipBtn" data-i18n="wu_skip">Skip warm-up</button>
+        <button class="hl-btn hl-btn--quiet" id="warmupSkipBtn" data-i18n="wu_skip">Skip warm-up</button>
       </div>
       <p class="trial-modal-sub" data-i18n="wu_sub">A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.</p>
-      <div class="btn-row wu-tabs">
-        <button class="ex-type-btn active" data-wu-mode="exercises" aria-pressed="true" data-i18n="wu_mode_exercises">Crazy exercises</button>
-        <button class="ex-type-btn" data-wu-mode="song" aria-pressed="false" data-i18n="wu_mode_song">Song warm-up</button>
+      <div class="hl-seg wu-tabs" role="group">
+        <button type="button" class="active" data-wu-mode="exercises" aria-pressed="true" data-i18n="wu_mode_exercises">Exercises</button>
+        <button type="button" data-wu-mode="song" aria-pressed="false" data-i18n="wu_mode_song">Song warm-up</button>
       </div>
       <div class="wu-list" id="warmupList"></div>
       <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
       <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
       <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
-      <div class="btn-row"><button class="solid-btn teal vc-sing" id="warmupContinueBtn" style="display:none;flex:1;justify-content:center;" data-i18n="wu_continue">Start my session</button></div>
+      <div class="p9-actions"><button class="hl-btn hl-btn--sing" id="warmupContinueBtn" style="display:none;" data-sheet-main data-i18n="wu_continue">Start my session</button></div>
     </div>
   </div>
 
@@ -8174,7 +8191,7 @@ const TRANSLATIONS = {
     wu_sub:"A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.",
     wu_skip:"Skip warm-up",
     wu_continue:"Start my session",
-    wu_mode_exercises:"Crazy exercises",
+    wu_mode_exercises:"Exercises",
     wu_mode_song:"Song warm-up",
     wu_ex_trill:"Lip trills",
     wu_ex_trill_how:"Loose lips, blow a “brrr” and ride the little waves.",
@@ -8186,7 +8203,7 @@ const TRANSLATIONS = {
     wu_ex_hum_how:"Lips closed, hum “mmm” on one comfy note and feel the buzz.",
     wu_start:"Start",
     wu_stop:"Stop",
-    wu_done_mark:"✓ Done",
+    wu_done_mark:"Done",
     wu_sing_hint:"Sing to start",
     wu_follow:"Follow the dotted line. No score, just warming up.",
     wu_song_follow:"Sing the melody along with the backing chords.",
@@ -9927,7 +9944,7 @@ const TRANSLATIONS = {
     wu_sub:"Une ou deux minutes de chant facile avant de vous entraîner. Faites un exercice, plusieurs, ou passez directement à votre séance.",
     wu_skip:"Passer l’échauffement",
     wu_continue:"Commencer ma séance",
-    wu_mode_exercises:"Exercices fous",
+    wu_mode_exercises:"Exercices",
     wu_mode_song:"Échauffement en chanson",
     wu_ex_trill:"Trilles de lèvres",
     wu_ex_trill_how:"Lèvres détendues, soufflez un « brrr » et suivez les petites vagues.",
@@ -9939,7 +9956,7 @@ const TRANSLATIONS = {
     wu_ex_hum_how:"Lèvres fermées, fredonnez « mmm » sur une note confortable et sentez la vibration.",
     wu_start:"Commencer",
     wu_stop:"Arrêter",
-    wu_done_mark:"✓ Fait",
+    wu_done_mark:"Fait",
     wu_sing_hint:"Chantez pour commencer",
     wu_follow:"Suivez la ligne pointillée. Pas de score, juste un échauffement.",
     wu_song_follow:"Chantez la mélodie avec les accords d’accompagnement.",
@@ -11680,7 +11697,7 @@ const TRANSLATIONS = {
     wu_sub:"Uno o dos minutos de canto suave antes de practicar. Haz un ejercicio, varios, o ve directo a tu sesión.",
     wu_skip:"Saltar calentamiento",
     wu_continue:"Empezar mi sesión",
-    wu_mode_exercises:"Ejercicios locos",
+    wu_mode_exercises:"Ejercicios",
     wu_mode_song:"Calentamiento con canción",
     wu_ex_trill:"Vibración de labios",
     wu_ex_trill_how:"Labios sueltos, sopla un “brrr” y sigue las olitas.",
@@ -11692,7 +11709,7 @@ const TRANSLATIONS = {
     wu_ex_hum_how:"Labios cerrados, tararea “mmm” en una nota cómoda y siente la vibración.",
     wu_start:"Empezar",
     wu_stop:"Parar",
-    wu_done_mark:"✓ Hecho",
+    wu_done_mark:"Hecho",
     wu_sing_hint:"Canta para empezar",
     wu_follow:"Sigue la línea punteada. Sin puntuación, solo calentamiento.",
     wu_song_follow:"Canta la melodía con los acordes de acompañamiento.",
@@ -13433,7 +13450,7 @@ const TRANSLATIONS = {
     wu_sub:"Çalışmadan önce bir iki dakika rahat şarkı söyleyin. Bir egzersiz ya da birkaç tane yapın veya doğrudan seansınıza geçin.",
     wu_skip:"Isınmayı atla",
     wu_continue:"Seansımı başlat",
-    wu_mode_exercises:"Çılgın egzersizler",
+    wu_mode_exercises:"Egzersizler",
     wu_mode_song:"Şarkıyla ısınma",
     wu_ex_trill:"Dudak titreşimi",
     wu_ex_trill_how:"Dudaklar gevşek, “brrr” diye üfleyin ve küçük dalgaları izleyin.",
@@ -13445,7 +13462,7 @@ const TRANSLATIONS = {
     wu_ex_hum_how:"Dudaklar kapalı, rahat bir notada “mmm” diye mırıldanın ve titreşimi hissedin.",
     wu_start:"Başla",
     wu_stop:"Durdur",
-    wu_done_mark:"✓ Tamam",
+    wu_done_mark:"Tamam",
     wu_sing_hint:"Başlamak için söyleyin",
     wu_follow:"Noktalı çizgiyi izleyin. Puan yok, sadece ısınma.",
     wu_song_follow:"Eşlik akorlarıyla birlikte melodiyi söyleyin.",
@@ -21212,8 +21229,8 @@ function wuRender(){
   const running = wuRun && (wuRun.kind==='ex' ? wuRun.ex.id : 'song:'+wuRun.id);
   const item = (key, emoji, name, how)=>{
     const state = running===key ? 'running' : (wuDone.has(key) ? 'done' : '');
-    const go = state==='running' ? t('wu_stop') : (state==='done' ? t('wu_done_mark') : t('wu_start'));
-    return `<button class="wu-item ${state}" data-wu-item="${key}"><span class="wu-emoji">${emoji}</span><span class="wu-text"><b>${name}</b><small>${how}</small></span><span class="wu-go">${go}</span></button>`;
+    const go = state==='running' ? t('wu_stop') : (state==='done' ? `<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg>${t('wu_done_mark')}` : t('wu_start'));
+    return `<button class="wu-item ${state}" data-wu-item="${key}"><span class="wu-text"><b>${name}</b><small>${how}</small></span><span class="wu-go">${go}</span></button>`; // phase 9: no emoji art
   };
   document.getElementById('warmupList').innerHTML = wuMode==='exercises'
     ? WU_EXERCISES.map(ex=>item(ex.id, ex.emoji, t('wu_ex_'+ex.id), t('wu_ex_'+ex.id+'_how'))).join('')
