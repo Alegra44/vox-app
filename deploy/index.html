@@ -20420,7 +20420,7 @@ function renderWarmupContext(){
   document.getElementById('warmupContext').textContent =
     `${timeBucketText}${gapNote} ${focusNote}${(profile && profile.genre) ? ` ${t('warmup_genrenote_p1')} ${GENRES[profile.genre].name}${/^[.,]/.test(t('warmup_genrenote_p2')) ? '' : ' '}${t('warmup_genrenote_p2')}` : ''}`;
 
-  document.getElementById('warmupStep1Sub').textContent = `${t('warmup_glide_prefix')} (${sirenDuration}s)`;
+  document.getElementById('warmupStep1Sub').textContent = `${t('warmup_glide_prefix')} (${sirenDuration} s)`;
 
   const genreScaleKey = (profile && profile.genre && GENRES[profile.genre]) ? GENRES[profile.genre].warmupScale : 'beginnerPattern';
   document.getElementById('warmupStep3Sub').textContent = (profile && profile.genre)
