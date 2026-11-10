@@ -950,6 +950,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .plan-features li{font-size:12.5px;color:var(--cream);opacity:0.88;padding:5px 0;padding-left:16px;position:relative;}
   .plan-features li::before{content:"—";position:absolute;left:0;color:var(--muted);}
   .plan-btn{width:100%;}
+  .plan-soon{margin:0;min-height:44px;display:flex;align-items:center;justify-content:center;font-weight:600;color:var(--hl-ink-2);border:1px solid var(--hl-rule);border-radius:var(--hl-r2);}
   .plan-btn.current{background:var(--surface);color:var(--muted);border:1px solid var(--hairline);cursor:default;}
 
   .tier-badge{
@@ -2709,7 +2710,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <button data-panel="pricing" id="pricingTabBtn">Pricing</button>
     <button data-panel="records" id="recordsTabBtn">Personal Records</button>
     <button data-panel="profile" id="profileTabBtn">Profile</button>
-    <button data-panel="teacher" id="teacherTabBtn">Teacher Dashboard</button>
     <button data-panel="resonance" id="resonanceTabBtn">Resonance Visualizer</button>
     <button data-panel="custom" id="customTabBtn">Custom Challenge</button>
     <button data-panel="rhythm" id="rhythmTabBtn">Rhythm Trainer</button>
@@ -3013,7 +3013,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="hl-item you-row" data-enter-panel="passport"><svg class="hl-icon" aria-hidden="true"><use href="#hl-passport"/></svg><span><span class="hl-item-title" data-i18n="you_passport_title">Vocal Passport</span><span class="hl-item-meta" data-i18n="you_passport_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPassport"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         <button class="hl-item you-row" data-enter-panel="voicehealth"><svg class="hl-icon" aria-hidden="true"><use href="#hl-pulse"/></svg><span><span class="hl-item-title" data-i18n="hub_you_voicehealth_title"></span><span class="hl-item-meta" data-i18n="hub_you_voicehealth_desc">Vocal load, stability and breath over the last 14 days.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValHealth"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         <button class="hl-item you-row" id="youChoirRow" data-you-choir hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-choir"/></svg><span><span class="hl-item-title" data-i18n="cw_label">Choir World</span><span class="hl-item-meta" data-i18n="you_choir_desc">Your parts' readiness</span></span><span class="hl-item-end"><span class="you-row-val" id="youValChoir"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
-        <button class="hl-item you-row" data-enter-panel="teacher" id="youTeacherRow" hidden><svg class="hl-icon" aria-hidden="true"><use href="#hl-group"/></svg><span><span class="hl-item-title" data-i18n="hub_you_teacher_title">Teacher Dashboard</span><span class="hl-item-meta" data-i18n="hub_you_teacher_desc">Your students and their assignments. Teacher plan.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValTeacher"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
+        <!-- phase 9: the Teacher Dashboard is hidden (PHASE9.md decisions), its row removed; panel-teacher stays, unreachable -->
         <button class="hl-item you-row" data-enter-panel="pricing"><svg class="hl-icon" aria-hidden="true"><use href="#hl-lock"/></svg><span><span class="hl-item-title" data-i18n="hub_you_pricing_title"></span><span class="hl-item-meta" data-i18n="hub_you_pricing_desc"></span></span><span class="hl-item-end"><span class="you-row-val" id="youValPlan"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
         <button class="hl-item you-row" data-enter-panel="profile"><svg class="hl-icon" aria-hidden="true"><use href="#hl-you"/></svg><span><span class="hl-item-title" data-i18n="hub_you_profile_title">Profile &amp; settings</span><span class="hl-item-meta" data-i18n="hub_you_profile_desc">Your Voice Card, language, theme and account.</span></span><span class="hl-item-end"><span class="you-row-val" id="youValProfile"></span><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>
       </div>
@@ -5492,7 +5492,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <li data-i18n="pricing_teacher_f3">Student progress reports</li>
             <li data-i18n="pricing_teacher_f4">Roster &amp; assignment tools — Phase 1, week 8</li>
           </ul>
-          <button class="plan-btn solid-btn" data-plan="teacher" data-price="$29/mo" data-i18n="pricing_continue_teacher_btn">Continue with Teacher</button>
+          <p class="plan-soon" id="teacherPlanSoon" data-i18n="pricing_teacher_coming">Coming later</p>
         </div>
 
         <div class="plan-card">
@@ -8709,6 +8709,8 @@ const TRANSLATIONS = {
     song_key_a_minor:"A Minor",
     boss_res_your_health:"Your health",
     boss_res_boss_health:"Boss health",
+    // phase 9 (PHASE9.md)
+    pricing_teacher_coming:"Coming later",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -10429,6 +10431,8 @@ const TRANSLATIONS = {
     song_key_a_minor:"La mineur",
     boss_res_your_health:"Votre santé",
     boss_res_boss_health:"Santé du boss",
+    // phase 9 (PHASE9.md)
+    pricing_teacher_coming:"Bientôt disponible",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -12149,6 +12153,8 @@ const TRANSLATIONS = {
     song_key_a_minor:"La menor",
     boss_res_your_health:"Tu salud",
     boss_res_boss_health:"Salud del jefe",
+    // phase 9 (PHASE9.md)
+    pricing_teacher_coming:"Disponible más adelante",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -13869,6 +13875,8 @@ const TRANSLATIONS = {
     song_key_a_minor:"La minör",
     boss_res_your_health:"Sağlığın",
     boss_res_boss_health:"Boss'un sağlığı",
+    // phase 9 (PHASE9.md)
+    pricing_teacher_coming:"Daha sonra gelecek",
   },
 };
 let currentLanguage = 'en';
@@ -22464,7 +22472,6 @@ function renderYouHub(){
     cwStoredParts().forEach(x=>{ if(n[x.st.status]!==undefined) n[x.st.status]++; });
     set('youValChoir', ['ready','developing','learning'].filter(k=>n[k]).map(k=>`${n[k]} ${t('rd_status_'+k)}`).join(' · ') || '—');
   }
-  document.getElementById('youTeacherRow').hidden = profile.subscriptionPlan!=='teacher';
   set('youValPlan', hasActiveSubscription() ? planLabel(profile.subscriptionPlan)
     : isInTrial() ? `${t('accountbar_day_p1')} ${trialDayNumber()}/21` : t('accountbar_trial_ended'));
   set('youValProfile', YOU_LANG_NAMES[currentLanguage] || '');
@@ -22845,7 +22852,7 @@ function renderTeacherRoster(){
     return;
   }
   wrap.innerHTML = profile.teacherRoster.map(s=>
-    `<div class="teacher-roster-row"><span class="teacher-roster-avatar">${s.name.charAt(0).toUpperCase()}</span><span class="roster-name">${s.name}</span><button class="roster-remove" data-remove-student="${s.id}">${t('teacher_remove_btn')}</button></div>`
+    `<div class="teacher-roster-row"><span class="teacher-roster-avatar">${escapeHtmlText(String(s.name).charAt(0).toUpperCase())}</span><span class="roster-name">${escapeHtmlText(s.name)}</span><button class="roster-remove" data-remove-student="${escapeHtmlText(s.id)}">${t('teacher_remove_btn')}</button></div>`
   ).join('');
   wrap.querySelectorAll('[data-remove-student]').forEach(btn=>{
     btn.addEventListener('click', async ()=>{
@@ -22871,16 +22878,16 @@ function renderTeacherAssignments(){
     const doneCount = roster.filter(s=>a.completions[s.id]).length;
     const studentRows = roster.length ? roster.map(s=>
       `<div class="assignment-student-row">
-        <input type="checkbox" data-assign-id="${a.id}" data-student-id="${s.id}" ${a.completions[s.id]?'checked':''}>
-        <span>${s.name}</span>
+        <input type="checkbox" data-assign-id="${escapeHtmlText(a.id)}" data-student-id="${escapeHtmlText(s.id)}" ${a.completions[s.id]?'checked':''}>
+        <span>${escapeHtmlText(s.name)}</span>
       </div>`
     ).join('') : `<p class="fine-print">${t('teacher_noroster_forassign')}</p>`;
     return `<div class="assignment-card">
       <div class="assignment-head">
-        <span class="assignment-title">${exerciseLabels[a.exerciseType]||a.exerciseType}</span>
+        <span class="assignment-title">${escapeHtmlText(exerciseLabels[a.exerciseType]||a.exerciseType)}</span>
         <span class="assignment-progress">${doneCount}/${roster.length} ${t('teacher_complete_suffix')}</span>
       </div>
-      ${a.note ? `<div class="assignment-note">${a.note}</div>` : ''}
+      ${a.note ? `<div class="assignment-note">${escapeHtmlText(a.note)}</div>` : ''}
       ${studentRows}
     </div>`;
   }).join('');
