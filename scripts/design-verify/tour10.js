@@ -220,18 +220,27 @@ function LEGACY() {
               steps.push(await page.evaluate(({ rootSel, isSheet }) => {
                 const e = document.activeElement, root = rootSel && document.querySelector(rootSel);
                 const pth = e => { if (!e) return 'null'; const p = []; for (let a = e; a && a !== document.body && p.length < 4; a = a.parentElement) p.unshift(a.tagName.toLowerCase() + (a.id ? '#' + a.id : '') + (a.classList.length ? '.' + [...a.classList].slice(0, 2).join('.') : '')); return p.join(' > ') || e.tagName.toLowerCase(); };
-                if (!e || e === document.body || e === document.documentElement) return { p: 'body', lost: true };
+                // identity: a counter per element (siblings share a path); the tabbable list in DOM order, to tell a wrap from a loss
+                window.__fid = window.__fid || 0; const idOf = el => el.__fid || (el.__fid = ++window.__fid);
+                const scopeEl = isSheet && root ? root : document.body;
+                const tabbables = [...scopeEl.querySelectorAll('a[href], button, input:not([type="hidden"]), select, textarea, summary, [tabindex]')].filter(el => !el.disabled && el.tabIndex >= 0 && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden');
+                const lastId = tabbables.length ? idOf(tabbables[tabbables.length - 1]) : 0;
+                if (!e || e === document.body || e === document.documentElement) return { p: 'body', id: 0, lost: true, lastId };
                 const look = el => { const cs = getComputedStyle(el); return [cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0 ? 'o' + cs.outlineWidth + cs.outlineColor : '', cs.boxShadow, cs.borderTopColor, cs.borderBottomColor, cs.backgroundColor, cs.color, cs.textDecorationLine].join('|'); };
                 const on = look(e); const r = e.getBoundingClientRect(); const cs = getComputedStyle(e);
                 const hidden = r.width < 1 || r.height < 1 || cs.visibility === 'hidden' || +cs.opacity === 0 || r.bottom < 0 || r.right < 0 || r.left > innerWidth || r.top > Math.max(innerHeight, document.documentElement.scrollHeight);
                 e.blur(); const off = look(e); e.focus({ preventScroll: true });
                 const outside = isSheet && root && !root.contains(e);
-                return { p: pth(e), invisible: on === off, hidden, outside };
+                return { p: pth(e), id: idOf(e), invisible: on === off, hidden, outside, lastId };
               }, { rootSel: sc.root, isSheet }));
             }
             const issues = { invisible: [], hidden: [], lost: 0, outside: [], stuck: [] };
-            steps.forEach((s, i) => { if (s.lost) issues.lost++; if (s.invisible) issues.invisible.push(s.p); if (s.hidden) issues.hidden.push(s.p); if (s.outside) issues.outside.push(s.p);
-              if (i > 0 && s.p === steps[i - 1].p && !s.lost) issues.stuck.push(s.p); });
+            // lost: focus on the body when the step before was not the scope's last tabbable (after it, the body is the normal wrap)
+            // stuck: the same element on two Tabs in a row
+            steps.forEach((s, i) => { const prev = steps[i - 1];
+              if (s.lost && !(prev && !prev.lost && prev.id === prev.lastId) && !(prev && prev.lost)) issues.lost++;
+              if (s.invisible) issues.invisible.push(s.p); if (s.hidden) issues.hidden.push(s.p); if (s.outside) issues.outside.push(s.p);
+              if (prev && !s.lost && s.id === prev.id) issues.stuck.push(s.p); });
             for (const k of ['invisible', 'hidden', 'outside', 'stuck']) issues[k] = [...new Set(issues[k])];
             let ret = null;
             if (isSheet) {
@@ -239,7 +248,7 @@ function LEGACY() {
               ret = await page.evaluate(id => { const o = document.getElementById(id); const cs = o && getComputedStyle(o); const open = !!o && cs.display !== 'none' && cs.visibility !== 'hidden' && +cs.opacity > 0.05 && (!o.classList.contains('levelup-overlay') || o.classList.contains('levelup-show'));
                 const e = document.activeElement; return { closedByEscape: !open, back: !!window.__opener && e === window.__opener, opener: window.__opener ? (window.__opener.id || window.__opener.className) : null, now: e ? (e.id || e.tagName + '.' + e.className).slice(0, 60) : null }; }, sc.overlay);
             }
-            audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.p)).size, ...issues, return: ret };
+            audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.id)).size, seq: steps.map(s => s.id).join(','), ...issues, return: ret };
           }
         } finally { await ctx.close(); }
         save();
