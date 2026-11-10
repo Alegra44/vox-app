@@ -27,8 +27,8 @@ on a decision, and how to set the machine up again. It contains no secrets.
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-09:
 phase 8, **dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx** (deployed by the user from `redesign/phase8` 547dbf7), **the rollback
-target for phase 9**. master is still phase 7 (1fca2ec) until the user types "deploy" (then: --no-ff merge of
-redesign/phase8, secret check, push). The previous target was phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk. The table
+target for phase 9**. master 27eab03 (the --no-ff merge of redesign/phase8, 2026-11-10) is identical to it. The
+previous target was phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk. The table
 above predates phase 5; `review/phase8-prod` is the current review branch.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
@@ -627,7 +627,17 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   ripple once, scores4b a different reading each run (brightness, then Register Drills chest %) then a clean third
   run; neither tool's code differs from master. No rollback. 0 test accounts left.
 - Deleted after the checks (8.2 §3): review/phase8, review/phase8-part1, review/phase8-before, review/phase7-prod,
-  review/phase7-part1. Open: the master merge on "deploy".
+  review/phase7-part1. "deploy" given 2026-11-10: master 27eab03 (--no-ff of redesign/phase8), identical to production.
+
+### Phase 9 (`redesign/phase9` from master 27eab03, spec `PHASE9.md`, given 2026-11-10)
+- Rollback target: phase 8, **dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx**. No merge or deploy before the user reviews the shots.
+- **Decisions (PHASE9.md "DECISIONS"):**
+  - Day 21 while plans aren't on sale: accounts past their 21 days keep losing the paid features, as today; the
+    paywall says so plainly and shows no price (one switch, `PLANS_ON_SALE = false`).
+  - The Teacher Dashboard is hidden like the Director Dashboard; the Teacher plan card says "Coming later" with no
+    button. Vocal Lab stays a Coach tool. `.legacy-tabs` goes in phase 10.
+  - Expression is no longer offered as an onboarding priority; accounts that chose it keep it, nothing is migrated.
+  - Share posters are always paper (light) in both themes, so a shared image looks the same whoever made it.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
