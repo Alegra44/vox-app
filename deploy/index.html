@@ -687,7 +687,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .assignment-card{border:1px solid var(--hairline);border-left:3px solid var(--teal);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:var(--surface);}
   .assignment-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
   .assignment-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:15px;color:var(--cream);}
-  .assignment-title::before{content:"📋 ";}
   .assignment-progress{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--brass);}
   .assignment-note{font-size:12px;color:var(--muted);margin-bottom:10px;}
   .assignment-student-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;color:var(--cream);}
@@ -2288,9 +2287,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .trial-modal-emoji{font-size:36px;}
   .trial-modal-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:24px;color:var(--cream);margin:10px 0 4px;}
   .trial-modal-sub{color:var(--muted);font-size:13.5px;margin-bottom:16px;}
-  .trial-checklist{list-style:none;padding:0;margin:0 0 18px;text-align:left;display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;}
-  .trial-checklist li{font-size:12.5px;color:var(--cream);padding-left:20px;position:relative;}
-  .trial-checklist li::before{content:"✓";position:absolute;left:0;color:var(--hl-ok);font-weight:700;}
   .trial-banner{background:var(--surface);border:1px solid var(--brass-dim);border-radius:12px;padding:14px 16px;}
   .trial-banner-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:700;font-size:19px;color:var(--brass);letter-spacing:0.02em;}
   .trial-banner-sub{font-size:11.5px;color:var(--muted);margin-top:4px;line-height:1.5;}
@@ -2804,7 +2800,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <nav class="tabs legacy-tabs" style="display:none;" aria-hidden="true">
     <button data-panel="journey" id="journeyTabBtn">21-Day Journey</button>
-    <button data-panel="arcade" id="arcadeTabBtn">🗺️ Vocal World</button>
+    <button data-panel="arcade" id="arcadeTabBtn">Vocal World</button>
     <button data-panel="tuner">Tuner</button>
     <button data-panel="warmup">Warmup</button>
     <button data-panel="range">Range Finder</button>
@@ -3066,9 +3062,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="hc-desc cw-hub-status" id="cwHubStatus" style="display:none;"></div>
       <div class="hc-btn-row">
         <button class="solid-btn teal" data-enter-panel="choir" data-cw-landing data-i18n="cw_open_btn">Open Choir World</button>
-        <button class="ghost-btn cw-hidden" data-enter-panel="partrehearsal" data-i18n="hub_songs_rehearsal_title">🎙️ I Am the Part</button>
+        <button class="ghost-btn cw-hidden" data-enter-panel="partrehearsal" data-i18n="hub_songs_rehearsal_title">I Am the Part</button>
         <button class="ghost-btn cw-hidden" data-enter-panel="choir" data-i18n="hub_songs_choir_title">Choir Workspace</button>
-        <button class="ghost-btn cw-hidden" data-enter-panel="choirpassport" data-i18n="rd_open_passport">🪪 Open Choir Passport</button>
+        <button class="ghost-btn cw-hidden" data-enter-panel="choirpassport" data-i18n="rd_open_passport">Open Choir Passport</button>
       </div>
     </div>
     <div class="hub-category-card cw-hidden">
@@ -3680,7 +3676,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- TUNER PANEL -->
   <section class="panel" id="panel-tuner">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="tuner_title">🎯 Live Tuner</div>
+      <div class="j-title" data-i18n="tuner_title">Live Tuner</div>
       <div class="j-sub" data-i18n="tuner_sub">Sing a note. The ring closes as you approach the pitch and locks when you're on it.</div>
     </div>
     <div class="tuner-hero-card">
@@ -3729,7 +3725,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-warmup">
     <div class="journey-hero">
       <div class="j-title" data-i18n="warmup_title">Smart Warmup</div>
-      <div class="j-sub" data-i18n="warmup_sub">A short warmup, shaped by real signals — time of day, your practice gap, and your weakest Skill Profile category, not a generic routine.</div>
+      <div class="j-sub" data-i18n="warmup_sub">A short warmup shaped by the time of day, how long since you last practised, and your weakest Skill Profile category.</div>
     </div>
     <div class="key-card">
       <div class="warmup-context" id="warmupContext"></div>
@@ -3760,7 +3756,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-range">
     <div class="journey-hero">
       <div class="j-title" data-i18n="range_title">Range Finder</div>
-      <div class="j-sub" data-i18n="range_sub">Sing your lowest comfortable note, then your highest — about 30 seconds for a real voice-type classification and a shareable result card.</div>
+      <div class="j-sub" data-i18n="range_sub">Sing your lowest comfortable note, then your highest. About 30 seconds for your range, a voice type and a result card to share.</div>
     </div>
     <div class="range-card">
 
@@ -3825,7 +3821,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-key">
     <div class="journey-hero">
       <div class="j-title" data-i18n="key_title">Key Trainer</div>
-      <div class="j-sub" data-i18n="key_sub">Play a reference tone in any key, or let the app recommend the best key for your captured range — real transposition, not a guess.</div>
+      <div class="j-sub" data-i18n="key_sub">Play a reference tone in any key, or let the app recommend the best key for your captured range, transposed to fit.</div>
     </div>
     <div class="key-card">
 
@@ -3919,7 +3915,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="btn-row">
             <button class="solid-btn" id="playRecBtn" data-i18n="key_play_recommended_btn">Play recommended key</button>
           </div>
-          <div class="step-label" style="margin-top:18px;" data-i18n="key_try_ranked_label">Try a few real keys, ranked by fit</div>
+          <div class="step-label" style="margin-top:18px;" data-i18n="key_try_ranked_label">Try a few keys, ranked by fit</div>
           <div id="keyRankings" style="margin-top:10px;"></div>
         </div>
       </div>
@@ -3931,12 +3927,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-exercises">
     <div class="journey-hero">
       <div class="j-title" data-i18n="exercises_title">Daily Exercises</div>
-      <div class="j-sub" data-i18n="exercises_sub">Four real ways to train pitch and ear — each scores your live mic input, octave-independent, tiered across Beginner/Intermediate/Professional.</div>
+      <div class="j-sub" data-i18n="exercises_sub">Four ways to train pitch and ear. Each scores your voice live, in any octave, at Beginner, Intermediate or Professional.</div>
     </div>
     <div class="key-card">
       <div class="reweight-card" id="reweightCard">
         <div class="step-label"><span data-i18n="exercises_focus_label">Today's Recommended Focus</span><span class="mock-tag" style="color:var(--teal);border-color:var(--teal);" data-i18n="exercises_focus_tag">ADAPTIVE — RECALCULATED DAILY</span></div>
-        <p class="desc" style="margin:8px 0 14px;" data-i18n="exercises_focus_desc">Not a fixed weekly plan — this is computed fresh from your real Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can generate a first score.</p>
+        <p class="desc" style="margin:8px 0 14px;" data-i18n="exercises_focus_desc">Not a fixed weekly plan: it's worked out again from your Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can get a first score.</p>
         <div class="reweight-bar" id="reweightBar"></div>
         <div class="reweight-legend" id="reweightLegend"></div>
         <p class="fine-print" id="reweightDeltaNote" style="margin-top:12px;"></p>
@@ -3954,8 +3950,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="time-budget-note" id="timeBudgetNote"></div>
 
       <div class="key-card" style="margin-top:14px;">
-        <div class="step-label" data-i18n="exercises_difficulty_label">This level's real difficulty breakdown</div>
-        <p class="fine-print" style="margin:6px 0 12px;" data-i18n="exercises_difficulty_desc">Not a single "Easy/Medium/Hard" label — five real dimensions, each pulled directly from the actual parameters driving your current level, not a separate rating system.</p>
+        <div class="step-label" data-i18n="exercises_difficulty_label">What this level asks of you</div>
+        <p class="fine-print" style="margin:6px 0 12px;" data-i18n="exercises_difficulty_desc">Not one Easy / Medium / Hard label: five dimensions, each taken from the settings your current level uses, not a separate rating.</p>
         <div id="difficultyDimensions"></div>
       </div>
 
@@ -4092,9 +4088,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <button class="ex-type-btn" data-ear-submode="chord" aria-pressed="false" data-i18n="ex_ear_chords_btn">Chords</button>
             <button class="ex-type-btn" data-ear-submode="progression" aria-pressed="false" data-i18n="ex_ear_progressions_btn">Progressions</button>
           </div>
-          <div class="ex-target-sub" id="earModeSub" data-i18n="ear_sub_interval">Listen, then pick the interval you heard — a real identify-by-ear drill, not sing-back</div>
+          <div class="ex-target-sub" id="earModeSub" data-i18n="ear_sub_interval">Listen, then pick the interval you heard. An ear drill: you don't sing.</div>
           <div class="btn-row" style="justify-content:center;margin:16px 0;">
-            <button class="solid-btn" id="earPlayBtn" data-i18n="ear_play_interval">▶ Play interval</button>
+            <button class="solid-btn" id="earPlayBtn" data-i18n="ear_play_interval">Play interval</button>
           </div>
           <div class="ear-choice-grid" id="earChoiceGrid"></div>
           <p class="ex-feedback-text" id="earFeedback" style="margin-top:14px;"></p>
@@ -4192,7 +4188,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-register">
     <div class="journey-hero">
       <div class="j-title"><span data-i18n="register_title">Register Coach</span><span class="beta-tag" data-i18n="beta_heuristic_tag">Estimate</span></div>
-      <div class="j-sub" data-i18n="register_sub">Build your bridge across the passaggio — reads the brightness of your vocal harmonics, a rule-based approximation, not a trained model (see PRD §3.2 / §12). Uses your Range Finder range if you've captured it, otherwise assumes A2–C5.</div>
+      <div class="j-sub" data-i18n="register_sub">Slide from a low note up to a high one and see where your voice crosses the passaggio, the break between chest and head voice. It reads the brightness of your harmonics, and uses your Range Finder range if you've captured one (otherwise A2–C5).</div>
     </div>
     <div class="tuner-hero-card">
       <div class="vc-stage reg-stage" id="registerStage">
@@ -4234,7 +4230,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-registerdrills">
     <div class="journey-hero">
       <div class="j-title" data-i18n="registerdrills_title">Register Drills</div>
-      <div class="j-sub" data-i18n="registerdrills_sub">Real chest and head voice drills — this doesn't just confine the target note to a range, it verifies your actual spectral brightness during capture, the same real detection used in Register Coach.</div>
+      <div class="j-sub" data-i18n="registerdrills_sub">Chest and head voice drills: besides the note, each one checks the brightness of your tone while you sing, the same reading Register Coach uses.</div>
     </div>
     <div class="key-card" id="drillPreCard">
       <div class="vc-stage drill-stage" id="drillStage">
@@ -4277,7 +4273,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-breath">
     <div class="journey-hero">
       <div class="j-title" data-i18n="breath_title">Breath Control</div>
-      <div class="j-sub" data-i18n="breath_sub">Sustain "Ah" as long and as steadily as you can. Measures real sustain duration and loudness consistency — timing ends automatically when your breath runs out (detected as sustained silence), not on a guess.</div>
+      <div class="j-sub" data-i18n="breath_sub">Hold an "Ah" as long and as steadily as you can. Measures how long you hold it and how even your loudness stays; the timer stops by itself when your breath runs out and you go quiet.</div>
     </div>
     <div class="tuner-hero-card">
       <div class="vc-stage breath-stage" id="breathStage">
@@ -4320,7 +4316,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-vibrato">
     <div class="journey-hero">
       <div class="j-title"><span data-i18n="vibrato_title">Vibrato</span><span class="beta-tag" data-i18n="beta_analysis_tag">Estimate</span></div>
-      <div class="j-sub" data-i18n="vibrato_sub">Hold a note and let natural vibrato happen. Real peak-detection on your live pitch trace over a ~4 second hold, not a preset animation — single-mic tracking makes this an approximation, so treat it as a coaching cue, not a lab measurement.</div>
+      <div class="j-sub" data-i18n="vibrato_sub">Hold a note and let your natural vibrato happen.</div>
     </div>
     <div class="tuner-hero-card">
       <div class="vc-stage hold-stage" id="vibratoStage">
@@ -4454,7 +4450,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-emotion">
     <div class="journey-hero">
       <div class="j-title"><span data-i18n="emotion_title">Emotional Singing</span><span class="beta-tag" data-i18n="beta_analysis_tag">Estimate</span></div>
-      <div class="j-sub" data-i18n="emotion_sub">Sing the Lead line and get Pitch and dynamic contrast scored separately — "technically perfect, needs more emotion," made real, not just phrasing/breath analysis a mic can't actually do.</div>
+      <div class="j-sub" data-i18n="emotion_sub">Sing the Lead line and see Pitch and dynamic contrast scored separately: a note can be right and still sound flat.</div>
     </div>
     <div class="key-card">
       <!-- the stage: the Lead note big, the song's progress, your loudness (the RMS it already reads), Start/Stop -->
@@ -4485,7 +4481,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-genre">
     <div class="journey-hero">
       <div class="j-title" data-i18n="genre_title">Genre Coach</div>
-      <div class="j-sub" data-i18n="genre_sub">Pick a style — real tips and real parameter defaults for Warmup and Vibrato, not audio-detected. You choose; the app doesn't guess.</div>
+      <div class="j-sub" data-i18n="genre_sub">Pick a style: tips and default settings for Warmup and Vibrato. You choose; the app doesn't detect it from your voice.</div>
     </div>
     <div class="key-card">
       <div class="genre-grid hl-list" id="genreGrid" role="list"></div>
@@ -4505,7 +4501,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-karaoke">
     <div class="journey-hero">
       <div class="j-title" data-i18n="karaoke_title">Karaoke Coach</div>
-      <div class="j-sub" data-i18n="karaoke_sub">Notes scroll toward you before you need to hit them — real Pitch and Timing scoring from your mic. Expression and pronunciation stay honestly unscored; no reliable signal exists for either.</div>
+      <div class="j-sub" data-i18n="karaoke_sub">The Lead line scrolls toward the NOW line before you sing it. Pitch and Timing are scored from your mic; expression and pronunciation aren't, as there's no reliable way to measure them.</div>
     </div>
     <div class="key-card">
       <!-- the stage: the roll (the Lead line in its part colour, your cursor in the voice colour, NOW), Start/Stop; no scores while singing -->
@@ -4542,7 +4538,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-livefeedback">
     <div class="journey-hero">
       <div class="j-title" data-i18n="livefeedback_title">Live Feedback</div>
-      <div class="j-sub" data-i18n="livefeedback_sub">Fuses Tuner pitch/stability, Breath Trainer's consistency approach, and Register Coach's brightness heuristic into one live checklist. Nasality is deliberately left out — no real detector for it exists.</div>
+      <div class="j-sub" data-i18n="livefeedback_sub">Four live checks while you sing: pitch, stability, loudness consistency and register.</div>
     </div>
     <div class="key-card">
       <div class="vc-stage lf-stage" id="liveFeedbackStage">
@@ -4563,7 +4559,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-resonance">
     <div class="journey-hero">
       <div class="j-title"><span data-i18n="resonance_title">Resonance Visualizer</span><span class="beta-tag" data-i18n="beta_heuristic_tag">Estimate</span></div>
-      <div class="j-sub" data-i18n="resonance_sub">Sing freely — real signals given visual form: amber for chest, cyan for head, violet for mixed voice. Particles contract when your pitch is steady and ripple when it's genuinely oscillating, not a preset animation.</div>
+      <div class="j-sub" data-i18n="resonance_sub">Sing freely and see your voice as a field of particles: the colour follows your register (chest, mixed or head), and the particles gather when your pitch is steady and ripple when it moves.</div>
     </div>
     <div class="tuner-hero-card">
       <div class="vc-stage res-stage" id="resonanceStage">
@@ -4584,7 +4580,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-custom">
     <div class="journey-hero">
       <div class="j-title" data-i18n="custom_title">Build Your Own Challenge</div>
-      <div class="j-sub" data-i18n="custom_sub">Pick your range, register focus, and pace — this generates a real 6-note sequence and scores it with the exact same capture engine as Pitch Match, not a separate simulation.</div>
+      <div class="j-sub" data-i18n="custom_sub">Pick your range, register focus and pace: you get a 6-note sequence, scored the same way as Pitch Match.</div>
     </div>
 
     <div class="key-card" id="customBuilderCard">
@@ -4644,7 +4640,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-rhythm">
     <div class="journey-hero">
       <div class="j-title" data-i18n="rhythm_title">Rhythm Trainer</div>
-      <div class="j-sub" data-i18n="rhythm_sub">Genuinely different from every other tool here — this measures WHEN you sing, not pitch. Real onset detection against a real metronome, not a fixed animation.</div>
+      <div class="j-sub" data-i18n="rhythm_sub">This one measures when you sing, not pitch: your onsets against a metronome.</div>
     </div>
 
     <div class="key-card" id="rhythmBuilderCard">
@@ -4684,11 +4680,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-earvoiceear">
     <div class="journey-hero">
       <div class="j-title" data-i18n="eve_title">Ear → Voice → Ear</div>
-      <div class="j-sub" data-i18n="eve_sub">A real 5-step loop: hear a note, sing it back, get analyzed, hear a harder one, then sing that one from memory alone — no replay right before. Reuses the exact same capture engine as Pitch Match throughout.</div>
+      <div class="j-sub" data-i18n="eve_sub">A 5-step loop: hear a note, sing it back, see your score, hear a harder one, then sing that one from memory, with no replay just before. Scored the same way as Pitch Match.</div>
     </div>
     <div class="key-card" id="evePreCard">
       <div class="vc-stage eve-stage" id="eveStage">
-      <p class="desc vc-paper-only" id="eveIntro" style="margin-bottom:16px;" data-i18n="eve_intro_desc">Five real steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.</p>
+      <p class="desc vc-paper-only" id="eveIntro" style="margin-bottom:16px;" data-i18n="eve_intro_desc">Five steps: Hear → Sing → Analyze → Hear again (harder) → Sing without help.</p>
       <div class="vc-take-runner" id="eveRunnerCard" style="display:none;">
         <div class="step-label" id="eveStepLabel">Step 1 — Hear</div>
         <div class="ex-target-note vc-take-note" id="eveStepNote">—</div>
@@ -4703,7 +4699,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="key-card" id="eveResultCard" style="display:none;">
       <div class="vc-result" role="status" aria-live="polite">
       <div class="ex-accuracy vc-result-num" id="eveResultAvg">—</div>
-      <h3 class="hl-h3" data-i18n="eve_results_label">Real results</h3>
+      <h3 class="hl-h3" data-i18n="eve_results_label">Average of your two sung steps</h3>
       <p class="ex-feedback-text hl-coach" id="eveResultNote"></p>
       <div class="vc-result-chart pm-trace-box" id="eveTraceFirst" style="display:none;">
         <div class="vc-chart-label" data-i18n="eve_step2_label">Step 2 — Sing</div>
@@ -4729,11 +4725,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-fiveways">
     <div class="journey-hero">
       <div class="j-title" data-i18n="fiveways_title">Sing It 5 Ways</div>
-      <div class="j-sub" data-i18n="fiveways_sub">One note, five real contexts — original, up a semitone, down a semitone, then the same note again with a deliberate register instruction. Honest limit: this app measures your real pitch accuracy in each round; it can't verify which register you actually used, only you and your ear can.</div>
+      <div class="j-sub" data-i18n="fiveways_sub">One note, five ways: as it is, a semitone up, a semitone down, then the same note in head voice and in mixed voice. Each round scores your pitch; which register you used is for you and your ear to judge.</div>
     </div>
     <div class="key-card" id="fivePreCard">
       <div class="vc-stage" id="fiveStage">
-      <p class="desc vc-paper-only" id="fiveIntro" style="margin-bottom:16px;" data-i18n="fiveways_intro_desc">Five real rounds, same underlying note, five different real challenges.</p>
+      <p class="desc vc-paper-only" id="fiveIntro" style="margin-bottom:16px;" data-i18n="fiveways_intro_desc">Five rounds on the same note, each a different challenge.</p>
       <div class="vc-take-runner" id="fiveRunnerCard" style="display:none;">
         <div class="step-label" id="fiveStepLabel">Round 1 of 5 — Original key</div>
         <div class="ex-target-note vc-take-note" id="fiveStepNote">—</div>
@@ -4747,7 +4743,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="key-card" id="fiveResultCard" style="display:none;">
       <div class="vc-result" role="status" aria-live="polite">
       <div class="ex-accuracy vc-result-num" id="fiveResultAvg">—</div>
-      <h3 class="hl-h3" data-i18n="fiveways_results_label">Real results across all 5</h3>
+      <h3 class="hl-h3" data-i18n="fiveways_results_label">Average across the five rounds</h3>
       <p class="ex-feedback-text hl-coach" id="fiveCoach"></p>
       <div class="vc-result-dims" id="fiveResultRows"></div>
       <details class="hl-measure"><summary><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-info"/></svg><span data-i18n="measure_summary">How this is measured</span><svg class="hl-icon hl-icon--s vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary><p data-i18n="five_measure"></p></details>
@@ -4760,7 +4756,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-onetake">
     <div class="journey-hero">
       <div class="j-title" data-i18n="onetake_title">One Take Challenge</div>
-      <div class="j-sub" data-i18n="onetake_sub">One real attempt per day. No restarting once you begin, no live pitch guide while you sing, no correction. Just you, one note, one honest result.</div>
+      <div class="j-sub" data-i18n="onetake_sub">One attempt a day. Once you begin there's no restarting, no pitch guide while you sing and no correction: one note, one result.</div>
     </div>
 
     <div class="key-card" id="oneTakePreCard">
@@ -4802,7 +4798,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-vocalpuzzle">
     <div class="journey-hero">
       <div class="j-title" data-i18n="vocalpuzzle_title">Vocal Puzzle</div>
-      <div class="j-sub" data-i18n="vocalpuzzle_sub">A real 4-note sequence from a real scale, with one genuinely wrong note hidden in it. Trains your ear to catch a mistake, not just match a pitch.</div>
+      <div class="j-sub" data-i18n="vocalpuzzle_sub">Four notes from a scale, one of them wrong. Trains your ear to catch a mistake, not just match a pitch.</div>
     </div>
     <div class="key-card" id="puzzlePreCard">
       <p class="desc" style="margin-bottom:16px;" data-i18n="vocalpuzzle_intro_desc">Listen to 4 notes. One doesn't belong. Which one?</p>
@@ -4816,7 +4812,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="ex-type-btn" data-puzzle-guess="2" data-i18n="vocalpuzzle_note3">Note 3</button>
         <button class="ex-type-btn" data-puzzle-guess="3" data-i18n="vocalpuzzle_note4">Note 4</button>
       </div>
-      <button class="ghost-btn" id="puzzleReplayBtn" style="margin-top:14px;width:100%;justify-content:center;" data-i18n="vocalpuzzle_replay_btn">▶ Replay the sequence</button>
+      <button class="ghost-btn" id="puzzleReplayBtn" style="margin-top:14px;width:100%;justify-content:center;" data-i18n="vocalpuzzle_replay_btn">Replay the sequence</button>
     </div>
     <div class="key-card" id="puzzleResultCard" style="display:none;text-align:center;">
       <div class="step-label" id="puzzleResultTitle">—</div>
@@ -4833,7 +4829,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-hearmistake">
     <div class="journey-hero">
       <div class="j-title" data-i18n="hearmistake_title">Can You Hear Your Mistake?</div>
-      <div class="j-sub" data-i18n="hearmistake_sub">Two real versions of the same note — one exactly on pitch, one genuinely shifted. Pick the correct one, then sing it back to prove you can reproduce it.</div>
+      <div class="j-sub" data-i18n="hearmistake_sub">Two versions of the same note: one on pitch, one shifted. Pick the accurate one, then sing it back.</div>
     </div>
     <div class="key-card" id="hmPreCard">
       <p class="desc" style="margin-bottom:16px;" data-i18n="hearmistake_intro_desc">Listen to A, then B. One is accurate, one is shifted.</p>
@@ -4845,7 +4841,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="ex-type-btn" data-hm-guess="A">A</button>
         <button class="ex-type-btn" data-hm-guess="B">B</button>
       </div>
-      <button class="ghost-btn" id="hmReplayBtn" style="margin-top:14px;width:100%;justify-content:center;" data-i18n="hearmistake_replay_btn">▶ Replay A and B</button>
+      <button class="ghost-btn" id="hmReplayBtn" style="margin-top:14px;width:100%;justify-content:center;" data-i18n="hearmistake_replay_btn">Replay A and B</button>
     </div>
     <div class="key-card" id="hmSingCard" style="display:none;text-align:center;">
       <div class="vc-stage" id="hmStage">
@@ -4972,7 +4968,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-mirror">
     <div class="journey-hero">
       <div class="j-title" data-i18n="mirror_title">Mirror Mode</div>
-      <div class="j-sub" data-i18n="mirror_sub">The AI sings a real 4-note phrase inside your captured range — you echo it, and your real captured contour overlays the reference so you can see exactly where you diverged.</div>
+      <div class="j-sub" data-i18n="mirror_sub">A 4-note phrase from your range plays; you echo it, and your contour is drawn over the phrase so you can see where you drifted.</div>
     </div>
     <div class="tuner-hero-card">
       <div class="vc-stage mirror-stage" id="mirrorStage">
@@ -5016,7 +5012,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-emotionmode">
     <div class="journey-hero">
       <div class="j-title" data-i18n="emotionmode_title">Emotion Mode</div>
-      <div class="j-sub" data-i18n="emotionmode_sub">Same note, two real intentions — this app never judges which "felt" more tender or powerful, only what's genuinely measurable: real dynamic range, real loudness, and real pitch stability, compared honestly between your two takes.</div>
+      <div class="j-sub" data-i18n="emotionmode_sub">The same note, sung with two intentions. Nothing judges which felt more tender or powerful: only what can be measured is compared between your two takes, dynamic range, loudness and pitch stability.</div>
     </div>
 
     <div class="key-card" id="emoPreCard">
@@ -5139,7 +5135,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <p class="fine-print" style="margin-top:6px;" id="cpDnaDesc"></p>
       </div>
 
-      <p class="fine-print" style="margin-top:16px;" data-i18n="cp_blend_note">Honest about scope: blend isn't shown. Nothing in this app measures how your voice blends with the other parts, so a blend score would be invented. Readiness history and your scored runs are the real record instead.</p>
+      <p class="fine-print" style="margin-top:16px;" data-i18n="cp_blend_note">Blend isn't shown: nothing in the app measures how your voice blends with the other parts. Your readiness history and scored runs are the record instead.</p>
 
       <div class="key-card" style="margin-top:16px;">
         <div class="step-label" data-i18n="cp_history_label">Readiness history</div>
@@ -5169,7 +5165,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="cw-songhead" data-cw-head data-cw-sec="songlab yourchoir"></div>
     <div class="journey-hero" data-cw-sec="hidden">
       <div class="j-title" data-i18n="choir_title">Choir Workspace</div>
-      <div class="j-sub" data-i18n="choir_sub">Real per-part mixer — mute, solo, and volume genuinely work on a synthesized progression, not a simulated UI.</div>
+      <div class="j-sub" data-i18n="choir_sub">A mixer for every part: mute, solo and set the volume of each voice in the song.</div>
     </div>
 
     <div class="key-card" data-cw-sec="hidden">
@@ -5196,17 +5192,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="cw-score-traits" id="songDifficultyBox"></div>
         <p class="cw-quiet" data-i18n="choir_synth_line">A synthesised demo arrangement.</p>
       </div>
-      <p class="desc cw-hidden" style="margin-bottom:20px;" data-i18n="choir_track_desc">
-        Real launch content is a licensed, pre-separated multi-track catalog (PRD §3.3) — live AI part separation for arbitrary uploads stays out of scope for the reasons in PRD §9.
-        This demo uses original, royalty-free progressions, synthesized live, so mute/solo/volume genuinely work per part rather than simulating the UI.
-      </p>
+      <p class="desc cw-hidden" style="margin-bottom:20px;" data-i18n="choir_track_desc">This demo uses original, royalty-free progressions played by the app, so the mixer acts on each part on its own.</p>
 
 
       <div class="key-card" id="songDnaCard" style="margin-bottom:20px;">
         <div class="step-label" data-i18n="choir_songdna_label">Song DNA</div>
-        <p class="fine-print" style="margin:6px 0 14px;" data-i18n="choir_songdna_desc">Four real dimensions computed directly from this song's actual note data — not a genre guess, the real numbers.</p>
+        <p class="fine-print" style="margin:6px 0 14px;" data-i18n="choir_songdna_desc">Four dimensions computed from this song's notes.</p>
         <div id="songDnaDimensions"></div>
-        <div class="step-label" style="margin-top:18px;" data-i18n="choir_difficultmoments_label">Real difficult moments</div>
+        <div class="step-label" style="margin-top:18px;" data-i18n="choir_difficultmoments_label">Difficult moments</div>
         <div id="songDnaMoments" style="margin-top:10px;"></div>
       </div>
 
@@ -5279,7 +5272,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
       <div class="key-card cw-gated" id="sonicXrayCard" style="margin-bottom:20px;">
         <div class="step-label" data-i18n="xray_title">Sonic X-Ray</div>
-        <p class="fine-print" style="margin:6px 0 4px;" data-i18n="xray_desc">All 5 parts across the song's real timeline, drawn from the exact note schedule the mixer plays. Tap a section to jump playback there; tap anywhere on the parts to put that moment under the Music Microscope.</p>
+        <p class="fine-print" style="margin:6px 0 4px;" data-i18n="xray_desc">All 5 parts across the song, from the note schedule the mixer plays. Tap a section to play from there; tap a part to look at that moment in the Music Microscope.</p>
         <p class="fine-print" style="margin:0 0 8px;" data-i18n="xray_dna_legend">Flame: a Song DNA difficult moment</p>
         <div class="cw-lightbox" data-house="down"><svg id="xraySvg" class="xray-svg"></svg></div>
 
@@ -5330,9 +5323,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="key-card" style="margin-top:20px;" data-cw-sec="hidden">
       <div class="step-label"><span data-i18n="choir_director_label">Director Dashboard</span><span class="mock-tag" data-i18n="choir_sampledata_tag">SAMPLE DATA</span></div>
       <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:20px;margin:8px 0 4px;" data-i18n="choir_rosterprogress_h2">Choir roster progress</h2>
-      <p class="desc" style="margin-bottom:16px;" data-i18n="choir_roster_desc">
-        This view needs a real multi-user backend to populate — no client-only prototype can show other people's data honestly. The rows below are illustrative sample data showing the shape a director's dashboard would take (PRD §3.3), not live figures.
-      </p>
+      <p class="desc" style="margin-bottom:16px;" data-i18n="choir_roster_desc">A director's view of every singer's progress. It needs accounts for a director and their singers, which the app doesn't have yet.</p>
       <div id="rosterList"></div>
     </div>
   </section>
@@ -5342,7 +5333,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="cw-songhead" data-cw-head data-cw-sec="rehearse trainers"></div>
     <div class="journey-hero" data-cw-sec="hidden">
       <div class="j-title" id="rehearsalTitle">I Am the Alto</div>
-      <div class="j-sub" data-i18n="rehearsal_sub">Your line is front and centre, the other parts keep playing around you, and your part's guide track genuinely fades out level by level until you're singing it alone.</div>
+      <div class="j-sub" data-i18n="rehearsal_sub">Your line is in front, the other parts keep playing around you, and your guide fades out level by level until you sing it alone.</div>
     </div>
 
     <div class="key-card cw-preview" id="cwPreviewRehearsal" data-cw-sec="rehearse trainers"></div>
@@ -5391,7 +5382,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <details class="hl-measure">
         <summary><span data-i18n="rehearsal_gain_measure">How the guide level is set</span><svg class="hl-icon vc-measure-chev" aria-hidden="true"><use href="#hl-chev"/></svg></summary>
         <div class="rh-gain-readout">
-          <div class="fine-print" data-i18n="rehearsal_live_gain_label">Live guide gain — read from the real audio GainNode</div>
+          <div class="fine-print" data-i18n="rehearsal_live_gain_label">Your guide's volume, read from the audio as it plays</div>
           <div class="rh-gain-val"><span id="rehearsalGainValue">—</span><small id="rehearsalGainTarget"></small></div>
           <div class="hl-meter"><i class="vu-meter-fill" id="rehearsalGuideVu"></i></div>
         </div>
@@ -5399,7 +5390,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
 
     <div class="key-card" style="margin-top:16px;" data-cw-sec="rehearse">
-      <div class="step-label" data-i18n="rehearsal_yourline_label">Your line — real notes &amp; timing</div>
+      <div class="step-label" data-i18n="rehearsal_yourline_label">Your line: notes and timing</div>
       <p class="fine-print rh-hide-ac" style="margin:6px 0 0;" data-i18n="rehearsal_roll_desc">Bold bars are your part's actual notes; faint bars are the other parts, still audible for context.</p>
       <div class="vc-stage cw-stage" id="rehearsalStage">
         <div class="rh-roll-wrap cw-lanes-wrap rh-hide-ac"><svg id="rehearsalRoll" class="cw-lanes" aria-hidden="true"></svg></div>
@@ -5416,7 +5407,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
     <div class="key-card" id="breathMapCard" style="margin-top:16px;" data-cw-sec="rehearse">
       <div class="step-label" data-i18n="bm_title">Breath Map</div>
-      <p class="desc" style="margin:6px 0 8px;" data-i18n="bm_desc">Every breath point in your part, taken from the real playback schedule: the silence between one note's release and the next note's attack.</p>
+      <p class="desc" style="margin:6px 0 8px;" data-i18n="bm_desc">Every breath point in your part: the silence between one note's release and the next note's attack.</p>
       <p class="fine-print" id="bmSummary"></p>
       <p class="fine-print" id="bmShape" style="margin-top:4px;"></p>
       <div class="bm-live" id="bmLive" aria-live="polite"></div>
@@ -5771,7 +5762,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <section class="panel" id="panel-feedback">
     <div class="journey-hero">
       <div class="j-title" data-i18n="feedback_title">Feedback</div>
-      <div class="j-sub" data-i18n="feedback_sub">Real, specific answers help far more than "it's fine" — a couple of sentences per question is genuinely useful.</div>
+      <div class="j-sub" data-i18n="feedback_sub">A sentence or two per question helps most.</div>
     </div>
 
     <div class="feedback-form" id="feedbackFormCard">
@@ -5838,8 +5829,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- TEACHER DASHBOARD PANEL -->
   <section class="panel" id="panel-teacher">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="teacher_title">👩‍🏫 Teacher Dashboard</div>
-      <div class="j-sub" data-i18n="teacher_sub">A real roster and assignment tracker — not sample data, an actual local tool you can use.</div>
+      <div class="j-title" data-i18n="teacher_title">Teacher Dashboard</div>
+      <div class="j-sub" data-i18n="teacher_sub">A roster and assignment tracker, kept on your account.</div>
     </div>
 
     <div class="key-card" id="teacherSignedOut" style="display:none;">
@@ -5857,7 +5848,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="home-trial-text" id="teacherBillingBannerText"></div>
       </div>
       <div class="demo-disclosure" style="margin-bottom:16px;">
-        <strong data-i18n="teacher_honestscope_label">Honest about scope:</strong> <span data-i18n="teacher_scope_desc_p1">this tracks what</span> <em data-i18n="teacher_scope_you">you</em> <span data-i18n="teacher_scope_desc_p2">record here, locally — it doesn't automatically detect student activity, since that needs each student to have their own account on a shared backend (PRD §6, Phase 1 week 8). Completion is teacher-marked, not auto-synced. A real launch version gives each student a login and updates this automatically.</span>
+        <strong data-i18n="teacher_honestscope_label">About this tool:</strong> <span data-i18n="teacher_scope_desc_p1">this tracks what</span> <em data-i18n="teacher_scope_you">you</em> <span data-i18n="teacher_scope_desc_p2">record here. It doesn't detect student activity: that needs each student to have their own account. You mark each assignment done.</span>
       </div>
 
       <div class="key-card">
@@ -5947,11 +5938,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <div class="modal-overlay" id="checkoutModalOverlay" role="dialog" aria-modal="true" aria-labelledby="checkoutPlanName" style="display:none;">
     <div class="modal-card">
-      <div class="step-label">Demo checkout — no real payment</div>
+      <div class="step-label">Demo checkout, no payment</div>
       <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:22px;margin:8px 0 4px;" id="checkoutPlanName">Upgrade to Pro</h2>
       <p style="color:var(--muted);font-size:13px;margin:0 0 20px;line-height:1.5;" id="checkoutPlanPrice">$9.99/mo</p>
       <p style="color:var(--muted);font-size:12.5px;margin:0 0 22px;line-height:1.5;">
-        This button simulates a successful Stripe subscription so you can see what unlocks. No card details are collected because none are processed.
+        This simulates a subscription so you can see what unlocks. No card details are collected.
       </p>
       <div class="p9-actions">
         <button class="hl-btn hl-btn--ink" id="checkoutConfirmBtn" data-sheet-main>Simulate successful subscription</button>
@@ -7023,8 +7014,8 @@ document.getElementById('calcKeyBtn').addEventListener('click', ()=>{
   const rankWrap = document.getElementById('keyRankings');
   if(rankWrap){
     rankWrap.innerHTML = candidates.map(c=>{
-      const label = c.shift===0 ? 'Original key' : (c.shift>0 ? `Up ${c.shift} semitone${c.shift===1?'':'s'}` : `Down ${Math.abs(c.shift)} semitone${c.shift===-1?'':'s'}`);
-      const starDisplay = '⭐'.repeat(c.stars) + '☆'.repeat(5-c.stars);
+      const n = Math.abs(c.shift), label = c.shift===0 ? t('key_rank_original') : t((c.shift>0 ? 'key_rank_up_' : 'key_rank_down_') + (n===1 ? 'one' : 'other')).replace('{n}', n);
+      const starDisplay = t('key_rank_fit_tpl').replace('{n}', c.stars); // phase 9: the fit as text, no ⭐
       return `<div class="record-row"><span class="record-label">${label} <span style="color:var(--muted);font-size:11px;">(${c.lowName}–${c.highName})</span></span><span class="record-val" style="color:var(--brass);">${starDisplay} ${c.fit}%</span></div>`;
     }).join('');
   }
@@ -7093,10 +7084,10 @@ const TRANSLATIONS = {
     auth_password_label:'Password',
     auth_title_signin:"Sign in", auth_sub_signin:'Sign in to continue your vocal journey.',
     auth_signin_btn:'Sign in', auth_toggle_to_signin:'Already have an account? Sign in', auth_toggle_to_signup:'Need an account? Create one',
-    auth_feature_ai_coach:'AI Vocal Coach', auth_feature_personalized_training:'Personalized vocal training', auth_feature_vocal_analysis:'Vocal analysis',
-    auth_feature_song_practice:'Song practice', auth_feature_vocal_world:'Vocal World', auth_feature_vocal_games:'Vocal games',
-    auth_feature_harmony_training:'Harmony training', auth_feature_progress_tracking:'Progress tracking', auth_feature_21day_program:'21-day transformation program',
-    auth_banner_title:'21 DAYS FREE', auth_banner_sub:'After your 21-day access period, a subscription is required to continue.',
+    
+    
+    
+    
     auth_terms_text:"After 21 days, some features need a paid plan. No payment today.",
     auth_err_missing_email_password:'Add an email and password to continue.', auth_err_missing_name:'Add a display name to continue.',
     auth_err_generic:'Something went wrong — try again.', auth_err_invalid_credentials:'Incorrect email or password. Try again.',
@@ -7148,7 +7139,7 @@ const TRANSLATIONS = {
     tool_five_ways:'Sing It 5 Ways', tool_one_take:'One Take Challenge', tool_vocal_puzzle:'Vocal Puzzle', tool_hear_mistake:'Can You Hear Your Mistake?',
     tool_vibrato:'Vibrato', tool_live_feedback:"Live Feedback", tool_resonance:'Resonance Visualizer', tool_mirror:'Mirror Mode',
     tool_emotion_mode:'Emotion Mode', tool_genre_coach:'Genre Coach', tool_warmup:'Warmup',
-    tuner_title:'🎯 Live Tuner', tuner_sub:"Sing a note. The ring closes as you approach the pitch and locks when you're on it.",
+    tuner_title:"Live Tuner", tuner_sub:"Sing a note. The ring closes as you approach the pitch and locks when you're on it.",
     tuner_result_label:"Average stability", pm_result_label:"Pitch accuracy", pm_live_on:"On the note", pm_live_flat:"{n} cents flat", pm_live_sharp:"{n} cents sharp", measure_summary:"How this is measured", tuner_measure:"Stability is 100 minus three times how much your pitch wavers, in cents, over its last 30 readings (about half a second). This number is the average for the whole time you sang. The ring locks when you're within 6 cents of the note.", pm_measure:"Accuracy is 100 minus your average distance from the note, in cents, times 0.45 at {beg}, 0.6 at {int} or 0.9 at {pro}. Listening starts when you start singing and lasts 3, 2.5 or 2 seconds; the first 0.4 seconds aren't scored. Natural vibrato counts as its centre, not as an error.",
     tuner_pitch_label:'Pitch', tuner_stability_label:'Stability', tuner_freq_label:'Freq',
     tuner_hint:'Uses your microphone locally in the browser — nothing is uploaded. Best with headphones or a quiet room.',
@@ -7303,14 +7294,14 @@ const TRANSLATIONS = {
     vocalpuzzle_note2:'Note 2',
     vocalpuzzle_note3:'Note 3',
     vocalpuzzle_note4:'Note 4',
-    vocalpuzzle_replay_btn:'▶ Replay the sequence',
+    vocalpuzzle_replay_btn:"Replay the sequence",
     vocalpuzzle_streak_label:'Streak',
     vocalpuzzle_solved_label:'Solved',
     vocalpuzzle_next_btn:'Next puzzle',
     hearmistake_title:'Can You Hear Your Mistake?',
     hearmistake_sub:"Two versions of the same note: one on pitch, one shifted. Pick the accurate one, then sing it back.",
     hearmistake_intro_desc:'Listen to A, then B. One is accurate, one is shifted.',
-    hearmistake_replay_btn:'▶ Replay A and B',
+    hearmistake_replay_btn:"Replay A and B",
     hearmistake_reproduce_label:'Now reproduce the correct version',
     hearmistake_next_btn:'Next round',
     studio_song_label:'Song',
@@ -7373,22 +7364,22 @@ const TRANSLATIONS = {
     records_sub:"Your bests, from what you've sung. A record appears once you've done the activity.",
     feedback_title:"Feedback",
     feedback_sub:"A sentence or two per question helps most.",
-    teacher_title:'👩‍🏫 Teacher Dashboard',
-    teacher_sub:'A real roster and assignment tracker — not sample data, an actual local tool you can use.',
+    teacher_title:"Teacher Dashboard",
+    teacher_sub:"A roster and assignment tracker, kept on your account.",
     journey_title:'21 Days to Discover Your Voice',
     journey_sub:"A baseline on Day 1, three themed weeks, and a before/after at the end. Every number comes from the tools you already use, in one guided path.",
     key_title:'Key Trainer',
     key_sub:"Play a reference tone in any key, or let the app recommend the best key for your captured range, transposed to fit.",
     dashboard_title:"Progress",
     dashboard_sub:"Today's Plan, this week's challenge, your range and your practice over time.",
-    boss_choose_desc:'Same real engine, genuinely different scoring per boss — not reskins.',
+    boss_choose_desc:"Each boss scores something different.",
     boss_choose_h2:'Choose your boss and difficulty',
     boss_listen_score_btn:'Listen & score',
     boss_play_note_btn:'Play the note',
     boss_rematch_btn:"Rematch",
     boss_reuses_tag:'REUSES KARAOKE COACH ENGINE',
     boss_section_breakdown:"By section",
-    boss_step_label:'🐉 Boss Arena — Vocal Boss Battle',
+    boss_step_label:"Boss Arena",
     boss_training_flow:"Train that note",
     boss_type_agility:"Agility Monster",
     boss_type_pitch:"Pitch Dragon",
@@ -7716,7 +7707,7 @@ const TRANSLATIONS = {
     journey_cw_open_btn:"Open I Am the Part",
     journey_cw_done_tpl:"Done on {date}: {part} on {song}, Harmony Memory stage {stage}, {score}% of notes held.",
     journey_cw_done_nodate_tpl:"Done: {part} on {song}.",
-    journey_cw_toast:"🎼 Journey milestone reached: you held your part with the choir.",
+    journey_cw_toast:"Journey milestone reached: you held your part with the choir.",
     achievement_cw_boss:"First Choir Boss Defeated",
     achievement_cw_ready:"A Part Is Ready",
     achievement_cw_yourchoir:"First Your Choir Recording",
@@ -7871,12 +7862,12 @@ const TRANSLATIONS = {
     dashboard_signedout_h2:'Create a free account to track progress',
     dashboard_signedout_label:"Progress",
     dashboard_signout_btn:'Sign out',
-    dashboard_skillprofile_desc:'Pitch and Agility come from Exercises, Range from Range Finder, Breath from the Breath Trainer. Expression stays honest — it shows "not enough data" until an expression/dynamics trainer exists, rather than guessing.',
-    dashboard_skillprofile_h2:'Five scores, built from what you\'ve actually practiced',
+    dashboard_skillprofile_desc:"Pitch and Agility come from Exercises, Range from Range Finder, Breath from the Breath Trainer. Expression shows \"not enough data\" until an expression trainer exists, rather than guessing.",
+    dashboard_skillprofile_h2:"Five scores, built from what you've actually practiced",
     dashboard_skillprofile_label:'Vocal Skill Profile',
     dashboard_streak_label:'Current streak',
     dashboard_todaysplan_desc:'This is a deterministic recommendation engine reading your Skill Profile and Register Coach history, not a language model reasoning about you — worth saying plainly rather than overclaiming "AI."',
-    dashboard_todaysplan_h2:'Rule-based, not AI — built from your real weak spots',
+    dashboard_todaysplan_h2:"Built from your weakest skills",
     dashboard_todaysplan_label:'Today\'s Plan',
     dashboard_weeklychallenge_label:'Weekly Challenge',
     dashboard_widestrange_h2:'Widest range recorded',
@@ -7900,7 +7891,7 @@ const TRANSLATIONS = {
     feedback_thanks_title:'Thank you',
     glider_choose_course:"Course",
     glider_takeoff_hint:'Sing to take off',
-    glider_course_desc:'Sing to fly, go quiet to fall — 7 real courses, not reskins of the same obstacle generator.',
+    glider_course_desc:"Sing to fly, go quiet to fall. Seven courses, each built differently.",
     glider_mode_agility:"Agility Run",
     glider_mode_highway:"Pitch Highway",
     glider_mode_interval:"Interval Jump",
@@ -7908,7 +7899,7 @@ const TRANSLATIONS = {
     glider_mode_melody:"Melody Road",
     glider_mode_memory:"Memory Run",
     glider_mode_sustain:"Sustain Bridge",
-    glider_step_label:'🏔️ Pitch Mountain — Vocal Journey',
+    glider_step_label:"Pitch Mountain",
     harmony_distraction_tagline:"An unrelated arpeggio plays under the choir.",
     harmony_hold_h2:'Hold your part while the others get louder',
     harmony_independence_label:'Independence',
@@ -7918,7 +7909,7 @@ const TRANSLATIONS = {
     harmony_level4:"Full choir",
     harmony_level5:"Random key",
     harmony_memory_tagline:"The note name shows briefly, then you sing from memory.",
-    harmony_overall_desc:'Overall — average of the 4 real scores below',
+    harmony_overall_desc:"Overall: the average of the 4 scores below",
     harmony_part_alto_tag:'Mid-upper harmony',
     harmony_part_bass_tag:'Foundation, lowest voice',
     harmony_part_lead_tag:'Independent melody line',
@@ -7929,7 +7920,7 @@ const TRANSLATIONS = {
     harmony_pitch_label:'Pitch',
     harmony_reuses_tag:'REUSES CHOIR WORKSPACE MIXER',
     harmony_ribbon_hint:"The bar sits level when you're on your note and tilts when you drift.",
-    harmony_step_label:'🎼 Harmony Castle — Harmony Arena',
+    harmony_step_label:"Harmony Castle",
     harmony_timing_label:'Timing',
     journey_achievements_h2:"Each one unlocks from your saved results.",
     journey_achievements_label:'Achievements',
@@ -8031,24 +8022,24 @@ const TRANSLATIONS = {
     records_cat_songs:"Songs",
     records_cat_voice:"Vocal Range & Technique",
     records_cat_world:"Vocal World",
-    rift_desc:'Each round is randomly one of four real drills — Pitch, Interval Jump, Sustain Hold, or Quick Catch — with a fresh real target every time. Same capture engine as Pitch Match throughout; only which challenge shows up next is a surprise.',
-    rift_h2:'60 seconds, unpredictable real rounds',
+    rift_desc:"Each round is one of four drills at random (Pitch, Interval Jump, Sustain Hold or Quick Catch) with a new target every time. Scored like Pitch Match; only the next challenge is a surprise.",
+    rift_h2:"60 seconds, unpredictable rounds",
     rift_reuses_tag:'REUSES PITCH MATCH ENGINE',
-    rift_step_label:'🌀 The Vocal Rift',
-    skilltree_desc:'No fake currency, no purchasing skill — a node lights up only when your actual Skill Profile, breath, or register data crosses its real threshold. Grey nodes are locked; the detail panel below shows exactly what\'s needed for the next one.',
-    skilltree_h2:'Every node unlocks from a real measured threshold',
-    skilltree_step_label:'🌳 Vocal Skill Tree',
+    rift_step_label:"The Rift",
+    skilltree_desc:"Nothing to buy: a node lights up only when your Skill Profile, breath or register data crosses its threshold. Grey nodes are locked; the panel below shows what the next one needs.",
+    skilltree_h2:"Every node unlocks at a measured threshold",
+    skilltree_step_label:"Skill Tree",
     teacher_addstudent_btn:'Add student',
     teacher_assignments_label:'Assignments',
     teacher_assignroster_btn:'Assign to whole roster',
-    teacher_honestscope_label:'Honest about scope:',
+    teacher_honestscope_label:"About this tool:",
     teacher_locked_h2:'Roster and assignment tools are part of the Teacher plan',
     teacher_locked_msg:'Included in your 21-day trial too — try it now, no separate signup needed.',
     teacher_newassignment_label:'New Assignment',
     teacher_plan_label:'Teacher plan',
     teacher_roster_label:'Roster',
     teacher_scope_desc_p1:'this tracks what',
-    teacher_scope_desc_p2:'record here, locally — it doesn\'t automatically detect student activity, since that needs each student to have their own account on a shared backend (PRD §6, Phase 1 week 8). Completion is teacher-marked, not auto-synced. A real launch version gives each student a login and updates this automatically.',
+    teacher_scope_desc_p2:"record here. It doesn't detect student activity: that needs each student to have their own account. You mark each assignment done.",
     teacher_scope_you:'you',
     teacher_signin_prompt:'Sign in to use the Teacher Dashboard.',
     teacher_viewplan_btn:'View Teacher plan',
@@ -8125,7 +8116,7 @@ const TRANSLATIONS = {
     skill_level_beginner:'Beginner', skill_level_intermediate:'Intermediate', skill_level_professional:'Professional',
     level_tier_explorer:'Pitch Explorer', level_tier_apprentice:'Pitch Apprentice', level_tier_builder:'Voice Builder',
     level_tier_performer:'Vocal Performer', level_tier_master:'Vocal Master',
-    journey_goal_1:'I want to sing higher', journey_goal_2:'I want to stop singing flat', journey_goal_3:'I want to improve my head voice',
+    journey_goal_1:'I want to sing higher', journey_goal_2:"I want to stop singing flat", journey_goal_3:'I want to improve my head voice',
     journey_goal_4:'I want to sing confidently', journey_goal_5:'I want to improve my runs', journey_goal_6:'I want to sing harmonies',
     journey_goal_7:'I want to prepare for a performance', journey_goal_8:'I want to become a better overall singer',
     record_label_highest_note:'Highest comfortable note', record_label_lowest_note:'Lowest comfortable note',
@@ -8154,13 +8145,13 @@ const TRANSLATIONS = {
     boss_lose_sub:"Notes in tune are what hurt the boss. Here's the one that cost you most.", boss_lose_title_suffix:'got you.',
     boss_memory_lead_close:"Last time was close:", boss_memory_lead_lost:"It beat you last time:", boss_memory_lead_won:'You won, but',
     boss_memory_p1:'was your weak point at', boss_memory_p2:"Let's see how it goes today.", boss_no_signal:'No signal',
-    boss_recommend_p1:'is recommended — your', boss_recommend_p2:'is your lowest real Skill Profile score',
+    boss_recommend_p1:"is recommended — your", boss_recommend_p2:"is your lowest Skill Profile score",
     boss_start_label:"Start the battle", boss_weakestsection_p1:'Your weakest section was the', boss_weakestsection_p2:'at',
     boss_weaknote_p1:'Your weakest single note this battle was', boss_weaknote_p2:'at', boss_weaknote_p3:'accuracy.',
     boss_weaknote_p4:'Train the note below, then rematch the boss.', boss_win_sub_p1:"You dealt more damage than you took.",
     breakthrough_detail_p1:'5 accurate attempts in a row — this was averaging', breakthrough_detail_p2:'before. Something just clicked.',
     bridgerunner_start_label:"Start running", bridgerunner_wipedout:"Out of lives",
-    curriculum_daylabel_p1:"Today's Curriculum — Day", curriculum_done_today:'✓ Done today', curriculum_mark_done:'Mark done',
+    curriculum_daylabel_p1:"Today's Curriculum — Day", curriculum_done_today:"Done today", curriculum_mark_done:'Mark done',
     curriculum_open_firsttool:"Open today's first tool", curriculum_open_p1:'Open',
     dash_not_captured:'Not captured yet — visit Range Finder', dash_recap_suffix:'Recap',
     game_best_p1:'Best:', game_new_best:"New best", game_score_p1:'Score:',
@@ -8226,7 +8217,7 @@ const TRANSLATIONS = {
     teacher_billing_active:"You're on the Teacher plan — full roster & assignment access continues.",
     teacher_billing_trial_p1:'Using Teacher tools via your', teacher_billing_trial_p2:'-day trial — after that, this specific dashboard needs the Teacher plan (your other tools continue on any paid plan).',
     teacher_complete_suffix:'complete', teacher_ex_ear:'Ear Training', teacher_ex_interval:'Interval Match', teacher_ex_pitch:'Pitch Match', teacher_ex_scale:'Scale Run',
-    teacher_locked_hasroster_p1:'Your real roster', teacher_locked_hasroster_p2:'and',
+    teacher_locked_hasroster_p1:"Your roster", teacher_locked_hasroster_p2:'and',
     teacher_locked_hasroster_p3:"are saved and waiting — pick the Teacher plan to get back into them. Other plans don't include this dashboard.",
     teacher_locked_noroster:'Included in your 21-day trial too — try it now, no separate signup needed.',
     teacher_noroster_forassign:'No students on the roster.', teacher_remove_btn:'Remove',
@@ -8288,7 +8279,7 @@ const TRANSLATIONS = {
     ear_sub_chord:"Listen, then pick the quality of the triad you heard.",
     ear_sub_progression:"Listen to a 4-chord progression, then pick which one you heard: ear training in the context of a key, not single chords.",
     ear_sub_interval:"Listen, then pick the interval you heard. An ear drill: you don't sing.",
-    ear_play_chord:'▶ Play chord', ear_play_progression:'▶ Play progression', ear_play_interval:'▶ Play interval',
+    ear_play_chord:"Play chord", ear_play_progression:"Play progression", ear_play_interval:"Play interval",
     ear_feedback_correct:'Correct!', ear_thatwas_template:'That was {name}.', ear_thatwas_a:'a ',
     rhythm_running:'Running…', rhythm_beat_label:'Beat', rhythm_missed:'Missed',
     rhythm_listen_instructions:"Sing on each click",
@@ -8321,10 +8312,10 @@ const TRANSLATIONS = {
     studio_notavailable:'Recording isn\'t available right now — check mic permissions.',
     snapshot_nobaseline:'No baseline yet.', snapshot_nodatayet:'No data yet',
     snapshot_nobaselinefor:'No Day 1 baseline for this — started tracking later',
-    reweight_signin:'Sign in for a real recommendation', reweight_new:'new', reweight_more:'more', reweight_less:'less',
+    reweight_signin:"Sign in for a recommendation", reweight_new:'new', reweight_more:'more', reweight_less:'less',
     reweight_wasfocus_p1:'was', reweight_wasfocus_p2:"of your last session's focus — today it's",
-    reweight_wasfocus_p3:'based on your actual score change.',
-    reweight_comparedto_p1:'Compared with your last session', reweight_comparedto_p2:"today's weighting has shifted slightly as your real scores changed.",
+    reweight_wasfocus_p3:"based on your actual score change.",
+    reweight_comparedto_p1:'Compared with your last session', reweight_comparedto_p2:"today's weighting has shifted slightly as your scores changed.",
     reweight_firstweighting:"This is your first weighting; tomorrow's will already reflect today's results.",
     timebudget_beginner:'Today\'s budget (ref): warm-up 5 · breathing 5 · pitch 5 · scales 5 · registers 5 · intervals 3 · agility 2–3 · sustain 3 · song 5–10 min — total 30–40 min',
     timebudget_intermediate:'Today\'s budget (ref): warm-up 5–7 · breathing 5 · pitch 8 · scales 8 · registers 8 · intervals 5 · agility 5 · sustain 5 · vibrato 3 · song 10–15 min — total 50–65 min',
@@ -8487,7 +8478,7 @@ const TRANSLATIONS = {
     paywall_ispartof_tpl:'{feature} is part of the {plan} plan.',
     paywall_trialended_choir_tpl:'Your 21-day free access has ended. {feature} continues on the {plan} plan ({price}) — your progress is still saved.',
     arcade_pro_level_template:'Pro · Level {n}', arcade_won_template:"Wins: {n}", arcade_best_template:'Best: {n}',
-    arcade_trial_included:'Included in your 21-day trial', arcade_always_open:'Always open', arcade_unlocks_at_level_template:'🔒 Unlocks at Level {n}',
+    arcade_trial_included:'Included in your 21-day trial', arcade_always_open:'Always open', arcade_unlocks_at_level_template:"Unlocks at Level {n}",
     pricing_planname_monthly:"Monthly", pricing_planname_yearly:"Yearly", pricing_planname_teacher:"Teacher", pricing_planname_choir:"Choir / Studio",
     trialcompare_nobaseline:"No Day 1 baseline was recorded (the 21-Day Journey assessment wasn't completed), so there's no before/after to show — your saved progress is still intact.",
     voicehealth_nodata_tooltip:'no data',
@@ -8866,6 +8857,18 @@ const TRANSLATIONS = {
     vocallab_notes_one:"1 note tracked",
     vocallab_notes_other:"{n} notes tracked",
     vocallab_measure:"Extended: the lowest and highest notes the Range Finder heard. Comfortable: every note you've sung at least once with 55% accuracy or better. Reliable: notes with 3 or more attempts averaging 75% or better. From your Pitch Match, Custom Challenge, Boss Arena and Rift attempts.",
+    rec_recording:"Recording… (4 s)",
+    rec_recorded:"Recorded",
+    rec_toast_save_day1:"Couldn't save the clip (it may be too large). This step is optional; you can skip it.",
+    rec_toast_unavailable_day1:"Recording isn't available right now. Check the mic permission, or skip this optional step.",
+    rec_toast_save_today:"Couldn't save today's clip (it may be too large). Try again, or skip it.",
+    rec_toast_unavailable_today:"Recording isn't available right now. Check the mic permission and try again.",
+    key_rank_original:"Original key",
+    key_rank_up_one:"Up 1 semitone",
+    key_rank_up_other:"Up {n} semitones",
+    key_rank_down_one:"Down 1 semitone",
+    key_rank_down_other:"Down {n} semitones",
+    key_rank_fit_tpl:"Fit {n}/5",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -8877,10 +8880,10 @@ const TRANSLATIONS = {
     auth_password_label:'Mot de passe',
     auth_title_signin:"Se connecter", auth_sub_signin:'Connectez-vous pour continuer votre parcours vocal.',
     auth_signin_btn:'Se connecter', auth_toggle_to_signin:'Vous avez déjà un compte ? Connectez-vous', auth_toggle_to_signup:"Pas encore de compte ? Créez-en un",
-    auth_feature_ai_coach:'Coach vocal IA', auth_feature_personalized_training:'Entraînement vocal personnalisé', auth_feature_vocal_analysis:'Analyse vocale',
-    auth_feature_song_practice:'Entraînement sur des chansons', auth_feature_vocal_world:'Monde Vocal', auth_feature_vocal_games:'Jeux vocaux',
-    auth_feature_harmony_training:"Entraînement à l'harmonie", auth_feature_progress_tracking:'Suivi de la progression', auth_feature_21day_program:'Programme de transformation de 21 jours',
-    auth_banner_title:'21 JOURS GRATUITS', auth_banner_sub:"Après votre période d'accès de 21 jours, un abonnement est nécessaire pour continuer.",
+    
+    
+    
+    
     auth_terms_text:"Après 21 jours, certaines fonctions nécessitent un forfait payant. Aucun paiement aujourd'hui.",
     auth_err_missing_email_password:'Ajoutez un e-mail et un mot de passe pour continuer.', auth_err_missing_name:'Ajoutez un nom d\'affichage pour continuer.',
     auth_err_generic:"Une erreur s'est produite — réessayez.", auth_err_invalid_credentials:'E-mail ou mot de passe incorrect. Réessayez.',
@@ -8932,7 +8935,7 @@ const TRANSLATIONS = {
     tool_five_ways:'Chantez-le de 5 façons', tool_one_take:'Défi en une prise', tool_vocal_puzzle:'Puzzle vocal', tool_hear_mistake:'Entendez-vous votre erreur ?',
     tool_vibrato:'Vibrato', tool_live_feedback:"Retour en direct", tool_resonance:'Visualiseur de résonance', tool_mirror:'Mode miroir',
     tool_emotion_mode:'Mode émotion', tool_genre_coach:'Coach de genre', tool_warmup:'Échauffement',
-    tuner_title:'🎯 Accordeur en direct', tuner_sub:"Chantez une note. L'anneau se referme à mesure que vous approchez de la note et se verrouille quand vous y êtes.",
+    tuner_title:"Accordeur en direct", tuner_sub:"Chantez une note. L'anneau se referme à mesure que vous approchez de la note et se verrouille quand vous y êtes.",
     tuner_result_label:"Stabilité moyenne", pm_result_label:"Justesse", pm_live_on:"Sur la note", pm_live_flat:"{n} cents trop bas", pm_live_sharp:"{n} cents trop haut", measure_summary:"Comment c'est mesuré", tuner_measure:"La stabilité vaut 100 moins trois fois l'écart de votre hauteur, en cents, sur ses 30 dernières mesures (environ une demi-seconde). Ce chiffre est la moyenne de tout le temps où vous avez chanté. L'anneau se verrouille quand vous êtes à moins de 6 cents de la note.", pm_measure:"La justesse vaut 100 moins votre écart moyen à la note, en cents, multiplié par 0,45 en {beg}, 0,6 en {int} ou 0,9 en {pro}. L'écoute commence quand vous commencez à chanter et dure 3, 2,5 ou 2 secondes ; les 0,4 premières secondes ne sont pas notées. Un vibrato naturel compte pour son centre, pas comme une erreur.",
     tuner_pitch_label:'Justesse', tuner_stability_label:'Stabilité', tuner_freq_label:'Fréq',
     tuner_hint:"Utilise votre microphone localement dans le navigateur — rien n'est envoyé. Idéal avec un casque ou dans une pièce calme.",
@@ -9087,14 +9090,14 @@ const TRANSLATIONS = {
     vocalpuzzle_note2:'Note 2',
     vocalpuzzle_note3:'Note 3',
     vocalpuzzle_note4:'Note 4',
-    vocalpuzzle_replay_btn:'▶ Rejouer la séquence',
+    vocalpuzzle_replay_btn:"Rejouer la séquence",
     vocalpuzzle_streak_label:'Série',
     vocalpuzzle_solved_label:'Résolus',
     vocalpuzzle_next_btn:'Puzzle suivant',
     hearmistake_title:'Pouvez-vous Entendre Votre Erreur ?',
     hearmistake_sub:"Deux versions de la même note : l'une juste, l'autre décalée. Choisissez la juste, puis rechantez-la.",
     hearmistake_intro_desc:'Écoutez A, puis B. Une est précise, une est décalée.',
-    hearmistake_replay_btn:'▶ Rejouer A et B',
+    hearmistake_replay_btn:"Rejouer A et B",
     hearmistake_reproduce_label:'Maintenant reproduisez la bonne version',
     hearmistake_next_btn:'Tour suivant',
     studio_song_label:'Chanson',
@@ -9157,22 +9160,22 @@ const TRANSLATIONS = {
     records_sub:"Vos meilleurs résultats, d'après ce que vous avez chanté. Un record apparaît une fois l'activité faite.",
     feedback_title:"Avis",
     feedback_sub:"Une phrase ou deux par question, c'est ce qui aide le plus.",
-    teacher_title:'👩‍🏫 Tableau de Bord Enseignant',
-    teacher_sub:'Un vrai suivi de liste d\'élèves et de devoirs — pas des données d\'exemple, un vrai outil local que vous pouvez utiliser.',
+    teacher_title:"Tableau de bord enseignant",
+    teacher_sub:"Un suivi des élèves et des devoirs, enregistré sur votre compte.",
     journey_title:'21 Jours pour Découvrir Votre Voix',
     journey_sub:"Un point de départ au jour 1, trois semaines à thème et un avant/après à la fin. Chaque chiffre vient des outils que vous utilisez déjà, sur un seul parcours guidé.",
     key_title:'Entraîneur de Tonalité',
     key_sub:"Jouez un son de référence dans n'importe quelle tonalité, ou laissez l'application recommander la meilleure tonalité pour votre tessiture enregistrée, transposée pour lui convenir.",
     dashboard_title:"Progrès",
     dashboard_sub:"Le plan du jour, le défi de la semaine, votre tessiture et votre pratique dans le temps.",
-    boss_choose_desc:'Même vrai moteur, notation vraiment différente par boss — pas de simples re-habillages.',
+    boss_choose_desc:"Chaque boss note quelque chose de différent.",
     boss_choose_h2:'Choisissez votre boss et votre difficulté',
     boss_listen_score_btn:'Écouter et noter',
     boss_play_note_btn:'Jouer la note',
     boss_rematch_btn:"Revanche",
     boss_reuses_tag:'RÉUTILISE LE MOTEUR DU COACH KARAOKÉ',
     boss_section_breakdown:"Par section",
-    boss_step_label:'🐉 Arène des Boss — Combat Vocal de Boss',
+    boss_step_label:"Arène des boss",
     boss_training_flow:"Travaillez cette note",
     boss_type_agility:"Monstre de l'agilité",
     boss_type_pitch:"Dragon de la justesse",
@@ -9500,7 +9503,7 @@ const TRANSLATIONS = {
     journey_cw_open_btn:"Ouvrir Je suis ma voix",
     journey_cw_done_tpl:"Réussi le {date} : {part} sur {song}, étape {stage} de Mémoire harmonique, {score} % des notes tenues.",
     journey_cw_done_nodate_tpl:"Réussi : {part} sur {song}.",
-    journey_cw_toast:"🎼 Étape du parcours atteinte : vous avez tenu votre voix avec le chœur.",
+    journey_cw_toast:"Étape du parcours atteinte : vous avez tenu votre voix avec le chœur.",
     achievement_cw_boss:"Premier boss de la chorale vaincu",
     achievement_cw_ready:"Une voix est prête",
     achievement_cw_yourchoir:"Premier enregistrement Votre chorale",
@@ -9655,12 +9658,12 @@ const TRANSLATIONS = {
     dashboard_signedout_h2:'Créez un compte gratuit pour suivre vos progrès',
     dashboard_signedout_label:"Progrès",
     dashboard_signout_btn:'Se déconnecter',
-    dashboard_skillprofile_desc:'La justesse et l\'agilité viennent des Exercices, la tessiture du Détecteur de tessiture, le souffle de l\'Entraîneur de souffle. L\'expression reste honnête — elle affiche « pas assez de données » jusqu\'à ce qu\'un entraîneur d\'expression/dynamique existe, plutôt que de deviner.',
-    dashboard_skillprofile_h2:'Cinq scores, construits à partir de ce que vous avez réellement pratiqué',
+    dashboard_skillprofile_desc:"La justesse et l'agilité viennent des Exercices, la tessiture du Détecteur de tessiture, le souffle de l'Entraîneur de souffle. L'expression affiche « pas assez de données » tant qu'il n'existe pas d'entraîneur d'expression, plutôt que de deviner.",
+    dashboard_skillprofile_h2:"Cinq scores, tirés de ce que vous avez pratiqué",
     dashboard_skillprofile_label:'Profil de compétences vocales',
     dashboard_streak_label:'Série actuelle',
     dashboard_todaysplan_desc:'Ceci est un moteur de recommandation déterministe qui lit votre Profil de compétences et votre historique de Coach de registre, pas un modèle de langage qui raisonne à votre sujet — mieux vaut le dire clairement plutôt que de sur-affirmer une « IA ».',
-    dashboard_todaysplan_h2:'Basé sur des règles, pas sur l\'IA — construit à partir de vos vrais points faibles',
+    dashboard_todaysplan_h2:"Construit à partir de vos points faibles",
     dashboard_todaysplan_label:'Plan du jour',
     dashboard_weeklychallenge_label:'Défi hebdomadaire',
     dashboard_widestrange_h2:'Tessiture la plus large enregistrée',
@@ -9684,7 +9687,7 @@ const TRANSLATIONS = {
     feedback_thanks_title:'Merci',
     glider_choose_course:"Parcours",
     glider_takeoff_hint:'Chantez pour décoller',
-    glider_course_desc:'Chantez pour voler, taisez-vous pour tomber — 7 vrais parcours, pas de simples re-habillages du même générateur d\'obstacles.',
+    glider_course_desc:"Chantez pour voler, taisez-vous pour tomber. Sept parcours, chacun construit différemment.",
     glider_mode_agility:"Course d'agilité",
     glider_mode_highway:"Autoroute des notes",
     glider_mode_interval:"Saut d'intervalle",
@@ -9692,7 +9695,7 @@ const TRANSLATIONS = {
     glider_mode_melody:"Route de la mélodie",
     glider_mode_memory:"Course de mémoire",
     glider_mode_sustain:"Pont tenu",
-    glider_step_label:'🏔️ Montagne de la Justesse — Voyage Vocal',
+    glider_step_label:"Montagne de la justesse",
     harmony_distraction_tagline:"Un arpège sans rapport joue sous le chœur.",
     harmony_hold_h2:'Tenez votre voix pendant que les autres deviennent plus fortes',
     harmony_independence_label:'Indépendance',
@@ -9702,7 +9705,7 @@ const TRANSLATIONS = {
     harmony_level4:"Chœur complet",
     harmony_level5:"Tonalité au hasard",
     harmony_memory_tagline:"Le nom de la note s'affiche un instant, puis vous chantez de mémoire.",
-    harmony_overall_desc:'Global — moyenne des 4 vrais scores ci-dessous',
+    harmony_overall_desc:"Global : la moyenne des 4 scores ci-dessous",
     harmony_part_alto_tag:'Harmonie médium-aigu',
     harmony_part_bass_tag:'Fondation, voix la plus grave',
     harmony_part_lead_tag:'Ligne mélodique indépendante',
@@ -9713,7 +9716,7 @@ const TRANSLATIONS = {
     harmony_pitch_label:'Justesse',
     harmony_reuses_tag:'RÉUTILISE LE MIXEUR DE L\'ESPACE CHORALE',
     harmony_ribbon_hint:"La barre reste droite quand vous êtes sur votre note et penche quand vous dérivez.",
-    harmony_step_label:'🎼 Château Harmonie — Arène Harmonie',
+    harmony_step_label:"Château de l'harmonie",
     harmony_timing_label:'Rythme',
     journey_achievements_h2:"Chacun se débloque d'après vos résultats enregistrés.",
     journey_achievements_label:'Succès',
@@ -9815,24 +9818,24 @@ const TRANSLATIONS = {
     records_cat_songs:"Chansons",
     records_cat_voice:"Tessiture vocale et technique",
     records_cat_world:"Monde Vocal",
-    rift_desc:'Chaque tour est aléatoirement l\'un des quatre vrais exercices — Justesse, Saut d\'Intervalle, Tenue de Soutien, ou Capture Rapide — avec une nouvelle vraie cible à chaque fois. Même moteur de capture que Pitch Match tout du long ; seul le prochain défi est une surprise.',
-    rift_h2:'60 secondes, vrais tours imprévisibles',
+    rift_desc:"Chaque tour est l'un de quatre exercices au hasard (Justesse, Saut d'intervalle, Tenue ou Capture rapide), avec une nouvelle cible à chaque fois. Noté comme Pitch Match ; seul le prochain défi est une surprise.",
+    rift_h2:"60 secondes, des tours imprévisibles",
     rift_reuses_tag:'RÉUTILISE LE MOTEUR PITCH MATCH',
-    rift_step_label:'🌀 La Faille Vocale',
-    skilltree_desc:'Pas de fausse monnaie, pas d\'achat de compétence — un nœud s\'allume seulement quand vos vraies données de Profil de compétences, de souffle, ou de registre franchissent son vrai seuil. Les nœuds gris sont verrouillés ; le panneau de détail ci-dessous montre exactement ce qui est nécessaire pour le suivant.',
-    skilltree_h2:'Chaque nœud se débloque à partir d\'un vrai seuil mesuré',
-    skilltree_step_label:'🌳 Arbre de Compétences Vocales',
+    rift_step_label:"La Faille",
+    skilltree_desc:"Rien à acheter : un nœud s'allume seulement quand vos données de Profil de compétences, de souffle ou de registre franchissent son seuil. Les nœuds gris sont verrouillés ; le panneau ci-dessous montre ce qu'il faut pour le suivant.",
+    skilltree_h2:"Chaque nœud se débloque à un seuil mesuré",
+    skilltree_step_label:"Arbre de compétences",
     teacher_addstudent_btn:'Ajouter un élève',
     teacher_assignments_label:'Devoirs',
     teacher_assignroster_btn:'Attribuer à toute la liste',
-    teacher_honestscope_label:'Honnête sur la portée :',
+    teacher_honestscope_label:"À propos de cet outil :",
     teacher_locked_h2:'Les outils de liste et d\'attribution font partie du forfait Enseignant',
     teacher_locked_msg:'Inclus aussi dans votre essai de 21 jours — essayez-le maintenant, aucune inscription séparée nécessaire.',
     teacher_newassignment_label:'Nouveau devoir',
     teacher_plan_label:'Forfait Enseignant',
     teacher_roster_label:'Liste',
     teacher_scope_desc_p1:'ceci suit ce que',
-    teacher_scope_desc_p2:'enregistrez ici, localement — cela ne détecte pas automatiquement l\'activité des élèves, car cela nécessite que chaque élève ait son propre compte sur un backend partagé (PRD §6, Phase 1 semaine 8). L\'achèvement est marqué par l\'enseignant, pas synchronisé automatiquement. Une vraie version de lancement donne à chaque élève une connexion et met cela à jour automatiquement.',
+    teacher_scope_desc_p2:"enregistrez ici. Il ne détecte pas l'activité des élèves : il faudrait que chaque élève ait son propre compte. Vous marquez vous-même chaque devoir terminé.",
     teacher_scope_you:'vous',
     teacher_signin_prompt:'Connectez-vous pour utiliser le Tableau de bord Enseignant.',
     teacher_viewplan_btn:'Voir le forfait Enseignant',
@@ -9909,7 +9912,7 @@ const TRANSLATIONS = {
     skill_level_beginner:'Débutant', skill_level_intermediate:'Intermédiaire', skill_level_professional:'Professionnel',
     level_tier_explorer:'Explorateur de justesse', level_tier_apprentice:'Apprenti de justesse', level_tier_builder:'Bâtisseur de voix',
     level_tier_performer:'Interprète vocal', level_tier_master:'Maître vocal',
-    journey_goal_1:'Je veux chanter plus aigu', journey_goal_2:'Je veux arrêter de chanter faux', journey_goal_3:'Je veux améliorer ma voix de tête',
+    journey_goal_1:'Je veux chanter plus aigu', journey_goal_2:"Je veux chanter plus juste", journey_goal_3:'Je veux améliorer ma voix de tête',
     journey_goal_4:'Je veux chanter avec assurance', journey_goal_5:'Je veux améliorer mes vocalises', journey_goal_6:'Je veux chanter des harmonies',
     journey_goal_7:'Je veux me préparer pour une performance', journey_goal_8:"Je veux devenir un meilleur chanteur dans l'ensemble",
     record_label_highest_note:'Note la plus haute confortable', record_label_lowest_note:'Note la plus basse confortable',
@@ -9938,13 +9941,13 @@ const TRANSLATIONS = {
     boss_lose_sub:"Ce sont les notes justes qui blessent le boss. Voici celle qui vous a le plus coûté.", boss_lose_title_suffix:"vous a eu.",
     boss_memory_lead_close:"La dernière fois, c'était serré :", boss_memory_lead_lost:"Il vous a battu la dernière fois :", boss_memory_lead_won:'Vous avez gagné, mais',
     boss_memory_p1:'était votre point faible à', boss_memory_p2:"Voyons ce que ça donne aujourd'hui.", boss_no_signal:'Aucun signal',
-    boss_recommend_p1:'est recommandé — votre', boss_recommend_p2:'est votre score de Profil Vocal le plus bas',
+    boss_recommend_p1:"est recommandé — votre", boss_recommend_p2:"est votre score de Profil Vocal le plus bas",
     boss_start_label:"Lancer le combat", boss_weakestsection_p1:'Votre section la plus faible était', boss_weakestsection_p2:'à',
     boss_weaknote_p1:'Votre note la plus faible de ce combat était', boss_weaknote_p2:'à', boss_weaknote_p3:'de précision.',
     boss_weaknote_p4:'Entraînez la note ci-dessous, puis affrontez à nouveau le boss.', boss_win_sub_p1:"Vous avez infligé plus de dégâts que vous n'en avez reçu.",
     breakthrough_detail_p1:"5 tentatives réussies d'affilée — la moyenne était de", breakthrough_detail_p2:'avant. Quelque chose vient de se déclencher.',
     bridgerunner_start_label:"Commencer la course", bridgerunner_wipedout:"Plus de vies",
-    curriculum_daylabel_p1:'Programme du jour — Jour', curriculum_done_today:"✓ Fait aujourd'hui", curriculum_mark_done:'Marquer comme fait',
+    curriculum_daylabel_p1:'Programme du jour — Jour', curriculum_done_today:"Fait aujourd'hui", curriculum_mark_done:'Marquer comme fait',
     curriculum_open_firsttool:'Ouvrir le premier outil du jour', curriculum_open_p1:'Ouvrir',
     dash_not_captured:'Pas encore mesuré — allez sur Recherche de tessiture', dash_recap_suffix:'Récapitulatif',
     game_best_p1:'Meilleur score :', game_new_best:"Nouveau record", game_score_p1:'Score :',
@@ -10010,7 +10013,7 @@ const TRANSLATIONS = {
     teacher_billing_active:'Vous êtes sur le forfait Enseignant — accès complet à la liste et aux devoirs.',
     teacher_billing_trial_p1:"Vous utilisez les outils Enseignant via votre essai de", teacher_billing_trial_p2:"jours — après cela, ce tableau de bord spécifique nécessite le forfait Enseignant (vos autres outils continuent avec tout forfait payant).",
     teacher_complete_suffix:'terminé(s)', teacher_ex_ear:"Entraînement d'oreille", teacher_ex_interval:'Intervalles', teacher_ex_pitch:'Pitch Match', teacher_ex_scale:'Gammes',
-    teacher_locked_hasroster_p1:'Votre vraie liste', teacher_locked_hasroster_p2:'et',
+    teacher_locked_hasroster_p1:"Votre liste", teacher_locked_hasroster_p2:'et',
     teacher_locked_hasroster_p3:"sont enregistrés et vous attendent — choisissez le forfait Enseignant pour les retrouver. Les autres forfaits n'incluent pas ce tableau de bord.",
     teacher_locked_noroster:"Inclus dans votre essai de 21 jours aussi — essayez-le maintenant, aucune inscription séparée nécessaire.",
     teacher_noroster_forassign:'Aucun élève sur la liste.', teacher_remove_btn:'Retirer',
@@ -10072,7 +10075,7 @@ const TRANSLATIONS = {
     ear_sub_chord:"Écoutez, puis choisissez la qualité de l'accord de trois sons entendu.",
     ear_sub_progression:"Écoutez une progression de 4 accords, puis choisissez laquelle vous avez entendue : de l'entraînement d'oreille dans le contexte d'une tonalité, pas des accords isolés.",
     ear_sub_interval:"Écoutez, puis choisissez l'intervalle entendu. Un exercice d'oreille : vous ne chantez pas.",
-    ear_play_chord:'▶ Jouer l\'accord', ear_play_progression:'▶ Jouer la progression', ear_play_interval:'▶ Jouer l\'intervalle',
+    ear_play_chord:"Jouer l'accord", ear_play_progression:"Jouer la progression", ear_play_interval:"Jouer l'intervalle",
     ear_feedback_correct:'Correct !', ear_thatwas_template:'C\'était {name}.', ear_thatwas_a:'un ',
     rhythm_running:'En cours…', rhythm_beat_label:'Temps', rhythm_missed:'Manqué',
     rhythm_listen_instructions:"Chantez sur chaque clic",
@@ -10105,10 +10108,10 @@ const TRANSLATIONS = {
     studio_notavailable:'L\'enregistrement n\'est pas disponible pour le moment — vérifiez les autorisations du micro.',
     snapshot_nobaseline:'Pas encore de référence.', snapshot_nodatayet:'Pas encore de données',
     snapshot_nobaselinefor:'Pas de référence du Jour 1 pour ceci — le suivi a commencé plus tard',
-    reweight_signin:'Connectez-vous pour une vraie recommandation', reweight_new:'nouveau', reweight_more:'plus', reweight_less:'moins',
+    reweight_signin:"Connectez-vous pour une recommandation", reweight_new:'nouveau', reweight_more:'plus', reweight_less:'moins',
     reweight_wasfocus_p1:'représentait', reweight_wasfocus_p2:"de votre dernière séance — aujourd'hui c'est",
-    reweight_wasfocus_p3:'basé sur l\'évolution réelle de vos scores.',
-    reweight_comparedto_p1:'Par rapport à votre dernière séance', reweight_comparedto_p2:'la pondération d\'aujourd\'hui a légèrement changé selon l\'évolution réelle de vos scores.',
+    reweight_wasfocus_p3:"d'après l'évolution de vos scores.",
+    reweight_comparedto_p1:'Par rapport à votre dernière séance', reweight_comparedto_p2:"la pondération d'aujourd'hui a légèrement changé avec l'évolution de vos scores.",
     reweight_firstweighting:"C'est votre première pondération ; celle de demain reflétera déjà vos résultats d'aujourd'hui.",
     timebudget_beginner:'Budget du jour (réf.) : échauffement 5 · respiration 5 · justesse 5 · gammes 5 · registres 5 · intervalles 3 · agilité 2–3 · tenue 3 · chanson 5–10 min — total 30–40 min',
     timebudget_intermediate:'Budget du jour (réf.) : échauffement 5–7 · respiration 5 · justesse 8 · gammes 8 · registres 8 · intervalles 5 · agilité 5 · tenue 5 · vibrato 3 · chanson 10–15 min — total 50–65 min',
@@ -10271,7 +10274,7 @@ const TRANSLATIONS = {
     paywall_ispartof_tpl:'{feature} fait partie du forfait {plan}.',
     paywall_trialended_choir_tpl:'Votre accès gratuit de 21 jours a pris fin. {feature} continue avec le forfait {plan} ({price}) — votre progression reste enregistrée.',
     arcade_pro_level_template:'Pro · Niveau {n}', arcade_won_template:"Victoires : {n}", arcade_best_template:'Meilleur : {n}',
-    arcade_trial_included:'Inclus dans votre essai de 21 jours', arcade_always_open:'Toujours ouvert', arcade_unlocks_at_level_template:'🔒 Débloqué au niveau {n}',
+    arcade_trial_included:'Inclus dans votre essai de 21 jours', arcade_always_open:'Toujours ouvert', arcade_unlocks_at_level_template:"Débloqué au niveau {n}",
     pricing_planname_monthly:"Mensuel", pricing_planname_yearly:"Annuel", pricing_planname_teacher:"Enseignant", pricing_planname_choir:"Chorale / Studio",
     trialcompare_nobaseline:"Aucune référence du jour 1 n'a été enregistrée (l'évaluation du parcours de 21 jours n'a pas été terminée), donc il n'y a pas d'avant/après à afficher — votre progression enregistrée est toujours intacte.",
     voicehealth_nodata_tooltip:'aucune donnée',
@@ -10376,7 +10379,7 @@ const TRANSLATIONS = {
     vibrato_fb_nopitch:"Aucune hauteur tenue nette n'a été captée. Réessayez, plus près du micro.",
     vibrato_fb_none:"Pas de vibrato net : c'est normal pour un son droit, ou la tenue doit être plus stable ou plus longue.",
     vibrato_fb_inrange:"{rate} Hz est dans la plage naturelle généralement citée.",
-    vibrato_fb_outrange:"{rate} Hz est hors de la plage naturelle généralement citée (environ 5 à 6,5 Hz) : pas forcément faux, mais à remarquer.",
+    vibrato_fb_outrange:"{rate} Hz est hors de la plage naturelle généralement citée (environ 5 à 6,5 Hz) : pas forcément un problème, mais à remarquer.",
     vibrato_fb_wide:"L'amplitude est assez large : si elle vous semble forcée, essayez de relâcher un peu.",
     vibrato_measure:"Votre hauteur est lue environ 60 fois par seconde pendant une tenue de 4 secondes, sur la voie de hauteur filtrée du micro. Les mesures à plus de 3 demi-tons du milieu de la tenue sont écartées (des erreurs du détecteur). La fréquence est 1 divisé par le temps moyen entre les crêtes de votre courbe de hauteur (crêtes espacées d'au moins 0,1 seconde) ; la régularité vaut 100 moins 160 fois la variation de ces temps (leur écart type sur leur moyenne). L'amplitude est l'écart médian entre chaque crête et les creux qui l'entourent, divisé par deux et corrigé de la moyenne du détecteur. Sous 8 cents d'amplitude, ce n'est pas compté comme du vibrato : un son droit. Le tracé montre ±100 cents autour de la moyenne de la tenue. La plage naturelle généralement citée est d'environ 5 à 6,5 Hz. Avec un seul micro, c'est une estimation : un repère de coaching, pas une mesure de laboratoire.",
     vq_fine_more:"Le micro, la pièce, la distance, la voyelle et la hauteur les font varier : comparez-vous avec le même matériel, la même note et la même voyelle. Les seuils (par exemple, 20 dB ou plus = clair) sont des repères approximatifs propres à cet outil, pas des normes cliniques. Si un enrouement ou un souffle persiste, ou si chanter fait mal, un professeur de chant ou un professionnel de la voix est la bonne personne à consulter.",
@@ -10650,6 +10653,18 @@ const TRANSLATIONS = {
     vocallab_notes_one:"1 note suivie",
     vocallab_notes_other:"{n} notes suivies",
     vocallab_measure:"Étendue : les notes la plus grave et la plus aiguë entendues par la Recherche de tessiture. Confortable : chaque note chantée au moins une fois avec 55 % de justesse ou plus. Fiable : les notes avec 3 essais ou plus, en moyenne à 75 % ou plus. D'après vos essais en Justesse, Défi personnalisé, Arène des boss et la Faille.",
+    rec_recording:"Enregistrement… (4 s)",
+    rec_recorded:"Enregistré",
+    rec_toast_save_day1:"Impossible d'enregistrer l'extrait (il est peut-être trop lourd). Cette étape est facultative ; vous pouvez la passer.",
+    rec_toast_unavailable_day1:"L'enregistrement n'est pas disponible pour l'instant. Vérifiez l'accès au micro, ou passez cette étape facultative.",
+    rec_toast_save_today:"Impossible d'enregistrer l'extrait du jour (il est peut-être trop lourd). Réessayez, ou passez.",
+    rec_toast_unavailable_today:"L'enregistrement n'est pas disponible pour l'instant. Vérifiez l'accès au micro et réessayez.",
+    key_rank_original:"Tonalité d'origine",
+    key_rank_up_one:"1 demi-ton plus haut",
+    key_rank_up_other:"{n} demi-tons plus haut",
+    key_rank_down_one:"1 demi-ton plus bas",
+    key_rank_down_other:"{n} demi-tons plus bas",
+    key_rank_fit_tpl:"Adéquation {n}/5",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10661,10 +10676,10 @@ const TRANSLATIONS = {
     auth_password_label:'Contraseña',
     auth_title_signin:"Iniciar sesión", auth_sub_signin:'Inicia sesión para continuar tu viaje vocal.',
     auth_signin_btn:'Iniciar sesión', auth_toggle_to_signin:'¿Ya tienes una cuenta? Inicia sesión', auth_toggle_to_signup:'¿No tienes cuenta? Crea una',
-    auth_feature_ai_coach:'Entrenador vocal con IA', auth_feature_personalized_training:'Entrenamiento vocal personalizado', auth_feature_vocal_analysis:'Análisis vocal',
-    auth_feature_song_practice:'Práctica de canciones', auth_feature_vocal_world:'Mundo Vocal', auth_feature_vocal_games:'Juegos vocales',
-    auth_feature_harmony_training:'Entrenamiento de armonía', auth_feature_progress_tracking:'Seguimiento del progreso', auth_feature_21day_program:'Programa de transformación de 21 días',
-    auth_banner_title:'21 DÍAS GRATIS', auth_banner_sub:'Después de tu período de acceso de 21 días, se requiere una suscripción para continuar.',
+    
+    
+    
+    
     auth_terms_text:"Después de 21 días, algunas funciones necesitan un plan de pago. Hoy no pagas nada.",
     auth_err_missing_email_password:'Agrega un correo electrónico y una contraseña para continuar.', auth_err_missing_name:'Agrega un nombre a mostrar para continuar.',
     auth_err_generic:'Algo salió mal — inténtalo de nuevo.', auth_err_invalid_credentials:'Correo electrónico o contraseña incorrectos. Inténtalo de nuevo.',
@@ -10716,7 +10731,7 @@ const TRANSLATIONS = {
     tool_five_ways:'Cántalo de 5 formas', tool_one_take:'Desafío de una toma', tool_vocal_puzzle:'Rompecabezas vocal', tool_hear_mistake:'¿Puedes oír tu error?',
     tool_vibrato:'Vibrato', tool_live_feedback:"Retroalimentación en vivo", tool_resonance:'Visualizador de resonancia', tool_mirror:'Modo espejo',
     tool_emotion_mode:'Modo emoción', tool_genre_coach:'Coach de género', tool_warmup:'Calentamiento',
-    tuner_title:'🎯 Afinador en vivo', tuner_sub:'Canta una nota. El anillo se cierra a medida que te acercas a la nota y se fija cuando la alcanzas.',
+    tuner_title:"Afinador en vivo", tuner_sub:'Canta una nota. El anillo se cierra a medida que te acercas a la nota y se fija cuando la alcanzas.',
     tuner_result_label:"Estabilidad media", pm_result_label:"Precisión de afinación", pm_live_on:"En la nota", pm_live_flat:"{n} cents por debajo", pm_live_sharp:"{n} cents por encima", measure_summary:"Cómo se mide", tuner_measure:"La estabilidad es 100 menos tres veces cuánto oscila tu afinación, en cents, en sus últimas 30 lecturas (alrededor de medio segundo). Este número es la media de todo el tiempo que cantaste. El anillo se fija cuando estás a 6 cents o menos de la nota.", pm_measure:"La precisión es 100 menos tu distancia media a la nota, en cents, multiplicada por 0,45 en {beg}, 0,6 en {int} o 0,9 en {pro}. La escucha empieza cuando empiezas a cantar y dura 3, 2,5 o 2 segundos; los primeros 0,4 segundos no se puntúan. El vibrato natural cuenta como su centro, no como un error.",
     tuner_pitch_label:'Afinación', tuner_stability_label:'Estabilidad', tuner_freq_label:'Frec',
     tuner_hint:'Usa tu micrófono localmente en el navegador — no se sube nada. Mejor con auriculares o en una habitación silenciosa.',
@@ -10871,14 +10886,14 @@ const TRANSLATIONS = {
     vocalpuzzle_note2:'Nota 2',
     vocalpuzzle_note3:'Nota 3',
     vocalpuzzle_note4:'Nota 4',
-    vocalpuzzle_replay_btn:'▶ Repetir la secuencia',
+    vocalpuzzle_replay_btn:"Repetir la secuencia",
     vocalpuzzle_streak_label:'Racha',
     vocalpuzzle_solved_label:'Resueltos',
     vocalpuzzle_next_btn:'Siguiente rompecabezas',
     hearmistake_title:'¿Puedes Oír Tu Error?',
     hearmistake_sub:"Dos versiones de la misma nota: una afinada y otra desplazada. Elige la afinada y luego cántala.",
     hearmistake_intro_desc:'Escucha A, luego B. Una es precisa, una está desplazada.',
-    hearmistake_replay_btn:'▶ Repetir A y B',
+    hearmistake_replay_btn:"Repetir A y B",
     hearmistake_reproduce_label:'Ahora reproduce la versión correcta',
     hearmistake_next_btn:'Siguiente ronda',
     studio_song_label:'Canción',
@@ -10941,22 +10956,22 @@ const TRANSLATIONS = {
     records_sub:"Tus mejores marcas, según lo que has cantado. Un récord aparece cuando has hecho la actividad.",
     feedback_title:"Comentarios",
     feedback_sub:"Una o dos frases por pregunta es lo que más ayuda.",
-    teacher_title:'👩‍🏫 Panel del Profesor',
-    teacher_sub:'Un seguimiento real de lista de alumnos y tareas — no datos de muestra, una herramienta local real que puedes usar.',
+    teacher_title:"Panel del profesor",
+    teacher_sub:"Un seguimiento de alumnos y tareas, guardado en tu cuenta.",
     journey_title:'21 Días para Descubrir Tu Voz',
     journey_sub:"Un punto de partida el día 1, tres semanas temáticas y un antes/después al final. Cada número viene de las herramientas que ya usas, en un solo recorrido guiado.",
     key_title:'Entrenador de Tonalidad',
     key_sub:"Toca un tono de referencia en cualquier tonalidad, o deja que la app recomiende la mejor tonalidad para tu rango registrado, transportada para que encaje.",
     dashboard_title:"Progreso",
     dashboard_sub:"El plan de hoy, el reto de la semana, tu registro y tu práctica a lo largo del tiempo.",
-    boss_choose_desc:'Mismo motor real, puntuación genuinamente diferente por jefe — no solo reskins.',
+    boss_choose_desc:"Cada jefe puntúa algo distinto.",
     boss_choose_h2:'Elige tu jefe y dificultad',
     boss_listen_score_btn:'Escuchar y puntuar',
     boss_play_note_btn:'Reproducir la nota',
     boss_rematch_btn:"Revancha",
     boss_reuses_tag:'REUTILIZA EL MOTOR DEL COACH DE KARAOKE',
     boss_section_breakdown:"Por sección",
-    boss_step_label:'🐉 Arena de Jefes — Batalla Vocal de Jefes',
+    boss_step_label:"Arena de jefes",
     boss_training_flow:"Entrena esa nota",
     boss_type_agility:"Monstruo de la agilidad",
     boss_type_pitch:"Dragón de la afinación",
@@ -11284,7 +11299,7 @@ const TRANSLATIONS = {
     journey_cw_open_btn:"Abrir Yo soy mi voz",
     journey_cw_done_tpl:"Logrado el {date}: {part} en {song}, etapa {stage} de Memoria armónica, {score} % de notas sostenidas.",
     journey_cw_done_nodate_tpl:"Logrado: {part} en {song}.",
-    journey_cw_toast:"🎼 Hito del viaje alcanzado: sostuviste tu voz con el coro.",
+    journey_cw_toast:"Hito del recorrido alcanzado: sostuviste tu voz con el coro.",
     achievement_cw_boss:"Primer jefe del coro vencido",
     achievement_cw_ready:"Una voz está lista",
     achievement_cw_yourchoir:"Primera grabación de Tu coro",
@@ -11439,12 +11454,12 @@ const TRANSLATIONS = {
     dashboard_signedout_h2:'Crea una cuenta gratis para seguir tu progreso',
     dashboard_signedout_label:"Progreso",
     dashboard_signout_btn:'Cerrar sesión',
-    dashboard_skillprofile_desc:'Afinación y Agilidad vienen de Ejercicios, Rango del Buscador de rango, Respiración del Entrenador de respiración. La Expresión se mantiene honesta — muestra "datos insuficientes" hasta que exista un entrenador de expresión/dinámica, en lugar de adivinar.',
-    dashboard_skillprofile_h2:'Cinco puntuaciones, construidas a partir de lo que realmente has practicado',
+    dashboard_skillprofile_desc:"Afinación y Agilidad vienen de Ejercicios, Rango del Buscador de rango, Respiración del Entrenador de respiración. La Expresión muestra \"datos insuficientes\" hasta que exista un entrenador de expresión, en lugar de adivinar.",
+    dashboard_skillprofile_h2:"Cinco puntuaciones, a partir de lo que has practicado",
     dashboard_skillprofile_label:'Perfil de habilidades vocales',
     dashboard_streak_label:'Racha actual',
     dashboard_todaysplan_desc:'Este es un motor de recomendación determinista que lee tu Perfil de habilidades e historial del Coach de registro, no un modelo de lenguaje razonando sobre ti — vale la pena decirlo claramente en lugar de sobre-afirmar "IA."',
-    dashboard_todaysplan_h2:'Basado en reglas, no en IA — construido a partir de tus puntos débiles reales',
+    dashboard_todaysplan_h2:"Basado en tus puntos más débiles",
     dashboard_todaysplan_label:'Plan de hoy',
     dashboard_weeklychallenge_label:'Desafío semanal',
     dashboard_widestrange_h2:'Rango más amplio registrado',
@@ -11468,7 +11483,7 @@ const TRANSLATIONS = {
     feedback_thanks_title:'Gracias',
     glider_choose_course:"Recorrido",
     glider_takeoff_hint:'Canta para despegar',
-    glider_course_desc:'Canta para volar, guarda silencio para caer — 7 recorridos reales, no reskins del mismo generador de obstáculos.',
+    glider_course_desc:"Canta para volar, calla para caer. Siete recorridos, cada uno distinto.",
     glider_mode_agility:"Carrera de agilidad",
     glider_mode_highway:"Autopista del tono",
     glider_mode_interval:"Salto de intervalo",
@@ -11476,7 +11491,7 @@ const TRANSLATIONS = {
     glider_mode_melody:"Camino de la melodía",
     glider_mode_memory:"Carrera de memoria",
     glider_mode_sustain:"Puente sostenido",
-    glider_step_label:'🏔️ Montaña de Afinación — Viaje Vocal',
+    glider_step_label:"Montaña de afinación",
     harmony_distraction_tagline:"Un arpegio sin relación suena bajo el coro.",
     harmony_hold_h2:'Mantén tu voz mientras las otras se hacen más fuertes',
     harmony_independence_label:'Independencia',
@@ -11486,7 +11501,7 @@ const TRANSLATIONS = {
     harmony_level4:"Coro completo",
     harmony_level5:"Tonalidad al azar",
     harmony_memory_tagline:"El nombre de la nota aparece un momento y luego cantas de memoria.",
-    harmony_overall_desc:'General — promedio de las 4 puntuaciones reales de abajo',
+    harmony_overall_desc:"General: el promedio de las 4 puntuaciones de abajo",
     harmony_part_alto_tag:'Armonía media-alta',
     harmony_part_bass_tag:'Fundamento, voz más grave',
     harmony_part_lead_tag:'Línea melódica independiente',
@@ -11497,7 +11512,7 @@ const TRANSLATIONS = {
     harmony_pitch_label:'Afinación',
     harmony_reuses_tag:'REUTILIZA EL MEZCLADOR DEL ESPACIO DE CORO',
     harmony_ribbon_hint:"La barra queda recta cuando estás en tu nota y se inclina cuando te desvías.",
-    harmony_step_label:'🎼 Castillo de Armonía — Arena de Armonía',
+    harmony_step_label:"Castillo de armonía",
     harmony_timing_label:'Ritmo',
     journey_achievements_h2:"Cada uno se desbloquea con tus resultados guardados.",
     journey_achievements_label:'Logros',
@@ -11599,24 +11614,24 @@ const TRANSLATIONS = {
     records_cat_songs:"Canciones",
     records_cat_voice:"Rango vocal y técnica",
     records_cat_world:"Mundo Vocal",
-    rift_desc:'Cada ronda es aleatoriamente uno de cuatro ejercicios reales — Afinación, Salto de Intervalo, Sostenido, o Captura Rápida — con un nuevo objetivo real cada vez. Mismo motor de captura que Precisión de nota en todo momento; solo cuál desafío aparece a continuación es una sorpresa.',
-    rift_h2:'60 segundos, rondas reales impredecibles',
+    rift_desc:"Cada ronda es uno de cuatro ejercicios al azar (Afinación, Salto de intervalo, Sostenido o Captura rápida), con un objetivo nuevo cada vez. Se puntúa como Precisión de nota; solo el siguiente desafío es una sorpresa.",
+    rift_h2:"60 segundos, rondas impredecibles",
     rift_reuses_tag:'REUTILIZA EL MOTOR DE PRECISIÓN DE NOTA',
-    rift_step_label:'🌀 La Grieta Vocal',
-    skilltree_desc:'Sin moneda falsa, sin comprar habilidad — un nodo se enciende solo cuando tus datos reales de Perfil de habilidades, respiración, o registro cruzan su umbral real. Los nodos grises están bloqueados; el panel de detalles abajo muestra exactamente qué se necesita para el siguiente.',
-    skilltree_h2:'Cada nodo se desbloquea desde un umbral medido real',
-    skilltree_step_label:'🌳 Árbol de Habilidades Vocales',
+    rift_step_label:"La Grieta",
+    skilltree_desc:"Nada que comprar: un nodo se enciende solo cuando tus datos de Perfil de habilidades, respiración o registro superan su umbral. Los nodos grises están bloqueados; el panel de abajo muestra qué necesita el siguiente.",
+    skilltree_h2:"Cada nodo se desbloquea en un umbral medido",
+    skilltree_step_label:"Árbol de habilidades",
     teacher_addstudent_btn:'Añadir estudiante',
     teacher_assignments_label:'Tareas',
     teacher_assignroster_btn:'Asignar a toda la lista',
-    teacher_honestscope_label:'Honestos sobre el alcance:',
+    teacher_honestscope_label:"Sobre esta herramienta:",
     teacher_locked_h2:'Las herramientas de lista y asignación son parte del plan Profesor',
     teacher_locked_msg:'También incluido en tu prueba de 21 días — pruébalo ahora, no se necesita registro separado.',
     teacher_newassignment_label:'Nueva tarea',
     teacher_plan_label:'Plan Profesor',
     teacher_roster_label:'Lista',
     teacher_scope_desc_p1:'esto rastrea lo que',
-    teacher_scope_desc_p2:'registras aquí, localmente — no detecta automáticamente la actividad del estudiante, ya que eso necesita que cada estudiante tenga su propia cuenta en un backend compartido (PRD §6, Fase 1 semana 8). La finalización es marcada por el profesor, no auto-sincronizada. Una versión de lanzamiento real le da a cada estudiante un inicio de sesión y actualiza esto automáticamente.',
+    teacher_scope_desc_p2:"registras aquí. No detecta la actividad de los alumnos: haría falta que cada alumno tuviera su propia cuenta. Tú marcas cada tarea como hecha.",
     teacher_scope_you:'tú',
     teacher_signin_prompt:'Inicia sesión para usar el Panel del Profesor.',
     teacher_viewplan_btn:'Ver plan Profesor',
@@ -11693,7 +11708,7 @@ const TRANSLATIONS = {
     skill_level_beginner:'Principiante', skill_level_intermediate:'Intermedio', skill_level_professional:'Profesional',
     level_tier_explorer:'Explorador de afinación', level_tier_apprentice:'Aprendiz de afinación', level_tier_builder:'Constructor de voz',
     level_tier_performer:'Intérprete vocal', level_tier_master:'Maestro vocal',
-    journey_goal_1:'Quiero cantar más agudo', journey_goal_2:'Quiero dejar de cantar desafinado', journey_goal_3:'Quiero mejorar mi voz de cabeza',
+    journey_goal_1:'Quiero cantar más agudo', journey_goal_2:"Quiero dejar de cantar desafinado", journey_goal_3:'Quiero mejorar mi voz de cabeza',
     journey_goal_4:'Quiero cantar con confianza', journey_goal_5:'Quiero mejorar mis melismas', journey_goal_6:'Quiero cantar armonías',
     journey_goal_7:'Quiero prepararme para una actuación', journey_goal_8:'Quiero ser un mejor cantante en general',
     record_label_highest_note:'Nota más aguda cómoda', record_label_lowest_note:'Nota más grave cómoda',
@@ -11722,13 +11737,13 @@ const TRANSLATIONS = {
     boss_lose_sub:"Las notas afinadas son las que dañan al jefe. Esta es la que más te costó.", boss_lose_title_suffix:'te venció.',
     boss_memory_lead_close:"La última vez estuvo reñido:", boss_memory_lead_lost:"Te venció la última vez:", boss_memory_lead_won:'Ganaste, pero',
     boss_memory_p1:'fue tu punto débil con', boss_memory_p2:"Veamos cómo va hoy.", boss_no_signal:'Sin señal',
-    boss_recommend_p1:'es recomendado — tu', boss_recommend_p2:'es tu puntuación más baja del Perfil Vocal',
+    boss_recommend_p1:"es recomendado — tu", boss_recommend_p2:"es tu puntuación más baja del Perfil Vocal",
     boss_start_label:"Empezar el combate", boss_weakestsection_p1:'Tu sección más débil fue', boss_weakestsection_p2:'con',
     boss_weaknote_p1:'Tu nota más débil en esta batalla fue', boss_weaknote_p2:'con', boss_weaknote_p3:'de precisión.',
     boss_weaknote_p4:'Entrena la nota de abajo y luego reta al jefe de nuevo.', boss_win_sub_p1:"Hiciste más daño del que recibiste.",
     breakthrough_detail_p1:'5 intentos correctos seguidos — antes promediabas', breakthrough_detail_p2:'. Algo acaba de hacer clic.',
     bridgerunner_start_label:"Empezar a correr", bridgerunner_wipedout:"Sin vidas",
-    curriculum_daylabel_p1:'Plan de hoy — Día', curriculum_done_today:'✓ Hecho hoy', curriculum_mark_done:'Marcar como hecho',
+    curriculum_daylabel_p1:'Plan de hoy — Día', curriculum_done_today:"Hecho hoy", curriculum_mark_done:'Marcar como hecho',
     curriculum_open_firsttool:'Abrir la primera herramienta de hoy', curriculum_open_p1:'Abrir',
     dash_not_captured:'Aún sin medir — visita el Buscador de Registro', dash_recap_suffix:'Resumen',
     game_best_p1:'Mejor:', game_new_best:"Nuevo récord", game_score_p1:'Puntuación:',
@@ -11794,7 +11809,7 @@ const TRANSLATIONS = {
     teacher_billing_active:'Estás en el plan Profesor — acceso completo a la lista y las tareas continúa.',
     teacher_billing_trial_p1:'Usando las herramientas de Profesor mediante tu prueba de', teacher_billing_trial_p2:'días — después, este panel específico necesitará el plan Profesor (tus otras herramientas siguen con cualquier plan de pago).',
     teacher_complete_suffix:'completado(s)', teacher_ex_ear:'Entrenamiento auditivo', teacher_ex_interval:'Intervalos', teacher_ex_pitch:'Pitch Match', teacher_ex_scale:'Escalas',
-    teacher_locked_hasroster_p1:'Tu lista real', teacher_locked_hasroster_p2:'y',
+    teacher_locked_hasroster_p1:"Tu lista", teacher_locked_hasroster_p2:'y',
     teacher_locked_hasroster_p3:'están guardados y esperando — elige el plan Profesor para recuperarlos. Los demás planes no incluyen este panel.',
     teacher_locked_noroster:'También incluido en tu prueba de 21 días — pruébalo ahora, sin registro aparte.',
     teacher_noroster_forassign:'No hay estudiantes en la lista.', teacher_remove_btn:'Quitar',
@@ -11856,7 +11871,7 @@ const TRANSLATIONS = {
     ear_sub_chord:"Escucha y elige la calidad de la tríada que oíste.",
     ear_sub_progression:"Escucha una progresión de 4 acordes y elige cuál oíste: entrenamiento auditivo en el contexto de una tonalidad, no acordes sueltos.",
     ear_sub_interval:"Escucha y elige el intervalo que oíste. Un ejercicio de oído: no cantas.",
-    ear_play_chord:'▶ Reproducir acorde', ear_play_progression:'▶ Reproducir progresión', ear_play_interval:'▶ Reproducir intervalo',
+    ear_play_chord:"Reproducir acorde", ear_play_progression:"Reproducir progresión", ear_play_interval:"Reproducir intervalo",
     ear_feedback_correct:'¡Correcto!', ear_thatwas_template:'Eso era {name}.', ear_thatwas_a:'un ',
     rhythm_running:'En curso…', rhythm_beat_label:'Tiempo', rhythm_missed:'Perdido',
     rhythm_listen_instructions:"Canta en cada clic",
@@ -11889,10 +11904,10 @@ const TRANSLATIONS = {
     studio_notavailable:'La grabación no está disponible ahora mismo — revisa los permisos del micrófono.',
     snapshot_nobaseline:'Aún no hay línea base.', snapshot_nodatayet:'Aún sin datos',
     snapshot_nobaselinefor:'No hay línea base del Día 1 para esto — el seguimiento empezó más tarde',
-    reweight_signin:'Inicia sesión para una recomendación real', reweight_new:'nuevo', reweight_more:'más', reweight_less:'menos',
+    reweight_signin:"Inicia sesión para una recomendación", reweight_new:'nuevo', reweight_more:'más', reweight_less:'menos',
     reweight_wasfocus_p1:'fue', reweight_wasfocus_p2:'del enfoque de tu última sesión — hoy es',
-    reweight_wasfocus_p3:'según el cambio real de tus puntuaciones.',
-    reweight_comparedto_p1:'Comparado con tu última sesión', reweight_comparedto_p2:'la ponderación de hoy ha cambiado ligeramente según tus puntuaciones reales.',
+    reweight_wasfocus_p3:"según el cambio de tus puntuaciones.",
+    reweight_comparedto_p1:'Comparado con tu última sesión', reweight_comparedto_p2:"la ponderación de hoy ha cambiado ligeramente con tus puntuaciones.",
     reweight_firstweighting:"Esta es tu primera ponderación; la de mañana ya reflejará tus resultados de hoy.",
     timebudget_beginner:'Presupuesto de hoy (ref.): calentamiento 5 · respiración 5 · afinación 5 · escalas 5 · registros 5 · intervalos 3 · agilidad 2–3 · sostenido 3 · canción 5–10 min — total 30–40 min',
     timebudget_intermediate:'Presupuesto de hoy (ref.): calentamiento 5–7 · respiración 5 · afinación 8 · escalas 8 · registros 8 · intervalos 5 · agilidad 5 · sostenido 5 · vibrato 3 · canción 10–15 min — total 50–65 min',
@@ -12055,7 +12070,7 @@ const TRANSLATIONS = {
     paywall_ispartof_tpl:'{feature} es parte del plan {plan}.',
     paywall_trialended_choir_tpl:'Tu acceso gratuito de 21 días ha terminado. {feature} continúa con el plan {plan} ({price}) — tu progreso sigue guardado.',
     arcade_pro_level_template:'Pro · Nivel {n}', arcade_won_template:"Victorias: {n}", arcade_best_template:'Mejor: {n}',
-    arcade_trial_included:'Incluido en tu prueba de 21 días', arcade_always_open:'Siempre abierto', arcade_unlocks_at_level_template:'🔒 Se desbloquea en el nivel {n}',
+    arcade_trial_included:'Incluido en tu prueba de 21 días', arcade_always_open:'Siempre abierto', arcade_unlocks_at_level_template:"Se desbloquea en el nivel {n}",
     pricing_planname_monthly:"Mensual", pricing_planname_yearly:"Anual", pricing_planname_teacher:"Profesor", pricing_planname_choir:"Coro / Estudio",
     trialcompare_nobaseline:"No se registró una línea base del día 1 (no se completó la evaluación del recorrido de 21 días), por lo que no hay un antes/después que mostrar — tu progreso guardado sigue intacto.",
     voicehealth_nodata_tooltip:'sin datos',
@@ -12434,6 +12449,18 @@ const TRANSLATIONS = {
     vocallab_notes_one:"1 nota registrada",
     vocallab_notes_other:"{n} notas registradas",
     vocallab_measure:"Extendido: las notas más grave y más aguda que oyó el Buscador de Registro. Cómodo: cada nota que cantaste al menos una vez con un 55 % de precisión o más. Fiable: notas con 3 intentos o más y una media del 75 % o más. A partir de tus intentos en Afinación, Desafío personalizado, Arena de jefes y la Grieta.",
+    rec_recording:"Grabando… (4 s)",
+    rec_recorded:"Grabado",
+    rec_toast_save_day1:"No se pudo guardar el clip (puede ser demasiado grande). Este paso es opcional; puedes saltarlo.",
+    rec_toast_unavailable_day1:"La grabación no está disponible ahora. Revisa el permiso del micrófono o salta este paso opcional.",
+    rec_toast_save_today:"No se pudo guardar el clip de hoy (puede ser demasiado grande). Inténtalo de nuevo o sáltalo.",
+    rec_toast_unavailable_today:"La grabación no está disponible ahora. Revisa el permiso del micrófono e inténtalo de nuevo.",
+    key_rank_original:"Tonalidad original",
+    key_rank_up_one:"1 semitono más alto",
+    key_rank_up_other:"{n} semitonos más alto",
+    key_rank_down_one:"1 semitono más bajo",
+    key_rank_down_other:"{n} semitonos más bajo",
+    key_rank_fit_tpl:"Ajuste {n}/5",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12445,10 +12472,10 @@ const TRANSLATIONS = {
     auth_password_label:'Şifre',
     auth_title_signin:"Giriş yap", auth_sub_signin:'Vokal yolculuğunuza devam etmek için oturum açın.',
     auth_signin_btn:'Oturum aç', auth_toggle_to_signin:'Zaten bir hesabınız var mı? Oturum açın', auth_toggle_to_signup:'Hesabınız yok mu? Bir tane oluşturun',
-    auth_feature_ai_coach:'Yapay Zeka Vokal Koçu', auth_feature_personalized_training:'Kişiselleştirilmiş vokal antrenmanı', auth_feature_vocal_analysis:'Vokal analizi',
-    auth_feature_song_practice:'Şarkı pratiği', auth_feature_vocal_world:'Vokal Dünyası', auth_feature_vocal_games:'Vokal oyunları',
-    auth_feature_harmony_training:'Armoni antrenmanı', auth_feature_progress_tracking:'İlerleme takibi', auth_feature_21day_program:'21 günlük dönüşüm programı',
-    auth_banner_title:'21 GÜN ÜCRETSİZ', auth_banner_sub:'21 günlük erişim sürenizin ardından devam etmek için abonelik gerekir.',
+    
+    
+    
+    
     auth_terms_text:"21 günün sonunda bazı özellikler ücretli bir plan gerektirir. Bugün ödeme yok.",
     auth_err_missing_email_password:'Devam etmek için bir e-posta ve şifre girin.', auth_err_missing_name:'Devam etmek için bir görünen ad girin.',
     auth_err_generic:'Bir şeyler ters gitti — tekrar deneyin.', auth_err_invalid_credentials:'E-posta veya şifre hatalı. Tekrar deneyin.',
@@ -12500,7 +12527,7 @@ const TRANSLATIONS = {
     tool_five_ways:'5 Şekilde Söyle', tool_one_take:'Tek Çekim Meydan Okuması', tool_vocal_puzzle:'Vokal Bulmaca', tool_hear_mistake:'Hatanı Duyabiliyor musun?',
     tool_vibrato:'Vibrato', tool_live_feedback:"Canlı geri bildirim", tool_resonance:'Rezonans Görselleştirici', tool_mirror:'Ayna Modu',
     tool_emotion_mode:'Duygu Modu', tool_genre_coach:'Tür Koçu', tool_warmup:'Isınma',
-    tuner_title:'🎯 Canlı Akort Cihazı', tuner_sub:'Bir nota söyleyin. Notaya yaklaştıkça halka kapanır, tam üzerindeyken kilitlenir.',
+    tuner_title:"Canlı Akort Cihazı", tuner_sub:'Bir nota söyleyin. Notaya yaklaştıkça halka kapanır, tam üzerindeyken kilitlenir.',
     tuner_result_label:"Ortalama kararlılık", pm_result_label:"Perde doğruluğu", pm_live_on:"Tam notada", pm_live_flat:"{n} sent pes", pm_live_sharp:"{n} sent diyez", measure_summary:"Nasıl ölçülüyor", tuner_measure:"Kararlılık, perdenizin son 30 ölçümde (yaklaşık yarım saniye) sent cinsinden ne kadar dalgalandığının üç katının 100'den çıkarılmasıyla bulunur. Bu sayı, şarkı söylediğiniz sürenin tamamının ortalamasıdır. Notaya 6 sent yaklaştığınızda halka kilitlenir.", pm_measure:"Doğruluk, 100'den notaya sent cinsinden ortalama uzaklığınızın {beg} seviyesinde 0,45, {int} seviyesinde 0,6, {pro} seviyesinde 0,9 katının çıkarılmasıyla bulunur. Dinleme, şarkı söylemeye başladığınızda başlar ve 3, 2,5 veya 2 saniye sürer; ilk 0,4 saniye puanlanmaz. Doğal vibrato bir hata olarak değil, merkezi olarak sayılır.",
     tuner_pitch_label:'Perde', tuner_stability_label:'Kararlılık', tuner_freq_label:'Frekans',
     tuner_hint:'Mikrofonunuzu yerel olarak tarayıcıda kullanır — hiçbir şey yüklenmez. Kulaklıkla veya sessiz bir odada en iyi sonucu verir.',
@@ -12655,14 +12682,14 @@ const TRANSLATIONS = {
     vocalpuzzle_note2:'Nota 2',
     vocalpuzzle_note3:'Nota 3',
     vocalpuzzle_note4:'Nota 4',
-    vocalpuzzle_replay_btn:'▶ Diziyi tekrar çal',
+    vocalpuzzle_replay_btn:"Diziyi tekrar çal",
     vocalpuzzle_streak_label:'Seri',
     vocalpuzzle_solved_label:'Çözülen',
     vocalpuzzle_next_btn:'Sonraki bulmaca',
     hearmistake_title:'Hatanı Duyabiliyor musun?',
     hearmistake_sub:"Aynı notanın iki hâli: biri perdesinde, biri kaydırılmış. Doğru olanı seçin, sonra onu geri söyleyin.",
     hearmistake_intro_desc:'A\'yı, ardından B\'yi dinleyin. Biri doğru, biri kaymış.',
-    hearmistake_replay_btn:'▶ A ve B\'yi tekrar çal',
+    hearmistake_replay_btn:"A ve B'yi tekrar çal",
     hearmistake_reproduce_label:'Şimdi doğru versiyonu yeniden üretin',
     hearmistake_next_btn:'Sonraki tur',
     studio_song_label:'Şarkı',
@@ -12725,22 +12752,22 @@ const TRANSLATIONS = {
     records_sub:"Söylediklerinden en iyilerin. Bir rekor, o etkinliği yaptığında görünür.",
     feedback_title:"Geri bildirim",
     feedback_sub:"Soru başına bir iki cümle en çok işe yarar.",
-    teacher_title:'👩‍🏫 Öğretmen Paneli',
-    teacher_sub:'Gerçek bir öğrenci listesi ve ödev takipçisi — örnek veri değil, kullanabileceğiniz gerçek bir yerel araç.',
+    teacher_title:"Öğretmen Paneli",
+    teacher_sub:"Hesabında tutulan bir öğrenci listesi ve ödev takibi.",
     journey_title:'Sesinizi Keşfetmek İçin 21 Gün',
     journey_sub:"1. günde bir başlangıç ölçümü, üç temalı hafta ve sonunda bir önce/sonra. Her sayı zaten kullandığın araçlardan gelir, tek bir rehberli yolda.",
     key_title:'Tonalite Antrenörü',
     key_sub:"Herhangi bir tonda referans ses çalın ya da uygulamanın kaydedilen aralığınıza en uygun tonu, ona göre transpoze ederek önermesine izin verin.",
     dashboard_title:"İlerleme",
     dashboard_sub:"Bugünün planı, haftanın görevi, ses aralığın ve zaman içindeki çalışman.",
-    boss_choose_desc:'Aynı gerçek motor, boss başına gerçekten farklı puanlama — yeniden kaplamalar değil.',
+    boss_choose_desc:"Her boss farklı bir şeyi puanlar.",
     boss_choose_h2:'Boss ve zorluk seçin',
     boss_listen_score_btn:'Dinle ve puanla',
     boss_play_note_btn:'Notayı çal',
     boss_rematch_btn:"Rövanş",
     boss_reuses_tag:'KARAOKE KOÇU MOTORUNU YENİDEN KULLANIR',
     boss_section_breakdown:"Bölüme göre",
-    boss_step_label:'🐉 Boss Arenası — Vokal Boss Savaşı',
+    boss_step_label:"Boss Arenası",
     boss_training_flow:"O notayı çalış",
     boss_type_agility:"Çeviklik Canavarı",
     boss_type_pitch:"Perde Ejderhası",
@@ -13068,7 +13095,7 @@ const TRANSLATIONS = {
     journey_cw_open_btn:"Ben Kendi Partimim'i aç",
     journey_cw_done_tpl:"{date} tarihinde tamamlandı: {song} içinde {part}, Armoni Hafızası {stage}. aşama, notaların %{score}'i tutuldu.",
     journey_cw_done_nodate_tpl:"Tamamlandı: {song} içinde {part}.",
-    journey_cw_toast:"🎼 Yolculuk kilometre taşına ulaşıldı: partinizi koroyla birlikte tuttunuz.",
+    journey_cw_toast:"Yolculuk kilometre taşına ulaşıldı: partini koroyla birlikte tuttun.",
     achievement_cw_boss:"İlk Koro Boss'u Yenildi",
     achievement_cw_ready:"Bir Parti Hazır",
     achievement_cw_yourchoir:"İlk Senin Koron Kaydı",
@@ -13223,12 +13250,12 @@ const TRANSLATIONS = {
     dashboard_signedout_h2:'İlerlemeyi takip etmek için ücretsiz hesap oluşturun',
     dashboard_signedout_label:"İlerleme",
     dashboard_signout_btn:'Oturumu kapat',
-    dashboard_skillprofile_desc:'Perde ve Çeviklik Egzersizlerden, Aralık Ses Aralığı Bulucudan, Nefes Nefes Antrenöründen gelir. İfade dürüst kalır — tahmin etmek yerine, bir ifade/dinamik antrenörü var olana kadar "yeterli veri yok" gösterir.',
-    dashboard_skillprofile_h2:'Gerçekten pratik yaptığınız şeylerden oluşturulan beş puan',
+    dashboard_skillprofile_desc:"Perde ve Çeviklik Egzersizlerden, Aralık Ses Aralığı Bulucu'dan, Nefes Nefes Antrenörü'nden gelir. İfade, tahmin etmek yerine, bir ifade antrenörü olana kadar \"yeterli veri yok\" gösterir.",
+    dashboard_skillprofile_h2:"Pratik yaptıklarından oluşan beş puan",
     dashboard_skillprofile_label:'Vokal Yetenek Profili',
     dashboard_streak_label:'Mevcut seri',
     dashboard_todaysplan_desc:'Bu, sizin hakkınızda akıl yürüten bir dil modeli değil, Yetenek Profilinizi ve Register Koçu geçmişinizi okuyan deterministik bir öneri motorudur — "yapay zeka" iddiasını abartmak yerine bunu açıkça söylemekte fayda var.',
-    dashboard_todaysplan_h2:'Yapay zeka değil, kural tabanlı — gerçek zayıf noktalarınızdan oluşturulmuş',
+    dashboard_todaysplan_h2:"En zayıf becerilerinden oluşturuldu",
     dashboard_todaysplan_label:'Bugünün Planı',
     dashboard_weeklychallenge_label:'Haftalık Meydan Okuma',
     dashboard_widestrange_h2:'Kaydedilen en geniş aralık',
@@ -13252,7 +13279,7 @@ const TRANSLATIONS = {
     feedback_thanks_title:'Teşekkürler',
     glider_choose_course:"Parkur",
     glider_takeoff_hint:'Havalanmak için söyleyin',
-    glider_course_desc:'Uçmak için söyleyin, düşmek için sessiz kalın — 7 gerçek parkur, aynı engel üretecinin yeniden kaplamaları değil.',
+    glider_course_desc:"Uçmak için söyle, düşmek için sus. Her biri farklı kurulmuş yedi parkur.",
     glider_mode_agility:"Çeviklik Koşusu",
     glider_mode_highway:"Perde Otoyolu",
     glider_mode_interval:"Aralık Atlama",
@@ -13260,7 +13287,7 @@ const TRANSLATIONS = {
     glider_mode_melody:"Melodi Yolu",
     glider_mode_memory:"Hafıza Koşusu",
     glider_mode_sustain:"Uzun Nota Köprüsü",
-    glider_step_label:'🏔️ Perde Dağı — Vokal Yolculuğu',
+    glider_step_label:"Perde Dağı",
     harmony_distraction_tagline:"Koronun altında ilgisiz bir arpej çalar.",
     harmony_hold_h2:'Diğerleri yükselirken sesinizi koruyun',
     harmony_independence_label:'Bağımsızlık',
@@ -13270,7 +13297,7 @@ const TRANSLATIONS = {
     harmony_level4:"Tam koro",
     harmony_level5:"Rastgele ton",
     harmony_memory_tagline:"Nota adı kısa bir süre görünür, sonra ezberden söylersin.",
-    harmony_overall_desc:'Genel — aşağıdaki 4 gerçek puanın ortalaması',
+    harmony_overall_desc:"Genel: aşağıdaki 4 puanın ortalaması",
     harmony_part_alto_tag:'Orta-üst armoni',
     harmony_part_bass_tag:'Temel, en pes ses',
     harmony_part_lead_tag:'Bağımsız melodi çizgisi',
@@ -13281,7 +13308,7 @@ const TRANSLATIONS = {
     harmony_pitch_label:'Perde',
     harmony_reuses_tag:'KORO ÇALIŞMA ALANI MİKSERİNİ YENİDEN KULLANIR',
     harmony_ribbon_hint:"Notandayken çubuk düz durur, kaydığında eğilir.",
-    harmony_step_label:'🎼 Armoni Kalesi — Armoni Arenası',
+    harmony_step_label:"Armoni Kalesi",
     harmony_timing_label:'Zamanlama',
     journey_achievements_h2:"Her biri kayıtlı sonuçlarınla açılır.",
     journey_achievements_label:'Başarılar',
@@ -13383,24 +13410,24 @@ const TRANSLATIONS = {
     records_cat_songs:"Şarkılar",
     records_cat_voice:"Ses Aralığı ve Teknik",
     records_cat_world:"Vokal Dünyası",
-    rift_desc:'Her tur, rastgele dört gerçek egzersizden biridir — Perde, Aralık Sıçraması, Sürdürme Tutuşu veya Hızlı Yakalama — her seferinde yeni bir gerçek hedefle. Boyunca Nota Eşleştirme ile aynı yakalama motoru; sadece bir sonraki hangi meydan okumanın geleceği bir sürprizdir.',
-    rift_h2:'60 saniye, öngörülemez gerçek turlar',
+    rift_desc:"Her tur rastgele dört egzersizden biri (Perde, Aralık Sıçraması, Uzun Tutuş veya Hızlı Yakalama), her seferinde yeni bir hedefle. Nota Eşleştirme gibi puanlanır; yalnızca sıradaki meydan okuma sürprizdir.",
+    rift_h2:"60 saniye, öngörülemeyen turlar",
     rift_reuses_tag:'NOTA EŞLEŞTİRME MOTORUNU YENİDEN KULLANIR',
-    rift_step_label:'🌀 Vokal Yarığı',
-    skilltree_desc:'Sahte para birimi yok, yetenek satın alma yok — bir düğüm yalnızca gerçek Yetenek Profili, nefes veya register verileriniz gerçek eşiğini geçtiğinde yanar. Gri düğümler kilitlidir; aşağıdaki ayrıntı paneli bir sonraki için tam olarak nelerin gerektiğini gösterir.',
-    skilltree_h2:'Her düğüm gerçek ölçülen bir eşikten kilidi açılır',
-    skilltree_step_label:'🌳 Vokal Yetenek Ağacı',
+    rift_step_label:"Yarık",
+    skilltree_desc:"Satın alınacak bir şey yok: bir düğüm yalnızca Yetenek Profili, nefes veya register verilerin eşiğini geçtiğinde yanar. Gri düğümler kilitlidir; aşağıdaki panel sıradakinin ne gerektirdiğini gösterir.",
+    skilltree_h2:"Her düğüm ölçülen bir eşikte açılır",
+    skilltree_step_label:"Yetenek Ağacı",
     teacher_addstudent_btn:'Öğrenci ekle',
     teacher_assignments_label:'Ödevler',
     teacher_assignroster_btn:'Tüm listeye ata',
-    teacher_honestscope_label:'Kapsam konusunda dürüz:',
+    teacher_honestscope_label:"Bu araç hakkında:",
     teacher_locked_h2:'Liste ve ödev araçları Öğretmen planının bir parçasıdır',
     teacher_locked_msg:'21 günlük denemenize de dahildir — şimdi deneyin, ayrı bir kayıt gerekmez.',
     teacher_newassignment_label:'Yeni Ödev',
     teacher_plan_label:'Öğretmen planı',
     teacher_roster_label:'Liste',
     teacher_scope_desc_p1:'bu, ne kaydettiğinizi izler',
-    teacher_scope_desc_p2:'burada yerel olarak kaydettiğiniz — öğrenci etkinliğini otomatik olarak algılamaz, çünkü bu her öğrencinin paylaşılan bir arka uçta kendi hesabına sahip olmasını gerektirir (PRD §6, Aşama 1 8. hafta). Tamamlanma öğretmen tarafından işaretlenir, otomatik senkronize edilmez. Gerçek bir lansman sürümü her öğrenciye bir giriş verir ve bunu otomatik olarak günceller.',
+    teacher_scope_desc_p2:"burada kaydettiklerini. Öğrenci etkinliğini algılamaz: bunun için her öğrencinin kendi hesabı olmalı. Her ödevi tamamlandı olarak sen işaretlersin.",
     teacher_scope_you:'siz',
     teacher_signin_prompt:'Öğretmen Panelini kullanmak için oturum açın.',
     teacher_viewplan_btn:'Öğretmen planını görüntüle',
@@ -13477,7 +13504,7 @@ const TRANSLATIONS = {
     skill_level_beginner:'Başlangıç', skill_level_intermediate:'Orta', skill_level_professional:'Profesyonel',
     level_tier_explorer:'Perde Kâşifi', level_tier_apprentice:'Perde Çırağı', level_tier_builder:'Ses Geliştirici',
     level_tier_performer:'Vokal Sanatçı', level_tier_master:'Vokal Ustası',
-    journey_goal_1:'Daha tiz söylemek istiyorum', journey_goal_2:'Akort dışı söylemeyi bırakmak istiyorum', journey_goal_3:'Baş sesimi geliştirmek istiyorum',
+    journey_goal_1:'Daha tiz söylemek istiyorum', journey_goal_2:"Akort dışı söylemeyi bırakmak istiyorum", journey_goal_3:'Baş sesimi geliştirmek istiyorum',
     journey_goal_4:'Özgüvenle söylemek istiyorum', journey_goal_5:'Hızlı nota geçişlerimi (run) geliştirmek istiyorum', journey_goal_6:'Armoni söylemek istiyorum',
     journey_goal_7:'Bir performansa hazırlanmak istiyorum', journey_goal_8:'Genel olarak daha iyi bir şarkıcı olmak istiyorum',
     record_label_highest_note:'En rahat ulaşılan en tiz nota', record_label_lowest_note:'En rahat ulaşılan en pes nota',
@@ -13506,13 +13533,13 @@ const TRANSLATIONS = {
     boss_lose_sub:"Boss'a zarar veren, doğru söylenen notalardır. İşte sana en çok kaybettiren nota.", boss_lose_title_suffix:'sizi yendi.',
     boss_memory_lead_close:"Geçen sefer çekişmeliydi:", boss_memory_lead_lost:"Geçen sefer seni yendi:", boss_memory_lead_won:'Kazandınız ama',
     boss_memory_p1:'zayıf noktanızdı, oranı', boss_memory_p2:"Bakalım bugün nasıl gidecek.", boss_no_signal:'Sinyal yok',
-    boss_recommend_p1:'öneriliyor — en düşük gerçek Perde Profili skorunuz', boss_recommend_p2:'kategorisinde',
+    boss_recommend_p1:"öneriliyor — en düşük Perde Profili skorun", boss_recommend_p2:"kategorisinde",
     boss_start_label:"Savaşı başlat", boss_weakestsection_p1:'En zayıf bölümünüz', boss_weakestsection_p2:'bölümüydü, oranı',
     boss_weaknote_p1:'Bu savaştaki en zayıf notanız', boss_weaknote_p2:'oranı', boss_weaknote_p3:'doğruluk.',
     boss_weaknote_p4:'Aşağıdaki notayı çalışın, sonra boss ile tekrar karşılaşın.', boss_win_sub_p1:"Aldığından fazla hasar verdin.",
     breakthrough_detail_p1:'Üst üste 5 doğru deneme — önceki ortalamanız', breakthrough_detail_p2:'idi. Az önce bir şey oturdu.',
     bridgerunner_start_label:"Koşmaya başla", bridgerunner_wipedout:"Can kalmadı",
-    curriculum_daylabel_p1:'Bugünün Programı — Gün', curriculum_done_today:'✓ Bugün tamamlandı', curriculum_mark_done:'Tamamlandı olarak işaretle',
+    curriculum_daylabel_p1:'Bugünün Programı — Gün', curriculum_done_today:"Bugün tamamlandı", curriculum_mark_done:'Tamamlandı olarak işaretle',
     curriculum_open_firsttool:'Bugünün ilk aracını aç', curriculum_open_p1:'Aç:',
     dash_not_captured:"Henüz ölçülmedi — Ses Aralığı Bulucu'yu ziyaret edin", dash_recap_suffix:'Özeti',
     game_best_p1:'En iyi:', game_new_best:"Yeni rekor", game_score_p1:'Skor:',
@@ -13578,7 +13605,7 @@ const TRANSLATIONS = {
     teacher_billing_active:'Öğretmen planındasınız — tam liste ve ödev erişimi devam ediyor.',
     teacher_billing_trial_p1:'Öğretmen araçlarını', teacher_billing_trial_p2:'günlük deneme sürenizle kullanıyorsunuz — sonrasında bu panel için Öğretmen planı gerekir (diğer araçlarınız herhangi bir ücretli planda devam eder).',
     teacher_complete_suffix:'tamamlandı', teacher_ex_ear:'Kulak Eğitimi', teacher_ex_interval:'Aralık Eşleştirme', teacher_ex_pitch:'Pitch Match', teacher_ex_scale:'Gam Koşusu',
-    teacher_locked_hasroster_p1:'Gerçek listeniz', teacher_locked_hasroster_p2:'ve',
+    teacher_locked_hasroster_p1:"Listen", teacher_locked_hasroster_p2:'ve',
     teacher_locked_hasroster_p3:'kaydedildi ve sizi bekliyor — bunlara geri dönmek için Öğretmen planını seçin. Diğer planlar bu paneli içermez.',
     teacher_locked_noroster:'21 günlük deneme sürenize de dahil — ayrı bir kayıt gerekmeden hemen deneyin.',
     teacher_noroster_forassign:'Listede öğrenci yok.', teacher_remove_btn:'Kaldır',
@@ -13640,7 +13667,7 @@ const TRANSLATIONS = {
     ear_sub_chord:"Dinleyin, sonra duyduğunuz üçlü akorun türünü seçin.",
     ear_sub_progression:"4 akorluk bir ilerlemeyi dinleyin, sonra hangisini duyduğunuzu seçin: tek tek akorlar değil, bir ton bağlamında kulak eğitimi.",
     ear_sub_interval:"Dinleyin, sonra duyduğunuz aralığı seçin. Bir kulak alıştırması: şarkı söylemezsiniz.",
-    ear_play_chord:'▶ Akoru çal', ear_play_progression:'▶ İlerlemeyi çal', ear_play_interval:'▶ Aralığı çal',
+    ear_play_chord:"Akoru çal", ear_play_progression:"İlerlemeyi çal", ear_play_interval:"Aralığı çal",
     ear_feedback_correct:'Doğru!', ear_thatwas_template:'Bu {name} idi.', ear_thatwas_a:'bir ',
     rhythm_running:'Çalışıyor…', rhythm_beat_label:'Vuruş', rhythm_missed:'Kaçırıldı',
     rhythm_listen_instructions:"Her tıklamada söyleyin",
@@ -13673,10 +13700,10 @@ const TRANSLATIONS = {
     studio_notavailable:'Kayıt şu anda kullanılamıyor — mikrofon izinlerini kontrol edin.',
     snapshot_nobaseline:'Henüz referans yok.', snapshot_nodatayet:'Henüz veri yok',
     snapshot_nobaselinefor:'Bunun için Gün 1 referansı yok — takip daha sonra başladı',
-    reweight_signin:'Gerçek bir öneri için oturum açın', reweight_new:'yeni', reweight_more:'daha fazla', reweight_less:'daha az',
+    reweight_signin:"Bir öneri için giriş yap", reweight_new:'yeni', reweight_more:'daha fazla', reweight_less:'daha az',
     reweight_wasfocus_p1:'son oturumunuzun odağının', reweight_wasfocus_p2:'kadarıydı — bugün',
-    reweight_wasfocus_p3:'gerçek puan değişikliğinize dayanıyor.',
-    reweight_comparedto_p1:'Son oturumunuzla karşılaştırıldığında', reweight_comparedto_p2:'bugünün ağırlıklandırması gerçek puanlarınız değiştikçe biraz kaydı.',
+    reweight_wasfocus_p3:"puan değişikliğine dayanıyor.",
+    reweight_comparedto_p1:'Son oturumunuzla karşılaştırıldığında', reweight_comparedto_p2:"bugünün ağırlıklandırması puanların değiştikçe biraz kaydı.",
     reweight_firstweighting:"Bu ilk ağırlıklandırmanız; yarınki bugünün sonuçlarını zaten yansıtacak.",
     timebudget_beginner:'Bugünün bütçesi (ref): ısınma 5 · nefes 5 · perde 5 · gamlar 5 · registerlar 5 · aralıklar 3 · çeviklik 2–3 · sürdürme 3 · şarkı 5–10 dk — toplam 30–40 dk',
     timebudget_intermediate:'Bugünün bütçesi (ref): ısınma 5–7 · nefes 5 · perde 8 · gamlar 8 · registerlar 8 · aralıklar 5 · çeviklik 5 · sürdürme 5 · vibrato 3 · şarkı 10–15 dk — toplam 50–65 dk',
@@ -13839,7 +13866,7 @@ const TRANSLATIONS = {
     paywall_ispartof_tpl:'{feature} özelliği {plan} planının bir parçasıdır.',
     paywall_trialended_choir_tpl:'21 günlük ücretsiz erişiminiz sona erdi. {feature} özelliği {plan} planıyla devam ediyor ({price}) — ilerlemeniz hâlâ kaydedildi.',
     arcade_pro_level_template:'Pro · Seviye {n}', arcade_won_template:"Galibiyet: {n}", arcade_best_template:'En iyi: {n}',
-    arcade_trial_included:'21 günlük deneme sürenize dahildir', arcade_always_open:'Her zaman açık', arcade_unlocks_at_level_template:'🔒 Seviye {n} içinde açılır',
+    arcade_trial_included:'21 günlük deneme sürenize dahildir', arcade_always_open:'Her zaman açık', arcade_unlocks_at_level_template:"Seviye {n}'de açılır",
     pricing_planname_monthly:"Aylık", pricing_planname_yearly:"Yıllık", pricing_planname_teacher:"Öğretmen", pricing_planname_choir:"Koro / Stüdyo",
     trialcompare_nobaseline:"1. Gün temel ölçümü kaydedilmedi (21 Günlük Yolculuk değerlendirmesi tamamlanmadı), bu yüzden gösterilecek bir öncesi/sonrası yok — kayıtlı ilerlemeniz hâlâ korunuyor.",
     voicehealth_nodata_tooltip:'veri yok',
@@ -14218,6 +14245,18 @@ const TRANSLATIONS = {
     vocallab_notes_one:"1 nota izlendi",
     vocallab_notes_other:"{n} nota izlendi",
     vocallab_measure:"Geniş: Ses Aralığı Bulucu'nun duyduğu en pes ve en tiz notalar. Rahat: en az bir kez %55 ya da daha iyi doğrulukla söylediğin her nota. Güvenilir: en az 3 denemede ortalaması %75 ya da üstü olan notalar. Perde Eşleme, Özel Meydan Okuma, Boss Arenası ve Yarık denemelerinden.",
+    rec_recording:"Kaydediliyor… (4 sn)",
+    rec_recorded:"Kaydedildi",
+    rec_toast_save_day1:"Klip kaydedilemedi (çok büyük olabilir). Bu adım isteğe bağlı; atlayabilirsin.",
+    rec_toast_unavailable_day1:"Kayıt şu anda kullanılamıyor. Mikrofon iznini kontrol et ya da bu isteğe bağlı adımı atla.",
+    rec_toast_save_today:"Bugünün klibi kaydedilemedi (çok büyük olabilir). Tekrar dene ya da atla.",
+    rec_toast_unavailable_today:"Kayıt şu anda kullanılamıyor. Mikrofon iznini kontrol edip tekrar dene.",
+    key_rank_original:"Orijinal ton",
+    key_rank_up_one:"1 yarım ses yukarı",
+    key_rank_up_other:"{n} yarım ses yukarı",
+    key_rank_down_one:"1 yarım ses aşağı",
+    key_rank_down_other:"{n} yarım ses aşağı",
+    key_rank_fit_tpl:"Uyum {n}/5",
   },
 };
 let currentLanguage = 'en';
@@ -21328,10 +21367,10 @@ document.getElementById('gliderStartBtn').addEventListener('click', ()=>{
 const WU_EX_SEC = 20, WU_PX_PER_SEC = 60, WU_NOW_X = 90;
 // guide(p, t): the dotted line's pitch (MIDI) t seconds in; p(f) is the note at fraction f of the singer's range.
 const WU_EXERCISES = [
-  {id:'trill', emoji:'💋', guide:(p,t)=>p(0.35) + 2*Math.sin(2*Math.PI*t/3)},
-  {id:'siren', emoji:'🚨', guide:(p,t)=>p(0.5 - 0.4*Math.cos(2*Math.PI*t/5))},
-  {id:'glide', emoji:'🪁', guide:(p,t)=>{ const ph = (t/8)%1; return p(0.25 + 0.35*(ph<0.5 ? ph*2 : 2-ph*2)); }},
-  {id:'hum',   emoji:'🐝', guide:(p,t)=>p(0.35)},
+  {id:'trill', guide:(p,t)=>p(0.35) + 2*Math.sin(2*Math.PI*t/3)},
+  {id:'siren', guide:(p,t)=>p(0.5 - 0.4*Math.cos(2*Math.PI*t/5))},
+  {id:'glide', guide:(p,t)=>{ const ph = (t/8)%1; return p(0.25 + 0.35*(ph<0.5 ? ph*2 : 2-ph*2)); }},
+  {id:'hum',   guide:(p,t)=>p(0.35)},
 ];
 const WU_ROLL = {svg:'warmupRollSvg', group:'warmupNotesGroup', cursor:'warmupLiveCursor', rect:'wu-note-rect'};
 let wuPending = null, wuResolve = null, wuPassedKey = null, wuMode = 'exercises', wuRun = null, wuGen = 0, wuDone = new Set();
@@ -21375,16 +21414,16 @@ function wuRender(){
     const on = b.dataset.wuMode===wuMode; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on?'true':'false');
   });
   const running = wuRun && (wuRun.kind==='ex' ? wuRun.ex.id : 'song:'+wuRun.id);
-  const item = (key, emoji, name, how)=>{
+  const item = (key, name, how)=>{
     const state = running===key ? 'running' : (wuDone.has(key) ? 'done' : '');
     const go = state==='running' ? t('wu_stop') : (state==='done' ? `<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg>${t('wu_done_mark')}` : t('wu_start'));
     return `<button class="wu-item ${state}" data-wu-item="${key}"><span class="wu-text"><b>${name}</b><small>${how}</small></span><span class="wu-go">${go}</span></button>`; // phase 9: no emoji art
   };
   document.getElementById('warmupList').innerHTML = wuMode==='exercises'
-    ? WU_EXERCISES.map(ex=>item(ex.id, ex.emoji, t('wu_ex_'+ex.id), t('wu_ex_'+ex.id+'_how'))).join('')
+    ? WU_EXERCISES.map(ex=>item(ex.id, t('wu_ex_'+ex.id), t('wu_ex_'+ex.id+'_how'))).join('')
     : Object.keys(SONGS).map(id=>{
         const s = SONGS[id], sec = Math.round((60/s.tempo)*s.beatsPerChord*s.parts.Lead.notes.length);
-        return item('song:'+id, '🎵', s.name, `${s.key} · ${s.difficulty} · ${sec} s`);
+        return item('song:'+id, s.name, `${s.key} · ${s.difficulty} · ${sec} s`);
       }).join('');
   document.getElementById('warmupStage').style.display = wuRun && wuRun.kind==='ex' ? 'block' : 'none';
   document.getElementById('warmupRollWrap').style.display = wuRun && wuRun.kind==='song' ? 'block' : 'none';
@@ -23714,7 +23753,7 @@ document.getElementById('journeyRecordBtn')?.addEventListener('click', async ()=
   if(!profile){ requireSignIn('Hear Yourself Improve'); return; }
   const btn = document.getElementById('journeyRecordBtn');
   const check = document.getElementById('voiceRecordCheck');
-  btn.disabled = true; btn.textContent = '🔴 Recording… (4s)';
+  btn.disabled = true; btn.textContent = t('rec_recording');
   singingSession(()=>btn.disabled);
   const clip = await recordShortClip(4000);
   btn.disabled = false;
@@ -23722,16 +23761,16 @@ document.getElementById('journeyRecordBtn')?.addEventListener('click', async ()=
     try{
       profile.day1AudioClip = clip;
       await saveProfile(profile);
-      btn.textContent = '✓ Recorded';
-      check.textContent = '✓'; check.classList.add('done');
+      btn.textContent = t('rec_recorded');
+      check.innerHTML = '<svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-check"/></svg>'; check.classList.add('done');
       document.getElementById('voiceRecordStep').classList.add('done');
     } catch(e){
-      btn.textContent = '🎙️ Record';
-      showToast('Couldn\'t save the clip locally (it may be too large) — this step is optional, feel free to skip it.', 'warn');
+      btn.textContent = t('journey_record_btn');
+      showToast(t('rec_toast_save_day1'), 'warn');
     }
   } else {
-    btn.textContent = '🎙️ Record';
-    showToast('Recording isn\'t available right now — check mic permissions, or just skip this optional step.', 'warn');
+    btn.textContent = t('journey_record_btn');
+    showToast(t('rec_toast_unavailable_day1'), 'warn');
   }
 });
 
@@ -23762,20 +23801,20 @@ function renderHearYourselfImprove(){
 document.getElementById('recordTodayBtn')?.addEventListener('click', async ()=>{
   if(!profile) return;
   const btn = document.getElementById('recordTodayBtn');
-  btn.disabled = true; btn.textContent = '🔴 Recording… (4s)';
+  btn.disabled = true; btn.textContent = t('rec_recording');
   singingSession(()=>btn.disabled);
   const clip = await recordShortClip(4000);
-  btn.disabled = false; btn.textContent = '🎙️ Record today\'s clip';
+  btn.disabled = false; btn.textContent = t('pricing_recordtoday_btn');
   if(clip){
     try{
       profile.todayAudioClip = clip;
       await saveProfile(profile);
       renderHearYourselfImprove();
     } catch(e){
-      showToast('Couldn\'t save today\'s clip locally (it may be too large) — try again, or skip this.', 'warn');
+      showToast(t('rec_toast_save_today'), 'warn');
     }
   } else {
-    showToast('Recording isn\'t available right now — check mic permissions and try again.', 'warn');
+    showToast(t('rec_toast_unavailable_today'), 'warn');
   }
 });
 
