@@ -2489,6 +2489,22 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   @media (prefers-reduced-motion: reduce){
     .levelup-overlay, .levelup-card{transition:none;}
   }
+
+  /* ---- PHASE 9 (2.1): one sheet for every overlay. Paper (--hl-raised) on a scrim, radius r3, 24 px padding, at most
+     440 wide (at 390 the full width less the 16 px gutters); the title an hl-h2 left-aligned, one line in ink-2, the
+     content, then the actions (.p9-actions): the main one .hl-btn--ink (or --sing), the rest quiet. ---- */
+  .modal-overlay{background:rgba(6,7,8,.56);backdrop-filter:none;-webkit-backdrop-filter:none;padding:16px;}
+  .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{
+    background:var(--hl-raised);color:var(--hl-ink);border:0;border-radius:var(--hl-r3);padding:var(--hl-s5);
+    max-width:440px;width:100%;box-shadow:var(--hl-shadow-sheet);text-align:left;max-height:calc(100dvh - 32px);overflow-y:auto;}
+  .modal-card .trial-modal-title, .modal-card .p9-title{font-family:var(--hl-font);font-size:var(--hl-t-h2);font-stretch:106%;font-weight:620;
+    line-height:1.15;letter-spacing:-.01em;color:var(--hl-ink);margin:0 0 var(--hl-s2);text-align:left;text-wrap:balance;}
+  .modal-card .trial-modal-sub, .modal-card .p9-line{font-size:var(--hl-t-body);line-height:1.45;color:var(--hl-ink-2);margin:0 0 var(--hl-s4);text-align:left;}
+  .p9-actions{display:flex;flex-wrap:wrap;align-items:center;gap:var(--hl-s2);margin-top:var(--hl-s5);}
+  .p9-actions .hl-btn--ink, .p9-actions .hl-btn--sing{flex:1 1 auto;}
+  .p9-actions.p9-stack{flex-direction:column;align-items:stretch;}
+  .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
+  @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
 </head>
 <body data-house="up">
@@ -2647,7 +2663,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   <div id="authModalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" style="display:none;">
     <div class="modal-card trial-modal-card">
-      <div class="trial-modal-emoji">🎤</div>
       <h2 class="trial-modal-title" id="authModalTitle">Start your Vocal Journey</h2>
       <p class="trial-modal-sub">Get full access to VoxCoach for 21 days.</p>
       <ul class="trial-checklist">
@@ -2677,8 +2692,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <label for="authPassword" data-i18n="auth_password_label">Password</label>
         <input type="password" id="authPassword" placeholder="At least 6 characters" class="text-input" autocomplete="current-password">
       </div>
-      <button class="solid-btn teal" id="authCreateBtn" style="width:100%;justify-content:center;">Start my 21 days free</button>
-      <button class="ghost-btn" id="authCancelBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="auth_cancel_btn">Cancel</button>
+      <button class="hl-btn hl-btn--ink hl-btn--block" id="authCreateBtn" data-sheet-main>Start my 21 days free</button>
+      <button class="hl-btn hl-btn--quiet hl-btn--block" id="authCancelBtn" style="margin-top:var(--hl-s2);" data-i18n="auth_cancel_btn">Cancel</button>
       <p class="trial-modal-terms">
         <a href="#" id="authModeToggle" style="text-decoration:underline;">Already have an account? Sign in</a>
       </p>
@@ -5784,25 +5799,24 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- PAYWALL MODAL (replaces browser confirm() popups) -->
   <div class="modal-overlay" id="paywallModalOverlay" role="dialog" aria-modal="true" aria-labelledby="paywallTitle" style="display:none;">
     <div class="modal-card paywall-card">
-      <div class="paywall-icon" id="paywallIcon">🔒</div>
+      <svg class="hl-icon p9-sheet-icon" id="paywallIcon" aria-hidden="true"><use href="#hl-lock"/></svg>
       <h2 class="trial-modal-title" id="paywallTitle">Feature name</h2>
       <p class="trial-modal-sub" id="paywallReason">Reason text.</p>
       <div class="paywall-plan-chip" id="paywallPlanChip">Plan · Price</div>
-      <div class="btn-row" style="margin-top:20px;">
-        <button class="solid-btn teal" id="paywallViewPlansBtn" style="flex:1;justify-content:center;">View plans</button>
-        <button class="ghost-btn" id="paywallCancelBtn">Not now</button>
+      <div class="p9-actions">
+        <button class="hl-btn hl-btn--ink" id="paywallViewPlansBtn" data-sheet-main>View plans</button>
+        <button class="hl-btn hl-btn--quiet" id="paywallCancelBtn">Not now</button>
       </div>
     </div>
   </div>
 
   <div class="modal-overlay" id="signinRequiredOverlay" role="dialog" aria-modal="true" aria-labelledby="signinRequiredTitle" style="display:none;">
     <div class="modal-card paywall-card">
-      <div class="paywall-icon">🎤</div>
       <h2 class="trial-modal-title" id="signinRequiredTitle">Feature name</h2>
       <p class="trial-modal-sub" data-i18n="signin_required_sub">Create a free account to unlock this — 21 days of full access, no payment required today.</p>
-      <div class="btn-row" style="margin-top:20px;">
-        <button class="solid-btn teal" id="signinRequiredCreateBtn" style="flex:1;justify-content:center;" data-i18n="dashboard_create_account_btn">Create free account</button>
-        <button class="ghost-btn" id="signinRequiredCancelBtn" data-i18n="signin_required_cancel_btn">Not now</button>
+      <div class="p9-actions">
+        <button class="hl-btn hl-btn--ink" id="signinRequiredCreateBtn" data-sheet-main data-i18n="dashboard_create_account_btn">Create free account</button>
+        <button class="hl-btn hl-btn--quiet" id="signinRequiredCancelBtn" data-i18n="signin_required_cancel_btn">Not now</button>
       </div>
     </div>
   </div>
@@ -5831,8 +5845,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="modal-card">
       <h2 class="trial-modal-title" id="plansSoonTitle" data-i18n="plans_soon_title">Paid plans aren't on sale yet</h2>
       <p class="trial-modal-sub" data-i18n="plans_soon_body">Your current access continues; we'll tell you when they open.</p>
-      <div class="btn-row" style="margin-top:20px;">
-        <button class="ghost-btn" id="plansSoonCloseBtn" data-i18n="plans_soon_close">Close</button>
+      <div class="p9-actions">
+        <button class="hl-btn hl-btn--ink" id="plansSoonCloseBtn" data-sheet-main data-i18n="plans_soon_close">Close</button>
       </div>
     </div>
   </div>
@@ -5845,9 +5859,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <p style="color:var(--muted);font-size:12.5px;margin:0 0 22px;line-height:1.5;">
         This button simulates a successful Stripe subscription so you can see what unlocks. No card details are collected because none are processed.
       </p>
-      <div class="btn-row">
-        <button class="solid-btn teal" id="checkoutConfirmBtn">Simulate successful subscription</button>
-        <button class="ghost-btn" id="checkoutCancelBtn">Cancel</button>
+      <div class="p9-actions">
+        <button class="hl-btn hl-btn--ink" id="checkoutConfirmBtn" data-sheet-main>Simulate successful subscription</button>
+        <button class="hl-btn hl-btn--quiet" id="checkoutCancelBtn">Cancel</button>
       </div>
     </div>
   </div>
@@ -5855,7 +5869,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- LANGUAGE SELECTOR OVERLAY -->
   <div class="modal-overlay" id="languageSelectOverlay" role="dialog" aria-modal="true" aria-labelledby="langSelectTitle" style="display:none;">
     <div class="modal-card trial-modal-card">
-      <div class="trial-modal-emoji">🌐</div>
       <h2 class="trial-modal-title" id="langSelectTitle" data-i18n="lang_select_title">Choose your language</h2>
       <div class="goal-grid" style="margin-top:16px;">
         <button class="ex-type-btn mode-card" data-lang="en" style="text-align:center;align-items:center;">
@@ -5881,7 +5894,6 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="onboarding-dots" id="onboardingDots"></div>
 
       <div class="onboarding-step" data-ob-step="0">
-        <div class="trial-modal-emoji">🎤</div>
         <h2 class="trial-modal-title" id="obWelcomeTitle" data-i18n="ob_welcome_title">Welcome to VoxCoach</h2>
         <p class="trial-modal-sub" data-i18n="ob_welcome_sub">Six quick questions, then straight into your real Day 1 assessment — this isn't a form, it's the start of your vocal journey.</p>
         <div class="paywall-plan-chip" id="obTrialChip" style="margin-top:8px;">Day 1 of 21 free access</div>
@@ -5929,15 +5941,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
 
       <div class="onboarding-step" data-ob-step="6" style="display:none;">
-        <div class="trial-modal-emoji">✨</div>
         <h2 class="trial-modal-title">Your plan is ready</h2>
         <div id="obPlanSummary" class="ob-plan-summary"></div>
         <p class="trial-modal-sub" style="margin-top:14px;">Next: your real Day 1 baseline assessment — five quick real measurements, not a demo.</p>
       </div>
 
-      <div class="btn-row" style="margin-top:22px;">
-        <button class="ghost-btn" id="obBackBtn" style="display:none;">Back</button>
-        <button class="solid-btn teal" id="obNextBtn" style="flex:1;justify-content:center;">Get started</button>
+      <div class="p9-actions">
+        <button class="hl-btn hl-btn--quiet" id="obBackBtn" style="display:none;">Back</button>
+        <button class="hl-btn hl-btn--ink" id="obNextBtn" data-sheet-main>Get started</button>
       </div>
     </div>
   </div>
@@ -6013,12 +6024,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 function openModalWithA11y(modalEl, onClose){
   if(!modalEl) return;
   if(modalEl._a11yKeyHandler){ document.removeEventListener('keydown', modalEl._a11yKeyHandler); modalEl._a11yKeyHandler = null; } // safe to re-call, e.g. onboarding's per-step content
-  const focusable = modalEl.querySelectorAll('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+  const shown = e => e.getClientRects().length && getComputedStyle(e).visibility!=='hidden';
+  const focusable = [...modalEl.querySelectorAll('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(shown);
   const first = focusable[0], last = focusable[focusable.length-1];
+  const start = focusable.find(e=>/^(INPUT|SELECT|TEXTAREA)$/.test(e.tagName)) || focusable.find(e=>e.hasAttribute('data-sheet-main')) || first; // 2.1
   modalEl.setAttribute('role', modalEl.getAttribute('role') || 'dialog');
   modalEl.setAttribute('aria-modal', 'true');
   if(!modalEl._prevFocus) modalEl._prevFocus = document.activeElement;
-  if(first) first.focus();
+  if(start) start.focus();
 
   function handleKeydown(e){
     if(e.key==='Escape'){ e.preventDefault(); onClose(); return; }
@@ -19008,8 +19021,6 @@ function showPricingPanel(){
 function openPaywallPrompt(featureLabel, suggestedPlan, choirOnly){
   const planName = planLabel(suggestedPlan==='choir' ? 'choir' : 'monthly');
   const planPrice = suggestedPlan==='choir' ? '$79/mo' : '$9.99/mo';
-  const icon = suggestedPlan==='choir' ? '🎼' : '🔒';
-  document.getElementById('paywallIcon').textContent = icon;
   document.getElementById('paywallTitle').textContent = featureLabel;
   // Whole-sentence templates so each language keeps its own punctuation. After the trial, a Choir-only
   // feature names the Choir plan; other features (the mixer included) really do continue on any paid plan.
