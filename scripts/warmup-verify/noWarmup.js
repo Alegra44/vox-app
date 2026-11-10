@@ -5,13 +5,15 @@
 //  2. Fallback: if the overlay still appears (e.g. a script swaps the account or the day mid-page), Skip is pressed and
 //     window.__wuAutoSkips counts it, so a script can report it.
 // Pages without the warm-up (older builds served as a "before" side) are left alone. Only scripts/warmup-verify/entries.js
-// and tracking.js see the warm-up on purpose: they don't require this module.
+// and tracking.js see the warm-up on purpose: they don't require this module. A page that sets window.__wuAllow = true
+// is left alone from then on (to show the warm-up on purpose).
 const pw = require('playwright');
 
 const SKIP = () => {
   window.__wuAutoSkips = 0;
   const tick = () => {
     try {
+      if (window.__wuAllow) return; // a script showing the warm-up on purpose (phase 9's shots9.js, states9.js) sets this
       if (typeof wuKey !== 'function') return;
       const k = wuKey();
       if (!localStorage.getItem(k)) localStorage.setItem(k, 'skipped');

@@ -18,7 +18,13 @@
 // message of a locked tile ("new": Level 1). Reports §7 words, emoji and, outside English, English left over: a text
 // identical to one the English scan saw on the same screen, with two words of three or more letters (place names and
 // note names excepted only where they are the same in every language: none are, so none are excepted). Exit 1 on any.
-// Usage: node scripts/design-verify/copyscan.js [--lang en] [--tools] [--set 4b] [--you] [--world]
+// Phase 9 (PHASE9.md 2.11, §3), --all: the whole app's markup and keys, in en, fr, es and tr (or --lang). Signed out,
+// nothing opened: every text node of <body> (visible or not: hidden screens and states included; the sprite, scripts and
+// styles left out), every placeholder, aria-label, title and alt, and every TRANSLATIONS value of that language (all
+// keys, whether or not the markup uses them). Reports §7 words and emoji per text, with where it is (the key, or the
+// element's id or closest id); exit 1 if either is found. The language names in the chooser are not emoji (flags were
+// removed in phase 7); nothing is excepted.
+// Usage: node scripts/design-verify/copyscan.js [--lang en] [--tools] [--set 4b] [--you] [--world] [--all]
 const C = require('./common'), H = require('./homeStates');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const LANG = arg('--lang') || 'en';
@@ -169,7 +175,43 @@ async function worldScan() {
   process.exitCode = total || totalEmoji || totalEn ? 1 : 0;
 }
 
+async function allScan() {
+  const langs = arg('--lang') ? [LANG] : ['en', 'fr', 'es', 'tr'];
+  const b = await C.chromium.launch(); let total = 0, totalEmoji = 0;
+  try {
+    for (const lang of langs) {
+      const re = new RegExp(`(?<![\\p{L}])(${WORDS[lang]}${lang === 'en' ? '' : '|' + WORDS.en}|${COMMON})(?![\\p{L}])|§`, 'iu');
+      const { ctx, page } = await C.openPage(b, { lang });
+      try {
+        await C.clearOverlays(page);
+        const texts = await page.evaluate(() => {
+          const out = [], where = e => { for (let x = e; x; x = x.parentElement) if (x.id) return '#' + x.id; return e.tagName.toLowerCase(); };
+          const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement.closest('script, style, svg') ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+          while (w.nextNode()) { const v = w.currentNode.textContent.replace(/\s+/g, ' ').trim(); if (v) out.push([v, 'markup ' + where(w.currentNode.parentElement)]); }
+          for (const e of document.body.querySelectorAll('[placeholder], [aria-label], [title], [alt]'))
+            for (const a of ['placeholder', 'aria-label', 'title', 'alt']) if (e.getAttribute(a) && !e.closest('svg')) out.push([e.getAttribute(a), `${a} ${where(e)}`]);
+          const T = TRANSLATIONS[currentLanguage] || {};
+          for (const [k, v] of Object.entries(T)) if (typeof v === 'string') out.push([v.replace(/\s+/g, ' ').trim(), 'key ' + k]);
+          return out;
+        });
+        const hits = new Map(), emo = new Map();
+        for (const [tx, where] of texts) {
+          if (re.test(tx)) hits.set(tx, (hits.get(tx) || new Set()).add(where));
+          if (EMOJI.test(tx)) emo.set(tx, (emo.get(tx) || new Set()).add(where));
+        }
+        total += hits.size; totalEmoji += emo.size;
+        console.log(`\n== ${lang}: ${texts.length} texts scanned; ${hits.size} with a §7 word, ${emo.size} with an emoji`);
+        for (const [tx, where] of hits) console.log(`  §7 [${[...where].slice(0, 4).join(', ')}${where.size > 4 ? ', …' : ''}] ${tx.slice(0, 200)}`);
+        for (const [tx, where] of emo) console.log(`  emoji [${[...where].slice(0, 4).join(', ')}${where.size > 4 ? ', …' : ''}] ${tx.slice(0, 200)}`);
+      } finally { await ctx.close(); }
+    }
+  } finally { await b.close(); C.cleanup(); }
+  console.log(`\n${total} texts with a §7 word, ${totalEmoji} with an emoji, across ${langs.join(', ')}`);
+  process.exitCode = total || totalEmoji ? 1 : 0;
+}
+
 (async () => {
+  if (process.argv.includes('--all')) return allScan();
   if (process.argv.includes('--world')) return worldScan();
   if (process.argv.includes('--you')) return youScan();
   if (process.argv.includes('--tools')) return toolsScan();
