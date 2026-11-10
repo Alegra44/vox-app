@@ -7,7 +7,7 @@ note-count suffix). English literals moved out of the code into keys are in this
 poster export toast, the clip recorders' labels and toasts, the Key tool's ranking labels. Markup defaults that
 `data-i18n` replaces at run time and that still carried a §7 word or an emoji were set to the key's English.
 
-161 keys.
+163 keys.
 
 | Key | Lang | Old | New |
 |---|---|---|---|
@@ -453,6 +453,10 @@ poster export toast, the clip recorders' labels and toasts, the Key tool's ranki
 | `pricing_planname_yearly` | fr | ⭐ Annuel | Annuel |
 | `pricing_planname_yearly` | es | ⭐ Anual | Anual |
 | `pricing_planname_yearly` | tr | ⭐ Yıllık | Yıllık |
+| `pricing_progresssaved_note` | en | Your progress, achievements, and history are saved — nothing is deleted because your trial ended. Choose a plan below to keep training, playing Vocal World, and getting AI-guided practice. | Your progress, achievements and history are saved; nothing is deleted because your trial ended. |
+| `pricing_progresssaved_note` | fr | Votre progression, vos succès et votre historique sont enregistrés — rien n'est supprimé parce que votre essai s'est terminé. Choisissez un forfait ci-dessous pour continuer à vous entraîner, jouer au Monde Vocal, et obtenir une pratique guidée par IA. | Votre progression, vos réussites et votre historique sont enregistrés ; rien n'est supprimé parce que votre essai est terminé. |
+| `pricing_progresssaved_note` | es | Tu progreso, logros e historial se guardan — nada se elimina porque tu prueba terminó. Elige un plan abajo para seguir entrenando, jugando el Mundo Vocal, y obteniendo práctica guiada por IA. | Tu progreso, tus logros y tu historial están guardados; no se borra nada porque terminó tu prueba. |
+| `pricing_progresssaved_note` | tr | İlerlemeniz, başarılarınız ve geçmişiniz kaydedilir — denemeniz bittiği için hiçbir şey silinmez. Antrenmana devam etmek, Vokal Dünyası oynamak ve yapay zeka rehberliğinde pratik yapmak için aşağıdan bir plan seçin. | İlerlemen, başarıların ve geçmişin kayıtlı; deneme süren bittiği için hiçbir şey silinmez. |
 | `pricing_realnumbers_desc` | en | Real numbers only — your stored Day 1 baseline compared to today. | Your stored Day 1 baseline compared to today. |
 | `pricing_realnumbers_desc` | fr | Uniquement de vrais chiffres — votre référence du Jour 1 enregistrée comparée à aujourd'hui. | Votre référence du Jour 1 enregistrée, comparée à aujourd'hui. |
 | `pricing_realnumbers_desc` | es | Solo números reales — tu línea base del Día 1 guardada comparada con hoy. | Tu línea base del Día 1 guardada, comparada con hoy. |
@@ -485,6 +489,10 @@ poster export toast, the clip recorders' labels and toasts, the Key tool's ranki
 | `pricingstate_journeycomplete` | fr | Votre Parcours Vocal de 21 jours est terminé 🎤 | Votre Parcours Vocal de 21 jours est terminé |
 | `pricingstate_journeycomplete` | es | Tu Viaje Vocal de 21 días ha terminado 🎤 | Tu Viaje Vocal de 21 días ha terminado |
 | `pricingstate_journeycomplete` | tr | 21 günlük Vokal Yolculuğunuz tamamlandı 🎤 | 21 günlük Vokal Yolculuğun tamamlandı |
+| `pricingstate_progresschoose` | en | your progress is saved. Choose a plan to keep training. | your progress is saved. |
+| `pricingstate_progresschoose` | fr | votre progression est enregistrée. Choisissez un forfait pour continuer à vous entraîner. | votre progression est enregistrée. |
+| `pricingstate_progresschoose` | es | tu progreso está guardado. Elige un plan para seguir entrenando. | tu progreso está guardado. |
+| `pricingstate_progresschoose` | tr | ilerlemeniz kaydedildi. Antrenmana devam etmek için bir plan seçin. | ilerlemen kayıtlı. |
 | `rec_recorded` | en | (new key) | Recorded |
 | `rec_recorded` | fr | (new key) | Enregistré |
 | `rec_recorded` | es | (new key) | Grabado |

@@ -2472,7 +2472,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   /* ---- PHASE 9 (2.2): sign up / sign in. Fields: the label above, the field 48 px tall, ruled, no card. ---- */
   .p9-field{display:grid;gap:6px;margin:0 0 var(--hl-s4);}
-  .p9-field label{font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);}
+  .p9-field label{font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);text-transform:none;letter-spacing:0;font-family:var(--hl-font);}
   .p9-field .text-input{min-height:48px;padding:0 var(--hl-s3);font-size:var(--hl-t-body);background:var(--hl-raised);color:var(--hl-ink);
     border:var(--hl-hair) solid var(--hl-rule-strong);border-radius:var(--hl-r1);}
   .p9-field .text-input::placeholder{color:var(--hl-ink-3);}
@@ -2484,6 +2484,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* ---- PHASE 9 (2.3): onboarding. "Step n of 6" over a hairline bar in ink; the choices as rows with a check. ---- */
   .ob-progress{display:grid;gap:var(--hl-s2);margin:0 0 var(--hl-s5);}
   .ob-progress .hl-label{min-height:1.2em;}
+  .ob-progress[hidden]{display:none;}
   .ob-bar{height:1px;background:var(--hl-rule);}
   .ob-bar i{display:block;height:1px;width:0;background:var(--hl-ink);transition:width var(--hl-d2) var(--hl-ease);}
   .ob-options{display:flex;flex-direction:column;border-top:var(--hl-hair) solid var(--hl-rule);}
@@ -2504,7 +2505,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .lang-opt.hl-item{grid-template-columns:minmax(0,1fr);min-height:56px;}
 
   /* ---- PHASE 9 (2.5): Plan & Pricing as ruled rows (columns from 768); the "not on sale" line; the paywall ---- */
-  .pricing-notonsale{margin:0 0 var(--hl-s4);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);border-bottom:var(--hl-hair) solid var(--hl-rule);
+  .pricing-notonsale{margin:0 0 var(--hl-s4);padding:var(--hl-s3) 0;border-top:0;border-bottom:var(--hl-hair) solid var(--hl-rule);
     font-size:var(--hl-t-body);line-height:1.45;color:var(--hl-ink);}
   .pricing-notonsale[hidden]{display:none;}
   #panel-pricing .trial-status-banner, #panel-pricing .trial-status-banner.neutral, #panel-pricing .trial-status-banner.active, #panel-pricing .trial-status-banner.expired{
@@ -2536,11 +2537,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     border-bottom:var(--hl-hair) solid var(--hl-rule);font-size:var(--hl-t-body);color:var(--hl-ink);background:none;border-radius:0;}
   #trialCompareRows .snapshot-row:first-child{border-top:var(--hl-hair) solid var(--hl-rule);}
   #trialCompareRows .snapshot-row > span:last-child{font-variant-numeric:tabular-nums;color:var(--hl-ink-2);}
+  #trialCompareRows .snapshot-delta{background:none;padding:0;border:0;}
   #trialCompareRows .snapshot-delta.up{color:var(--hl-ok);} #trialCompareRows .snapshot-delta.flat{color:var(--hl-ink-3);}
   #paywallPlanChip[hidden]{display:none;}
 
   /* ---- PHASE 9 (2.6): Feedback. The form on paper with ruled fields; the rating a segmented control. ---- */
-  .feedback-form{display:grid;gap:0;margin-top:var(--hl-s4);border-top:var(--hl-hair) solid var(--hl-rule);}
+  .feedback-form{display:grid;gap:0;margin-top:0;}
   .feedback-form .feedback-field{display:grid;gap:6px;padding:var(--hl-s4) 0;border-bottom:var(--hl-hair) solid var(--hl-rule);margin:0;}
   .feedback-form .feedback-label{font-size:var(--hl-t-body);font-weight:600;color:var(--hl-ink);margin:0;}
   .feedback-form .text-input{min-height:48px;padding:var(--hl-s3);font-size:var(--hl-t-body);line-height:1.45;background:var(--hl-raised);color:var(--hl-ink);
@@ -5556,7 +5558,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <p class="fine-print" data-i18n="pricing_noday1clip_note">No Day 1 clip was recorded, so there's nothing to compare by ear. Your saved progress above is intact.</p>
       </div>
 
-      <p class="pricing-desc" style="margin-top:var(--hl-s4);" data-i18n="pricing_progresssaved_note">Your progress, achievements, and history are saved — nothing is deleted because your trial ended. Choose a plan below to keep training, playing Vocal World, and getting AI-guided practice.</p>
+      <p class="pricing-desc" style="margin-top:var(--hl-s4);" data-i18n="pricing_progresssaved_note">Your progress, achievements and history are saved; nothing is deleted because your trial ended.</p>
     </section>
 
     <section class="hl-section pricing-plans">
@@ -8004,7 +8006,7 @@ const TRANSLATIONS = {
     pricing_per_mo:'/mo',
     pricing_per_yr:'/yr',
     pricing_plans_label:'Plans',
-    pricing_progresssaved_note:'Your progress, achievements, and history are saved — nothing is deleted because your trial ended. Choose a plan below to keep training, playing Vocal World, and getting AI-guided practice.',
+    pricing_progresssaved_note:"Your progress, achievements and history are saved; nothing is deleted because your trial ended.",
     pricing_realnumbers_desc:"Your stored Day 1 baseline compared to today.",
     pricing_recordtoday_btn:"Record today's clip",
     pricing_teacher_audience:'Up to 20 students',
@@ -8240,7 +8242,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Tomorrow, your 21-day Vocal Journey ends.', pricingstate_daysleft_transform:'days left to complete your transformation.',
     pricingstate_championship_p1:'Your Vocal Championship is coming —', pricingstate_championship_p2:'days left.',
     pricingstate_daysleft_free:'days remaining in your free access.',
-    pricingstate_journeycomplete:"Your 21-day Vocal Journey is complete", pricingstate_progresschoose:'your progress is saved. Choose a plan to keep training.',
+    pricingstate_journeycomplete:"Your 21-day Vocal Journey is complete", pricingstate_progresschoose:"your progress is saved.",
     plan_current:'Current plan', plan_continue_prefix:'Continue with', plan_upgrade_prefix:'Upgrade to',
     plan_subscribed_prefix:"You're subscribed to", plan_subscribed_suffix:'(demo). Your vocal journey continues — nothing was lost.',
     plan_phrase_template:'{p} plan', plan_suffix_trial_of21:'of 21 trial',
@@ -9800,7 +9802,7 @@ const TRANSLATIONS = {
     pricing_per_mo:'/mois',
     pricing_per_yr:'/an',
     pricing_plans_label:'Forfaits',
-    pricing_progresssaved_note:'Votre progression, vos succès et votre historique sont enregistrés — rien n\'est supprimé parce que votre essai s\'est terminé. Choisissez un forfait ci-dessous pour continuer à vous entraîner, jouer au Monde Vocal, et obtenir une pratique guidée par IA.',
+    pricing_progresssaved_note:"Votre progression, vos réussites et votre historique sont enregistrés ; rien n'est supprimé parce que votre essai est terminé.",
     pricing_realnumbers_desc:"Votre référence du Jour 1 enregistrée, comparée à aujourd'hui.",
     pricing_recordtoday_btn:"Enregistrer l'extrait du jour",
     pricing_teacher_audience:'Jusqu\'à 20 élèves',
@@ -10036,7 +10038,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Demain, votre Parcours Vocal de 21 jours se termine.', pricingstate_daysleft_transform:'jours restants pour terminer votre transformation.',
     pricingstate_championship_p1:'Votre Championnat Vocal approche —', pricingstate_championship_p2:'jours restants.',
     pricingstate_daysleft_free:'jours restants dans votre accès gratuit.',
-    pricingstate_journeycomplete:"Votre Parcours Vocal de 21 jours est terminé", pricingstate_progresschoose:'votre progression est enregistrée. Choisissez un forfait pour continuer à vous entraîner.',
+    pricingstate_journeycomplete:"Votre Parcours Vocal de 21 jours est terminé", pricingstate_progresschoose:"votre progression est enregistrée.",
     plan_current:'Forfait actuel', plan_continue_prefix:'Continuer avec', plan_upgrade_prefix:'Passer au forfait',
     plan_subscribed_prefix:'Vous êtes abonné au forfait', plan_subscribed_suffix:'(démo). Votre parcours vocal continue — rien n\'a été perdu.',
     plan_phrase_template:'forfait {p}', plan_suffix_trial_of21:"d'essai sur 21",
@@ -11596,7 +11598,7 @@ const TRANSLATIONS = {
     pricing_per_mo:'/mes',
     pricing_per_yr:'/año',
     pricing_plans_label:'Planes',
-    pricing_progresssaved_note:'Tu progreso, logros e historial se guardan — nada se elimina porque tu prueba terminó. Elige un plan abajo para seguir entrenando, jugando el Mundo Vocal, y obteniendo práctica guiada por IA.',
+    pricing_progresssaved_note:"Tu progreso, tus logros y tu historial están guardados; no se borra nada porque terminó tu prueba.",
     pricing_realnumbers_desc:"Tu línea base del Día 1 guardada, comparada con hoy.",
     pricing_recordtoday_btn:"Grabar el clip de hoy",
     pricing_teacher_audience:'Hasta 20 estudiantes',
@@ -11832,7 +11834,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Mañana termina tu Viaje Vocal de 21 días.', pricingstate_daysleft_transform:'días restantes para completar tu transformación.',
     pricingstate_championship_p1:'Se acerca tu Campeonato Vocal —', pricingstate_championship_p2:'días restantes.',
     pricingstate_daysleft_free:'días restantes de tu acceso gratuito.',
-    pricingstate_journeycomplete:"Tu Viaje Vocal de 21 días ha terminado", pricingstate_progresschoose:'tu progreso está guardado. Elige un plan para seguir entrenando.',
+    pricingstate_journeycomplete:"Tu Viaje Vocal de 21 días ha terminado", pricingstate_progresschoose:"tu progreso está guardado.",
     plan_current:'Plan actual', plan_continue_prefix:'Continuar con', plan_upgrade_prefix:'Mejorar a',
     plan_subscribed_prefix:'Te has suscrito al plan', plan_subscribed_suffix:'(demo). Tu viaje vocal continúa — no se perdió nada.',
     plan_phrase_template:'plan {p}', plan_suffix_trial_of21:'de prueba sobre 21',
@@ -13392,7 +13394,7 @@ const TRANSLATIONS = {
     pricing_per_mo:'/ay',
     pricing_per_yr:'/yıl',
     pricing_plans_label:'Planlar',
-    pricing_progresssaved_note:'İlerlemeniz, başarılarınız ve geçmişiniz kaydedilir — denemeniz bittiği için hiçbir şey silinmez. Antrenmana devam etmek, Vokal Dünyası oynamak ve yapay zeka rehberliğinde pratik yapmak için aşağıdan bir plan seçin.',
+    pricing_progresssaved_note:"İlerlemen, başarıların ve geçmişin kayıtlı; deneme süren bittiği için hiçbir şey silinmez.",
     pricing_realnumbers_desc:"Kayıtlı 1. Gün başlangıç noktan, bugünle karşılaştırıldı.",
     pricing_recordtoday_btn:"Bugünün klibini kaydet",
     pricing_teacher_audience:'20\'ye kadar öğrenci',
@@ -13628,7 +13630,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Yarın 21 günlük Vokal Yolculuğunuz sona eriyor.', pricingstate_daysleft_transform:'gün kaldı dönüşümünüzü tamamlamak için.',
     pricingstate_championship_p1:'Vokal Şampiyonanız yaklaşıyor —', pricingstate_championship_p2:'gün kaldı.',
     pricingstate_daysleft_free:'gün kaldı ücretsiz erişiminizde.',
-    pricingstate_journeycomplete:"21 günlük Vokal Yolculuğun tamamlandı", pricingstate_progresschoose:'ilerlemeniz kaydedildi. Antrenmana devam etmek için bir plan seçin.',
+    pricingstate_journeycomplete:"21 günlük Vokal Yolculuğun tamamlandı", pricingstate_progresschoose:"ilerlemen kayıtlı.",
     plan_current:'Mevcut plan', plan_continue_prefix:'Şununla devam et:', plan_upgrade_prefix:'Şu plana yükselt:',
     plan_subscribed_prefix:'Şu plana abone oldunuz:', plan_subscribed_suffix:'(demo). Vokal yolculuğunuz devam ediyor — hiçbir şey kaybolmadı.',
     plan_phrase_template:'{p} planı', plan_suffix_trial_of21:'/21 deneme',
@@ -22917,6 +22919,7 @@ function renderOnboardingStep(){
   // phase 9 (2.3): "Step n of 6" (the welcome has none) and a hairline bar in ink
   document.getElementById('obStepLabel').textContent = obStepIndex>0 ? t('ob_step_tpl').replace('{n}', obStepIndex).replace('{total}', OB_TOTAL_STEPS-1) : '';
   document.getElementById('obBarFill').style.width = (100*obStepIndex/(OB_TOTAL_STEPS-1))+'%';
+  document.getElementById('onboardingDots').hidden = obStepIndex===0; // the welcome has no progress line
   document.getElementById('obBackBtn').style.display = obStepIndex>0 ? 'inline-flex':'none';
   document.getElementById('obBackBtn').textContent = t('ob_back_btn');
   const nextBtn = document.getElementById('obNextBtn');
