@@ -10,7 +10,9 @@
 // 1, in the trial); active (Level 7); expired (active, the 21 days over, no plan); teacher (active on the Teacher plan
 // with two students and one assignment: the Teacher Dashboard, master only, since phase 9 hides it).
 // Out: <out>/<w>-<theme>/<screen>-<state>.jpg (+ <poster>-<state>-export.png), states.json, sheets/<name>.jpg
-// Usage: node scripts/design-verify/shots9.js [--out <dir>] [--base <ref>] [--only key,key] [--combos 390-light,…]
+// Usage: node scripts/design-verify/shots9.js [--out <dir>] [--base <ref>] [--only key,key] [--combos 390-light,…] [--set 91]
+//        (--set 91 adds 9.1's shots: the empty Feedback send, Range Finder's result and Profile in French, onboarding
+//        steps 1 and 3 with choices made)
 //        [--name before9|phase9]
 const fs = require('fs'), path = require('path'), os = require('os');
 const C = require('./common');
@@ -23,7 +25,7 @@ const SIZES = { 390: { width: 390, height: 844 }, 1280: { width: 1280, height: 9
 const sleep = C.sleep;
 const src = fs.readFileSync(path.join(__dirname, 'contrast.js'), 'utf8');
 const MEASURE = src.slice(src.indexOf('async function measure('), src.indexOf('\n}\n', src.indexOf('async function measure(')) + 2);
-const SCREENS = require('./screens9').SCREENS.filter(s => !ONLY || ONLY.includes(s.key));
+const SCREENS = [...require('./screens9').SCREENS, ...(arg('--set') === '91' ? require('./screens9').SCREENS_91 : [])].filter(s => !ONLY || ONLY.includes(s.key));
 const { stateInPage, resetInPage, openOverlays } = require('./screens9');
 
 async function openState(b, state, st, { theme, viewport }) {

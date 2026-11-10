@@ -35,6 +35,15 @@ const SCREENS = [
   { key: 'sharerecap', open: `document.getElementById('shareRecapBtn').click();`, overlay: 'shareRecapOverlay', root: '#shareRecapOverlay', states: ['active'], exportBtn: 'downloadRecapPosterBtn', poster: 'recapPoster' },
   { key: 'vocallab', open: `enterPanel('vocallab');`, panel: 'vocallab', root: '#panel-vocallab', states: ['signedout', 'new', 'active'] },
 ];
+// 9.1's extra shots (PHASE9.md 9.1, SCREENSHOTS): shots9.js --set 91 adds them; states9 doesn't (its list stays §1's)
+const FR = `window.__langSet = true; setLanguage('fr');`;
+const SCREENS_91 = [
+  { key: 'feedbackempty', open: `enterPanel('feedback'); document.getElementById('feedbackSubmitBtn').click();`, panel: 'feedback', root: '#panel-feedback', states: ['new'] },
+  { key: 'rangeresult-fr', open: FR + ` enterPanel('range'); lowNote = {midi:45, name:'A', octave:2, freq:110}; highNote = {midi:69, name:'A', octave:4, freq:440}; renderRangeResult(); showStep('rangeResult');`, panel: 'range', root: '#panel-range', states: ['active'] },
+  { key: 'profile-fr', open: FR + ` enterPanel('profile');`, panel: 'profile', root: '#panel-profile', states: ['active'] },
+  { key: 'onboarding1set', open: `openOnboarding(); document.querySelectorAll('#obSingerTypeGrid [data-ob-value]')[1].click(); obStepIndex=1; renderOnboardingStep();`, overlay: 'onboardingOverlay', root: '#onboardingOverlay', states: ['new'] },
+  { key: 'onboarding3set', open: `openOnboarding(); for (const i of [0, 2, 5]) document.querySelectorAll('#obGenreGrid [data-ob-value]')[i].click(); obStepIndex=3; renderOnboardingStep();`, overlay: 'onboardingOverlay', root: '#onboardingOverlay', states: ['new'] },
+];
 
 // Runs in the page: the state on top of youSeed's (expired and teacher build on active); nothing is saved.
 function stateInPage(st) {
@@ -54,6 +63,8 @@ function stateInPage(st) {
 // show them again) and stop anything a screen opened.
 function resetInPage() {
   window.__wuAllow = false;
+  if (window.__langSet) { window.__langSet = false; try { setLanguage('en'); } catch (e) {} }
+  try { if (typeof showStep === 'function') showStep('rangeIntro'); } catch (e) {}
   try { if (typeof wuStop === 'function') wuStop(); } catch (e) {}
   document.querySelectorAll('.modal-overlay, .share-overlay').forEach(o => { o.style.display = 'none'; });
   document.querySelectorAll('.levelup-overlay').forEach(o => { o.classList.remove('levelup-show'); o.style.display = ''; });
@@ -69,4 +80,4 @@ function openOverlays() {
   const p = document.querySelector('.panel.active');
   return { overlays: [...new Set(overlays)], panel: p ? p.id.replace(/^panel-/, '') : null, house: document.body.dataset.house || null };
 }
-module.exports = { SCREENS, stateInPage, resetInPage, openOverlays };
+module.exports = { SCREENS, SCREENS_91, stateInPage, resetInPage, openOverlays };
