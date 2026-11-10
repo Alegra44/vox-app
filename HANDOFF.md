@@ -648,8 +648,15 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   blank row (hasAnyContent counts submittedAt); voice types read in English on Range Finder and Profile (translated
   only on the poster); Pricing's Choir plan still lists "Director dashboard", which is hidden. **Fixed by phase 9:**
   the poster export failed on every poster (html2canvas can't draw color-mix).
-- **Kept as on master:** the moment sheets still close on their own timers (Continue closes sooner); a breakthrough
-  can fire mid-exercise. Sonic X-Ray's paywall title reads "Song Lab" (its Choir World section).
+- **Kept as on master:** a breakthrough can fire mid-exercise. Sonic X-Ray's paywall title reads "Song Lab" (its Choir World section).
+- **9.1, the review's fix round (PHASE9.md "9.1"), built and checked 2026-11-10; waiting on the user's review.**
+  Feedback's empty Send saves nothing and says so under the button (a rating or one answer sends); voice types in
+  the page's language (Range Finder, poster; Profile's range line is hidden since phase 7); Plans without "Director
+  dashboard" and the paragraph under the heading; moment sheets 6 s / 4 s, a pointer or key inside stops the timer,
+  then Continue, Escape or the scrim close (momentTimers.js); Vocal Lab plain bars with Cs under each and "Find your
+  range"; poster PNG opaque at 3x (1020×1800). Checks: feedback posters levelup moments9 states9 checkout tools
+  youstates copyscan-all contrast hooks bootcheck all pass (states9: 13 expected differences). Shots, sheets (before =
+  phase 9 as reviewed) and logs on review/phase9 `9.1/`. Shots: `node scripts/design-verify/shots9.js --set 91 …`.
 - Six feedback rows the first states9/feedback runs inserted into public.feedback were deleted by id; both scripts
   now stub the insert (feedback.js inserts one real row, reads it back and deletes it).
 
