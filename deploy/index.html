@@ -1591,6 +1591,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   :is(#panel-key, #panel-vocallab, #panel-genre, #panel-warmup) > .key-card,
   #panel-vocalpuzzle > .key-card:not(#puzzleGuessCard){background:none;border:0;border-radius:0;box-shadow:none;padding:0;}
   #panel-exercises > .key-card{background:none;border:0;border-radius:0;box-shadow:none;padding-left:0;padding-right:0;} /* 4a.1: the page on paper; the tool card and the difficulty breakdown stay raised */
+  #reweightCard > .step-label{font-size:var(--hl-t-body);color:var(--hl-ink);} #reweightCard > .step-label > [data-i18n="exercises_focus_label"]{font-weight:600;} /* phase 10 A1: Today's Recommended Focus, a bold title (its tag stays as it was) */
+  #reweightCard > .desc{font-size:var(--hl-t-small);line-height:1.5;color:var(--hl-ink-2);} /* no bigger than the page subtitle (.j-sub, 14px) */
   :is(#pitchAgainBtn, #intervalAgainBtn, #scaleAgainBtn){white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis;}
   #panel-key .key-section{margin:0;padding:var(--hl-s6) 0;border-top:var(--hl-hair) solid var(--hl-rule);}
   #panel-key .key-section:first-child{border-top:0;padding-top:0;}
