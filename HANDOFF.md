@@ -25,11 +25,10 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-09:
-phase 8, **dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx** (deployed by the user from `redesign/phase8` 547dbf7), **the rollback
-target for phase 9**. master 27eab03 (the --no-ff merge of redesign/phase8, 2026-11-10) is identical to it. The
-previous target was phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk. The table
-above predates phase 5; `review/phase8-prod` is the current review branch.
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-10:
+phase 9, **dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H** (deployed by the user from master 4c2aa7f, the --no-ff merge of
+redesign/phase9), **the rollback target for phase 10**. The previous target was phase 8,
+dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx. The table above predates phase 5; `review/phase9-prod` is the current review branch.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -659,6 +658,16 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   phase 9 as reviewed) and logs on review/phase9 `9.1/`. Shots: `node scripts/design-verify/shots9.js --set 91 …`.
 - Six feedback rows the first states9/feedback runs inserted into public.feedback were deleted by id; both scripts
   now stub the insert (feedback.js inserts one real row, reads it back and deletes it).
+
+- **Live 2026-11-10: dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H** (deploy-n0n6rz9s9-alegra1122.vercel.app), deployed by the user
+  after "deploy" from master 4c2aa7f (first `vercel deploy --prod` "Not authorized", the retry deployed); the main
+  address served it byte-identically, no promote. Production checks (review/phase9-prod, notes.txt): prod9.sh
+  (checkout, onboard, feedback, posters, moments9; master side 27eab03 served locally, branch side the site: common.js
+  buildDir takes a URL and openPage copies the local session to the site's origin) and prod.sh WITH_CHOIR=1
+  SCORES_BASE=27eab03. First run 46 of 52; checkout, warmup-entries, stopcheck, cv-live sign-in timeouts and scores4b
+  Voice Quality centroid spread all passed on rerun (scores4b on its third run), none repeated; probe-signup.js: 3/3
+  page sign-ups in 2.5–4.7 s. No rollback. 0 test accounts and 0 test Feedback rows left. review/phase9 and
+  review/phase8-prod deleted. **Rollback target for phase 10: dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H.**
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
