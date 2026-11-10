@@ -2572,6 +2572,23 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #trialCompareRows .snapshot-row > span:last-child{font-variant-numeric:tabular-nums;color:var(--hl-ink-2);}
   #trialCompareRows .snapshot-delta.up{color:var(--hl-ok);} #trialCompareRows .snapshot-delta.flat{color:var(--hl-ink-3);}
   #paywallPlanChip[hidden]{display:none;}
+
+  /* ---- PHASE 9 (2.6): Feedback. The form on paper with ruled fields; the rating a segmented control. ---- */
+  .feedback-form{display:grid;gap:0;margin-top:var(--hl-s4);border-top:var(--hl-hair) solid var(--hl-rule);}
+  .feedback-form .feedback-field{display:grid;gap:6px;padding:var(--hl-s4) 0;border-bottom:var(--hl-hair) solid var(--hl-rule);margin:0;}
+  .feedback-form .feedback-label{font-size:var(--hl-t-body);font-weight:600;color:var(--hl-ink);margin:0;}
+  .feedback-form .text-input{min-height:48px;padding:var(--hl-s3);font-size:var(--hl-t-body);line-height:1.45;background:var(--hl-raised);color:var(--hl-ink);
+    border:var(--hl-hair) solid var(--hl-rule-strong);border-radius:var(--hl-r1);font-family:var(--hl-font);}
+  .feedback-form textarea.text-input{resize:vertical;}
+  .feedback-form .text-input:focus{outline:2px solid var(--hl-voice);outline-offset:1px;}
+  .feedback-rating{display:grid;gap:6px;justify-items:start;}
+  .feedback-star-row.hl-seg{display:flex;width:100%;max-width:360px;}
+  .feedback-star-row.hl-seg .feedback-star{flex:1;min-width:44px;font-size:var(--hl-t-body);font-variant-numeric:tabular-nums;color:var(--hl-ink-2);background:transparent;}
+  .feedback-star-row.hl-seg .feedback-star[aria-pressed="true"]{background:var(--hl-ink);color:var(--hl-bg);}
+  .feedback-rating-ends{display:flex;justify-content:space-between;width:100%;max-width:360px;}
+  .feedback-submit{width:100%;margin-top:var(--hl-s5);}
+  .feedback-note{margin:var(--hl-s3) 0 0;}
+  .feedback-thanks{justify-items:start;}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
@@ -5721,11 +5738,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- FEEDBACK PANEL -->
   <section class="panel" id="panel-feedback">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="feedback_title">💬 Feedback</div>
+      <div class="j-title" data-i18n="feedback_title">Feedback</div>
       <div class="j-sub" data-i18n="feedback_sub">Real, specific answers help far more than "it's fine" — a couple of sentences per question is genuinely useful.</div>
     </div>
 
-    <div class="key-card" id="feedbackFormCard">
+    <div class="feedback-form" id="feedbackFormCard">
       <div class="feedback-field">
         <label class="feedback-label" for="fbLike" data-i18n="feedback_q_like">What do you like about the app?</label>
         <textarea class="text-input" id="fbLike" rows="2"></textarea>
@@ -5759,28 +5776,30 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <textarea class="text-input" id="fbBugs" rows="2"></textarea>
       </div>
       <div class="feedback-field">
-        <label class="feedback-label" data-i18n="feedback_q_rating">How would you rate your overall experience?</label>
-        <div class="feedback-star-row" id="feedbackStarRow">
-          <button class="feedback-star" data-star="1" aria-label="Rate 1 star" aria-pressed="false">★</button>
-          <button class="feedback-star" data-star="2" aria-label="Rate 2 stars" aria-pressed="false">★</button>
-          <button class="feedback-star" data-star="3" aria-label="Rate 3 stars" aria-pressed="false">★</button>
-          <button class="feedback-star" data-star="4" aria-label="Rate 4 stars" aria-pressed="false">★</button>
-          <button class="feedback-star" data-star="5" aria-label="Rate 5 stars" aria-pressed="false">★</button>
+        <label class="feedback-label" id="fbRatingLabel" data-i18n="feedback_q_rating">How would you rate your overall experience?</label>
+        <div class="feedback-rating">
+          <div class="hl-seg feedback-star-row" id="feedbackStarRow" role="group" aria-labelledby="fbRatingLabel">
+            <button type="button" class="feedback-star" data-star="1" aria-pressed="false">1</button>
+            <button type="button" class="feedback-star" data-star="2" aria-pressed="false">2</button>
+            <button type="button" class="feedback-star" data-star="3" aria-pressed="false">3</button>
+            <button type="button" class="feedback-star" data-star="4" aria-pressed="false">4</button>
+            <button type="button" class="feedback-star" data-star="5" aria-pressed="false">5</button>
+          </div>
+          <div class="feedback-rating-ends hl-meta"><span data-i18n="feedback_rating_low">Poor</span><span data-i18n="feedback_rating_high">Great</span></div>
         </div>
       </div>
       <div class="feedback-field">
         <label class="feedback-label" for="fbOther" data-i18n="feedback_q_other">Any additional suggestions?</label>
         <textarea class="text-input" id="fbOther" rows="2"></textarea>
       </div>
-      <button class="mic-btn vc-ink" id="feedbackSubmitBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="feedback_submit_btn">Submit Feedback</button>
-      <p class="fine-print" id="feedbackFormNote" style="margin-top:10px;" data-i18n="feedback_storage_note">Stored locally on this device via the same real persistence the rest of your progress uses — this prototype has no server to send it to yet (see the migration spec).</p>
+      <button class="hl-btn hl-btn--ink feedback-submit" id="feedbackSubmitBtn" data-i18n="feedback_submit_btn">Send feedback</button>
+      <p class="hl-meta feedback-note" id="feedbackFormNote" data-i18n="feedback_storage_note">Sent to the VoxCoach team, with your e-mail if you're signed in.</p>
     </div>
 
-    <div class="key-card" id="feedbackThanksCard" style="display:none;text-align:center;">
-      <div style="font-size:40px;margin-bottom:10px;">✅</div>
-      <div class="step-label" style="text-align:center;" data-i18n="feedback_thanks_title">Thank you</div>
-      <p class="desc" style="margin-top:8px;" data-i18n="feedback_thanks_desc">Your feedback was saved. It genuinely helps shape what gets built next.</p>
-      <button class="ghost-btn" id="feedbackAnotherBtn" style="margin-top:16px;" data-i18n="feedback_another_btn">Submit more feedback</button>
+    <div class="hl-empty feedback-thanks" id="feedbackThanksCard" style="display:none;">
+      <h2 class="hl-h3" data-i18n="feedback_thanks_title">Thank you</h2>
+      <p class="hl-small" data-i18n="feedback_thanks_desc">Your feedback was sent to the VoxCoach team.</p>
+      <button class="hl-btn" id="feedbackAnotherBtn" data-i18n="feedback_another_btn">Send more feedback</button>
     </div>
   </section>
 
@@ -7325,8 +7344,8 @@ const TRANSLATIONS = {
     pricing_sub:"21 days of full access on every new account; after that, a paid plan continues it.",
     records_title:"Personal Records",
     records_sub:"Your bests, from what you've sung. A record appears once you've done the activity.",
-    feedback_title:'💬 Feedback',
-    feedback_sub:'Real, specific answers help far more than "it\'s fine" — a couple of sentences per question is genuinely useful.',
+    feedback_title:"Feedback",
+    feedback_sub:"A sentence or two per question helps most.",
     teacher_title:'👩‍🏫 Teacher Dashboard',
     teacher_sub:'A real roster and assignment tracker — not sample data, an actual local tool you can use.',
     journey_title:'21 Days to Discover Your Voice',
@@ -7837,7 +7856,7 @@ const TRANSLATIONS = {
     difficulty_beginner:'Beginner',
     difficulty_intermediate:'Intermediate',
     difficulty_professional:'Professional',
-    feedback_another_btn:'Submit more feedback',
+    feedback_another_btn:"Send more feedback",
     feedback_q_addfeature:'What feature would you like us to add?',
     feedback_q_bugs:'Did you encounter any bugs or errors?',
     feedback_q_confusing:'What is confusing or unclear?',
@@ -7848,9 +7867,9 @@ const TRANSLATIONS = {
     feedback_q_mostused:'Which feature do you use the most?',
     feedback_q_other:'Any additional suggestions?',
     feedback_q_rating:'How would you rate your overall experience?',
-    feedback_storage_note:'Stored locally on this device via the same real persistence the rest of your progress uses — this prototype has no server to send it to yet (see the migration spec).',
-    feedback_submit_btn:'Submit Feedback',
-    feedback_thanks_desc:'Your feedback was saved. It genuinely helps shape what gets built next.',
+    feedback_storage_note:"Sent to the VoxCoach team, with your e-mail if you're signed in.",
+    feedback_submit_btn:"Send feedback",
+    feedback_thanks_desc:"Your feedback was sent to the VoxCoach team.",
     feedback_thanks_title:'Thank you',
     glider_choose_course:"Course",
     glider_takeoff_hint:'Sing to take off',
@@ -8785,6 +8804,10 @@ const TRANSLATIONS = {
     paywall_expired_notonsale:"Your 21 free days have ended. Paid plans aren't on sale yet; we'll tell you when they open. Your progress is saved.",
     paywall_close_btn:"Close",
     paywall_seeplans_btn:"See the plans",
+    feedback_rating_low:"Poor",
+    feedback_rating_high:"Great",
+    feedback_toast_empty:"Add a rating or a note before sending.",
+    feedback_toast_failed:"Couldn't send your feedback. Try again.",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9074,8 +9097,8 @@ const TRANSLATIONS = {
     pricing_sub:"21 jours d'accès complet sur chaque nouveau compte ; ensuite, un forfait payant prend le relais.",
     records_title:"Records personnels",
     records_sub:"Vos meilleurs résultats, d'après ce que vous avez chanté. Un record apparaît une fois l'activité faite.",
-    feedback_title:'💬 Avis',
-    feedback_sub:'Des réponses réelles et précises aident bien plus que « c\'est bien » — quelques phrases par question sont vraiment utiles.',
+    feedback_title:"Avis",
+    feedback_sub:"Une phrase ou deux par question, c'est ce qui aide le plus.",
     teacher_title:'👩‍🏫 Tableau de Bord Enseignant',
     teacher_sub:'Un vrai suivi de liste d\'élèves et de devoirs — pas des données d\'exemple, un vrai outil local que vous pouvez utiliser.',
     journey_title:'21 Jours pour Découvrir Votre Voix',
@@ -9586,7 +9609,7 @@ const TRANSLATIONS = {
     difficulty_beginner:'Débutant',
     difficulty_intermediate:'Intermédiaire',
     difficulty_professional:'Professionnel',
-    feedback_another_btn:'Envoyer d\'autres avis',
+    feedback_another_btn:"Envoyer un autre avis",
     feedback_q_addfeature:'Quelle fonctionnalité aimeriez-vous que nous ajoutions ?',
     feedback_q_bugs:'Avez-vous rencontré des bugs ou des erreurs ?',
     feedback_q_confusing:'Qu\'est-ce qui est confus ou peu clair ?',
@@ -9597,9 +9620,9 @@ const TRANSLATIONS = {
     feedback_q_mostused:'Quelle fonctionnalité utilisez-vous le plus ?',
     feedback_q_other:'Des suggestions supplémentaires ?',
     feedback_q_rating:'Comment évalueriez-vous votre expérience globale ?',
-    feedback_storage_note:'Enregistré localement sur cet appareil via la même vraie persistance que le reste de votre progression utilise — ce prototype n\'a pas encore de serveur où l\'envoyer (voir la spécification de migration).',
-    feedback_submit_btn:'Envoyer l\'avis',
-    feedback_thanks_desc:'Votre avis a été enregistré. Il aide vraiment à façonner ce qui sera construit ensuite.',
+    feedback_storage_note:"Envoyé à l'équipe VoxCoach, avec votre e-mail si vous êtes connecté.",
+    feedback_submit_btn:"Envoyer l'avis",
+    feedback_thanks_desc:"Votre avis a été envoyé à l'équipe VoxCoach.",
     feedback_thanks_title:'Merci',
     glider_choose_course:"Parcours",
     glider_takeoff_hint:'Chantez pour décoller',
@@ -10534,6 +10557,10 @@ const TRANSLATIONS = {
     paywall_expired_notonsale:"Vos 21 jours gratuits sont terminés. Les forfaits payants ne sont pas encore en vente ; nous vous préviendrons à leur ouverture. Votre progression est enregistrée.",
     paywall_close_btn:"Fermer",
     paywall_seeplans_btn:"Voir les forfaits",
+    feedback_rating_low:"Mauvais",
+    feedback_rating_high:"Excellent",
+    feedback_toast_empty:"Ajoutez une note ou un commentaire avant d'envoyer.",
+    feedback_toast_failed:"Impossible d'envoyer votre avis. Réessayez.",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10823,8 +10850,8 @@ const TRANSLATIONS = {
     pricing_sub:"21 días de acceso completo en cada cuenta nueva; después, un plan de pago lo continúa.",
     records_title:"Récords personales",
     records_sub:"Tus mejores marcas, según lo que has cantado. Un récord aparece cuando has hecho la actividad.",
-    feedback_title:'💬 Comentarios',
-    feedback_sub:'Respuestas reales y específicas ayudan mucho más que "está bien" — un par de frases por pregunta es genuinamente útil.',
+    feedback_title:"Comentarios",
+    feedback_sub:"Una o dos frases por pregunta es lo que más ayuda.",
     teacher_title:'👩‍🏫 Panel del Profesor',
     teacher_sub:'Un seguimiento real de lista de alumnos y tareas — no datos de muestra, una herramienta local real que puedes usar.',
     journey_title:'21 Días para Descubrir Tu Voz',
@@ -11335,7 +11362,7 @@ const TRANSLATIONS = {
     difficulty_beginner:'Principiante',
     difficulty_intermediate:'Intermedio',
     difficulty_professional:'Profesional',
-    feedback_another_btn:'Enviar más comentarios',
+    feedback_another_btn:"Enviar más comentarios",
     feedback_q_addfeature:'¿Qué función te gustaría que añadiéramos?',
     feedback_q_bugs:'¿Encontraste algún error o falla?',
     feedback_q_confusing:'¿Qué es confuso o poco claro?',
@@ -11346,9 +11373,9 @@ const TRANSLATIONS = {
     feedback_q_mostused:'¿Qué función usas más?',
     feedback_q_other:'¿Alguna sugerencia adicional?',
     feedback_q_rating:'¿Cómo calificarías tu experiencia general?',
-    feedback_storage_note:'Almacenado localmente en este dispositivo mediante la misma persistencia real que usa el resto de tu progreso — este prototipo aún no tiene un servidor al cual enviarlo (ver la especificación de migración).',
-    feedback_submit_btn:'Enviar comentarios',
-    feedback_thanks_desc:'Tu comentario fue guardado. Realmente ayuda a dar forma a lo que se construirá después.',
+    feedback_storage_note:"Se envía al equipo de VoxCoach, con tu correo si has iniciado sesión.",
+    feedback_submit_btn:"Enviar comentarios",
+    feedback_thanks_desc:"Tus comentarios se enviaron al equipo de VoxCoach.",
     feedback_thanks_title:'Gracias',
     glider_choose_course:"Recorrido",
     glider_takeoff_hint:'Canta para despegar',
@@ -12283,6 +12310,10 @@ const TRANSLATIONS = {
     paywall_expired_notonsale:"Tus 21 días gratis han terminado. Los planes de pago aún no están a la venta; te avisaremos cuando abran. Tu progreso está guardado.",
     paywall_close_btn:"Cerrar",
     paywall_seeplans_btn:"Ver los planes",
+    feedback_rating_low:"Mala",
+    feedback_rating_high:"Excelente",
+    feedback_toast_empty:"Añade una valoración o un comentario antes de enviar.",
+    feedback_toast_failed:"No se pudieron enviar tus comentarios. Inténtalo de nuevo.",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12572,8 +12603,8 @@ const TRANSLATIONS = {
     pricing_sub:"Her yeni hesapta 21 gün tam erişim; sonrasında ücretli bir plan devam ettirir.",
     records_title:"Kişisel Rekorlar",
     records_sub:"Söylediklerinden en iyilerin. Bir rekor, o etkinliği yaptığında görünür.",
-    feedback_title:'💬 Geri Bildirim',
-    feedback_sub:'Gerçek, somut cevaplar "iyi" demekten çok daha fazla yardımcı olur — soru başına birkaç cümle gerçekten faydalıdır.',
+    feedback_title:"Geri bildirim",
+    feedback_sub:"Soru başına bir iki cümle en çok işe yarar.",
     teacher_title:'👩‍🏫 Öğretmen Paneli',
     teacher_sub:'Gerçek bir öğrenci listesi ve ödev takipçisi — örnek veri değil, kullanabileceğiniz gerçek bir yerel araç.',
     journey_title:'Sesinizi Keşfetmek İçin 21 Gün',
@@ -13084,7 +13115,7 @@ const TRANSLATIONS = {
     difficulty_beginner:'Başlangıç',
     difficulty_intermediate:'Orta',
     difficulty_professional:'Profesyonel',
-    feedback_another_btn:'Daha fazla geri bildirim gönder',
+    feedback_another_btn:"Başka geri bildirim gönder",
     feedback_q_addfeature:'Hangi özelliği eklememizi istersiniz?',
     feedback_q_bugs:'Herhangi bir hata veya sorunla karşılaştınız mı?',
     feedback_q_confusing:'Ne kafa karıştırıcı veya belirsiz?',
@@ -13095,9 +13126,9 @@ const TRANSLATIONS = {
     feedback_q_mostused:'En çok hangi özelliği kullanıyorsunuz?',
     feedback_q_other:'Ek öneriniz var mı?',
     feedback_q_rating:'Genel deneyiminizi nasıl değerlendirirsiniz?',
-    feedback_storage_note:'İlerlemenizin geri kalanının kullandığı aynı gerçek kalıcılık yoluyla bu cihazda yerel olarak saklanır — bu prototipin henüz gönderecek bir sunucusu yok (geçiş özelliğine bakın).',
-    feedback_submit_btn:'Geri Bildirim Gönder',
-    feedback_thanks_desc:'Geri bildiriminiz kaydedildi. Bir sonraki yapılacakları gerçekten şekillendirmeye yardımcı oluyor.',
+    feedback_storage_note:"Giriş yaptıysan e-postanla birlikte VoxCoach ekibine gönderilir.",
+    feedback_submit_btn:"Geri bildirimi gönder",
+    feedback_thanks_desc:"Geri bildirimin VoxCoach ekibine gönderildi.",
     feedback_thanks_title:'Teşekkürler',
     glider_choose_course:"Parkur",
     glider_takeoff_hint:'Havalanmak için söyleyin',
@@ -14032,6 +14063,10 @@ const TRANSLATIONS = {
     paywall_expired_notonsale:"21 ücretsiz günün sona erdi. Ücretli planlar henüz satışta değil; açıldığında haber vereceğiz. İlerlemen kayıtlı.",
     paywall_close_btn:"Kapat",
     paywall_seeplans_btn:"Planları gör",
+    feedback_rating_low:"Kötü",
+    feedback_rating_high:"Harika",
+    feedback_toast_empty:"Göndermeden önce bir puan ya da not ekle.",
+    feedback_toast_failed:"Geri bildirimin gönderilemedi. Tekrar dene.",
   },
 };
 let currentLanguage = 'en';
@@ -25938,9 +25973,9 @@ document.querySelectorAll('.feedback-star').forEach(btn=>{
   btn.addEventListener('click', ()=>{
     feedbackStarValue = parseInt(btn.dataset.star, 10);
     document.querySelectorAll('.feedback-star').forEach(s=>{
-      const isFilled = parseInt(s.dataset.star,10) <= feedbackStarValue;
-      s.classList.toggle('filled', isFilled);
-      s.setAttribute('aria-pressed', isFilled ? 'true' : 'false');
+      const on = parseInt(s.dataset.star,10) === feedbackStarValue; // phase 9: a segmented control, one value chosen
+      s.classList.toggle('filled', on);
+      s.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
   });
 });
@@ -25963,7 +25998,7 @@ document.getElementById('feedbackSubmitBtn')?.addEventListener('click', async ()
 
   const hasAnyContent = Object.keys(entry).some(k => typeof entry[k]==='string' && entry[k].length>0) || entry.rating>0;
   if(!hasAnyContent){
-    showToast('Add at least a rating or a note before submitting — an empty form doesn\'t help much.', 'warn');
+    showToast(t('feedback_toast_empty'), 'warn');
     return;
   }
 
@@ -25986,7 +26021,7 @@ document.getElementById('feedbackSubmitBtn')?.addEventListener('click', async ()
     if(error) throw error;
   }catch(e){
     console.error('storage error', e);
-    showToast('Could not submit feedback — please try again.', 'warn');
+    showToast(t('feedback_toast_failed'), 'warn');
     return;
   }
 
