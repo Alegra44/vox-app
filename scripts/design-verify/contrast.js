@@ -16,6 +16,7 @@
 // Phase 4b (PHASE4B.md §1f): the 10 tools with their own displays (tools4b.js) the same way (the live tools idle, on the
 // stage while listening, and stopped). --set 4a | 4b | all (the default) picks the tools.
 // Phase 6 (PHASE6.md §1f): --set 6 measures the six Songs-tab solo tools (idle, stage, result) and the Songs tab.
+// Non-text (phase 10 A1): Scale Run's step dots are measured against 3:1 (graphics), flagged nonText in the JSON.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // --you (phase 7, PHASE7.md §1b): the You screens filled in, as shots7before measured them: each panel (the hub,
 // Journey, Progress, Records, Vocal Passport, Voice Health, Profile & settings) in each seeded state of youSeed.js, at
@@ -120,9 +121,12 @@ async function measure(rootArg) {
       if (layers.length && layers[layers.length - 1].stops.every(c => c[3] >= 1) && layers[layers.length - 1].stops.length === 1) break;
     }
     const size = parseFloat(st.fontSize), bold = +st.fontWeight >= 700;
-    const need = size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
+    // PHASE10.md A1: Scale Run's step dots (.scale-dot, the step number inside a coloured dot) are graphics: WCAG 1.4.11's
+    // 3:1 for non-text, not 1.4.3's 4.5:1 (the colour stays; 4.42:1 in Light).
+    const nonText = !!el.closest('.scale-dot');
+    const need = nonText || size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
     const disabled = el.closest('button:disabled, [aria-disabled="true"], input:disabled, select:disabled, fieldset:disabled') !== null;
-    const item = { text: own.slice(0, 60), path: path(el), size, weight: +st.fontWeight, need, disabled };
+    const item = { text: own.slice(0, 60), path: path(el), size, weight: +st.fontWeight, need, disabled, ...(nonText ? { nonText: true } : {}) };
     if (unknown) { out.push({ ...item, status: 'unknown', why: 'background image' }); continue; }
     // composite bottom-up from white (the canvas); a gradient branches over its stops
     let bgs = [[255, 255, 255, 1]];
