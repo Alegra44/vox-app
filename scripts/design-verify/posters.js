@@ -3,7 +3,8 @@
 // pixels), Light and Dark, in English, French, Spanish and Turkish. Per poster:
 //   opens from its own button (Range Finder's "Share this result" with a measured range; Progress's "Share my recap");
 //   Download (the app's own button) makes a PNG: not blank (more than one colour, under 98% of one colour), at the
-//   poster's size ×2 (±2 px each way), and equal to a screenshot of the poster on screen: under 5% of pixels differ
+//   poster's size ×3 (±3 px each way; 9.1: 1020 × 1800), opaque: its four corner pixels are the poster's paper at
+//   alpha 255 (9.1: no transparent rounded corners), and equal to a screenshot of the poster on screen: under 5% of pixels differ
 //   (a pixel differs when any channel is more than 24 apart; both images are saved for looking at);
 //   the text is right: every [data-i18n] inside the poster reads t(key) in the page's language, nothing else on it reads
 //   as English in fr/es/tr, the recap's month is Intl's month name in the page's language;
@@ -42,7 +43,9 @@ async function comparePng([a, b]) {
     const k = (pa[i] >> 3) << 10 | (pa[i + 1] >> 3) << 5 | (pa[i + 2] >> 3); counts.set(k, (counts.get(k) || 0) + 1);
   }
   const top = Math.max(...counts.values());
-  return { aw: A.naturalWidth, ah: A.naturalHeight, bw: B.naturalWidth, bh: B.naturalHeight, diffPct: 100 * diff / n, colours: counts.size, topPct: 100 * top / n };
+  const W = A.naturalWidth, H = A.naturalHeight, at = (x, y) => Array.from(pa.slice((y * W + x) * 4, (y * W + x) * 4 + 4));
+  const corners = [at(0, 0), at(W - 1, 0), at(0, H - 1), at(W - 1, H - 1)];
+  return { corners, aw: A.naturalWidth, ah: A.naturalHeight, bw: B.naturalWidth, bh: B.naturalHeight, diffPct: 100 * diff / n, colours: counts.size, topPct: 100 * top / n };
 }
 
 (async () => {
@@ -83,7 +86,10 @@ async function comparePng([a, b]) {
         check(!!png && !toast, `${tag}: Download makes a PNG${png ? '' : ' (none)'}${toast ? ` · toast "${toast}"` : ''}`);
         if (png) {
           const c = await page.evaluate(comparePng, ['data:image/png;base64,' + png.toString('base64'), 'data:image/png;base64,' + shot.toString('base64')]);
-          check(Math.abs(c.aw - 2 * box.w) <= 2 && Math.abs(c.ah - 2 * box.h) <= 2, `${tag}: ${c.aw}×${c.ah} px = the poster's ${box.w}×${box.h} ×2 (±2)`);
+          check(Math.abs(c.aw - 3 * box.w) <= 3 && Math.abs(c.ah - 3 * box.h) <= 3, `${tag}: ${c.aw}×${c.ah} px = the poster's ${box.w}×${box.h} ×3 (±3)`);
+          const paper = await page.evaluate(id => getComputedStyle(document.getElementById(id)).backgroundColor.match(/\d+/g).slice(0, 3).map(Number), po.poster);
+          const opaque = c.corners.every(p => p[3] === 255 && p.slice(0, 3).every((v, i) => Math.abs(v - paper[i]) <= 2));
+          check(opaque, `${tag}: corners opaque paper rgb(${paper}) ${JSON.stringify(c.corners)}`);
           check(c.colours > 1 && c.topPct < 98, `${tag}: not blank (${c.colours} colours, the commonest ${c.topPct.toFixed(1)}%)`);
           check(c.diffPct < 5, `${tag}: matches the screen: ${c.diffPct.toFixed(2)}% of pixels differ (screen ${c.bw}×${c.bh})`);
         }

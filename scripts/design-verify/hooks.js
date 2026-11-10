@@ -25,6 +25,8 @@ const hlCss = fs.readFileSync(path.join(ROOT, 'design/house-lights/house-lights.
 
 // Removals the spec allows, each with its reason. Anything else missing is a failure.
 const ALLOWED_REMOVALS = {
+  'data-i18n=pricing_trialgates_desc': 'phase 9.1 (3): the paragraph under the plans heading goes; key removed',
+  'data-i18n=pricing_choir_f3': 'phase 9.1 (3): "Director dashboard" leaves the Choir plan; key removed',
   'data-i18n=auth_feature_ai_coach': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
   'data-i18n=auth_feature_personalized_training': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
   'data-i18n=auth_feature_vocal_analysis': "phase 9 §2.2: the sign-up's 11-tick feature list goes (one line, auth_sub); key removed",
@@ -177,6 +179,9 @@ function translations(src) {
       pricing_disclosure_p1: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
       pricing_disclosure_p2: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
       pricing_disclosure_p3: 'PHASE9.md 2.5 (the checkout disclosure goes while plans are not on sale)',
+      pricing_trialgates_desc: 'PHASE9.md 9.1 (3): the paragraph under "Continue your vocal journey" goes (the page\'s first line says it)',
+      pricing_choir_f3: 'PHASE9.md 9.1 (3): "Director dashboard" leaves the Choir plan (the dashboard is hidden)',
+      feedback_toast_empty: 'PHASE9.md 9.1 (1): the empty Send shows a note under the button (feedback_empty_note), no toast',
       vocallab_notecount_suffix: 'PHASE9.md 2.10 (replaced by the plural keys vocallab_notes_one/other)',
     };
     const T0 = translations(master), gone = Object.keys(T0.en).filter(k => !(k in T.en));

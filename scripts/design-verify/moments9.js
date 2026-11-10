@@ -8,8 +8,12 @@
 // Per sheet: shown, the number (level / record value / note), the name or label, the why-line or delta / detail, and the
 // counts (levelupSnapshot, bestBreathDuration, breakthroughCount); then it closes (Continue where there is one, else a
 // click on the sheet, as on master). The texts and counts must equal master's. Reduced motion: the sheet shows at once.
+// 9.1 (4), on the branch (momentTimers.js): each sheet's time untouched (6 s level up with a why-line and breakthrough,
+// 4 s level up without one and new record), and a pointer or a key inside it stops the timer; then Continue, Escape or
+// the scrim close it.
 // Usage: node scripts/design-verify/moments9.js [--base master] [--branch-ref <ref>]
 const C = require('./common');
+const MT = require('./momentTimers');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const SIDES = { master: C.buildDir(arg('--base') || 'master'), branch: C.buildDir(arg('--branch-ref') || null) };
 let fails = 0; const check = (ok, s) => { if (!ok) fails++; console.log(`${ok ? '✓' : '✗'} ${s}`); };
@@ -82,6 +86,13 @@ async function runSide(b, side) {
     for (const f of ['breakthroughNote', 'breakthroughDetail']) check(M.breakthrough.sheet[f] === B.breakthrough.sheet[f], `breakthrough · ${f}: "${B.breakthrough.sheet[f]}"${M.breakthrough.sheet[f] === B.breakthrough.sheet[f] ? '' : ` (master "${M.breakthrough.sheet[f]}")`}`);
     check(M.breakthrough.count === 1 && B.breakthrough.count === 1, `breakthrough · counted once (master ${M.breakthrough.count}, branch ${B.breakthrough.count})`);
     for (const k of ['levelup', 'record', 'breakthrough']) check(B[k].closed, `${k}: closes (${B[k].sheet.text.slice(0, 90)})`);
+    console.log('-- 9.1: the timers (branch)');
+    { const { ctx, page, errors } = await C.openPage(b, { dir: SIDES.branch });
+      try { await C.signUp(page, 'dvmt', 'Moment Timer'); await C.clearOverlays(page);
+        await page.evaluate(() => document.querySelectorAll('.levelup-overlay').forEach(o => { o.style.display = ''; o.classList.remove('levelup-show'); }));
+        for (const name of Object.keys(MT.SHEETS)) { const r = await MT.runSheet(page, name); check(r.ok, MT.describe(r)); }
+        check(!errors.length, `timers: page errors ${errors.length} ${errors.slice(0, 2).join(' | ')}`);
+      } finally { await ctx.close(); } }
     check(!M.errors.length && !B.errors.length, `page errors: master ${M.errors.length}, branch ${B.errors.length} ${[...M.errors, ...B.errors].slice(0, 2).join(' | ')}`);
     console.log(`\nMOMENTS9: ${fails ? `FAIL: ${fails}` : 'PASS'}`); process.exitCode = fails ? 1 : 0;
   } catch (e) { console.log('ERROR ' + (e.stack || e)); process.exitCode = 1; }

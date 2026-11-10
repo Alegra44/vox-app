@@ -4,6 +4,8 @@
 //   account (a throwaway account, deleted at exit): two level-ups caused through the app's own saveProgress. The first
 //     shows the counts since the account started, the second only what happened since the first; the snapshot is in
 //     the database, survives a reload, and loads in a second browser context (as a second device would).
+//   timers (PHASE9.md 9.1 (4), design-verify/momentTimers.js): the level-up sheet with a why-line hides after 6 s and
+//     without one after 4 s; a click or a key inside it stops the timer; then Escape / the scrim / Continue close it.
 // Needs migration 0008 and the api function with levelup_snapshot patchable (the account part).
 // Usage: [LU_ONLY=text|account] node scripts/levelup-verify/levelup.js [url]   (no url: deploy/ served locally, production backend)
 const { chromium } = require('playwright');
@@ -95,6 +97,9 @@ async function levelUp(page, { sessions = 0, records = 0, breakthroughs = 0 }) {
         const shown = await page.evaluate(why => { showLevelUp(4, 'X', why); const t = document.getElementById('levelupWhy').textContent; document.getElementById('levelupOverlay').classList.remove('levelup-show'); return t; }, got[2]);
         check(`${lang} · rendered in the level-up card`, shown === EXPECT[lang][2], `"${shown}"`);
       }
+      await page.evaluate(l => setLanguage(l), 'en');
+      const MT = require('../design-verify/momentTimers');
+      for (const name of ['levelup-why', 'levelup']) { const r = await MT.runSheet(page, name); check(`timer · ${name === 'levelup' ? 'no why-line, 4 s' : 'with a why-line, 6 s'}`, r.ok, MT.describe(r)); }
       check('page errors', errors.length === 0, errors[0] || 'none');
     }
     if (ONLY !== 'text') {
