@@ -22,7 +22,7 @@ const SCREENS = [
   { key: 'paywallreal', open: `requireProFeature('The Vocal Rift');`, overlay: 'paywallModalOverlay', root: '#paywallModalOverlay', states: ['expired'] },
   { key: 'paywallchoir', open: `requireChoirWorld('Sonic X-Ray');`, overlay: 'paywallModalOverlay', root: '#paywallModalOverlay', states: ['expired'] },
   { key: 'teacher', open: `enterPanel('teacher');`, panel: 'teacher', root: '#panel-teacher', states: ['teacher'],
-    skipIf: `!document.querySelector('.legacy-tabs button[data-panel="teacher"]')`, skipWhy: 'phase 9 hides the Teacher Dashboard' },
+    skipIf: `!document.querySelector('[data-enter-panel="teacher"]')`, skipWhy: 'phase 9 hides the Teacher Dashboard (nothing opens it)' },
   { key: 'feedback', open: `enterPanel('feedback');`, panel: 'feedback', root: '#panel-feedback', states: ['signedout', 'new'] },
   { key: 'feedbackthanks', open: `enterPanel('feedback'); document.getElementById('feedbackFormCard').style.display='none'; document.getElementById('feedbackThanksCard').style.display='';`, panel: 'feedback', root: '#panel-feedback', states: ['new'] },
   { key: 'warmup', open: WU, overlay: 'warmupOverlay', root: '#warmupOverlay', states: ['new'] },

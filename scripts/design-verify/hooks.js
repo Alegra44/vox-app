@@ -90,6 +90,11 @@ const ALLOWED_REMOVALS = {
   'data-i18n=skilltree_h2': "phase 8 §2.8: the §7 heading goes; the page's one line (skilltree_line); key stays in TRANSLATIONS",
   'data-i18n=skilltree_desc': 'phase 8 §2.8: the §7 description goes; key stays in TRANSLATIONS',
 };
+// Phase 10 A1: .legacy-tabs goes (its markup, CSS and the click path enterPanel used; enterPanel now calls
+// showPanelByName). Every id and data-panel value that lived only on its buttons in master may go, read from master's
+// own nav so nothing else is excused.
+{ const nav = (master.match(/<nav class="tabs legacy-tabs"[\s\S]*?<\/nav>/) || [''])[0];
+  for (const [, a, v] of nav.matchAll(/\b(id|data-panel)="([^"]+)"/g)) ALLOWED_REMOVALS[`${a}=${v}`] ||= 'phase 10 A1: .legacy-tabs removed (enterPanel calls showPanelByName)'; }
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {
   gliderLoop: 'Glider canvas (arcade game)', bridgeLoop: 'Bridge canvas (arcade game)', wuExLoop: 'the warm-up canvas',
