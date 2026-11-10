@@ -669,6 +669,18 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   page sign-ups in 2.5–4.7 s. No rollback. 0 test accounts and 0 test Feedback rows left. review/phase9 and
   review/phase8-prod deleted. **Rollback target for phase 10: dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H.**
 
+### Phase 10 (`redesign/phase10` from master 63a348a, spec `PHASE10.md`, given 2026-11-10)
+- Rollback target: phase 9, **dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H**. Two parts: A (survey and the known small fixes,
+  then stop), B (the user's fix list after reading the survey).
+- **Part A done 2026-11-11, reported; waiting for the user's B list.** A1, one commit each: .legacy-tabs removed
+  (d5681a8; enterPanel calls showPanelByName), Recommended Focus type (09c99ae), "(3 s)" (8d5f4c2), English dates by
+  device region via dateLocale() (6c2862a, datelocale.js), 80 unused keys removed in 4 languages (36323ac,
+  unusedkeys.js), Scale Run dots measured as graphics in contrast.js (be808c3). A3: `checks10.sh a3`, all pass.
+  A2: `PHASE10_SURVEY.md`; tour10.js (618 shots: 390/768/1280 × Light/Dark, in-page audits, focus, reduced motion,
+  aria-label language) and sheet10.js. review/phase10 (orphan): shots, contact sheets, audit.json, logs.
+- Run the tour: `node scripts/design-verify/tour10.js --out <dir>` (~35 min; `--passes focus` alone ~12 min), then
+  `node scripts/design-verify/sheet10.js <dir>`.
+
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
 These change scores, so they wait until the redesign is finished (survey items in PHASE6_SURVEY.md "Broken or odd"):
