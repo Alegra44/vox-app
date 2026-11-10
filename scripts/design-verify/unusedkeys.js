@@ -33,3 +33,4 @@ console.log(`${keys.length} keys in en; ${unused.length} referenced nowhere; ${O
 console.log('\n-- only through a built prefix (check by hand):'); for (const [p, ks] of Object.entries(dynamic)) console.log(`   ${p} (${ks.length}): ${ks.join(', ')}`);
 console.log('\n-- referenced nowhere:'); for (const k of unused) console.log(`   ${k}  "${String(T.en[k]).slice(0, 70)}"`);
 const ji = process.argv.indexOf('--json'); if (ji > 0) fs.writeFileSync(process.argv[ji + 1], JSON.stringify({ unused, dynamic }, null, 1));
+process.exit(unused.length ? 1 : 0);
