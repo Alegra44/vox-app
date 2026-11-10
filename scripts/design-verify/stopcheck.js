@@ -5,7 +5,7 @@
 // no marks; no mic loop left running (no autoCorrelate, readRegisterFrame or vlFeed call in the 5 s on Home from 1 s
 // after leaving: a timer left behind, like Mirror's echo, fires in that time); back on the tool, its starting state (tools4b.js idleOk) and Start working (it
 // starts again). One Take: the take left midway saves nothing (no take stored for today) and today's take is still
-// available. Usage: node scripts/design-verify/stopcheck.js [--base <git ref>] [--only4b | --onlychoir | --only6] [--tools onetake,mirror,…]
+// available. Usage: node scripts/design-verify/stopcheck.js [--base <git ref>] [--only4b | --onlychoir | --only6 | --only8] [--tools onetake,mirror,…]
 // 4b.3 (PHASE4B.md): the vocal load is checked from the trace (vocal-load-verify/vltrace.js), not from the gauge: from the
 // moment of leaving to the end of the 5 s on Home, no vlFeed call, and every loop flag off (no session open). The gauge
 // may still settle once from a session that ended by the time you left: vlEnd defers a session whose server state hasn't
@@ -21,13 +21,20 @@
 // result shown and no skill score recorded after leaving, Studio's take left midway not saved (checked past its 15 s),
 // Sing With the Choir's mixer as it was before the start (your part unmuted again); back on it, its starting state and
 // Start working. --only6 runs these alone; without it they run after Choir World.
+// Phase 8 (PHASE8.md §1b): the five Vocal World games (games8.js: Pitch Mountain, Register Canyon, Boss Arena with the
+// Pitch Dragon and the Register Wraith, Harmony Castle, The Rift), each left at 0.8 s and 2.6 s the same way: listening
+// stops (no mic loop call, no vlFeed after leaving, every loop flag off, the backing pad and the choir silent), the house
+// up; back on it, its starting state and Start working. And the Rift's own "← Back to Vocal World" during a run, at 0.8 s
+// and 2.6 s: the run stops (riftActive off, no mic loop call or vlFeed after), the house comes up, the Rift is hidden and
+// the hub shown; opened again, Start works. --only8 runs these alone; without it they run after the Songs tools.
 // Test-only switches: --trace prints each case's trace; --slow-input <ms> delays every mic opener (initAudio,
 // openRegisterInput, vqCapture, through warmupGate) by that much (a slow mic open, hypothesis A); --slow-state <ms>
 // delays the vocal-load state GET (/me/vocal-load?day=…) by that much (a slow server, hypothesis B).
 const C = require('./common'), S = require('./stage'), T = require('./tools'), T4 = require('./tools4b'), VT = require('../vocal-load-verify/vltrace');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const ONLY4B = process.argv.includes('--only4b'), ONLYCHOIR = process.argv.includes('--onlychoir'), ONLY6 = process.argv.includes('--only6'), ONLY = arg('--tools') ? arg('--tools').split(',') : null;
-const CW = require('./choir5'), T6 = require('./tools6');
+const CW = require('./choir5'), T6 = require('./tools6'), G8 = require('./games8');
+const ONLY8 = process.argv.includes('--only8');
 const TRACE = process.argv.includes('--trace'), SLOW_INPUT = Number(arg('--slow-input')) || 0, SLOW_STATE = Number(arg('--slow-state')) || 0;
 const prepare = async ctx => {
   await ctx.addInitScript(VT.INIT);
@@ -102,6 +109,35 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
   }
   return bad;
 }
+// The Rift's "← Back to Vocal World" during a run (phase 8): the run stops, the house comes up, the Rift is hidden, the
+// hub shown; opened again, Start works.
+async function riftBack(page, log) {
+  let bad = 0; const rift = G8.byKey('rift');
+  await page.evaluate(COUNTERS);
+  for (const at of [800, 2600]) {
+    await rift.open(page); await C.sleep(500);
+    await rift.act(page); await page.waitForFunction(() => riftActive, null, { timeout: 8000 }).catch(() => {}); await C.sleep(at);
+    await page.evaluate(() => { window.__leaveT = performance.now(); document.querySelector('#gameRift [data-back-to-hub]').click(); });
+    await C.sleep(1000);
+    const a = await page.evaluate(() => ({ ...window.__cnt }));
+    await C.sleep(4000);
+    const z = await page.evaluate(vis => {
+      const v = new Function('return (' + vis + ')')();
+      return { ...window.__cnt, rift: riftActive, house: document.body.dataset.house, riftShown: v('#gameRift'), hubShown: v('#arcadeHub'), vlRun: vlRun !== null };
+    }, G8.vis.toString());
+    const calls = { autoCorrelate: z.ac - a.ac, vlFeed: z.vl - a.vl };
+    await rift.open(page); await C.sleep(400);
+    const idle = await page.evaluate(`(${rift.idleOk})()`);
+    await rift.act(page);
+    const again = await page.waitForFunction(() => riftActive, null, { timeout: 8000 }).then(() => true, () => false);
+    await page.evaluate(() => stopAllActiveSessions()); await C.sleep(3000);
+    const pass = !z.rift && z.house === 'up' && !z.riftShown && z.hubShown && !calls.autoCorrelate && !calls.vlFeed && !z.vlRun && idle && again;
+    if (!pass) bad++;
+    log(`${pass ? '✓' : '✗'} The Rift, "Back to Vocal World" at ${at} ms: riftActive ${z.rift} · house ${z.house} · Rift shown ${z.riftShown}, hub shown ${z.hubShown}`
+      + ` · mic loop calls after ${JSON.stringify(calls)} · vlRun ${z.vlRun} · back: starting state ${idle}, starts again ${again}`);
+  }
+  return bad;
+}
 (async () => {
   const dir = C.buildDir(process.argv.includes('--base') ? process.argv[process.argv.indexOf('--base') + 1] : null);
   const b0 = await C.chromium.launch();
@@ -111,7 +147,7 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
   try {
     const { page } = await C.openPage(b, { dir, theme: 'light', storageState: state, prepare });
     await C.clearOverlays(page); await S.warmMic(page);
-    for (const [key, btn, label, flag] of ONLY4B || ONLYCHOIR || ONLY6 ? [] : [['eve', 'eveStartBtn', 'eveStartLabel', 'eveActive'], ['five', 'fiveStartBtn', 'fiveStartLabel', 'fiveActive']]) {
+    for (const [key, btn, label, flag] of ONLY4B || ONLYCHOIR || ONLY6 || ONLY8 ? [] : [['eve', 'eveStartBtn', 'eveStartLabel', 'eveActive'], ['five', 'fiveStartBtn', 'fiveStartLabel', 'fiveActive']]) {
       for (const at of [800, 2600]) {
         const tool = T.TOOLS.find(t => t.key === key); await tool.open(page); await C.sleep(500);
         await page.evaluate(id => document.getElementById(id).click(), btn); await C.sleep(at);
@@ -128,9 +164,10 @@ async function leaveChecks(page, log, tools = T4.TOOLS) {
         console.log(`${pass ? '✓' : '✗'} ${key} stopped at ${at} ms: enabled within 5 s ${ok} · ${JSON.stringify(st)} · restarts ${again}`);
       }
     }
-    if (!ONLYCHOIR && !ONLY6) bad += await leaveChecks(page, console.log);
-    if (!ONLY4B && !ONLY6) bad += await leaveChecks(page, console.log, CW.TOOLS);
-    if (!ONLY4B && !ONLYCHOIR) bad += await leaveChecks(page, console.log, T6.TOOLS);
+    if (!ONLYCHOIR && !ONLY6 && !ONLY8) bad += await leaveChecks(page, console.log);
+    if (!ONLY4B && !ONLY6 && !ONLY8) bad += await leaveChecks(page, console.log, CW.TOOLS);
+    if (!ONLY4B && !ONLYCHOIR && !ONLY8) bad += await leaveChecks(page, console.log, T6.TOOLS);
+    if (!ONLY4B && !ONLYCHOIR && !ONLY6) { bad += await leaveChecks(page, console.log, G8.GAMES); bad += await riftBack(page, console.log); }
   } finally { await b.close(); await C.cleanup(); }
   console.log(bad ? `${bad} failed` : 'all passed'); process.exit(bad ? 1 : 0);
 })();

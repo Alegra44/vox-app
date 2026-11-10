@@ -55,6 +55,9 @@ async function withPage(file, which, fn, attempt = 1) {
   try {
     const ctx = await b.newContext({ permissions: ['microphone'], viewport: { width: 1280, height: 900 }, ...(which === 'prod' && AUTH ? { storageState: AUTH } : {}) });
     if (which !== 'prod') await ctx.route('http://localhost:8765/', r => r.fulfill({ path: HTML[which], contentType: 'text/html' }));
+    // the page's own scripts beside it (vocal-load.js, vocal-load-store.js): from the page's folder, else deploy/
+    if (which !== 'prod') await ctx.route('http://localhost:8765/*.js', r => { const f = path.basename(new URL(r.request().url()).pathname), d = path.dirname(HTML[which]);
+      r.fulfill({ path: require('fs').existsSync(path.join(d, f)) ? path.join(d, f) : path.join(ROOT, 'deploy', f), contentType: 'text/javascript' }); });
     if (process.env.REG_BLOCK_CDN) await ctx.route('**/supabase.js', r => r.abort()); // to check the load-failure handling
     await ctx.addInitScript(() => {
       window.__gum = [];

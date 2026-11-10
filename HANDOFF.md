@@ -25,9 +25,11 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
 | `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-08:
-phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk (master 0c39e09; test-script commits b13d79d, 374bc33 after it); the rollback
-target for the next deploy. The table above predates phase 5; `review/phase7-prod` is the current review branch.
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-09:
+phase 8, **dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx** (deployed by the user from `redesign/phase8` 547dbf7), **the rollback
+target for phase 9**. master is still phase 7 (1fca2ec) until the user types "deploy" (then: --no-ff merge of
+redesign/phase8, secret check, push). The previous target was phase 7, dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk. The table
+above predates phase 5; `review/phase8-prod` is the current review branch.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -544,6 +546,88 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   0 below 4.5:1), sheets/phase7.jpg, checks/ with every log and rerun/. Deleted (local and GitHub): review/phase7,
   -before, -fix, review/phase6-prod. review/phase7-part1 (42a3ee5) is still on GitHub (not in the delete list).
   **The rollback target for the next deploy is dpl_AuR6tZ7FryuBFf6meMmQDxaryGEk.**
+
+- **Phases 8 and 9 survey DONE 2026-11-09, reported; waiting for the user's phase 8 spec.** Branch `redesign/phase8`:
+  design/house-lights/PHASE8_SURVEY.md, survey8/copy8.py, shots8before.js. review/phase8-before (08b2875, orphan, 147
+  shots, sheets before8/before9, states, french.json, probes). Headlines: the Rift's back link leaves it shown and
+  running; the demo checkout says "subscribed" while nothing changes (production); signed-out plan buttons ask to sign
+  in to "Teacher Dashboard"; Bridge and the Register Wraith never go house-down; emoji art across Vocal World; onboarding
+  steps 1–6, checkout and posters English in every language. Phase 8 ≈ phase 6 in size, phase 9 ≈ phase 7; phase 9
+  needs decisions first (demo checkout, Teacher Dashboard, Vocal Lab, legacy tabs). No app changes.
+- Follow-up from the phase 7 deploy: scores.js's Voice Quality centroid gate (±2 Hz) is tighter than its A/A noise.
+  **Decided in PHASE8.md:** no rollback was right; done in scores.js (below).
+
+### Phase 8 (`redesign/phase8`, spec `PHASE8.md`, given 2026-11-09): LIVE 2026-11-09, dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx
+- **Decisions (PHASE8.md "DECISIONS"):**
+  - scores4b: not rolling back phase 7 was right. From now on Voice Quality's centroid, and any value whose own noise
+    is wider than ±2, is gated by master's A/A range or ±1% of master's median, whichever is wider (scores.js SPREAD;
+    a value newly found noisier than ±2 is added to SPREAD). Replayed on the phase 7 production runs: run 1 passes
+    (961 in 956.3–975.7), the rerun still misses by 1 Hz (951 vs 952–975.7), the A/A passes.
+  - Phase 9: the Teacher Dashboard is hidden like the Director Dashboard (it can't reach students without a
+    multi-user backend), and the Teacher plan card says "Coming later" instead of a button. Vocal Lab stays a Coach
+    tool. `.legacy-tabs` is removed in phase 10, after a grep of scripts/.
+- **Step 0 DONE** 41a74e5: every plan button opens "Paid plans aren't on sale yet…" (Close only, no plan change);
+  signed out "Sign in to choose a plan". The demo checkout stays in the code, unreachable. checkout.js 42/42 (master
+  fails it).
+- **Guards** 604f326: games8.js (the five games through their globals; Math.random seeded before Start; Glider, Boss
+  and Harmony told a steered pitch per frame), gamestates.js (the gate), treecheck.js, stopcheck --only8 (+ the Rift's
+  back link), copyscan --world. Master baselines: gamestates A/A all equal; stopcheck --only8 0/14 on master (Start
+  left reading its running label, Harmony's notes sounding, the Rift running under the hub); copyscan --world 101 §7,
+  162 emoji, 90 English-in-other-languages texts.
+- **Built** (one commit each): 2.1 marks (14 + 5 tree icons, marks8.js), 2.2 hub, 2.3 Pitch Mountain (+ the shared game
+  page/stage/result, gameColors, gameStartIdle/Live), 2.4 Register Canyon (houseSession), 2.5 Boss Arena (Wraith via
+  houseSession), 2.6 Harmony Castle, 2.7 The Rift (back link stops all; captureAccuracyForTarget opts.active), 2.8 Skill
+  Tree, 2.9 copy (PHASE8_COPY.md, 178 keys). Midway checkpoint review/phase8-part1 8587076.
+- Found: on master no game dimmed the house (singingSession without a stage), not only Bridge and the Wraith. The
+  Skill Tree's Vocal Master needs Expression ≥ 60, which phase 7 made "Not in your profile yet": unreachable until the
+  scoring batch scores Expression. Glider "For you" maps the weakest of pitch/agility/range to Melody Road / Agility
+  Run / Interval Jump (no course recommendation existed). The tree's Control node uses hl-breath (spec's icon list).
+- **Fix after the checks** 93fa691: the Glider's course lines, the bosses' lines and the games' song line were set once at
+  load, so fr/es/tr showed English after a language change (copyscan --world 48); renderWorldCopy() refills them on
+  every language change, the song's name and key translated. Rest of the checks below.
+- **Checks (§3)**, checks8.sh, logs checks8-2026-11-09T06-10-24 (all) + T10-47-53 and T12-36-39 (reruns): all pass.
+  gamestates PASS (Register Canyon 307 vs 249 in the first run: not noise, see 8.1; rerun alone 3 a side gave
+  174/172/84 on both); checkout 42/42; stopcheck pass; treecheck PASS; glider flight/courses, regfix, batch1
+  112/0, batch3a 169/0, batch3b 179/0, warm-up entries/tracking, loopback, house 1051/0, contrast, copyscan --world
+  0/0/0, hooks 21/0, navcheck, bootcheck 9/0, picker. Passed on rerun only: batch1, house, batch3a, copyscan, bootcheck
+  (each failed once on the production backend: "Failed to fetch", a sign-up timeout, a 6.7 s signed-in boot).
+  Test scripts changed for expected UI changes or harness gaps: batch3b (boss training is inside the result card),
+  batch1 (a non-best Glider run is titled "Score"), regfix (it served only the page, not vocal-load.js beside it:
+  broken since Vocal Load phase 2, not by phase 8).
+- **Screenshots** review/phase8 (shots8.js at 93fa691): 100 shots, house down on every stage and up elsewhere, 0
+  contrast items under 4.5:1, no page errors. Waiting for review: no merge, no deploy.
+- **Review (2026-11-09): passes.** The three questions, all yes as built: Pitch Mountain's "For you" picks a course from
+  the weakest of pitch, agility and range; the Skill Tree's Control node uses the breath icon; "All locked" can't
+  happen, so the signed-out hub stands in for it.
+- **8.1** (PHASE8.md "8.1"): 338a15d app, d7552f1 checks.
+  - Marks redrawn: Range Phoenix (a bird rising, front on), Volume Phantom (a ghost, the right side in bold dashes),
+    Register Canyon (angular cliff walls, lanes clear of them), Harmony Castle (wider than tall, two towers, a lower
+    wall). marks8.js --old <ref> draws old next to new.
+  - .link-btn in ink (font-size inherit, underline offset 2px); the why-btn and duet-after overrides removed.
+  - Boss result rows "Your health" / "Boss health"; the win line without the health number (one key, four languages).
+  - gamestates at 390: every game's big result number in view when it ends (259–366 px of 844): no scroll fix.
+  - Register Canyon's 307 vs 249 was the test, not the game: the lane followed the real register reading of the
+    looping A4 (158 frames chest, 27 head), and the branch's run started two frames later in that loop, so different
+    obstacles were hit. games8's bridge now scripts that cycle per frame from the run's first frame: master and branch
+    match (307/307, 172/172). contrast.js --panels a,b (arcade also opens each Vocal World page).
+  - Checks (logs checks81-2026-11-09T15-48-33): gamestates PASS (all equal to master, Register Canyon 307 → 307; at
+    390 all six numbers in view), hooks 21/0, copyscan --world 0/0/0, contrast --panels arcade,choir,partrehearsal,
+    choirpassport,aiduet 0 of 434 per theme, bootcheck 9/0. Screenshots: review/phase8, folder 8.1/. Waiting for
+    review: no merge, no deploy.
+- **8.2** (PHASE8.md "8.2"): 547dbf7, the Range Phoenix replaced exactly with the user's drawing; marks sheet looked at
+  (a bird at 24 px, Light and Dark), hooks 21/0, bootcheck 9/0.
+- **Deployed 2026-11-09** by the user from deploy/ (first `vercel deploy --prod` "Not authorized", the retry deployed):
+  dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx, deploy-di7cgbnem-alegra1122.vercel.app. The main address was checked before the
+  checks: byte-identical page (same etag), same vocal-load scripts, the 8.2 Phoenix in it; no promote needed.
+- **Production checks** against deploy-alegra1122 (review/phase8-prod, notes.txt): prod.sh WITH_CHOIR=1 SCORES_BASE=
+  master (log prod-2026-11-09T17-16-30; SCORES_BASE set explicitly because master isn't merged and the default would
+  pick phase 6), gamestates --branch-url, checkout DV_URL. 45 of 52 passed first; the rest passed on rerun, none
+  repeated: scores, cv-p5, cv-p10 and gamestates sign-up timeouts (Supabase auth; a probe signed up 3/3 in 2–4 s;
+  gamestates' own was on the local master page), gamestates and checkout ERR_INTERNET_DISCONNECTED, live Resonance
+  ripple once, scores4b a different reading each run (brightness, then Register Drills chest %) then a clean third
+  run; neither tool's code differs from master. No rollback. 0 test accounts left.
+- Deleted after the checks (8.2 §3): review/phase8, review/phase8-part1, review/phase8-before, review/phase7-prod,
+  review/phase7-part1. Open: the master merge on "deploy".
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 

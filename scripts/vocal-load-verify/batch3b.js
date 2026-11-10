@@ -58,7 +58,8 @@ const FEATURES = [
       && (r.acc === null ? b[i].acc === null : Math.abs(r.acc - b[i].acc) <= 2)) },
   { key: 'bosstrain', label: "Pitch Dragon weakest-note training: Listen & score (C4, 1.6 s)", kind: 'sidecar', ...arcade('boss'), startBtn: 'bossTrainListenBtn', gauge: 'vlGaugeBossTrain',
     // the section appears after a battle, with that battle's weakest note: shown directly, with C4 as the note
-    show: "document.getElementById('bossTrainingSection').style.display = 'block'; window._bossTrainTargetMidi = 60; document.getElementById('bossTrainNoteDisplay').textContent = 'C4'",
+    // phase 8: the section is inside the result card (#bossGameOver), shown after a battle
+    show: "document.getElementById('bossGameOver').style.display = 'block'; document.getElementById('bossTrainingSection').style.display = 'block'; window._bossTrainTargetMidi = 60; document.getElementById('bossTrainNoteDisplay').textContent = 'C4'",
     active: disabled('bossTrainListenBtn'), mid: 900, shortCapture: true,
     result: () => ({ acc: document.getElementById('bossTrainAccVal').textContent }), same: near(2, ['acc']) },
   { key: 'eve', label: 'Ear → Voice → Ear (seeded notes, runs to the end)', kind: 'sidecar', ...hub('train', 'earvoiceear'), startBtn: 'eveStartBtn', gauge: 'vlGaugeEve',

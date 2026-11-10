@@ -61,7 +61,8 @@ const TOL = 2;
 // master 83/86/87, branch 82/84/84; late60 master 44/44/48, branch 48/52/48)
 let RHYTHM_AA = { onbeat: [82, 87], late60: [44, 52] };
 const RHYTHM_GATED = ['average', 'result: average'], RHYTHM_REPORTED = /^beat \d/;
-// tool → stimulus → the value names gated by master's own range when it is wider than ±2 (4b.2)
+// tool → stimulus → the value names gated by master's own range when it is wider than ±2 (4b.2); since PHASE8.md: by
+// master's range or ±1% of master's median, whichever is wider. A value newly found to be noisier than ±2 is added here.
 const SPREAD = { mirror: { '*': /^note \d/ }, voicequality: { '*': /^centroid Hz$/ }, emotionmode: { louder: /./ }, registerdrills: { '*': /^note \d/ },
   pd: { '*': /./ }, staykey: { '*': /./ }, karaoke: { '*': /./ }, emotion: { '*': /./ } }; // phase 6: master's own range where it spreads wider than ±2
 const spreadOf = (key, stim, n) => { const t = SPREAD[key]; const re = t && (t[stim] || t['*']); return !!re && re.test(n); };
@@ -163,13 +164,17 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
           const reported = tool.key === 'rhythm' && RHYTHM_REPORTED.test(n), byRange = aa && RHYTHM_GATED.includes(n);
           const mv = data.stims[stim].master.map(r => r[tool.key].nums[n]).filter(x => typeof x === 'number');
           const mr = mv.length ? [Math.min(...mv), Math.max(...mv)] : null;
-          const bySpread = !byRange && typeof m === 'number' && spreadOf(tool.key, stim, n) && mv.some(x => Math.abs(x - m) > TOL);
+          // PHASE8.md decision: a SPREAD value is gated by master's own (A/A) range or ±1% of master's median, whichever
+          // is wider (and never tighter than ±TOL).
+          const bySpread = !byRange && typeof m === 'number' && spreadOf(tool.key, stim, n);
+          const pct = typeof m === 'number' ? Math.abs(m) * 0.01 : 0;
+          const sg = bySpread ? [Math.min(mr[0], m - pct, m - TOL), Math.max(mr[1], m + pct, m + TOL)] : null;
           const ok = reported ? true : byRange ? b !== null && b >= aa[0] && b <= aa[1]
-            : bySpread ? typeof b === 'number' && b >= mr[0] && b <= mr[1]
+            : bySpread ? typeof b === 'number' && b >= sg[0] && b <= sg[1]
             : typeof m === 'string' || typeof b === 'string' ? m === b : (m === null && b === null) || (m !== null && b !== null && Math.abs(b - m) <= TOL);
           if (!ok) fail++;
           const runs = s => data.stims[stim][s].map(r => r[tool.key].nums[n] ?? '—').join('/');
-          const how = reported ? '  [reported]' : byRange ? `  [A/A range ${aa[0]}–${aa[1]}]` : bySpread ? `  [master's range ${mr[0]}–${mr[1]}]` : '';
+          const how = reported ? '  [reported]' : byRange ? `  [A/A range ${aa[0]}–${aa[1]}]` : bySpread ? `  [master's range ${mr[0]}–${mr[1]} or ±1%: ${+sg[0].toFixed(1)}–${+sg[1].toFixed(1)}]` : '';
           log(`   ${reported ? '·' : ok ? '✓' : '✗'} ${n.padEnd(26)} ${String(m ?? '—').padStart(7)} → ${String(b ?? '—').padEnd(7)} (master ${runs('master')}; branch ${runs('branch')})${how}`);
         }
         const notDone = ['master', 'branch'].flatMap(s => data.stims[stim][s].map((r, i) => r[tool.key].done && r[tool.key].started ? null : `${s} #${i + 1}`)).filter(Boolean);
@@ -177,7 +182,7 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
       }
     }
   } finally {
-    log(`\nGATE: ${fail ? fail + ' differences beyond the gate' : 'every gated value within its gate'} (±${TOL}; Rhythm's average within the A/A range ${JSON.stringify(RHYTHM_AA)}, its per-beat values reported; master's own range where it is wider than ±2 on ${Object.keys(SPREAD).join(', ')})`);
+    log(`\nGATE: ${fail ? fail + ' differences beyond the gate' : 'every gated value within its gate'} (±${TOL}; Rhythm's average within the A/A range ${JSON.stringify(RHYTHM_AA)}, its per-beat values reported; master's own range or ±1%, whichever is wider, on ${Object.keys(SPREAD).join(', ')})`);
     log(`log: ${path.relative(C.ROOT, OUT)}.log  json: ${path.relative(C.ROOT, OUT)}.json`);
     process.exitCode = fail ? 1 : 0;
     C.cleanup();
