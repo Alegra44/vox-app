@@ -2606,6 +2606,22 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .wu-item.running .wu-go{color:var(--hl-voice);}
   .wu-item.done .wu-go{color:var(--hl-ok);}
   .wu-status{color:var(--hl-ink-2);font-size:var(--hl-t-small);}
+
+  /* ---- PHASE 9 (2.8): the moment sheet. Paper on the scrim, a 2 px gold rule at the top, text in ink; one 300 ms rise. ---- */
+  .levelup-overlay{background:rgba(6,7,8,.56);backdrop-filter:none;-webkit-backdrop-filter:none;padding:16px;transition:opacity .3s var(--hl-ease), visibility .3s;}
+  .levelup-card.moment-sheet{background:var(--hl-raised);color:var(--hl-ink);border-radius:var(--hl-r3);border-top:2px solid var(--hl-game-gold);box-shadow:var(--hl-shadow-sheet);
+    padding:var(--hl-s5);max-width:440px;width:100%;text-align:left;display:grid;gap:var(--hl-s2);transform:translateY(12px);transition:transform .3s var(--hl-ease);}
+  .levelup-overlay.levelup-show .levelup-card.moment-sheet{transform:none;}
+  .moment-num{color:var(--hl-ink);margin:var(--hl-s1) 0 var(--hl-s2);}
+  .moment-num:empty{display:none;}
+  .moment-row{display:flex;justify-content:space-between;align-items:baseline;gap:var(--hl-s3);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);border-bottom:var(--hl-hair) solid var(--hl-rule);}
+  .moment-row-label{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .moment-row-val{font-weight:600;color:var(--hl-ink);text-align:right;}
+  .moment-why{margin:var(--hl-s2) 0 0;max-width:none;}
+  .moment-why:empty, .moment-delta:empty{display:none;}
+  .moment-delta{margin:0;font-size:var(--hl-t-small);color:var(--hl-ink-2);font-variant-numeric:tabular-nums;}
+  .moment-continue{margin-top:var(--hl-s4);width:100%;}
+  @media (prefers-reduced-motion: reduce){ .levelup-card.moment-sheet{transform:none;transition:none;} .levelup-overlay{transition:none;} }
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
@@ -2701,55 +2717,33 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 </div>
 
 <div class="app-toast-wrap" id="appToastWrap" role="status" aria-live="polite"></div>
+<!-- phase 9 (PHASE9.md 2.8): one "moment" sheet for level up, new record and breakthrough -->
 <div class="levelup-overlay" id="levelupOverlay" role="status" aria-live="assertive">
-  <div class="levelup-card">
-    <div class="levelup-ring-wrap">
-      <svg class="levelup-ring" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="8"/>
-        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--brass)" stroke-width="8"
-          stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
-      </svg>
-      <div class="levelup-ring-center">
-        <div class="levelup-num" id="levelupNum">7</div>
-      </div>
-    </div>
-    <div class="levelup-title" id="levelupTitle">Level Up!</div>
-    <div class="levelup-sub" id="levelupSub">Pitch Apprentice</div>
-    <div class="levelup-why" id="levelupWhy"></div>
+  <div class="levelup-card moment-sheet">
+    <div class="hl-label moment-label" id="levelupTitle" data-i18n="moment_levelup">Level up</div>
+    <div class="hl-metric-l moment-num" id="levelupNum"></div>
+    <div class="moment-row"><span class="moment-row-label" data-i18n="moment_level_name">Level</span><span class="moment-row-val" id="levelupSub"></span></div>
+    <p class="hl-coach moment-why levelup-why" id="levelupWhy"></p>
+    <button type="button" class="hl-btn hl-btn--ink moment-continue" data-moment-close data-i18n="moment_continue">Continue</button>
   </div>
 </div>
 
 <div class="levelup-overlay" id="newRecordOverlay" role="status" aria-live="assertive">
-  <div class="levelup-card">
-    <div class="levelup-ring-wrap">
-      <svg class="levelup-ring" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="8"/>
-        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--teal)" stroke-width="8"
-          stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
-      </svg>
-      <div class="levelup-ring-center">
-        <div class="levelup-num" id="newRecordVal" style="color:var(--teal);">91%</div>
-      </div>
-    </div>
-    <div class="levelup-title">NEW RECORD</div>
-    <div class="levelup-sub" id="newRecordLabel">G4 stability</div>
-    <div class="levelup-sub" id="newRecordDelta" style="margin-top:4px;font-size:11px;"></div>
+  <div class="levelup-card moment-sheet">
+    <div class="hl-label moment-label" data-i18n="moment_record">New record</div>
+    <div class="hl-metric-l moment-num" id="newRecordVal"></div>
+    <div class="moment-row"><span class="moment-row-label" data-i18n="moment_record_what">Record</span><span class="moment-row-val" id="newRecordLabel"></span></div>
+    <p class="moment-delta" id="newRecordDelta"></p>
+    <button type="button" class="hl-btn hl-btn--ink moment-continue" data-moment-close data-i18n="moment_continue">Continue</button>
   </div>
 </div>
 
 <div class="levelup-overlay" id="breakthroughOverlay" role="status" aria-live="assertive">
-  <div class="levelup-card">
-    <div class="levelup-ring-wrap">
-      <svg class="levelup-ring" viewBox="0 0 200 200">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hairline)" stroke-width="8"/>
-        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--coral)" stroke-width="8"
-          stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
-      </svg>
-      <div class="levelup-ring-center" style="font-size:34px;">🔥</div>
-    </div>
-    <div class="levelup-title">BREAKTHROUGH</div>
-    <div class="levelup-sub" id="breakthroughNote">G4</div>
-    <div class="levelup-sub" id="breakthroughDetail" style="margin-top:6px;font-size:11px;max-width:220px;"></div>
+  <div class="levelup-card moment-sheet">
+    <div class="hl-label moment-label" data-i18n="moment_breakthrough">Breakthrough</div>
+    <div class="hl-metric-l moment-num hl-note" id="breakthroughNote"></div>
+    <p class="hl-coach moment-why" id="breakthroughDetail"></p>
+    <button type="button" class="hl-btn hl-btn--ink moment-continue" data-moment-close data-i18n="moment_continue">Continue</button>
   </div>
 </div>
 
@@ -8825,6 +8819,12 @@ const TRANSLATIONS = {
     feedback_rating_high:"Great",
     feedback_toast_empty:"Add a rating or a note before sending.",
     feedback_toast_failed:"Couldn't send your feedback. Try again.",
+    moment_levelup:"Level up",
+    moment_level_name:"Level",
+    moment_record:"New record",
+    moment_record_what:"Record",
+    moment_breakthrough:"Breakthrough",
+    moment_continue:"Continue",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -10578,6 +10578,12 @@ const TRANSLATIONS = {
     feedback_rating_high:"Excellent",
     feedback_toast_empty:"Ajoutez une note ou un commentaire avant d'envoyer.",
     feedback_toast_failed:"Impossible d'envoyer votre avis. Réessayez.",
+    moment_levelup:"Niveau supérieur",
+    moment_level_name:"Niveau",
+    moment_record:"Nouveau record",
+    moment_record_what:"Record",
+    moment_breakthrough:"Percée",
+    moment_continue:"Continuer",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -12331,6 +12337,12 @@ const TRANSLATIONS = {
     feedback_rating_high:"Excelente",
     feedback_toast_empty:"Añade una valoración o un comentario antes de enviar.",
     feedback_toast_failed:"No se pudieron enviar tus comentarios. Inténtalo de nuevo.",
+    moment_levelup:"Subiste de nivel",
+    moment_level_name:"Nivel",
+    moment_record:"Nuevo récord",
+    moment_record_what:"Récord",
+    moment_breakthrough:"Avance",
+    moment_continue:"Continuar",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -14084,6 +14096,12 @@ const TRANSLATIONS = {
     feedback_rating_high:"Harika",
     feedback_toast_empty:"Göndermeden önce bir puan ya da not ekle.",
     feedback_toast_failed:"Geri bildirimin gönderilemedi. Tekrar dene.",
+    moment_levelup:"Seviye atladın",
+    moment_level_name:"Seviye",
+    moment_record:"Yeni rekor",
+    moment_record_what:"Rekor",
+    moment_breakthrough:"Atılım",
+    moment_continue:"Devam",
   },
 };
 let currentLanguage = 'en';
@@ -14301,18 +14319,24 @@ async function saveProgress(){
     }
   }
 }
+function momentShown(o){ o._prevFocus = document.activeElement; const b = o.querySelector('[data-moment-close]'); if(b) b.focus({preventScroll:true}); }
+function momentHide(o){
+  o.classList.remove('levelup-show');
+  const p = o._prevFocus; o._prevFocus = null;
+  if(p && typeof p.focus==='function' && o.contains(document.activeElement)) p.focus({preventScroll:true});
+}
 function showLevelUp(level, name, why){
   document.getElementById('levelupNum').textContent = level;
   document.getElementById('levelupSub').textContent = name;
   document.getElementById('levelupWhy').textContent = why || '';
   const overlay = document.getElementById('levelupOverlay');
-  overlay.classList.add('levelup-show');
+  overlay.classList.add('levelup-show'); momentShown(overlay);
   clearTimeout(window._levelupTimer);
-  window._levelupTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), why ? 4500 : 2400); // time to read the line
+  window._levelupTimer = setTimeout(()=>momentHide(overlay), why ? 4500 : 2400); // time to read the line
   if(typeof logTimelineEvent==='function') logTimelineEvent('levelup', `${t('timeline_reached_level_p1')} ${level} — ${name}`, {level});
 }
 document.getElementById('levelupOverlay')?.addEventListener('click', ()=>{
-  document.getElementById('levelupOverlay').classList.remove('levelup-show');
+  momentHide(document.getElementById('levelupOverlay'));
   clearTimeout(window._levelupTimer);
 });
 
@@ -14321,13 +14345,13 @@ function triggerNewRecord(label, displayVal, deltaText){
   document.getElementById('newRecordVal').textContent = displayVal;
   document.getElementById('newRecordDelta').textContent = deltaText || '';
   const overlay = document.getElementById('newRecordOverlay');
-  overlay.classList.add('levelup-show');
+  overlay.classList.add('levelup-show'); momentShown(overlay);
   clearTimeout(window._newRecordTimer);
-  window._newRecordTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), 2400);
+  window._newRecordTimer = setTimeout(()=>momentHide(overlay), 2400);
   if(typeof logTimelineEvent==='function') logTimelineEvent('record', `${t('timeline_new_record_p1')} ${label} (${displayVal})`, {recordKey: TIMELINE_RECORD_KEYS.find(k=>t(k)===label) || null, value: displayVal});
 }
 document.getElementById('newRecordOverlay')?.addEventListener('click', ()=>{
-  document.getElementById('newRecordOverlay').classList.remove('levelup-show');
+  momentHide(document.getElementById('newRecordOverlay'));
   clearTimeout(window._newRecordTimer);
 });
 
@@ -14335,13 +14359,13 @@ function triggerBreakthrough(midi, priorAvg){
   document.getElementById('breakthroughNote').textContent = noteNameFromMidi(midi);
   document.getElementById('breakthroughDetail').textContent = `${t('breakthrough_detail_p1')} ${priorAvg}% ${t('breakthrough_detail_p2')}`;
   const overlay = document.getElementById('breakthroughOverlay');
-  overlay.classList.add('levelup-show');
+  overlay.classList.add('levelup-show'); momentShown(overlay);
   clearTimeout(window._breakthroughTimer);
-  window._breakthroughTimer = setTimeout(()=>overlay.classList.remove('levelup-show'), 3200);
+  window._breakthroughTimer = setTimeout(()=>momentHide(overlay), 3200);
   if(typeof logTimelineEvent==='function') logTimelineEvent('breakthrough', `${t('timeline_breakthrough_p1')} ${noteNameFromMidi(midi)} ${t('timeline_breakthrough_p2')} ${priorAvg}% ${t('timeline_breakthrough_p3')}`, {midi, prior: priorAvg});
 }
 document.getElementById('breakthroughOverlay')?.addEventListener('click', ()=>{
-  document.getElementById('breakthroughOverlay').classList.remove('levelup-show');
+  momentHide(document.getElementById('breakthroughOverlay'));
   clearTimeout(window._breakthroughTimer);
 });
 
