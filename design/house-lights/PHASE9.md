@@ -89,3 +89,45 @@ Expected changes (nothing else may change): Teacher hidden and escaped; the layo
 Every phase 9 screen in each of its states, every onboarding step, the three moment sheets, both posters (on screen and the exported PNG), at 390 and 1280, Light and Dark, on review/phase9 with a contact sheet and the before set next to it. Secret check, push both branches.
 
 5. REPORT, then stop.
+
+9.1
+
+Phase 9 review: it's close. One fix round, 9.1, on redesign/phase9, then push review/phase9 and stop. Add this message to the end of design/house-lights/PHASE9.md under "9.1" and commit it first. No merge or deploy yet. AC power only, one verify script at a time.
+
+YOUR QUESTIONS
+- Empty Feedback form: yes, fix it here (1).
+- Voice types in English on Range Finder and Profile: yes, fix it here (2).
+- "Director dashboard" under the Choir plan: remove it (3).
+- Moment sheets on timers: keep the timers, but longer, and they stop when touched (4).
+- Sonic X-Ray's paywall reads "Song Lab": yes, keep it.
+- Prices on the plan cards: yes, keep them; the top line and the sheet say they aren't on sale.
+
+1. FEEDBACK
+- Send with nothing filled in (no text and no rating) saves nothing and shows "Write at least one answer first." under the button (four languages). A rating alone, or any one text answer, sends as today.
+- feedback.js: add the empty case (no row saved) and the rating-only case.
+
+2. VOICE TYPES
+- Everywhere a voice type is shown (Range Finder's result, Profile, the Voice Card, anywhere else you find one), use the poster's voice-type keys so it's in the page's language. The stored value doesn't change. This is an expected change for states9 and youstates.
+
+3. PLANS PAGE
+- Remove "Director dashboard" from the Choir / Studio plan (the dashboard is hidden).
+- Remove the paragraph under "Continue your vocal journey" ("Every new account gets 21 days…"): the page's first line already says it. Keep the PLANS label and the heading.
+
+4. MOMENT SHEETS
+- Level up with a why-line, and Breakthrough: 6 s. Level up without one, and New record: 4 s. (Today 4.5, 2.4, 3.2 and 2.4 s: too short to read.)
+- Any pointer, touch or key inside the sheet stops its timer; after that only Continue, Escape or the scrim close it.
+- levelup.js and moments9: add both cases.
+
+5. VOCAL LAB BARS
+- A plain bar, not piano keys (the keys read as noise at this height, worst in Dark): the track in the rule colour, the tier's range as one solid voice-colour segment.
+- The note labels (the Cs) directly under each bar that's drawn, on the same axis for all three. No axis row of its own lower down (today C3 and C4 float under Reliable, away from the only bar).
+- The empty state (no range yet) gets one action: "Find your range" (ink link), opening the Range Finder as Home's link does.
+
+6. POSTER EXPORT
+- The PNG has transparent rounded corners, which some apps show black. Export it opaque: fill behind the poster with its paper colour, so the image is a clean rectangle.
+- Export at scale 3 (1020 × 1800) instead of 2, so it holds up full-screen on a phone.
+- posters.js: the four corner pixels are opaque paper; the new size.
+
+CHECKS: feedback, posters, levelup, moments9, states9, checkout, tools, youstates, copyscan --all, contrast, hooks, bootcheck.
+SCREENSHOTS on review/phase9 under 9.1/: Feedback with the empty-send note; Range Finder's result and Profile in French; Plans (new and expired); the three moment sheets; Vocal Lab (active, new, signed out); both posters on screen and their PNGs; onboarding steps 1 and 3 with choices made (I haven't seen the chosen state yet). 390 and 1280, Light and Dark. Secret check, push both branches.
+REPORT, then stop.
