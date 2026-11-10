@@ -2532,6 +2532,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .ob-plan-summary .obp-val{color:var(--hl-ink);font-weight:600;text-align:right;font-family:var(--hl-font);}
   .ob-next-line{margin-top:var(--hl-s4);}
   @media (prefers-reduced-motion: reduce){ .ob-bar i{transition:none;} }
+
+  /* ---- PHASE 9 (2.4): the language chooser, four rows ---- */
+  .lang-options{display:flex;flex-direction:column;border-top:var(--hl-hair) solid var(--hl-rule);margin:var(--hl-s4) 0 0;}
+  .lang-opt.hl-item{grid-template-columns:minmax(0,1fr);min-height:56px;}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
@@ -5884,21 +5888,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <div class="modal-overlay" id="languageSelectOverlay" role="dialog" aria-modal="true" aria-labelledby="langSelectTitle" style="display:none;">
     <div class="modal-card trial-modal-card">
       <h2 class="trial-modal-title" id="langSelectTitle" data-i18n="lang_select_title">Choose your language</h2>
-      <div class="goal-grid" style="margin-top:16px;">
-        <button class="ex-type-btn mode-card" data-lang="en" style="text-align:center;align-items:center;">
-          <div class="mode-card-name">English</div>
-        </button>
-        <button class="ex-type-btn mode-card" data-lang="fr" style="text-align:center;align-items:center;">
-          <div class="mode-card-name">Français</div>
-        </button>
-        <button class="ex-type-btn mode-card" data-lang="es" style="text-align:center;align-items:center;">
-          <div class="mode-card-name">Español</div>
-        </button>
-        <button class="ex-type-btn mode-card" data-lang="tr" style="text-align:center;align-items:center;">
-          <div class="mode-card-name">Türkçe</div>
-        </button>
+      <div class="lang-options">
+        <button type="button" class="hl-item lang-opt" data-lang="en" lang="en"><span class="hl-item-title">English</span></button>
+        <button type="button" class="hl-item lang-opt" data-lang="fr" lang="fr"><span class="hl-item-title">Français</span></button>
+        <button type="button" class="hl-item lang-opt" data-lang="es" lang="es"><span class="hl-item-title">Español</span></button>
+        <button type="button" class="hl-item lang-opt" data-lang="tr" lang="tr"><span class="hl-item-title">Türkçe</span></button>
       </div>
-      <p class="fine-print" style="margin-top:16px;" data-i18n="lang_select_disclosure">The whole app is translated: navigation, every tool, exercises, games and account screens. One exception for now: the 21-Day Journey's day-by-day curriculum text is in English.</p>
+      <p class="p9-terms" data-i18n="lang_select_disclosure">The whole app is translated: navigation, every tool, exercises, games and account screens. One exception for now: the 21-Day Journey's day-by-day curriculum text is in English.</p>
     </div>
   </div>
 
@@ -7041,7 +7037,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Five quick questions, then your Day 1 assessment.",
     ob_back_btn:'Back', ob_get_started_btn:'Get started', ob_start_assessment_btn:'Start my Day 1 assessment', ob_next_btn:'Next',
     lang_select_title:'Choose your language',
-    lang_select_disclosure:"The whole app is translated: navigation, every tool, exercises, games and account screens. One exception for now: the 21-Day Journey's day-by-day curriculum text is in English.",
+    lang_select_disclosure:"Everything is translated except the 21-Day Journey's daily lessons, which are in English for now.",
     hub_train_title:'Coach', hub_train_sub:'Exercises and tools for pitch, range, breath and tone.',
     hub_songs_title:'Songs', hub_songs_sub:'Rehearse your choir part, or practice a song on your own.',
     hub_you_title:'You', hub_you_sub:'Your range, progress and plan.',
@@ -8786,7 +8782,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Cinq questions rapides, puis votre évaluation du Jour 1.",
     ob_back_btn:'Retour', ob_get_started_btn:'Commencer', ob_start_assessment_btn:'Commencer mon évaluation du Jour 1', ob_next_btn:'Suivant',
     lang_select_title:'Choisissez votre langue',
-    lang_select_disclosure:"Toute l'application est traduite : navigation, chaque outil, exercices, jeux et écrans de compte. Une exception pour l'instant : le texte du programme jour par jour du parcours de 21 jours est en anglais.",
+    lang_select_disclosure:"Tout est traduit, sauf les leçons quotidiennes du parcours de 21 jours, qui sont en anglais pour l'instant.",
     hub_train_title:'Coach', hub_train_sub:'Exercices et outils pour la justesse, la tessiture, le souffle et le timbre.',
     hub_songs_title:'Chansons', hub_songs_sub:'Répétez votre voix du chœur, ou travaillez une chanson seul.',
     hub_you_title:'Vous', hub_you_sub:'Votre tessiture, vos progrès et votre forfait.',
@@ -10531,7 +10527,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Cinco preguntas rápidas y luego tu evaluación del Día 1.",
     ob_back_btn:'Atrás', ob_get_started_btn:'Empezar', ob_start_assessment_btn:'Comenzar mi evaluación del Día 1', ob_next_btn:'Siguiente',
     lang_select_title:'Elige tu idioma',
-    lang_select_disclosure:"Toda la app está traducida: navegación, cada herramienta, ejercicios, juegos y pantallas de cuenta. Una excepción por ahora: el texto del programa día a día del recorrido de 21 días está en inglés.",
+    lang_select_disclosure:"Todo está traducido, excepto las lecciones diarias del recorrido de 21 días, que por ahora están en inglés.",
     hub_train_title:'Coach', hub_train_sub:'Ejercicios y herramientas para afinación, rango, respiración y timbre.',
     hub_songs_title:'Canciones', hub_songs_sub:'Ensaya tu voz del coro o practica una canción por tu cuenta.',
     hub_you_title:'Tú', hub_you_sub:'Tu rango, tu progreso y tu plan.',
@@ -12276,7 +12272,7 @@ const TRANSLATIONS = {
     ob_welcome_sub:"Beş kısa soru, ardından 1. Gün değerlendirmen.",
     ob_back_btn:'Geri', ob_get_started_btn:'Başla', ob_start_assessment_btn:'1. Gün değerlendirmemi başlat', ob_next_btn:'İleri',
     lang_select_title:'Dilinizi seçin',
-    lang_select_disclosure:"Uygulamanın tamamı çevrildi: gezinme, her araç, egzersizler, oyunlar ve hesap ekranları. Şimdilik bir istisna: 21 günlük yolculuğun gün gün program metni İngilizce.",
+    lang_select_disclosure:"21 Günlük Yolculuk'un günlük dersleri dışında her şey çevrildi; o dersler şimdilik İngilizce.",
     hub_train_title:'Koç', hub_train_sub:'Perde, ses aralığı, nefes ve tını için egzersizler ve araçlar.',
     hub_songs_title:'Şarkılar', hub_songs_sub:'Koro partini çalış ya da bir şarkıyı tek başına çalış.',
     hub_you_title:'Sen', hub_you_sub:'Ses aralığın, ilerlemen ve planın.',
