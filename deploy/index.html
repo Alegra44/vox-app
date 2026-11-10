@@ -2641,6 +2641,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #vocalLabEmpty{margin:0;}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
+  /* onboarding's long steps (13 genres) scroll inside the sheet: Back / Next stay at its foot */
+  .modal-card.onboarding-card .p9-actions{position:sticky;bottom:calc(-1 * var(--hl-s5));z-index:1;background:var(--hl-raised);
+    margin-bottom:calc(-1 * var(--hl-s5));padding:var(--hl-s3) 0 var(--hl-s5);}
 </style>
 </head>
 <body data-house="up">
