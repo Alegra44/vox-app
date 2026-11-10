@@ -2536,6 +2536,42 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* ---- PHASE 9 (2.4): the language chooser, four rows ---- */
   .lang-options{display:flex;flex-direction:column;border-top:var(--hl-hair) solid var(--hl-rule);margin:var(--hl-s4) 0 0;}
   .lang-opt.hl-item{grid-template-columns:minmax(0,1fr);min-height:56px;}
+
+  /* ---- PHASE 9 (2.5): Plan & Pricing as ruled rows (columns from 768); the "not on sale" line; the paywall ---- */
+  .pricing-notonsale{margin:0 0 var(--hl-s4);padding:var(--hl-s3) 0;border-top:var(--hl-hair) solid var(--hl-rule);border-bottom:var(--hl-hair) solid var(--hl-rule);
+    font-size:var(--hl-t-body);line-height:1.45;color:var(--hl-ink);}
+  .pricing-notonsale[hidden]{display:none;}
+  #panel-pricing .trial-status-banner, #panel-pricing .trial-status-banner.neutral, #panel-pricing .trial-status-banner.active, #panel-pricing .trial-status-banner.expired{
+    background:none;border:0;border-radius:0;padding:0;margin:0 0 var(--hl-s4);font-size:var(--hl-t-body);line-height:1.45;color:var(--hl-ink-2);}
+  #panel-pricing .trial-status-banner strong{color:var(--hl-ink);font-weight:650;}
+  .pricing-h2{margin:var(--hl-s2) 0 var(--hl-s1);}
+  .pricing-desc{font-size:var(--hl-t-body);line-height:1.45;color:var(--hl-ink-2);margin:0 0 var(--hl-s4);max-width:62ch;}
+  .plan-rows{display:grid;grid-template-columns:1fr;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .plan-row{display:flex;flex-direction:column;gap:var(--hl-s1);padding:var(--hl-s5) 0;border-bottom:var(--hl-hair) solid var(--hl-rule);}
+  .plan-row-head{display:flex;align-items:baseline;justify-content:space-between;gap:var(--hl-s3);flex-wrap:wrap;}
+  .plan-row .plan-name{font-size:var(--hl-t-h3);font-weight:650;color:var(--hl-ink);margin:0;font-family:var(--hl-font);font-stretch:var(--hl-w-normal);}
+  .plan-row .plan-badge{position:static;background:none;color:var(--hl-ink-3);padding:0;border:0;}
+  .plan-row .plan-price{margin:var(--hl-s1) 0 0;color:var(--hl-ink);}
+  .plan-row .plan-amount{font-size:var(--hl-t-metric);font-stretch:var(--hl-w-wide);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.01em;}
+  .plan-row .plan-price .per{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
+  .plan-row .plan-audience{font-size:var(--hl-t-small);color:var(--hl-ink-3);margin:0 0 var(--hl-s2);}
+  .plan-row .plan-features{list-style:none;padding:0;margin:0 0 var(--hl-s4);flex:1;}
+  .plan-row .plan-features li{font-size:var(--hl-t-small);line-height:1.45;color:var(--hl-ink-2);opacity:1;padding:3px 0 3px 16px;position:relative;}
+  .plan-row .plan-features li::before{content:"–";position:absolute;left:0;color:var(--hl-ink-3);}
+  .plan-row .plan-btn{width:100%;}
+  .plan-row .plan-btn.current{color:var(--hl-ink-3);border-color:var(--hl-rule);}
+  @media (min-width:768px){
+    .plan-rows{grid-template-columns:repeat(4, minmax(0,1fr));border-bottom:var(--hl-hair) solid var(--hl-rule);}
+    .plan-row{border-bottom:0;padding:var(--hl-s5) var(--hl-s4);}
+    .plan-row + .plan-row{border-left:var(--hl-hair) solid var(--hl-rule);}
+    .plan-row:first-child{padding-left:0;} .plan-row:last-child{padding-right:0;}
+  }
+  #trialCompareRows .snapshot-row{display:flex;justify-content:space-between;align-items:baseline;gap:var(--hl-s3);padding:var(--hl-s3) 0;
+    border-bottom:var(--hl-hair) solid var(--hl-rule);font-size:var(--hl-t-body);color:var(--hl-ink);background:none;border-radius:0;}
+  #trialCompareRows .snapshot-row:first-child{border-top:var(--hl-hair) solid var(--hl-rule);}
+  #trialCompareRows .snapshot-row > span:last-child{font-variant-numeric:tabular-nums;color:var(--hl-ink-2);}
+  #trialCompareRows .snapshot-delta.up{color:var(--hl-ok);} #trialCompareRows .snapshot-delta.flat{color:var(--hl-ink-3);}
+  #paywallPlanChip[hidden]{display:none;}
   .p9-sheet-icon{display:block;width:28px;height:28px;color:var(--hl-ink-2);margin:0 0 var(--hl-s3);}
   @media (max-width:480px){ .modal-card, .modal-card.trial-modal-card, .modal-card.paywall-card, .modal-card.onboarding-card{padding:var(--hl-s5) var(--hl-s4);} }
 </style>
@@ -5445,21 +5481,22 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   <!-- PRICING PANEL -->
   <section class="panel" id="panel-pricing">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="pricing_title">💳 Plans</div>
-      <div class="j-sub" data-i18n="pricing_sub">21 days of full access on every new account, then a real plan continues it — transparent before you ever create one.</div>
+      <div class="j-title" data-i18n="pricing_title">Plans</div>
+      <div class="j-sub" data-i18n="pricing_sub">21 days of full access on every new account; after that, a paid plan continues it.</div>
     </div>
+    <p class="pricing-notonsale" id="pricingNotOnSale" data-i18n="pricing_notonsale">Paid plans aren't on sale yet; we'll tell you when they open. Your current access continues.</p>
 
     <div class="trial-status-banner" id="trialStatusBanner" role="status" aria-live="polite"></div>
 
-    <div class="key-card" id="trialCompleteCard" style="display:none;">
-      <div class="step-label" data-i18n="pricing_yourjourney_label">Your 21-Day Journey</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:26px;margin:8px 0 4px;" data-i18n="pricing_comefar_h2">Your voice has come this far.</h2>
-      <p class="desc" style="margin-bottom:18px;" data-i18n="pricing_realnumbers_desc">Real numbers only — your stored Day 1 baseline compared to today.</p>
+    <section class="hl-section pricing-complete" id="trialCompleteCard" style="display:none;">
+      <div class="hl-label" data-i18n="pricing_yourjourney_label">Your 21-Day Journey</div>
+      <h2 class="hl-h2 pricing-h2" data-i18n="pricing_comefar_h2">Your voice has come this far.</h2>
+      <p class="pricing-desc" data-i18n="pricing_realnumbers_desc">Your stored Day 1 baseline compared to today.</p>
       <div id="trialCompareRows"></div>
 
       <div id="hearYourselfSection" style="margin-top:22px;display:none;">
-        <div class="step-label" data-i18n="pricing_hearyourself_label">Hear Yourself Improve</div>
-        <p class="desc" style="margin:8px 0 14px;" data-i18n="pricing_hearyourself_desc">Your real Day 1 clip — recorded with your consent, stored only on this device. Play it back, then record how you sound right now.</p>
+        <div class="hl-label" data-i18n="pricing_hearyourself_label">Hear Yourself Improve</div>
+        <p class="pricing-desc" data-i18n="pricing_hearyourself_desc">Your Day 1 clip, recorded with your consent and stored only on this device. Play it back, then record how you sound now.</p>
         <div class="voice-compare-row">
           <div class="voice-compare-card">
             <div class="vc-label" data-i18n="pricing_day1_label">Day 1</div>
@@ -5468,7 +5505,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="voice-compare-card">
             <div class="vc-label" data-i18n="pricing_today_label">Today</div>
             <div id="todayAudioEmpty">
-              <button class="ghost-btn" id="recordTodayBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="pricing_recordtoday_btn">🎙️ Record today's clip</button>
+              <button class="ghost-btn" id="recordTodayBtn" style="width:100%;justify-content:center;margin-top:8px;" data-i18n="pricing_recordtoday_btn">Record today's clip</button>
               <div class="vl-gauge" id="vlGaugeToday" style="display:none;"></div>
             </div>
             <audio id="todayAudioPlayer" controls style="width:100%;margin-top:8px;display:none;"></audio>
@@ -5476,22 +5513,20 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
       </div>
       <div id="hearYourselfMissing" style="display:none;margin-top:18px;">
-        <p class="fine-print" data-i18n="pricing_noday1clip_note">No Day 1 clip was recorded, so there's nothing to compare by ear — your saved numeric progress above is still real and intact.</p>
+        <p class="fine-print" data-i18n="pricing_noday1clip_note">No Day 1 clip was recorded, so there's nothing to compare by ear. Your saved progress above is intact.</p>
       </div>
 
-      <p class="desc" style="margin:18px 0 0;" data-i18n="pricing_progresssaved_note">Your progress, achievements, and history are saved — nothing is deleted because your trial ended. Choose a plan below to keep training, playing Vocal World, and getting AI-guided practice.</p>
-    </div>
+      <p class="pricing-desc" style="margin-top:var(--hl-s4);" data-i18n="pricing_progresssaved_note">Your progress, achievements, and history are saved — nothing is deleted because your trial ended. Choose a plan below to keep training, playing Vocal World, and getting AI-guided practice.</p>
+    </section>
 
-    <div class="key-card">
-      <div class="step-label" data-i18n="pricing_plans_label">Plans</div>
-      <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:24px;margin:8px 0 4px;" data-i18n="pricing_continue_h2">Continue your vocal journey</h2>
-      <p class="desc" style="margin-bottom:26px;" data-i18n="pricing_trialgates_desc">Every new account gets 21 days of full access first — no feature gates during the trial. These plans are what continues after.</p>
-
-      <div class="pricing-grid">
-        <div class="plan-card highlight">
-          <div class="plan-badge" data-i18n="pricing_mostpopular_badge">MOST POPULAR</div>
-          <div class="plan-name" data-i18n="pricing_planname_monthly">🎤 Monthly</div>
-          <div class="plan-price">$9.99 <span class="per" data-i18n="pricing_per_mo">/mo</span></div>
+    <section class="hl-section pricing-plans">
+      <div class="hl-label" data-i18n="pricing_plans_label">Plans</div>
+      <h2 class="hl-h2 pricing-h2" data-i18n="pricing_continue_h2">Continue your vocal journey</h2>
+      <p class="pricing-desc" data-i18n="pricing_trialgates_desc">Every new account gets 21 days of full access first — no feature gates during the trial. These plans are what continues after.</p>
+      <div class="plan-rows">
+        <div class="plan-row highlight" data-plan-row="monthly">
+          <div class="plan-row-head"><h3 class="plan-name" data-i18n="pricing_planname_monthly">Monthly</h3><span class="plan-badge hl-label" data-i18n="pricing_mostpopular_badge">Most popular</span></div>
+          <div class="plan-price"><span class="plan-amount">$9.99</span> <span class="per" data-i18n="pricing_per_mo">/mo</span></div>
           <div class="plan-audience" data-i18n="pricing_monthly_audience">Individual singers</div>
           <ul class="plan-features">
             <li data-i18n="pricing_monthly_f1">Everything from your 21-day trial, unlimited</li>
@@ -5499,38 +5534,34 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <li data-i18n="pricing_monthly_f3">Key trainer + key recommendation</li>
             <li data-i18n="pricing_monthly_f4">Register coach, Vocal World, full Skill Profile</li>
           </ul>
-          <button class="plan-btn solid-btn" data-plan="monthly" data-price="$9.99/mo" data-i18n="pricing_continue_monthly_btn">Continue with Monthly</button>
+          <button class="plan-btn hl-btn" data-plan="monthly" data-price="$9.99/mo" data-i18n="pricing_continue_monthly_btn">Continue with Monthly</button>
         </div>
-
-        <div class="plan-card">
-          <div class="plan-badge" style="background:var(--teal);color:var(--on-teal);" data-i18n="pricing_bestvalue_badge">BEST VALUE</div>
-          <div class="plan-name" data-i18n="pricing_planname_yearly">⭐ Yearly</div>
-          <div class="plan-price">$79 <span class="per" data-i18n="pricing_per_yr">/yr</span></div>
+        <div class="plan-row highlight" data-plan-row="yearly">
+          <div class="plan-row-head"><h3 class="plan-name" data-i18n="pricing_planname_yearly">Yearly</h3><span class="plan-badge hl-label" data-i18n="pricing_bestvalue_badge">Best value</span></div>
+          <div class="plan-price"><span class="plan-amount">$79</span> <span class="per" data-i18n="pricing_per_yr">/yr</span></div>
           <div class="plan-audience" data-i18n="pricing_yearly_audience">~$6.60/mo — 2 months free vs. Monthly</div>
           <ul class="plan-features">
             <li data-i18n="pricing_yearly_f1">Everything in Monthly</li>
             <li data-i18n="pricing_yearly_f2">Billed once a year</li>
-            <li data-i18n="pricing_yearly_f3">Same real features, lower cost per month</li>
+            <li data-i18n="pricing_yearly_f3">The same features, lower cost per month</li>
           </ul>
-          <button class="plan-btn solid-btn teal" data-plan="yearly" data-price="$79/yr" data-i18n="pricing_continue_yearly_btn">Continue with Yearly</button>
+          <button class="plan-btn hl-btn" data-plan="yearly" data-price="$79/yr" data-i18n="pricing_continue_yearly_btn">Continue with Yearly</button>
         </div>
-
-        <div class="plan-card">
-          <div class="plan-name" data-i18n="pricing_planname_teacher">🎓 Teacher</div>
-          <div class="plan-price">$29 <span class="per" data-i18n="pricing_per_mo">/mo</span></div>
+        <div class="plan-row" data-plan-row="teacher">
+          <div class="plan-row-head"><h3 class="plan-name" data-i18n="pricing_planname_teacher">Teacher</h3></div>
+          <div class="plan-price"><span class="plan-amount">$29</span> <span class="per" data-i18n="pricing_per_mo">/mo</span></div>
           <div class="plan-audience" data-i18n="pricing_teacher_audience">Up to 20 students</div>
           <ul class="plan-features">
             <li data-i18n="pricing_teacher_f1">Everything in Monthly</li>
             <li data-i18n="pricing_teacher_f2">Assign exercises to students</li>
             <li data-i18n="pricing_teacher_f3">Student progress reports</li>
-            <li data-i18n="pricing_teacher_f4">Roster &amp; assignment tools — Phase 1, week 8</li>
+            <li data-i18n="pricing_teacher_f4">Roster and assignment tools</li>
           </ul>
           <p class="plan-soon" id="teacherPlanSoon" data-i18n="pricing_teacher_coming">Coming later</p>
         </div>
-
-        <div class="plan-card">
-          <div class="plan-name" data-i18n="pricing_planname_choir">🎹 Choir / Studio</div>
-          <div class="plan-price">$79 <span class="per" data-i18n="pricing_per_mo">/mo</span></div>
+        <div class="plan-row" data-plan-row="choir">
+          <div class="plan-row-head"><h3 class="plan-name" data-i18n="pricing_planname_choir">Choir / Studio</h3></div>
+          <div class="plan-price"><span class="plan-amount">$79</span> <span class="per" data-i18n="pricing_per_mo">/mo</span></div>
           <div class="plan-audience" data-i18n="pricing_choir_audience">Unlimited singers</div>
           <ul class="plan-features">
             <li data-i18n="pricing_choir_f1">Full choir mixer — mute/solo/volume per part</li>
@@ -5539,16 +5570,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <li data-i18n="pricing_choir_f4">Flat rate, no per-seat pricing</li>
             <li data-i18n="pricing_choir_f5">Choir World: part rehearsal, trainers, Harmony Memory, Choir Bosses, Your Choir and Choir Passport</li>
           </ul>
-          <button class="plan-btn solid-btn teal" data-plan="choir" data-price="$79/mo" data-i18n="pricing_continue_choir_btn">Continue with Choir</button>
+          <button class="plan-btn hl-btn" data-plan="choir" data-price="$79/mo" data-i18n="pricing_continue_choir_btn">Continue with Choir</button>
         </div>
       </div>
-
-      <div class="demo-disclosure">
-        <strong data-i18n="pricing_aboutcheckout_label">About this checkout:</strong> <span data-i18n="pricing_disclosure_p1">this prototype has no live payment processor connected — there's no Stripe account or backend behind it.</span>
-        <span data-i18n="pricing_disclosure_p2">Clicking a plan opens a demo flow that simulates the subscription state change locally so the trial→paywall behavior can be tested end-to-end.</span>
-        <span data-i18n="pricing_disclosure_p3">A real build replaces this with actual Stripe Checkout Sessions created server-side (PRD §6), never a client-side payment form.</span>
-      </div>
-    </div>
+    </section>
   </section>
 
   <!-- PERSONAL RECORDS PANEL -->
@@ -5820,10 +5845,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <svg class="hl-icon p9-sheet-icon" id="paywallIcon" aria-hidden="true"><use href="#hl-lock"/></svg>
       <h2 class="trial-modal-title" id="paywallTitle">Feature name</h2>
       <p class="trial-modal-sub" id="paywallReason">Reason text.</p>
-      <div class="paywall-plan-chip" id="paywallPlanChip">Plan · Price</div>
+      <div class="paywall-plan-chip" id="paywallPlanChip" hidden></div>
       <div class="p9-actions">
-        <button class="hl-btn hl-btn--ink" id="paywallViewPlansBtn" data-sheet-main>View plans</button>
-        <button class="hl-btn hl-btn--quiet" id="paywallCancelBtn">Not now</button>
+        <button class="hl-btn hl-btn--ink" id="paywallCancelBtn" data-sheet-main data-i18n="paywall_close_btn">Close</button>
+        <button class="hl-btn hl-btn--quiet" id="paywallViewPlansBtn" data-i18n="paywall_seeplans_btn">See the plans</button>
       </div>
     </div>
   </div>
@@ -7296,8 +7321,8 @@ const TRANSLATIONS = {
     passport_timeline_desc:"The moments of your voice, in order, each logged when it happened.",
     choir_title:"Choir Workspace",
     choir_sub:"A mixer for every part: mute, solo and set the volume of each voice in the song.",
-    pricing_title:'💳 Plans',
-    pricing_sub:'21 days of full access on every new account, then a real plan continues it — transparent before you ever create one.',
+    pricing_title:"Plans",
+    pricing_sub:"21 days of full access on every new account; after that, a paid plan continues it.",
     records_title:"Personal Records",
     records_sub:"Your bests, from what you've sung. A record appears once you've done the activity.",
     feedback_title:'💬 Feedback',
@@ -7912,8 +7937,8 @@ const TRANSLATIONS = {
     key_transpose_label:'Transpose',
     key_try_ranked_label:"Try a few keys, ranked by fit",
     key_use_captured_btn:'Use my Range Finder result',
-    pricing_aboutcheckout_label:'About this checkout:',
-    pricing_bestvalue_badge:'BEST VALUE',
+    
+    pricing_bestvalue_badge:"Best value",
     pricing_choir_audience:'Unlimited singers',
     pricing_choir_f1:'Full choir mixer — mute/solo/volume per part',
     pricing_choir_f2:'Pre-separated licensed track catalog',
@@ -7927,35 +7952,35 @@ const TRANSLATIONS = {
     pricing_continue_teacher_btn:'Continue with Teacher',
     pricing_continue_yearly_btn:'Continue with Yearly',
     pricing_day1_label:'Day 1',
-    pricing_disclosure_p1:'this prototype has no live payment processor connected — there\'s no Stripe account or backend behind it.',
-    pricing_disclosure_p2:'Clicking a plan opens a demo flow that simulates the subscription state change locally so the trial→paywall behavior can be tested end-to-end.',
-    pricing_disclosure_p3:'A real build replaces this with actual Stripe Checkout Sessions created server-side (PRD §6), never a client-side payment form.',
-    pricing_hearyourself_desc:'Your real Day 1 clip — recorded with your consent, stored only on this device. Play it back, then record how you sound right now.',
+    
+    
+    
+    pricing_hearyourself_desc:"Your Day 1 clip, recorded with your consent and stored only on this device. Play it back, then record how you sound now.",
     pricing_hearyourself_label:'Hear Yourself Improve',
     pricing_monthly_audience:'Individual singers',
     pricing_monthly_f1:'Everything from your 21-day trial, unlimited',
     pricing_monthly_f2:'Unlimited daily exercises',
     pricing_monthly_f3:'Key trainer + key recommendation',
     pricing_monthly_f4:'Register coach, Vocal World, full Skill Profile',
-    pricing_mostpopular_badge:'MOST POPULAR',
-    pricing_noday1clip_note:'No Day 1 clip was recorded, so there\'s nothing to compare by ear — your saved numeric progress above is still real and intact.',
+    pricing_mostpopular_badge:"Most popular",
+    pricing_noday1clip_note:"No Day 1 clip was recorded, so there's nothing to compare by ear. Your saved progress above is intact.",
     pricing_per_mo:'/mo',
     pricing_per_yr:'/yr',
     pricing_plans_label:'Plans',
     pricing_progresssaved_note:'Your progress, achievements, and history are saved — nothing is deleted because your trial ended. Choose a plan below to keep training, playing Vocal World, and getting AI-guided practice.',
-    pricing_realnumbers_desc:'Real numbers only — your stored Day 1 baseline compared to today.',
-    pricing_recordtoday_btn:'🎙️ Record today\'s clip',
+    pricing_realnumbers_desc:"Your stored Day 1 baseline compared to today.",
+    pricing_recordtoday_btn:"Record today's clip",
     pricing_teacher_audience:'Up to 20 students',
     pricing_teacher_f1:'Everything in Monthly',
     pricing_teacher_f2:'Assign exercises to students',
     pricing_teacher_f3:'Student progress reports',
-    pricing_teacher_f4:'Roster & assignment tools — Phase 1, week 8',
+    pricing_teacher_f4:"Roster and assignment tools",
     pricing_today_label:'Today',
     pricing_trialgates_desc:'Every new account gets 21 days of full access first — no feature gates during the trial. These plans are what continues after.',
     pricing_yearly_audience:'~$6.60/mo — 2 months free vs. Monthly',
     pricing_yearly_f1:'Everything in Monthly',
     pricing_yearly_f2:'Billed once a year',
-    pricing_yearly_f3:'Same real features, lower cost per month',
+    pricing_yearly_f3:"The same features, lower cost per month",
     pricing_yourjourney_label:'Your 21-Day Journey',
     records_cat_songs:"Songs",
     records_cat_voice:"Vocal Range & Technique",
@@ -8178,7 +8203,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Tomorrow, your 21-day Vocal Journey ends.', pricingstate_daysleft_transform:'days left to complete your transformation.',
     pricingstate_championship_p1:'Your Vocal Championship is coming —', pricingstate_championship_p2:'days left.',
     pricingstate_daysleft_free:'days remaining in your free access.',
-    pricingstate_journeycomplete:'Your 21-day Vocal Journey is complete 🎤', pricingstate_progresschoose:'your progress is saved. Choose a plan to keep training.',
+    pricingstate_journeycomplete:"Your 21-day Vocal Journey is complete", pricingstate_progresschoose:'your progress is saved. Choose a plan to keep training.',
     plan_current:'Current plan', plan_continue_prefix:'Continue with', plan_upgrade_prefix:'Upgrade to',
     plan_subscribed_prefix:"You're subscribed to", plan_subscribed_suffix:'(demo). Your vocal journey continues — nothing was lost.',
     plan_phrase_template:'{p} plan', plan_suffix_trial_of21:'of 21 trial',
@@ -8417,7 +8442,7 @@ const TRANSLATIONS = {
     paywall_trialended_choir_tpl:'Your 21-day free access has ended. {feature} continues on the {plan} plan ({price}) — your progress is still saved.',
     arcade_pro_level_template:'Pro · Level {n}', arcade_won_template:"Wins: {n}", arcade_best_template:'Best: {n}',
     arcade_trial_included:'Included in your 21-day trial', arcade_always_open:'Always open', arcade_unlocks_at_level_template:'🔒 Unlocks at Level {n}',
-    pricing_planname_monthly:'🎤 Monthly', pricing_planname_yearly:'⭐ Yearly', pricing_planname_teacher:'🎓 Teacher', pricing_planname_choir:'🎹 Choir / Studio',
+    pricing_planname_monthly:"Monthly", pricing_planname_yearly:"Yearly", pricing_planname_teacher:"Teacher", pricing_planname_choir:"Choir / Studio",
     trialcompare_nobaseline:"No Day 1 baseline was recorded (the 21-Day Journey assessment wasn't completed), so there's no before/after to show — your saved progress is still intact.",
     voicehealth_nodata_tooltip:'no data',
     exfeedback_nopitch:"Didn't catch a clear pitch — try again a little louder or closer to the mic.",
@@ -8756,6 +8781,10 @@ const TRANSLATIONS = {
     ob_pri_agility:"Agility and runs",
     ob_plan_title:"Your plan is ready",
     ob_next_line:"Next: your Day 1 assessment, five short measurements.",
+    pricing_notonsale:"Paid plans aren't on sale yet; we'll tell you when they open. Your current access continues.",
+    paywall_expired_notonsale:"Your 21 free days have ended. Paid plans aren't on sale yet; we'll tell you when they open. Your progress is saved.",
+    paywall_close_btn:"Close",
+    paywall_seeplans_btn:"See the plans",
   },
   fr: {
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
@@ -9041,8 +9070,8 @@ const TRANSLATIONS = {
     passport_timeline_desc:"Les moments de votre voix, dans l'ordre, chacun noté au moment où il s'est produit.",
     choir_title:"Espace Chorale",
     choir_sub:"Un mixeur pour chaque voix : coupez, isolez et réglez le volume de chaque voix du morceau.",
-    pricing_title:'💳 Forfaits',
-    pricing_sub:'21 jours d\'accès complet sur chaque nouveau compte, puis un vrai forfait continue — transparent avant même que vous n\'en créiez un.',
+    pricing_title:"Forfaits",
+    pricing_sub:"21 jours d'accès complet sur chaque nouveau compte ; ensuite, un forfait payant prend le relais.",
     records_title:"Records personnels",
     records_sub:"Vos meilleurs résultats, d'après ce que vous avez chanté. Un record apparaît une fois l'activité faite.",
     feedback_title:'💬 Avis',
@@ -9657,8 +9686,8 @@ const TRANSLATIONS = {
     key_transpose_label:'Transposer',
     key_try_ranked_label:"Essayez quelques tonalités, classées selon leur adéquation",
     key_use_captured_btn:'Utiliser mon résultat du Détecteur de tessiture',
-    pricing_aboutcheckout_label:'À propos de ce paiement :',
-    pricing_bestvalue_badge:'MEILLEUR RAPPORT',
+    
+    pricing_bestvalue_badge:"Meilleur rapport",
     pricing_choir_audience:'Chanteurs illimités',
     pricing_choir_f1:'Mixeur de chorale complet — muet/solo/volume par voix',
     pricing_choir_f2:'Catalogue de pistes sous licence pré-séparées',
@@ -9672,35 +9701,35 @@ const TRANSLATIONS = {
     pricing_continue_teacher_btn:'Continuer avec Enseignant',
     pricing_continue_yearly_btn:'Continuer avec Annuel',
     pricing_day1_label:'Jour 1',
-    pricing_disclosure_p1:'ce prototype n\'a aucun processeur de paiement en direct connecté — il n\'y a pas de compte Stripe ni de backend derrière.',
-    pricing_disclosure_p2:'Cliquer sur un forfait ouvre un flux de démonstration qui simule le changement d\'état d\'abonnement localement afin que le comportement essai→paywall puisse être testé de bout en bout.',
-    pricing_disclosure_p3:'Une vraie version remplace ceci par de vraies sessions de paiement Stripe créées côté serveur (PRD §6), jamais un formulaire de paiement côté client.',
-    pricing_hearyourself_desc:'Votre vrai extrait du Jour 1 — enregistré avec votre consentement, stocké uniquement sur cet appareil. Réécoutez-le, puis enregistrez comment vous sonnez maintenant.',
+    
+    
+    
+    pricing_hearyourself_desc:"Votre extrait du Jour 1, enregistré avec votre accord et stocké uniquement sur cet appareil. Réécoutez-le, puis enregistrez votre voix aujourd'hui.",
     pricing_hearyourself_label:'Écoutez votre progression',
     pricing_monthly_audience:'Chanteurs individuels',
     pricing_monthly_f1:'Tout de votre essai de 21 jours, illimité',
     pricing_monthly_f2:'Exercices quotidiens illimités',
     pricing_monthly_f3:'Entraîneur de tonalité + recommandation de tonalité',
     pricing_monthly_f4:'Coach de registre, Monde Vocal, Profil de compétences complet',
-    pricing_mostpopular_badge:'LE PLUS POPULAIRE',
-    pricing_noday1clip_note:'Aucun extrait du Jour 1 n\'a été enregistré, il n\'y a donc rien à comparer à l\'oreille — votre progression numérique enregistrée ci-dessus reste réelle et intacte.',
+    pricing_mostpopular_badge:"Le plus populaire",
+    pricing_noday1clip_note:"Aucun extrait du Jour 1 n'a été enregistré : rien à comparer à l'oreille. Votre progression enregistrée ci-dessus est intacte.",
     pricing_per_mo:'/mois',
     pricing_per_yr:'/an',
     pricing_plans_label:'Forfaits',
     pricing_progresssaved_note:'Votre progression, vos succès et votre historique sont enregistrés — rien n\'est supprimé parce que votre essai s\'est terminé. Choisissez un forfait ci-dessous pour continuer à vous entraîner, jouer au Monde Vocal, et obtenir une pratique guidée par IA.',
-    pricing_realnumbers_desc:'Uniquement de vrais chiffres — votre référence du Jour 1 enregistrée comparée à aujourd\'hui.',
-    pricing_recordtoday_btn:'🎙️ Enregistrer l\'extrait du jour',
+    pricing_realnumbers_desc:"Votre référence du Jour 1 enregistrée, comparée à aujourd'hui.",
+    pricing_recordtoday_btn:"Enregistrer l'extrait du jour",
     pricing_teacher_audience:'Jusqu\'à 20 élèves',
     pricing_teacher_f1:'Tout ce qui est dans Mensuel',
     pricing_teacher_f2:'Assigner des exercices aux élèves',
     pricing_teacher_f3:'Rapports de progression des élèves',
-    pricing_teacher_f4:'Outils de liste et d\'attribution — Phase 1, semaine 8',
+    pricing_teacher_f4:"Outils de liste d'élèves et de devoirs",
     pricing_today_label:'Aujourd\'hui',
     pricing_trialgates_desc:'Chaque nouveau compte bénéficie d\'abord de 21 jours d\'accès complet — aucune restriction de fonctionnalité pendant l\'essai. Ces forfaits sont ce qui continue après.',
     pricing_yearly_audience:'~6,60 $/mois — 2 mois gratuits vs Mensuel',
     pricing_yearly_f1:'Tout ce qui est dans Mensuel',
     pricing_yearly_f2:'Facturé une fois par an',
-    pricing_yearly_f3:'Mêmes vraies fonctionnalités, coût mensuel inférieur',
+    pricing_yearly_f3:"Les mêmes fonctions, un coût mensuel plus bas",
     pricing_yourjourney_label:'Votre parcours de 21 jours',
     records_cat_songs:"Chansons",
     records_cat_voice:"Tessiture vocale et technique",
@@ -9923,7 +9952,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Demain, votre Parcours Vocal de 21 jours se termine.', pricingstate_daysleft_transform:'jours restants pour terminer votre transformation.',
     pricingstate_championship_p1:'Votre Championnat Vocal approche —', pricingstate_championship_p2:'jours restants.',
     pricingstate_daysleft_free:'jours restants dans votre accès gratuit.',
-    pricingstate_journeycomplete:'Votre Parcours Vocal de 21 jours est terminé 🎤', pricingstate_progresschoose:'votre progression est enregistrée. Choisissez un forfait pour continuer à vous entraîner.',
+    pricingstate_journeycomplete:"Votre Parcours Vocal de 21 jours est terminé", pricingstate_progresschoose:'votre progression est enregistrée. Choisissez un forfait pour continuer à vous entraîner.',
     plan_current:'Forfait actuel', plan_continue_prefix:'Continuer avec', plan_upgrade_prefix:'Passer au forfait',
     plan_subscribed_prefix:'Vous êtes abonné au forfait', plan_subscribed_suffix:'(démo). Votre parcours vocal continue — rien n\'a été perdu.',
     plan_phrase_template:'forfait {p}', plan_suffix_trial_of21:"d'essai sur 21",
@@ -10162,7 +10191,7 @@ const TRANSLATIONS = {
     paywall_trialended_choir_tpl:'Votre accès gratuit de 21 jours a pris fin. {feature} continue avec le forfait {plan} ({price}) — votre progression reste enregistrée.',
     arcade_pro_level_template:'Pro · Niveau {n}', arcade_won_template:"Victoires : {n}", arcade_best_template:'Meilleur : {n}',
     arcade_trial_included:'Inclus dans votre essai de 21 jours', arcade_always_open:'Toujours ouvert', arcade_unlocks_at_level_template:'🔒 Débloqué au niveau {n}',
-    pricing_planname_monthly:'🎤 Mensuel', pricing_planname_yearly:'⭐ Annuel', pricing_planname_teacher:'🎓 Enseignant', pricing_planname_choir:'🎹 Chorale / Studio',
+    pricing_planname_monthly:"Mensuel", pricing_planname_yearly:"Annuel", pricing_planname_teacher:"Enseignant", pricing_planname_choir:"Chorale / Studio",
     trialcompare_nobaseline:"Aucune référence du jour 1 n'a été enregistrée (l'évaluation du parcours de 21 jours n'a pas été terminée), donc il n'y a pas d'avant/après à afficher — votre progression enregistrée est toujours intacte.",
     voicehealth_nodata_tooltip:'aucune donnée',
     exfeedback_nopitch:"Aucune hauteur claire détectée — réessayez un peu plus fort ou plus près du micro.",
@@ -10501,6 +10530,10 @@ const TRANSLATIONS = {
     ob_pri_agility:"Agilité et vocalises",
     ob_plan_title:"Votre plan est prêt",
     ob_next_line:"Ensuite : votre évaluation du Jour 1, cinq mesures courtes.",
+    pricing_notonsale:"Les forfaits payants ne sont pas encore en vente ; nous vous préviendrons à leur ouverture. Votre accès actuel continue.",
+    paywall_expired_notonsale:"Vos 21 jours gratuits sont terminés. Les forfaits payants ne sont pas encore en vente ; nous vous préviendrons à leur ouverture. Votre progression est enregistrée.",
+    paywall_close_btn:"Fermer",
+    paywall_seeplans_btn:"Voir les forfaits",
   },
   es: {
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
@@ -10786,8 +10819,8 @@ const TRANSLATIONS = {
     passport_timeline_desc:"Los momentos de tu voz, en orden, cada uno anotado cuando ocurrió.",
     choir_title:"Espacio de Coro",
     choir_sub:"Un mezclador por voz: silencia, aísla y ajusta el volumen de cada voz de la canción.",
-    pricing_title:'💳 Planes',
-    pricing_sub:'21 días de acceso completo en cada cuenta nueva, luego un plan real lo continúa — transparente antes de que crees una.',
+    pricing_title:"Planes",
+    pricing_sub:"21 días de acceso completo en cada cuenta nueva; después, un plan de pago lo continúa.",
     records_title:"Récords personales",
     records_sub:"Tus mejores marcas, según lo que has cantado. Un récord aparece cuando has hecho la actividad.",
     feedback_title:'💬 Comentarios',
@@ -11402,8 +11435,8 @@ const TRANSLATIONS = {
     key_transpose_label:'Transponer',
     key_try_ranked_label:"Prueba algunas tonalidades, ordenadas por ajuste",
     key_use_captured_btn:'Usar mi resultado del Buscador de rango',
-    pricing_aboutcheckout_label:'Sobre este pago:',
-    pricing_bestvalue_badge:'MEJOR VALOR',
+    
+    pricing_bestvalue_badge:"Mejor valor",
     pricing_choir_audience:'Cantantes ilimitados',
     pricing_choir_f1:'Mezclador de coro completo — silenciar/solo/volumen por voz',
     pricing_choir_f2:'Catálogo de pistas con licencia pre-separadas',
@@ -11417,35 +11450,35 @@ const TRANSLATIONS = {
     pricing_continue_teacher_btn:'Continuar con Profesor',
     pricing_continue_yearly_btn:'Continuar con Anual',
     pricing_day1_label:'Día 1',
-    pricing_disclosure_p1:'este prototipo no tiene un procesador de pagos en vivo conectado — no hay cuenta de Stripe ni backend detrás.',
-    pricing_disclosure_p2:'Al hacer clic en un plan se abre un flujo de demostración que simula el cambio de estado de suscripción localmente para que el comportamiento de prueba→muro de pago pueda probarse de extremo a extremo.',
-    pricing_disclosure_p3:'Una compilación real reemplaza esto con Sesiones de Checkout de Stripe reales creadas en el servidor (PRD §6), nunca un formulario de pago del lado del cliente.',
-    pricing_hearyourself_desc:'Tu clip real del Día 1 — grabado con tu consentimiento, almacenado solo en este dispositivo. Reprodúcelo, luego graba cómo suenas ahora mismo.',
+    
+    
+    
+    pricing_hearyourself_desc:"Tu clip del Día 1, grabado con tu consentimiento y guardado solo en este dispositivo. Escúchalo y luego graba cómo suenas ahora.",
     pricing_hearyourself_label:'Escucha tu mejora',
     pricing_monthly_audience:'Cantantes individuales',
     pricing_monthly_f1:'Todo de tu prueba de 21 días, ilimitado',
     pricing_monthly_f2:'Ejercicios diarios ilimitados',
     pricing_monthly_f3:'Entrenador de tonalidad + recomendación de tono',
     pricing_monthly_f4:'Coach de registro, Mundo Vocal, Perfil de habilidades completo',
-    pricing_mostpopular_badge:'MÁS POPULAR',
-    pricing_noday1clip_note:'No se grabó ningún clip del Día 1, así que no hay nada que comparar de oído — tu progreso numérico guardado arriba sigue siendo real e intacto.',
+    pricing_mostpopular_badge:"Más popular",
+    pricing_noday1clip_note:"No se grabó ningún clip del Día 1, así que no hay nada que comparar de oído. Tu progreso guardado arriba está intacto.",
     pricing_per_mo:'/mes',
     pricing_per_yr:'/año',
     pricing_plans_label:'Planes',
     pricing_progresssaved_note:'Tu progreso, logros e historial se guardan — nada se elimina porque tu prueba terminó. Elige un plan abajo para seguir entrenando, jugando el Mundo Vocal, y obteniendo práctica guiada por IA.',
-    pricing_realnumbers_desc:'Solo números reales — tu línea base del Día 1 guardada comparada con hoy.',
-    pricing_recordtoday_btn:'🎙️ Grabar el clip de hoy',
+    pricing_realnumbers_desc:"Tu línea base del Día 1 guardada, comparada con hoy.",
+    pricing_recordtoday_btn:"Grabar el clip de hoy",
     pricing_teacher_audience:'Hasta 20 estudiantes',
     pricing_teacher_f1:'Todo en Mensual',
     pricing_teacher_f2:'Asignar ejercicios a estudiantes',
     pricing_teacher_f3:'Informes de progreso de estudiantes',
-    pricing_teacher_f4:'Herramientas de lista y asignación — Fase 1, semana 8',
+    pricing_teacher_f4:"Herramientas de lista y tareas",
     pricing_today_label:'Hoy',
     pricing_trialgates_desc:'Cada cuenta nueva obtiene primero 21 días de acceso completo — sin restricciones de funciones durante la prueba. Estos planes son lo que continúa después.',
     pricing_yearly_audience:'~$6.60/mes — 2 meses gratis vs Mensual',
     pricing_yearly_f1:'Todo en Mensual',
     pricing_yearly_f2:'Facturado una vez al año',
-    pricing_yearly_f3:'Las mismas funciones reales, menor costo por mes',
+    pricing_yearly_f3:"Las mismas funciones, menor costo por mes",
     pricing_yourjourney_label:'Tu recorrido de 21 días',
     records_cat_songs:"Canciones",
     records_cat_voice:"Rango vocal y técnica",
@@ -11668,7 +11701,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Mañana termina tu Viaje Vocal de 21 días.', pricingstate_daysleft_transform:'días restantes para completar tu transformación.',
     pricingstate_championship_p1:'Se acerca tu Campeonato Vocal —', pricingstate_championship_p2:'días restantes.',
     pricingstate_daysleft_free:'días restantes de tu acceso gratuito.',
-    pricingstate_journeycomplete:'Tu Viaje Vocal de 21 días ha terminado 🎤', pricingstate_progresschoose:'tu progreso está guardado. Elige un plan para seguir entrenando.',
+    pricingstate_journeycomplete:"Tu Viaje Vocal de 21 días ha terminado", pricingstate_progresschoose:'tu progreso está guardado. Elige un plan para seguir entrenando.',
     plan_current:'Plan actual', plan_continue_prefix:'Continuar con', plan_upgrade_prefix:'Mejorar a',
     plan_subscribed_prefix:'Te has suscrito al plan', plan_subscribed_suffix:'(demo). Tu viaje vocal continúa — no se perdió nada.',
     plan_phrase_template:'plan {p}', plan_suffix_trial_of21:'de prueba sobre 21',
@@ -11907,7 +11940,7 @@ const TRANSLATIONS = {
     paywall_trialended_choir_tpl:'Tu acceso gratuito de 21 días ha terminado. {feature} continúa con el plan {plan} ({price}) — tu progreso sigue guardado.',
     arcade_pro_level_template:'Pro · Nivel {n}', arcade_won_template:"Victorias: {n}", arcade_best_template:'Mejor: {n}',
     arcade_trial_included:'Incluido en tu prueba de 21 días', arcade_always_open:'Siempre abierto', arcade_unlocks_at_level_template:'🔒 Se desbloquea en el nivel {n}',
-    pricing_planname_monthly:'🎤 Mensual', pricing_planname_yearly:'⭐ Anual', pricing_planname_teacher:'🎓 Profesor', pricing_planname_choir:'🎹 Coro / Estudio',
+    pricing_planname_monthly:"Mensual", pricing_planname_yearly:"Anual", pricing_planname_teacher:"Profesor", pricing_planname_choir:"Coro / Estudio",
     trialcompare_nobaseline:"No se registró una línea base del día 1 (no se completó la evaluación del recorrido de 21 días), por lo que no hay un antes/después que mostrar — tu progreso guardado sigue intacto.",
     voicehealth_nodata_tooltip:'sin datos',
     exfeedback_nopitch:"No se detectó una afinación clara — inténtalo de nuevo un poco más fuerte o más cerca del micrófono.",
@@ -12246,6 +12279,10 @@ const TRANSLATIONS = {
     ob_pri_agility:"Agilidad y melismas",
     ob_plan_title:"Tu plan está listo",
     ob_next_line:"Después: tu evaluación del Día 1, cinco mediciones cortas.",
+    pricing_notonsale:"Los planes de pago aún no están a la venta; te avisaremos cuando abran. Tu acceso actual continúa.",
+    paywall_expired_notonsale:"Tus 21 días gratis han terminado. Los planes de pago aún no están a la venta; te avisaremos cuando abran. Tu progreso está guardado.",
+    paywall_close_btn:"Cerrar",
+    paywall_seeplans_btn:"Ver los planes",
   },
   tr: {
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
@@ -12531,8 +12568,8 @@ const TRANSLATIONS = {
     passport_timeline_desc:"Sesinin anları sırayla; her biri olduğu anda kaydedildi.",
     choir_title:"Koro Çalışma Alanı",
     choir_sub:"Her parti için bir mikser: şarkıdaki her sesi sessize alın, solo yapın ve ses düzeyini ayarlayın.",
-    pricing_title:'💳 Planlar',
-    pricing_sub:'Her yeni hesapta 21 gün tam erişim, ardından gerçek bir plan bunu sürdürür — bir tane oluşturmadan önce şeffaf.',
+    pricing_title:"Planlar",
+    pricing_sub:"Her yeni hesapta 21 gün tam erişim; sonrasında ücretli bir plan devam ettirir.",
     records_title:"Kişisel Rekorlar",
     records_sub:"Söylediklerinden en iyilerin. Bir rekor, o etkinliği yaptığında görünür.",
     feedback_title:'💬 Geri Bildirim',
@@ -13147,8 +13184,8 @@ const TRANSLATIONS = {
     key_transpose_label:'Transpoze et',
     key_try_ranked_label:"Uyuma göre sıralanmış birkaç ton deneyin",
     key_use_captured_btn:'Ses Aralığı Bulucu sonucumu kullan',
-    pricing_aboutcheckout_label:'Bu ödeme hakkında:',
-    pricing_bestvalue_badge:'EN İYİ DEĞER',
+    
+    pricing_bestvalue_badge:"En iyi değer",
     pricing_choir_audience:'Sınırsız şarkıcı',
     pricing_choir_f1:'Tam koro mikseri — ses grubu başına sessize alma/solo/ses düzeyi',
     pricing_choir_f2:'Önceden ayrılmış lisanslı parça kataloğu',
@@ -13162,35 +13199,35 @@ const TRANSLATIONS = {
     pricing_continue_teacher_btn:'Öğretmen ile devam et',
     pricing_continue_yearly_btn:'Yıllık ile devam et',
     pricing_day1_label:'1. Gün',
-    pricing_disclosure_p1:'bu prototipte bağlı canlı bir ödeme işlemcisi yok — arkasında bir Stripe hesabı veya arka uç yok.',
-    pricing_disclosure_p2:'Bir plana tıklamak, deneme→ödeme duvarı davranışının uçtan uca test edilebilmesi için abonelik durum değişikliğini yerel olarak simüle eden bir demo akışı açar.',
-    pricing_disclosure_p3:'Gerçek bir yapı bunu, asla istemci tarafı bir ödeme formu değil, sunucu tarafında oluşturulan gerçek Stripe Ödeme Oturumlarıyla değiştirir (PRD §6).',
-    pricing_hearyourself_desc:'Gerçek 1. Gün klibiniz — izninizle kaydedildi, yalnızca bu cihazda saklanır. Geri oynatın, ardından şu anda nasıl ses çıkardığınızı kaydedin.',
+    
+    
+    
+    pricing_hearyourself_desc:"1. Gün klibin; iznin alınarak kaydedildi ve yalnızca bu cihazda saklanıyor. Dinle, sonra şimdiki sesini kaydet.",
     pricing_hearyourself_label:'Gelişiminizi Duyun',
     pricing_monthly_audience:'Bireysel şarkıcılar',
     pricing_monthly_f1:'21 günlük denemenizdeki her şey, sınırsız',
     pricing_monthly_f2:'Sınırsız günlük egzersizler',
     pricing_monthly_f3:'Tonalite antrenörü + ton önerisi',
     pricing_monthly_f4:'Register koçu, Vokal Dünyası, tam Yetenek Profili',
-    pricing_mostpopular_badge:'EN POPÜLER',
-    pricing_noday1clip_note:'1. Gün klibi kaydedilmedi, bu yüzden kulakla karşılaştırılacak bir şey yok — yukarıdaki kaydedilen sayısal ilerlemeniz hâlâ gerçek ve bozulmamış.',
+    pricing_mostpopular_badge:"En popüler",
+    pricing_noday1clip_note:"1. Gün klibi kaydedilmedi, bu yüzden kulakla karşılaştırılacak bir şey yok. Yukarıdaki kayıtlı ilerlemen olduğu gibi duruyor.",
     pricing_per_mo:'/ay',
     pricing_per_yr:'/yıl',
     pricing_plans_label:'Planlar',
     pricing_progresssaved_note:'İlerlemeniz, başarılarınız ve geçmişiniz kaydedilir — denemeniz bittiği için hiçbir şey silinmez. Antrenmana devam etmek, Vokal Dünyası oynamak ve yapay zeka rehberliğinde pratik yapmak için aşağıdan bir plan seçin.',
-    pricing_realnumbers_desc:'Yalnızca gerçek sayılar — saklanan 1. Gün başlangıç noktanız bugünle karşılaştırıldı.',
-    pricing_recordtoday_btn:'🎙️ Bugünün klibini kaydet',
+    pricing_realnumbers_desc:"Kayıtlı 1. Gün başlangıç noktan, bugünle karşılaştırıldı.",
+    pricing_recordtoday_btn:"Bugünün klibini kaydet",
     pricing_teacher_audience:'20\'ye kadar öğrenci',
     pricing_teacher_f1:'Aylık plandaki her şey',
     pricing_teacher_f2:'Öğrencilere egzersiz atayın',
     pricing_teacher_f3:'Öğrenci ilerleme raporları',
-    pricing_teacher_f4:'Liste ve ödev araçları — Aşama 1, 8. hafta',
+    pricing_teacher_f4:"Öğrenci listesi ve ödev araçları",
     pricing_today_label:'Bugün',
     pricing_trialgates_desc:'Her yeni hesap önce 21 gün tam erişim alır — deneme sırasında özellik kısıtlaması yoktur. Bu planlar sonrasında devam edenlerdir.',
     pricing_yearly_audience:'~6.60$/ay — Aylığa göre 2 ay ücretsiz',
     pricing_yearly_f1:'Aylık plandaki her şey',
     pricing_yearly_f2:'Yılda bir kez faturalandırılır',
-    pricing_yearly_f3:'Aynı gerçek özellikler, aylık daha düşük maliyet',
+    pricing_yearly_f3:"Aynı özellikler, aylık daha düşük maliyet",
     pricing_yourjourney_label:'21 Günlük Yolculuğunuz',
     records_cat_songs:"Şarkılar",
     records_cat_voice:"Ses Aralığı ve Teknik",
@@ -13413,7 +13450,7 @@ const TRANSLATIONS = {
     pricingstate_endstomorrow:'Yarın 21 günlük Vokal Yolculuğunuz sona eriyor.', pricingstate_daysleft_transform:'gün kaldı dönüşümünüzü tamamlamak için.',
     pricingstate_championship_p1:'Vokal Şampiyonanız yaklaşıyor —', pricingstate_championship_p2:'gün kaldı.',
     pricingstate_daysleft_free:'gün kaldı ücretsiz erişiminizde.',
-    pricingstate_journeycomplete:'21 günlük Vokal Yolculuğunuz tamamlandı 🎤', pricingstate_progresschoose:'ilerlemeniz kaydedildi. Antrenmana devam etmek için bir plan seçin.',
+    pricingstate_journeycomplete:"21 günlük Vokal Yolculuğun tamamlandı", pricingstate_progresschoose:'ilerlemeniz kaydedildi. Antrenmana devam etmek için bir plan seçin.',
     plan_current:'Mevcut plan', plan_continue_prefix:'Şununla devam et:', plan_upgrade_prefix:'Şu plana yükselt:',
     plan_subscribed_prefix:'Şu plana abone oldunuz:', plan_subscribed_suffix:'(demo). Vokal yolculuğunuz devam ediyor — hiçbir şey kaybolmadı.',
     plan_phrase_template:'{p} planı', plan_suffix_trial_of21:'/21 deneme',
@@ -13652,7 +13689,7 @@ const TRANSLATIONS = {
     paywall_trialended_choir_tpl:'21 günlük ücretsiz erişiminiz sona erdi. {feature} özelliği {plan} planıyla devam ediyor ({price}) — ilerlemeniz hâlâ kaydedildi.',
     arcade_pro_level_template:'Pro · Seviye {n}', arcade_won_template:"Galibiyet: {n}", arcade_best_template:'En iyi: {n}',
     arcade_trial_included:'21 günlük deneme sürenize dahildir', arcade_always_open:'Her zaman açık', arcade_unlocks_at_level_template:'🔒 Seviye {n} içinde açılır',
-    pricing_planname_monthly:'🎤 Aylık', pricing_planname_yearly:'⭐ Yıllık', pricing_planname_teacher:'🎓 Öğretmen', pricing_planname_choir:'🎹 Koro / Stüdyo',
+    pricing_planname_monthly:"Aylık", pricing_planname_yearly:"Yıllık", pricing_planname_teacher:"Öğretmen", pricing_planname_choir:"Koro / Stüdyo",
     trialcompare_nobaseline:"1. Gün temel ölçümü kaydedilmedi (21 Günlük Yolculuk değerlendirmesi tamamlanmadı), bu yüzden gösterilecek bir öncesi/sonrası yok — kayıtlı ilerlemeniz hâlâ korunuyor.",
     voicehealth_nodata_tooltip:'veri yok',
     exfeedback_nopitch:"Net bir perde yakalanamadı — biraz daha yüksek sesle veya mikrofona daha yakın tekrar deneyin.",
@@ -13991,6 +14028,10 @@ const TRANSLATIONS = {
     ob_pri_agility:"Çeviklik ve ses koşuları",
     ob_plan_title:"Planın hazır",
     ob_next_line:"Sırada: 1. Gün değerlendirmen, beş kısa ölçüm.",
+    pricing_notonsale:"Ücretli planlar henüz satışta değil; açıldığında haber vereceğiz. Mevcut erişimin devam ediyor.",
+    paywall_expired_notonsale:"21 ücretsiz günün sona erdi. Ücretli planlar henüz satışta değil; açıldığında haber vereceğiz. İlerlemen kayıtlı.",
+    paywall_close_btn:"Kapat",
+    paywall_seeplans_btn:"Planları gör",
   },
 };
 let currentLanguage = 'en';
@@ -19060,13 +19101,13 @@ const FEATURE_LABEL_KEYS = {
   'Genre Coach':'tool_genre_coach', 'Karaoke Coach':'hub_songs_karaoke_title', 'Real-Time Feedback':'tool_live_feedback',
   'Per-part mixing':'feature_perpart_mixing', 'Teacher Dashboard':'hub_you_teacher_title', 'Choose a plan':'signin_choose_plan', 'Exercises':'tool_exercises',
   'Smart Warmup':'tool_warmup', '21-Day Journey':'hub_you_journey_title', 'Vocal World':'hub_world_title',
-  'Vocal Journey':'feature_vocal_journey', 'Karaoke Boss Battle':'feature_boss_battle', 'Register Runner':'feature_register_runner',
-  'Harmony Arena':'feature_harmony_arena', 'Resonance Visualizer':'tool_resonance', 'Hear Yourself Improve':'pricing_hearyourself_label',
-  'Rhythm Trainer':'tool_rhythm_trainer', 'Mirror Mode':'tool_mirror', 'The Vocal Rift':'feature_vocal_rift',
+  'Vocal Journey':'world_glider_title', 'Karaoke Boss Battle':'world_boss_title', 'Register Runner':'world_bridge_title',
+  'Harmony Arena':'world_harmony_title', 'Can You Hear Your Mistake?':'hearmistake_title', 'Resonance Visualizer':'tool_resonance', 'Hear Yourself Improve':'pricing_hearyourself_label',
+  'Rhythm Trainer':'tool_rhythm_trainer', 'Mirror Mode':'tool_mirror', 'The Vocal Rift':'world_rift_title',
   'Ear → Voice → Ear':'tool_ear_voice_ear', 'Sing It 5 Ways':'tool_five_ways', 'One Take Challenge':'tool_one_take',
   'Vocal Puzzle':'tool_vocal_puzzle', 'Studio Mode':'hub_songs_studio_title', 'Emotion Mode':'tool_emotion_mode',
   'Performance Director':'hub_songs_pd_title', 'Register Drills':'tool_register_drills', 'AI Duet Partner':'hub_songs_aiduet_title',
-  'I Am the Part':'cw_feature_rehearsal', 'A Cappella Mode':'cw_feature_acappella', 'Sonic X-Ray':'xray_title',
+  'I Am the Part':'cw_feature_rehearsal', 'A Cappella Mode':'cw_feature_acappella', 'Sonic X-Ray':'cw_tab_songlab',
   'Entrance & Cutoff Trainer':'tt_title', 'Harmony Memory':'hm_title', 'Choir Bosses':'cb_title', 'Chaos Mode':'cx_title',
   'Tempo/Key Ladder':'tk_title', 'Your Choir':'yc_title',
 };
@@ -19126,10 +19167,12 @@ function openPaywallPrompt(featureLabel, suggestedPlan, choirOnly){
   const fill = tpl => tpl.replace('{feature}', () => featureLabel).replace('{plan}', () => planName).replace('{price}', () => planPrice); // functions: no $-pattern expansion in '$79/mo'
   document.getElementById('paywallReason').textContent = !trialHasExpired()
     ? fill(t('paywall_ispartof_tpl'))
+    : !PLANS_ON_SALE ? t('paywall_expired_notonsale') // Day 21 while plans aren't on sale: the paid features stay closed, said plainly
     : choirOnly
       ? fill(t('paywall_trialended_choir_tpl'))
       : `${t('paywall_trialended_p1')} ${featureLabel} ${t('paywall_trialended_p2')}`;
-  document.getElementById('paywallPlanChip').textContent = `${planName} · ${planPrice}`;
+  const chip = document.getElementById('paywallPlanChip');
+  chip.textContent = `${planName} · ${planPrice}`; chip.hidden = !PLANS_ON_SALE; // no price while plans aren't on sale
   document.getElementById('paywallModalOverlay').style.display='flex';
   openModalWithA11y(document.getElementById('paywallModalOverlay'), closePaywallModal);
 }
@@ -19159,6 +19202,9 @@ document.getElementById('signinRequiredCreateBtn').addEventListener('click', ()=
 });
 
 let pendingCheckoutPlan = null;
+// Paid plans aren't on sale yet (PHASE9.md 2.5): Pricing says so at the top, the paywall shows no price. True when
+// Stripe is wired and a plan can be bought.
+const PLANS_ON_SALE = false;
 // Paid plans aren't on sale until Stripe is wired (PHASE8.md step 0): every plan button opens #plansSoonOverlay,
 // which changes nothing. Signed out, it asks to sign in "to choose a plan". The demo checkout (openDemoCheckout,
 // #checkoutModalOverlay, #checkoutConfirmBtn) stays in the code, unreachable: nothing calls openDemoCheckout.
@@ -19242,6 +19288,7 @@ function renderPricingState(){
     renderHearYourselfImprove();
   }
 
+  document.getElementById('pricingNotOnSale').hidden = PLANS_ON_SALE;
   const tier = hasActiveSubscription() ? profile.subscriptionPlan : null;
   document.querySelectorAll('.plan-btn[data-plan]').forEach(btn=>{
     const plan = btn.dataset.plan;
