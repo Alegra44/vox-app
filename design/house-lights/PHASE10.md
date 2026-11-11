@@ -21,3 +21,66 @@ h) Branches: remote branches already merged into master (to delete in B) and unm
 A3. CHECKS for A1: hooks, contrast, copyscan --all, bootcheck, navcheck, home, warmup-verify, and every script that touched .legacy-tabs.
 
 A4. Push redesign/phase10, and review/phase10 with the tour sheets and the survey. Secret check. REPORT the counts per audit and your proposed fixes grouped by size, then stop.
+
+## Part B
+
+Phase 10 part B. Add this message to the end of design/house-lights/PHASE10.md under "Part B" and commit it first. One commit per item, in this order. No merge or deploy until I've reviewed. Rollback target: dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H. AC power only, one verify script at a time.
+
+YOUR OPEN POINTS
+- renderTeacherDashboard and the rest of the Teacher and Director code: keep them (hidden, "Coming later").
+- The three durations without a space: fix them (B8).
+- Scale Run's dots: the dot is a graphic (3:1), the number inside it is text (B8).
+- Mirror Mode and the Breath ring: see B3.
+- 10 (--teal) folds into B1 and B3.
+
+B1. LEGACY VARIABLES (mechanical, no visual change)
+- Replace all 592 var(--legacy) uses with the --hl- token each one aliases (--teal becomes --hl-voice for now; B3 changes what should change). Delete the 17 aliases, the two unused glow ones included.
+- Gate: the tour, master against the branch, identical on all 618 shots (apart from proven noise such as the clock). Contrast and states9 unchanged. Any difference gets explained before you go on.
+
+B2. DEAD CSS (no visual change)
+- Remove the 103 dead candidates that aren't House Lights library rules, after a grep per family across the markup, script, deploy/*.js and scripts/. Keep the 14 library rules and the 280 state rules.
+- Same gate as B1.
+
+B3. RULE 1 (voice blue only for the singer and the start-singing buttons)
+- To ink (or ink-2 for secondary text): the Vocal load fill (keep any warning colour it already switches to), Daily Exercises' "Adaptive" tag, the Vocal Passport fingerprint and its value, the Choir Passport DNA polygon, the .hm-held record values, "Alto (you)" (ink, 600), the interval labels (ink-2), Breath Map's live line, the Skill Tree's next-node ring (ink, dashed; my phase 8 spec said voice, that was wrong), Hear the Mistake's "Play A and B" (.hl-btn--ink: it plays, it doesn't listen), and the warm-up's Stop (the same as the vcTake tools' Stop).
+- Categories: Pitch, Breath, Agility and Range get one set of category colours, used on Daily Exercises' Focus bar and legend and on Progress's chart. None of them is the voice colour; each 3:1 or better on paper in both themes.
+- Stay voice: Vocal Lab's segments (the singer's range, as 9.1 asked), Breath Control's hold ring (a live measure of the singer).
+- Mirror Mode's "Play a new phrase": if one press plays the phrase and then opens the mic, it's a start-singing button and stays voice; if the mic needs its own press, it goes ink.
+- rule1.js becomes a check: only the allowed list uses the voice colour.
+
+B4. TOUCH TARGETS (44 × 44, except links inside running text)
+- min-height 44 on .mic-btn/.vc-take-pill, .solid-btn, .ghost-btn, .hl-key, .ex-type-btn and select.
+- Small controls keep their look and get a 44 hit area from padding or a pseudo-element: .vc-avatar, Key Trainer's − / +, .hl-fader, the volume slider, .hl-chip, the top-bar Sign in. Hit areas mustn't overlap; where they would, grow the control instead.
+- Change song and "Already have an account?": padding to 44 tall.
+- targets.js becomes a check: 0 under 44 (the two hidden controls excluded).
+
+B5. NAMES
+- aria-hidden on the five skill rings, the tuner rings and the skill-tree icons.
+- role="img" and a summary label, in the page's language and built from the data shown, on the Progress chart, the Karaoke roll, the Passport fingerprint and the X-Ray.
+- for= on Custom Challenge's two selects; each of the 5 rehearsal level buttons named ("Level 1: Piano guide"…).
+- The 7 English aria-labels get keys and data-i18n-aria-label (four languages); the canvases' changing parts built from keys.
+- names.js becomes a check: 0 without a name, 0 English labels in fr, es, tr.
+
+B6. FOCUS
+- openModalWithA11y builds its list of controls on every Tab (fixes Sign-in's stop, the paywall's unreachable Close and onboarding step 1).
+- Smart Warmup, the 3 moment sheets, the 2 share sheets and Language open through it: focus stays inside, Escape closes them, focus returns to the opener. Language at first run still needs a choice (Escape only when it's opened from settings); onboarding stays as it is.
+- focus.js becomes a check: 0 stuck, 0 escaping, 0 not returned (onboarding and first-run Language excepted).
+
+B7. REDUCED MOTION
+- One global rule under prefers-reduced-motion: reduce: animation and transition durations 0.01ms, one iteration, scroll-behavior auto.
+- Then check the running states the tour doesn't reach, with reduce on: a Coach tool mid-take, the tuner locked, a level-up sheet, a game. Nothing slides or pulses; values jump to where they are. motion.js becomes a check.
+
+B8. SMALL COPY AND CONTRAST
+- A space before "s" in the record values ("12.4 s", with the language's decimal sign), the weekly challenge ("x.x s / 20 s") and the rehearsal chord times.
+- Scale Run: the dot stays a graphic at 3:1; the step number inside it is text, 4.5:1 against the dot's fill.
+
+B9. LAYOUTS
+- Progress · Today's Plan, every width: .hl-item rows like Home's (icon left, title and one line, chevron right), left-aligned, no stray rule.
+- 600–959 px: Plans in two columns × two rows; Home's gutters the same as every other screen; .vc-stage and the Unified Progress chart max-width 600, centred.
+
+B10. HOUSE_LIGHTS.md v3.0
+- All ten phases marked done; the components added since v2.0 (the sheet, the moment sheet, the posters, the lanes, the marks); Rule 1's allowed list exactly as rule1.js enforces it.
+
+CHECKS: the full local run, every suite with WITH_CHOIR=1, plus rule1, targets, names, focus, motion and datelocale. Then the tour diff, master against the branch: differences only on screens B3, B4, B8 and B9 touch.
+SCREENSHOTS: the tour again (390, 768, 1280, Light and Dark), with before|after sheets of every screen that changed. Secret check, push redesign/phase10 and review/phase10.
+REPORT, then stop. The deploy steps come from me after the review.
