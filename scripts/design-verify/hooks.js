@@ -109,7 +109,7 @@ const PROTECTED_STRINGS = ['In tune', 'Listening…', 'In key', 'Steady', 'Pushi
   'Fits comfortably in your captured range', 'Outside part of your captured range', 'Recording', 'Songs'];
 const PROTECTED_ATTRS = ['data-rd-part', 'data-boss-type', 'data-boss-difficulty', 'data-glider-mode', 'data-glider-difficulty', 'data-game',
   'data-hm-stage', 'data-hm-guess', 'data-profile-lang'];
-const LEGACY_VARS = ['--bg', '--surface', '--surface-raised', '--hairline', '--cream', '--muted', '--brass', '--brass-dim', '--teal', '--coral'];
+const LEGACY_VARS = ['--bg', '--surface', '--surface-raised', '--hairline', '--cream', '--text', '--muted', '--brass', '--brass-dim', '--teal', '--coral', '--on-brass', '--on-teal', '--on-part', '--shadow', '--bg-glow-1', '--bg-glow-2'];
 const HL_BEGIN = '/* ===== HOUSE LIGHTS v1.2 BEGIN */', HL_END = '/* ===== HOUSE LIGHTS v1.2 END */';
 
 const results = []; // {check, ok, detail}
@@ -226,10 +226,10 @@ const hlStart = work.indexOf(HL_BEGIN), hlEnd = work.indexOf(HL_END);
   check('HOUSE LIGHTS v1.2 block = design/house-lights/house-lights.css', ok, detail);
 }
 
-// ---- 5. legacy variables (choir-verify/fix.js reads them)
+// ---- 5. legacy variables: gone since phase 10 B1 (every use is the --hl- token it aliased; fix.js reads the tokens)
 {
-  const miss = LEGACY_VARS.filter(v => !new RegExp(`${esc(v)}\\s*:`).test(work));
-  check('legacy variables still defined', miss.length === 0, miss.length ? `missing: ${miss.join(', ')}` : LEGACY_VARS.join(' '));
+  const left = LEGACY_VARS.filter(v => new RegExp(`${esc(v)}(?![\\w-])`).test(work));
+  check('legacy variables gone (not defined, not used)', left.length === 0, left.length ? `still there: ${left.join(', ')}` : `${LEGACY_VARS.length} names, none left`);
 }
 
 // ---- line bookkeeping for the next checks

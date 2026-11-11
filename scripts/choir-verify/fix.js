@@ -39,7 +39,7 @@ const url = process.argv[2] || 'http://localhost:8765/';
     const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
     const probe = cls => { const el = document.createElement('span'); el.className = 'record-val ' + cls; document.getElementById('hmemResults').appendChild(el); const c = getComputedStyle(el).color; el.remove(); return c; };
     const rgb = v => { const el = document.createElement('span'); el.style.color = `var(${v})`; document.body.appendChild(el); const c = getComputedStyle(el).color; el.remove(); return c; };
-    return { teal: rgb('--teal'), coral: rgb('--coral'), brass: rgb('--brass'), muted: rgb('--muted'),
+    return { teal: rgb('--hl-voice'), coral: rgb('--hl-miss'), brass: rgb('--hl-ink'), muted: rgb('--hl-ink-3'), // the tokens the old names aliased (removed in phase 10 B1)
       'hm-held': probe('hm-held'), 'hm-off': probe('hm-off'), 'hm-silent': probe('hm-silent'),
       'tt-ontime': probe('tt-ontime'), 'tt-late': probe('tt-late'), 'tt-early': probe('tt-early'),
       'real rows': [...document.querySelectorAll('#hmemResults .record-val')].map(e => e.textContent.split('·').pop().trim() + '=' + getComputedStyle(e).color) };

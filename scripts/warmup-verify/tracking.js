@@ -192,7 +192,7 @@ const RUN = async ({ what, seq }) => {
           const mid = sm.filter(s => s.el > i * d + 0.25 * d && s.el < i * d + 0.8 * d);
           const want = karaokeRollY(m + cents / 100, lo, hi), shown = mid.filter(s => s.disp === 'block');
           const med = shown.map(s => s.cy).sort((a, b) => a - b)[shown.length >> 1];
-          return { n: mid.length, idxOk: mid.every(s => s.idx === i), shown: shown.length / Math.max(1, mid.length), teal: shown.filter(s => s.fill === 'var(--teal)').length / Math.max(1, shown.length),
+          return { n: mid.length, idxOk: mid.every(s => s.idx === i), shown: shown.length / Math.max(1, mid.length), teal: shown.filter(s => s.fill === 'var(--teal)' || s.fill === 'var(--hl-voice)').length / Math.max(1, shown.length),
             dy: Math.abs(med - want) };
         });
         const rects = document.querySelectorAll('#warmupNotesGroup .wu-note-rect').length;
