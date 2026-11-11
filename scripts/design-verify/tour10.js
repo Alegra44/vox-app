@@ -20,13 +20,16 @@
 // (screens9.js SCREENS and SCREENS_91, in their states). Game stages and results: shots8.js --combos 768-light,768-dark.
 // Out: <out>/<w>-<theme>/<screen>-<state>.jpg, <out>/audit.json. Signed in through a test account (deleted at exit);
 // states are set in the page only (youSeed.js, screens9.js stateInPage), nothing is saved.
-// Usage: node scripts/design-verify/tour10.js [--out <dir>] [--combos 390-light,…] [--only key,key] [--passes shots,focus,motion,lang]
+// --ref <git ref> tours that commit's deploy/ instead of the working copy (the gates of PHASE10.md B1/B2: before vs after).
+// Usage: node scripts/design-verify/tour10.js [--ref <ref>] [--out <dir>] [--combos 390-light,…] [--only key,key] [--passes shots,focus,motion,lang]
 const fs = require('fs'), path = require('path'), os = require('os');
 const C = require('./common'), { seedInPage } = require('./youSeed'), S9 = require('./screens9');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const OUT = arg('--out') || path.join(os.tmpdir(), 'voxcoach-tour10');
 const COMBOS = (arg('--combos') || '390-light,390-dark,768-light,768-dark,1280-light,1280-dark').split(',').map(c => c.split('-'));
 const PASSES = (arg('--passes') || 'shots,focus,motion,lang').split(',');
+const DIR = C.buildDir(arg('--ref'));
+const HIT = process.argv.includes('--hit'); // c) by hit-testing (targets.js); off by default: it scrolls, so the shots of a gate stay as before
 const ONLY = arg('--only') ? arg('--only').split(',') : null;
 const SIZES = { 390: { width: 390, height: 844 }, 768: { width: 768, height: 1024 }, 1280: { width: 1280, height: 900 } };
 const Q = { type: 'jpeg', quality: 72 };
@@ -49,7 +52,7 @@ function screens(panelIds) {
 
 // ---- in the page: the audits b, c, d, g on the current screen ----
 function AUDIT(arg) {
-  const { rootSel, legacy } = arg;
+  const { rootSel, legacy, hit: hitTest } = arg;
   const root = (rootSel && document.querySelector(rootSel)) || document.body;
   const vis = e => { if (!e.getClientRects().length) return false; const cs = getComputedStyle(e); if (cs.visibility === 'hidden' || +cs.opacity === 0) return false;
     for (let a = e; a; a = a.parentElement) { const s = getComputedStyle(a); if (s.display === 'none' || +s.opacity === 0) return false; } return true; };
@@ -69,6 +72,8 @@ function AUDIT(arg) {
     if (cs.backgroundColor === voice) props.push('background');
     for (const side of ['Top', 'Right', 'Bottom', 'Left']) if (+parseFloat(cs[`border${side}Width`]) > 0 && cs[`border${side}Style`] !== 'none' && cs[`border${side}Color`] === voice) { props.push('border'); break; }
     if (e instanceof SVGElement) { if (cs.fill === voice) props.push('fill'); if (cs.stroke === voice && cs.strokeWidth !== '0px') props.push('stroke'); }
+    if (cs.boxShadow && cs.boxShadow !== 'none' && cs.boxShadow.includes(voice)) props.push('shadow');
+    if (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0 && cs.outlineColor === voice && document.activeElement !== e) props.push('outline');
     if (props.length) voiceHits.push({ path: pth(e), text: txt(e), props });
   }
   // c) touch targets
@@ -82,8 +87,17 @@ function AUDIT(arg) {
     // a visually hidden input inside a label: the label is the target
     let t = e; if (e.tagName === 'INPUT' && ['checkbox', 'radio', 'range', 'file'].includes(e.type) === false && e.closest('label')) t = e.closest('label');
     if ((e.tagName === 'INPUT' && ['checkbox', 'radio'].includes(e.type)) && e.closest('label')) t = e.closest('label');
-    const r = t.getBoundingClientRect(); if (r.width < 1 || r.height < 1) continue;
-    if (r.width < 44 || r.height < 44) small.push({ path: pth(e), text: txt(e) || e.getAttribute('aria-label') || '', w: Math.round(r.width), h: Math.round(r.height) });
+    let r = t.getBoundingClientRect(); if (r.width < 1 || r.height < 1) continue;
+    if ((r.width < 44 || r.height < 44) && !hitTest) small.push({ path: pth(e), text: txt(e) || e.getAttribute('aria-label') || '', w: Math.round(r.width), h: Math.round(r.height) });
+    else if (r.width < 44 || r.height < 44) {
+      // hitRect: a control can keep a small look and take its 44 px from padding or a ::before/::after box. Hit-test it:
+      // in view, the points 21.5 px left, right, above and below its centre must all land on it (on a neighbour = overlap)
+      t.scrollIntoView({ block: 'center', inline: 'center' }); r = t.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const on = (x, y) => { const h = document.elementFromPoint(x, y); return !!h && (h === t || t.contains(h) || h === e || (h.tagName === 'LABEL' && h.control === e)); };
+      const hit = on(cx - 21.5, cy) && on(cx + 21.5, cy) && on(cx, cy - 21.5) && on(cx, cy + 21.5);
+      if (!hit) small.push({ path: pth(e), text: txt(e) || e.getAttribute('aria-label') || '', w: Math.round(r.width), h: Math.round(r.height) });
+    }
   }
   // d) names
   const nameOf = e => {
@@ -134,6 +148,7 @@ function AUDIT(arg) {
       }
     }
   });
+  if (hitTest) window.scrollTo(0, 0), document.querySelectorAll('.modal-overlay, .share-overlay, .levelup-overlay').forEach(o => { o.scrollTop = 0; });
   return { voice, voiceHits, small, noName, ariaLabels, legacyUse, matched, ruleCount: rules.length };
 }
 // the legacy variables: :root custom properties without the --hl- prefix
@@ -151,7 +166,10 @@ function LEGACY() {
   const audit = { started: new Date().toISOString(), combos: {}, focus: {}, motion: {}, lang: {}, rules: null, legacy: null, errors: {} };
   const save = () => fs.writeFileSync(path.join(OUT, 'audit.json'), JSON.stringify(audit));
   try {
-    const a = await C.openPage(b, {}); await C.signUp(a.page, 'dvtour', 'Alex Rivera');
+    // sign-up on the production backend times out now and then (Supabase): one more try on a fresh page
+    let a = await C.openPage(b, { dir: DIR });
+    try { await C.signUp(a.page, 'dvtour', 'Alex Rivera'); }
+    catch (e) { console.log(`  sign-up failed (${String(e).split('\n')[0]}), trying once more`); await a.ctx.close(); a = await C.openPage(b, { dir: DIR }); await C.signUp(a.page, 'dvtour', 'Alex Rivera'); }
     const state = await a.ctx.storageState();
     const panelIds = await C.panelKeys(a.page); const meta = await a.page.evaluate(LEGACY); audit.legacy = meta.legacy; audit.rules = meta.rules;
     await a.ctx.close();
@@ -160,7 +178,7 @@ function LEGACY() {
     const STATES = ['signedout', 'new', 'active', 'expired', 'teacher'];
     const openState = async (st, { theme, viewport, reducedMotion, lang }) => {
       const signed = st !== 'signedout';
-      const o = await C.openPage(b, { theme, viewport, reducedMotion, storageState: signed ? state : undefined });
+      const o = await C.openPage(b, { dir: DIR, theme, viewport, reducedMotion, storageState: signed ? state : undefined });
       await o.page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {}); await C.clearOverlays(o.page);
       if (signed) await o.page.evaluate(seedInPage, st === 'new' ? 'new' : 'active');
       await o.page.evaluate(S9.stateInPage, st);
@@ -185,7 +203,7 @@ function LEGACY() {
             const name = `${sc.key}-${st}`;
             if (sc.skipIf && await page.evaluate(sc.skipIf)) continue;
             const err = await show(page, sc);
-            const r = await page.evaluate(AUDIT, { rootSel: sc.root, legacy: audit.legacy }).catch(e => ({ error: String(e) }));
+            const r = await page.evaluate(AUDIT, { rootSel: sc.root, legacy: audit.legacy, hit: HIT }).catch(e => ({ error: String(e) }));
             const on = await page.evaluate(S9.openOverlays);
             audit.combos[combo][name] = { ...r, open: on, openError: err, pageErrors: errors.splice(0) };
             // at narrow widths the fixed tab bar is moved below the page's end, so it doesn't cover the middle of a long page
@@ -231,7 +249,7 @@ function LEGACY() {
                 const hidden = r.width < 1 || r.height < 1 || cs.visibility === 'hidden' || +cs.opacity === 0 || r.bottom < 0 || r.right < 0 || r.left > innerWidth || r.top > Math.max(innerHeight, document.documentElement.scrollHeight);
                 e.blur(); const off = look(e); e.focus({ preventScroll: true });
                 const outside = isSheet && root && !root.contains(e);
-                return { p: pth(e), id: idOf(e), invisible: on === off, hidden, outside, lastId };
+                return { p: pth(e), id: idOf(e), invisible: on === off, hidden, outside, lastId, n: tabbables.length };
               }, { rootSel: sc.root, isSheet }));
             }
             const issues = { invisible: [], hidden: [], lost: 0, outside: [], stuck: [] };
@@ -248,7 +266,7 @@ function LEGACY() {
               ret = await page.evaluate(id => { const o = document.getElementById(id); const cs = o && getComputedStyle(o); const open = !!o && cs.display !== 'none' && cs.visibility !== 'hidden' && +cs.opacity > 0.05 && (!o.classList.contains('levelup-overlay') || o.classList.contains('levelup-show'));
                 const e = document.activeElement; return { closedByEscape: !open, back: !!window.__opener && e === window.__opener, opener: window.__opener ? (window.__opener.id || window.__opener.className) : null, now: e ? (e.id || e.tagName + '.' + e.className).slice(0, 60) : null }; }, sc.overlay);
             }
-            audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.id)).size, seq: steps.map(s => s.id).join(','), ...issues, return: ret };
+            audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.id)).size, controls: Math.max(0, ...steps.map(s => s.n || 0)), seq: steps.map(s => s.id).join(','), ...issues, return: ret };
           }
         } finally { await ctx.close(); }
         save();
