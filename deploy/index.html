@@ -2949,7 +2949,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
   </section>
 
-  <nav class="shell-bottomnav hl-tabbar" aria-label="Main navigation">
+  <nav class="shell-bottomnav hl-tabbar" aria-label="Main navigation" data-i18n-aria-label="nav_main_label">
     <button class="snb-item hl-tab active" data-shell="home" aria-current="page"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-home"/></svg></span><span class="snb-label" data-i18n="nav_home">Home</span></button>
     <button class="snb-item hl-tab" data-shell="train"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-coach"/></svg></span><span class="snb-label" data-i18n="nav_train">Coach</span></button>
     <button class="snb-item hl-tab" data-shell="songs"><span class="snb-icon" aria-hidden="true"><svg class="hl-icon" aria-hidden="true"><use href="#hl-songs"/></svg></span><span class="snb-label" data-i18n="nav_songs">Songs</span></button>
@@ -3191,7 +3191,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_coins">Coins</span><span class="gw-hud-v" id="gliderCoinsLabel">0</span></span>
             <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_best">Best</span><span class="gw-hud-v" id="gliderHudBest">0</span></span>
           </div>
-          <div class="arcade-canvas-wrap gw-canvas"><canvas id="gliderCanvas" width="600" height="320" role="img" aria-label="Pitch Mountain: sing higher to climb and lower to dive through the gaps"></canvas></div>
+          <div class="arcade-canvas-wrap gw-canvas"><canvas id="gliderCanvas" width="600" height="320" role="img" data-i18n-aria-label="glider_canvas_label" aria-label="Pitch Mountain: sing higher to climb and lower to dive through the gaps"></canvas></div>
           <div class="btn-row gw-go">
             <button class="mic-btn vc-take-pill gw-start" id="gliderStartBtn"><span class="dot-icon"></span><span id="gliderStartLabel" data-i18n="glider_start_label">Start flying</span></button>
           </div>
@@ -3469,7 +3469,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
             <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_lives">Lives</span><span class="gw-hud-v" id="bridgeLivesLabel">3</span></span>
             <span class="gw-hud-i"><span class="gw-hud-k" data-i18n="game_hud_best">Best</span><span class="gw-hud-v" id="bridgeHudBest">0</span></span>
           </div>
-          <div class="arcade-canvas-wrap gw-canvas"><canvas id="bridgeCanvas" width="600" height="240" role="img" aria-label="Register Canyon: chest voice runs the low lane, head voice the high lane"></canvas></div>
+          <div class="arcade-canvas-wrap gw-canvas"><canvas id="bridgeCanvas" width="600" height="240" role="img" data-i18n-aria-label="bridge_canvas_label" aria-label="Register Canyon: chest voice runs the low lane, head voice the high lane"></canvas></div>
           <div class="btn-row gw-go">
             <button class="mic-btn vc-take-pill gw-start" id="bridgeStartBtn"><span class="dot-icon"></span><span id="bridgeStartLabel" data-i18n="bridgerunner_start_label">Start running</span></button>
           </div>
@@ -3499,7 +3499,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="tuner-hero-card">
       <div class="vc-stage" id="tunerStage">
       <div class="tuner-ring-wrap" id="tunerRingWrap">
-        <svg class="tuner-ring" viewBox="0 0 200 200">
+        <svg class="tuner-ring" viewBox="0 0 200 200" aria-hidden="true">
           <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"/>
           <circle id="tunerLockFill" cx="100" cy="100" r="80" fill="var(--hl-lock)"/>
           <circle id="tunerRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"
@@ -4095,7 +4095,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="tuner-hero-card">
       <div class="vc-stage breath-stage" id="breathStage">
       <div class="tuner-ring-wrap" id="breathRingWrap">
-        <svg class="tuner-ring" viewBox="0 0 200 200">
+        <svg class="tuner-ring" viewBox="0 0 200 200" aria-hidden="true">
           <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"/>
           <circle id="breathRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hl-voice)" stroke-width="10"
             stroke-linecap="round" stroke-dasharray="553" stroke-dashoffset="553"
@@ -4107,7 +4107,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </div>
       </div>
       <div class="breath-level-label vc-live-only" data-i18n="breath_level_label" aria-hidden="true">Loudness</div>
-      <div class="hl-meter breath-level vc-live-only" id="breathLevel" role="meter" aria-label="Loudness" aria-valuemin="0" aria-valuemax="100"><i></i></div>
+      <div class="hl-meter breath-level vc-live-only" id="breathLevel" role="meter" aria-label="Loudness" data-i18n-aria-label="breath_level_label" aria-valuemin="0" aria-valuemax="100"><i></i></div>
 
       <div class="btn-row" style="justify-content:center;">
         <button class="mic-btn" id="breathStartBtn"><span class="dot-icon"></span><span id="breathStartLabel" data-i18n="breath_start_hold_label">Start hold</span></button>
@@ -4235,7 +4235,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <!-- the stage: the chord big, the ring as closeness (filled in the lock colour in key, like the Tuner), the status, the song's progress -->
       <div class="vc-stage staykey-stage" id="stayKeyStage">
       <div class="tuner-ring-wrap" id="stayKeyRingWrap">
-        <svg class="tuner-ring" viewBox="0 0 200 200">
+        <svg class="tuner-ring" viewBox="0 0 200 200" aria-hidden="true">
           <circle cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"/>
           <circle id="stayKeyLockFill" cx="100" cy="100" r="80" fill="var(--hl-lock)"/>
           <circle id="stayKeyRingFill" cx="100" cy="100" r="88" fill="none" stroke="var(--hl-rule)" stroke-width="10"
@@ -4380,7 +4380,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <div class="tuner-hero-card">
       <div class="vc-stage res-stage" id="resonanceStage">
-      <canvas id="resonanceCanvas" class="vc-live-only" width="600" height="360" role="img" aria-label="Your voice as particles: the colour shows your register, the spread your pitch steadiness"></canvas>
+      <canvas id="resonanceCanvas" class="vc-live-only" width="600" height="360" role="img" data-i18n-aria-label="res_canvas_label" aria-label="Your voice as particles: the colour shows your register, the spread your pitch steadiness"></canvas>
       <div class="res-zone vc-live-only"><span class="vc-visually-hidden" data-i18n="resonance_register_label">Register</span> <span id="resRegisterStat">—</span></div>
       <div class="res-small vc-live-only">
         <span><span data-i18n="resonance_steadiness_label">Steadiness</span> <span id="resSteadyStat">—</span></span>
@@ -4403,8 +4403,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     <div class="key-card" id="customBuilderCard">
       <div class="step-label" data-i18n="custom_step1">1. Note range</div>
       <div class="field-row" style="margin:10px 0 20px;">
-        <select id="customLowNote" class="text-input" style="flex:1;"></select>
-        <select id="customHighNote" class="text-input" style="flex:1;"></select>
+        <label for="customLowNote" class="vc-visually-hidden" data-i18n="custom_low_label">Lowest note</label><select id="customLowNote" class="text-input" style="flex:1;"></select>
+        <label for="customHighNote" class="vc-visually-hidden" data-i18n="custom_high_label">Highest note</label><select id="customHighNote" class="text-input" style="flex:1;"></select>
       </div>
 
       <div class="step-label" data-i18n="custom_step2">2. Register focus</div>
@@ -5735,7 +5735,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button type="button" data-wu-mode="song" aria-pressed="false" data-i18n="wu_mode_song">Song warm-up</button>
       </div>
       <div class="wu-list" id="warmupList"></div>
-      <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
+      <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" data-i18n-aria-label="warmup_canvas_label" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
       <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
       <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
       <div class="p9-actions"><button class="hl-btn hl-btn--sing" id="warmupContinueBtn" style="display:none;" data-sheet-main data-i18n="wu_continue">Start my session</button></div>
@@ -5783,7 +5783,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   </div>
 
   <!-- ONBOARDING OVERLAY -->
-  <div class="modal-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Account setup" style="display:none;">
+  <div class="modal-overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-label="Account setup" data-i18n-aria-label="onboarding_dialog_label" style="display:none;">
     <div class="modal-card onboarding-card">
       <div class="ob-progress" id="onboardingDots" aria-hidden="true"><span class="hl-label" id="obStepLabel"></span><div class="ob-bar"><i id="obBarFill"></i></div></div>
 
@@ -6893,6 +6893,23 @@ let profile = null;
 /* ---------------- Language selection (real i18n infrastructure, honest scope) ---------------- */
 const TRANSLATIONS = {
   en: {
+    // phase 10 B5: names
+    skilltree_node_unlocked:"Unlocked",
+    skilltree_locked:"Locked", skilltree_node_aria_tpl:"{name}: {state}",
+    nav_main_label:"Main navigation",
+    glider_canvas_label:"Pitch Mountain: sing higher to climb and lower to dive through the gaps",
+    bridge_canvas_label:"Register Canyon: chest voice runs the low lane, head voice the high lane",
+    warmup_canvas_label:"Warm-up pitch trace: your voice as a line following the dotted guide",
+    onboarding_dialog_label:"Account setup",
+    custom_low_label:"Lowest note",
+    custom_high_label:"Highest note",
+    rehearsal_level_aria_tpl:"Level {n}: {name}",
+    chart_item_tpl:"{skill} {score}",
+    chart_item_nodata_tpl:"{skill}: no data",
+    progress_chart_aria_tpl:"{title}, last 14 days. Latest scores: {list}.",
+    fingerprint_aria_tpl:"{title}: {list}.",
+    karaoke_roll_aria_tpl:"{song}: the melody, {n} notes from {low} to {high}",
+    xray_aria_tpl:"{title} of {song}. Parts: {parts}. Sections: {sections}.",
     home_focus_noscore:"No score yet", home_score_tpl:"Score {n}", home_numbers_label:"Skill Profile", home_range_find:"Find your range",
     home_semitones_tpl:"{n} semitones", home_pickup_label:"Pick up", coach_best_tpl:"Best {v}",
     nav_home:'Home', nav_train:'Coach', nav_songs:'Songs', nav_world:'World', nav_you:'You',
@@ -8643,6 +8660,23 @@ const TRANSLATIONS = {
     feedback_empty_note:"Write at least one answer first.",
   },
   fr: {
+    // phase 10 B5: names
+    skilltree_node_unlocked:"Débloqué",
+    skilltree_locked:"Verrouillé", skilltree_node_aria_tpl:"{name} : {state}",
+    nav_main_label:"Navigation principale",
+    glider_canvas_label:"Mont des Notes : chantez plus aigu pour monter et plus grave pour plonger à travers les passages",
+    bridge_canvas_label:"Canyon des Registres : la voix de poitrine suit la voie basse, la voix de tête la voie haute",
+    warmup_canvas_label:"Tracé de hauteur de l’échauffement : votre voix, une ligne qui suit le guide en pointillés",
+    onboarding_dialog_label:"Configuration du compte",
+    custom_low_label:"Note la plus grave",
+    custom_high_label:"Note la plus aiguë",
+    rehearsal_level_aria_tpl:"Niveau {n} : {name}",
+    chart_item_tpl:"{skill} {score}",
+    chart_item_nodata_tpl:"{skill} : aucune donnée",
+    progress_chart_aria_tpl:"{title}, 14 derniers jours. Derniers scores : {list}.",
+    fingerprint_aria_tpl:"{title} : {list}.",
+    karaoke_roll_aria_tpl:"{song} : la mélodie, {n} notes de {low} à {high}",
+    xray_aria_tpl:"{title} de {song}. Voix : {parts}. Sections : {sections}.",
     home_focus_noscore:"Pas encore de score", home_score_tpl:"Score {n}", home_numbers_label:"Profil de compétences", home_range_find:"Trouvez votre tessiture",
     home_semitones_tpl:"{n} demi-tons", home_pickup_label:"À reprendre", coach_best_tpl:"Meilleur {v}",
     nav_home:'Accueil', nav_train:'Coach', nav_songs:'Chansons', nav_world:'Monde', nav_you:'Vous',
@@ -10393,6 +10427,23 @@ const TRANSLATIONS = {
     feedback_empty_note:"Écrivez d'abord au moins une réponse.",
   },
   es: {
+    // phase 10 B5: names
+    skilltree_node_unlocked:"Desbloqueado",
+    skilltree_locked:"Bloqueado", skilltree_node_aria_tpl:"{name}: {state}",
+    nav_main_label:"Navegación principal",
+    glider_canvas_label:"Monte del Tono: canta más agudo para subir y más grave para bajar por los huecos",
+    bridge_canvas_label:"Cañón de Registros: la voz de pecho va por el carril bajo y la de cabeza por el alto",
+    warmup_canvas_label:"Trazo de altura del calentamiento: tu voz, una línea que sigue la guía punteada",
+    onboarding_dialog_label:"Configuración de la cuenta",
+    custom_low_label:"Nota más grave",
+    custom_high_label:"Nota más aguda",
+    rehearsal_level_aria_tpl:"Nivel {n}: {name}",
+    chart_item_tpl:"{skill} {score}",
+    chart_item_nodata_tpl:"{skill}: sin datos",
+    progress_chart_aria_tpl:"{title}, últimos 14 días. Últimas puntuaciones: {list}.",
+    fingerprint_aria_tpl:"{title}: {list}.",
+    karaoke_roll_aria_tpl:"{song}: la melodía, {n} notas de {low} a {high}",
+    xray_aria_tpl:"{title} de {song}. Voces: {parts}. Secciones: {sections}.",
     home_focus_noscore:"Aún sin puntuación", home_score_tpl:"Puntuación {n}", home_numbers_label:"Perfil de habilidades", home_range_find:"Encuentra tu rango",
     home_semitones_tpl:"{n} semitonos", home_pickup_label:"Para retomar", coach_best_tpl:"Mejor {v}",
     nav_home:'Inicio', nav_train:'Coach', nav_songs:'Canciones', nav_world:'Mundo', nav_you:'Tú',
@@ -12143,6 +12194,23 @@ const TRANSLATIONS = {
     feedback_empty_note:"Escribe primero al menos una respuesta.",
   },
   tr: {
+    // phase 10 B5: names
+    skilltree_node_unlocked:"Açık",
+    skilltree_locked:"Kilitli", skilltree_node_aria_tpl:"{name}: {state}",
+    nav_main_label:"Ana gezinme",
+    glider_canvas_label:"Perde Dağı: tırmanmak için daha ince, boşluklardan dalmak için daha kalın söyleyin",
+    bridge_canvas_label:"Register Kanyonu: göğüs sesi alt şeritte, kafa sesi üst şeritte ilerler",
+    warmup_canvas_label:"Isınma perde izi: noktalı kılavuzu izleyen bir çizgi olarak sesiniz",
+    onboarding_dialog_label:"Hesap kurulumu",
+    custom_low_label:"En pes nota",
+    custom_high_label:"En tiz nota",
+    rehearsal_level_aria_tpl:"Seviye {n}: {name}",
+    chart_item_tpl:"{skill} {score}",
+    chart_item_nodata_tpl:"{skill}: veri yok",
+    progress_chart_aria_tpl:"{title}, son 14 gün. Son puanlar: {list}.",
+    fingerprint_aria_tpl:"{title}: {list}.",
+    karaoke_roll_aria_tpl:"{song}: melodi, {low} ile {high} arasında {n} nota",
+    xray_aria_tpl:"{title}, {song}. Partiler: {parts}. Bölümler: {sections}.",
     home_focus_noscore:"Henüz puan yok", home_score_tpl:"Puan {n}", home_numbers_label:"Yetenek Profili", home_range_find:"Ses aralığınızı bulun",
     home_semitones_tpl:"{n} yarım ses", home_pickup_label:"Kaldığınız yerden", coach_best_tpl:"En iyi {v}",
     nav_home:'Ana Sayfa', nav_train:'Koç', nav_songs:'Şarkılar', nav_world:'Dünya', nav_you:'Sen',
@@ -15901,6 +15969,9 @@ function buildKaraokeRoll(ids=KARAOKE_ROLL){ // returns the roll's {minMidi, max
     <g id="${ids.group}">${rects}</g>
     <circle id="${ids.cursor}" cx="${KARAOKE_PLAYHEAD_X}" cy="70" r="10" fill="var(--hl-voice)" stroke="var(--hl-bg)" stroke-width="2" style="display:none;filter:drop-shadow(0 0 10px var(--hl-voice));transition:cy .06s linear;"/>
   `;
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', t('karaoke_roll_aria_tpl').replace('{song}', songNameText()).replace('{n}', notes.length)
+    .replace('{low}', noteNameFromMidi(minMidi+3)).replace('{high}', noteNameFromMidi(maxMidi-3)));
   return {minMidi, maxMidi};
 }
 
@@ -16560,7 +16631,7 @@ function renderRehearsalLevels(){
   box.innerHTML = REHEARSAL_LEVELS.map((lv,i)=>{
     const pct = Math.round(lv.guide*100);
     const pctLabel = pct===0 ? t('rehearsal_noguide') : `${pct}% ${t('rehearsal_guide_word')}`;
-    return `<button class="rh-level${i===cur?' active':''}${i<cur?' passed':''}" data-rh-level="${i}" aria-pressed="${i===cur}">
+    return `<button class="rh-level${i===cur?' active':''}${i<cur?' passed':''}" data-rh-level="${i}" aria-pressed="${i===cur}" aria-label="${t('rehearsal_level_aria_tpl').replace('{n}', i+1).replace('{name}', t('rehearsal_level_'+lv.key))}">
       <span class="rh-level-n" aria-hidden="true">${i+1}</span>
       <span class="rh-level-num">${t('rehearsal_level_word')} ${i+1}/5</span>
       <span class="rh-level-name">${t('rehearsal_level_'+lv.key)}</span>
@@ -16876,7 +16947,14 @@ function songTimeline(){
 }
 function chordIndexAt(tl, sec){ return Math.max(0, Math.min(tl.n-1, Math.floor(sec/tl.chordDur))); }
 function sectionForIndex(idx){ return getSongSections().find(s=>s.indices.includes(idx)); }
-function sectionLabel(name){ return t('section_name_'+name.toLowerCase().replace('-','')); }
+// Phase 10 B5: a section by its id. Before, the label was looked up from the section's name, which is already translated:
+// in fr, es and tr the X-Ray, the mixer head and the Performance Dashboard showed keys, and its cues were empty. A name
+// still works.
+const SECTION_IDS = ['verse','prechorus','chorus','bridge'];
+function sectionLabel(x){
+  const s = String(x||''), k = SECTION_IDS.find(k => s===k || s===t('section_'+k) || s.toLowerCase().replace('-','')===k);
+  return k ? t('section_name_'+k) : s;
+}
 
 // Interval Match's own model: an interval is a semitone distance (target = root + semi), named from the
 // 12-interval table its Professional level drills. Here the root is the Lead note and the target is the part's.
@@ -16911,7 +16989,7 @@ function renderSonicXray(){
   getSongSections().forEach((sec, k)=>{
     const s0 = sec.indices[0]*tl.chordDur, s1 = (sec.indices[sec.indices.length-1]+1)*tl.chordDur;
     html += `<g class="xray-sec" data-sec-start="${sec.indices[0]}"><rect class="xray-sec-hit" x="${x(s0)+1}" y="2" width="${x(s1)-x(s0)-2}" height="${XRAY_SEC_H-8}"/><rect class="xray-sec-box" x="${x(s0)+2}" y="3" width="20" height="20" rx="2"/>`
-      + `<text class="xray-sec-letter" x="${x(s0)+12}" y="18">${String.fromCharCode(65+k)}</text><text class="xray-sec-name" x="${x(s0)+28}" y="18">${sectionLabel(sec.name)} · ${s0.toFixed(1)} s</text></g>`;
+      + `<text class="xray-sec-letter" x="${x(s0)+12}" y="18">${String.fromCharCode(65+k)}</text><text class="xray-sec-name" x="${x(s0)+28}" y="18">${sectionLabel(sec.id)} · ${s0.toFixed(1)} s</text></g>`;
   });
   parts.forEach((p,r)=>{
     const y0 = XRAY_SEC_H + r*XRAY_ROW_H;
@@ -16935,6 +17013,9 @@ function renderSonicXray(){
   svg.setAttribute('viewBox', `0 0 ${XRAY_W} ${H}`);
   svg.style.minWidth = Math.max(640, tl.n*70)+'px';
   svg.innerHTML = html;
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', t('xray_aria_tpl').replace('{title}', t('xray_title')).replace('{song}', songNameText())
+    .replace('{parts}', parts.map(partName).join(', ')).replace('{sections}', getSongSections().map(s=>sectionLabel(s.id)).join(', ')));
   if(microscope.t!==null) microscope.t = Math.min(microscope.t, tl.total-0.001);
   renderMicroscope();
 }
@@ -17050,7 +17131,7 @@ function renderMicroscope(){
     : onsets.slice(1).map(o=>t('mx_after_tpl').replace('{part}', partName(o.p)).replace('{ms}', Math.round((o.onset-onsets[0].onset)*1000)).replace('{first}', partName(onsets[0].p))).join('<br>');
 
   box.innerHTML = `
-    <div class="mx-head" id="mxHead" data-t="${T.toFixed(3)}" data-idx="${idx}">${T.toFixed(3)} s · ${t('rehearsal_chord_word')} ${idx+1}/${tl.n} (${SONG.chordLabels[idx]||''}) · ${sectionLabel(sec.name)}</div>
+    <div class="mx-head" id="mxHead" data-t="${T.toFixed(3)}" data-idx="${idx}">${T.toFixed(3)} s · ${t('rehearsal_chord_word')} ${idx+1}/${tl.n} (${SONG.chordLabels[idx]||''}) · ${sectionLabel(sec.id)}</div>
     <div class="mx-zoom-row"><span class="fine-print">${t('mx_zoom_label')}</span>
       ${MICROSCOPE_ZOOMS.map(z=>`<button class="practice-chip${microscope.zoom===z?' active-part':''}" data-mx-zoom="${z}">${t('mx_zoom_'+z)}</button>`).join('')}
     </div>
@@ -19937,7 +20018,7 @@ function renderSkillProfile(barsId, summaryId){
     const ringId = `ring-${barsId}-${r.key}`;
     return `<div class="skill-ring-item">
       <div class="skill-ring-wrap-sm">
-        <svg class="skill-ring-svg" id="${ringId}" viewBox="0 0 120 120"></svg>
+        <svg class="skill-ring-svg" id="${ringId}" viewBox="0 0 120 120" aria-hidden="true"></svg>
         <div class="skill-ring-val${v===null?' no-data':''}">${v===null?'—':v}</div>
       </div>
       <div class="skill-ring-label">${r.label}</div>
@@ -21421,14 +21502,13 @@ function bossLoop(){
 // whether the active song has 8 chords or 12 (or any other length).
 function getSongSections(){
   const total = SONG.parts.Lead.notes.length;
-  const names = [t('section_verse'), t('section_prechorus'), t('section_chorus'), t('section_bridge')];
   const base = Math.floor(total/4), extra = total%4;
   let start = 0;
-  return names.map((name,i)=>{
+  return SECTION_IDS.map((id,i)=>{ // id: stable ('verse'…); name: in the page's language
     const len = base + (i<extra ? 1 : 0);
     const indices = Array.from({length:len}, (_,k)=>start+k);
     start += len;
-    return {name, indices};
+    return {id, name:t('section_'+id), indices};
   }).filter(sec=>sec.indices.length>0);
 }
 function bossFindSectionScores(){
@@ -21940,12 +22020,13 @@ function renderSkillTree(){
     const parentsUnlocked = node.requires.every(rid=>SKILL_TREE_NODES.find(n=>n.id===rid).isUnlocked());
     const isNext = !unlocked && parentsUnlocked && !nextLockedNode;
     if(isNext) nextLockedNode = node;
-    // phase 8: the sprite's icon; unlocked in ink, the next ringed in the voice colour, locked in ink-3 with the lock
+    // phase 8: the sprite's icon; unlocked in ink, the next ringed in ink, dashed (phase 10 B3), locked in ink-3 with the lock.
+    // The icons are hidden from screen readers (B5); the name says the state
     return `<g>
       <circle class="st-node-bg${unlocked?' unlocked':''}${isNext?' next':''}" cx="${node.x}" cy="${node.y}" r="28"/>
-      <svg class="hl-icon st-node-icon${unlocked?'':' locked'}" x="${node.x-12}" y="${node.y-12}" width="24" height="24" viewBox="0 0 24 24"><use href="#${node.icon}"/></svg>
-      ${unlocked ? '' : `<svg class="hl-icon st-node-icon locked" x="${node.x+14}" y="${node.y-30}" width="14" height="14" viewBox="0 0 24 24"><use href="#hl-lock"/></svg>`}
-      <text class="st-node-label${unlocked?' unlocked':''}" x="${node.x}" y="${node.y+46}">${node.label}</text>
+      <svg class="hl-icon st-node-icon${unlocked?'':' locked'}" aria-hidden="true" x="${node.x-12}" y="${node.y-12}" width="24" height="24" viewBox="0 0 24 24"><use href="#${node.icon}"/></svg>
+      ${unlocked ? '' : `<svg class="hl-icon st-node-icon locked" aria-hidden="true" x="${node.x+14}" y="${node.y-30}" width="14" height="14" viewBox="0 0 24 24"><use href="#hl-lock"/></svg>`}
+      <text class="st-node-label${unlocked?' unlocked':''}" x="${node.x}" y="${node.y+46}" aria-label="${t('skilltree_node_aria_tpl').replace('{name}', node.label).replace('{state}', t(unlocked ? 'skilltree_node_unlocked' : 'skilltree_locked'))}">${node.label}</text>
     </g>`;
   }).join('');
 
@@ -23057,9 +23138,13 @@ function selectSong(id){
 }
 // Vocal World's JS-filled copy (the course and boss lines, the games' song line), in the current language: at load and
 // on every language change (applyTranslations), and when the song changes.
+function songNameText(){ // the song's name alone, in the page's language (B5's chart labels)
+  const nk = 'choir_song_' + currentSongId + '_name';
+  return nk in TRANSLATIONS.en ? t(nk) : SONG.name;
+}
 function songLabelText(){
-  const nk = 'choir_song_' + currentSongId + '_name', kk = 'song_key_' + String(SONG.key).toLowerCase().replace(/\s+/g, '_');
-  return t('game_song_tpl').replace('{name}', nk in TRANSLATIONS.en ? t(nk) : SONG.name).replace('{key}', kk in TRANSLATIONS.en ? t(kk) : SONG.key);
+  const kk = 'song_key_' + String(SONG.key).toLowerCase().replace(/\s+/g, '_');
+  return t('game_song_tpl').replace('{name}', songNameText()).replace('{key}', kk in TRANSLATIONS.en ? t(kk) : SONG.key);
 }
 function renderWorldCopy(){
   document.querySelectorAll('#gliderModeRow [data-glider-mode]').forEach(b=>{ const e = b.querySelector('.mode-card-tag'); if(e && GLIDER_MODES[b.dataset.gliderMode]) e.textContent = GLIDER_MODES[b.dataset.gliderMode].tagline; });
@@ -24222,7 +24307,7 @@ function renderVoiceFingerprint(svgId, noteId){
     const [lx,ly] = pointAt(i, maxR+22);
     const score = scores[c.key];
     axisSvg += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="var(--hl-ink)" font-size="12" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${c.label}</text>`;
-    axisSvg += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${score!==null?'var(--hl-ink)':'var(--hl-ink-3)'}" font-size="10.5" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${score!==null?score+'%':'no data'}</text>`;
+    axisSvg += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${score!==null?'var(--hl-ink)':'var(--hl-ink-3)'}" font-size="10.5" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${score!==null?score+'%':t('voicehealth_nodata_tooltip')}</text>`;
   });
 
   // real data polygon -- honest treatment: untracked categories sit at center, not a fabricated value
@@ -24242,6 +24327,8 @@ function renderVoiceFingerprint(svgId, noteId){
   });
 
   svg.innerHTML = gridSvg + axisSvg + dataSvg;
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', t('fingerprint_aria_tpl').replace('{title}', t('passport_fingerprint_label')).replace('{list}', categories.map(c=>chartScoreItem(c.key, scores[c.key])).join(', ')));
 
   const trackedCount = categories.filter(c=>scores[c.key]!==null).length;
   const note = document.getElementById(noteId || 'fingerprintUpdatedNote');
@@ -25252,10 +25339,10 @@ document.getElementById('emoRetryBtn')?.addEventListener('click', ()=>{
 
 /* ---------------- Performance Director (real section-aware coaching + real multi-dimension report) ---------------- */
 const PERFORMANCE_DIRECTOR_CUES = {
-  get 'Verse'(){return t('pd_cue_verse');},
-  get 'Pre-Chorus'(){return t('pd_cue_prechorus');},
-  get 'Chorus'(){return t('pd_cue_chorus');},
-  get 'Bridge'(){return t('pd_cue_bridge');},
+  get verse(){return t('pd_cue_verse');}, // by section id (B5: keyed by English names, the cues showed in English only, and not for Pre-chorus)
+  get prechorus(){return t('pd_cue_prechorus');},
+  get chorus(){return t('pd_cue_chorus');},
+  get bridge(){return t('pd_cue_bridge');},
 };
 let pdActive = false;
 let pdStartTime = 0;
@@ -25271,7 +25358,7 @@ function renderPdBriefing(){
   if(!wrap) return;
   const sections = getSongSections();
   wrap.innerHTML = sections.map(sec=>
-    `<div class="record-row"><span class="record-label">${sectionLabel(sec.name)}</span><span class="record-val" style="color:var(--hl-ink-3);font-style:italic;font-size:12px;">${PERFORMANCE_DIRECTOR_CUES[sec.name]||''}</span></div>`
+    `<div class="record-row"><span class="record-label">${sectionLabel(sec.id)}</span><span class="record-val" style="color:var(--hl-ink-3);font-style:italic;font-size:12px;">${PERFORMANCE_DIRECTOR_CUES[sec.id]||''}</span></div>`
   ).join('');
   if(pdCurrentSectionName) document.getElementById('pdCurrentSection').textContent = sectionLabel(pdCurrentSectionName); // a language switch mid-run
 }
@@ -25331,10 +25418,10 @@ function pdLoop(){
 
     const sections = getSongSections();
     const sec = sections.find(s=>s.indices.includes(idx));
-    if(sec && sec.name!==pdCurrentSectionName){
-      pdCurrentSectionName = sec.name;
-      document.getElementById('pdCurrentSection').textContent = sectionLabel(sec.name);
-      document.getElementById('pdCurrentCue').textContent = PERFORMANCE_DIRECTOR_CUES[sec.name]||'';
+    if(sec && sec.id!==pdCurrentSectionName){
+      pdCurrentSectionName = sec.id; // the id: a language switch mid-run still finds its label
+      document.getElementById('pdCurrentSection').textContent = sectionLabel(sec.id);
+      document.getElementById('pdCurrentCue').textContent = PERFORMANCE_DIRECTOR_CUES[sec.id]||'';
     }
     document.getElementById('pdCurrentNote').textContent = noteNameFromMidi(SONG.parts.Lead.notes[idx]);
   }
@@ -25594,6 +25681,10 @@ function findMostImproved(trend){
   });
   return best;
 }
+// Phase 10 B5: one item of a chart's summary ("Pitch 72", "Range: no data"), in the page's language
+function chartScoreItem(key, v){
+  return v===null ? t('chart_item_nodata_tpl').replace('{skill}', t('skill_'+key)) : t('chart_item_tpl').replace('{skill}', t('skill_'+key)).replace('{score}', v);
+}
 function renderUnifiedProgress(){
   const svg = document.getElementById('unifiedTrendSvg');
   if(!svg || !profile) return;
@@ -25610,7 +25701,7 @@ function renderUnifiedProgress(){
     gridSvg += `<line x1="${padL}" y1="${y.toFixed(1)}" x2="${W-padR}" y2="${y.toFixed(1)}" stroke="var(--hl-rule)" stroke-width="1"/>`;
   });
 
-  // House Lights (phase 7, 2.2): your voice for Pitch, ink for Breath, ink-3 dashed for Agility (not teal / brass / coral)
+  // the category colours (phase 10 B3: never the voice), Agility dashed as well
   const colors = {pitch:'var(--hl-cat-pitch)', breath:'var(--hl-cat-breath)', agility:'var(--hl-cat-agility)'}, dash = {agility:' stroke-dasharray="6 4"'};
   let linesSvg = '';
   Object.keys(trend.series).forEach(type=>{
@@ -25630,6 +25721,11 @@ function renderUnifiedProgress(){
   svg.innerHTML = gridSvg + linesSvg;
 
   const trackedCount = Object.values(trend.series).filter(s=>s.some(v=>v!==null)).length;
+  const latest = k => { const v = trend.series[k].filter(x=>x!==null); return v.length ? v[v.length-1] : null; };
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', trackedCount>0
+    ? t('progress_chart_aria_tpl').replace('{title}', t('profile_unifiedprogress_label')).replace('{list}', ['pitch','breath','agility'].map(k=>chartScoreItem(k, latest(k))).join(', '))
+    : t('unifiedprogress_nodata'));
   const note = document.getElementById('unifiedProgressNote');
   if(note){
     note.textContent = trackedCount>0
