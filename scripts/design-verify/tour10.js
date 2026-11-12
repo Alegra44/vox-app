@@ -268,7 +268,7 @@ function LEGACY() {
               ret = await page.evaluate(id => { const o = document.getElementById(id); const cs = o && getComputedStyle(o); const open = !!o && cs.display !== 'none' && cs.visibility !== 'hidden' && +cs.opacity > 0.05 && (!o.classList.contains('levelup-overlay') || o.classList.contains('levelup-show'));
                 const e = document.activeElement; return { closedByEscape: !open, back: !!window.__opener && e === window.__opener, opener: window.__opener ? (window.__opener.id || window.__opener.className) : null, now: e ? (e.id || e.tagName + '.' + e.className).slice(0, 60) : null }; }, sc.overlay);
             }
-            audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.id)).size, controls: Math.max(0, ...steps.map(s => s.n || 0)), seq: steps.map(s => s.id).join(','), ...issues, return: ret };
+            audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.id)).size, controls: Math.max(0, ...steps.map(s => s.n || 0)), seq: steps.map(s => s.id).join(','), ...issues, return: ret, overlay: isSheet };
           });
         } finally { await ctx.close(); }
         save();

@@ -13,7 +13,7 @@ const SCREENS = [
   { key: 'signin', open: `openAuthModal(); setAuthMode('signin');`, overlay: 'authModalOverlay', root: '#authModalOverlay', states: SO },
   { key: 'signinrequired', open: `requireSignIn('The Vocal Rift');`, overlay: 'signinRequiredOverlay', root: '#signinRequiredOverlay', states: SO },
   { key: 'signinplan', open: `enterPanel('pricing'); document.querySelector('.plan-btn[data-plan="monthly"]').click();`, overlay: 'signinRequiredOverlay', root: '#signinRequiredOverlay', states: SO },
-  { key: 'language', open: `document.getElementById('languageSelectOverlay').style.display='flex';`, overlay: 'languageSelectOverlay', root: '#languageSelectOverlay', states: SO },
+  { key: 'language', open: `try { localStorage.removeItem('language'); } catch (e) {} initLanguage();`, /* as at first run (phase 10 B6: its trap is set there) */ overlay: 'languageSelectOverlay', root: '#languageSelectOverlay', states: SO },
   ...[0, 1, 2, 3, 4, 5, 6].map(n => ({ key: `onboarding${n}`, open: `openOnboarding(); obStepIndex=${n}; renderOnboardingStep();`, overlay: 'onboardingOverlay', root: '#onboardingOverlay', states: ['new'] })),
   { key: 'onboarding6set', open: `openOnboarding(); for (const [g, i] of [['obSingerTypeGrid',0],['obLevelGrid',1],['obGenreGrid',0],['obGenreGrid',2],['obGoalsGrid',1],['obPriorityGrid',0]]) document.querySelectorAll('#'+g+' [data-ob-value]')[i].click(); obStepIndex=6; renderOnboardingStep();`, overlay: 'onboardingOverlay', root: '#onboardingOverlay', states: ['new'] },
   { key: 'pricing', open: `enterPanel('pricing');`, panel: 'pricing', root: '#panel-pricing', states: ['signedout', 'new', 'active', 'expired'] },

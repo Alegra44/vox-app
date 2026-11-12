@@ -21,7 +21,9 @@ const fails = { stuck: [], escaping: [], invisible: [], hidden: [], returned: []
 let n = 0;
 for (const [combo, screens] of Object.entries(audit.focus))
   for (const [name, f] of Object.entries(screens)) {
-    n++; const at = `${name} (${combo})`, sheet = name.startsWith('sheet-');
+    n++; const at = `${name} (${combo})`;
+    // a sheet is an overlay (the tour's 'sheet-' names also cover states9's panels, Pricing, Feedback…: they are pages)
+    const sheet = 'overlay' in f ? !!f.overlay : name.startsWith('sheet-');
     if (f.stuck.length && !(sheet && f.controls === 1)) fails.stuck.push(`${at}: ${f.stuck.map(p => p.split(' > ').pop()).join(', ')}`);
     if (sheet && f.outside.length) fails.escaping.push(`${at}: ${f.outside.length} steps outside`);
     if (sheet && f.lost) fails.escaping.push(`${at}: ${f.lost} steps on the body`);

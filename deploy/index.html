@@ -5909,40 +5909,55 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 </script>
 <script>
 /* ---------------- Accessibility: reusable focus trap + Escape-to-close for all modals ---------------- */
+// Phase 10 B6: the list of controls is built again on every Tab (a sheet's steps and states add, hide and disable
+// controls after it opens: Sign-in's mode switch, the paywall's Close, onboarding's step 1), and Tab is moved by hand
+// inside it, so focus never stops on a control that has gone or leaves the sheet. onClose is optional: without it Escape
+// does nothing (Language at first run: a choice is needed). Re-calling it is safe (onboarding's per-step content).
+// a[href], not [href]: an icon's <use href> inside a button matched, couldn't take focus, and held Tab on its button
+const A11Y_FOCUSABLE = 'button:not([disabled]), a[href], area[href], input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+function a11yFocusables(modalEl){
+  const shown = e => e.tabIndex >= 0 && e.getClientRects().length && getComputedStyle(e).visibility!=='hidden';
+  return [...modalEl.querySelectorAll(A11Y_FOCUSABLE)].filter(shown);
+}
 function openModalWithA11y(modalEl, onClose){
   if(!modalEl) return;
-  if(modalEl._a11yKeyHandler){ document.removeEventListener('keydown', modalEl._a11yKeyHandler); modalEl._a11yKeyHandler = null; } // safe to re-call, e.g. onboarding's per-step content
-  const shown = e => e.getClientRects().length && getComputedStyle(e).visibility!=='hidden';
-  const focusable = [...modalEl.querySelectorAll('button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')].filter(shown);
-  const first = focusable[0], last = focusable[focusable.length-1];
-  const start = focusable.find(e=>/^(INPUT|SELECT|TEXTAREA)$/.test(e.tagName)) || focusable.find(e=>e.hasAttribute('data-sheet-main')) || first; // 2.1
+  if(modalEl._a11yKeyHandler){ document.removeEventListener('keydown', modalEl._a11yKeyHandler); modalEl._a11yKeyHandler = null; }
+  const focusable = a11yFocusables(modalEl);
+  const start = focusable.find(e=>/^(INPUT|SELECT|TEXTAREA)$/.test(e.tagName)) || focusable.find(e=>e.hasAttribute('data-sheet-main')) || focusable[0]; // 2.1
   modalEl.setAttribute('role', modalEl.getAttribute('role') || 'dialog');
   modalEl.setAttribute('aria-modal', 'true');
   if(!modalEl._prevFocus) modalEl._prevFocus = document.activeElement;
   if(start) start.focus();
 
   function handleKeydown(e){
-    if(e.key==='Escape'){ e.preventDefault(); onClose(); return; }
-    if(e.key!=='Tab' || focusable.length===0) return;
-    if(e.shiftKey){
-      if(document.activeElement===first){ e.preventDefault(); last.focus(); }
-    } else {
-      if(document.activeElement===last){ e.preventDefault(); first.focus(); }
-    }
+    // a sheet hidden without being closed (display or visibility): its handler does nothing, so it can't hold the page
+    if(!modalEl.getClientRects().length || getComputedStyle(modalEl).visibility==='hidden') return;
+    if(e.key==='Escape'){ if(onClose){ e.preventDefault(); onClose(); } return; }
+    if(e.key!=='Tab') return;
+    const f = a11yFocusables(modalEl), n = f.length;
+    if(!n) return;
+    e.preventDefault();
+    const a = document.activeElement;
+    let i = f.indexOf(a);
+    if(i>=0){ f[(i + (e.shiftKey ? n-1 : 1)) % n].focus(); return; }
+    // focus is on something that isn't in the list (outside the sheet, or a control hidden since): the next one after
+    // it in the page's order, or the one before it with Shift
+    let j = f.findIndex(x => a && a !== document.body && (a.compareDocumentPosition(x) & Node.DOCUMENT_POSITION_FOLLOWING));
+    if(j<0) j = n;
+    f[e.shiftKey ? (j-1+n) % n : j % n].focus();
   }
   modalEl._a11yKeyHandler = handleKeydown;
   document.addEventListener('keydown', handleKeydown);
 }
-function closeModalWithA11y(modalEl){
+// restoreFocus false: the sheet closed by itself while focus was elsewhere (a moment sheet's timer): focus stays put
+function closeModalWithA11y(modalEl, restoreFocus = true){
   if(!modalEl) return;
   if(modalEl._a11yKeyHandler){
     document.removeEventListener('keydown', modalEl._a11yKeyHandler);
     modalEl._a11yKeyHandler = null;
   }
-  if(modalEl._prevFocus && typeof modalEl._prevFocus.focus==='function'){
-    modalEl._prevFocus.focus();
-  }
-  modalEl._prevFocus = null;
+  const p = modalEl._prevFocus; modalEl._prevFocus = null;
+  if(restoreFocus && p && typeof p.focus==='function' && document.contains(p)) p.focus({preventScroll:true});
 }
 
 /* ---------------- Panel switching ---------------- */
@@ -14070,13 +14085,14 @@ async function initLanguage(){
     if(overlay) overlay.style.display = 'none';
   } else {
     const overlay = document.getElementById('languageSelectOverlay');
-    if(overlay){ overlay.style.display = 'flex'; overlay.querySelector('[data-lang]')?.focus({preventScroll:true}); } // 2.1: focus on the first choice
+    if(overlay){ overlay.style.display = 'flex'; openModalWithA11y(overlay); overlay.querySelector('[data-lang]')?.focus({preventScroll:true}); } // 2.1: focus on the first choice; B6: kept inside, no Escape (a choice is needed)
   }
 }
 document.querySelectorAll('#languageSelectOverlay [data-lang]').forEach(btn=>{
   btn.addEventListener('click', async ()=>{
     await setLanguage(btn.dataset.lang);
     document.getElementById('languageSelectOverlay').style.display = 'none';
+    closeModalWithA11y(document.getElementById('languageSelectOverlay'));
   });
 });
 document.querySelectorAll('#profileLanguageRow [data-profile-lang]').forEach(btn=>{
@@ -14211,16 +14227,16 @@ document.addEventListener('keydown', e=>{
   if(open.length){ e.preventDefault(); open.forEach(momentClose); }
 });
 function momentShown(o){
-  if(!o.contains(document.activeElement)) o._prevFocus = document.activeElement;
+  openModalWithA11y(o, ()=>momentClose(o)); // B6: focus stays inside; Escape and Continue close it
   const b = o.querySelector('[data-moment-close]'); if(!b) return;
   // the sheet fades in from visibility:hidden, which can't take focus at once: try now, then once it is visible
   const go = ()=>{ if(o.classList.contains('levelup-show') && document.activeElement!==b) b.focus({preventScroll:true}); };
   go(); requestAnimationFrame(()=>requestAnimationFrame(go)); setTimeout(go, 60);
 }
 function momentHide(o){
+  const had = o.contains(document.activeElement);
   o.classList.remove('levelup-show');
-  const p = o._prevFocus; o._prevFocus = null;
-  if(p && typeof p.focus==='function' && o.contains(document.activeElement)) p.focus({preventScroll:true});
+  closeModalWithA11y(o, had); // focus back to the opener if it was in the sheet; a timer close elsewhere leaves it be
 }
 function showLevelUp(level, name, why){
   document.getElementById('levelupNum').textContent = level;
@@ -14549,10 +14565,10 @@ let appInitPromise = (async function initAccountAndDashboard(){
 })();
 
 /* ---------------- Shareable Posters ---------------- */
-function openOverlay(id){ const o = document.getElementById(id); o._prevFocus = document.activeElement; o.style.display='flex';
+function openOverlay(id){ const o = document.getElementById(id); o.style.display='flex';
+  openModalWithA11y(o, ()=>closeOverlay(id)); // B6: focus stays inside; Escape closes; focus goes back to the opener
   const b = o.querySelector('.hl-btn--ink'); if(b) b.focus({preventScroll:true}); } // 2.1: focus on the main button (Download)
-function closeOverlay(id){ const o = document.getElementById(id), p = o._prevFocus; o._prevFocus = null; o.style.display='none';
-  if(p && typeof p.focus==='function' && document.contains(p)) p.focus({preventScroll:true}); }
+function closeOverlay(id){ const o = document.getElementById(id); o.style.display='none'; closeModalWithA11y(o); }
 
 document.getElementById('shareRangeBtn').addEventListener('click', ()=>{
   if(!lowNote || !highNote) return;
@@ -21137,11 +21153,11 @@ function wuOpen(){
   wuMode = 'exercises';
   document.getElementById('warmupStatus').textContent = '';
   wuRender();
-  document.getElementById('warmupOverlay').style.display = 'flex';
-  document.addEventListener('keydown', wuKeydown);
+  const ov = document.getElementById('warmupOverlay');
+  ov.style.display = 'flex';
+  openModalWithA11y(ov, ()=>wuFinish('skipped')); // B6: focus stays inside; Escape = Skip; focus goes back to the opener
   document.getElementById('warmupSkipBtn').focus();
 }
-function wuKeydown(e){ if(e.key==='Escape') wuFinish('skipped'); }
 function wuMarkPassed(how){ // how: 'skipped' | 'done'
   wuPassedKey = wuKey();
   try{ localStorage.setItem(wuPassedKey, how); }catch(e){}
@@ -21150,7 +21166,7 @@ function wuFinish(how){
   wuStop();
   wuMarkPassed(how);
   document.getElementById('warmupOverlay').style.display = 'none';
-  document.removeEventListener('keydown', wuKeydown);
+  closeModalWithA11y(document.getElementById('warmupOverlay'));
   const r = wuResolve; wuResolve = null; wuPending = null;
   if(r) r();
 }
