@@ -1,7 +1,7 @@
 #!/bin/bash
 # Phase 10 checks (PHASE10.md A3), one at a time on the working build (redesign/phase10), AC power only (waits while on
 # battery). Each check's output goes to <out>/<name>.log; <out>/progress.txt has a line per start and end with its exit.
-# Usage: bash scripts/design-verify/checks10.sh <set>   sets: a3 | all | <name,name…>
+# Usage: bash scripts/design-verify/checks10.sh <set>   sets: a3 | all | b | design | <name,name…>
 #   a3   PHASE10.md A3, the checks for A1: hooks contrast copyscan-all bootcheck navcheck home warmup-entries
 #        warmup-tracking, states9 (screens9.js changed with .legacy-tabs; master = phase 9 vs the branch), datelocale
 #        (A1's English dates), unusedkeys (A1's keys: 0 referenced nowhere)
@@ -35,11 +35,19 @@ cmd(){ case $1 in
   youstates) echo "node scripts/design-verify/youstates.js";;
   datelocale) echo "node scripts/design-verify/datelocale.js";;
   unusedkeys) echo "node scripts/design-verify/unusedkeys.js";;
+  rule1) echo "node scripts/design-verify/rule1.js --out $OUT/rule1";;
+  targets) echo "node scripts/design-verify/targets.js --out $OUT/targets";;
+  names) echo "node scripts/design-verify/names.js --out $OUT/names";;
+  focus) echo "node scripts/design-verify/focus.js --out $OUT/focus";;
+  motion) echo "node scripts/design-verify/motion.js --out $OUT/motion";;
+  durations) echo "node scripts/design-verify/durations.js";;
   *) echo "false";;
 esac; }
 case $SET in
   a3) LIST="hooks unusedkeys datelocale copyscan-all bootcheck navcheck home warmup-entries warmup-tracking states9 contrast";;
   all) LIST="datelocale unusedkeys states9 onboard checkout feedback posters moments9 levelup home cv-paywall cv-p8 warmup-entries warmup-tracking tools house contrast copyscan-all hooks navcheck bootcheck youstates";;
+  b) LIST="rule1 targets names focus motion durations datelocale";; # PHASE10.md part B's checks
+  design) LIST="unusedkeys states9 onboard checkout feedback posters moments9 tools copyscan-all navcheck bootcheck youstates";; # all, less what suites.sh runs (house home hooks contrast levelup warmup-* cv-*) and datelocale (in b)
   *) LIST=${SET//,/ };;
 esac
 case " $LIST " in *" cv-paywall "*|*" cv-p8 "*) # the choir scripts take the working build at :8765 (as in checks7)
