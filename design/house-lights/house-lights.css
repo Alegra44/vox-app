@@ -239,7 +239,7 @@
 .hl-seg button{ min-height: var(--hl-touch); padding: 0 var(--hl-s3); border: 0; border-radius: 4px; background: transparent; color: var(--hl-ink-2); font: inherit; font-size: var(--hl-t-small); font-weight: 600; cursor: pointer; }
 .hl-seg button[aria-selected="true"], .hl-seg button[aria-pressed="true"]{ background: var(--hl-ink); color: var(--hl-bg); }
 .hl-chip{ position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 var(--hl-s3); border-radius: var(--hl-r1); border: var(--hl-hair) solid var(--hl-rule-strong); font-size: var(--hl-t-small); font-weight: 600; color: var(--hl-ink-2); background: transparent; }
-.hl-chip::after{ content: ""; position: absolute; inset: -6px 0; } /* a 44px hit area on the 32px chip */
+.hl-chip::after{ content: ""; position: absolute; inset: -7px 0; } /* a 44px hit area on the 32px chip (the inset counts from inside its 1px border) */
 .hl-chip[aria-pressed="true"]{ border-color: var(--hl-ink); color: var(--hl-ink); }
 .hl-part-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--part); flex: none; }
 

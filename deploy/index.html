@@ -258,7 +258,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 .hl-seg button{ min-height: var(--hl-touch); padding: 0 var(--hl-s3); border: 0; border-radius: 4px; background: transparent; color: var(--hl-ink-2); font: inherit; font-size: var(--hl-t-small); font-weight: 600; cursor: pointer; }
 .hl-seg button[aria-selected="true"], .hl-seg button[aria-pressed="true"]{ background: var(--hl-ink); color: var(--hl-bg); }
 .hl-chip{ position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 var(--hl-s3); border-radius: var(--hl-r1); border: var(--hl-hair) solid var(--hl-rule-strong); font-size: var(--hl-t-small); font-weight: 600; color: var(--hl-ink-2); background: transparent; }
-.hl-chip::after{ content: ""; position: absolute; inset: -6px 0; } /* a 44px hit area on the 32px chip */
+.hl-chip::after{ content: ""; position: absolute; inset: -7px 0; } /* a 44px hit area on the 32px chip (the inset counts from inside its 1px border) */
 .hl-chip[aria-pressed="true"]{ border-color: var(--hl-ink); color: var(--hl-ink); }
 .hl-part-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--part); flex: none; }
 
@@ -1844,7 +1844,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     background:var(--hl-raised);color:var(--hl-ink);font-family:var(--hl-font);font-size:var(--hl-t-small);font-weight:700;
     display:grid;place-items:center;padding:0;cursor:pointer;
   }
-  .vc-avatar::after{content:"";position:absolute;inset:-6px;} /* a 44px hit area on the 32px circle */
+  .vc-avatar::after{content:"";position:absolute;inset:-7px;} /* a 44px hit area on the 32px circle (from inside its 1px border) */
   .vc-avatar:focus-visible{outline:2px solid var(--hl-voice);outline-offset:2px;}
   .vc-signin{min-height:40px;padding:0 var(--hl-s2);color:var(--hl-ink);}
 
@@ -2484,6 +2484,21 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* onboarding's long steps (13 genres) scroll inside the sheet: Back / Next stay at its foot */
   .modal-card.onboarding-card .p9-actions{position:sticky;bottom:calc(-1 * var(--hl-s5));z-index:1;background:var(--hl-raised);
     margin-bottom:calc(-1 * var(--hl-s5));padding:var(--hl-s3) 0 var(--hl-s5);}
+
+  /* ---- PHASE 10 B4: touch targets, 44 × 44 (links inside running text excepted) ----
+     Buttons and selects grow to 44. Small controls keep their look and take 44 from a hit area: the avatar and the chips
+     already have one (::after, now 7 px out: an inset counts from inside the 1 px border), Key Trainer's − / + and Choir World's
+     "Practice this" get one; a range input can't carry a pseudo-element, so the faders and
+     the volume slider are 44 tall with their track and thumb unchanged. The two links get 44 of padding, given back by a
+     negative margin, so nothing moves. Wrapping chip rows get a 14 px row gap, so the chips' hit areas meet and never overlap. */
+  .mic-btn, .vc-take-pill, .solid-btn, .ghost-btn, .hl-key, .ex-type-btn, select, .vc-signin{min-height:44px;}
+  .hl-key{min-width:44px;}
+  .transpose-stepper button{position:relative;}
+  .transpose-stepper button::after{content:"";position:absolute;inset:-7px;}
+  .cw-moment-btn{position:relative;} .cw-moment-btn::after{content:"";position:absolute;inset:-6px 0;}
+  .hl-fader, #playbackVolumeSlider{height:44px;}
+  .gw-song .link-btn, .p9-terms .link-btn{display:inline-block;padding-block:14px;margin-block:-14px;}
+  .practice-chip-row, .emo-chips, .cw-chips{row-gap:14px;}
 </style>
 </head>
 <body data-house="up">
