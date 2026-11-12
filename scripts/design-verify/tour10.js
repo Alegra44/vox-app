@@ -31,7 +31,7 @@ const PASSES = (arg('--passes') || 'shots,focus,motion,lang').split(',');
 const DIR = C.buildDir(arg('--ref'));
 const HIT = process.argv.includes('--hit'); // c) by hit-testing (targets.js); off by default: it scrolls, so the shots of a gate stay as before
 const ONLY = arg('--only') ? arg('--only').split(',') : null;
-const SIZES = { 390: { width: 390, height: 844 }, 768: { width: 768, height: 1024 }, 1280: { width: 1280, height: 900 } };
+const SIZES = { 390: { width: 390, height: 844 }, 600: { width: 600, height: 960 }, 768: { width: 768, height: 1024 }, 959: { width: 959, height: 900 }, 1280: { width: 1280, height: 900 } }; // 600 and 959: the edges of B9's middle range (on request)
 const Q = { type: 'jpeg', quality: 72 };
 const HUBS = { home: 'home', 'train-hub': 'train', 'songs-hub': 'songs', 'you-hub': 'you' };
 

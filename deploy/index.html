@@ -1884,6 +1884,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   /* ---- HOME (phase 3): lights up, one column, at most 640px at every width ---- */
   #panel-home .home-col{max-width:640px;margin:0 auto;display:flex;flex-direction:column;gap:var(--hl-s5);}
+  @media (min-width:600px) and (max-width:959px){ /* phase 10 B9 */
+    #panel-home .home-col{max-width:none;} /* the same gutters as every other screen */
+    .vc-stage{max-width:600px;margin-left:auto;margin-right:auto;}
+    /* the card a stage sits in (it is what shows: the stage itself has no chrome), at rest; live, the stage path takes
+       the card's chrome and margins away and the stage is its own 560 px column */
+    :is(.tuner-hero-card, .range-card, .ex-target-card, .key-card):has(> .vc-stage:not(.is-live)){max-width:600px;margin-left:auto;margin-right:auto;}
+    #unifiedTrendSvg{max-width:600px;margin-left:auto;margin-right:auto;}
+  }
   /* one line of text that wraps like a sentence (renderHomeScreen shows the trial part with display:flex) */
   .home-dateline{margin-bottom:calc(-1 * var(--hl-s3));}
   .home-dateline .home-trial-row[style*="flex"]{display:inline !important;}
@@ -2015,10 +2023,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-dashboard .dash-signedout p{margin:0;}
   #panel-dashboard .dash-elsewhere[hidden]{display:none;}
   #panel-dashboard .hl-section{margin-top:var(--hl-s5);}
+  #panel-dashboard .hl-section.dash-plan{border-top:0;margin-top:0;padding-top:0;} /* B9: under the title's rule, not a second one */
   #panel-dashboard .hl-section > .hl-label{margin-bottom:var(--hl-s2);}
   #panel-dashboard .dash-h{color:var(--hl-ink);margin:0 0 var(--hl-s3);}
-  #panel-dashboard .plan-row .hl-item-title{display:block;color:var(--hl-ink);}
-  #panel-dashboard .plan-row .hl-item-meta{display:block;margin-top:2px;}
+  #panel-dashboard .today-row .hl-item-title{display:block;color:var(--hl-ink);}
+  #panel-dashboard .today-row .hl-item-meta{display:block;margin-top:2px;}
   #panel-dashboard .dash-challenge{display:flex;flex-direction:column;gap:var(--hl-s2);padding:var(--hl-s5);margin-top:var(--hl-s5);}
   #panel-dashboard .dash-challenge .hl-h3{color:var(--hl-ink);}
   #panel-dashboard .dash-challenge-meter{margin-top:var(--hl-s2);}
@@ -2369,7 +2378,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .plan-row .plan-features li::before{content:"–";position:absolute;left:0;color:var(--hl-ink-3);}
   .plan-row .plan-btn{width:100%;}
   .plan-row .plan-btn.current{color:var(--hl-ink-3);border-color:var(--hl-rule);}
-  @media (min-width:768px){
+  @media (min-width:600px) and (max-width:959px){ /* phase 10 B9: two columns × two rows */
+    .plan-rows{grid-template-columns:repeat(2, minmax(0,1fr));border-bottom:var(--hl-hair) solid var(--hl-rule);}
+    .plan-row{border-bottom:0;padding:var(--hl-s5) var(--hl-s4);}
+    .plan-row:nth-child(odd){padding-left:0;} .plan-row:nth-child(even){padding-right:0;border-left:var(--hl-hair) solid var(--hl-rule);}
+    .plan-row:nth-child(n+3){border-top:var(--hl-hair) solid var(--hl-rule);}
+  }
+  @media (min-width:960px){
     .plan-rows{grid-template-columns:repeat(4, minmax(0,1fr));border-bottom:var(--hl-hair) solid var(--hl-rule);}
     .plan-row{border-bottom:0;padding:var(--hl-s5) var(--hl-s4);}
     .plan-row + .plan-row{border-left:var(--hl-hair) solid var(--hl-rule);}
@@ -20326,8 +20341,8 @@ function renderTodaysPlan(){
 
   // rows (phase 7, 2.2): each opens its screen through enterPanel, so its hooks run and the tab bar follows
   const icons = {warmup:'warmup', exercises:'score', range:'range', breath:'breath', register:'steps', dashboard:'calendar', agility:'pulse'};
-  listEl.innerHTML = steps.map(s=>`<button class="hl-item plan-row" type="button" data-goto="${s.panel}"><svg class="hl-icon" aria-hidden="true"><use href="#hl-${icons[s.panel]||'chev'}"/></svg><span><span class="hl-item-title">${s.text}</span><span class="hl-item-meta">${s.reason}</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>`).join('');
-  listEl.querySelectorAll('.plan-row').forEach(btn=>{
+  listEl.innerHTML = steps.map(s=>`<button class="hl-item today-row" type="button" data-goto="${s.panel}"><svg class="hl-icon" aria-hidden="true"><use href="#hl-${icons[s.panel]||'chev'}"/></svg><span><span class="hl-item-title">${s.text}</span><span class="hl-item-meta">${s.reason}</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>`).join('');
+  listEl.querySelectorAll('.today-row').forEach(btn=>{
     btn.addEventListener('click', ()=>{ const panel = btn.dataset.goto; if(panel!=='dashboard') enterPanel(panel); else document.querySelector('#panel-dashboard .dash-challenge')?.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); });
   });
 }
