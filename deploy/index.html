@@ -325,6 +325,9 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 @media (prefers-reduced-motion: reduce){
   .hl-btn, .hl-transport, .hl-dimmer, .hl-meter > i{ transition: none; }
   .hl-steps li[data-state="active"]::before{ animation: none; }
+  /* v3.0 (phase 10 B7): one global rule. Every animation and transition, the app's own included, finishes at once and
+     runs once, so nothing slides or pulses and values jump to where they are; scrolling jumps too. */
+  *, *::before, *::after{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 /* ===== HOUSE LIGHTS v1.2 END */
   body{transition:background-color 0.3s ease;}
@@ -20319,7 +20322,7 @@ function renderTodaysPlan(){
   const icons = {warmup:'warmup', exercises:'score', range:'range', breath:'breath', register:'steps', dashboard:'calendar', agility:'pulse'};
   listEl.innerHTML = steps.map(s=>`<button class="hl-item plan-row" type="button" data-goto="${s.panel}"><svg class="hl-icon" aria-hidden="true"><use href="#hl-${icons[s.panel]||'chev'}"/></svg><span><span class="hl-item-title">${s.text}</span><span class="hl-item-meta">${s.reason}</span></span><span class="hl-item-end"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-chev"/></svg></span></button>`).join('');
   listEl.querySelectorAll('.plan-row').forEach(btn=>{
-    btn.addEventListener('click', ()=>{ const panel = btn.dataset.goto; if(panel!=='dashboard') enterPanel(panel); else document.querySelector('#panel-dashboard .dash-challenge')?.scrollIntoView({block:'center', behavior:'smooth'}); });
+    btn.addEventListener('click', ()=>{ const panel = btn.dataset.goto; if(panel!=='dashboard') enterPanel(panel); else document.querySelector('#panel-dashboard .dash-challenge')?.scrollIntoView({block:'center', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); });
   });
 }
 

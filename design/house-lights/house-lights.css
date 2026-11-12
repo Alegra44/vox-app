@@ -306,4 +306,7 @@
 @media (prefers-reduced-motion: reduce){
   .hl-btn, .hl-transport, .hl-dimmer, .hl-meter > i{ transition: none; }
   .hl-steps li[data-state="active"]::before{ animation: none; }
+  /* v3.0 (phase 10 B7): one global rule. Every animation and transition, the app's own included, finishes at once and
+     runs once, so nothing slides or pulses and values jump to where they are; scrolling jumps too. */
+  *, *::before, *::after{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
