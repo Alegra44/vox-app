@@ -219,7 +219,7 @@
 .hl-key[aria-pressed="true"]{ color: var(--hl-ink); border-color: var(--hl-ink-3); }
 .hl-key[aria-pressed="true"]::before{ background: var(--led, var(--hl-lead)); box-shadow: 0 0 6px var(--led, var(--hl-lead)); }
 .hl-key[data-key="mute"]{ --led: var(--hl-miss); }
-.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-voice); }
+.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-ink); }
 
 /* fader: a real control on input[type=range] */
 .hl-fader{ -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; margin: 0; }
@@ -288,7 +288,7 @@
 .hl-steps li[data-state="done"]{ color: var(--hl-ink-2); }
 .hl-steps li[data-state="done"]::before{ width: 12px; height: 7px; border-radius: 0; border: 0; border-left: 2px solid var(--hl-ok); border-bottom: 2px solid var(--hl-ok); transform: rotate(-45deg) translate(1px,-2px); }
 .hl-steps li[data-state="active"]{ color: var(--hl-ink); font-weight: 600; }
-.hl-steps li[data-state="active"]::before{ background: var(--hl-voice); border-color: var(--hl-voice); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
+.hl-steps li[data-state="active"]::before{ background: var(--hl-ink); border-color: var(--hl-ink); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
 
 .hl-error{ display: grid; gap: var(--hl-s3); padding: var(--hl-s5) 0; border-top: 2px solid var(--hl-miss); }
 .hl-error details{ font-size: var(--hl-t-small); color: var(--hl-ink-3); }
