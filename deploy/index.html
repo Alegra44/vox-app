@@ -945,14 +945,14 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .ear-choice-btn.wrong{background:color-mix(in srgb, var(--hl-miss) 18%, transparent);border-color:var(--hl-miss);color:var(--hl-miss);}
   .ear-choice-btn:disabled{cursor:default;opacity:0.85;}
   .scale-dot{
-    width:34px;height:34px;border-radius:50%;border:1px solid var(--hl-rule);background:var(--hl-sunk);
+    width:34px;height:34px;border-radius:50%;border:1px solid var(--hl-ink-3);background:var(--hl-sunk); /* B8: the outline is the graphic, 3:1+ */
     display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--hl-ink-3);
   }
-  .scale-dot.current{border-color:var(--hl-ink);color:var(--hl-ink);}
-  .scale-dot.done-good{background:color-mix(in srgb, var(--hl-ok) 18%, transparent);border-color:var(--hl-ok);color:var(--hl-ok);}
+  .scale-dot.current{border:2px solid var(--hl-ink);color:var(--hl-ink);}
+  .scale-dot.done-good{background:color-mix(in srgb, var(--hl-ok) 18%, transparent);border-color:var(--hl-ok);color:var(--hl-ink);} /* B8: the number in ink, 4.5:1 on the tint */
   .scale-dot.done-mid{background:color-mix(in srgb, var(--hl-ink) 15%, transparent);border-color:var(--hl-ink);color:var(--hl-ink);}
   .rhythm-beat-dots{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;}
-  .scale-dot.done-low{background:color-mix(in srgb, var(--hl-miss) 15%, transparent);border-color:var(--hl-miss);color:var(--hl-miss);}
+  .scale-dot.done-low{background:color-mix(in srgb, var(--hl-miss) 15%, transparent);border-color:var(--hl-miss);color:var(--hl-ink);}
 
   .ex-cap-note{text-align:center;color:var(--hl-ink-3);font-size:12.5px;margin-top:18px;}
 
@@ -14825,6 +14825,12 @@ function updateRegisterUI(freq, chestScore){
   }
 }
 const regSeconds = s=>s.toLocaleString(localeForLang(), {minimumFractionDigits:1, maximumFractionDigits:1})+' s';
+// Phase 10 B8: a duration in seconds, as "12.4 s" with the language's decimal sign and a no-break space; d decimals
+// (fixed), or up to 1 when d is left out
+function fmtSecs(x, d){
+  const o = d==null ? {maximumFractionDigits:1} : {minimumFractionDigits:d, maximumFractionDigits:d};
+  return Number(x).toLocaleString(localeForLang(), o)+'\u00a0s';
+}
 
 async function maybeSaveBestBridge(seconds){
   if(!profile) return;
@@ -14835,7 +14841,7 @@ async function maybeSaveBestBridge(seconds){
     progress.xp = (progress.xp||0)+Math.min(40,Math.round(delta*4)+8);
     await saveProgress();
     updateBestBridgeLabel();
-    if(hadPriorBest) triggerNewRecord(t('record_popup_bridge_crossing'), progress.bestBridgeSeconds+'s', `+${Math.round(delta*10)/10}s ${t('record_delta_suffix')}`);
+    if(hadPriorBest) triggerNewRecord(t('record_popup_bridge_crossing'), fmtSecs(progress.bestBridgeSeconds), `+${fmtSecs(Math.round(delta*10)/10)} ${t('record_delta_suffix')}`);
   }
 }
 // Best (paper): your saved best; signed in with none yet, its own line; signed out, the sign-in line under the rows.
@@ -15232,7 +15238,7 @@ function finishBreathHold(){
         const delta = duration-(progress.bestBreathDuration||0);
         progress.bestBreathDuration = Math.round(duration*10)/10;
         progress.xp = (progress.xp||0)+Math.min(40,Math.round(delta*2)+8);
-        if(hadPriorBest) triggerNewRecord(t('record_label_longest_breath'), progress.bestBreathDuration+'s', `+${Math.round(delta*10)/10}s ${t('record_delta_suffix')}`);
+        if(hadPriorBest) triggerNewRecord(t('record_label_longest_breath'), fmtSecs(progress.bestBreathDuration), `+${fmtSecs(Math.round(delta*10)/10)} ${t('record_delta_suffix')}`);
       }
       saveProgress();
     }
@@ -16676,7 +16682,7 @@ function renderRehearsalRoll(){
   document.getElementById('rehearsalNotes').innerHTML = SONG.parts[sel].notes.map((m,i)=>`
     <div class="rh-note" data-idx="${i}" style="--part-color:${PART_COLORS[sel]};">
       <b>${midiName(m)}</b>
-      <span>${t('rehearsal_chord_word')} ${i+1} · ${(i*chordDur).toFixed(1)}s–${((i+CHOIR_NOTE_FRACTION)*chordDur).toFixed(1)}s</span><br>
+      <span>${t('rehearsal_chord_word')} ${i+1} · ${fmtSecs(i*chordDur, 1)}–${fmtSecs((i+CHOIR_NOTE_FRACTION)*chordDur, 1)}</span><br>
       <span>${SONG.chordLabels[i]||''}</span>
       ${sel==='Lead' ? '' : `<span class="rh-note-iv">${intervalVsLead(sel,i).short}</span>`}
     </div>`).join('');
@@ -17008,7 +17014,7 @@ function renderSonicXray(){
   getSongSections().forEach((sec, k)=>{
     const s0 = sec.indices[0]*tl.chordDur, s1 = (sec.indices[sec.indices.length-1]+1)*tl.chordDur;
     html += `<g class="xray-sec" data-sec-start="${sec.indices[0]}"><rect class="xray-sec-hit" x="${x(s0)+1}" y="2" width="${x(s1)-x(s0)-2}" height="${XRAY_SEC_H-8}"/><rect class="xray-sec-box" x="${x(s0)+2}" y="3" width="20" height="20" rx="2"/>`
-      + `<text class="xray-sec-letter" x="${x(s0)+12}" y="18">${String.fromCharCode(65+k)}</text><text class="xray-sec-name" x="${x(s0)+28}" y="18">${sectionLabel(sec.id)} · ${s0.toFixed(1)} s</text></g>`;
+      + `<text class="xray-sec-letter" x="${x(s0)+12}" y="18">${String.fromCharCode(65+k)}</text><text class="xray-sec-name" x="${x(s0)+28}" y="18">${sectionLabel(sec.id)} · ${fmtSecs(s0, 1)}</text></g>`;
   });
   parts.forEach((p,r)=>{
     const y0 = XRAY_SEC_H + r*XRAY_ROW_H;
@@ -17137,7 +17143,7 @@ function renderMicroscope(){
     return `<tr data-mx-part="${p}" data-midi="${nt.midi}" data-sounding="${sounding}">
       <td><span style="color:${PART_COLORS[p]};">●</span> ${partName(p)}</td>
       <td class="mono">${midiName(nt.midi)} <span class="fine-print">(MIDI ${nt.midi})</span>${repeat}</td>
-      <td class="mono">${nt.start.toFixed(3)}–${nt.end.toFixed(3)} s</td>
+      <td class="mono">${fmtNum(nt.start,3)}–${fmtNum(nt.end,3)} s</td>
       <td>${state}</td>
       <td class="mono">${iv}</td></tr>`;
   }).join('');
@@ -17146,11 +17152,11 @@ function renderMicroscope(){
   const onsets = parts.map(p=>({p, onset:tl.parts[p][idx].start})).sort((a,b)=>a.onset-b.onset);
   const spreadMs = Math.round((onsets[onsets.length-1].onset - onsets[0].onset)*1000);
   const offsets = spreadMs===0
-    ? t('mx_together_tpl').replace('{n}', parts.length).replace('{time}', onsets[0].onset.toFixed(3))
+    ? t('mx_together_tpl').replace('{n}', parts.length).replace('{time}', fmtNum(onsets[0].onset,3))
     : onsets.slice(1).map(o=>t('mx_after_tpl').replace('{part}', partName(o.p)).replace('{ms}', Math.round((o.onset-onsets[0].onset)*1000)).replace('{first}', partName(onsets[0].p))).join('<br>');
 
   box.innerHTML = `
-    <div class="mx-head" id="mxHead" data-t="${T.toFixed(3)}" data-idx="${idx}">${T.toFixed(3)} s · ${t('rehearsal_chord_word')} ${idx+1}/${tl.n} (${SONG.chordLabels[idx]||''}) · ${sectionLabel(sec.id)}</div>
+    <div class="mx-head" id="mxHead" data-t="${T.toFixed(3)}" data-idx="${idx}">${fmtNum(T,3)} s · ${t('rehearsal_chord_word')} ${idx+1}/${tl.n} (${SONG.chordLabels[idx]||''}) · ${sectionLabel(sec.id)}</div>
     <div class="mx-zoom-row"><span class="fine-print">${t('mx_zoom_label')}</span>
       ${MICROSCOPE_ZOOMS.map(z=>`<button class="practice-chip${microscope.zoom===z?' active-part':''}" data-mx-zoom="${z}">${t('mx_zoom_'+z)}</button>`).join('')}
     </div>
@@ -17347,10 +17353,10 @@ function renderTimingResults(){
   const claimed = timingTrainer.results.filter(r=>r.claimed);
   const verdict = ms => Math.abs(ms)<=TIMING_ONTIME_MS ? 'ontime' : (ms<0 ? 'early' : 'late');
   const rows = timingTrainer.results.map((r,i)=>{
-    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${timingTrainer.targets[i].toFixed(3)} s`;
+    const label = `${t('rehearsal_chord_word')} ${i+1} · ${t('tt_target')} ${fmtNum(timingTrainer.targets[i],3)} s`;
     if(!r.claimed) return `<div class="record-row"><span class="record-label">${label}</span><span class="record-val untracked">${t('tt_missed_'+mode)}</span></div>`;
     const v = verdict(r.offsetMs);
-    return `<div class="record-row" data-tt-idx="${i}"><span class="record-label">${label} · ${t('tt_you')} ${r.eventT.toFixed(3)} s</span>`
+    return `<div class="record-row" data-tt-idx="${i}"><span class="record-label">${label} · ${t('tt_you')} ${fmtNum(r.eventT,3)} s</span>`
       + `<span class="record-val tt-${v}">${r.offsetMs>0?'+':''}${r.offsetMs} ms · ${t('tt_'+v)} · ${r.accuracy}%</span></div>`;
   }).join('');
   const avgAbs = claimed.length ? Math.round(claimed.reduce((a,r)=>a+Math.abs(r.offsetMs),0)/claimed.length) : 0;
@@ -17406,7 +17412,7 @@ function renderBreathMap(){
   const gaps = pts.map(p=>bmMs(p.gap));
   const lo = Math.min(...gaps), hi = Math.max(...gaps);
   document.getElementById('bmSummary').textContent = t('bm_summary_tpl')
-    .replace('{n}', pts.length).replace('{ms}', lo===hi ? lo : `${lo}–${hi}`).replace('{hold}', hold.toFixed(3));
+    .replace('{n}', pts.length).replace('{ms}', lo===hi ? lo : `${lo}–${hi}`).replace('{hold}', fmtNum(hold,3));
   document.getElementById('bmShape').textContent = lo===hi ? t('bm_uniform_note') : t('bm_varied_note');
 
   const colW = 100, H = 60, n = notes.length, W = n*colW;
@@ -17427,9 +17433,9 @@ function renderBreathMap(){
   el.innerHTML = svg;
 
   document.getElementById('bmRows').innerHTML = pts.map(p=>`
-    <div class="record-row" data-bm-k="${p.k}"><span class="record-label">${t('bm_row_tpl').replace('{k}', p.k).replace('{from}', p.from.toFixed(3)).replace('{to}', p.to.toFixed(3))}</span>
+    <div class="record-row" data-bm-k="${p.k}"><span class="record-label">${t('bm_row_tpl').replace('{k}', p.k).replace('{from}', fmtNum(p.from,3)).replace('{to}', fmtNum(p.to,3))}</span>
     <span class="record-val">${bmMs(p.gap)} ms · ${t('bm_next_tpl').replace('{note}', midiName(p.after.midi)).replace('{move}', bmMoveText(p.before.midi, p.after.midi))}</span></div>`).join('')
-    + `<p class="fine-print" style="margin-top:6px;">${t('bm_final_tpl').replace('{t}', notes[n-1].end.toFixed(3))}</p>`;
+    + `<p class="fine-print" style="margin-top:6px;">${t('bm_final_tpl').replace('{t}', fmtNum(notes[n-1].end,3))}</p>`;
   bmLiveState = ''; // force the live cue to redraw in the current language
   updateBreathLive(partRehearsal.active && choirIsPlaying && audioCtx ? audioCtx.currentTime - choirStartCtxTime : null);
 }
@@ -20251,7 +20257,7 @@ const WEEKLY_CHALLENGES = [
   {id:'breath20', get label(){return t('weeklychallenge_breath20_label');}, check:(log)=>{
     const entries = log.filter(e=>e.type==='breath_duration_raw');
     const best = entries.length ? Math.max(...entries.map(e=>e.score)) : 0;
-    return {progress: Math.min(100, Math.round((best/20)*100)), detail: `${t('weeklychallenge_bestweek_p1')} ${best.toFixed(1)}s / 20s`, done: best>=20};
+    return {progress: Math.min(100, Math.round((best/20)*100)), detail: `${t('weeklychallenge_bestweek_p1')} ${fmtSecs(best, 1)} / ${fmtSecs(20, 0)}`, done: best>=20};
   }},
   {id:'pitch90x3', get label(){return t('weeklychallenge_pitch90x3_label');}, check:(log)=>{
     const count = log.filter(e=>e.type==='pitch' && e.score>=90).length;
@@ -21993,7 +21999,7 @@ const SKILL_TREE_NODES = [
   {id:'headvoice',  get label(){return t('skilltree_label_headvoice');},   icon:'hl-head', x:110, y:250, requires:['range'],
     isUnlocked:()=>(progress.bestBridgeSeconds||0)>=3,
     reqText:()=>t('skilltree_req_headvoice'),
-    progressText:()=>t('skilltree_now_tpl').replace('{v}', (progress.bestBridgeSeconds||0)+' s')},
+    progressText:()=>t('skilltree_now_tpl').replace('{v}', fmtSecs(progress.bestBridgeSeconds||0))},
   {id:'chestvoice', get label(){return t('skilltree_label_chestvoice');},  icon:'hl-chest', x:290, y:250, requires:['agility'],
     isUnlocked:()=>{ const s=computeSkillProfile(); return s.breath!==null && s.breath>=60; },
     reqText:()=>t('skilltree_req_chestvoice'),
@@ -22492,9 +22498,9 @@ function personalRecordValues(){
     lowestNote: progress.lowestMidi!==null && progress.lowestMidi!==undefined ? noteNameFromMidi(progress.lowestMidi) : null,
     bestPitchAcc: bestPitchAcc!==null ? bestPitchAcc+'%' : null,
     bestAgility: bestAgility!==null ? bestAgility+'%' : null,
-    longestBreath: progress.bestBreathDuration ? progress.bestBreathDuration+'s' : null,
+    longestBreath: progress.bestBreathDuration ? fmtSecs(progress.bestBreathDuration) : null,
     bestStability: bestStability!==null ? Math.round(bestStability)+'%' : null,
-    longestCrossing: progress.bestBridgeSeconds ? progress.bestBridgeSeconds+'s' : null,
+    longestCrossing: progress.bestBridgeSeconds ? fmtSecs(progress.bestBridgeSeconds) : null,
     gliderScore: progress.gliderBest ? progress.gliderBest : null,
     bridgeScore: progress.bridgeBest ? progress.bridgeBest : null,
     bossWins: progress.bossVictories ? progress.bossVictories+'x' : null,
@@ -22805,7 +22811,7 @@ function renderProfile(){
   const bestPitchAcc = (progress.pitchScores && progress.pitchScores.length) ? Math.max(...progress.pitchScores) : null;
   const previewRows = [
     {label:t('record_label_best_pitch_acc'), val: bestPitchAcc!==null ? bestPitchAcc+'%' : null},
-    {label:t('record_label_longest_breath'), val: progress.bestBreathDuration ? progress.bestBreathDuration+'s' : null},
+    {label:t('record_label_longest_breath'), val: progress.bestBreathDuration ? fmtSecs(progress.bestBreathDuration) : null},
     {label:t('record_label_glider_score'), val: progress.gliderBest || null},
     {label:t('record_label_boss_wins'), val: progress.bossVictories ? progress.bossVictories+'x' : null},
   ];

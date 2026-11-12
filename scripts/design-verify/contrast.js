@@ -16,7 +16,8 @@
 // Phase 4b (PHASE4B.md §1f): the 10 tools with their own displays (tools4b.js) the same way (the live tools idle, on the
 // stage while listening, and stopped). --set 4a | 4b | all (the default) picks the tools.
 // Phase 6 (PHASE6.md §1f): --set 6 measures the six Songs-tab solo tools (idle, stage, result) and the Songs tab.
-// Non-text (phase 10 A1): Scale Run's step dots are measured against 3:1 (graphics), flagged nonText in the JSON.
+// Scale Run's step dots (phase 10 B8): the step number inside a dot is text, 4.5:1 against the dot's fill; the dot is a
+// graphic, its outline 3:1 against what is behind the dot (WCAG 1.4.11), listed with graphic: true in the JSON.
 // Output: JSON, plus a per-panel table of fails under 3, fails between 3 and 4.5, and unknown.
 // --you (phase 7, PHASE7.md §1b): the You screens filled in, as shots7before measured them: each panel (the hub,
 // Journey, Progress, Records, Vocal Passport, Voice Health, Profile & settings) in each seeded state of youSeed.js, at
@@ -121,12 +122,11 @@ async function measure(rootArg) {
       if (layers.length && layers[layers.length - 1].stops.every(c => c[3] >= 1) && layers[layers.length - 1].stops.length === 1) break;
     }
     const size = parseFloat(st.fontSize), bold = +st.fontWeight >= 700;
-    // PHASE10.md A1: Scale Run's step dots (.scale-dot, the step number inside a coloured dot) are graphics: WCAG 1.4.11's
-    // 3:1 for non-text, not 1.4.3's 4.5:1 (the colour stays; 4.42:1 in Light).
-    const nonText = !!el.closest('.scale-dot');
-    const need = nonText || size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
+    // PHASE10.md B8: the step number inside a Scale Run dot is text (4.5:1 against the dot's fill: the dot is an ancestor,
+    // so its fill is in the layers below); the dot itself is measured as a graphic after this loop.
+    const need = size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
     const disabled = el.closest('button:disabled, [aria-disabled="true"], input:disabled, select:disabled, fieldset:disabled') !== null;
-    const item = { text: own.slice(0, 60), path: path(el), size, weight: +st.fontWeight, need, disabled, ...(nonText ? { nonText: true } : {}) };
+    const item = { text: own.slice(0, 60), path: path(el), size, weight: +st.fontWeight, need, disabled };
     if (unknown) { out.push({ ...item, status: 'unknown', why: 'background image' }); continue; }
     // composite bottom-up from white (the canvas); a gradient branches over its stops
     let bgs = [[255, 255, 255, 1]];
@@ -135,6 +135,21 @@ async function measure(rootArg) {
     for (const b of bgs) { const f = over([fg[0], fg[1], fg[2], alpha], b), r = ratio(f, b); if (!worst || r < worst.r) worst = { r, f, b }; }
     const r = Math.round(worst.r * 100) / 100, hex = c => '#' + c.slice(0, 3).map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
     out.push({ ...item, ratio: r, fg: hex(worst.f), bg: hex(worst.b), status: r >= need ? 'pass' : r < 3 ? 'fail<3' : 'fail3-4.5' });
+  }
+  // B8: Scale Run's dots as graphics: the outline against the colour behind the dot (its parents composited from white),
+  // 3:1. A dot is told apart from the paper by its outline; the number inside is measured above as text.
+  for (const root of roots) for (const dot of root.querySelectorAll('.scale-dot')) {
+    if (!visible(dot)) continue;
+    const ds = getComputedStyle(dot), edge = resolve(ds.borderTopColor); if (!edge || !(parseFloat(ds.borderTopWidth) > 0)) continue;
+    const layers = []; let alpha = 1;
+    for (let e = dot; e && e.nodeType === 1; e = e.parentElement) alpha *= +getComputedStyle(e).opacity;
+    for (let e = dot.parentElement; e && e.nodeType === 1; e = e.parentElement) {
+      const bg = resolve(getComputedStyle(e).backgroundColor); if (bg && bg[3] > 0) layers.push(bg); if (bg && bg[3] >= 1) break;
+    }
+    let b = [255, 255, 255, 1]; for (const c of layers.reverse()) b = over(c, b);
+    const f = over([edge[0], edge[1], edge[2], edge[3] * alpha], b), r = Math.round(ratio(f, b) * 100) / 100;
+    const hex = c => '#' + c.slice(0, 3).map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+    out.push({ text: `(dot ${dot.textContent.trim()})`, path: path(dot), graphic: true, need: 3, disabled: false, ratio: r, fg: hex(f), bg: hex(b), status: r >= 3 ? 'pass' : 'fail<3' });
   }
   return out;
 }
