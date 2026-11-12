@@ -92,6 +92,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   --hl-game-gold: #895F00;   /* rewards, games only */
   /* choir parts */
   --hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;
+  --hl-cat-pitch: #0A7279; --hl-cat-breath: #B0306E; --hl-cat-agility: #985700; --hl-cat-range: #576E13; --hl-cat-expression: #6C3FD1; /* skill categories: never the voice */
   /* piano keys */
   --hl-piano-white: #FFFFFF; --hl-piano-black: #111316;
   --hl-shadow-sheet: 0 18px 48px rgba(17,19,22,.16);
@@ -107,6 +108,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     --hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;
     --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
     --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+    --hl-cat-pitch: #3FD0D6; --hl-cat-breath: #FF7DB8; --hl-cat-agility: #FFB347; --hl-cat-range: #B6D35A; --hl-cat-expression: #B193FF;
     --hl-piano-white: #D9DBDF; --hl-piano-black: #060708;
     --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);
     color-scheme: dark;
@@ -118,6 +120,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   --hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;
   --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
   --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+  --hl-cat-pitch: #3FD0D6; --hl-cat-breath: #FF7DB8; --hl-cat-agility: #FFB347; --hl-cat-range: #B6D35A; --hl-cat-expression: #B193FF;
   --hl-piano-white: #D9DBDF; --hl-piano-black: #060708;
   --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);
   color-scheme: dark;
@@ -130,6 +133,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   --hl-voice: #7F8CFF; --hl-voice-soft: rgba(127,140,255,.16); --hl-on-voice: #05060F;
   --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
   --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+  --hl-cat-pitch: #3FD0D6; --hl-cat-breath: #FF7DB8; --hl-cat-agility: #FFB347; --hl-cat-range: #B6D35A; --hl-cat-expression: #B193FF;
   --hl-piano-white: #C9CCD1; --hl-piano-black: #000000;
   --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.6);
   --hl-glow: drop-shadow(0 0 6px rgba(127,140,255,.55));
@@ -234,7 +238,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 .hl-key[aria-pressed="true"]{ color: var(--hl-ink); border-color: var(--hl-ink-3); }
 .hl-key[aria-pressed="true"]::before{ background: var(--led, var(--hl-lead)); box-shadow: 0 0 6px var(--led, var(--hl-lead)); }
 .hl-key[data-key="mute"]{ --led: var(--hl-miss); }
-.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-voice); }
+.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-ink); }
 
 /* fader: a real control on input[type=range] */
 .hl-fader{ -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; margin: 0; }
@@ -303,7 +307,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 .hl-steps li[data-state="done"]{ color: var(--hl-ink-2); }
 .hl-steps li[data-state="done"]::before{ width: 12px; height: 7px; border-radius: 0; border: 0; border-left: 2px solid var(--hl-ok); border-bottom: 2px solid var(--hl-ok); transform: rotate(-45deg) translate(1px,-2px); }
 .hl-steps li[data-state="active"]{ color: var(--hl-ink); font-weight: 600; }
-.hl-steps li[data-state="active"]::before{ background: var(--hl-voice); border-color: var(--hl-voice); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
+.hl-steps li[data-state="active"]::before{ background: var(--hl-ink); border-color: var(--hl-ink); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
 
 .hl-error{ display: grid; gap: var(--hl-s3); padding: var(--hl-s5) 0; border-top: 2px solid var(--hl-miss); }
 .hl-error details{ font-size: var(--hl-t-small); color: var(--hl-ink-3); }
@@ -619,8 +623,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .cw-preview, .cw-lock-only{display:none !important;}
   body.cw-locked .cw-preview{display:block !important;}
   body.cw-locked .cw-lock-only{display:inline-block !important;}
-  .cw-hub-feature{margin-top:18px;border-color:color-mix(in srgb, var(--hl-voice) 45%, transparent);}
-  .hc-desc.cw-hub-status{color:var(--hl-voice);margin-top:-6px;}
+  .cw-hub-feature{margin-top:18px;border-color:var(--hl-rule-strong);}
+  .hc-desc.cw-hub-status{color:var(--hl-ink);margin-top:-6px;}
   body.cw-locked .cw-gated,
   body.cw-locked #panel-partrehearsal > :not(.journey-hero):not(.cw-preview),
   body.cw-locked #panel-choirpassport > :not(.journey-hero):not(.cw-preview){display:none !important;}
@@ -648,13 +652,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   }
   .roster-name{font-size:13.5px;color:var(--hl-ink);flex:1;}
   .roster-remove{background:none;border:none;color:var(--hl-miss);font-size:11px;cursor:pointer;padding:4px 8px;}
-  .assignment-card{border:1px solid var(--hl-rule);border-left:3px solid var(--hl-voice);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:var(--hl-raised);}
+  .assignment-card{border:1px solid var(--hl-rule);border-left:3px solid var(--hl-ink);border-radius:12px;padding:14px 16px;margin-bottom:12px;background:var(--hl-raised);}
   .assignment-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
   .assignment-title{font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:600;font-size:15px;color:var(--hl-ink);}
   .assignment-progress{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11.5px;color:var(--hl-ink);}
   .assignment-note{font-size:12px;color:var(--hl-ink-3);margin-bottom:10px;}
   .assignment-student-row{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:12.5px;color:var(--hl-ink);}
-  .assignment-student-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--hl-voice);}
+  .assignment-student-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--hl-ink);}
 
   /* ---- DASHBOARD ---- */
   .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;}
@@ -696,7 +700,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .vl-gauge-head{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--hl-ink-3);}
   .vl-gauge-val{color:var(--hl-ink);font-variant-numeric:tabular-nums;white-space:nowrap;}
   .vl-gauge-track{height:4px;border-radius:2px;background:var(--hl-rule);overflow:hidden;margin-top:6px;}
-  .vl-gauge-fill{height:100%;width:0%;background:var(--hl-voice);transition:width .4s ease;}
+  .vl-gauge-fill{height:100%;width:0%;background:var(--hl-ink);transition:width .4s ease;}
   .vl-gauge.over .vl-gauge-fill{background:var(--hl-miss);}
   .vl-disclaimer{text-align:center;margin:10px auto 0;max-width:420px;}
   .vl-break{border:1px solid var(--hl-rule-strong);border-radius:12px;background:var(--hl-sunk);padding:12px 14px;margin:0 0 16px;}
@@ -718,7 +722,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     padding:12px 16px;margin-bottom:10px;
   }
   @media (max-width:640px){ .track-row{grid-template-columns:90px 1fr; grid-template-areas:"name name" "slider slider" "mute solo"; row-gap:8px;} }
-  .vu-meter-fill{height:100%;width:0%;background:var(--hl-voice);}
+  .vu-meter-fill{height:100%;width:0%;background:var(--hl-ink);}
   .track-slider{width:100%;accent-color:var(--part-color, var(--hl-ink));}
   .track-toggle{
     border:1px solid var(--hl-rule);background:var(--hl-sunk);color:var(--hl-ink-3);
@@ -726,7 +730,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     padding:7px 0;border-radius:8px;cursor:pointer;text-align:center;
   }
   .track-toggle.on-mute{background:var(--hl-miss);color:var(--hl-on-voice);border-color:var(--hl-miss);}
-  .track-toggle.on-solo{background:var(--hl-voice);color:var(--hl-on-voice);border-color:var(--hl-voice);}
+  .track-toggle.on-solo{background:var(--hl-ink);color:var(--hl-bg);border-color:var(--hl-ink);}
 
   .transport-row{display:flex;align-items:center;gap:12px;margin:22px 0 8px;flex-wrap:wrap;}
   .transport-progress{flex:1;min-width:140px;height:6px;background:var(--hl-raised);border:1px solid var(--hl-rule);border-radius:4px;overflow:hidden;}
@@ -772,13 +776,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .rh-note span{font-size:11px;color:var(--hl-ink-3);}
   .rh-note.current{background:var(--hl-sunk);border-color:var(--part-color, var(--hl-ink));}
   .rh-note{cursor:pointer;}
-  .rh-note .rh-note-iv{display:block;color:var(--hl-voice);font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;margin-top:2px;}
+  .rh-note .rh-note-iv{display:block;color:var(--hl-ink-2);font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;margin-top:2px;}
 
   /* ---- A CAPPELLA + TIMING TRAINERS ---- */
   #panel-partrehearsal.acappella-on .rh-hide-ac{display:none !important;}
-  .ac-note{display:none;border-left:3px solid var(--hl-voice);font-size:13px;}
+  .ac-note{display:none;border-left:3px solid var(--hl-ink);font-size:13px;}
   #panel-partrehearsal.acappella-on .ac-note{display:block;}
-  #acappellaBtn[aria-pressed="true"]{background:var(--hl-voice);color:var(--hl-on-voice);border-color:var(--hl-voice);}
+  #acappellaBtn[aria-pressed="true"]{background:var(--hl-ink);color:var(--hl-bg);border-color:var(--hl-ink);}
   /* Choir World phase 7: Performance Report, "Why Did I Fail?", Readiness, Choir DNA */
   .pr-report{margin-top:12px;padding-top:10px;border-top:1px solid var(--hl-rule);}
   .pr-report .record-label small{display:block;color:var(--hl-ink-3);font-size:11px;margin-top:2px;line-height:1.4;}
@@ -790,7 +794,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .why-detail svg{width:100%;max-width:380px;display:block;margin:8px 0 2px;}
   .rd-row{padding:8px 0;border-bottom:1px solid var(--hl-rule);}
   .rd-row:last-child{border-bottom:0;}
-  .rd-row.current .rd-part{color:var(--hl-voice);}
+  .rd-row.current .rd-part{color:var(--hl-ink);font-weight:600;}
   .rd-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;}
   .rd-part{font-weight:600;}
   .rd-detail{font-size:11.5px;color:var(--hl-ink-3);margin-top:2px;line-height:1.4;}
@@ -799,13 +803,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .rd-status.developing{color:var(--hl-ink);}
   .rd-status.ready{color:var(--hl-ok);}
   .dna-svg{width:100%;max-width:340px;margin:12px auto 0;display:block;}
-  .record-val.tt-early{color:var(--hl-ink);} .record-val.tt-late{color:var(--hl-miss);} .record-val.tt-ontime{color:var(--hl-voice);}
+  .record-val.tt-early{color:var(--hl-ink);} .record-val.tt-late{color:var(--hl-miss);} .record-val.tt-ontime{color:var(--hl-ink);}
 
   /* ---- HARMONY MEMORY + BREATH MAP ---- */
   .hm-stages{grid-template-columns:repeat(6,1fr);}
   @media (max-width:640px){ .hm-stages{grid-template-columns:1fr 1fr;} }
   .rh-level:disabled{opacity:0.45;cursor:not-allowed;}
-  .record-val.hm-held{color:var(--hl-voice);} .record-val.hm-off{color:var(--hl-miss);} .record-val.hm-silent{color:var(--hl-ink-3);}
+  .record-val.hm-held{color:var(--hl-ink);} .record-val.hm-off{color:var(--hl-miss);} .record-val.hm-silent{color:var(--hl-ink-3);}
   .cb-arena{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:4px 0 14px;}
   .cb-arena .boss-name{margin-top:4px;}
   .cx-event{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:11px;color:var(--hl-ink);}
@@ -813,12 +817,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .yc-row{align-items:center;gap:10px;flex-wrap:wrap;}
   .yc-actions{display:flex;gap:6px;flex-wrap:wrap;}
   .yc-actions .practice-chip{margin:0;}
-  .bm-live{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:14px;color:var(--hl-voice);margin:8px 0 2px;min-height:20px;}
+  .bm-live{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:14px;color:var(--hl-ink);margin:8px 0 2px;min-height:20px;}
   .bm-live.now{color:var(--hl-ink);}
 
   /* ---- SONG INTELLIGENCE: Harmony Vision, Sonic X-Ray, Music Microscope ---- */
-  .hv-box{background:var(--hl-raised);border:1px solid var(--hl-rule);border-left:3px solid var(--hl-voice);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
-  .hv-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;letter-spacing:0.06em;color:var(--hl-voice);}
+  .hv-box{background:var(--hl-raised);border:1px solid var(--hl-rule);border-left:3px solid var(--hl-ink);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+  .hv-label{font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;letter-spacing:0.06em;color:var(--hl-ink-2);}
   .xray-svg{cursor:crosshair;}
   .xray-svg .xray-sec{cursor:pointer;}
   .xray-svg .xray-sec:hover rect{stroke:var(--hl-ink);}
@@ -1065,7 +1069,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
 
   /* ---- WEEKLY CHALLENGE / TODAY'S PLAN ---- */
   .challenge-done-badge{
-    display:inline-block;background:var(--hl-voice);color:var(--hl-on-voice);font-family:var(--hl-font);font-weight:700;
+    display:inline-block;background:var(--hl-ink);color:var(--hl-bg);font-family:var(--hl-font);font-weight:700;
     font-size:11px;padding:3px 10px;border-radius:999px;margin-left:8px;
   }
   .plan-step-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--hl-raised);border:1px solid var(--hl-rule);border-radius:10px;padding:12px 16px;margin-bottom:8px;}
@@ -1136,7 +1140,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .wu-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--hl-raised);border:1px solid var(--hl-rule);
     border-radius:12px;padding:10px 12px;color:var(--hl-ink);font:inherit;cursor:pointer;}
   .wu-item:hover{border-color:var(--hl-rule-strong);}
-  .wu-item.running{border-color:var(--hl-voice);}
+  .wu-item.running{border-color:var(--hl-ink);}
   .wu-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
   .wu-text b{font-weight:600;font-size:14px;}
   .wu-text small{color:var(--hl-ink-3);font-size:12.5px;line-height:1.35;}
@@ -1222,7 +1226,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* ---- ADAPTIVE REWEIGHTING ---- */
   .reweight-card{background:var(--hl-raised);border:1px solid var(--hl-rule);border-radius:14px;padding:18px 20px;margin-bottom:22px;}
   .reweight-bar{display:flex;height:26px;border-radius:8px;overflow:hidden;border:1px solid var(--hl-rule);}
-  .reweight-bar .rw-seg{display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;color:var(--hl-on-voice);font-weight:700;transition:width .3s ease;}
+  .reweight-bar .rw-seg{display:flex;align-items:center;justify-content:center;font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:10.5px;color:var(--hl-raised);font-weight:700;transition:width .3s ease;}
   .reweight-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;}
   .reweight-legend .rl-item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--hl-ink-3);}
   .reweight-legend .rl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
@@ -1354,7 +1358,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .gw-tree .st-line.unlocked{stroke:var(--hl-ink-2);}
   .gw-tree .st-node-bg{fill:var(--hl-raised);stroke:var(--hl-rule);stroke-width:1.5;}
   .gw-tree .st-node-bg.unlocked{stroke:var(--hl-ink);}
-  .gw-tree .st-node-bg.next{stroke:var(--hl-voice);stroke-width:3;stroke-dasharray:none;animation:none;}
+  .gw-tree .st-node-bg.next{stroke:var(--hl-ink);stroke-width:3;stroke-dasharray:4 3;animation:none;}
   .gw-tree .st-node-icon{color:var(--hl-ink);}
   .gw-tree .st-node-icon.locked{color:var(--hl-ink-3);}
   .gw-tree .st-node-label{font-family:var(--hl-font);font-size:14px;font-weight:600;text-anchor:middle;fill:var(--hl-ink-3);}
@@ -1382,7 +1386,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .skilltree-svg .st-line.unlocked{stroke:var(--hl-rule-strong);}
   .skilltree-svg .st-node-bg{fill:var(--hl-raised);stroke:var(--hl-rule);stroke-width:1.5;}
   .skilltree-svg .st-node-bg.unlocked{fill:var(--hl-sunk);stroke:var(--hl-ink);}
-  .skilltree-svg .st-node-bg.next{stroke:var(--hl-voice);stroke-dasharray:3 3;}
+  .skilltree-svg .st-node-bg.next{stroke:var(--hl-ink);stroke-dasharray:4 3;}
   .skilltree-svg .st-node-label{font-family:var(--hl-font);font-size:10.5px;font-weight:700;fill:var(--hl-ink-3);text-anchor:middle;}
   .skilltree-svg .st-node-label.unlocked{fill:var(--hl-ink);}
   .skilltree-svg .st-node-icon{font-size:16px;text-anchor:middle;}
@@ -1809,7 +1813,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .xray-notename{fill:var(--hl-bg);font:700 9.5px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none;}
   .xray-moment{stroke:var(--hl-ink-3);stroke-width:1;stroke-dasharray:3 3;pointer-events:none;}
   .xray-flame{color:var(--hl-ink);fill:none;stroke:currentColor;pointer-events:none;}
-  .xray-cursor{stroke:var(--hl-voice);stroke-width:2;pointer-events:none;}
+  .xray-cursor{stroke:var(--hl-ink);stroke-width:2;pointer-events:none;}
   .xray-playhead{stroke:var(--hl-ink);stroke-width:2;pointer-events:none;}
   /* Music Microscope: fits its column; at 390 one row per part on two lines, "vs Lead" a column from 768 */
   @media (max-width:767px){
@@ -2025,8 +2029,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   #panel-dashboard .dash-legend{display:flex;gap:var(--hl-s4);margin-top:var(--hl-s3);font-size:var(--hl-t-small);color:var(--hl-ink-2);}
   #panel-dashboard .dash-key{display:inline-flex;align-items:center;gap:6px;}
   #panel-dashboard .dash-key > i{display:inline-block;width:16px;height:0;border-top:2.5px solid var(--hl-ink);}
-  #panel-dashboard .dash-key--pitch > i{border-top-color:var(--hl-voice);}
-  #panel-dashboard .dash-key--agility > i{border-top:2.5px dashed var(--hl-ink-3);}
+  #panel-dashboard .dash-key--pitch > i{border-top-color:var(--hl-cat-pitch);} #panel-dashboard .dash-key--breath > i{border-top-color:var(--hl-cat-breath);}
+  #panel-dashboard .dash-key--agility > i{border-top:2.5px dashed var(--hl-cat-agility);}
   #panel-dashboard .dash-actions{margin-top:var(--hl-s6);}
   @media (min-width:960px){
     #panel-dashboard #dashSignedIn[style*="block"]{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;} /* renderDashboard shows it with display:block */
@@ -2270,11 +2274,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .mode-card.active .mode-card-name{color:var(--hl-ink);}
   .mode-card-tag{font-size:10.5px;color:var(--hl-ink-3);line-height:1.4;}
   .mode-card-recommend-badge{
-    position:absolute;top:-8px;right:10px;background:var(--hl-voice);color:var(--hl-on-voice);
+    position:absolute;top:-8px;right:10px;background:var(--hl-ink);color:var(--hl-bg);
     font-size:9px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;
     padding:3px 8px;border-radius:999px;
   }
-  .mode-card.recommended{border-color:var(--hl-voice);}
+  .mode-card.recommended{border-color:var(--hl-ink);}
 
   /* ---- LEVEL UP CELEBRATION ---- */
   .levelup-overlay{
@@ -2404,11 +2408,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .wu-list{gap:0;border-top:var(--hl-hair) solid var(--hl-rule);margin-bottom:var(--hl-s4);}
   .wu-item{background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;min-height:60px;color:var(--hl-ink);}
   .wu-item:hover{border-color:var(--hl-rule);background:none;}
-  .wu-item.running{border-color:var(--hl-rule);box-shadow:inset 3px 0 0 var(--hl-voice);padding-left:var(--hl-s3);}
+  .wu-item.running{border-color:var(--hl-rule);box-shadow:inset 3px 0 0 var(--hl-ink);padding-left:var(--hl-s3);}
   .wu-text b{font-size:var(--hl-t-body);color:var(--hl-ink);}
   .wu-text small{font-size:var(--hl-t-small);color:var(--hl-ink-3);}
   .wu-go{display:inline-flex;align-items:center;gap:4px;font-size:var(--hl-t-small);font-weight:600;color:var(--hl-ink-2);}
-  .wu-item.running .wu-go{color:var(--hl-voice);}
+  .wu-item.running .wu-go{color:var(--hl-ink);}
   .wu-item.done .wu-go{color:var(--hl-ok);}
   .wu-status{color:var(--hl-ink-2);font-size:var(--hl-t-small);}
 
@@ -3729,7 +3733,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <div class="key-card">
       <div class="reweight-card" id="reweightCard">
-        <div class="step-label"><span data-i18n="exercises_focus_label">Today's Recommended Focus</span><span class="mock-tag" style="color:var(--hl-voice);border-color:var(--hl-voice);" data-i18n="exercises_focus_tag">ADAPTIVE — RECALCULATED DAILY</span></div>
+        <div class="step-label"><span data-i18n="exercises_focus_label">Today's Recommended Focus</span><span class="mock-tag" style="color:var(--hl-ink);border-color:var(--hl-ink);" data-i18n="exercises_focus_tag">ADAPTIVE — RECALCULATED DAILY</span></div>
         <p class="desc" style="margin:8px 0 14px;" data-i18n="exercises_focus_desc">Not a fixed weekly plan: it's worked out again from your Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can get a first score.</p>
         <div class="reweight-bar" id="reweightBar"></div>
         <div class="reweight-legend" id="reweightLegend"></div>
@@ -4631,7 +4635,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <div class="key-card" id="hmPreCard">
       <p class="desc" style="margin-bottom:16px;" data-i18n="hearmistake_intro_desc">Listen to A, then B. One is accurate, one is shifted.</p>
-      <button class="mic-btn" id="hmStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span>Play A and B</button>
+      <button class="hl-btn hl-btn--ink" id="hmStartBtn" style="width:100%;justify-content:center;">Play A and B</button>
     </div>
     <div class="key-card" id="hmGuessCard" style="display:none;">
       <p class="desc" id="hmStatus" style="text-align:center;margin-bottom:16px;">Which one was accurate?</p>
@@ -5537,7 +5541,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <h2 id="playbackVolumeTitle" style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_playback_title">Playback volume</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_playback_sub">Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.</p>
         <div style="display:flex;align-items:center;gap:12px;">
-          <input type="range" id="playbackVolumeSlider" min="0" max="100" step="1" value="100" aria-labelledby="playbackVolumeTitle" style="flex:1;accent-color:var(--hl-voice);">
+          <input type="range" id="playbackVolumeSlider" min="0" max="100" step="1" value="100" aria-labelledby="playbackVolumeTitle" style="flex:1;accent-color:var(--hl-ink);">
           <span id="playbackVolumeVal" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;min-width:44px;text-align:right;">100%</span>
         </div>
 
@@ -17003,7 +17007,7 @@ function renderMicroscope(){
       if(lx < W-40) svg += `<text x="${lx}" y="${y+12}" style="fill:var(--hl-on-voice);font:bold 10px var(--hl-font);font-variant-numeric:tabular-nums;pointer-events:none">${partName(p)} ${midiName(nt.midi)}</text>`;
     });
   });
-  svg += `<line x1="${x(T)}" y1="0" x2="${x(T)}" y2="${H}" style="stroke:var(--hl-voice);stroke-width:2"/>`;
+  svg += `<line x1="${x(T)}" y1="0" x2="${x(T)}" y2="${H}" style="stroke:var(--hl-ink);stroke-width:2"/>`;
 
   // Per-part state at exactly T
   const rows = parts.map(p=>{
@@ -18356,9 +18360,9 @@ function whyPlotSvg(s){
   const x = sec=>L + Math.max(0, Math.min(1, sec/s.len))*(W-L-R);
   const y = c=>T + (1 - (Math.max(-RANGE, Math.min(RANGE, c))+RANGE)/(2*RANGE))*(H-T-B);
   let g = `<rect x="${L}" y="${T}" width="${W-L-R}" height="${H-T-B}" fill="none" stroke="var(--hl-rule)"/>`;
-  g += `<rect x="${L}" y="${y(HM_TOL_CENTS)}" width="${W-L-R}" height="${y(-HM_TOL_CENTS)-y(HM_TOL_CENTS)}" fill="color-mix(in srgb, var(--hl-voice) 14%, transparent)"/>`;
+  g += `<rect x="${L}" y="${y(HM_TOL_CENTS)}" width="${W-L-R}" height="${y(-HM_TOL_CENTS)-y(HM_TOL_CENTS)}" fill="color-mix(in srgb, var(--hl-ink) 8%, transparent)"/>`;
   g += `<rect x="${L}" y="${T}" width="${x(HM_SKIP_ATTACK_SEC)-L}" height="${H-T-B}" fill="var(--hl-rule)" opacity="0.5"/>`;
-  g += `<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--hl-voice)" stroke-dasharray="3 3"/>`;
+  g += `<line x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" stroke="var(--hl-ink-3)" stroke-dasharray="3 3"/>`;
   [[RANGE, '+'+RANGE], [0, midiName(s.nt.midi)], [-RANGE, '−'+RANGE]].forEach(([c, lab])=>{
     g += `<text x="${L-4}" y="${y(c)+3}" text-anchor="end" font-size="9" fill="var(--hl-ink-3)" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${lab}</text>`;
   });
@@ -18533,7 +18537,7 @@ function renderChoirDna(svgId, noteId, song, example){
     g += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${col(x.st)}" font-size="10" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${t('rd_status_'+x.st)} · ${Math.round(x.v*100)}%</text>`;
   });
   const pts = parts.map((x,i)=>at(i, rOf(x.v)));
-  g += `<polygon points="${pts.map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' ')}" fill="color-mix(in srgb, var(--hl-voice) 18%, transparent)" stroke="var(--hl-voice)" stroke-width="2"/>`;
+  g += `<polygon points="${pts.map(p=>p.map(n=>n.toFixed(1)).join(',')).join(' ')}" fill="color-mix(in srgb, var(--hl-ink) 10%, transparent)" stroke="var(--hl-ink)" stroke-width="2"/>`;
   parts.forEach((x,i)=>{ g += `<circle cx="${pts[i][0].toFixed(1)}" cy="${pts[i][1].toFixed(1)}" r="5" fill="${col(x.st)}" stroke="var(--hl-bg)" stroke-width="1.5"/>`; });
   const wins = parts.reduce((a,x)=>a+x.inp.wins, 0), losses = parts.reduce((a,x)=>a+x.inp.losses, 0);
   g += `<circle cx="${cx}" cy="${cy}" r="${inner-4}" fill="var(--hl-bg)" stroke="var(--hl-rule)"/>`;
@@ -20466,11 +20470,11 @@ function computeSessionWeights(){
   const scores = computeSkillProfile();
   const DEFAULT_SCORE = 60; // neutral assumption for no-data-yet categories, so they still get a fair starting share
   const cats = [
-    {key:'pitch', label:t('skill_pitch'), color:'var(--hl-ink)', panel:'exercises', subtype:'pitch'},
-    {key:'agility', label:t('skill_agility'), color:'var(--hl-lead)', panel:'exercises', subtype:'scale'},
-    {key:'range', label:t('skill_range'), color:'var(--hl-voice)', panel:'range'},
-    {key:'breath', label:t('skill_breath'), color:'var(--hl-miss)', panel:'breath'},
-    {key:'expression', label:t('skill_expression'), color:'var(--hl-sop)', panel:'emotion'},
+    {key:'pitch', label:t('skill_pitch'), color:'var(--hl-cat-pitch)', panel:'exercises', subtype:'pitch'},
+    {key:'agility', label:t('skill_agility'), color:'var(--hl-cat-agility)', panel:'exercises', subtype:'scale'},
+    {key:'range', label:t('skill_range'), color:'var(--hl-cat-range)', panel:'range'},
+    {key:'breath', label:t('skill_breath'), color:'var(--hl-cat-breath)', panel:'breath'},
+    {key:'expression', label:t('skill_expression'), color:'var(--hl-cat-expression)', panel:'emotion'},
   ];
   const raw = cats.map(c=>{
     const s = (scores[c.key]!==null && scores[c.key]!==undefined) ? scores[c.key] : DEFAULT_SCORE;
@@ -24203,7 +24207,7 @@ function renderVoiceFingerprint(svgId, noteId){
     const [lx,ly] = pointAt(i, maxR+22);
     const score = scores[c.key];
     axisSvg += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="var(--hl-ink)" font-size="12" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${c.label}</text>`;
-    axisSvg += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${score!==null?'var(--hl-voice)':'var(--hl-ink-3)'}" font-size="10.5" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${score!==null?score+'%':'no data'}</text>`;
+    axisSvg += `<text x="${lx.toFixed(1)}" y="${(ly+13).toFixed(1)}" text-anchor="middle" fill="${score!==null?'var(--hl-ink)':'var(--hl-ink-3)'}" font-size="10.5" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums">${score!==null?score+'%':'no data'}</text>`;
   });
 
   // real data polygon -- honest treatment: untracked categories sit at center, not a fabricated value
@@ -24213,12 +24217,12 @@ function renderVoiceFingerprint(svgId, noteId){
     return pointAt(i, r);
   });
   const dataPolyPts = dataPts.map(p=>p.join(',')).join(' ');
-  let dataSvg = `<polygon points="${dataPolyPts}" fill="color-mix(in srgb, var(--hl-voice) 22%, transparent)" stroke="var(--hl-voice)" stroke-width="2.5"/>`;
+  let dataSvg = `<polygon points="${dataPolyPts}" fill="color-mix(in srgb, var(--hl-ink) 10%, transparent)" stroke="var(--hl-ink)" stroke-width="2.5"/>`;
   categories.forEach((c,i)=>{
     const [x,y] = dataPts[i];
     const tracked = scores[c.key]!==null;
     dataSvg += tracked
-      ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="var(--hl-voice)"/>`
+      ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="var(--hl-ink)"/>`
       : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="none" stroke="var(--hl-ink-3)" stroke-width="1.5" stroke-dasharray="2 2"/>`;
   });
 
@@ -25592,7 +25596,7 @@ function renderUnifiedProgress(){
   });
 
   // House Lights (phase 7, 2.2): your voice for Pitch, ink for Breath, ink-3 dashed for Agility (not teal / brass / coral)
-  const colors = {pitch:'var(--hl-voice)', breath:'var(--hl-ink)', agility:'var(--hl-ink-3)'}, dash = {agility:' stroke-dasharray="6 4"'};
+  const colors = {pitch:'var(--hl-cat-pitch)', breath:'var(--hl-cat-breath)', agility:'var(--hl-cat-agility)'}, dash = {agility:' stroke-dasharray="6 4"'};
   let linesSvg = '';
   Object.keys(trend.series).forEach(type=>{
     const vals = trend.series[type];
