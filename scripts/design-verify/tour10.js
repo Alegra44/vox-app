@@ -73,6 +73,7 @@ function AUDIT(arg) {
     for (const side of ['Top', 'Right', 'Bottom', 'Left']) if (+parseFloat(cs[`border${side}Width`]) > 0 && cs[`border${side}Style`] !== 'none' && cs[`border${side}Color`] === voice) { props.push('border'); break; }
     if (e instanceof SVGElement) { if (cs.fill === voice) props.push('fill'); if (cs.stroke === voice && cs.strokeWidth !== '0px') props.push('stroke'); }
     if (cs.boxShadow && cs.boxShadow !== 'none' && cs.boxShadow.includes(voice)) props.push('shadow');
+    if (cs.accentColor === voice && e.matches('input, progress, meter')) props.push('accent');
     if (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0 && cs.outlineColor === voice && document.activeElement !== e) props.push('outline');
     if (props.length) voiceHits.push({ path: pth(e), text: txt(e), props });
   }
@@ -176,7 +177,8 @@ function LEGACY() {
     const SCR = screens(panelIds); audit.screens = SCR.map(s => s.key);
     console.log(`== tour10 · ${SCR.length} screens (${SCR.reduce((n, s) => n + s.states.length, 0)} screen-states) × ${COMBOS.length} combos → ${OUT}`);
     const STATES = ['signedout', 'new', 'active', 'expired', 'teacher'];
-    const openState = async (st, { theme, viewport, reducedMotion, lang }) => {
+    const openState = (st, o) => C.G.step(`open ${st}`, 60, () => openState_(st, o)); // normally 5–8 s
+    const openState_ = async (st, { theme, viewport, reducedMotion, lang }) => {
       const signed = st !== 'signedout';
       const o = await C.openPage(b, { dir: DIR, theme, viewport, reducedMotion, storageState: signed ? state : undefined });
       await o.page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {}); await C.clearOverlays(o.page);
@@ -199,9 +201,9 @@ function LEGACY() {
         const list = SCR.filter(s => s.states.includes(st)); if (!list.length) continue;
         const { ctx, page, errors } = await openState(st, { theme, viewport: SIZES[w] });
         try {
-          for (const sc of list) {
+          for (const sc of list) await C.G.step(`${combo} ${sc.key}-${st}`, 30, async () => { // normally 1–3 s
             const name = `${sc.key}-${st}`;
-            if (sc.skipIf && await page.evaluate(sc.skipIf)) continue;
+            if (sc.skipIf && await page.evaluate(sc.skipIf)) return;
             const err = await show(page, sc);
             const r = await page.evaluate(AUDIT, { rootSel: sc.root, legacy: audit.legacy, hit: HIT }).catch(e => ({ error: String(e) }));
             const on = await page.evaluate(S9.openOverlays);
@@ -210,7 +212,7 @@ function LEGACY() {
             await page.evaluate(() => { const n = document.querySelector('nav.shell-bottomnav'); if (n && innerWidth < 960 && !document.querySelector('.modal-overlay[style*="flex"], .share-overlay[style*="flex"], .levelup-show')) { const h = document.documentElement.scrollHeight; n.style.position = 'absolute'; n.style.top = h + 'px'; n.style.bottom = 'auto'; } });
             await page.screenshot({ path: path.join(d, name + '.jpg'), fullPage: sc.group !== 'sheet', ...Q });
             await page.evaluate(() => { const n = document.querySelector('nav.shell-bottomnav'); if (n) { n.style.position = ''; n.style.top = ''; n.style.bottom = ''; } });
-          }
+          });
         } finally { await ctx.close(); }
         save();
       }
@@ -223,8 +225,8 @@ function LEGACY() {
         const list = SCR.filter(s => s.states.includes(st)); if (!list.length) continue;
         const { ctx, page } = await openState(st, { theme, viewport: SIZES[1280] });
         try {
-          for (const sc of list) {
-            if (sc.skipIf && await page.evaluate(sc.skipIf)) continue;
+          for (const sc of list) await C.G.step(`focus ${combo} ${sc.key}-${st}`, 30, async () => {
+            if (sc.skipIf && await page.evaluate(sc.skipIf)) return;
             const isSheet = !!sc.overlay;
             // the opener for the return test: a tab-bar button outside the sheet, focused before it opens
             await page.evaluate(S9.resetInPage); await page.evaluate(() => { showShellSection('home'); window.scrollTo(0, 0); });
@@ -267,7 +269,7 @@ function LEGACY() {
                 const e = document.activeElement; return { closedByEscape: !open, back: !!window.__opener && e === window.__opener, opener: window.__opener ? (window.__opener.id || window.__opener.className) : null, now: e ? (e.id || e.tagName + '.' + e.className).slice(0, 60) : null }; }, sc.overlay);
             }
             audit.focus[combo][`${sc.key}-${st}`] = { steps: steps.length, distinct: new Set(steps.map(s => s.id)).size, controls: Math.max(0, ...steps.map(s => s.n || 0)), seq: steps.map(s => s.id).join(','), ...issues, return: ret };
-          }
+          });
         } finally { await ctx.close(); }
         save();
       }
@@ -279,8 +281,8 @@ function LEGACY() {
         const list = SCR.filter(s => s.states.includes(st)); if (!list.length) continue;
         const { ctx, page } = await openState(st, { theme: 'light', viewport: SIZES[390], reducedMotion: 'reduce' });
         try {
-          for (const sc of list) {
-            if (sc.skipIf && await page.evaluate(sc.skipIf)) continue;
+          for (const sc of list) await C.G.step(`motion ${sc.key}-${st}`, 30, async () => {
+            if (sc.skipIf && await page.evaluate(sc.skipIf)) return;
             await show(page, sc);
             audit.motion[`${sc.key}-${st}`] = await page.evaluate(rootSel => {
               const pth = e => { const p = []; for (let a = e; a && a !== document.body && p.length < 4; a = a.parentElement) p.unshift(a.tagName.toLowerCase() + (a.id ? '#' + a.id : '') + (a.classList.length ? '.' + [...a.classList].slice(0, 2).join('.') : '')); return p.join(' > '); };
@@ -293,7 +295,7 @@ function LEGACY() {
                 if (td > 0.01 || ad > 0.01) trans.push({ path: pth(e), transition: td > 0.01 ? `${cs.transitionProperty} ${cs.transitionDuration}` : '', animation: ad > 0.01 ? `${cs.animationName} ${cs.animationDuration}` : '' }); }
               return { running, declared: trans };
             }, sc.root);
-          }
+          });
         } finally { await ctx.close(); }
       }
       save(); console.log(`  motion: ${Object.keys(audit.motion).length} screens`);
@@ -307,15 +309,15 @@ function LEGACY() {
           const list = SCR.filter(s => s.states.includes(st) && !/-fr$/.test(s.key)); if (!list.length) continue;
           const { ctx, page } = await openState(st, { theme: 'light', viewport: SIZES[390], lang });
           try {
-            for (const sc of list) {
-              if (sc.skipIf && await page.evaluate(sc.skipIf)) continue;
+            for (const sc of list) await C.G.step(`lang ${sc.key}-${st}`, 30, async () => {
+              if (sc.skipIf && await page.evaluate(sc.skipIf)) return;
               await show(page, sc); await page.evaluate(l => { if (typeof currentLanguage !== 'undefined' && currentLanguage !== l) setLanguage(l); }, lang); await C.sleep(200);
               const labels = await page.evaluate(rootSel => { const root = (rootSel && document.querySelector(rootSel)) || document.body; const scope = [root, ...document.querySelectorAll('.shell-topbar, nav.shell-bottomnav')];
                 return [...new Set(scope.flatMap(r => [...r.querySelectorAll('[aria-label]'), ...(r.hasAttribute && r.hasAttribute('aria-label') ? [r] : [])]))].filter(e => e.getClientRects().length).map(e => e.getAttribute('aria-label')); }, sc.root);
               const enSet = new Set(((en[`${sc.key}-${st}`] || {}).ariaLabels || []).map(x => x.label));
               const same = labels.filter(l => enSet.has(l) && /[A-Za-z]{3,}/.test(l) && !/^(VoxCoach|A\d|[A-G][#b]?\d)$/.test(l));
               if (same.length) audit.lang[lang][`${sc.key}-${st}`] = [...new Set(same)];
-            }
+            });
           } finally { await ctx.close(); }
         }
       }

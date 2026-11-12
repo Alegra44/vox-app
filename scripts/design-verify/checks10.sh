@@ -8,6 +8,9 @@
 #   all  as checks9.sh's all, plus datelocale and unusedkeys
 cd "$(dirname "$0")/../.."
 SET=${1:?usage: checks10.sh all|name,name}
+# One verify run at a time: the runner holds the lock (scripts/runguard.js) for all its checks; each check runs under its
+# own time limit (run-limits.json, about 2x its normal time): past it, it and its browsers are killed, a FAIL "timed out".
+[ -z "$VOXCOACH_RUN_LOCK" ] && exec node scripts/runguard.js run --name "checks10 $*" --limit-min 0 -- bash "$PWD/scripts/design-verify/checks10.sh" "$@"
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/checks10-$STAMP; mkdir -p "$OUT"
 cmd(){ case $1 in
   states9) echo "node scripts/design-verify/states9.js --out $OUT/states9";;
@@ -46,8 +49,8 @@ echo "checks10 $SET on $(git rev-parse --short HEAD)$(git diff --quiet || echo '
 for n in $LIST; do
   while pmset -g batt | head -1 | grep -q "Battery Power"; do echo "$(date -u +%H:%M:%S) on battery: waiting for AC before $n" >> "$OUT/progress.txt"; sleep 300; done
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $n" >> "$OUT/progress.txt"
-  $(cmd $n) > "$OUT/$n.log" 2>&1; rc=$?
-  echo "$(date -u +%H:%M:%S) done  $n exit $rc ($(( ($(date +%s)-t0)/60 )) min)" >> "$OUT/progress.txt"
+  node scripts/runguard.js run --name $n -- $(cmd $n) > "$OUT/$n.log" 2>&1; rc=$?
+  echo "$(date -u +%H:%M:%S) done  $n exit $rc ($(( ($(date +%s)-t0)/60 )) min)$([ $rc = 124 ] && echo ' TIMED OUT: FAIL')" >> "$OUT/progress.txt"
   sleep 20
 done
 echo "$(date -u +%H:%M:%S) ALL DONE → $OUT" >> "$OUT/progress.txt"

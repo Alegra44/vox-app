@@ -84,3 +84,24 @@ B10. HOUSE_LIGHTS.md v3.0
 CHECKS: the full local run, every suite with WITH_CHOIR=1, plus rule1, targets, names, focus, motion and datelocale. Then the tour diff, master against the branch: differences only on screens B3, B4, B8 and B9 touch.
 SCREENSHOTS: the tour again (390, 768, 1280, Light and Dark), with before|after sheets of every screen that changed. Secret check, push redesign/phase10 and review/phase10.
 REPORT, then stop. The deploy steps come from me after the review.
+
+## Part B, additions (2026-11-12)
+
+Agreed: time limits are the right fix, and thanks for saying plainly what happened. Four additions, then carry on with B3.
+
+1. PUSH AS YOU GO
+- origin/redesign/phase10 still ends at part A (2399605); B1, B2 and B3 are only on this Mac. After each B item is committed and its check passes, run the secret check and push redesign/phase10. Pushing the branch is not a deploy.
+
+2. ONE RUN AT A TIME, ENFORCED
+- A lock file that the runner takes at start and releases at exit (including on a crash or kill). A second run refuses to start while the lock's process is alive, and says which run holds it.
+
+3. TIME LIMITS ON EVERYTHING
+- Every script, every step inside one, and every database call (the Supabase CLI included) gets a limit of about 2× its normal time. Past it, kill the process and its browser and record a FAIL with "timed out", so a hang shows up as a failure in minutes.
+- Check every long run at its expected end time, as you said. If it hasn't ended, look, don't wait.
+
+4. LESS WAITING
+- Per item, run only that item's own check: rule1 for B3, targets for B4, names for B5, focus for B6, motion for B7, the copy checks for B8, the layout shots for B9.
+- Contrast, the full suite (WITH_CHOIR=1) and the tour diff run once each, after B9, in that order. A contrast failure then gets fixed in its item's commit, and only contrast is rerun.
+- Everything else in PHASE10.md part B stays as written.
+
+Then: rule1's warm-up step alone with its new limit, commit B3, push, and on to B4. REPORT when B9's checks and the tour are done, then stop.

@@ -7,6 +7,7 @@ require('../warmup-verify/noWarmup'); // the pre-session warm-up is skipped (see
 const fs = require('fs'), os = require('os'), path = require('path');
 const { execFileSync } = require('child_process');
 const { track, cleanup } = require('../choir-verify/testAccounts');
+const G = require('../runguard'); // steps with a limit: openPage 60 s (normally 4–6 s), signUp 75 s (normally 5–15 s)
 
 const ROOT = path.resolve(__dirname, '../..'), DEPLOY = path.join(ROOT, 'deploy'), LOCAL = 'http://localhost:8765/';
 const REMOTE = process.env.DV_URL || null, PAGE_URL = REMOTE || LOCAL;
@@ -39,7 +40,8 @@ const panelKeys = page => page.evaluate(() => [...document.querySelectorAll('.pa
 // theme: 'light' | 'dark' | 'system' | null (leave the page's default). The device scheme follows the theme unless given.
 // dir may also be a site URL (https://…): that site is opened as it is, like DV_URL, for this page only.
 // prepare(ctx) is awaited before the page opens (extra routes and init scripts: synthmic.js).
-async function openPage(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en', prepare } = {}) {
+async function openPage(b, opts = {}) { return G.step('open a page', 60, () => openPage_(b, opts)); }
+async function openPage_(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en', prepare } = {}) {
   const site = /^https?:\/\//.test(dir) ? dir : REMOTE;
   if (site && storageState && typeof storageState === 'object' && storageState.origins) { // a session made on the local side: copied to the site's origin
     const o = new URL(site).origin;
@@ -73,7 +75,8 @@ async function applyTheme(page, theme) {
   await sleep(200);
 }
 
-async function signUp(page, prefix, name = 'Design Check') {
+async function signUp(page, prefix, name) { return G.step('sign-up', 75, () => signUp_(page, prefix, name)); }
+async function signUp_(page, prefix, name = 'Design Check') {
   const email = track(`voxcoach-${prefix}-${Date.now()}@example.com`), password = 'DV-' + Math.random().toString(36).slice(2) + '!x9';
   await page.evaluate(() => { openAuthModal(); setAuthMode('signup'); });
   await page.locator('#authName').fill(name);
@@ -93,4 +96,4 @@ async function clearOverlays(page) {
   });
 }
 
-module.exports = { chromium, ROOT, DEPLOY, LOCAL, REMOTE, PAGE_URL, sleep, buildDir, HUBS, showPanel, panelKeys, openPage, applyTheme, signUp, clearOverlays, cleanup };
+module.exports = { G, chromium, ROOT, DEPLOY, LOCAL, REMOTE, PAGE_URL, sleep, buildDir, HUBS, showPanel, panelKeys, openPage, applyTheme, signUp, clearOverlays, cleanup };
