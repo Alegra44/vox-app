@@ -680,6 +680,27 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   aria-label language) and sheet10.js. review/phase10 (orphan): shots, contact sheets, audit.json, logs.
 - Run the tour: `node scripts/design-verify/tour10.js --out <dir>` (~35 min; `--passes focus` alone ~12 min), then
   `node scripts/design-verify/sheet10.js <dir>`.
+- **Part B done 2026-11-13, reported; waiting on the user's review (no merge or deploy until then).** B list and
+  additions in `PHASE10.md`. One commit per item, each pushed after its own check passed: B1 5aa8fba, B2 30b3909,
+  B3 65711e4 (+ 3adcecf, house-lights.css synced), B4 6c33c24, B5 f2df226, B6 5aaa68a, B7 843bc1b, B8 595aacc,
+  B9 6bd9f12, B10 26b295f (HOUSE_LIGHTS.md v3.0). Tooling: bcd099a, 2d49aea (runguard), 11c2aef, 52ab4c8.
+- **Every verify run goes through `scripts/runguard.js`:** one run at a time (a lock in $TMPDIR; a second run is refused
+  and told which holds it; a killed holder's lock is taken over), limits about 2× normal in `scripts/run-limits.json`
+  (steps: openPage 60 s, signUp 75 s, a tour screen 30 s; a Supabase CLI call 15 s, one retry). Past a limit: FAIL
+  "timed out", exit 124, the process tree killed. checks10.sh and suites.sh hold the lock for their whole run.
+  `node scripts/runguard.js status` says who holds it.
+- Part B's checks: rule1, targets, names, focus, motion, durations (`checks10.sh b`); `checks10.sh design` is all
+  less what suites.sh runs. tour10.js takes `--ref`, `--hit`, sizes 600 and 959; tourdiff.js `<before> <after>
+  --sheets`. The tour on master vs the branch: 389 of 618 shots differ, 13 of them noise (the branch twice); the rest
+  attributed to B3, B4, B8, B9 (and B5's Pre-chorus cue) on review/phase10 `partB/`.
+- Final runs: contrast 0/0/1; suites WITH_CHOIR=1 all pass after reruns of four production sign-up / save timeouts;
+  noisegate's one flag was noise (rerun: +3 within ±8); tt-firsttick fails on master too (Songs hub's Part Rehearsal
+  button is hidden; the test still clicks it). Expected differences from master: B8's durations ("12.4 s") in home,
+  moments9, youstates; states9: the share sheets close on Escape (B6).
+- **Open, for the user:** the 15 merged branches the survey lists (h) are not deleted (not in the B list); the
+  Language sheet has no settings opener, so its "Escape from settings" case doesn't exist; Hear the Mistake's script
+  strings ("Which one was accurate?", "Not quite.", its result line, "Play A and B") are English only; tt-firsttick's
+  stale path.
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
