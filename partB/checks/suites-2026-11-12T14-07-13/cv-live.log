@@ -1,0 +1,60 @@
+live sha 9b67307c54092486 local sha 6bd314bf593c329b DIFFERENT
+signed up voxcoach-cvlive-1794498105840@example.com
+panel active: true
+== Breath Map (live)
+{
+ "summary": "7 breath points · 200 ms of silence each · longest held note 3.133 s",
+ "rows": [
+  "Breath 1 · 3.133–3.333 s 200 ms · then B4, 4 semitones up",
+  "Breath 2 · 6.467–6.667 s 200 ms · then A4, 2 semitones down",
+  "Breath 3 · 9.800–10.000 s 200 ms · then A4, same pitch",
+  "Breath 4 · 13.133–13.333 s 200 ms · then G4, 2 semitones down",
+  "Breath 5 · 16.467–16.667 s 200 ms · then A4, 2 semitones up",
+  "Breath 6 · 19.800–20.000 s 200 ms · then B4, 2 semitones up",
+  "Breath 7 · 23.133–23.333 s 200 ms · then G4, 4 semitones down"
+ ],
+ "final": "Final release at 26.467 s — the song ends there.",
+ "cue": "Press Play (or start a trainer or Harmony Memory) to follow the breath points live."
+}
+stages: [
+  'open:Full guide',
+  'locked:Guide 75%',
+  'locked:Guide 50%',
+  'locked:Guide 25%',
+  'locked:A Cappella',
+  'locked:From memory'
+]
+run {"songT":-1.493,"status":"Count-in…","cue":"Full breath now — the song starts in 1.5 s","gains":{"Soprano":0.65,"Lead":0.85,"Alto":0.7,"Tenor":0.7,"Bass":0.75},"readout":"0.700","notesVisible":false}
+run {"songT":1.008,"status":"Stage 1 — chord 1/8: sing G4","cue":"Next breath (1) in 2.1 s","gains":{"Soprano":0.65,"Lead":0.85,"Alto":0.7,"Tenor":0.7,"Bass":0.75},"readout":"0.700","notesVisible":false}
+run {"songT":3.211,"status":"Stage 1 — chord 1/8: sing G4","cue":"Breathe — breath 1 (200 ms)","gains":{"Soprano":0.65,"Lead":0.85,"Alto":0.7,"Tenor":0.7,"Bass":0.75},"readout":"0.700","notesVisible":false}
+run {"songT":6.011,"status":"Stage 1 — chord 2/8: sing B4","cue":"Next breath (2) in 0.5 s","gains":{"Soprano":0.65,"Lead":0.85,"Alto":0.7,"Tenor":0.7,"Bass":0.75},"readout":"0.700","notesVisible":false}
+== Result (live) {
+ "active": false,
+ "score": 75,
+ "results": [
+  "    Stage 1 result — Full guide",
+  "    75%",
+  "    6/8 notes held in tune (within ±50 cents)",
+  "    Passed — stage 2 is unlocked.",
+  "    ",
+  "    Your performance",
+  "    Notes held6/8 notes held within ±50 cents75PitchTypically 13 cents from the target across the 7 notes heard92Timing7/7 notes heard: your voice arrived in the first 40% of the note · median 19 ms after it started100",
+  "    Work on notes held next: it's your lowest (75).",
+  "    How this is measuredScored the same way as Performance Director. Pitch is 100 minus 0.6 × your average cents off in each note. Timing is 100 when your voice arrived in the first 40% of a note and 50 when it came later. Both count only notes that were heard. Tap \"Why?\" on a missed note to see what was expected next to what the mic heard.",
+  "  ",
+  "    Chord 1 · target G4+2 cents · in tuneChord 2 · target B4+2 cents · in tuneChord 3 · target A4 Why?+81 cents · off pitchChord 4 · target A4+1 cents · in tuneChord 5 · target G4+2 cents · in tuneChord 6 · target A4 Why?not heardChord 7 · target B4+2 cents · in tuneChord 8 · target G4+2 cents · in tune",
+  "  "
+ ],
+ "stored": "{\"hymn\":{\"Alto\":[75]}}",
+ "stages": [
+  "open",
+  "open",
+  "locked",
+  "locked",
+  "locked",
+  "locked"
+ ]
+}
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-cvlive-1794498105840@example.com

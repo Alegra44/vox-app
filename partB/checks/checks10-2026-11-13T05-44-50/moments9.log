@@ -1,0 +1,30 @@
+== master: {"levelup":{"from":1,"sheet":{"shown":true,"levelupNum":"2","levelupSub":"Pitch Explorer","levelupWhy":"You levelled up: 2 new records, 1 breakthrough and 3 sessions","newRecordLabel":"Check","newRecordVal":"2","newRecordDelta":"","breakthroughNote":"","breakthroughDetail":"","text":"LEVEL UP 2 Level Pitch Explorer You levelled up: 2 new records, 1 breakthrough and 3 sessions Continue"},"closed":true,"snap":{"at":"2026-11-13T06:37:16.082Z","level":2,"streak":1,"records":2,"warmups":0,"sessions":3,"boss_wins":0,"breakthroughs":1,"curriculum_days":0}},"record":{"sheet":{"shown":true,"levelupNum"
+== branch: {"levelup":{"from":1,"sheet":{"shown":true,"levelupNum":"2","levelupSub":"Pitch Explorer","levelupWhy":"You levelled up: 2 new records, 1 breakthrough and 3 sessions","newRecordLabel":"Check","newRecordVal":"2","newRecordDelta":"","breakthroughNote":"","breakthroughDetail":"","text":"2 You levelled up: 2 new records, 1 breakthrough and 3 sessions Continue"},"closed":true,"snap":{"at":"2026-11-13T06:37:30.371Z","level":2,"streak":1,"records":2,"warmups":0,"sessions":3,"boss_wins":0,"breakthroughs":1,"curriculum_days":0}},"record":{"sheet":{"shown":true,"levelupNum":"2","levelupSub":"Pitch Explo
+✓ level up shown (master true, branch true)
+✓ level up · levelupNum: "2"
+✓ level up · levelupSub: "Pitch Explorer"
+✓ level up · levelupWhy: "You levelled up: 2 new records, 1 breakthrough and 3 sessions"
+✓ level up · counts {"level":2,"streak":1,"records":2,"warmups":0,"sessions":3,"boss_wins":0,"breakthroughs":1,"curriculum_days":0}
+✓ new record shown (master true, branch true)
+✓ new record · newRecordLabel: "Longest breath sustain"
+✗ new record · newRecordVal: "15 s" (master "15s")
+✗ new record · newRecordDelta: "+2.6 s from your last best" (master "+2.6s from your last best")
+✓ new record · best stored 15 (master 15)
+✓ breakthrough shown (master true, branch true)
+✓ breakthrough · breakthroughNote: "E4"
+✓ breakthrough · breakthroughDetail: "5 accurate attempts in a row — this was averaging 50% before. Something just clicked."
+✓ breakthrough · counted once (master 1, branch 1)
+✓ levelup: closes (2 You levelled up: 2 new records, 1 breakthrough and 3 sessions Continue)
+✓ record: closes (+2.6 s from your last best Continue)
+✓ breakthrough: closes (E4 5 accurate attempts in a row — this was averaging 50% before. Something just clicked. C)
+-- 9.1: the timers (branch)
+✓ levelup-why: hides by itself after 6006 ms (want 6000 ±400); a click on the sheet keeps it true and stops the timer true, Escape closes true; a key stops it true, the scrim closes true; Continue closes true
+✓ levelup: hides by itself after 4006 ms (want 4000 ±400); a click on the sheet keeps it true and stops the timer true, Escape closes true; a key stops it true, the scrim closes true; Continue closes true
+✓ newrecord: hides by itself after 4053 ms (want 4000 ±400); a click on the sheet keeps it true and stops the timer true, Escape closes true; a key stops it true, the scrim closes true; Continue closes true
+✓ breakthrough: hides by itself after 6050 ms (want 6000 ±400); a click on the sheet keeps it true and stops the timer true, Escape closes true; a key stops it true, the scrim closes true; Continue closes true
+✓ timers: page errors 0 
+✓ page errors: master 0, branch 0 
+
+MOMENTS9: FAIL: 2
+
+[cleanup] deleted 3 test account(s) this run created; 0 left of voxcoach-dvmo-1794551830050@example.com, voxcoach-dvmo-1794551844785@example.com, voxcoach-dvmt-1794551858540@example.com

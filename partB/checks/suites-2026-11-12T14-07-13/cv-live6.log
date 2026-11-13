@@ -1,0 +1,53 @@
+live sha 6bd314bf593c329b local sha 6bd314bf593c329b IDENTICAL
+signed up voxcoach-cvlive6-1794498384595@example.com
+lang fr | choir panel active: true
+FR card before: {
+ "title": "Votre chorale",
+ "summary": "0 voix sur 5 enregistrées pour Demo Hymn (C Major).",
+ "rows": [
+  "● Soprano · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Voix principale · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Alto · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Ténor · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Basse · non enregistrée — muette à la lecture ● Enregistrer"
+ ],
+ "play": "Écouter ma chorale",
+ "stop": "Arrêter",
+ "headphones": "Utilisez un casque : avec des haut-parleurs, le micro peut entendre le chœur et le confondre avec vous.",
+ "note": "Vos enregistrements sont conservés uniquement sur cet appareil.",
+ "desc": "Enregistrez-vous en chantant chaque voix, une à la fois, puis écoutez toutes vos prises ensemble comme une chorale complète. Chaque prise commence après un décompte de 4 temps ; pendant l’enregistrement, le synthé joue la voix que vous chantez et vos prises précédentes sont rejouées, pour que vous chantiez avec vous-même. Les voix non enregistrées restent muettes. Pendant la lecture, les curseurs, Muet et Solo ci-dessus règlent vos voix enregistrées."
+}
+
+== Recorded Alto (live)
+  status: ["Enregistrement : Alto — décompte…","Enregistrement : Alto — accord 2/8"] → Alto enregistrée.
+  while recording: chord 2 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.4457 B4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0 —
+  UI while recording: {"stop":"Arrêter l’enregistrement","row":"● Alto · enregistrement en cours… ● Enregistrer"}
+  take: {"lead":3.4133,"peak":0.637,"dur":27.19,"kb":146,"onset1VsDownbeatMs":65.7,"onset2VsChord2Ms":65.3}
+
+== Recorded Bass (live)
+  status: ["Enregistrement : Basse — décompte…","Enregistrement : Basse — accord 2/8"] → Basse enregistrée.
+  while recording: chord 2 trim 0.847 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2498 B4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.4744 G2✓
+  UI while recording: {"stop":"Arrêter l’enregistrement","row":"● Basse · enregistrement en cours… ● Enregistrer"}
+  take: {"lead":3.4133,"peak":0.665,"dur":27.19,"kb":146,"onset1VsDownbeatMs":67.7,"onset2VsChord2Ms":68.3}
+
+== Live 2-part stack (Alto + Bass, default faders)
+  chord 1 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2493 G4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2653 C3✓
+  chord 2 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2501 B4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2658 G2✓
+  chord 4 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2555 A4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.265 F2✓
+  chord 8 trim 1 | Soprano g0.65 rms 0 — | Lead g0.85 rms 0 — | Alto g0.7 rms 0.2521 G4✓ | Tenor g0.7 rms 0 — | Bass g0.75 rms 0.2646 C3✓
+  VU meters at 25 s: {"Soprano":"0%","Lead":"0%","Alto":"38%","Tenor":"0%","Bass":"38%"} | stacked output {"peak":0.874,"peakDbfs":-1.17,"pctOver":0}
+  UI while playing: {"status":"Lecture de 2 voix enregistrées : Alto, Basse","button":"Lecture en cours"}
+FR card after: {
+ "summary": "2 voix sur 5 enregistrées pour Demo Hymn (C Major).",
+ "rows": [
+  "● Soprano · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Voix principale · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Alto · enregistrée le 12 nov., 21:17 · 27 s ● Réenregistrer Supprimer",
+  "● Ténor · non enregistrée — muette à la lecture ● Enregistrer",
+  "● Basse · enregistrée le 12 nov., 21:17 · 27 s ● Réenregistrer Supprimer"
+ ],
+ "play": "Écouter ma chorale"
+}
+shots in /var/folders/gn/v4bmhrkx4rj608jy9jv_rv780000gn/T/ | page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-cvlive6-1794498384595@example.com

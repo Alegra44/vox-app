@@ -1,0 +1,16 @@
+✓ every markup aria-label is translated (data-i18n-aria-label or t()) — 11 aria-labels, 0 untranslated
+✓ no script sets an aria-label from an English literal — none
+✓ every data-i18n-aria-label key exists in en, fr, es and tr — 8 keys
+== tour10 · 86 screens (104 screen-states) × 2 combos → scripts/design-verify/logs/checks10-2026-11-13T05-44-50/names
+  390-light: 103 shots
+  1280-light: 103 shots
+  lang: fr 0 screens with English labels, es 0 screens with English labels, tr 0 screens with English labels
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvtour-1794549437318@example.com
+tour10: scripts/design-verify/logs/checks10-2026-11-13T05-44-50/names
+✓ no visible control or graphic without an accessible name (390 and 1280) — 0 without a name
+✓ no aria-label in English when the page is in fr — none
+✓ no aria-label in English when the page is in es — none
+✓ no aria-label in English when the page is in tr — none
+
+NAMES: PASS (0 failed)

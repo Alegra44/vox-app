@@ -1,0 +1,22 @@
+account voxcoach-vq-1794512254689@example.com | tier trial
+
+== Vibrato Analyzer (injected 6 Hz ±50 ct, 330 Hz tone)
+panel: panel-vibrato
+during: "Listening…"
+shown: {"rate":"6.0 Hz","depth":"49 ct","consistency":"90%","feedback":"6.0 Hz is within the commonly cited natural range."}
+getUserMedia calls: [{"asked":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"got":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"track":"live"}]
+
+== Voice Quality, same signal (clean tone, harmonics 1, ½, ⅓, ¼ → centroid 633 Hz)
+panel: panel-voicequality
+shown: Measured on E4 (330 Hz), 4.0 s of steady voice. | Vibrato6.0 Hz · ±49 ctWithin the commonly cited natural range (about 5–6.5 Hz). | Breathiness (HNR)44.2 dBClear tone: the harmonics stand well above the noise between them. | Brightness476 Hz · 1.44× pitchBrighter, more forward tone: strong upper harmonics.
+getUserMedia calls: [{"asked":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"got":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"track":"live"}]
+
+== Voice Quality, breathiness (injected HNR 15 dB, no vibrato)
+panel: panel-voicequality
+shown: Measured on A3 (220 Hz), 3.9 s of steady voice. | Vibrato—No regular vibrato: a straight tone. That's a choice, not a fault. | Breathiness (HNR)15.4 dBSome air in the tone. Possible contributors: a soft or airy onset, a relaxed breathy style, or mic and room noise. | Brightness427 Hz · 1.94× pitchBrighter, more forward tone: strong upper harmonics.
+[fr] Vibrato—Pas de vibrato régulier : un son droit. C’est un choix, pas un défaut. | Souffle (HNR)15,4 dBUn peu d’air dans le son. Causes possibles : une attaque douce ou soufflée, un style détendu et soufflé, ou le bruit du micro et de la pièce. | Brillance427 Hz · 1,94× la hauteurSon plus brillant et projeté : harmoniques aiguës marquées.
+[es] Vibrato—Sin vibrato regular: un tono recto. Es una elección, no un fallo. | Aire en la voz (HNR)15,4 dBAlgo de aire en el tono. Posibles factores: un ataque suave o aireado, un estilo relajado y aireado, o el ruido del micrófono y de la sala. | Brillo427 Hz · 1,94× la alturaTono más brillante y proyectado: armónicos agudos marcados.
+[tr] Vibrato—Düzenli vibrato yok: düz bir ses. Bu bir tercih, hata değil. | Nefeslilik (HNR)15,4 dBSeste biraz hava var. Olası etkenler: yumuşak ya da havalı bir başlangıç, rahat ve nefesli bir üslup ya da mikrofon ve oda gürültüsü. | Parlaklık427 Hz · perdenin 1,94 katıDaha parlak, öne çıkan ses: güçlü üst harmonikler.
+getUserMedia calls: [{"asked":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"got":{"echoCancellation":true,"noiseSuppression":false,"autoGainControl":false},"track":"live"}]
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vq-1794512254689@example.com

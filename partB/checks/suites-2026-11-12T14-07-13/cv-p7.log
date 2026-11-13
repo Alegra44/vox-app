@@ -1,0 +1,154 @@
+signed up voxcoach-cvp7-1794499264947@example.com
+== Harmony Memory stage 1, Demo Hymn Alto, stand-in plan: [{"c":0},{"c":20},{"c":80},{"c":0,"d":0.55},null,{"c":-120},{"c":0},{"c":0,"d":0,"dur":0.075}]
+┌─────────┬───────┬────────┬────────┬────────┬─────────┬────────┬─────────────┐
+│ (index) │ chord │ target │ frames │ median │ entryMs │ noteMs │ verdict     │
+├─────────┼───────┼────────┼────────┼────────┼─────────┼────────┼─────────────┤
+│ 0       │ 1     │ 'G4'   │ 182    │ 2      │ 11      │ 3133   │ 'held'      │
+│ 1       │ 2     │ 'B4'   │ 182    │ 21     │ 5       │ 3133   │ 'held'      │
+│ 2       │ 3     │ 'A4'   │ 182    │ 81     │ 11      │ 3133   │ 'off'       │
+│ 3       │ 4     │ 'A4'   │ 79     │ 1      │ 1728    │ 3133   │ 'held'      │
+│ 4       │ 5     │ 'G4'   │ 0      │ null   │ null    │ 3133   │ 'not heard' │
+│ 5       │ 6     │ 'A4'   │ 182    │ -118   │ 11      │ 3133   │ 'off'       │
+│ 6       │ 7     │ 'B4'   │ 182    │ 2      │ 11      │ 3133   │ 'held'      │
+│ 7       │ 8     │ 'G4'   │ 1      │ 14     │ 5       │ 3133   │ 'not heard' │
+└─────────┴───────┴────────┴────────┴────────┴─────────┴────────┴─────────────┘
+independent: {"held":4,"n":8,"score":50,"heard":6,"pitch":77,"timing":92}
+Performance Report shown:
+  Notes held4/8 notes held within ±50 cents50
+  PitchTypically 38 cents from the target across the 6 notes heard77
+  Timing5/6 notes heard: your voice arrived in the first 40% of the note · median 11 ms after it started92
+insight: Work on notes held next: it's your lowest (50).
+why buttons on chords: 3,5,6,8
+
+-- Why? chord 3:
+
+    ExpectedA4 (440.0 Hz), 6.67–9.80 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents.
+    What the mic heardMedian pitch A#4 −19 cents (461.1 Hz), which is +81 cents from the target. 0 of 182 readings were within ±50 cents. Your voice was first detected 11 ms after the note started. On time means arriving in the first 40% of the note (1.3 s here).
+    Why it missedYour median was 81 cents sharp, outside the ±50 cent window. That's closer to A#4 than to A4.
+    +200A4−2000 s3.13 s
+    Each dot is one pitch reading, placed at the moment it was read. The band is ±50 cents, the shaded start is the first 100 ms (not judged), and the dashed line is where your voice arrived.
+  
+   plot dots: 182 | aria-expanded: true
+
+-- Why? chord 6:
+
+    ExpectedA4 (440.0 Hz), 16.67–19.80 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents.
+    What the mic heardMedian pitch G#4 −18 cents (411.0 Hz), which is −118 cents from the target. 0 of 182 readings were within ±50 cents. Your voice was first detected 11 ms after the note started. On time means arriving in the first 40% of the note (1.3 s here).
+    Why it missedYour median was 118 cents flat, outside the ±50 cent window. That's closer to G#4 than to A4.
+    +200A4−2000 s3.13 s
+    Each dot is one pitch reading, placed at the moment it was read. The band is ±50 cents, the shaded start is the first 100 ms (not judged), and the dashed line is where your voice arrived.
+  
+   plot dots: 182 | aria-expanded: true
+
+-- Why? chord 5:
+
+    ExpectedG4 (392.0 Hz), 13.33–16.47 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents.
+    What the mic heardNo voice was detected at any point during this note.
+    Why it missedNo pitch was caught here, so there was nothing to judge.
+    
+    
+  
+   plot dots: 0 | aria-expanded: true
+
+-- Why? chord 8:
+
+    ExpectedG4 (392.0 Hz), 23.33–26.47 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents.
+    What the mic heardMedian pitch G4 +14 cents (395.2 Hz), which is +14 cents from the target. 1 of 1 readings were within ±50 cents. Your voice was first detected 5 ms after the note started. On time means arriving in the first 40% of the note (1.3 s here).
+    Why it missedOnly 1 pitch readings were caught. A note needs at least 5 to be judged, so it counts as not heard.
+    +200G4−2000 s3.13 s
+    Each dot is one pitch reading, placed at the moment it was read. The band is ±50 cents, the shaded start is the first 100 ms (not judged), and the dashed line is where your voice arrived.
+  
+   plot dots: 1 | aria-expanded: true
+after closing: open panels = 0
+
+== Boss 1 (Drowner): in tune except chord 2 (−70¢) → 7/8 wins
+independent: {"held":7,"score":88,"heard":8,"pitch":94,"timing":100} chord 2 median -69
+shown: Notes held7/8 notes held within ±50 cents88 | PitchTypically 10 cents from the target across the 8 notes heard94 | Timing8/8 notes heard: your voice arrived in the first 40% of the note · median 11 ms after it started100
+Why? chord 2:
+
+    ExpectedB4 (493.9 Hz), 3.33–6.47 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents.
+    What the mic heardMedian pitch A#4 +31 cents (474.6 Hz), which is −69 cents from the target. 0 of 182 readings were within ±50 cents. Your voice was first detected 16 ms after the note started. On time means arriving in the first 40% of the note (1.3 s here).
+    Why it missedYour median was 69 cents flat, outside the ±50 cent window. That's closer to A#4 than to B4.
+    +200B4−2000 s3.13 s
+    Each dot is one pitch reading, placed at the moment it was read. The band is ±50 cents, the shaded start is the first 100 ms (not judged), and the dashed line is where your voice arrived.
+  
+
+== Boss 2 (Drifter) lost early: silent from chord 2
+Why? chord 7 (unreached):
+
+    ExpectedB4 (493.9 Hz), 20.00–23.13 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents.
+    What the mic heardNot sung.
+    Why it missedThe boss won before this chord, so it was never sung.
+    
+    
+  
+
+== Readiness after those runs (signed in with its own test account, so they are saved to it):
+
+        SopranoLearning
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+        LeadLearning
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+        Alto (you)Developing
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 1/6 · Boss record 1–1
+        TenorLearning
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+        BassLearning
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+choir_readiness object: {"parts":{"hymn":{"Alto":{"levels":[],"hm":[50,null,null,null,null,null],"bosses":[88,13,null,null,null,null],"hmPassed":0,"bossesBeaten":1,"wins":1,"losses":1,"status":"developing","updated":"2026-11-12T16:02:27.646Z","snap":{"hm":0,"ts":1794499300554,"bosses":0,"levels":0,"status":"learning"}}}},"log":[{"ts":1794499331026,"from":"learning","part":"Alto","song":"hymn","status":"developing"}],"runs":3}
+
+== A full rehearsal play-through at level 1, then one interrupted by a level change
+after 1 loop at level 1: {"hymn":{"Alto":[0]}}
+after a pass that changed level mid-way: {"hymn":{"Alto":[0]}}
+after a clean pass at level 2: {"hymn":{"Alto":[0,1]}}
+
+== Status rules, from stored bests (Alto) and a second part
+
+        SopranoDeveloping
+        Levels played 3/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+        LeadLearning
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+        Alto (you)Developing
+        Levels played 4/5 · Harmony Memory 5/6 · Bosses beaten 2/6 · Boss record 1–1
+        TenorLearning
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 0/6 · Boss record 0–0
+        BassDeveloping
+        Levels played 0/5 · Harmony Memory 0/6 · Bosses beaten 1/6 · Boss record 0–0
+
+Alto after its 5th level:  Alto (you)Ready Levels played 5/5 · Harmony Memory 5/6 · Bosses beaten 2/6 · Boss record 1–1
+log: ["Alto:learning->developing","Alto:developing->ready"]
+Choir DNA (workspace): {
+  label: 'Choir DNA: Soprano Developing, Lead Learning, Alto Ready, Tenor Learning, Bass Developing. Choir Boss record: won 1, lost 1.',
+  note: 'Demo Hymn — 1 ready · 2 developing · 2 learning · Boss record 1–1',
+  dots: 6
+}
+
+== fr
+[report]  Votre performance Notes tenues4/8 notes tenues à ±50 cents50JustesseEn général à 38 cents de la cible sur les 6 notes entendues77Timing5/6 notes entendues : votre voix est arrivée dans les premiers 40 % de la note · médiane 11 ms après son début92 Travaillez ensuite notes tenues : c'est votre point le plus bas (50). Comment c'est mesuréMême notation que le Directeur de Performance. La justesse vaut 100 moins 0,6 × votre écart moyen en cents sur chaque note. Le timing vaut 100 quand votre voix arrive dans les premiers 40 % d'une note, 50 si elle arrive plus tard. Les deux ne comptent que les notes entendues. Touchez « Pourquoi ? » sur une note manquée pour voir ce qui était attendu à côté de
+[why]  AttenduA4 (440,0 Hz), de 6,67 à 9,80 s dans le morceau. Pour compter, la médiane d'au moins 5 mesures de hauteur (prises après les 100 premières ms) doit être à ±50 cents. Ce que le micro a entenduHauteur médiane A#4 −19 cents (461,1 Hz), soit +81 cents par rapport à la cible. 0 mesures sur 182 étaient à ±50 cents. Votre voix a été détectée 11 ms après le début de la note. À temps veut dire arriver dans les premiers 40 % de la note (1,3 s ici). Pourquoi elle est manquéeVotre médiane était 81 cents trop haut, hors de la fenêtre de ±50 cents. C'est plus proche de A#4 que de A4. +200A4−2000 s3,13 s Chaque point est une mesure de hauteur, placée au moment où elle a été prise. La bande couvre ±50 cents, le début grisé correspond aux 100 premières ms (non jugées) et la ligne pointillée marque l'arrivée de votre voix. 
+[ready] Préparation Alto PRÊTE Tous les critères « Prête » sont remplis pour cette voix. Essayez une autre voix ou l'autre chant. Les cinq voix
+[passport] Monde Chorale Hymne de démo Répéter Labo du chant Entraîneurs Votre chœur Passeport Passeport Chorale Comment c'est mesuré Bilan d'ensemble VOIX PRÊTES 1 sur 10 (2 en progrès) HYMNE DE DÉMO Soprano: EN PROGRÈS · Alto: PRÊTE · Basse: EN PROGRÈS REQUIEM D'AUTOMNE Toutes les voix sont encore en apprentissage BILAN BOSS DE LA CHORALE Gagnés : 1 · perdus : 1 BOSS BATTUS 2 sur 6, sur au moins une voix MEILLEURE MÉMOIRE HARMONIQUE 5 étapes sur 6 (Alto, Hymne de démo) SESSIONS NOTÉES 3 · les 3 dernières : 50 % de notes tenues en moyenne PRISES VOTRE CHORALE ENREGISTRÉES 0 (0 actuellement sur cet appareil) ADN Chorale Hymne de démo Requiem d'Automne Soprano En progrès · 20% Voix principale Apprentissage · 0% Alto Prête · 72% Ténor Apprentissage · 0% Basse En progrès · 6% 1–1 Hymne de démo — 1 prête(s) · 2 en progrès · 2 en apprentissage · Bilan boss 1–1 Votre identité d'ensemble pour un morceau. Chaque branche est une voix, tracée aussi loin que va sa préparation (niveaux de répétition, étapes de Mémoire harmonique et boss battus, à poids égal) et colorée selon son statut. Au centre : votre bilan contre les Boss de la chorale sur ce morceau. Le fondu vocal n'est pas affiché : rien dans l'app ne mesure comment votre voix se fond avec les autres. L'historique de préparation et vos séances notées font office de bilan. Historique de préparation Alto (Hymne de démo) : En progrès → PRÊTE 12 nov. 2026 Alto (Hymne de démo) : Apprentissage → EN PROGRÈS 12 nov. 2026 Séances notées récentes Le Dériveur · Alto (Hymne de démo) 12 nov. 2026 · justesse 99 · timing 100 13% Le Noyeur · Alto (Hymne d
+
+== es
+[report]  Tu actuación Notas sostenidas4/8 notas sostenidas a ±50 cents50AfinaciónNormalmente a 38 cents del objetivo en las 6 notas oídas77Ritmo5/6 notas oídas: tu voz llegó en el primer 40 % de la nota · mediana 11 ms después de su inicio92 Trabaja ahora notas sostenidas: es tu punto más bajo (50). Cómo se mideSe puntúa igual que en el Director de Actuación. La afinación es 100 menos 0,6 × tu desviación media en cents en cada nota. El tiempo vale 100 si tu voz llegó en el primer 40 % de la nota y 50 si llegó más tarde. Ambos solo cuentan las notas oídas. Toca «¿Por qué?» en una nota fallada para ver lo esperado junto a lo que oyó el micrófono. 
+[why]  EsperadoA4 (440,0 Hz), de 6,67 a 9,80 s de la canción. Para contar, la mediana de al menos 5 lecturas de tono (tomadas tras los primeros 100 ms) debe estar a ±50 cents. Lo que oyó el micrófonoTono mediano A#4 −19 cents (461,1 Hz), es decir +81 cents respecto al objetivo. 0 de 182 lecturas estaban a ±50 cents. Tu voz se detectó 11 ms después del inicio de la nota. A tiempo significa llegar en el primer 40% de la nota (1,3 s aquí). Por qué fallóTu mediana estuvo 81 cents alta, fuera de la ventana de ±50 cents. Eso está más cerca de A#4 que de A4. +200A4−2000 s3,13 s Cada punto es una lectura de tono, colocada en el momento en que se tomó. La banda es ±50 cents, el inicio sombreado son los primeros 100 ms (no se juzgan) y la línea discontinua marca cuándo llegó tu voz. 
+[ready] Preparación Contralto LISTA Todos los criterios de «Lista» están cumplidos para esta voz. Prueba otra voz u otra canción. Las cinco voces
+[passport] Mundo Coral Himno de demostración Ensayar Laboratorio Entrenadores Tu coro Pasaporte Pasaporte Coral Cómo se mide Récord de conjunto VOCES LISTAS 1 de 10 (2 en desarrollo) HIMNO DE DEMOSTRACIÓN Soprano: EN DESARROLLO · Contralto: LISTA · Bajo: EN DESARROLLO RÉQUIEM DE OTOÑO Todas las voces siguen aprendiendo RÉCORD CONTRA LOS JEFES DEL CORO Ganados: 1 · perdidos: 1 JEFES VENCIDOS 2 de 6, en al menos una voz MEJOR MEMORIA ARMÓNICA 5 de 6 etapas (Contralto, Himno de demostración) SESIONES PUNTUADAS 3 · las últimas 3: 50 % de notas sostenidas de media TOMAS DE TU CORO GRABADAS 0 (0 guardadas ahora en este dispositivo) ADN Coral Himno de demostración Réquiem de Otoño Soprano En desarrollo · 20% Voz principal Aprendiendo · 0% Contralto Lista · 72% Tenor Aprendiendo · 0% Bajo En desarrollo · 6% 1–1 Himno de demostración — 1 lista(s) · 2 en desarrollo · 2 aprendiendo · Récord de jefes 1–1 Tu identidad de conjunto en una canción. Cada eje es una voz, trazada hasta donde llega su preparación (niveles de ensayo, etapas de Memoria armónica y jefes vencidos, con el mismo peso) y coloreada según su estado. En el centro, tu récord contra los Jefes del coro en esta canción. El empaste no se muestra: nada en la app mide cómo empasta tu voz con las demás. El historial de preparación y tus sesiones puntuadas son el registro. Historial de preparación Contralto (Himno de demostración): En desarrollo → LISTA 12 nov 2026 Contralto (Himno de demostración): Aprendiendo → EN DESARROLLO 12 nov 2026 Sesiones puntuadas recientes El Desafinador · Contralto (Himno de demostración) 12 nov 2026 · afinació
+
+== tr
+[report]  Performansınız Tutulan notalar4/8 nota ±50 sent içinde tutuldu50PerdeDuyulan 6 notada hedeften genellikle 38 sent uzakta77ZamanlamaDuyulan 6 notanın 5 tanesinde sesiniz notanın ilk %40 kısmında geldi · başlangıçtan ortanca 11 ms sonra92 Sırada tutulan notalar var: en düşük sonucunuz bu (50). Nasıl ölçülüyorPerformans Yönetmeni ile aynı puanlama. Perde, 100 eksi her notadaki ortalama sent sapmanızın 0,6 katıdır. Zamanlama, sesiniz notanın ilk %40 kısmında geldiyse 100, daha geç geldiyse 50'dir. İkisi de yalnızca duyulan notaları sayar. Kaçan bir notada "Neden?"e dokunarak beklenenle mikrofonun duyduğunu yan yana görün. 
+[why]  BeklenenA4 (440,0 Hz), şarkının 6,67–9,80 saniyesi. Sayılması için en az 5 perde ölçümünün (ilk 100 ms'den sonra alınan) ortancası ±50 sent içinde olmalı. Mikrofonun duyduğuOrtanca perde A#4 −19 sent (461,1 Hz), yani hedeften +81 sent. 182 ölçümün 0 tanesi ±50 sent içindeydi. Sesiniz nota başladıktan 11 ms sonra algılandı. Zamanında, notanın ilk %40'lik kısmında gelmek demektir (burada 1,3 s). Neden kaçtıOrtancanız 81 sent tizdi, ±50 sentlik aralığın dışında. Bu ses A4 notasına değil, A#4 notasına daha yakın. +200A4−2000 s3,13 s Her nokta bir perde ölçümüdür ve alındığı ana yerleştirilmiştir. Bant ±50 senttir, gölgeli başlangıç ilk 100 ms'dir (değerlendirilmez) ve kesikli çizgi sesinizin geldiği andır. 
+[ready] Hazırlık Alto HAZIR Bu parti için Hazır koşullarının hepsi tamam. Başka bir parti ya da diğer şarkıyı deneyin. Beş partinin hepsi
+[passport] Koro Dünyası Demo İlahi Çalış Şarkı Lab Antrenörler Korunuz Pasaport Koro Pasaportu Nasıl ölçülüyor Topluluk sicili HAZIR PARTİLER 10 partiden 1 hazır (2 gelişiyor) DEMO İLAHİ Soprano: GELİŞİYOR · Alto: HAZIR · Bas: GELİŞİYOR SONBAHAR AĞITI Tüm partiler hâlâ öğreniyor KORO BOSS SİCİLİ 1 galibiyet · 1 mağlubiyet YENİLEN BOSSLAR 6 bosstan 2 tanesi, en az bir partide EN İYİ ARMONİ HAFIZASI 6 aşamadan 5 (Alto, Demo İlahi) PUANLANAN ÇALIŞMALAR 3 · son 3 çalışmada ortalama notaların %50 kadarı tutuldu KAYDEDİLEN SENİN KORON KAYITLARI 0 (şu an bu cihazda 0 kayıt) Koro DNA Demo İlahi Sonbahar Ağıtı Soprano Gelişiyor · 20% Ana ses Öğreniyor · 0% Alto Hazır · 72% Tenor Öğreniyor · 0% Bas Gelişiyor · 6% 1–1 Demo İlahi — 1 hazır · 2 gelişiyor · 2 öğreniyor · Boss sicili 1–1 Bir şarkı için topluluk kimliğiniz. Her kol bir partidir; hazırlığı ne kadar ilerlediyse o kadar uzanır (prova seviyeleri, Armoni Hafızası aşamaları ve yenilen bosslar, eşit ağırlıkla) ve durumuna göre renklenir. Ortada bu şarkıdaki Koro Boss siciliniz var. Uyum (blend) gösterilmez: uygulamada sesinizin diğer partilerle nasıl kaynaştığını ölçen bir şey yok. Kayıt, hazırlık geçmişiniz ve puanlanan çalışmalarınızdır. Hazırlık geçmişi Alto (Demo İlahi): Gelişiyor → HAZIR 12 Kas 2026 Alto (Demo İlahi): Öğreniyor → GELİŞİYOR 12 Kas 2026 Son puanlanan çalışmalar Kaydırıcı · Alto (Demo İlahi) 12 Kas 2026 · perde 99 · zamanlama 100 13% Boğucu · Alto (Demo İlahi) 12 Kas 2026 · perde 94 · zamanlama 100 88% Armoni Hafızası · AŞAMA 1 · Alto (Demo İlahi) 12 Kas 2026 · perde 77 · zamanlama 92 50% Hesabınıza kaydedildi, diğer ciha
+
+== en
+[report]  Your performance Notes held4/8 notes held within ±50 cents50PitchTypically 38 cents from the target across the 6 notes heard77Timing5/6 notes heard: your voice arrived in the first 40% of the note · median 11 ms after it started92 Work on notes held next: it's your lowest (50). How this is measuredScored the same way as Performance Director. Pitch is 100 minus 0.6 × your average cents off in each note. Timing is 100 when your voice arrived in the first 40% of a note and 50 when it came later. Both count only notes that were heard. Tap "Why?" on a missed note to see what was expected next to what the mic heard. 
+[why]  ExpectedA4 (440.0 Hz), 6.67–9.80 s into the song. To count, the median of at least 5 pitch readings (taken after the first 100 ms) has to be within ±50 cents. What the mic heardMedian pitch A#4 −19 cents (461.1 Hz), which is +81 cents from the target. 0 of 182 readings were within ±50 cents. Your voice was first detected 11 ms after the note started. On time means arriving in the first 40% of the note (1.3 s here). Why it missedYour median was 81 cents sharp, outside the ±50 cent window. That's closer to A#4 than to A4. +200A4−2000 s3.13 s Each dot is one pitch reading, placed at the moment it was read. The band is ±50 cents, the shaded start is the first 100 ms (not judged), and the dashed line is where your voice arrived. 
+[ready] Readiness Alto READY Every Ready check is done for this part. Try another part, or the other song. All five parts
+[passport] Choir World Demo Hymn Rehearse Song Lab Trainers Your Choir Passport Choir Passport How this is measured Ensemble record PARTS READY 1 of 10 (2 developing) DEMO HYMN Soprano: DEVELOPING · Alto: READY · Bass: DEVELOPING AUTUMN REQUIEM Every part is still Learning CHOIR BOSS RECORD Won 1 · lost 1 BOSSES BEATEN 2 of 6, on at least one part BEST HARMONY MEMORY 5 of 6 stages (Alto, Demo Hymn) SCORED RUNS 3 · the last 3 averaged 50% of notes held YOUR CHOIR TAKES RECORDED 0 (0 saved on this device now) Choir DNA Demo Hymn Autumn Requiem Soprano Developing · 20% Lead Learning · 0% Alto Ready · 72% Tenor Learning · 0% Bass Developing · 6% 1–1 Demo Hymn — 1 ready · 2 developing · 2 learning · Boss record 1–1 Your ensemble identity for one song. Each spoke is a part, drawn out as far as its readiness goes (rehearsal levels, Harmony Memory stages and bosses beaten, weighted equally) and coloured by its status. The centre is your Choir Boss record on this song. Blend isn't shown: nothing in the app measures how your voice blends with the other parts. Your readiness history and scored runs are the record instead. Readiness history Alto (Demo Hymn): Developing → READY Nov 12, 2026 Alto (Demo Hymn): Learning → DEVELOPING Nov 12, 2026 Recent scored runs The Drifter · Alto (Demo Hymn) Nov 12, 2026 · pitch 99 · timing 100 13% The Drowner · Alto (Demo Hymn) Nov 12, 2026 · pitch 94 · timing 100 88% Harmony Memory · STAGE 1 · Alto (Demo Hymn) Nov 12, 2026 · pitch 77 · timing 92 50% Saved to your account, so it follows you to other devices.
+
+signed-out passport: 
+
+page errors: []
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-cvp7-1794499264947@example.com

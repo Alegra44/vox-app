@@ -1,0 +1,29 @@
+noisegate 2026-11-13T05-34-51  sides: before, after  before: master  target MIDI 57
+
+== noise-talker-10 (voices)
+   before #1 Pitch Match 15/0 | Drills 15/0/0/0/0 | RTF heard 54% in tune 8% | Tuner heard 60% in tune 13% | Stay in Key heard 48% in key 0% | Choir World heard 43% of frames, held 0/2
+   after #1  Pitch Match 15/0 | Drills 15/0/0/0/0 | RTF heard 54% in tune 8% | Tuner heard 60% in tune 9% | Stay in Key heard 50% in key 0% | Choir World heard 43% of frames, held 0/2
+   before #2 Pitch Match 16/0 | Drills 16/0/0/0/0 | RTF heard 54% in tune 9% | Tuner heard 60% in tune 5% | Stay in Key heard 48% in key 0% | Choir World heard 44% of frames, held 0/2
+   after #2  Pitch Match 16/0 | Drills 14/0/0/0/0 | RTF heard 53% in tune 8% | Tuner heard 61% in tune 9% | Stay in Key heard 51% in key 0% | Choir World heard 43% of frames, held 0/2
+   before #3 Pitch Match 18/0 | Drills 17/0/0/0/0 | RTF heard 54% in tune 9% | Tuner heard 60% in tune 6% | Stay in Key heard 50% in key 1% | Choir World heard 43% of frames, held 0/2
+   after #3  Pitch Match 15/0 | Drills 13/0/0/0/0 | RTF heard 55% in tune 9% | Tuner heard 59% in tune 7% | Stay in Key heard 50% in key 1% | Choir World heard 43% of frames, held 0/2
+
+==== Regression: passes on master and fails on the branch, or moves past the tolerance the wrong way (blocks a deploy)
+
+==== Fixed: fails on master and passes on the branch, or moves past the tolerance the right way
+
+==== Already failing: fails on master and on the branch (not caused by the branch)
+
+==== Within noise: crosses a pass/fail bar, but by no more than master's own spread (±5 to ±10): not blocking
+
+==== VERDICT (regress, 3 runs per side, medians): 0 regression(s), 0 fixed, 0 already failing, 0 within noise, 8 passed
+pass noise-talker-10 rtfVoiced: master 54/54/54 (median 54, spread 0) → branch 54/53/55 (median 54), change 0 (±5) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 tunerVoiced: master 60/60/60 (median 60, spread 0) → branch 60/61/59 (median 60), change 0 (±5) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 skVoiced: master 48/48/50 (median 48, spread 2) → branch 50/51/50 (median 50), change +2 (±5) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 cwFrames: master 43/44/43 (median 43, spread 1) → branch 43/43/43 (median 43), change 0 (±5) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 rtfInTune: master 8/9/9 (median 9, spread 1) → branch 8/8/9 (median 8), change -1 (±5) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 tunerInTune: master 13/5/6 (median 6, spread 8) → branch 9/9/7 (median 9), change +3 (±8) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 skInKey: master 0/0/1 (median 0, spread 1) → branch 0/0/1 (median 0), change 0 (±5) · noise alone: must not get worse past the tolerance
+pass noise-talker-10 Choir World held: master 0/0/0 (median 0, spread 0) → branch 0/0/0 (median 0), change 0 (±0) · noise alone: the median held count must not rise past master's own spread
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/noisegate-local-2026-11-13T05-34-51.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/noisegate-local-2026-11-13T05-34-51.json

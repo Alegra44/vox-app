@@ -1,0 +1,22 @@
+== youstates · master vs working copy · en
+
+-- signedout: 3 equal, 0 expected, 0 unexpected
+
+-- new: 65 equal, 0 expected, 0 unexpected
+
+-- active: 64 equal, 0 expected, 4 unexpected
+   DIFF     records.longestBreath: "12.4s" → "12.4 s"
+   DIFF     records.longestCrossing: "3.2s" → "3.2 s"
+   DIFF     recordsDom.recordsListVoice.4: "Longest breath sustain = 12.4s" → "Longest breath sustain = 12.4 s"
+   DIFF     recordsDom.recordsListVoice.6: "Longest clean register crossing = 3.2s" → "Longest clean register crossing = 3.2 s"
+
+-- activecw: 64 equal, 0 expected, 4 unexpected
+   DIFF     records.longestBreath: "12.4s" → "12.4 s"
+   DIFF     records.longestCrossing: "3.2s" → "3.2 s"
+   DIFF     recordsDom.recordsListVoice.4: "Longest breath sustain = 12.4s" → "Longest breath sustain = 12.4 s"
+   DIFF     recordsDom.recordsListVoice.6: "Longest clean register crossing = 3.2s" → "Longest clean register crossing = 3.2 s"
+
+YOUSTATES: FAIL: 8 unexpected difference(s)
+json: scripts/design-verify/logs/youstates-2026-11-13T06-44-53.json
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvys-1794552296741@example.com
