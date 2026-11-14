@@ -105,3 +105,37 @@ Agreed: time limits are the right fix, and thanks for saying plainly what happen
 - Everything else in PHASE10.md part B stays as written.
 
 Then: rule1's warm-up step alone with its new limit, commit B3, push, and on to B4. REPORT when B9's checks and the tour are done, then stop.
+
+## Deploy (2026-11-14)
+
+Phase 10 part B approved. Two small fixes first, then the deploy. Add this message to the end of design/house-lights/PHASE10.md under "Deploy" and commit it first. AC power only, one run at a time (the lock), time limits on.
+
+YOUR FOUR QUESTIONS
+1. Merged branches: yes, delete them, but only after production passes (step 4).
+2. Language from settings: no opener needed. Profile changing the language in place is right; drop that case.
+3. Hear the Mistake's English: fix it now (B11).
+4. tt-firsttick: fix it now (B11).
+
+B11 (one commit)
+- Hear the Mistake: "Which one was accurate?", "Not quite.", the result line and "Play A and B" get keys in four languages (no §7 words). Search the rest of the script for any other English written straight into textContent or innerHTML in a tool, key what you find, and list it in the commit message.
+- tt-firsttick: open Part Rehearsal the way a person does now, and make it pass on the branch.
+- Checks: Hear the Mistake's own check, tt-firsttick, copyscan --all, names, hooks, bootcheck. Secret check, push redesign/phase10.
+
+1. WAIT FOR "deploy"
+- When B11 is pushed, say you're ready and wait for me to type "deploy" here. Nothing else first.
+
+2. AFTER I TYPE "deploy"
+- Merge redesign/phase10 into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself.
+- After my Vercel line: confirm https://deploy-alegra1122.vercel.app serves the new deployment (check its page). If it doesn't, give me the exact vercel promote line with the real dpl id, and wait.
+- Rollback target: dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H.
+
+3. PRODUCTION CHECKS (against deploy-alegra1122.vercel.app). This is the last phase, so it's the full run:
+- prod.sh with WITH_CHOIR=1; checkout, onboard, feedback, posters and moments9; and phase 10's rule1, targets, names, focus, motion and datelocale.
+- Rollback rule: a failure that repeats on a rerun and isn't a network error or a Supabase 503 means rolling back to dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H. For a sign-up timeout, sign up through the page once by script; if that works in a few seconds, it was Supabase. If a rollback is needed, give me the line and stop.
+- Delete the test accounts and any Feedback rows they sent. Push the results to review/phase10-prod.
+
+4. WHEN EVERYTHING PASSES
+- Delete the 15 merged branches, redesign/phase10, review/phase10, review/phase9-prod and the five old orphans review/phase1-prod … review/phase4b-prod. Keep master, review/phase10-prod and exp/single-stream.
+- HANDOFF: the House Lights redesign is complete; phase 10 is live with its dpl id, which is the rollback target from now on.
+
+REPORT, then stop.
