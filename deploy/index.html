@@ -6915,7 +6915,8 @@ async function apiFetch(path, options={}){
   });
   if(!res.ok){
     const body = await res.json().catch(()=>({}));
-    throw new Error(body.error || ('Request failed: ' + res.status));
+    const e = new Error(body.error || ('Request failed: ' + res.status)); e.status = res.status; // a network error has none
+    throw e;
   }
   return res.status===204 ? null : res.json();
 }
@@ -14279,11 +14280,27 @@ function levelupWhyText(prev, now){
   return parts.length ? t('levelup_why').replace('{list}', levelupJoin(parts)) : '';
 }
 let lastKnownLevel = null;
+// A failed save (a network error, a 5xx, a 429 or a 401) is tried again with the vocal-load outbox's back-off: 2, 5, 15
+// and 60 s, then every 5 min while the page is open, each ±20 % jitter (scoring batch release A, A2). One timer: a retry
+// sends progress as it is then, so saves made meanwhile go with it; any good save resets it. Another 4xx is the server
+// refusing the body: not retried. Only while signed in; cleared at sign-out.
+const PROGRESS_RETRY = {BACKOFF_MS:[2000, 5000, 15000, 60000], EVERY_MS:300000, JITTER:0.2};
+const progressRetry = {n:0, timer:null};
+function progressRetryClear(reset){ if(progressRetry.timer){ clearTimeout(progressRetry.timer); progressRetry.timer = null; } if(reset) progressRetry.n = 0; }
+function progressRetryLater(e){
+  const again = !e || e.status===undefined || e.status===null || e.status>=500 || e.status===429 || e.status===401;
+  if(!again || !profile || progressRetry.timer) return;
+  const n = progressRetry.n++, base = n < PROGRESS_RETRY.BACKOFF_MS.length ? PROGRESS_RETRY.BACKOFF_MS[n] : PROGRESS_RETRY.EVERY_MS;
+  progressRetry.timer = setTimeout(()=>{ progressRetry.timer = null; if(profile && progress) saveProgress(); },
+    Math.round(base * (1 + (Math.random()*2-1) * PROGRESS_RETRY.JITTER)));
+}
+window.addEventListener('online', ()=>{ if(progressRetry.timer && profile){ progressRetryClear(false); saveProgress(); } });
 async function saveProgress(){
   try{
     const row = await apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
     progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
-  }catch(e){ console.error('progress save error', e); }
+    progressRetryClear(true);
+  }catch(e){ console.error('progress save error', e); progressRetryLater(e); }
   if(profile && typeof levelForXp==='function'){
     const {level, name} = levelForXp(progress.xp||0);
     const priorLevel = lastKnownLevel;
@@ -14528,6 +14545,7 @@ document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
   if(typeof vlEnd==='function') vlEnd(); // saved while still signed in
   try{ await sb.auth.signOut(); }catch(e){ console.error('sign out error', e); }
   profile = null;
+  progressRetryClear(true); // a retry waiting for this account's save stops
   if(typeof renderVocalLoadGauge==='function') renderVocalLoadGauge();
   lastKnownLevel = null;
   renderAccountBar();
@@ -25230,7 +25248,7 @@ function studioMigrate(){
   const have = new Set(studioTakes().map(tk=>tk.recordedAt));
   const merged = studioTakes().concat(progress.studioTakes.filter(tk=>tk && tk.base64 && !have.has(tk.recordedAt)));
   if(!studioSaveTakes(merged)) return; // the device is full: they stay where they are
-  progress.studioTakes = [];
+  delete progress.studioTakes; // never a server column: an empty list sent with every save was dropped there (A2's check)
   saveProgress();
 }
 function renderStudioMode(){
