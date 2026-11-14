@@ -22,9 +22,9 @@ const LOG = path.join(DIR, 'watchdog.log');
 // The CLI logs in with a temporary role whose password each query resets, so two queries at once (two scripts running,
 // or a watchdog next to a run) can fail with "password authentication failed for user cli_login_postgres": retried.
 // A query that hangs (one sat for 31 hours on 2026-10-03/04, at full CPU) is killed after DB_TIMEOUT_MS and tried once
-// more. The platform's CLI binary is run directly when it can be found, so the kill reaches the process doing the work;
+// more; a second time out throws (the run records it). A query normally takes 5–6 s (2026-11-12): the limit is about 2×. The platform's CLI binary is run directly when it can be found, so the kill reaches the process doing the work;
 // through npx, a kill of npx could leave the binary running.
-const DB_TIMEOUT_MS = 60000;
+const DB_TIMEOUT_MS = 15000;
 const SUPABASE_BIN = (() => {
   const os_ = { win32: 'windows' }[process.platform] || process.platform, ext = process.platform === 'win32' ? '.exe' : '';
   for (const suffix of [`${os_}-${process.arch}`, `${os_}-${process.arch}-musl`]) {
@@ -132,6 +132,8 @@ function reapDeadRuns() {
     } catch (e) { console.log(`[reap] FAILED for run ${pid} (${e.message.split(/\r?\n/)[0]}): ${emails.join(', ')}`); }
   }
 }
+// One verify run at a time, with its time limit (scripts/runguard.js): taken before this run touches the database.
+require('../runguard').auto();
 reapDeadRuns();
 
 // A backstop for accounts from before the ledger existed: deletes accounts with this prefix over an hour old (a run of

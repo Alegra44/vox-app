@@ -73,6 +73,7 @@
   --hl-game-gold: #895F00;   /* rewards, games only */
   /* choir parts */
   --hl-sop: #6C3FD1; --hl-lead: #985700; --hl-alto: #B0306E; --hl-ten: #0A7279; --hl-bass: #576E13;
+  --hl-cat-pitch: #0A7279; --hl-cat-breath: #B0306E; --hl-cat-agility: #985700; --hl-cat-range: #576E13; --hl-cat-expression: #6C3FD1; /* skill categories: never the voice */
   /* piano keys */
   --hl-piano-white: #FFFFFF; --hl-piano-black: #111316;
   --hl-shadow-sheet: 0 18px 48px rgba(17,19,22,.16);
@@ -88,6 +89,7 @@
     --hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;
     --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
     --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+    --hl-cat-pitch: #3FD0D6; --hl-cat-breath: #FF7DB8; --hl-cat-agility: #FFB347; --hl-cat-range: #B6D35A; --hl-cat-expression: #B193FF;
     --hl-piano-white: #D9DBDF; --hl-piano-black: #060708;
     --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);
     color-scheme: dark;
@@ -99,6 +101,7 @@
   --hl-voice: #8A96FF; --hl-voice-soft: #232A5C; --hl-on-voice: #0A0C1A;
   --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF7A5F; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
   --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+  --hl-cat-pitch: #3FD0D6; --hl-cat-breath: #FF7DB8; --hl-cat-agility: #FFB347; --hl-cat-range: #B6D35A; --hl-cat-expression: #B193FF;
   --hl-piano-white: #D9DBDF; --hl-piano-black: #060708;
   --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.5);
   color-scheme: dark;
@@ -111,6 +114,7 @@
   --hl-voice: #7F8CFF; --hl-voice-soft: rgba(127,140,255,.16); --hl-on-voice: #05060F;
   --hl-lock: var(--hl-voice); /* locked on the note = your voice, filled */ --hl-miss: #FF6A4D; --hl-warn: #F0B44A; --hl-ok: #5BC98A; --hl-game-gold: #FFC23D;
   --hl-sop: #B193FF; --hl-lead: #FFB347; --hl-alto: #FF7DB8; --hl-ten: #3FD0D6; --hl-bass: #B6D35A;
+  --hl-cat-pitch: #3FD0D6; --hl-cat-breath: #FF7DB8; --hl-cat-agility: #FFB347; --hl-cat-range: #B6D35A; --hl-cat-expression: #B193FF;
   --hl-piano-white: #C9CCD1; --hl-piano-black: #000000;
   --hl-shadow-sheet: 0 18px 48px rgba(0,0,0,.6);
   --hl-glow: drop-shadow(0 0 6px rgba(127,140,255,.55));
@@ -215,7 +219,7 @@
 .hl-key[aria-pressed="true"]{ color: var(--hl-ink); border-color: var(--hl-ink-3); }
 .hl-key[aria-pressed="true"]::before{ background: var(--led, var(--hl-lead)); box-shadow: 0 0 6px var(--led, var(--hl-lead)); }
 .hl-key[data-key="mute"]{ --led: var(--hl-miss); }
-.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-voice); }
+.hl-key[data-key="loop"], .hl-key[data-key="acappella"]{ --led: var(--hl-ink); }
 
 /* fader: a real control on input[type=range] */
 .hl-fader{ -webkit-appearance: none; appearance: none; width: 100%; height: 28px; background: transparent; cursor: pointer; margin: 0; }
@@ -235,7 +239,7 @@
 .hl-seg button{ min-height: var(--hl-touch); padding: 0 var(--hl-s3); border: 0; border-radius: 4px; background: transparent; color: var(--hl-ink-2); font: inherit; font-size: var(--hl-t-small); font-weight: 600; cursor: pointer; }
 .hl-seg button[aria-selected="true"], .hl-seg button[aria-pressed="true"]{ background: var(--hl-ink); color: var(--hl-bg); }
 .hl-chip{ position: relative; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 0 var(--hl-s3); border-radius: var(--hl-r1); border: var(--hl-hair) solid var(--hl-rule-strong); font-size: var(--hl-t-small); font-weight: 600; color: var(--hl-ink-2); background: transparent; }
-.hl-chip::after{ content: ""; position: absolute; inset: -6px 0; } /* a 44px hit area on the 32px chip */
+.hl-chip::after{ content: ""; position: absolute; inset: -7px 0; } /* a 44px hit area on the 32px chip (the inset counts from inside its 1px border) */
 .hl-chip[aria-pressed="true"]{ border-color: var(--hl-ink); color: var(--hl-ink); }
 .hl-part-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--part); flex: none; }
 
@@ -284,7 +288,7 @@
 .hl-steps li[data-state="done"]{ color: var(--hl-ink-2); }
 .hl-steps li[data-state="done"]::before{ width: 12px; height: 7px; border-radius: 0; border: 0; border-left: 2px solid var(--hl-ok); border-bottom: 2px solid var(--hl-ok); transform: rotate(-45deg) translate(1px,-2px); }
 .hl-steps li[data-state="active"]{ color: var(--hl-ink); font-weight: 600; }
-.hl-steps li[data-state="active"]::before{ background: var(--hl-voice); border-color: var(--hl-voice); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
+.hl-steps li[data-state="active"]::before{ background: var(--hl-ink); border-color: var(--hl-ink); animation: hl-pulse 1.2s var(--hl-ease) infinite; }
 
 .hl-error{ display: grid; gap: var(--hl-s3); padding: var(--hl-s5) 0; border-top: 2px solid var(--hl-miss); }
 .hl-error details{ font-size: var(--hl-t-small); color: var(--hl-ink-3); }
@@ -302,4 +306,7 @@
 @media (prefers-reduced-motion: reduce){
   .hl-btn, .hl-transport, .hl-dimmer, .hl-meter > i{ transition: none; }
   .hl-steps li[data-state="active"]::before{ animation: none; }
+  /* v3.0 (phase 10 B7): one global rule. Every animation and transition, the app's own included, finishes at once and
+     runs once, so nothing slides or pulses and values jump to where they are; scrolling jumps too. */
+  *, *::before, *::after{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }

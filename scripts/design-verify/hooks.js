@@ -90,6 +90,11 @@ const ALLOWED_REMOVALS = {
   'data-i18n=skilltree_h2': "phase 8 §2.8: the §7 heading goes; the page's one line (skilltree_line); key stays in TRANSLATIONS",
   'data-i18n=skilltree_desc': 'phase 8 §2.8: the §7 description goes; key stays in TRANSLATIONS',
 };
+// Phase 10 A1: .legacy-tabs goes (its markup, CSS and the click path enterPanel used; enterPanel now calls
+// showPanelByName). Every id and data-panel value that lived only on its buttons in master may go, read from master's
+// own nav so nothing else is excused.
+{ const nav = (master.match(/<nav class="tabs legacy-tabs"[\s\S]*?<\/nav>/) || [''])[0];
+  for (const [, a, v] of nav.matchAll(/\b(id|data-panel)="([^"]+)"/g)) ALLOWED_REMOVALS[`${a}=${v}`] ||= 'phase 10 A1: .legacy-tabs removed (enterPanel calls showPanelByName)'; }
 // Canvas drawing code keeps its literal colours this phase (exempt by function), and the voice ambient glow (phase 2).
 const EXEMPT_FUNCTIONS = {
   gliderLoop: 'Glider canvas (arcade game)', bridgeLoop: 'Bridge canvas (arcade game)', wuExLoop: 'the warm-up canvas',
@@ -104,7 +109,7 @@ const PROTECTED_STRINGS = ['In tune', 'Listening…', 'In key', 'Steady', 'Pushi
   'Fits comfortably in your captured range', 'Outside part of your captured range', 'Recording', 'Songs'];
 const PROTECTED_ATTRS = ['data-rd-part', 'data-boss-type', 'data-boss-difficulty', 'data-glider-mode', 'data-glider-difficulty', 'data-game',
   'data-hm-stage', 'data-hm-guess', 'data-profile-lang'];
-const LEGACY_VARS = ['--bg', '--surface', '--surface-raised', '--hairline', '--cream', '--muted', '--brass', '--brass-dim', '--teal', '--coral'];
+const LEGACY_VARS = ['--bg', '--surface', '--surface-raised', '--hairline', '--cream', '--text', '--muted', '--brass', '--brass-dim', '--teal', '--coral', '--on-brass', '--on-teal', '--on-part', '--shadow', '--bg-glow-1', '--bg-glow-2'];
 const HL_BEGIN = '/* ===== HOUSE LIGHTS v1.2 BEGIN */', HL_END = '/* ===== HOUSE LIGHTS v1.2 END */';
 
 const results = []; // {check, ok, detail}
@@ -184,6 +189,23 @@ function translations(src) {
       feedback_toast_empty: 'PHASE9.md 9.1 (1): the empty Send shows a note under the button (feedback_empty_note), no toast',
       vocallab_notecount_suffix: 'PHASE9.md 2.10 (replaced by the plural keys vocallab_notes_one/other)',
     };
+    // PHASE10.md A1: the keys nothing referenced (unusedkeys.js; the list is in PHASE10_SURVEY.md), removed in all four
+    for (const k of `
+      theme_default theme_cyberpunk theme_aurora theme_velvetopera hub_you_teacher_desc staykey_tag
+      emotion_tag boss_choose_desc boss_choose_h2 boss_reuses_tag boss_step_label bridge_h2
+      bridge_reuses_tag bridge_step_label hub_songs_rehearsal_desc hv_hint ac_btn_off ac_btn_on
+      rehearsal_playing_btn dashboard_skillprofile_desc dashboard_skillprofile_h2 dashboard_todaysplan_desc dashboard_todaysplan_h2 glider_course_desc
+      glider_step_label harmony_hold_h2 harmony_overall_desc harmony_part_alto_tag harmony_part_bass_tag harmony_part_lead_tag
+      harmony_part_soprano_tag harmony_part_tenor_tag harmony_reuses_tag harmony_step_label pricing_continue_teacher_btn rift_desc
+      rift_h2 rift_reuses_tag rift_step_label skilltree_desc skilltree_h2 skilltree_step_label
+      record_label_keychange record_label_song_score record_note_keychange record_note_song_score action_go boss_recommend_p1
+      boss_recommend_p2 bridgerunner_wipedout dash_recap_suffix game_score_p1 glider_coins glider_crashed
+      registercoach_beststat_p1 rift_avg_p1 rift_rounds_completed rift_rounds_p1 rift_time_p1 weeklychallenge_you
+      pd_dim_technique pd_insight_prefix skilltree_current skilltree_bestcrossing passport_updated_prefix passport_updated_suffix
+      voicecard_nottracked feature_vocal_journey feature_boss_battle feature_register_runner feature_harmony_arena feature_vocal_rift
+      arcade_pro_level_template arcade_trial_included arcade_unlocks_at_level_template studio_recording_label studio_no_gamification studio_session_title
+      cw_trainers_label rhythm_running
+    `.trim().split(/\s+/)) INTENDED[k] ||= 'PHASE10.md A1: referenced by no code or markup (unusedkeys.js), removed in all four languages';
     const T0 = translations(master), gone = Object.keys(T0.en).filter(k => !(k in T.en));
     const dropped = gone.filter(k => !(k in INTENDED)), meant = gone.filter(k => k in INTENDED);
     check(`no TRANSLATIONS key from ${BASE} removed`, dropped.length === 0,
@@ -204,10 +226,10 @@ const hlStart = work.indexOf(HL_BEGIN), hlEnd = work.indexOf(HL_END);
   check('HOUSE LIGHTS v1.2 block = design/house-lights/house-lights.css', ok, detail);
 }
 
-// ---- 5. legacy variables (choir-verify/fix.js reads them)
+// ---- 5. legacy variables: gone since phase 10 B1 (every use is the --hl- token it aliased; fix.js reads the tokens)
 {
-  const miss = LEGACY_VARS.filter(v => !new RegExp(`${esc(v)}\\s*:`).test(work));
-  check('legacy variables still defined', miss.length === 0, miss.length ? `missing: ${miss.join(', ')}` : LEGACY_VARS.join(' '));
+  const left = LEGACY_VARS.filter(v => new RegExp(`${esc(v)}(?![\\w-])`).test(work));
+  check('legacy variables gone (not defined, not used)', left.length === 0, left.length ? `still there: ${left.join(', ')}` : `${LEGACY_VARS.length} names, none left`);
 }
 
 // ---- line bookkeeping for the next checks

@@ -1,4 +1,15 @@
-# House Lights: the VoxCoach design system (v2.0)
+# House Lights: the VoxCoach design system (v3.0)
+
+v3.0 (2026-11-12, phases 8, 9 and 10, specs `PHASE8.md`, `PHASE9.md`, `PHASE10.md`): all ten build phases done (§10).
+**Components added since v2.0** (§4): the sheet, the moment sheet, the posters, the lanes, the marks. **Rule 1** (§2) now
+has an allowed list, and `scripts/design-verify/rule1.js` enforces exactly that list. **Tokens:** the 17 legacy variables
+are gone (every use is the `--hl-` token it aliased); `--hl-cat-pitch`, `-breath`, `-agility`, `-range`, `-expression`
+are the skill category colours (never the voice; 3:1 or better on paper in both themes). **Reduced motion** is one
+global rule (§3). **Touch targets** are 44 × 44 (§4). **Focus:** every sheet opens through `openModalWithA11y`, which
+builds its list of controls on every Tab, keeps focus inside, closes on Escape (when it has an `onClose`) and gives focus
+back to the opener. **Names:** decorative graphics are `aria-hidden`; data graphics have `role="img"` and a summary
+built from the data in the page's language; every `aria-label` is keyed (`data-i18n-aria-label` or `t()`).
+**Durations** are written with a no-break space and the language's decimal sign ("12.4 s", "12,4 s": `fmtSecs`).
 
 v2.0 (2026-11-08, phase 7, spec `PHASE7.md`): Progress and identity, the You screens. **Structure:** (a) **You**
 (`panel-you-hub`) is the one place for you: signed out, one raised block with Sign in; signed in, an identity block
@@ -154,6 +165,22 @@ open once granted, so the trigger is the singing session, not the mic itself: se
 1. **Your voice is the brightest thing.** `--hl-voice` (ultramarine) is reserved for the singer:
    the live pitch line, their range, their takes, the button that starts singing
    (`.hl-btn--sing`), the playhead on the active tab. Never use it for anything else.
+   **The allowed list (v3.0)**, exactly as `rule1.js` enforces it: every element in the voice colour (text, background,
+   border, outline, box-shadow, fill, stroke or accent colour) on every screen and sheet at rest, at 390 in Light and
+   Dark, must be one of:
+   - a start-singing button (`.mic-btn` / `.vc-take-pill`) or anything inside one;
+   - Daily Exercises' Listen & score (`#pitchListenBtn`: it opens the mic);
+   - the singer's trace: Part Rehearsal's line (`path.cw-voice`);
+   - the singer's range: Range Finder's and Progress's range bars (`#rangeFill`, `#dashRangeFill`);
+   - the singer's range: the range poster's keys (`.pk-w.on`, `.pk-b.on`);
+   - the singer's range: Vocal Lab's segments (`.vlab-seg`);
+   - a live measure of the singer: Breath Control's hold ring (`#breathRingFill`).
+   It also checks the warm-up with an item running: no voice colour on its list (the Stop and the running row are ink).
+   Not seen at rest, so outside the check, and also the singer: the live voice line and meters on a stage, the
+   karaoke cursor, HEAR ME's LED, the capture button, the rhythm dot, your health bar in the games.
+   Ink, not voice, for anything that plays rather than listens (Hear the Mistake's "Play A and B"), for state (LEDs,
+   pressed keys, badges, the next node of the Skill Tree), and for data about the singer that isn't live (the
+   fingerprint, the DNA polygon, held records). Skill categories use `--hl-cat-*`.
 2. **Lights down to sing, lights up to learn.** While singing, show only the target, the voice
    line and how far off it is. Scores, history, explanations and secondary buttons appear only
    after stopping.
@@ -177,9 +204,13 @@ open once granted, so the trigger is the singing session, not the mic itself: se
 - **Colour:** semantic tokens only (`--hl-bg`, `--hl-raised`, `--hl-sunk`, `--hl-rule`,
   `--hl-ink`, `--hl-ink-2`, `--hl-ink-3`, `--hl-voice`, `--hl-voice-soft`, `--hl-lock`,
   `--hl-miss`, `--hl-warn`, `--hl-ok`, `--hl-game-gold`). Parts via `data-part="sop|lead|alto|ten|bass"`,
-  which sets `--part`. No literal colours in component rules.
+  which sets `--part`. Skill categories (v3.0): `--hl-cat-pitch`, `--hl-cat-breath`, `--hl-cat-agility`,
+  `--hl-cat-range`, `--hl-cat-expression` (Daily Exercises' Focus bar and legend, Progress's chart and key). No literal
+  colours in component rules. The legacy variables (`--teal`, `--cream`, `--surface`…) are gone (v3.0).
 - **Motion:** `--hl-d1` 120ms, `--hl-d2` 200ms, `--hl-d3` 320ms, `--hl-d-house` 640ms;
-  `--hl-ease`, `--hl-ease-house`. Respect `prefers-reduced-motion` everywhere.
+  `--hl-ease`, `--hl-ease-house`. Under `prefers-reduced-motion: reduce` one global rule (§17 of `house-lights.css`,
+  v3.0) makes every animation and transition 0.01 ms and one iteration, and scrolling jump: nothing slides or pulses,
+  values jump to where they are. Script that scrolls smoothly checks the setting too. `motion.js` checks it.
 
 `data-house` goes on `<body>` or on a panel, **never on `<html>`** (it would lose to the theme
 selectors). A house-up block inside a stage (e.g. a result sheet) can set `data-house="up"`.
@@ -206,6 +237,16 @@ selectors). A house-up block inside a stage (e.g. a result sheet) can set `data-
 | Method note | `details.hl-measure` | One per result screen |
 | Main tabs | `.hl-tabbar` + `.hl-tab[aria-current=page]` | |
 | Icons | `<svg class="hl-icon"><use href="#hl-NAME"/></svg>` | Names in `house-lights-icons.svg` |
+| An overlay (v3.0, phase 9) | the sheet: paper (`--hl-raised`) on a scrim, `--hl-r3`, 24 px padding, max 440 wide; `.p9-title` (hl-h2), one `.p9-line` in ink-2, the content (`.p9-field`), `.p9-actions` | Main action `.hl-btn--ink` (or `--sing` if it opens the mic), the rest quiet; × close 44 px. Opens through `openModalWithA11y`. Used by sign-in/up, sign-in required, onboarding, Language, the paywall, checkout, the warm-up card, the posters' frames |
+| A moment (v3.0, phase 9) | the moment sheet: `.levelup-overlay` + `.moment-sheet` (`showLevelUp`, `triggerNewRecord`, `triggerBreakthrough`) | 6 s with a why-line or a breakthrough, 4 s otherwise; a touch or key inside stops the timer; then Continue, Escape or the scrim. Focus inside while open; back to the opener only if it was in the sheet |
+| A shared image (v3.0, phase 9) | the posters: `.poster` (range, monthly recap) | Always paper (it restates the light tokens), flat: no `color-mix()`, gradients, `backdrop-filter` or `font-stretch` (html2canvas can't draw them). Exported opaque at ×2 |
+| Parts over time (v3.0, phases 5–6) | the lanes: `svg.cw-lanes` | The five parts as lanes, your part bold, your live voice line and the playhead; Choir World rehearsal, Sing With the Choir, Performance, Your Choir |
+| A place or a boss (v3.0, phase 8) | the marks: `hl-loc-*` (6 locations), `hl-boss-*` (8 bosses) and the Skill Tree's skills in the sprite | 24 px grid, 1.6 stroke, `currentColor`, drawn to work from 24 to 96 px; ink, ink-3 when locked (with `hl-lock`, no opacity) |
+
+**Touch targets (v3.0):** every control is 44 × 44 or more, except links inside running text. Buttons, keys and selects
+have `min-height: 44px`. A control that keeps a small look takes 44 from padding or a `::after` hit area; the inset counts
+from inside the border, so a 32 px control with a 1 px border needs `inset: -7px`. Hit areas never overlap (a wrapping
+chip row has a 14 px row gap); where they would, the control grows. `targets.js` hit-tests them.
 
 The mockups in `house-lights.html` use extra `m-*` classes. Treat those as the per-area styles
 to recreate (with `vc-` or area prefixes), not as a library.
@@ -339,20 +380,23 @@ time. Phases start only after `wip/noise-gate` and `warmup` are merged into mast
 1. **Foundation:** fonts, `house-lights.css`, icon sprite, legacy variable remap, header, tab
    bar (icons, "Coach" label, playhead), developer note removed, emoji replaced in the shell and
    tab bar, theme choice reduced to System / Light / Dark (with the §8 mapping), `<html lang>` set
-   from the active language.
+   from the active language. **Done** in v1.2 (2026-10-10).
 2. **Lighting:** `houseSession` / `singingSession` and the `data-house` watcher (§9), dimmer, the singing layout and the results layout
-   as reusable patterns, applied first to the Tuner and Pitch Match only.
-3. **Home and the Coach tab.**
+   as reusable patterns, applied first to the Tuner and Pitch Match only. **Done** in v1.3 and v1.4 (2026-10-11, 10-12).
+3. **Home and the Coach tab.** **Done** in v1.5 (2026-10-13).
 4. **Vocal Coach tools**, one group at a time, onto the singing and results layouts. 4a (v1.6): the 14 tools on `vcTake`
-   and paper; 4b (v1.7): the 10 tools with their own displays, each on its own stage.
+   and paper; 4b (v1.7): the 10 tools with their own displays, each on its own stage. **Done** (2026-10-21, 10-26).
 5. **Choir World:** song page sub-navigation, rehearsal stage, Song Lab with X-Ray lightbox and
-   Microscope, the mixer as channel strips.
-6. **Performance:** Studio as the stage; the Performance Report.
+   Microscope, the mixer as channel strips. **Done** in v1.8 (2026-11-02).
+6. **Performance:** Studio as the stage; the Performance Report. **Done** in v1.9 (2026-11-04).
 7. **Progress and identity:** You hub, Journey, Dashboard, Records, both Passports, Voice
-   Health, Profile. Done in v2.0 (Dashboard renamed Progress; Choir World's Passport stays with Choir World).
-8. **Vocal World games.**
+   Health, Profile. **Done** in v2.0 (2026-11-08; Dashboard renamed Progress; Choir World's Passport stays with Choir World).
+8. **Vocal World games.** **Done** (2026-11-09): the hub, the six game pages, the 14 marks.
 9. **Everything else:** onboarding, sign-up, Plans, Teacher, Feedback, remaining copy in all
-   four languages, all remaining emoji.
+   four languages, all remaining emoji. **Done** (live 2026-11-11): the sheet, the moment sheets, the posters; Teacher
+   hidden ("Coming later").
 10. **Final pass:** motion, tablet/desktop layouts, accessibility (contrast, focus, touch
     targets, screen reader labels, reduced motion), screenshots of all 46 screens in both
-    themes, the full verify run on production.
+    themes, the full verify run on production. **Done** in v3.0 (2026-11-12, `PHASE10.md`): Rule 1 enforced, legacy
+    variables and dead CSS gone, touch targets, names, focus, reduced motion, durations, the 600–959 px layouts; the
+    production run follows the deploy.

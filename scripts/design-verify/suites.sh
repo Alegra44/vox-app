@@ -5,14 +5,17 @@
 # listenwin / picker / loopback compare against master themselves (*_BEFORE=master); vibfix and noisegate run regress mode.
 # The choir group (phase 5a), opt-in: ONLY="choir", or WITH_CHOIR=1 for everything plus the group. Required for phases
 # 5, 6 and 10 (with choirregress.sh, the choir gate). cv-live runs against production (it checks the live HTML equals deploy/index.html, so it
-# can only pass after a deploy); p8.js makes its own tier accounts. Choir suites carry a usual run time: 3× it (30 min at
-# most) is their limit, on top of the idle watchdog.
+# can only pass after a deploy); p8.js makes its own tier accounts. Every suite's limit is in scripts/run-limits.json
+# (about 2× its normal time, enforced by runguard.js), on top of the idle watchdog.
 # Single stream (2026-10-15): also modecheck (three engines), vlcompare, regfix against master, Voice Quality (vq, livevq,
 # bands, cvib: measured on one build, re-run on master by suites-master.sh to read the shift), house/home/hooks/contrast
 # against master. Long jobs on AC power only: before each suite the run waits while the Mac is on battery.
 # Usage: bash scripts/design-verify/suites.sh [first suite to run]
 #        ONLY="warmup-tracking levelup" bash scripts/design-verify/suites.sh   (just those suites, in this file's order)
 cd "$(dirname "$0")/../.."
+# One verify run at a time: this runner holds the lock (scripts/runguard.js) for all its suites; each suite runs under its
+# time limit from run-limits.json (about 2x its normal time): past it, it and its browsers are killed, a FAIL "timed out".
+[ -z "$VOXCOACH_RUN_LOCK" ] && exec node scripts/runguard.js run --name "suites${ONLY:+ ONLY=$ONLY}${WITH_CHOIR:+ WITH_CHOIR=1}" --limit-min 0 -- bash "$PWD/scripts/design-verify/suites.sh" "$@"
 STAMP=$(date -u +%Y-%m-%dT%H-%M-%S); OUT=scripts/design-verify/logs/suites-$STAMP; mkdir -p "$OUT"
 L=http://localhost:8765/
 WATCHDOG=${WATCHDOG:-15}
@@ -85,18 +88,15 @@ for s in "${SUITES[@]}"; do
   case $name in cv-*) [ -z "$ONLY" ] && [ -z "$WITH_CHOIR" ] && continue;; esac # the choir group is opt-in
   while pmset -g batt | head -1 | grep -q "Battery Power"; do echo "$(date -u +%H:%M:%S) on battery: waiting for AC before $name" >> "$OUT/progress.txt"; sleep 300; done
   t0=$(date +%s); echo "$(date -u +%H:%M:%S) start $name" >> "$OUT/progress.txt"
-  $cmd > "$OUT/$name.log" 2>&1 & PID=$!
-  limit=; [ -n "$usual" ] && limit=$(( usual * 3 )) && [ $limit -gt 30 ] && limit=30
+  node scripts/runguard.js run --name $name -- $cmd > "$OUT/$name.log" 2>&1 & PID=$!
   while kill -0 $PID 2>/dev/null; do # a suite with no output for WATCHDOG minutes is killed (cv-s6fr hung for 44 h on 2026-10-16)
     sleep 20
     idle=$(( ($(date +%s) - $(stat -f %m "$OUT/$name.log")) / 60 ))
     if [ $idle -ge $WATCHDOG ]; then pkill -P $PID 2>/dev/null; kill $PID 2>/dev/null
       echo "$(date -u +%H:%M:%S) $name killed: no output for $WATCHDOG min" >> "$OUT/progress.txt"; fi
-    if [ -n "$limit" ] && [ $(( $(date +%s) - t0 )) -ge $(( limit * 60 )) ]; then pkill -P $PID 2>/dev/null; kill $PID 2>/dev/null
-      echo "$(date -u +%H:%M:%S) $name killed: over its limit of $limit min" >> "$OUT/progress.txt"; fi
   done
   wait $PID; rc=$?
-  echo "$(date -u +%H:%M:%S) done  $name exit $rc ($(( ($(date +%s)-t0)/60 )) min)" >> "$OUT/progress.txt"
+  echo "$(date -u +%H:%M:%S) done  $name exit $rc ($(( ($(date +%s)-t0)/60 )) min)$([ $rc = 124 ] && echo ' TIMED OUT: FAIL')" >> "$OUT/progress.txt"
   sleep 60
 done
 echo "$(date -u +%H:%M:%S) ALL DONE" >> "$OUT/progress.txt"
