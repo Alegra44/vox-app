@@ -4,31 +4,24 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub
+## Branches on GitHub (2026-11-14)
 
-| Branch | What it is | Status |
-|---|---|---|
-| `master` | Everything through House Lights phase 4b (merge ffa49b1, 2026-10-29) | **Ahead of production**: 4b was deployed (dpl_FjTuxeuo8kehTKyepm2wKSEHtR5g) and rolled back to dpl_FCwcfBpeCmDP6mZ9AyK3A8cftDdg (phase 4a) after stopcheck failed twice on production; see phase 4b below |
-| `redesign/phase4a` | House Lights phase 4a and fix rounds 4a.1–4a.3 (spec `design/house-lights/PHASE4A.md`) | Merged (296d530) and live 2026-10-22. Closed |
-| `redesign/phase4b` | Phase 4b survey (`design/house-lights/PHASE4B_SURVEY.md`) and the 4b build (spec `design/house-lights/PHASE4B.md`) | Built and checked, pushed 2026-10-29 (1f06e2e and the HANDOFF commit); waiting for the user's screenshot review. No merge or deploy before it |
-| `review/phase4b-fix` | Orphan branch, no code: the 4b.1 fixed screens and `sheets/fix.jpg` | For the user's review |
-| `review/phase4b` | Orphan branch, no code: the 10 tools after 4b (idle, stage, result or stopped; 390 and 1280, Light and Dark; Mirror scrubbed, Rhythm with every beat sung, hl-alert, `sheets/tools.jpg`) | For the user's review |
-| `review/phase4b-before` | Orphan branch, no code: the 10 phase 4b tools as they are now (idle, live, result; 390 Light/Dark, 1280 Light) | For the user to look at; delete after |
-| `review/phase4a-prod` | Orphan branch, no code: production screenshots after the phase 4a deploy (the 14 tools, hubs, states, Home; 390, Light/Dark) | For the user to look at; delete after |
-| `feat/single-stream` | Item 3: C3 + F2 single mic stream (spec `design/audio/BUILD.md`) | Merged (7bfc47a) and live 2026-10-21. Closed |
-| `wip/noise-gate` | Fix A, the singing-detection gate | Merged (fce3993) and live. Closed |
-| `warmup` | Pre-session warm-up, phases 1–2 (based on `d7a5691`, two commits behind master) | WIP. Never run, not deployed, not merged |
-| `redesign/phase1` | House Lights redesign phase 1, Foundation, and the 1.1 fixes (spec `design/house-lights/PHASE1.md`) | Merged (12a1364) and live 2026-10-11. Closed |
-| `redesign/phase2` | House Lights phase 2, Lighting, and the 2.8 fixes (spec `design/house-lights/PHASE2.md`) | Merged (3b29e93) and live 2026-10-13. Closed |
-| `redesign/phase3` | House Lights phase 3, Home and the Coach tab, and the 3.1 fixes (spec `design/house-lights/PHASE3.md`) | Merged (7996514) and live 2026-10-13. Closed |
-| `review/phase3-prod` | Orphan branch, no code: production screenshots after the phase 3 deploy (Home in the 7 seeded states and the Coach tab, 390, Light/Dark) | For the user to look at; delete after |
-| `review/phase2-prod` | Orphan branch, no code: production screenshots after the phase 2 deploy (singing states and motion, 390, Light/Dark) | For the user to look at; delete after |
-| `review/phase1-prod` | Orphan branch, no code: production screenshots after the phase 1 deploy (Home and the four hubs, 390, Light/Dark) | For the user to look at; delete after |
+| Branch | What it is |
+|---|---|
+| `master` | Everything, through House Lights phase 10 (merge 3309686), live as dpl_2g7Gq6fiY782p75a2tmokH2dJFLF |
+| `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
+| `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-10:
-phase 9, **dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H** (deployed by the user from master 4c2aa7f, the --no-ff merge of
-redesign/phase9), **the rollback target for phase 10**. The previous target was phase 8,
-dpl_2fusEnGruFnpBJmfa4FzV6mPEGbx. The table above predates phase 5; `review/phase9-prod` is the current review branch.
+Every other branch was deleted on 2026-11-14 after phase 10's production checks passed (PHASE10.md "Deploy" §4): the
+15 merged ones of PHASE10_SURVEY.md h, redesign/phase10, review/phase10, review/phase9-prod and review/phase1-prod …
+review/phase4b-prod. Their commits are in master (all 16 code branches checked as ancestors before deleting).
+
+**The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
+
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-14:
+phase 10, **dpl_2g7Gq6fiY782p75a2tmokH2dJFLF** (deployed by the user from master 3309686, the --no-ff merge of
+redesign/phase10; page sha256 a5e6bf0d77d22047…), **the rollback target from now on**. The previous target was
+phase 9, dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -697,10 +690,14 @@ Spec verbatim in `design/house-lights/PHASE5A.md` (194aa5c). Test code only, no 
   noisegate's one flag was noise (rerun: +3 within ±8); tt-firsttick fails on master too (Songs hub's Part Rehearsal
   button is hidden; the test still clicks it). Expected differences from master: B8's durations ("12.4 s") in home,
   moments9, youstates; states9: the share sheets close on Escape (B6).
-- **Open, for the user:** the 15 merged branches the survey lists (h) are not deleted (not in the B list); the
-  Language sheet has no settings opener, so its "Escape from settings" case doesn't exist; Hear the Mistake's script
-  strings ("Which one was accurate?", "Not quite.", its result line, "Play A and B") are English only; tt-firsttick's
-  stale path.
+- **B11 and the deploy (PHASE10.md "Deploy", 2026-11-14).** B11 (e47e46a): the tools' English keyed in four languages
+  (Hear the Mistake, and 12 more places found by a search: Vocal Puzzle, Tuner, Stay in Key, Key Trainer, Daily
+  Exercises, Scale Run, Ear → Voice → Ear, Sing It 5 Ways); tt-firsttick reaches the Timing Trainer through Choir World.
+  Language from settings: dropped (Profile changes it in place). Merged 3309686, **live dpl_2g7Gq6fiY782p75a2tmokH2dJFLF**.
+  Production: `scripts/design-verify/prod10.sh` (the lock; phase 9's and 10's checks, then prod.sh WITH_CHOIR=1),
+  all pass after reruns (names and system needed script fixes, f76007f; pageload and tools-shots were Supabase sign-up
+  timeouts: three page sign-ups took 2–4 s). Results on review/phase10-prod. Test accounts 0 left, test feedback rows 0.
+- **Phase 10 is closed.**
 
 ## Scoring accuracy batch (after the redesign; decided in PHASE6.md, not to be done in a redesign phase)
 
