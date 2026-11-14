@@ -15,7 +15,10 @@ let fails = 0;
 const check = (name, ok, detail) => { console.log(`${ok ? '✓' : '✗'} ${name}${detail ? ` — ${detail}` : ''}`); if (!ok) fails++; };
 
 // 3. static
-const html = REF ? execFileSync('git', ['show', `${REF}:deploy/index.html`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 << 20 }) : fs.readFileSync(path.join(ROOT, 'deploy/index.html'), 'utf8');
+// REF: a git ref, or a site URL (production): its page fetched as it is served
+const html = !REF ? fs.readFileSync(path.join(ROOT, 'deploy/index.html'), 'utf8')
+  : /^https?:\/\//.test(REF) ? execFileSync('curl', ['-sf', '--max-time', '30', REF], { encoding: 'utf8', maxBuffer: 64 << 20 })
+  : execFileSync('git', ['show', `${REF}:deploy/index.html`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 << 20 });
 const lineOf = i => html.slice(0, i).split('\n').length;
 const tags = [...html.matchAll(/<[a-zA-Z][^<>]*\saria-label="([^"]*)"[^<>]*>/g)];
 const untranslated = tags.filter(m => !/data-i18n-aria-label=/.test(m[0]) && !/^\$\{\s*t\(/.test(m[1]) && /[A-Za-z]{2}/.test(m[1].replace(/\$\{[^}]*\}/g, '')));

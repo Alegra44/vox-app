@@ -28,7 +28,10 @@ const PAPER = '#F2F3EF', DUSK = '#16181C';
         for (const el of document.querySelectorAll('header.shell-topbar, header.shell-topbar *, nav.shell-bottomnav, nav.shell-bottomnav *')) {
           for (const pseudo of [null, '::before', '::after']) {
             const s = getComputedStyle(el, pseudo);
-            const tr = s.transitionDuration.split(',').some(d => parseFloat(d) > 0), an = s.animationName !== 'none' && s.animationName !== '';
+            // phase 10 B7: under reduce one global rule makes every transition and animation 0.01 ms, one iteration (it finishes at
+            // once; transitionend still fires): more than 0.01 ms is motion
+            const ms = v => v.trim().endsWith('ms') ? parseFloat(v) : parseFloat(v) * 1000;
+            const tr = s.transitionDuration.split(',').some(d => ms(d) > 0.01), an = s.animationName !== 'none' && s.animationName !== '' && s.animationDuration.split(',').some(d => ms(d) > 0.01);
             if (tr || an) out.push(`${el.tagName.toLowerCase()}.${String(el.className.baseVal ?? el.className).split(' ')[0]}${pseudo || ''}: ${tr ? 'transition ' + s.transitionProperty : ''}${an ? ' animation ' + s.animationName : ''}`);
           }
         }
