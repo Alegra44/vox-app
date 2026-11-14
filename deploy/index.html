@@ -16171,7 +16171,7 @@ function finalizeKaraokeNote(idx){
   const chordDurMs = songChordDurMs();
   let pitchAcc = 0;
   if(karaokeCentsBuf.length>0){
-    const avgAbs = vibratoTolerantCents(karaokeCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/karaokeCentsBuf.length;
+    const vt = vibratoTolerantCents(karaokeCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // over its own values (scoring batch item 3)
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   let timingScore = 0;
@@ -25554,7 +25554,7 @@ function pdFinalizeNote(idx){
   const chordDurMs = songChordDurMs();
   let pitchAcc = 0;
   if(pdCentsBuf.length>0){
-    const avgAbs = vibratoTolerantCents(pdCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/pdCentsBuf.length;
+    const vt = vibratoTolerantCents(pdCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // over its own values (scoring batch item 3)
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   let timingScore = 0;
@@ -25763,7 +25763,7 @@ async function runDrillSequence(){
 
     let pitchAcc=0, avgChest=null, registerMatch=false;
     if(centsBuf.length>0){
-      const avgAbs = vibratoTolerantCents(centsBuf).reduce((a,b)=>a+Math.abs(b),0)/centsBuf.length; // natural vibrato isn't a pitch error
+      const vt = vibratoTolerantCents(centsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // natural vibrato isn't a pitch error; over its own values (scoring batch item 3)
       pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
     }
     if(chestBuf.length>0){
