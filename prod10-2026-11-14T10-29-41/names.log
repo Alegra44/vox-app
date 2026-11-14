@@ -1,0 +1,27 @@
+fatal: invalid object name 'https'.
+node:child_process:955
+    throw err;
+    ^
+
+Error: Command failed: git show https://deploy-alegra1122.vercel.app/:deploy/index.html
+fatal: invalid object name 'https'.
+
+    at genericNodeError (node:internal/errors:983:15)
+    at wrappedFn (node:internal/errors:537:14)
+    at checkExecSyncError (node:child_process:916:11)
+    at execFileSync (node:child_process:952:15)
+    at Object.<anonymous> (/Users/alegramusenge/Documents/voxcoach-app/scripts/design-verify/names.js:18:20)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Module._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19) {
+  status: 128,
+  signal: null,
+  output: [ null, '', "fatal: invalid object name 'https'.\n" ],
+  pid: 33662,
+  stdout: '',
+  stderr: "fatal: invalid object name 'https'.\n"
+}
+
+Node.js v22.23.3
