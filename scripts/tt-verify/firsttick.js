@@ -69,8 +69,14 @@ async function openPage(b) {
   // open the shared mic (and so the singer) now: a just-created AudioContext's clock isn't steady for its first moments,
   // which would skew the song-clock → singer-clock mapping of the first run
   await page.evaluate(() => initAudio()); await sleep(2000);
+  // Part Rehearsal's Entrance & Cutoff trainer, the way a person reaches it now (phase 5's Choir World structure; the Songs
+  // hub's direct "I Am the Part" button has been hidden since): the Songs tab, Open Choir World, the song, Trainers,
+  // Entrance & Cutoff.
   await page.locator('.snb-item[data-shell="songs"]').click(); await sleep(500);
-  await page.locator('#panel-songs-hub [data-enter-panel="partrehearsal"]').click(); await sleep(800);
+  await page.locator('#panel-songs-hub [data-cw-landing]').click(); await sleep(800);
+  await page.locator('#cwSongList [data-cw-song="hymn"]').click(); await sleep(800);
+  await page.locator('#panel-partrehearsal .cw-subnav [data-cw-tab="trainers"]').click(); await sleep(500);
+  await page.locator('#cwTrainerList [data-cw-trainer-row="timing"]').click(); await sleep(800);
   await page.evaluate(() => {
     document.querySelector('#rehearsalPartRow [data-rh-part="Lead"]').click();
     const claim = claimNearestTarget;

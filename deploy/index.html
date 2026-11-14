@@ -3526,13 +3526,13 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         </svg>
         <div class="tuner-ring-center">
           <div class="note-display" id="noteDisplay">—</div>
-          <div class="cents-display" id="centsDisplay">Tap start and sing a note</div>
+          <div class="cents-display" id="centsDisplay" data-i18n="tuner_idle_hint">Tap start and sing a note</div>
         </div>
       </div>
 
       <button class="mic-btn" id="micBtn">
         <span class="dot-icon"></span>
-        <span id="micBtnLabel">Start listening</span>
+        <span id="micBtnLabel" data-i18n="tuner_start_label">Start listening</span>
       </button>
       <div class="vl-gauge" id="vlGaugeTuner" style="display:none;"></div>
 
@@ -3899,7 +3899,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <div class="vc-take-live" data-vc-take></div>
           <div class="scale-dots" id="scaleDots"></div>
           <div class="btn-row" style="justify-content:center;margin-top:18px;">
-            <button class="solid-btn teal vc-sing vc-take-pill" id="scaleStartBtn">Start scale run</button>
+            <button class="solid-btn teal vc-sing vc-take-pill" id="scaleStartBtn" data-i18n="scale_start_btn">Start scale run</button>
             <button class="ghost-btn vc-paper-only" id="scaleNextBtn" data-i18n="ex_new_root_btn">New root</button>
             <button class="ghost-btn vc-paper-only" id="scaleAgainBtn" style="display:none;"></button>
           </div>
@@ -4526,7 +4526,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="vc-take-live" data-vc-take></div>
         <p class="vc-visually-hidden" id="eveStepStatus" role="status"></p>
       </div>
-      <button class="mic-btn vc-take-pill" id="eveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="eveStartLabel">Begin the loop</span></button>
+      <button class="mic-btn vc-take-pill" id="eveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="eveStartLabel" data-i18n="eve_start_label">Begin the loop</span></button>
       <div class="vl-gauge" id="vlGaugeEve" style="display:none;"></div>
       </div>
     </div>
@@ -4571,7 +4571,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <div class="vc-take-live" data-vc-take></div>
         <p class="vc-visually-hidden" id="fiveStepStatus" role="status"></p>
       </div>
-      <button class="mic-btn vc-take-pill" id="fiveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="fiveStartLabel">Begin</span></button>
+      <button class="mic-btn vc-take-pill" id="fiveStartBtn" style="width:100%;justify-content:center;"><span class="dot-icon"></span><span id="fiveStartLabel" data-i18n="five_start_label">Begin</span></button>
       <div class="vl-gauge" id="vlGaugeFive" style="display:none;"></div>
       </div>
     </div>
@@ -4640,7 +4640,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <button class="mic-btn vc-ink" id="puzzleStartBtn" style="width:100%;justify-content:center;">Play the sequence</button>
     </div>
     <div class="key-card" id="puzzleGuessCard" style="display:none;">
-      <p class="desc" style="text-align:center;margin-bottom:16px;" id="puzzleStatus">Which note sounds wrong?</p>
+      <p class="desc" style="text-align:center;margin-bottom:16px;" id="puzzleStatus" data-i18n="puzzle_status">Which note sounds wrong?</p>
       <div class="ex-type-row" id="puzzleGuessRow">
         <button class="ex-type-btn" data-puzzle-guess="0" data-i18n="vocalpuzzle_note1">Note 1</button>
         <button class="ex-type-btn" data-puzzle-guess="1" data-i18n="vocalpuzzle_note2">Note 2</button>
@@ -4668,10 +4668,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
     <div class="key-card" id="hmPreCard">
       <p class="desc" style="margin-bottom:16px;" data-i18n="hearmistake_intro_desc">Listen to A, then B. One is accurate, one is shifted.</p>
-      <button class="hl-btn hl-btn--ink" id="hmStartBtn" style="width:100%;justify-content:center;">Play A and B</button>
+      <button class="hl-btn hl-btn--ink" id="hmStartBtn" style="width:100%;justify-content:center;" data-i18n="hm_play_btn">Play A and B</button>
     </div>
     <div class="key-card" id="hmGuessCard" style="display:none;">
-      <p class="desc" id="hmStatus" style="text-align:center;margin-bottom:16px;">Which one was accurate?</p>
+      <p class="desc" id="hmStatus" style="text-align:center;margin-bottom:16px;" data-i18n="hm_status">Which one was accurate?</p>
       <div class="ex-type-row">
         <button class="ex-type-btn" data-hm-guess="A">A</button>
         <button class="ex-type-btn" data-hm-guess="B">B</button>
@@ -6344,7 +6344,7 @@ const freqStat = document.getElementById('freqStat');
 function updateTunerUI(freq){
   if(!freq || freq<50 || freq>1200){
     noteDisplay.innerHTML = '—';
-    centsDisplay.textContent = 'Listening…';
+    centsDisplay.textContent = t('vq_listening');
     centsDisplay.className = 'cents-display';
     pitchStat.textContent = '—'; stabilityStat.textContent = '—'; freqStat.textContent = '—';
     resetTunerRing();
@@ -6428,8 +6428,8 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
     mode=null;
     cancelAnimationFrame(rafId);
     btn.classList.remove('listening');
-    label.textContent='Start listening';
-    centsDisplay.textContent='Tap start and sing a note';
+    label.textContent=t('tuner_start_label');
+    centsDisplay.textContent=t('tuner_idle_hint');
     centsDisplay.className='cents-display';
     noteDisplay.innerHTML='—';
     resetTunerRing(); // the ring and its lock disc back to idle (the loop has stopped)
@@ -6453,7 +6453,7 @@ document.getElementById('micBtn').addEventListener('click', async ()=>{
   document.getElementById('vocalHealthBanner')?.style.setProperty('display','none');
   mode='tuner';
   btn.classList.add('listening');
-  label.textContent='Listening — tap to stop';
+  label.textContent=t('tuner_listening_stop');
   cancelAnimationFrame(rafId);
   loop();
   singingSession(()=>mode==='tuner', document.getElementById('tunerStage'));
@@ -6858,7 +6858,7 @@ document.getElementById('calcKeyBtn').addEventListener('click', ()=>{
     : 'Heads up — this song\'s full range is wider than your comfortable range, so some notes may still sit outside it even at the best transposition. Consider a lighter head-voice or falsetto approach for the extremes.';
 
   document.getElementById('recHeadline').textContent = direction;
-  document.getElementById('recSub').textContent = `New song range: ${candidates[0].lowName} → ${candidates[0].highName}`;
+  document.getElementById('recSub').textContent = t('key_new_range_tpl').replace('{low}', candidates[0].lowName).replace('{high}', candidates[0].highName);
   document.getElementById('recReasoning').textContent = reasoning;
   document.getElementById('recResult').style.display='block';
 
@@ -6926,6 +6926,24 @@ let profile = null;
 /* ---------------- Language selection (real i18n infrastructure, honest scope) ---------------- */
 const TRANSLATIONS = {
   en: {
+    // phase 10 B11: tool strings that were written in English
+    tuner_start_label:"Start listening",
+    tuner_idle_hint:"Tap start and sing a note",
+    tuner_listening_stop:"Listening — tap to stop",
+    key_new_range_tpl:"New song range: {low} → {high}",
+    pitch_avg_deadon:"Averaged 0 cents (dead on)",
+    pitch_avg_sharp_tpl:"Averaged +{n} cents sharp",
+    pitch_avg_flat_tpl:"Averaged {n} cents flat",
+    scale_start_btn:"Start scale run",
+    eve_start_label:"Begin the loop",
+    five_start_label:"Begin",
+    puzzle_status:"Which note sounds wrong?",
+    result_not_quite:"Not quite.",
+    hm_status:"Which one was accurate?",
+    hm_play_btn:"Play A and B",
+    hm_wrong_detail_tpl:"{label} was the accurate one. Try the next round to keep training your ear.",
+    hm_correct_pick:"Correct pick!",
+    hm_nopitch:"No clear pitch was captured on your reproduction attempt.",
     // phase 10 B5: names
     skilltree_node_unlocked:"Unlocked",
     skilltree_locked:"Locked", skilltree_node_aria_tpl:"{name}: {state}",
@@ -8693,6 +8711,24 @@ const TRANSLATIONS = {
     feedback_empty_note:"Write at least one answer first.",
   },
   fr: {
+    // phase 10 B11: tool strings that were written in English
+    tuner_start_label:"Commencer l’écoute",
+    tuner_idle_hint:"Appuyez sur Commencer et chantez une note",
+    tuner_listening_stop:"Écoute en cours — touchez pour arrêter",
+    key_new_range_tpl:"Nouvelle tessiture du morceau : {low} → {high}",
+    pitch_avg_deadon:"Moyenne : 0 cent (pile juste)",
+    pitch_avg_sharp_tpl:"Moyenne : +{n} cents, trop haut",
+    pitch_avg_flat_tpl:"Moyenne : {n} cents, trop bas",
+    scale_start_btn:"Lancer la gamme",
+    eve_start_label:"Lancer la boucle",
+    five_start_label:"Commencer",
+    puzzle_status:"Quelle note est incorrecte ?",
+    result_not_quite:"Pas tout à fait.",
+    hm_status:"Laquelle était juste ?",
+    hm_play_btn:"Écouter A et B",
+    hm_wrong_detail_tpl:"La version juste était {label}. Passez au tour suivant pour continuer à entraîner votre oreille.",
+    hm_correct_pick:"Bon choix !",
+    hm_nopitch:"Aucune hauteur nette n’a été captée pendant votre reproduction.",
     // phase 10 B5: names
     skilltree_node_unlocked:"Débloqué",
     skilltree_locked:"Verrouillé", skilltree_node_aria_tpl:"{name} : {state}",
@@ -10460,6 +10496,24 @@ const TRANSLATIONS = {
     feedback_empty_note:"Écrivez d'abord au moins une réponse.",
   },
   es: {
+    // phase 10 B11: tool strings that were written in English
+    tuner_start_label:"Empezar a escuchar",
+    tuner_idle_hint:"Pulsa empezar y canta una nota",
+    tuner_listening_stop:"Escuchando: toca para detener",
+    key_new_range_tpl:"Nuevo rango de la canción: {low} → {high}",
+    pitch_avg_deadon:"Media: 0 cents (exacto)",
+    pitch_avg_sharp_tpl:"Media: +{n} cents, alto",
+    pitch_avg_flat_tpl:"Media: {n} cents, bajo",
+    scale_start_btn:"Empezar la escala",
+    eve_start_label:"Empezar el ciclo",
+    five_start_label:"Empezar",
+    puzzle_status:"¿Qué nota suena mal?",
+    result_not_quite:"Casi.",
+    hm_status:"¿Cuál era la correcta?",
+    hm_play_btn:"Reproducir A y B",
+    hm_wrong_detail_tpl:"La correcta era la {label}. Prueba la siguiente ronda para seguir entrenando el oído.",
+    hm_correct_pick:"¡Bien elegido!",
+    hm_nopitch:"No se captó una altura clara en tu intento de reproducción.",
     // phase 10 B5: names
     skilltree_node_unlocked:"Desbloqueado",
     skilltree_locked:"Bloqueado", skilltree_node_aria_tpl:"{name}: {state}",
@@ -12227,6 +12281,24 @@ const TRANSLATIONS = {
     feedback_empty_note:"Escribe primero al menos una respuesta.",
   },
   tr: {
+    // phase 10 B11: tool strings that were written in English
+    tuner_start_label:"Dinlemeye başla",
+    tuner_idle_hint:"Başlat'a dokunun ve bir nota söyleyin",
+    tuner_listening_stop:"Dinleniyor — durdurmak için dokunun",
+    key_new_range_tpl:"Şarkının yeni aralığı: {low} → {high}",
+    pitch_avg_deadon:"Ortalama 0 sent (tam isabet)",
+    pitch_avg_sharp_tpl:"Ortalama +{n} sent, tiz",
+    pitch_avg_flat_tpl:"Ortalama {n} sent, pes",
+    scale_start_btn:"Gamı başlat",
+    eve_start_label:"Döngüyü başlat",
+    five_start_label:"Başla",
+    puzzle_status:"Hangi nota yanlış duyuluyor?",
+    result_not_quite:"Tam değil.",
+    hm_status:"Hangisi doğruydu?",
+    hm_play_btn:"A ve B'yi çal",
+    hm_wrong_detail_tpl:"Doğru olan {label} idi. Kulağınızı eğitmeye devam etmek için bir sonraki tura geçin.",
+    hm_correct_pick:"Doğru seçim!",
+    hm_nopitch:"Tekrar denemenizde net bir perde yakalanmadı.",
     // phase 10 B5: names
     skilltree_node_unlocked:"Açık",
     skilltree_locked:"Kilitli", skilltree_node_aria_tpl:"{name}: {state}",
@@ -15753,7 +15825,7 @@ function stayKeyLoop(){
     }
   } else {
     statusEl.className = 'cents-display';
-    statusEl.textContent = 'Listening…';
+    statusEl.textContent = t('vq_listening');
     if(ring){ ring.style.strokeDashoffset='553'; ring.style.stroke='var(--hl-rule)'; }
     document.getElementById('stayKeyRingWrap')?.classList.remove('locked-pulse');
   }
@@ -19796,7 +19868,7 @@ document.getElementById('pitchListenBtn').addEventListener('click', async ()=>{
   const centsEl = document.getElementById('pitchCentsDetail');
   if(cfg.showCentsDetail && res.heard){
     centsEl.style.display='block';
-    centsEl.textContent = `Averaged ${res.avgCents>0?'+':''}${res.avgCents} cents ${res.avgCents===0?'(dead on)':(res.avgCents>0?'sharp':'flat')}`;
+    centsEl.textContent = res.avgCents===0 ? t('pitch_avg_deadon') : t(res.avgCents>0 ? 'pitch_avg_sharp_tpl' : 'pitch_avg_flat_tpl').replace('{n}', res.avgCents);
   } else { centsEl.style.display='none'; }
   renderConfidenceBadge('pitchConfidenceBadge', res.confidence);
   if(res.heard){ recordSkillScore('pitch', res.accuracy); recordWeeklyLog('pitch', res.accuracy); }
@@ -19971,7 +20043,7 @@ document.getElementById('scaleStartBtn').addEventListener('click', async ()=>{
     results.push(res.accuracy);
     renderScaleDots(i, results, steps.length);
   }
-  btn.disabled = false; btn.textContent = 'Start scale run';
+  btn.disabled = false; btn.textContent = t('scale_start_btn');
   const avg = Math.round(results.reduce((a,b)=>a+b,0)/results.length);
   document.getElementById('scaleResult').style.display='block';
   const accEl = document.getElementById('scaleAccuracyVal');
@@ -24584,7 +24656,7 @@ function eveStopped(){
   document.getElementById('eveRunnerCard').style.display='none';
   document.getElementById('eveIntro').style.display='';
   document.getElementById('eveStartBtn').disabled = false;
-  document.getElementById('eveStartLabel').textContent = 'Begin the loop';
+  document.getElementById('eveStartLabel').textContent = t('eve_start_label');
 }
 
 function finishEveLoop(){
@@ -24592,7 +24664,7 @@ function finishEveLoop(){
   document.getElementById('eveRunnerCard').style.display='none';
   document.getElementById('evePreCard').style.display='none';
   document.getElementById('eveStartBtn').disabled = false;
-  document.getElementById('eveStartLabel').textContent = 'Begin the loop';
+  document.getElementById('eveStartLabel').textContent = t('eve_start_label');
   document.getElementById('eveResultCard').style.display='block';
   document.getElementById('eveResultFirst').textContent = eveFirstResult.heard ? eveFirstResult.accuracy+'%' : t('take_not_heard');
   document.getElementById('eveResultFirst').classList.toggle('vc-not-heard', !eveFirstResult.heard);
@@ -24792,7 +24864,7 @@ function fiveStopped(){
   document.getElementById('fiveRunnerCard').style.display='none';
   document.getElementById('fiveIntro').style.display='';
   document.getElementById('fiveStartBtn').disabled = false;
-  document.getElementById('fiveStartLabel').textContent = 'Begin';
+  document.getElementById('fiveStartLabel').textContent = t('five_start_label');
 }
 
 function finishFiveWays(){
@@ -24800,7 +24872,7 @@ function finishFiveWays(){
   document.getElementById('fiveRunnerCard').style.display='none';
   document.getElementById('fivePreCard').style.display='none';
   document.getElementById('fiveStartBtn').disabled = false;
-  document.getElementById('fiveStartLabel').textContent = 'Begin';
+  document.getElementById('fiveStartLabel').textContent = t('five_start_label');
   document.getElementById('fiveResultCard').style.display='block';
   { const h = fiveResults.filter(r=>r.heard), avg = h.length ? Math.round(h.reduce((a,b)=>a+b.accuracy,0)/h.length) : null;
     vcResultNum(document.getElementById('fiveResultAvg'), avg===null ? null : avg+'%'); // the average recorded below
@@ -24998,7 +25070,7 @@ document.getElementById('puzzleStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('puzzlePreCard').style.display = 'none';
   document.getElementById('puzzleResultCard').style.display = 'none';
   document.getElementById('puzzleGuessCard').style.display = 'block';
-  document.getElementById('puzzleStatus').textContent = 'Which note sounds wrong?';
+  document.getElementById('puzzleStatus').textContent = t('puzzle_status');
   document.querySelectorAll('#puzzleGuessRow .ex-type-btn').forEach(b=>{b.classList.remove('active'); b.disabled=false;});
   playPuzzleSequence();
 });
@@ -25012,7 +25084,7 @@ document.querySelectorAll('#puzzleGuessRow .ex-type-btn').forEach(btn=>{
     puzzleStreak = correct ? puzzleStreak+1 : 0;
     document.getElementById('puzzleGuessCard').style.display = 'none';
     document.getElementById('puzzleResultCard').style.display = 'block';
-    document.getElementById('puzzleResultTitle').textContent = correct ? 'Correct!' : 'Not quite.';
+    document.getElementById('puzzleResultTitle').textContent = t(correct ? 'ear_feedback_correct' : 'result_not_quite');
     document.getElementById('puzzleResultDetail').textContent = t('puzzle_wrong_note').replace('{n}', puzzleWrongIndex+1).replace('{note}', noteNameFromMidi(puzzleSequence[puzzleWrongIndex]));
     document.getElementById('puzzleStreakVal').textContent = puzzleStreak;
     document.getElementById('puzzleSolvedVal').textContent = puzzleSolved;
@@ -25052,7 +25124,7 @@ document.getElementById('hmStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('hmSingCard').style.display = 'none';
   document.getElementById('hmResultCard').style.display = 'none';
   document.getElementById('hmGuessCard').style.display = 'block';
-  document.getElementById('hmStatus').textContent = 'Which one was accurate?';
+  document.getElementById('hmStatus').textContent = t('hm_status');
   playHmPair();
 });
 document.getElementById('hmReplayBtn')?.addEventListener('click', ()=>{ playHmPair(); });
@@ -25063,8 +25135,8 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
     document.getElementById('hmGuessCard').style.display = 'none';
     if(!correct){
       document.getElementById('hmResultCard').style.display = 'block';
-      document.getElementById('hmResultTitle').textContent = 'Not quite.';
-      document.getElementById('hmResultDetail').textContent = `${hmCorrectLabel} was the accurate one. Try the next round to keep training your ear.`;
+      document.getElementById('hmResultTitle').textContent = t('result_not_quite');
+      document.getElementById('hmResultDetail').textContent = t('hm_wrong_detail_tpl').replace('{label}', hmCorrectLabel);
       vcResultNum(document.getElementById('hmSingAccuracy'), null);
       document.getElementById('hmResultLabel').style.display = 'none'; // a wrong pick isn't sung back: no number
       vcTakeTrace(document.getElementById('hmTraceBox'), null, 1600);
@@ -25073,7 +25145,7 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
     }
     document.getElementById('hmSingCard').style.display = 'block';
     document.getElementById('hmSingNote').textContent = noteNameFromMidi(hmTargetMidi);
-    document.getElementById('hmSingStatus').textContent = 'Listening…';
+    document.getElementById('hmSingStatus').textContent = t('vq_listening');
     hmSinging = true;
     const stage = document.getElementById('hmStage'), lane = vcTakeStart(stage, hmTargetMidi, 1600);
     singingSession(()=>hmSinging, stage); // the sing-back is on stage (listening to A and B stays on paper)
@@ -25082,11 +25154,11 @@ document.querySelectorAll('[data-hm-guess]').forEach(btn=>{
     vcTakeEnd(lane);
     document.getElementById('hmSingCard').style.display = 'none';
     document.getElementById('hmResultCard').style.display = 'block';
-    document.getElementById('hmResultTitle').textContent = 'Correct pick!';
+    document.getElementById('hmResultTitle').textContent = t('hm_correct_pick');
     document.getElementById('hmResultLabel').style.display = '';
     document.getElementById('hmResultDetail').textContent = result.heard
       ? t('hm_detail_scored').replace('{n}', result.accuracy)
-      : `No clear pitch was captured on your reproduction attempt.`;
+      : t('hm_nopitch');
     vcResultNum(document.getElementById('hmSingAccuracy'), result.heard ? result.accuracy+'%' : null);
     vcTakeTrace(document.getElementById('hmTraceBox'), result.heard && result.samples, 1600);
     if(profile && result.heard) recordSkillScore('pitch', result.accuracy);
