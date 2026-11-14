@@ -14948,7 +14948,8 @@ function updateBestBridgeLabel(){
 // Today's vocal load. While Register Coach listens, every frame of its unprocessed register input (the pitch and the
 // buffer's RMS: the loudness the engine was verified on) goes into a session of the engine (vocal-load.js), which the
 // checkpointer (vocal-load-store.js) saves to /api/me/vocal-load every 60 s of singing, at a 5 s pause, when the page
-// is hidden and at the end. A session starts with the first frame (reading today's total and the rolling baseline from
+// is hidden and at the end, through the outbox (vocal-load-store.js createOutbox): each checkpoint is kept on this device
+// until the server confirms it and retried with back-off, so a failed save no longer loses the session. A session starts with the first frame (reading today's total and the rolling baseline from
 // the server first; frames wait meanwhile) and ends when the Coach stops or no frame has come for VL_IDLE_MS, which
 // covers every way it can stop. The gauge shows today's total as a % of the daily budget to every signed-in user,
 // whatever their plan.
@@ -14961,32 +14962,62 @@ async function vlRefreshToken(){
   try{ const { data:{ session } } = await sb.auth.getSession(); vlToken = session ? session.access_token : null; }catch(e){}
 }
 async function vlFetchState(day){ await vlRefreshToken(); return apiFetch('/me/vocal-load?day='+day); }
+// The signed-in user's outbox (one per user: its key in this device's storage). Switching user stops the last one's
+// timers; its entries stay stored and go when that user signs in again.
+let vlBox = null, vlBoxUid = null;
+function vlOutbox(){
+  const uid = profile && (profile.id || profile.email);
+  if(!uid || typeof VocalLoadStore==='undefined' || !VocalLoadStore.createOutbox) return null;
+  if(vlBox && vlBoxUid===uid) return vlBox;
+  if(vlBox) vlBox.stop();
+  let storage = null; try{ storage = window.localStorage; }catch(e){}
+  vlBoxUid = uid;
+  return vlBox = VocalLoadStore.createOutbox({storage, key:'vl-outbox:'+uid, send:(p, opts)=>vlSend(p, opts, uid),
+    log:(...a)=>console.error(...a)});
+}
+const vlDrain = ()=>{ const b = vlOutbox(); return b ? b.drain() : Promise.resolve([]); };
 async function loadVocalLoadToday(){
   if(!profile){ vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
   const day = todayStr();
-  try{ const st = await vlFetchState(day); vlDay = {day, load:Number(st.dayLoad)||0}; }
+  await vlDrain(); // checkpoints still waiting from before (a failed save, a closed tab) go first
+  try{ const st = await vlFetchState(day); const b = vlOutbox(); vlDay = {day, load:(Number(st.dayLoad)||0) + (b ? b.pendingLoad(day) : 0)}; }
   catch(e){ console.error('vocal load state error', e); }
   renderVocalLoadGauge();
 }
-function vlWrite(p, opts){
+// One checkpoint to the server. Resolves on a 2xx; rejects otherwise, with error.status when there was a response (the
+// outbox retries a network error, a 5xx or a 429, and drops any other 4xx). Only for the outbox's own user.
+async function vlSend(p, opts, uid){
+  if(!profile || (profile.id || profile.email)!==uid) throw new Error('vocal load: not signed in as this checkpoint\'s user');
   const body = JSON.stringify({day:p.day, startedAt:p.startedAt, activeSeconds:p.activeSeconds, load:p.load,
     medianRms:p.medianRms, p5Midi:p.p5Midi, p95Midi:p.p95Midi, ended:p.ended});
-  const path = '/me/vocal-load/sessions/'+p.sessionId;
-  if(opts.keepalive){
-    // page hide: sent right now, with the token already in hand (the page may be frozen once this handler returns)
-    if(!vlToken) return Promise.reject(new Error('no access token'));
-    return fetch(API_BASE+path, {method:'PUT', keepalive:true, body,
-      headers:{'Content-Type':'application/json', Authorization:'Bearer '+vlToken, apikey:SUPABASE_ANON_KEY}})
-      .then(r=>{ if(!r.ok) throw new Error('vocal load checkpoint '+r.status); });
-  }
-  return vlRefreshToken().then(()=>apiFetch(path, {method:'PUT', body}));
+  // page hide: sent right now with the token already in hand (the page may be frozen once the handler returns)
+  if(!opts.keepalive) await vlRefreshToken();
+  if(!vlToken) throw new Error('no access token');
+  const ctl = !opts.keepalive && typeof AbortController!=='undefined' ? new AbortController() : null;
+  const timer = ctl ? setTimeout(()=>ctl.abort(), 15000) : null; // a hung request is a network error, retried
+  try{
+    const r = await fetch(API_BASE+'/me/vocal-load/sessions/'+p.sessionId, {method:'PUT', keepalive:!!opts.keepalive, body,
+      ...(ctl ? {signal:ctl.signal} : {}),
+      headers:{'Content-Type':'application/json', Authorization:'Bearer '+vlToken, apikey:SUPABASE_ANON_KEY}});
+    if(!r.ok){ const e = new Error('vocal load checkpoint '+r.status); e.status = r.status; throw e; }
+  } finally { if(timer) clearTimeout(timer); }
 }
+// The checkpointer's write: stored in the outbox (then sent from there). Saved, as far as the checkpointer goes, once
+// it is stored on the device.
+function vlWrite(p, opts){
+  const b = vlOutbox(); if(!b) return Promise.reject(new Error('vocal load: not signed in'));
+  b.put(p, opts); return Promise.resolve();
+}
+window.addEventListener('online', ()=>{ vlDrain(); });
 function vlLogWrite(res){ if(res && !res.ok) console.error('vocal load checkpoint not saved', res.reason, res.errors || res.error); }
 function vlStart(){
   const startedAtMs = Date.now();
   const r = vlRun = {startedAtMs, day:VocalLoadStore.dayOf(startedAtMs), buffer:[], ready:false, lastFrame:null, prior:0, pct:null, ending:false};
-  vlFetchState(r.day).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
-    r.prior = st ? (Number(st.dayLoad)||0) : (vlDay.day===r.day ? vlDay.load : 0);
+  // before the new session: checkpoints still waiting go first, then today's total (the server's, plus what is still
+  // waiting on this device). Frames wait in r.buffer meanwhile.
+  vlDrain().then(()=>vlFetchState(r.day)).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
+    const b = vlOutbox();
+    r.prior = st ? (Number(st.dayLoad)||0) + (b ? b.pendingLoad(r.day) : 0) : (vlDay.day===r.day ? vlDay.load : 0);
     const saved = progress && progress.lowestMidi!=null && progress.highestMidi!=null ? {lowMidi:progress.lowestMidi, highMidi:progress.highestMidi} : null;
     r.session = VocalLoad.createSession(VocalLoad.computeBaseline(st ? st.sessions : [], saved), {priorLoadToday:r.prior});
     r.cp = VocalLoadStore.createCheckpointer({session:r.session, sessionId:crypto.randomUUID(), startedAtMs, day:r.day, write:vlWrite});
