@@ -27,10 +27,14 @@ const check = (name, ok, detail) => { console.log(`  ${ok ? '✓' : '✗'} ${nam
     const uid = await page.evaluate(() => profile.id);
     const serverXp = () => db(`select xp from public.user_progress where user_id = '${uid}'`)[0].xp;
     const waitFor = async (fn, ms) => { const t = Date.now() + ms; for (;;) { const v = await fn(); if (v || Date.now() > t) return v; await C.sleep(250); } };
+    // the page's own saves after sign-up (and any retry of them) done: no PATCH for 3 s, none waiting
+    const quiet = () => waitFor(async () => (!seen.length || Date.now() - seen[seen.length - 1].t > 3000) && await page.evaluate(() => !progressRetry.timer), 30000);
 
+    // a small XP step: crossing a level makes saveProgress save again (the level-up snapshot, its timeline event), and those
+    // saves would take the planned 503s
     await C.G.step('503 three times', 60, async () => { // normally 25 s
-      plan = ['503', '503', '503']; const s0 = seen.length;
-      const xp = await page.evaluate(async () => { progress.xp = (progress.xp || 0) + 111; await saveProgress(); return progress.xp; });
+      await quiet(); plan = ['503', '503', '503']; const s0 = seen.length;
+      const xp = await page.evaluate(async () => { progress.xp = (progress.xp || 0) + 3; await saveProgress(); return progress.xp; });
       const ok = await waitFor(() => seen.length - s0 >= 4, 40000);
       const mine = seen.slice(s0), gaps = mine.slice(1).map((x, i) => (x.t - mine[i].t) / 1000);
       check('a 503: retried after ~2 s, ~5 s, ~15 s (±20 %, plus the request\'s own time), then sent', ok && mine.slice(0, 3).every(x => x.what === '503') && mine[3].what === 'pass'
@@ -39,20 +43,20 @@ const check = (name, ok, detail) => { console.log(`  ${ok ? '✓' : '✗'} ${nam
       check('…and stored: the server has the new XP', serverXp() === xp, `server ${serverXp()}, page ${xp}`);
     });
     await C.G.step('abort once', 40, async () => {
-      plan = ['abort']; const s0 = seen.length;
+      await quiet(); plan = ['abort']; const s0 = seen.length;
       const xp = await page.evaluate(async () => { progress.xp += 7; await saveProgress(); return progress.xp; });
       await waitFor(() => seen.length - s0 >= 2, 10000); await C.sleep(1500);
       const mine = seen.slice(s0);
       check('a request aborted (no response): retried and stored', mine.length >= 2 && mine[0].what === 'abort' && mine[1].what === 'pass' && serverXp() === xp, `${mine.map(x => x.what).join(', ')}, server ${serverXp()}`);
     });
     await C.G.step('400', 40, async () => {
-      plan = ['400']; const s0 = seen.length;
+      await quiet(); plan = ['400']; const s0 = seen.length;
       await page.evaluate(async () => { progress.xp += 1; await saveProgress(); });
       await C.sleep(9000);
       check('a 400 (the server refusing the body): not retried', seen.length - s0 === 1, `${seen.length - s0} PATCH in 9 s`);
     });
     await C.G.step('sign out with a retry waiting', 40, async () => {
-      plan = ['503']; const s0 = seen.length;
+      await quiet(); plan = ['503']; const s0 = seen.length;
       await page.evaluate(async () => { progress.xp += 1; await saveProgress(); });
       const waiting = await page.evaluate(() => !!progressRetry.timer);
       await page.evaluate(() => document.getElementById('dashSignOutBtn').click()); await C.sleep(9000);
