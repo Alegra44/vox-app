@@ -135,3 +135,19 @@ says it couldn't hear the clicks and uses the estimate. Two faults the rig found
 The estimate is now read live (the reported latency + 50 ms): Chrome's reported output latency moved 39–47 ms on one
 device while audio ran, so a stored number went stale. A failed or skipped measurement is stored as such, with no
 number. The longest round trip the sheet can measure is 320 ms.
+
+### levelShape's dead zone and 100 point (decision 5; B5)
+
+Set from VocalSet (18 clips: breathy, pp, straight, vibrato) through the real tools on the rig (checksB vocalset,
+survey.js `--voice`, one run each, PD and Emotional Singing). The sd is the spread of the notes' levels in dB.
+
+- **One level, the clips' steady stretches** (the longest stretch of each clip held at one level, normalised to −20
+  dBFS; vocalset.sh has the table): sd 0.03–0.37 across all 36 takes. Score 0 every time (rule: ≤ 10).
+- **The dynamic stimulus** (note levels from −12 to 0 dB): sd 3.71–3.76, score 90–92 (2 runs; rule: ≥ 85). The on-time
+  stimulus at one level: sd 0.09–0.23, score 0.
+- So `LS_FLAT_SD = 1.0` (2.7× the widest one-level wander) and `LS_FULL_SD = 4.0` stay: the 10 point is at 1.3 dB, the
+  85 point at 3.55 dB. The texts already say 1 dB and 4 dB.
+- **The whole clips aren't one-level takes,** kept for the record: VocalSet clips drift 10–25 dB over a clip and have
+  phrase gaps, so notes land on breaths (straight-286 alternates −37 / −13 dBFS). They score 0–100 (sd 0.2–12.5);
+  three (breathy-1743, breathy-562, pp-1717) are under the 0.012 rms gate and give no score. They can't meet the ≤ 10
+  rule and weren't used to set it.

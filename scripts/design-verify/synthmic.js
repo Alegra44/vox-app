@@ -7,6 +7,7 @@
 //   __synth.pulses(times, ms)   an onset at each performance.now() time: the gain up for ms, silent between
 //   __synth.melody(t0, semis, stepMs)  (phase 6) the file moved by semis[i] semitones (playback rate) from t0 + i × stepMs
 //                                (performance.now() times): the steady A4 sung as a line, each note on its step
+//   __synth.sing(notes)         (release B) notes [{semis, on, off, gain}]: each its own onset, held, released
 const fs = require('fs');
 const C = require('./common');
 
@@ -40,6 +41,17 @@ const INIT = level0 => {
     const { ac, src } = S, now = performance.now(), base = ac.currentTime, r = src.playbackRate;
     r.cancelScheduledValues(base);
     semis.forEach((s, i) => r.setValueAtTime(Math.pow(2, s / 12), Math.max(base, base + (t0 + i * stepMs - now) / 1000)));
+  };
+  // (release B) notes [{semis, on, off, gain}] in performance.now() ms: each rises over 40 ms to its gain, holds, falls over 60 ms
+  window.__synth.sing = notes => {
+    const { ac, g, src } = S, now = performance.now(), base = ac.currentTime, at = ms => base + (ms - now) / 1000, r = src.playbackRate;
+    g.gain.cancelScheduledValues(base); g.gain.setValueAtTime(0, base); r.cancelScheduledValues(base);
+    for (const n of notes) {
+      const on = Math.max(base, at(n.on)), off = at(n.off), gain = n.gain === undefined ? 1 : n.gain;
+      r.setValueAtTime(Math.pow(2, n.semis / 12), Math.max(base, on - 0.004));
+      g.gain.setValueAtTime(0, on); g.gain.linearRampToValueAtTime(gain, on + 0.04);
+      g.gain.setValueAtTime(gain, off); g.gain.linearRampToValueAtTime(0, off + 0.06);
+    }
   };
   md.getUserMedia = async () => {
     if (!S) { if (!opening) opening = make(); await opening; }
