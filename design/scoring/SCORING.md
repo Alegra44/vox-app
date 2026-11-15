@@ -81,6 +81,44 @@ REPORT, then stop. Nothing from B merges, and the migration isn't applied, until
 
 ## Release B: what the measurements found
 
+### Performance Director's extra ~20 ms (decision 3; B3)
+
+On the rig (survey.js, the synthetic mic), Performance Director read an on-time singer about 20 ms late and Karaoke
+about 9 ms late. Measured (checksB pd-onsets, pd-onsets-nolanes; frame intervals and each onset's edge against the
+frame that found it):
+
+- **Not PD's frame rate.** Both tools ran at the same frame interval (median 6.9 ms, p90 ~12 ms), and PD with its lanes
+  not drawn (`--stub-lanes`) read the same.
+- **The app's part, fixed.** Every tool stamped a mic frame with `performance.now()` when it read the analyser. Chrome on
+  this Mac renders audio in bursts (four 128-frame quanta, 10.7 ms, at once, then a wait), so the analyser's newest
+  sample is 0–10 ms older than that stamp, and Karaoke and Harmony Arena read the raw mic only after `autoCorrelate`,
+  by which time a burst could have landed: their onsets came out up to ~11 ms early, PD's late. All four tools
+  (PD, Karaoke, Emotional Singing, Harmony Arena) now score on the audio clock: ms since the take's start on
+  `audioCtx.currentTime`, read in the same statement as the raw buffer (`micClockMs`). The speaker delay (B2) is
+  measured on that clock, so it comes off exactly. The screens keep `performance.now()`.
+- **The rest is the rig's.** With that change PD and Karaoke agree: on time 18–27 ms, 150 ms late 168–176 ms (two runs
+  each). The common ~20 ms is the synthetic mic's own path from its AudioContext to the app's through a MediaStream:
+  the latency rig, which crosses that path twice, measures its own round trip at 33–36 ms. On a device that latency is
+  part of the measured round trip and is subtracted. The survey now puts each stimulus on the tool's audio-clock start
+  (mapped at the start of a render burst in both contexts); the first note of a PD take still reads 30–60 ms because
+  PD's start is already in the past when the stimulus is scheduled (the rig's, not a scoring effect).
+
+### The onset rule: two faults the checks found (B3)
+
+- **A legato change of note never counted on time.** "No pitch for 150 ms" was measured from the last frame near the
+  *current* target, so a singer on the previous note just before the change looked "already there": only a change
+  more than 150 ms late gave an onset (scores6's legato `lead` stimulus: notes 2–8 timed 0). Now it's this note's own
+  pitch over the last 150 ms; a tone already held on that pitch still isn't an onset. `lead` now: the notes that
+  change pitch read on time (PD 71–78, Karaoke 52–78, the rig's path and the pitch tracker's lag), the hymn's repeated
+  C5s (notes 4–6, no re-articulation in that stimulus) 0, as the rule says.
+- **The backing's leak gave pitch onsets.** In some chords the backing holds the Lead's own note; its leak (19 dB under
+  the voice) arrived as a pitch onset ~100 ms into notes 1, 5 and 8 of loudlate, which the backing filter (level
+  onsets only) let through: 3 of 8 false in both tools. A pitch onset now counts only 6 dB above the room (the median
+  of the frames with no voice on the note), in every tool. loudlate after: Karaoke 0 of 8 false (both runs). PD 1 of
+  8: note 1, a *level* onset from the stimulus's backing leak at the first chord start (80 / 96 ms). PD plays nothing,
+  so a real PD take has no backing to leak and no chord-start filter; the survey's loud room leaks the backing into
+  every tool. Not tuned to the rig; flagged in the report.
+
 ### The speaker-delay measurement (decision 6; B2)
 
 latency.js `--rig 0,120,250` (the app's output looped into its mic D ms late in one page, the rig's own path measured

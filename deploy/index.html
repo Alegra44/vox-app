@@ -8517,7 +8517,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Begin the performance",
     pd_dim_combined:"Pitch and timing together",
     pd_insight_tpl:"Work on {dim} next: it was your lowest today ({n}).",
-    pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: a note scores 100 if your voice came in during its first 40 %, 50 if later, averaged over the notes you sang. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
+    pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: when your voice started each note, a rise in loudness or a new pitch, held on the note for 150 ms; it scores 100 minus 0.6 × how many milliseconds early or late it was, and a voice already sounding or more than 40 % of the note late scores 0. It's averaged over the notes you sang, with the delay of your microphone subtracted. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
     aiduet_start_btn:"Sing with the choir",
     aiduet_after_tpl:"You sang {part} with the choir.",
     aiduet_rehearse_link:"Rehearse {part} in {cw}",
@@ -8531,7 +8531,7 @@ const TRANSLATIONS = {
     karaoke_not_heard:"Not heard",
     karaoke_obj_done:"done",
     karaoke_obj_open:"not yet",
-    karaoke_measure:"Each chord is one note of the Lead line. A note's pitch: 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out); a note with no voice is Not heard. Pitch is the average over the notes you sang, saved as your pitch score. Timing: 100 if your voice came in during a note's first 40 %, 50 if later, 0 if not heard, averaged over every note. Your song best is the average of Pitch and Timing.",
+    karaoke_measure:"Each chord is one note of the Lead line. A note's pitch: 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out); a note with no voice is Not heard. Pitch is the average over the notes you sang, saved as your pitch score. Timing: when your voice started each note, a rise in loudness or a new pitch, held on the note for 150 ms; it scores 100 minus 0.6 × how many milliseconds early or late it was, and a voice already sounding, more than 40 % of the note late or not heard scores 0. A rise that is only the backing coming through your speaker doesn't count. It's averaged over every note, with the delay of your speaker and microphone subtracted. Your song best is the average of Pitch and Timing.",
     emotion_result_label:"Dynamic contrast",
     emotion_measure:"An estimate. Dynamic contrast is how much your loudness varies while you sing: the spread of your level readings above the silence threshold, relative to their average, × 250, at most 100. It's saved as your expression score. Loudness also changes with your distance from the mic and the room, so treat it as a guide. Pitch: for each note of the Lead line, 100 minus 0.6 × your average distance from it in cents, natural vibrato taken out.",
     // phase 7 (PHASE7.md)
@@ -8644,7 +8644,7 @@ const TRANSLATIONS = {
     harmony_coach_none:"Too little of your voice was heard to score. Sing a little louder, or closer to the mic.",
     harmony_coach_good:"You held your part through the piece. Try the next level.",
     harmony_coach_more:"You landed {n} of {m} notes. Turn on the piano guide, or try a lower level first.",
-    harmony_measure:"Your part's line is the target, note by note, natural vibrato taken out. Pitch is how close you sang across the piece; Timing is how much of it you were heard; Part accuracy is the share of notes you landed within about 40 cents; Independence is Pitch, weighted up by how loud the other parts were at your level. Overall is the average of the four.",
+    harmony_measure:"Your part's line is the target, note by note, natural vibrato taken out. Pitch is how close you sang across the piece; Timing is when your voice started each note against its chord, as in Karaoke Coach (100 minus 0.6 × the milliseconds off, 0 for a note with no start), averaged over every note, with the delay of your speaker and microphone subtracted; Part accuracy is the share of notes you landed within about 40 cents; Independence is Pitch, weighted up by how loud the other parts were at your level. Overall is the average of the four.",
     rift_line:"Sixty seconds of rounds you can't predict: match a note, jump an interval, hold one steady, or catch one fast.",
     rift_hud_rounds:"Rounds",
     rift_hud_avg:"Average",
@@ -10317,7 +10317,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Commencer la performance",
     pd_dim_combined:"Justesse et timing ensemble",
     pd_insight_tpl:"À travailler ensuite : {dim}, votre point le plus bas aujourd'hui ({n}).",
-    pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : une note vaut 100 si votre voix arrive dans ses premiers 40 %, 50 si plus tard, en moyenne sur les notes chantées. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
+    pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : le moment où votre voix commence chaque note, une montée du volume ou une nouvelle hauteur, tenue sur la note pendant 150 ms ; elle vaut 100 moins 0,6 × son avance ou son retard en millisecondes, et une voix qui sonnait déjà ou qui arrive après 40 % de la note vaut 0. En moyenne sur les notes chantées, le délai de votre micro soustrait. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
     aiduet_start_btn:"Chanter avec le chœur",
     aiduet_after_tpl:"Vous avez chanté {part} avec le chœur.",
     aiduet_rehearse_link:"Répéter {part} dans {cw}",
@@ -10331,7 +10331,7 @@ const TRANSLATIONS = {
     karaoke_not_heard:"Pas entendue",
     karaoke_obj_done:"réussi",
     karaoke_obj_open:"pas encore",
-    karaoke_measure:"Chaque accord est une note de la ligne principale. Justesse d'une note : 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré) ; une note sans voix est « Pas entendue ». La justesse est la moyenne des notes chantées, enregistrée comme score de justesse. Timing : 100 si votre voix arrive dans les premiers 40 % de la note, 50 si plus tard, 0 si pas entendue, en moyenne sur toutes les notes. Votre meilleur score du morceau est la moyenne de la justesse et du timing.",
+    karaoke_measure:"Chaque accord est une note de la ligne principale. Justesse d'une note : 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré) ; une note sans voix est « Pas entendue ». La justesse est la moyenne des notes chantées, enregistrée comme score de justesse. Timing : le moment où votre voix commence chaque note, une montée du volume ou une nouvelle hauteur, tenue sur la note pendant 150 ms ; elle vaut 100 moins 0,6 × son avance ou son retard en millisecondes, et une voix qui sonnait déjà, qui arrive après 40 % de la note ou pas entendue vaut 0. Une montée qui n'est que l'accompagnement sortant de votre haut-parleur ne compte pas. En moyenne sur toutes les notes, le délai de votre haut-parleur et de votre micro soustrait. Votre meilleur score du morceau est la moyenne de la justesse et du timing.",
     emotion_result_label:"Contraste dynamique",
     emotion_measure:"Une estimation. Le contraste dynamique mesure combien votre volume varie pendant que vous chantez : l'écart de vos niveaux au-dessus du seuil de silence, rapporté à leur moyenne, × 250, 100 au plus. Il est enregistré comme score d'expression. Le volume change aussi avec la distance au micro et la pièce : prenez-le comme un repère. Justesse : pour chaque note de la ligne principale, 100 moins 0,6 × votre écart moyen en cents, vibrato naturel retiré.",
     // phase 7 (PHASE7.md)
@@ -10444,7 +10444,7 @@ const TRANSLATIONS = {
     harmony_coach_none:"Trop peu de votre voix a été entendu pour noter. Chantez un peu plus fort, ou plus près du micro.",
     harmony_coach_good:"Vous avez tenu votre voix tout du long. Essayez le niveau suivant.",
     harmony_coach_more:"Vous avez réussi {n} notes sur {m}. Activez le guide piano, ou essayez d'abord un niveau plus bas.",
-    harmony_measure:"La ligne de votre voix est la cible, note par note, vibrato naturel retiré. Justesse : à quel point vous avez chanté juste sur tout le morceau ; Rythme : la part du morceau où l'on vous a entendu ; Justesse de la voix : la part des notes réussies à environ 40 cents près ; Indépendance : la justesse, pondérée selon le volume des autres voix à votre niveau. Global est la moyenne des quatre.",
+    harmony_measure:"La ligne de votre voix est la cible, note par note, vibrato naturel retiré. Justesse : à quel point vous avez chanté juste sur tout le morceau ; Rythme : le moment où votre voix commence chaque note par rapport à son accord, comme dans Coach Karaoké (100 moins 0,6 × l'écart en millisecondes, 0 pour une note sans début), en moyenne sur toutes les notes, le délai de votre haut-parleur et de votre micro soustrait ; Justesse de la voix : la part des notes réussies à environ 40 cents près ; Indépendance : la justesse, pondérée selon le volume des autres voix à votre niveau. Global est la moyenne des quatre.",
     rift_line:"Soixante secondes de manches imprévisibles : reproduire une note, sauter un intervalle, en tenir une stable ou en attraper une vite.",
     rift_hud_rounds:"Manches",
     rift_hud_avg:"Moyenne",
@@ -12117,7 +12117,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Empezar la actuación",
     pd_dim_combined:"Afinación y ritmo juntos",
     pd_insight_tpl:"Lo siguiente a trabajar: {dim}, tu punto más bajo hoy ({n}).",
-    pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: una nota vale 100 si tu voz entra en su primer 40 %, 50 si entra después, en promedio sobre las notas cantadas. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
+    pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: el momento en que tu voz empieza cada nota, una subida de volumen o una nueva altura, mantenida en la nota 150 ms; vale 100 menos 0,6 × los milisegundos de adelanto o retraso, y una voz que ya sonaba o que entra pasado el 40 % de la nota vale 0. En promedio sobre las notas cantadas, con el retardo de tu micrófono restado. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
     aiduet_start_btn:"Cantar con el coro",
     aiduet_after_tpl:"Cantaste {part} con el coro.",
     aiduet_rehearse_link:"Ensayar {part} en {cw}",
@@ -12131,7 +12131,7 @@ const TRANSLATIONS = {
     karaoke_not_heard:"No se oyó",
     karaoke_obj_done:"logrado",
     karaoke_obj_open:"todavía no",
-    karaoke_measure:"Cada acorde es una nota de la línea principal. Afinación de una nota: 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural); una nota sin voz es «No se oyó». La afinación es la media de las notas que cantaste y se guarda como tu puntuación de afinación. Ritmo: 100 si tu voz entra en el primer 40 % de la nota, 50 si entra después, 0 si no se oyó, en promedio sobre todas las notas. Tu mejor marca de la canción es la media de la afinación y el ritmo.",
+    karaoke_measure:"Cada acorde es una nota de la línea principal. Afinación de una nota: 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural); una nota sin voz es «No se oyó». La afinación es la media de las notas que cantaste y se guarda como tu puntuación de afinación. Ritmo: el momento en que tu voz empieza cada nota, una subida de volumen o una nueva altura, mantenida en la nota 150 ms; vale 100 menos 0,6 × los milisegundos de adelanto o retraso, y una voz que ya sonaba, que entra pasado el 40 % de la nota o que no se oyó vale 0. Una subida que solo es el acompañamiento saliendo de tu altavoz no cuenta. En promedio sobre todas las notas, con el retardo de tu altavoz y tu micrófono restado. Tu mejor marca de la canción es la media de la afinación y el ritmo.",
     emotion_result_label:"Contraste dinámico",
     emotion_measure:"Una estimación. El contraste dinámico es cuánto varía tu volumen mientras cantas: la dispersión de tus niveles por encima del umbral de silencio, relativa a su media, × 250, como máximo 100. Se guarda como tu puntuación de expresión. El volumen también cambia con la distancia al micrófono y la sala, así que tómalo como una guía. Afinación: para cada nota de la línea principal, 100 menos 0,6 × tu distancia media en cents, sin el vibrato natural.",
     // phase 7 (PHASE7.md)
@@ -12244,7 +12244,7 @@ const TRANSLATIONS = {
     harmony_coach_none:"Se oyó muy poco de tu voz para puntuar. Canta un poco más fuerte o más cerca del micrófono.",
     harmony_coach_good:"Mantuviste tu voz durante toda la pieza. Prueba el siguiente nivel.",
     harmony_coach_more:"Acertaste {n} de {m} notas. Activa la guía de piano o prueba antes un nivel más bajo.",
-    harmony_measure:"La línea de tu voz es el objetivo, nota a nota, sin el vibrato natural. Afinación: cuánto te acercaste en toda la pieza; Tiempo: cuánto de ella se te oyó; Precisión de la voz: la parte de notas que acertaste a unos 40 cents; Independencia: la afinación, ponderada según el volumen de las otras voces en tu nivel. Global es la media de las cuatro.",
+    harmony_measure:"La línea de tu voz es el objetivo, nota a nota, sin el vibrato natural. Afinación: cuánto te acercaste en toda la pieza; Tiempo: el momento en que tu voz empieza cada nota frente a su acorde, como en Coach de Karaoke (100 menos 0,6 × los milisegundos de desvío, 0 para una nota sin inicio), en promedio sobre todas las notas, con el retardo de tu altavoz y tu micrófono restado; Precisión de la voz: la parte de notas que acertaste a unos 40 cents; Independencia: la afinación, ponderada según el volumen de las otras voces en tu nivel. Global es la media de las cuatro.",
     rift_line:"Sesenta segundos de rondas imprevisibles: igualar una nota, saltar un intervalo, sostener una estable o atrapar una rápido.",
     rift_hud_rounds:"Rondas",
     rift_hud_avg:"Media",
@@ -13917,7 +13917,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Performansa başla",
     pd_dim_combined:"Perde ve zamanlama birlikte",
     pd_insight_tpl:"Sırada {dim} var: bugünkü en düşük puanınız ({n}).",
-    pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, söylenen notaların ortalaması. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
+    pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesinizin her notaya başladığı an, ses düzeyinde bir yükselme ya da yeni bir perde, notada 150 ms tutulmuş; 100 eksi 0,6 × kaç milisaniye erken ya da geç olduğu ile puanlanır, zaten sürmekte olan ya da notanın %40'ından sonra gelen ses 0 alır. Söylenen notaların ortalamasıdır, mikrofonunuzun gecikmesi çıkarılır. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
     aiduet_start_btn:"Koroyla söyle",
     aiduet_after_tpl:"Koroyla {part} partisini söylediniz.",
     aiduet_rehearse_link:"{part} partisini {cw} içinde çalışın",
@@ -13931,7 +13931,7 @@ const TRANSLATIONS = {
     karaoke_not_heard:"Duyulmadı",
     karaoke_obj_done:"tamamlandı",
     karaoke_obj_open:"henüz değil",
-    karaoke_measure:"Her akor Lead hattının bir notasıdır. Bir notanın perdesi: 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır); sesinizin olmadığı nota Duyulmadı olur. Perde, söylediğiniz notaların ortalamasıdır ve perde puanınız olarak kaydedilir. Zamanlama: sesiniz notanın ilk %40'ında girerse 100, daha geç girerse 50, duyulmazsa 0, tüm notaların ortalaması. Şarkıdaki en iyi puanınız Perde ve Zamanlama'nın ortalamasıdır.",
+    karaoke_measure:"Her akor Lead hattının bir notasıdır. Bir notanın perdesi: 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır); sesinizin olmadığı nota Duyulmadı olur. Perde, söylediğiniz notaların ortalamasıdır ve perde puanınız olarak kaydedilir. Zamanlama: sesinizin her notaya başladığı an, ses düzeyinde bir yükselme ya da yeni bir perde, notada 150 ms tutulmuş; 100 eksi 0,6 × kaç milisaniye erken ya da geç olduğu ile puanlanır, zaten sürmekte olan, notanın %40'ından sonra gelen ya da duyulmayan ses 0 alır. Yalnızca hoparlörünüzden gelen eşlik olan bir yükselme sayılmaz. Tüm notaların ortalamasıdır, hoparlörünüzün ve mikrofonunuzun gecikmesi çıkarılır. Şarkıdaki en iyi puanınız Perde ve Zamanlama'nın ortalamasıdır.",
     emotion_result_label:"Dinamik kontrast",
     emotion_measure:"Bir tahmin. Dinamik kontrast, söylerken ses düzeyinizin ne kadar değiştiğidir: sessizlik eşiğinin üzerindeki seviye okumalarınızın ortalamalarına göre yayılımı, × 250, en fazla 100. İfade puanınız olarak kaydedilir. Ses düzeyi mikrofona uzaklığınızla ve odayla da değişir, bu yüzden onu bir rehber olarak görün. Perde: Lead hattının her notası için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız, doğal vibrato çıkarılır.",
     // phase 7 (PHASE7.md)
@@ -14044,7 +14044,7 @@ const TRANSLATIONS = {
     harmony_coach_none:"Puanlamak için sesinden çok az duyuldu. Biraz daha yüksek sesle ya da mikrofona daha yakın söyle.",
     harmony_coach_good:"Parça boyunca partini korudun. Bir sonraki seviyeyi dene.",
     harmony_coach_more:"{m} notadan {n} tanesini tutturdun. Piyano rehberini aç ya da önce daha düşük bir seviye dene.",
-    harmony_measure:"Hedef, doğal vibrato çıkarılarak not not partinin melodisidir. Perde: parça boyunca ne kadar yakın söylediğin; Zamanlama: ne kadarında duyulduğun; Parti doğruluğu: yaklaşık 40 sent içinde tutturduğun notaların payı; Bağımsızlık: seviyendeki diğer partilerin yüksekliğine göre ağırlıklandırılmış Perde. Genel, dördünün ortalamasıdır.",
+    harmony_measure:"Hedef, doğal vibrato çıkarılarak not not partinin melodisidir. Perde: parça boyunca ne kadar yakın söylediğin; Zamanlama: sesinin her notaya akoruna göre başladığı an, Karaoke Koçu'ndaki gibi (100 eksi 0,6 × milisaniye cinsinden sapma, başlangıcı olmayan nota 0), tüm notaların ortalaması, hoparlörünün ve mikrofonunun gecikmesi çıkarılır; Parti doğruluğu: yaklaşık 40 sent içinde tutturduğun notaların payı; Bağımsızlık: seviyendeki diğer partilerin yüksekliğine göre ağırlıklandırılmış Perde. Genel, dördünün ortalamasıdır.",
     rift_line:"Tahmin edemeyeceğin altmış saniyelik turlar: bir notayı eşle, bir aralık atla, birini sabit tut ya da birini hızlı yakala.",
     rift_hud_rounds:"Tur",
     rift_hud_avg:"Ortalama",
@@ -15889,6 +15889,12 @@ async function playBackingPad(includeLead=false){
 // sings with the backing takes its note starts from here, so note i starts when chord i does. Reading performance.now()
 // after playBackingPad (which schedules 80 ms ahead) started every note 80 ms before its chord.
 function backingClockMs(t0){ return performance.now() + (t0 - audioCtx.currentTime)*1000; }
+// The scoring clock of Performance Director, Karaoke, Emotional Singing and Harmony Arena (B3): ms since the take's start
+// on the audio clock, at the mic's newest sample. The analyser's buffer ends at audioCtx.currentTime; performance.now()
+// at the read is 0–10 ms later than that sample on this Mac (Chrome renders four 128-frame quanta at once, every
+// ~10.7 ms), so a frame stamped by performance.now() put every onset 0–10 ms late (PD's extra offset on the rig). The
+// speaker delay is measured on this clock too (sdMeasure), so it comes off exactly. The screens keep performance.now().
+function micClockMs(startCtx){ return (audioCtx.currentTime - startCtx)*1000; }
 function stopBackingPad(){
   backingActiveOsc.forEach(o=>{ try{o.stop();}catch(e){} });
   backingActiveOsc = [];
@@ -16222,13 +16228,14 @@ function buildKaraokeRoll(ids=KARAOKE_ROLL){ // returns the roll's {minMidi, max
 }
 
 let karaokeActive = false;
-let karaokeStartTime = 0;
+let karaokeStartTime = 0, karaokeStartCtx = 0;
 let karaokeRafId = null;
 let karaokeCurrentIdx = -1;
 let karaokeCentsBuf = [];
 let karaokeFirstVoicedOffset = null;
 let karaokeResults = [];
 let karaokeDelayMs = 0; // the speaker delay this take subtracts (B2)
+let karaokeOnset = null; // B3: the take's onsets, with the backing's chord starts
 
 async function startKaraoke(){
   if(!requireProFeature('Karaoke Coach')) return;
@@ -16240,8 +16247,9 @@ async function startKaraoke(){
   const t0 = await playBackingPad(false);
   if(tok!==startGen) return;
   karaokeActive = true;
-  karaokeStartTime = backingClockMs(t0); // note i starts with chord i of the backing
+  karaokeStartTime = backingClockMs(t0); karaokeStartCtx = t0; // note i starts with chord i of the backing
   karaokeDelayMs = sdDelayMs();
+  karaokeOnset = makeOnsetTracker({backing:true});
   karaokeCurrentIdx = -1;
   karaokeCentsBuf = [];
   karaokeFirstVoicedOffset = null;
@@ -16262,11 +16270,7 @@ function finalizeKaraokeNote(idx){
     const vt = vibratoTolerantCents(karaokeCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // over its own values (scoring batch item 3)
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
-  let timingScore = 0;
-  if(karaokeFirstVoicedOffset!==null){
-    timingScore = karaokeFirstVoicedOffset < chordDurMs*0.4 ? 100 : 50;
-  }
-  karaokeResults[idx] = {pitchAcc, timingScore, heard: karaokeCentsBuf.length>0};
+  karaokeResults[idx] = {pitchAcc, timingScore:0, heard: karaokeCentsBuf.length>0}; // timing: from the take's onsets, at the end (B3)
 
   const rect = document.querySelector(`.karaoke-note-rect[data-idx="${idx}"]`);
   if(rect){ const c = pitchAcc>=70 ? 'var(--hl-ok)' : (karaokeCentsBuf.length>0 ? 'var(--hl-miss)' : 'var(--hl-rule)'); rect.style.fill = c; rect.style.stroke = c; }
@@ -16279,7 +16283,7 @@ function karaokeLoop(){
   if(!karaokeActive) return;
   const shownMs = performance.now()-karaokeStartTime;
   // the scoring time: when you sang what the mic hears now (the speaker delay taken off); the roll moves with the song
-  const elapsedMs = shownMs - karaokeDelayMs;
+  const elapsedMs = micClockMs(karaokeStartCtx) - karaokeDelayMs;
   const totalMs = songTotalDurMs();
   if(elapsedMs >= totalMs){ finishKaraoke(); return; }
 
@@ -16292,7 +16296,9 @@ function karaokeLoop(){
   }
 
   analyser.getFloatTimeDomainData(dataArray);
+  const raw = readRawMic(), micMs = micClockMs(karaokeStartCtx) - karaokeDelayMs; // stamped as it's read (micClockMs)
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  karaokeOnset.push(micMs, raw, freq, SONG.parts.Lead.notes[idx]);
   const cursor = document.getElementById('karaokeLiveCursor');
   if(freq>0){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
@@ -16327,6 +16333,8 @@ function karaokeStop(){ karaokeReset(); }
 function finishKaraoke(){
   finalizeKaraokeNote(karaokeCurrentIdx);
   karaokeReset();
+  const kTim = onsetTimings(karaokeOnset, SONG.parts.Lead.notes.length);
+  karaokeResults.forEach((r,i)=>{ if(r){ r.timingScore = kTim[i].score; r.offsetMs = kTim[i].offsetMs; } });
 
   const heardResults = karaokeResults.filter(r=>r && r.heard);
   const avgPitch = heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.pitchAcc,0)/heardResults.length) : 0;
@@ -21996,10 +22004,11 @@ document.getElementById('bridgeStartBtn').addEventListener('click', ()=>{
 });
 
 /* ---------------- Game 4: Harmony Arena (Pro, reuses Choir Workspace mixer) ---------------- */
-let harmonyActive=false, harmonyStartTime=0, harmonyRafId=null, harmonyCentsSamples=[], harmonySelectedPart='Soprano', harmonySelectedLevel=1, harmonyTransposeShift=0;
+let harmonyActive=false, harmonyStartTime=0, harmonyStartCtx=0, harmonyRafId=null, harmonyCentsSamples=[], harmonySelectedPart='Soprano', harmonySelectedLevel=1, harmonyTransposeShift=0;
 let harmonyTotalFrames=0, harmonyHeardFrames=0, harmonyCurrentIdx=-1, harmonyNoteBuf=[], harmonyNoteResults=[];
 let harmonyPianoGuideOn = false;
 let harmonyDelayMs = 0, harmonyShownIdx = -1; // the speaker delay this take subtracts (B2); the note on screen
+let harmonyOnset = null; // B3: the take's onsets, with the choir's chord starts
 document.getElementById('harmonyPianoGuideBtn')?.addEventListener('click', ()=>{
   harmonyPianoGuideOn = !harmonyPianoGuideOn;
   const btn = document.getElementById('harmonyPianoGuideBtn');
@@ -22079,8 +22088,9 @@ async function startHarmonyArena(){
     });
   });
 
-  harmonyActive=true; harmonyStartTime=backingClockMs(t0); harmonyCentsSamples=[]; // note i starts with chord i of the choir
+  harmonyActive=true; harmonyStartTime=backingClockMs(t0); harmonyStartCtx=t0; harmonyCentsSamples=[]; // note i starts with chord i of the choir
   harmonyDelayMs = sdDelayMs(); harmonyShownIdx = -1;
+  harmonyOnset = makeOnsetTracker({backing:true});
   harmonyTotalFrames=0; harmonyHeardFrames=0; harmonyCurrentIdx=-1; harmonyNoteBuf=[]; harmonyNoteResults=[];
   document.getElementById('harmonyResult').style.display='none';
   gameStartLive('harmonyStartBtn', 'harmonyStartLabel');
@@ -22100,7 +22110,7 @@ function harmonyFinalizeNote(idx){
 function harmonyLoop(){
   if(!harmonyActive) return;
   const shownMs=performance.now()-harmonyStartTime;
-  const elapsedMs=shownMs-harmonyDelayMs; // the scoring time: when you sang what the mic hears now
+  const elapsedMs=micClockMs(harmonyStartCtx)-harmonyDelayMs; // the scoring time: when you sang what the mic hears now
   const totalMs=songTotalDurMs();
   if(elapsedMs>=totalMs){
     if(harmonyCurrentIdx>=0) harmonyFinalizeNote(harmonyCurrentIdx);
@@ -22133,7 +22143,9 @@ function harmonyLoop(){
 
   harmonyTotalFrames++;
   analyser.getFloatTimeDomainData(dataArray);
+  const raw=readRawMic(), micMs=micClockMs(harmonyStartCtx)-harmonyDelayMs; // stamped as it's read (micClockMs)
   const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
+  harmonyOnset.push(micMs, raw, freq, targetMidi);
   const ribbon = document.getElementById('harmonyRibbonShape');
   if(freq>0){
     harmonyHeardFrames++;
@@ -22175,8 +22187,10 @@ function finishHarmonyArena(){
     const avgAbs=harmonyCentsSamples.reduce((a,b)=>a+b,0)/harmonyCentsSamples.length;
     pitchAcc=Math.max(0, Math.round(100-avgAbs*0.6));
   }
-  // Timing: how consistently a pitch was actually detected through the piece (presence rate)
-  const timingScore = harmonyTotalFrames>0 ? Math.round((harmonyHeardFrames/harmonyTotalFrames)*100) : 0;
+  // Timing (B3): each note's onset against its chord, as Karaoke's, averaged over every note (it was the share of
+  // frames with a pitch, which a voice held through the piece filled)
+  const hTim = onsetTimings(harmonyOnset, SONG.parts[harmonySelectedPart].notes.length);
+  const timingScore = Math.round(hTim.reduce((a,b)=>a+b.score,0)/hTim.length);
   // Part Accuracy: % of the 8 individual notes you actually landed cleanly (per-note, not smoothed)
   const totalNotes = SONG.parts[harmonySelectedPart].notes.length;
   const validNotes = harmonyNoteResults.filter(r=>r!==null && r!==undefined);
@@ -25800,6 +25814,79 @@ document.getElementById('emoRetryBtn')?.addEventListener('click', ()=>{
   document.getElementById('emoPreCard').style.display = 'block';
 });
 
+/* ---------------- Onsets (scoring batch item 1, B3) ---------------- */
+// A note's timing comes from an onset heard in its window, not from a voice being present (a tone held through the song,
+// or a singer 150 ms late, scored 100 before). An onset is
+//  - a level rise of ONSET_RISE_DB within ONSET_LOOKBACK_MS to above the voicing threshold (an entrance, or a
+//    re-articulation: the hymn has four C5s in a row, so pitch alone can't separate them), placed inside the analyser's
+//    window in 64-sample hops (~1.3 ms, as edgeSecondsAgo) at a threshold halfway up the rise;
+//  - or a pitch arriving within 100 ct of the note when no frame of the last ONSET_PITCH_AWAY_MS was within 100 ct of
+//    that pitch (a legato change of note; a tone held on the note's pitch from before isn't one);
+// either kept only if the next 150 ms hold 3 frames within ±300 ct of the note, so a click or a noise burst isn't one.
+// A pitch onset is the singer's only if it is ONSET_BACKING_DB above the room (the median of the frames with no voice on
+// the note, below), in every tool: a backing's chord can hold the Lead's own note, and its leak is a pitch too.
+// With a backing (Karaoke, Harmony Arena) a level onset within ONSET_BACKING_MS of a chord start may be the backing's own
+// leaking into the mic: it is kept only if it is ONSET_BACKING_DB above the backing's level at the mic (the median of the
+// frames inside the chords with no voice on the note). Every time here already has the speaker delay off (B2), so the
+// chord starts are where the backing's leak lands.
+// The first onset in [start − ONSET_EARLY_MS, start + 40 % of the note] is the note's: timingAccuracy(onset − start),
+// the formula of Rhythm and Entrance & Cutoff. No onset: 0.
+const ONSET_RISE_DB = 9, ONSET_LOOKBACK_MS = 120, ONSET_GAP_MS = 150, ONSET_PITCH_AWAY_MS = 150, ONSET_EARLY_MS = 150;
+const ONSET_BACKING_MS = 120, ONSET_BACKING_DB = 6;
+function edgeAgoAbove(buf, sampleRate, thr){
+  const HOP = 64, hops = Math.floor(buf.length/HOP);
+  const loud = k=>{ let s=0; for(let i=k*HOP;i<(k+1)*HOP;i++) s+=buf[i]*buf[i]; return Math.sqrt(s/HOP) > thr; };
+  let k = hops-1; while(k>=0 && loud(k)) k--;
+  return (buf.length - (k+1)*HOP)/sampleRate;
+}
+// D: the note length (ms), and with backing:true the chord starts j × D are where a backing's leak may start a level
+// onset: one confirmed there doesn't hold off the next candidate (ONSET_GAP_MS), so a singer just after the chord start
+// is still heard; the level test itself waits for the whole take (onsetTimings).
+function makeOnsetTracker({D = songChordDurMs(), backing = false} = {}){
+  const hist = [], phist = [], onsets = [], frames = []; let lastOnset = -Infinity, cand = null;
+  const nearChord = t=>{ const b = Math.round(t/D)*D; return Math.abs(t-b) <= ONSET_BACKING_MS; };
+  function push(t, raw, freq, target){
+    const rms = computeRMS(raw), db = 20*Math.log10(Math.max(rms, 1e-7));
+    hist.push({t, db}); while(hist.length && t-hist[0].t > ONSET_LOOKBACK_MS) hist.shift();
+    let minDb = Infinity; for(const x of hist) if(x.db<minDb) minDb = x.db;
+    const cents = freq>0 ? centsFromTarget(freq, target) : null;
+    const near = cents!==null && Math.abs(cents)<100, onNote = cents!==null && Math.abs(cents)<300;
+    frames.push({t, db, onNote});
+    if(!cand && t-lastOnset >= ONSET_GAP_MS){
+      if(rms>ONSET_RMS_THRESHOLD && db-minDb >= ONSET_RISE_DB){
+        const thr = Math.max(ONSET_RMS_THRESHOLD*0.5, Math.pow(10, (minDb+ONSET_RISE_DB/2)/20));
+        cand = {t: t - edgeAgoAbove(raw, audioCtx.sampleRate, thr)*1000, at:t, on:0, kind:'level', db:-Infinity}; // at: the frame that found it
+      } else if(near && !phist.some(x=>Math.abs(centsFromTarget(x.freq, target))<100)){ cand = {t, at:t, on:0, kind:'pitch', db:-Infinity}; }
+    }
+    if(freq>0) phist.push({t, freq}); while(phist.length && t-phist[0].t > ONSET_PITCH_AWAY_MS) phist.shift();
+    if(cand){
+      if(onNote){ cand.on++; if(db>cand.db) cand.db = db; }
+      if(cand.on>=3){
+        onsets.push(cand);
+        if(!(backing && cand.kind==='level' && nearChord(cand.t))) lastOnset = cand.t;
+        cand = null;
+      }
+      else if(t-cand.t > 150) cand = null;
+    }
+  }
+  return {push, onsets, frames, D, backing};
+}
+// Per note j of n: {offsetMs, score}; offsetMs null for a note with no onset (score 0).
+function onsetTimings(tr, n){
+  const D = tr.D;
+  let list = tr.onsets;
+  const free = tr.frames.filter(f=>!f.onNote && f.t>=0 && f.t%D>=100 && f.t%D<=D*0.9).map(f=>f.db).sort((a,b)=>a-b);
+  const level = free.length>=10 ? free[free.length>>1] : null; // the room; no frames without the voice: no sign of a leak
+  if(level!==null){
+    list = list.filter(o=>o.kind!=='pitch' || o.db >= level + ONSET_BACKING_DB);
+    if(tr.backing) list = list.filter(o=>o.kind!=='level' || Math.abs(o.t - Math.round(o.t/D)*D) > ONSET_BACKING_MS || o.db >= level + ONSET_BACKING_DB);
+  }
+  return Array.from({length:n}, (_,j)=>{
+    const s = j*D, o = list.find(x=>x.t>=s-ONSET_EARLY_MS && x.t<=s+D*0.4);
+    return o===undefined ? {offsetMs:null, score:0} : {offsetMs:Math.round(o.t-s), score:timingAccuracy(o.t-s)};
+  });
+}
+
 /* ---------------- Performance Director (real section-aware coaching + real multi-dimension report) ---------------- */
 const PERFORMANCE_DIRECTOR_CUES = {
   get verse(){return t('pd_cue_verse');}, // by section id (B5: keyed by English names, the cues showed in English only, and not for Pre-chorus)
@@ -25815,7 +25902,8 @@ let pdFirstVoicedOffset = null;
 let pdResults = [];
 let pdRmsSamples = [];
 let pdCurrentSectionName = null;
-let pdDelayMs = 0, pdShownIdx = -1;
+let pdDelayMs = 0, pdShownIdx = -1, pdStartCtx = 0;
+let pdOnset = null; // B3: the take's onsets
 
 function renderPdBriefing(){
   const wrap = document.getElementById('pdBriefingRows');
@@ -25836,8 +25924,9 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   if(tok!==startGen) return;
   if(!await sdGate() || tok!==startGen) return;
   pdActive = true;
-  pdStartTime = performance.now();
+  pdStartTime = performance.now(); pdStartCtx = audioCtx.currentTime;
   pdDelayMs = sdInputMs(); // PD plays nothing: the microphone's share of the delay (B2)
+  pdOnset = makeOnsetTracker();
   pdCurrentIdx = -1; pdShownIdx = -1;
   pdCentsBuf = [];
   pdFirstVoicedOffset = null;
@@ -25862,17 +25951,13 @@ function pdFinalizeNote(idx){
     const vt = vibratoTolerantCents(pdCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // over its own values (scoring batch item 3)
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
-  let timingScore = 0;
-  if(pdFirstVoicedOffset!==null){
-    timingScore = pdFirstVoicedOffset < chordDurMs*0.4 ? 100 : 50;
-  }
-  pdResults[idx] = {pitchAcc, timingScore, heard: pdCentsBuf.length>0};
+  pdResults[idx] = {pitchAcc, timingScore:0, heard: pdCentsBuf.length>0}; // timing: from the take's onsets, at the end (B3)
 }
 
 function pdLoop(){
   if(!pdActive) return;
   const shownMs = performance.now()-pdStartTime;
-  const elapsedMs = shownMs - pdDelayMs; // the scoring time: when you sang what the mic hears now
+  const elapsedMs = micClockMs(pdStartCtx) - pdDelayMs; // the scoring time: when you sang what the mic hears now
   const totalMs = songTotalDurMs();
   if(elapsedMs >= totalMs){ pdFinalizeNote(pdCurrentIdx); finishPd(); return; }
 
@@ -25900,9 +25985,10 @@ function pdLoop(){
   document.getElementById('pdProgressFill').style.width = Math.max(0, Math.min(100,(shownMs/totalMs)*100))+'%';
 
   analyser.getFloatTimeDomainData(dataArray);
-  const rms = computeRMS(readRawMic());
+  const raw = readRawMic(), micMs = micClockMs(pdStartCtx) - pdDelayMs, rms = computeRMS(raw); // stamped as it's read (micClockMs)
   if(rms>0.008) pdRmsSamples.push(rms);
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
+  pdOnset.push(micMs, raw, freq, SONG.parts.Lead.notes[idx]);
   if(freq>0){
     if(pdFirstVoicedOffset===null){
       const chordDurMs = songChordDurMs();
@@ -25931,6 +26017,8 @@ function finishPd(){
   document.getElementById('pdResultCard').style.display='block';
   document.getElementById('pdBriefingCard').style.display='block'; // Start again, under the result
 
+  const tim = onsetTimings(pdOnset, SONG.parts.Lead.notes.length);
+  pdResults.forEach((r,i)=>{ if(r){ r.timingScore = tim[i].score; r.offsetMs = tim[i].offsetMs; } });
   const heard = pdResults.filter(r=>r && r.heard);
   const avgPitch = heard.length ? Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length) : 0;
   const avgTiming = heard.length ? Math.round(heard.reduce((a,b)=>a+b.timingScore,0)/heard.length) : 0;
