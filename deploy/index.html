@@ -14380,9 +14380,14 @@ function progressRetryLater(e){
     Math.round(base * (1 + (Math.random()*2-1) * PROGRESS_RETRY.JITTER)));
 }
 window.addEventListener('online', ()=>{ if(progressRetry.timer && profile){ progressRetryClear(false); saveProgress(); } });
+// B8: the saves in flight; Erase my progress waits for them first (a save sent just before it, landing after, merged the
+// old row back and could be the last write)
+const progressSaving = new Set();
 async function saveProgress(){
   try{
-    const row = await apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
+    const req = apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
+    progressSaving.add(req); req.catch(()=>{}).finally(()=>progressSaving.delete(req));
+    const row = await req;
     progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
     progressRetryClear(true);
   }catch(e){ console.error('progress save error', e); progressRetryLater(e); }
@@ -14647,11 +14652,28 @@ document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
   if(typeof renderCoachHub==='function') renderCoachHub();
 });
 
+// B8: what "Erase my progress" deletes, as its text says (range, streak, sessions, scores and history), every column at
+// its default. PATCH /me/progress merges, so a column left out of the save kept its value: the score lists, the bests and
+// the session count survived an erase. XP and level, the Journey's days, the achievements already shown, the "tried"
+// flags and the warm-up count aren't named, and stay; so do the vocal-load sessions (their own table).
+const PROGRESS_ERASED = {
+  lowestMidi:null, highestMidi:null,                                                       // range
+  streak:0,                                                                                // streak
+  totalSessions:0, lastPracticeDate:null, lastExerciseDate:null, exercisesToday:0, sessionSnapshot:{}, // sessions
+  pitchScores:[], agilityScores:[], breathScores:[], expressionScores:[], noteAttemptHistory:{}, // scores
+  oneTakeHistory:{}, oneTakeLastDate:null, dailyMetrics:{}, weeklyLog:[], breakthroughCount:0,
+  songBestScores:{}, gliderBest:0, bridgeBest:null, harmonyBest:null, riftBest:null,      // bests
+  bestBreathDuration:null, bestBridgeSeconds:null, bossVictories:0, lastBossWeakness:null, // the app keeps both as numbers
+  choirReadiness:{},                                                                       // Choir World's runs and parts
+  history:{}, timelineEvents:[], dailyWeighting:{},                                        // history
+};
 document.getElementById('dashResetBtn').addEventListener('click', async ()=>{
   if(!confirm(t('profile_reset_confirm'))) return; // phase 7: it erases the account's saved progress, not only this device's (the old text said "locally")
-  progress = {highestMidi:null, lowestMidi:null, totalSessions:0, lastPracticeDate:null, streak:0, history:{}};
+  await Promise.allSettled([...progressSaving]);
+  progress = normalizeJsonbScoreDefaults({ ...progress, ...JSON.parse(JSON.stringify(PROGRESS_ERASED)) });
   await saveProgress();
   renderDashboard();
+  if(typeof renderHomeScreen==='function') renderHomeScreen();
 });
 
 function noteNameFromMidi(midi){
