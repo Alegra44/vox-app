@@ -151,3 +151,5 @@ survey.js `--voice`, one run each, PD and Emotional Singing). The sd is the spre
   phrase gaps, so notes land on breaths (straight-286 alternates −37 / −13 dBFS). They score 0–100 (sd 0.2–12.5);
   three (breathy-1743, breathy-562, pp-1717) are under the 0.012 rms gate and give no score. They can't meet the ≤ 10
   rule and weren't used to set it.
+- youSeed's Expression is reseeded from real takes on this measure: [36, 49, 54] (vibrato-3131, -2961, -2417 whole
+  clips, Emotional Singing).

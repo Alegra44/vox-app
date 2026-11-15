@@ -28,7 +28,7 @@ function seedInPage(name) {
   const dm = {}; [[1, 71, 64], [2, 74, 66], [4, 69, null], [5, 76, 70], [7, 72, 62], [9, 70, 60]].forEach(([d, s, br]) => {
     dm[daysAgo(d)] = { stability: [s, s + 3], ...(br !== null ? { breath: [br] } : {}) }; });
   Object.assign(progress, {
-    pitchScores: [62, 70, 76, 81, 84], breathScores: [55, 60], agilityScores: [64, 72], expressionScores: [48],
+    pitchScores: [62, 70, 76, 81, 84], breathScores: [55, 60], agilityScores: [64, 72], expressionScores: [36, 49, 54],
     lowestMidi: 45, highestMidi: 69, bestBreathDuration: 12.4, bestBridgeSeconds: 3.2, gliderBest: 1200, bossVictories: 1,
     harmonyBest: 78, xp: 340, streak: 3, lastPracticeDate: today, totalSessions: 14, history: hist, dailyMetrics: dm,
     weeklyLog: [[12, 60], [9, 63], [5, 78], [2, 81], [0, 84]].map(([d, score]) => ({ date: daysAgo(d), type: 'pitch', score })),

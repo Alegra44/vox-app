@@ -20264,7 +20264,8 @@ function computeSkillProfile(){
     range:      rangeSkillScore(),
     breath:     avgOf(progress.breathScores),
     agility:    avgOf(progress.agilityScores),
-    expression: null,  // needs Emotional Singing analysis — not built yet, not faked
+    // B6: Emotional Singing's Expression (the level shape, B5), the last 20, stored from migration 0009
+    expression: avgOf((progress.expressionScores||[]).slice(-20)),
   };
 }
 function renderSkillProfile(barsId, summaryId){
@@ -22224,7 +22225,8 @@ function finishHarmonyArena(){
       saveProgress();
       if(hadPriorBest) triggerNewRecord(t('record_popup_harmony_acc'), overall+'%', `${delta>0?'+':''}${delta}% ${t('record_delta_suffix')}`);
     }
-    recordSkillScore('expression', overall); // holding an independent line under distraction is an expression/control skill
+    // B6: no longer recorded as Expression: its overall (Pitch, Timing, Part accuracy, Independence) isn't how your level
+    // moves, and mixing the two would make the Expression ring mean neither
   }
   document.getElementById('harmonyResBest').textContent = profile && progress.harmonyBest ? progress.harmonyBest+'%' : '—';
   { const hb = document.getElementById('harmonyBestLive'); if(hb) hb.textContent = profile && progress.harmonyBest ? t('arcade_best_template').replace('{n}', progress.harmonyBest+'%') : ''; }

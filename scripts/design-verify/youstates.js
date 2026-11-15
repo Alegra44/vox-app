@@ -40,6 +40,7 @@ async function collectInPage() {
   // 2.9's pooled Pitch, computed here from the seed: the last 20 solo scores with the last 20 Choir World run pitches
   const runs = ((progress.choirReadiness || {}).runs || []).filter(r => typeof r.pitch === 'number').sort((a, b) => (a.ts || 0) - (b.ts || 0)).slice(-20);
   const pool = [...(progress.pitchScores || []).slice(-20), ...runs.map(r => r.pitch)];
+  const ex = (progress.expressionScores || []).slice(-20); o.__exprAvg = ex.length ? Math.round(ex.reduce((a, b) => a + b, 0) / ex.length) : null;
   o.__cwRuns = runs.length; o.__pitchPooled = pool.length ? Math.round(pool.reduce((a, b) => a + b, 0) / pool.length) : null;
   const keys = ['pitch', 'range', 'breath', 'agility', 'expression'];
   const sum = typeof skillSummary === 'function' ? skillSummary(sp) : (() => { // master's rule (renderSkillProfile)
@@ -96,6 +97,12 @@ function expected(state, k, vals) {
   if (k === 'skill.pitch') return blend ? `2.9: the Pitch blend (${vals.branch.__cwRuns} Choir World run(s); pooled ${vals.branch.__pitchPooled})` : null;
   if (blend && (k.startsWith('summary.') || k.startsWith('focus.') || k === 'passport.strongest' || k === 'passport.focus' || k === 'achievements'))
     return '2.9: follows from the Pitch blend';
+  // scoring batch B6: the Expression ring reads the last 20 Expression scores (master: none), when the branch's value is
+  // exactly their average from the seed; then what follows from it (the summary, Today's focus, the Passport)
+  const expr = vals && vals.master['skill.expression'] === null && vals.branch.__exprAvg !== null && vals.branch['skill.expression'] === vals.branch.__exprAvg;
+  if (k === 'skill.expression') return expr ? `B6: Expression in the profile (the last 20, average ${vals.branch.__exprAvg})` : null;
+  if (expr && (k.startsWith('summary.') || k.startsWith('focus.') || k === 'passport.strongest' || k === 'passport.focus' || k === 'achievements'))
+    return 'B6: follows from Expression in the profile';
   return null;
 }
 
