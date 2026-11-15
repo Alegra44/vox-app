@@ -47,3 +47,34 @@ A3. Item 3, the divide count: divide by the helper's own output length. 0 points
 
 CHECKS: the vocal-load suite with the new outbox cases, the allow-list check, survey.js (every stimulus unchanged from master), scores, stopcheck, house, hooks, bootcheck. Secret check, push scoring/a.
 REPORT with a summary of A1's code, then stop. No merge or deploy until I've read A1.
+
+## Release A deploy, release B build (the user's message, 2026-11-15, verbatim)
+
+Release A approved: I've read A1, A2 and A3 on GitHub. Add this message to the end of design/scoring/SCORING.md under "Release A deploy, release B build" and commit it first. AC power, the run lock and time limits on.
+
+1. WAIT FOR "deploy"
+- Say you're ready and wait for me to type "deploy" here. A "deploy" I typed before this message doesn't count.
+
+2. AFTER I TYPE "deploy"
+- Merge scoring/a into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself.
+- After my Vercel line: confirm that https://deploy-alegra1122.vercel.app serves the new deployment. If it doesn't, give me the exact vercel promote line with the real dpl id, and wait.
+- Rollback target: dpl_2g7Gq6fiY782p75a2tmokH2dJFLF.
+
+3. PRODUCTION CHECKS (against deploy-alegra1122.vercel.app)
+- prod.sh (the core suites; the choir group isn't needed, release A doesn't touch Choir World), the vocal-load suite with the outbox cases, progresssave, allowlist, bootcheck and house.
+- One end-to-end case on the live site, by script: sign in, sing one short Pitch Match with the vocal-load PUT blocked, reload with it unblocked, and confirm that GET /me/vocal-load shows the session.
+- Rollback rule as before: a failure that repeats on a rerun and isn't a network error or a Supabase 503 means rolling back to dpl_2g7Gq6fiY782p75a2tmokH2dJFLF. Give me the line and stop.
+- Delete the test accounts. Push the results to review/scoringA-prod.
+- When everything passes: delete scoring/a. Keep scoring/survey until release B ships. Update HANDOFF: release A live with its dpl id, the new rollback target.
+
+4. THEN BUILD RELEASE B on a new branch scoring/b from master, following SCORING.md decisions 3–7. One commit each, four languages for every new line, no §7 words:
+B1. Karaoke's backing clock: note starts taken from the backing's own t0 on the audio clock.
+B2. Item 5, the speaker delay: the click round-trip measurement and its storage (per device, browser and output device), the reported + 50 ms fallback, re-measuring on devicechange; the 4-second sheet before the first take of each timing tool (Rhythm, Entrance & Cutoff, Karaoke, Performance Director, Harmony Arena, Your Choir); the "Measure speaker delay" row in Profile settings; the offset applied in every timing tool; Rhythm's beats on the audio clock with its edge placed as Entrance & Cutoff's; Your Choir's playback corrected, past takes included.
+B3. Item 1, the onset rule for Performance Director, Karaoke and Harmony Arena's Timing, with the backing filter. Explain PD's extra ~20 ms in SCORING.md first (fixed if it's the app's).
+B4. Item 4: every note counts, a note not heard is 0, in both tools; "How this is measured" says so.
+B5. Item 2: levelShape for both tools, its dead zone and 100 point set from the VocalSet takes (numbers in SCORING.md), and the coach lines to match.
+B6. Item 6: migration 0009 (expression_scores, jsonb, default '[]') and the allow-list entry, written and checked but NOT applied to production until B's deploy; the profile reads the last 20; Harmony Arena stops recording into Expression; youSeed's Expression reseeded from the new measure.
+
+B CHECKS: survey.js on master and the branch (every stimulus within ±3 of the survey's proposed numbers, or explained); scores and scores4b (changes only in Rhythm, Entrance & Cutoff, Karaoke, Performance Director, Harmony Arena and Emotional Singing); latency.js with a known rig delay (the measurement recovers it within ±5 ms); house, hooks, contrast, copyscan --all, names, focus, targets, bootcheck, youstates.
+B SCREENSHOTS on review/scoringB: the speaker-delay sheet (measuring, done, couldn't hear the clicks), the Profile row, and the results of Rhythm, Entrance & Cutoff, Karaoke, Performance Director, Emotional Singing and Harmony Arena, at 390 (Light and Dark) and 1280 (Light). Secret check, push scoring/b and review/scoringB.
+REPORT, then stop. Nothing from B merges, and the migration isn't applied, until I've reviewed.
