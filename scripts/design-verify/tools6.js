@@ -165,7 +165,8 @@ const TOOLS = [
         pitch = Math.max(0, Math.round(100 - abs.reduce((a, b) => a + b, 0) / abs.length * 0.6));
       }
       const voiced = emotionRmsSamples.filter(r => r > 0.012);
-      if (emotionRmsSamples.length > 10 && voiced.length > 10) {
+      if (typeof levelShape === 'function' && typeof emotionFrames !== 'undefined') { const sc = levelShape(emotionFrames).score; expr = sc === null ? 'none' : sc; } // release B (B5): the level shape
+      else if (emotionRmsSamples.length > 10 && voiced.length > 10) {
         const mean = voiced.reduce((a, b) => a + b, 0) / voiced.length, v = voiced.reduce((a, b) => a + (b - mean) * (b - mean), 0) / voiced.length;
         expr = Math.max(0, Math.min(100, Math.round(Math.sqrt(v) / mean * 250)));
       }
@@ -173,7 +174,7 @@ const TOOLS = [
       o['result: pitch'] = num(document.getElementById('emotionPitchVal').textContent);
       o['result: expression'] = num(document.getElementById('emotionExpressionVal').textContent);
       const fb = document.getElementById('emotionFeedback').textContent.trim();
-      o['coach line'] = ['nosignal', 'flatdynamics', 'gooddynamics', 'moreneeded'].find(k => t('emotion_fb_' + k) === fb) || (fb ? 'other' : 'none');
+      o['coach line'] = ['nosignal', 'flatdynamics', 'flatlevel', 'gooddynamics', 'moreneeded'].find(k => t('emotion_fb_' + k) === fb) || (fb ? 'other' : 'none');
       const s = (window.__skills || []).filter(x => x.cat === 'expression'); o['skill expression recorded'] = s.length ? s[s.length - 1].score : 'none';
       return o;
     },

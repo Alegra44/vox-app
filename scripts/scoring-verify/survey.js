@@ -17,6 +17,11 @@
 //            the backing as the singer's onset?)
 // Each take records, besides the tool's own numbers: every computeRMS and autoCorrelate call of the take (time, value),
 // and every vibratoTolerantCents call (readings in, values out: item 3).
+// Release B added, for its own measurements (SCORING.md):
+//   --voice <wav> [--voice-from <s>, default 5] [--voice-to <s>, default its end] [--voice-gain-db <dB>, default 0]
+//                                                another recording as the voice, looped from..to, at a gain (B5: VocalSet)
+//   --stub-lanes  Performance Director's lanes not drawn (cwLanesFrame, cwVoicePush stubbed): does drawing move its onsets?
+//   each take also keeps the tool's onsets (time, the frame it was found in, kind) and its frame intervals (B3: PD's ~20 ms)
 // Usage: node scripts/scoring-verify/survey.js [--ref <git ref>] [--runs 2] [--stims a,b] [--tools pd,karaoke,emotion] [--out f.json]
 require('../runguard').auto();
 const fs = require('fs'), path = require('path');
@@ -25,6 +30,7 @@ const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.arg
 const REF = arg('--ref'), RUNS = +(arg('--runs') || 2);
 const STIMS = (arg('--stims') || 'steady,ontime,late150,silence,loud,dynamic,skips,loudlate').split(',');
 const TOOLS = (arg('--tools') || 'pd,karaoke,emotion').split(',').map(k => T6.byKey(k));
+const VOICE = arg('--voice'), VOICE_FROM = +(arg('--voice-from') || 5), VOICE_TO = arg('--voice-to') ? +arg('--voice-to') : null, VOICE_GAIN_DB = +(arg('--voice-gain-db') || 0), STUB_LANES = process.argv.includes('--stub-lanes');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const OUT = arg('--out') || path.join(__dirname, 'logs', `survey-${REF || 'working'}-${stamp}.json`.replace(/\//g, '_'));
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
@@ -42,8 +48,10 @@ const INIT = () => {
     const ac = new AudioContext({ sampleRate: 48000 });
     const buf = await ac.decodeAudioData(await (await fetch('/__stim.wav')).arrayBuffer());
     const src = ac.createBufferSource(), g = ac.createGain(), dest = ac.createMediaStreamDestination();
-    src.buffer = buf; src.loop = true; src.loopStart = 5; src.loopEnd = buf.duration; g.gain.value = 0;
-    src.connect(g).connect(dest); src.start(0, 5);
+    const to = window.__voiceTo ? Math.min(window.__voiceTo, buf.duration) : buf.duration, from = Math.min(window.__voiceFrom ?? 5, window.__voiceTo ? to - 0.5 : buf.duration / 2);
+    const vg = ac.createGain(); vg.gain.value = Math.pow(10, (window.__voiceGainDb || 0) / 20);
+    src.buffer = buf; src.loop = true; src.loopStart = from; src.loopEnd = to; g.gain.value = 0;
+    src.connect(vg).connect(g).connect(dest); src.start(0, from);
     // pink noise (Voss–McCartney-ish: summed octave-held white), 10 s looped
     const n = ac.sampleRate * 10, nb = ac.createBuffer(1, n, ac.sampleRate), d = nb.getChannelData(0); const rows = new Float32Array(8); let sum = 0;
     for (let i = 0; i < n; i++) { for (let k = 0; k < 8; k++) if ((i & ((1 << k) - 1)) === 0) { sum -= rows[k]; rows[k] = Math.random() * 2 - 1; sum += rows[k]; } d[i] = sum / 8; }
@@ -54,6 +62,11 @@ const INIT = () => {
     return (S = { ac, g, dest, src, ng, bg, oscs: [] });
   };
   const at = (ms, now, base) => base + (ms - now) / 1000;
+  // {perf, ctx} of an AudioContext read at the start of a render burst (Chrome renders ~10.7 ms of quanta at once, then
+  // waits): a currentTime that moves after ≥ 4 ms still, so performance.now() and currentTime belong to the same moment
+  const fresh = ac => { let c0 = ac.currentTime, p0 = performance.now(); const u = p0 + 60;
+    for (;;) { const c = ac.currentTime, p = performance.now(); if (c !== c0) { if (p - p0 >= 4 || p > u) return { perf: p, ctx: c }; c0 = c; p0 = p; } else if (p > u) return { perf: p, ctx: c }; } };
+  window.__freshClock = fresh;
   window.__synth = {
     ready: () => !!S,
     idle: () => { if (!S) return; const t = S.ac.currentTime; for (const p of [S.g.gain, S.ng.gain, S.bg.gain, S.src.playbackRate]) p.cancelScheduledValues(t);
@@ -61,7 +74,7 @@ const INIT = () => {
     steadyOn: () => { const t = S.ac.currentTime; S.g.gain.cancelScheduledValues(t); S.g.gain.setValueAtTime(1, t); },
     // notes: [{semis, on, off, gain}] in performance.now() ms; noise, backing {t0, dur, chords:[[midi…]], level}
     play: (notes, noise, backing) => {
-      const { ac, g, src } = S, now = performance.now(), base = ac.currentTime;
+      const { ac, g, src } = S, fc = fresh(ac), now = fc.perf, base = fc.ctx;
       g.gain.cancelScheduledValues(base); g.gain.setValueAtTime(0, base); src.playbackRate.cancelScheduledValues(base);
       for (const n of notes) {
         const on = Math.max(base, at(n.on, now, base)), off = at(n.off, now, base);
@@ -86,29 +99,36 @@ const INIT = () => {
 // the taps (after the page's script): every reading of a take, and vibratoTolerantCents' in/out counts
 const TAP = () => {
   if (window.__tapped) return; window.__tapped = true; window.__rec = null;
-  const r0 = computeRMS, a0 = autoCorrelate, v0 = vibratoTolerantCents;
+  if (window.__stubLanes) { cwLanesFrame = () => {}; cwVoicePush = () => {}; }
+  const r0 = computeRMS, a0 = autoCorrelate, v0 = vibratoTolerantCents, b0 = playBackingPad;
+  // the backing's own t0 (on the audio clock), as a performance.now() time: where its leak goes in the loud stimuli
+  playBackingPad = async function () { const t0 = await b0.apply(this, arguments); window.__bkPerf = performance.now() + (t0 - audioCtx.currentTime) * 1000; return t0; };
   computeRMS = function (b) { const v = r0.apply(this, arguments); if (window.__rec) window.__rec.rms.push([performance.now(), v]); return v; };
   autoCorrelate = function () { const v = a0.apply(this, arguments); if (window.__rec) window.__rec.f.push([performance.now(), v]); return v; };
   vibratoTolerantCents = function (pts) { const out = v0.apply(this, arguments); if (window.__rec) window.__rec.vtc.push([pts.length, out.length]); return out; };
 };
 
-const START = { pd: ['pdStartBtn', 'pdActive', 'pdStartTime'], karaoke: ['karaokeStartBtn', 'karaokeActive', 'karaokeStartTime'], emotion: ['emotionStartBtn', 'emotionActive', 'emotionStartTime'] };
-// Start, and once the tool's clock is known, the stimulus on it. The backing (Karaoke, Emotional Singing) starts 80 ms
-// after the tool's clock (playBackingPad's t0 = currentTime + 0.08, before the clock is read): the leak is put there.
-const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active, startVar], plan, key }) => {
+const START = { pd: ['pdStartBtn', 'pdActive', 'pdStartTime', 'pdStartCtx'], karaoke: ['karaokeStartBtn', 'karaokeActive', 'karaokeStartTime', 'karaokeStartCtx'], emotion: ['emotionStartBtn', 'emotionActive', 'emotionStartTime', 'emotionStartCtx'] };
+// From release B the four tools score on the audio clock (micClockMs): the stimulus is put on the tool's audio-clock
+// start, mapped to performance.now() at the start of a render burst; a build without one (master) keeps its own clock.
+// Start, and once the tool's clock is known, the stimulus on it. The backing's leak (Karaoke, Emotional Singing) goes where
+// the backing really starts: its own t0, read from playBackingPad (on master 80 ms after the tool's clock; from release
+// B's B1 the tool's clock is the backing's). PD plays no backing: its leak, harsher than the app, is put on its clock.
+const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active, startVar, ctxVar], plan, key }) => {
   const g = v => new Function('return (' + v + ')')();
   __synth.idle(); if (plan.steady) { __synth.steadyOn(); await new Promise(r => setTimeout(r, 1200)); } // held: sounding well before Start
-  window.__rec = { rms: [], f: [], vtc: [] };
+  window.__rec = { rms: [], f: [], vtc: [] }; window.__bkPerf = null;
   document.getElementById(btn).click();
   const until = performance.now() + 8000;
   while (!g(active) && performance.now() < until) await new Promise(r => setTimeout(r, 2));
   if (!g(active)) return { started: false };
-  const t0 = g(startVar), D = songChordDurMs(), lead = SONG.parts.Lead.notes, late = plan.late || 0;
-  window.__rec.t0 = t0; window.__rec.D = D; window.__rec.lead = lead.slice();
+  let hasCtx = false; try { hasCtx = typeof g(ctxVar) === 'number'; } catch (e) {}
+  const t0 = hasCtx ? (fc => fc.perf + (g(ctxVar) - fc.ctx) * 1000)(__freshClock(audioCtx)) : g(startVar), D = songChordDurMs(), lead = SONG.parts.Lead.notes, late = plan.late || 0;
+  window.__rec.t0 = t0; window.__rec.bk = window.__bkPerf; window.__rec.D = D; window.__rec.lead = lead.slice();
   if (!plan.steady && !plan.silent) {
     const notes = lead.map((m, i) => ({ semis: m - 69, on: t0 + i * D + late, off: t0 + (i + 0.85) * D + late, gain: plan.gains ? plan.gains[i % plan.gains.length] : 1 }))
       .filter((_, i) => !(plan.skip || []).includes(i));
-    const backing = plan.backing ? { t0: t0 + (key === 'pd' ? 0 : 80), dur: D, level: plan.backing, chords: lead.map((_, i) => ['Soprano', 'Alto', 'Tenor', 'Bass'].map(p => SONG.parts[p].notes[i])) } : null;
+    const backing = plan.backing ? { t0: key === 'pd' || hasCtx || window.__bkPerf == null ? t0 : window.__bkPerf, dur: D, level: plan.backing, chords: lead.map((_, i) => ['Soprano', 'Alto', 'Tenor', 'Bass'].map(p => SONG.parts[p].notes[i])) } : null;
     __synth.play(notes, plan.noise || 0, backing);
     window.__rec.lateBy = Math.max(0, performance.now() - t0); // how late the first note's schedule was made
   } else if (plan.noise) __synth.play([], plan.noise, null);
@@ -122,12 +142,12 @@ const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active,
   try {
     const dir = C.buildDir(REF);
     const a = await C.openPage(b, { dir }); await C.signUp(a.page, 'dvscore', 'Score Survey'); const state = await a.ctx.storageState(); await a.ctx.close();
-    const body = fs.readFileSync(S.STIM.steady);
+    const body = fs.readFileSync(VOICE || S.STIM.steady);
     for (let run = 0; run < RUNS; run++) for (const stim of STIMS) {
       const { ctx, page, errors } = await C.openPage(b, { dir, theme: 'light', storageState: state,
-        prepare: async c => { await c.route('**/__stim.wav', r => r.fulfill({ status: 200, contentType: 'audio/wav', body })); await c.addInitScript(INIT); } });
+        prepare: async c => { await c.route('**/__stim.wav', r => r.fulfill({ status: 200, contentType: 'audio/wav', body })); await c.addInitScript(([f, t, gdb]) => { window.__voiceFrom = f; window.__voiceTo = t; window.__voiceGainDb = gdb; }, [VOICE_FROM, VOICE_TO, VOICE_GAIN_DB]); await c.addInitScript(INIT); } });
       try {
-        await C.clearOverlays(page); await page.evaluate(TAP); await S.warmMic(page);
+        await C.clearOverlays(page); await page.evaluate(stub => { window.__stubLanes = stub; }, STUB_LANES); await page.evaluate(TAP); await S.warmMic(page);
         for (const tool of TOOLS) {
           await C.G.step(`${stim} ${tool.key} run ${run + 1}`, 75, async () => { // normally 27 s of song + 3 s
             await tool.open(page); await C.sleep(300);
@@ -142,10 +162,16 @@ const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active,
               if (k === 'karaoke') o.results = karaokeResults.map(r => r && { ...r }), o.songBest = progress.songBestScores && progress.songBestScores[currentSongId];
               if (k === 'emotion') o.emotionShown = { pitch: document.getElementById('emotionPitchVal').textContent, expr: document.getElementById('emotionExpressionVal').textContent, fb: document.getElementById('emotionFeedback').textContent };
               o.skills = (window.__skills || []).map(s => [s.cat, s.score]);
-              o.shape = (k === 'pd' ? window.__pdShape : k === 'emotion' ? window.__emotionShape : null) || null; window.__pdShape = window.__emotionShape = null;
+              const tr = k === 'pd' ? window.pdOnset || (typeof pdOnset !== 'undefined' ? pdOnset : null) : k === 'karaoke' ? (typeof karaokeOnset !== 'undefined' ? karaokeOnset : null) : null;
+              if (tr) o.onsets = tr.onsets.map(x => ({ t: +x.t.toFixed(1), at: x.at === undefined ? null : +x.at.toFixed(1), kind: x.kind, db: +x.db.toFixed(1) }));
+              o.shape = typeof levelShape === 'function' && (k === 'pd' || k === 'emotion') ? levelShape(k === 'pd' ? pdFrames : emotionFrames) : null; // release B (B5)
               return o;
             }, tool.key);
             const rec = await page.evaluate(() => { const r = window.__rec; window.__rec = null; return r; });
+            if (rec && rec.f.length > 2) { // the frame intervals: one autoCorrelate call per frame of the tool's loop
+              const dt = rec.f.slice(1).map((x, i) => x[0] - rec.f[i][0]).sort((a, b) => a - b), q = p => +dt[Math.min(dt.length - 1, Math.floor(dt.length * p))].toFixed(1);
+              extra.frameMs = { median: q(0.5), p90: q(0.9), max: q(0.999) };
+            }
             await page.evaluate(() => { __synth.idle(); try { stopAllActiveSessions(); } catch (e) {} }); await C.sleep(300);
             data.takes.push({ run: run + 1, stim, tool: tool.key, started: st.started, nums, extra, rec, errors: errors.slice() });
             const pick = nums ? Object.fromEntries(Object.entries(nums).filter(([n]) => !/^note |^mission/.test(n))) : 'not started';
