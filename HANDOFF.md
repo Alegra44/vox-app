@@ -4,12 +4,14 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-14)
+## Branches on GitHub (2026-11-15)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through House Lights phase 10 (merge 3309686), live as dpl_2g7Gq6fiY782p75a2tmokH2dJFLF |
+| `master` | Everything, through the scoring batch's release A (merge 4de6592), live as dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb |
+| `review/scoringA-prod` | Orphan, no code: release A's production checks (all pass after reruns), README |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
+| `scoring/survey` | The scoring survey (SCORING_SURVEY.md, survey.js, latency.js); kept until release B ships |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
 Every other branch was deleted on 2026-11-14 after phase 10's production checks passed (PHASE10.md "Deploy" §4): the
@@ -18,10 +20,10 @@ review/phase4b-prod. Their commits are in master (all 16 code branches checked a
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-14:
-phase 10, **dpl_2g7Gq6fiY782p75a2tmokH2dJFLF** (deployed by the user from master 3309686, the --no-ff merge of
-redesign/phase10; page sha256 a5e6bf0d77d22047…), **the rollback target from now on**. The previous target was
-phase 9, dpl_9GFdNrb4LQJNRjfvtKfcdKUsPY5H.
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-15:
+the scoring batch's release A, **dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb** (deployed by the user from master 4de6592, the
+--no-ff merge of scoring/a; page sha256 e5c71fbbc8d286db…), **the rollback target from now on**. The previous target was
+phase 10, dpl_2g7Gq6fiY782p75a2tmokH2dJFLF.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -744,6 +746,12 @@ stimuli. The decisions are in design/scoring/SCORING.md, "Decisions and release 
    Expression). The profile reads the last 20. Harmony Arena stops recording into Expression. youSeed's Expression is
    reseeded from the new measure.
 8. **Safari's latency numbers:** not blocking. Run `latency.js --browsers safari` once remote automation is on.
+
+**Release A is live (2026-11-15): dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb** (master 4de6592; the new rollback target). The
+production checks (scripts/scoring-verify/prodA.sh: prod.sh's core suites, the vocal-load suite with the outbox cases,
+progresssave, allowlist, and prodE2E, the live outbox end-to-end case) all pass; modecheck and stopcheck timed out
+waiting for Supabase sign-up and passed on rerun. Results on `review/scoringA-prod`. scoring/a is deleted. Release B is
+built on scoring/b, waiting for the user's review: nothing from it merges, and migration 0009 isn't applied, before then.
 
 
 ## Later: the day is the UTC date (PHASE7_SURVEY.md item 5; decided in PHASE7.md, not in phase 7)

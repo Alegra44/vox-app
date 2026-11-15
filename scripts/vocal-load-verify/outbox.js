@@ -126,7 +126,7 @@ async function unit() {
 
 // ---------------- part 2
 async function app() {
-  console.log('\n== part 2: the app (local build, production backend)');
+  console.log(`\n== part 2: the app (${process.env.DV_URL || 'local build'}, production backend)`);
   const C = require('../design-verify/common'), { db } = require('../choir-verify/testAccounts');
   const b = await C.chromium.launch();
   const PUT = /\/me\/vocal-load\/sessions\/([0-9a-f-]{36})/;
@@ -136,7 +136,8 @@ async function app() {
     const rows = () => db(`select session_id::text as id, active_seconds, load, ended from public.vocal_load_sessions where user_id = '${uid}' order by started_at`);
     // one context = one browser profile: its pages share localStorage, like two tabs
     const ctx = await b.newContext({ storageState: state, viewport: { width: 390, height: 844 } });
-    await ctx.route(C.LOCAL + '**', r => { const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html'; r.fulfill({ path: require('path').join(C.DEPLOY, p), contentType: p.endsWith('.js') ? 'text/javascript' : 'text/html' }); });
+    const SITE = process.env.DV_URL || C.LOCAL; // DV_URL=https://…: that site (production) instead of the local build
+    if (!process.env.DV_URL) await ctx.route(C.LOCAL + '**', r => { const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html'; r.fulfill({ path: require('path').join(C.DEPLOY, p), contentType: p.endsWith('.js') ? 'text/javascript' : 'text/html' }); });
     const puts = []; let mode = 'pass'; // pass | 503 | abort
     await ctx.route('**/me/vocal-load/sessions/**', r => {
       if (r.request().method() !== 'PUT') return r.continue();
@@ -146,7 +147,7 @@ async function app() {
       return r.continue();
     });
     const open = async () => { const page = await ctx.newPage(), errors = []; page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
-      await page.goto(C.LOCAL); await page.waitForFunction(() => typeof profile !== 'undefined' && !!profile && !!progress, null, { timeout: 30000 }); await C.clearOverlays(page); return { page, errors }; };
+      await page.goto(SITE); await page.waitForFunction(() => typeof profile !== 'undefined' && !!profile && !!progress, null, { timeout: 30000 }); await C.clearOverlays(page); return { page, errors }; };
     // 4 s of a C4 frame through the app's own load feed, then the idle timer ends the session (3 s) and writes its end
     const sing = page => page.evaluate(async () => {
       const n = 2048, buf = new Float32Array(n), f = 261.63; for (let i = 0; i < n; i++) buf[i] = 0.1 * Math.sin(2 * Math.PI * f * i / 48000);
