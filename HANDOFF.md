@@ -715,9 +715,36 @@ These change scores, so they wait until the redesign is finished (survey items i
 5. **Rhythm / Entrance & Cutoff latency** (from 4b 2.4, see "Later accuracy item" above): output and input latency land
    in every onset offset as "late".
 
-6. **Expression joins the Skill Profile after its fix** (PHASE7.md decision): Emotional Singing and Harmony Arena
-   already store `expressionScores`; once the batch fixes Expression's measurement (a steady tone scores 51), add it
-   to `computeSkillProfile` from those stored scores. Until then it reads "Not in your profile yet".
+6. **Expression joins the Skill Profile after its fix** (PHASE7.md decision). *Corrected 2026-11-15:* Emotional
+   Singing and Harmony Arena do **not** store `expressionScores`. `recordSkillScore('expression', …)` pushes onto
+   `progress.expressionScores`, but `user_progress` has no such column and the progress PATCH keeps only its allow-list,
+   silently, so the scores last until the page reloads (SCORING_SURVEY.md item 2). No account has any. Until release B
+   it reads "Not in your profile yet".
+
+**Survey and decisions (2026-11-15):** design/scoring/SCORING_SURVEY.md (on scoring/survey) measured all six on fixed
+stimuli. The decisions are in design/scoring/SCORING.md, "Decisions and release A":
+1. **Past scores stay as they are.** Only scores are stored, and production has 12 accounts. The exception is Your
+   Choir: item 5's correction applies at playback, past takes included.
+2. **Two releases.**
+   - **A (no score changes):** the vocal-load outbox (R1), saveProgress back-off and an allow-list guard (R2), item 3.
+   - **B:** items 1, 2, 4, 5 and 6 together, with Karaoke's backing clock, Harmony Arena and Rhythm's clock.
+   - **The UTC day (R3)** is its own release after B, with its own spec; its migration becomes 0010.
+3. **Item 1, the onset rule,** for PD, Karaoke and Harmony Arena's Timing. Before it ships:
+   - find PD's extra ~20 ms on the rig (fixed if it's the app's, documented if it's the rig's);
+   - add the backing filter, proven on loudlate with 0 of 8 false onsets in both tools.
+4. **Item 2, levelShape for both tools.** The dead zone and the 100 point are set from the VocalSet takes: one-level
+   real takes ≤ 10, the dynamic stimulus ≥ 85.
+5. **Item 4:** every note counts, and a note not heard is 0, in both tools; "How this is measured" says so.
+6. **Item 5, the automatic click round trip,** once per device, browser and output device, stored on the device:
+   - fallback: the reported values + 50 ms; re-measured on devicechange;
+   - a 4 s sheet before a timing tool's first take, and a "Measure speaker delay" row in Profile settings;
+   - Rhythm's beats move to the audio clock, with its edge placed as Entrance & Cutoff's;
+   - Entrance & Cutoff says the delay is subtracted.
+7. **Item 6:** migration 0009 adds `expression_scores`, in release B only (earlier would store today's inflated
+   Expression). The profile reads the last 20. Harmony Arena stops recording into Expression. youSeed's Expression is
+   reseeded from the new measure.
+8. **Safari's latency numbers:** not blocking. Run `latency.js --browsers safari` once remote automation is on.
+
 
 ## Later: the day is the UTC date (PHASE7_SURVEY.md item 5; decided in PHASE7.md, not in phase 7)
 

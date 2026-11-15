@@ -6915,7 +6915,8 @@ async function apiFetch(path, options={}){
   });
   if(!res.ok){
     const body = await res.json().catch(()=>({}));
-    throw new Error(body.error || ('Request failed: ' + res.status));
+    const e = new Error(body.error || ('Request failed: ' + res.status)); e.status = res.status; // a network error has none
+    throw e;
   }
   return res.status===204 ? null : res.json();
 }
@@ -14279,11 +14280,27 @@ function levelupWhyText(prev, now){
   return parts.length ? t('levelup_why').replace('{list}', levelupJoin(parts)) : '';
 }
 let lastKnownLevel = null;
+// A failed save (a network error, a 5xx, a 429 or a 401) is tried again with the vocal-load outbox's back-off: 2, 5, 15
+// and 60 s, then every 5 min while the page is open, each ±20 % jitter (scoring batch release A, A2). One timer: a retry
+// sends progress as it is then, so saves made meanwhile go with it; any good save resets it. Another 4xx is the server
+// refusing the body: not retried. Only while signed in; cleared at sign-out.
+const PROGRESS_RETRY = {BACKOFF_MS:[2000, 5000, 15000, 60000], EVERY_MS:300000, JITTER:0.2};
+const progressRetry = {n:0, timer:null};
+function progressRetryClear(reset){ if(progressRetry.timer){ clearTimeout(progressRetry.timer); progressRetry.timer = null; } if(reset) progressRetry.n = 0; }
+function progressRetryLater(e){
+  const again = !e || e.status===undefined || e.status===null || e.status>=500 || e.status===429 || e.status===401;
+  if(!again || !profile || progressRetry.timer) return;
+  const n = progressRetry.n++, base = n < PROGRESS_RETRY.BACKOFF_MS.length ? PROGRESS_RETRY.BACKOFF_MS[n] : PROGRESS_RETRY.EVERY_MS;
+  progressRetry.timer = setTimeout(()=>{ progressRetry.timer = null; if(profile && progress) saveProgress(); },
+    Math.round(base * (1 + (Math.random()*2-1) * PROGRESS_RETRY.JITTER)));
+}
+window.addEventListener('online', ()=>{ if(progressRetry.timer && profile){ progressRetryClear(false); saveProgress(); } });
 async function saveProgress(){
   try{
     const row = await apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
     progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
-  }catch(e){ console.error('progress save error', e); }
+    progressRetryClear(true);
+  }catch(e){ console.error('progress save error', e); progressRetryLater(e); }
   if(profile && typeof levelForXp==='function'){
     const {level, name} = levelForXp(progress.xp||0);
     const priorLevel = lastKnownLevel;
@@ -14528,6 +14545,7 @@ document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
   if(typeof vlEnd==='function') vlEnd(); // saved while still signed in
   try{ await sb.auth.signOut(); }catch(e){ console.error('sign out error', e); }
   profile = null;
+  progressRetryClear(true); // a retry waiting for this account's save stops
   if(typeof renderVocalLoadGauge==='function') renderVocalLoadGauge();
   lastKnownLevel = null;
   renderAccountBar();
@@ -14948,7 +14966,8 @@ function updateBestBridgeLabel(){
 // Today's vocal load. While Register Coach listens, every frame of its unprocessed register input (the pitch and the
 // buffer's RMS: the loudness the engine was verified on) goes into a session of the engine (vocal-load.js), which the
 // checkpointer (vocal-load-store.js) saves to /api/me/vocal-load every 60 s of singing, at a 5 s pause, when the page
-// is hidden and at the end. A session starts with the first frame (reading today's total and the rolling baseline from
+// is hidden and at the end, through the outbox (vocal-load-store.js createOutbox): each checkpoint is kept on this device
+// until the server confirms it and retried with back-off, so a failed save no longer loses the session. A session starts with the first frame (reading today's total and the rolling baseline from
 // the server first; frames wait meanwhile) and ends when the Coach stops or no frame has come for VL_IDLE_MS, which
 // covers every way it can stop. The gauge shows today's total as a % of the daily budget to every signed-in user,
 // whatever their plan.
@@ -14961,32 +14980,62 @@ async function vlRefreshToken(){
   try{ const { data:{ session } } = await sb.auth.getSession(); vlToken = session ? session.access_token : null; }catch(e){}
 }
 async function vlFetchState(day){ await vlRefreshToken(); return apiFetch('/me/vocal-load?day='+day); }
+// The signed-in user's outbox (one per user: its key in this device's storage). Switching user stops the last one's
+// timers; its entries stay stored and go when that user signs in again.
+let vlBox = null, vlBoxUid = null;
+function vlOutbox(){
+  const uid = profile && (profile.id || profile.email);
+  if(!uid || typeof VocalLoadStore==='undefined' || !VocalLoadStore.createOutbox) return null;
+  if(vlBox && vlBoxUid===uid) return vlBox;
+  if(vlBox) vlBox.stop();
+  let storage = null; try{ storage = window.localStorage; }catch(e){}
+  vlBoxUid = uid;
+  return vlBox = VocalLoadStore.createOutbox({storage, key:'vl-outbox:'+uid, send:(p, opts)=>vlSend(p, opts, uid),
+    log:(...a)=>console.error(...a)});
+}
+const vlDrain = ()=>{ const b = vlOutbox(); return b ? b.drain() : Promise.resolve([]); };
 async function loadVocalLoadToday(){
   if(!profile){ vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
   const day = todayStr();
-  try{ const st = await vlFetchState(day); vlDay = {day, load:Number(st.dayLoad)||0}; }
+  await vlDrain(); // checkpoints still waiting from before (a failed save, a closed tab) go first
+  try{ const st = await vlFetchState(day); const b = vlOutbox(); vlDay = {day, load:(Number(st.dayLoad)||0) + (b ? b.pendingLoad(day) : 0)}; }
   catch(e){ console.error('vocal load state error', e); }
   renderVocalLoadGauge();
 }
-function vlWrite(p, opts){
+// One checkpoint to the server. Resolves on a 2xx; rejects otherwise, with error.status when there was a response (the
+// outbox retries a network error, a 5xx or a 429, and drops any other 4xx). Only for the outbox's own user.
+async function vlSend(p, opts, uid){
+  if(!profile || (profile.id || profile.email)!==uid) throw new Error('vocal load: not signed in as this checkpoint\'s user');
   const body = JSON.stringify({day:p.day, startedAt:p.startedAt, activeSeconds:p.activeSeconds, load:p.load,
     medianRms:p.medianRms, p5Midi:p.p5Midi, p95Midi:p.p95Midi, ended:p.ended});
-  const path = '/me/vocal-load/sessions/'+p.sessionId;
-  if(opts.keepalive){
-    // page hide: sent right now, with the token already in hand (the page may be frozen once this handler returns)
-    if(!vlToken) return Promise.reject(new Error('no access token'));
-    return fetch(API_BASE+path, {method:'PUT', keepalive:true, body,
-      headers:{'Content-Type':'application/json', Authorization:'Bearer '+vlToken, apikey:SUPABASE_ANON_KEY}})
-      .then(r=>{ if(!r.ok) throw new Error('vocal load checkpoint '+r.status); });
-  }
-  return vlRefreshToken().then(()=>apiFetch(path, {method:'PUT', body}));
+  // page hide: sent right now with the token already in hand (the page may be frozen once the handler returns)
+  if(!opts.keepalive) await vlRefreshToken();
+  if(!vlToken) throw new Error('no access token');
+  const ctl = !opts.keepalive && typeof AbortController!=='undefined' ? new AbortController() : null;
+  const timer = ctl ? setTimeout(()=>ctl.abort(), 15000) : null; // a hung request is a network error, retried
+  try{
+    const r = await fetch(API_BASE+'/me/vocal-load/sessions/'+p.sessionId, {method:'PUT', keepalive:!!opts.keepalive, body,
+      ...(ctl ? {signal:ctl.signal} : {}),
+      headers:{'Content-Type':'application/json', Authorization:'Bearer '+vlToken, apikey:SUPABASE_ANON_KEY}});
+    if(!r.ok){ const e = new Error('vocal load checkpoint '+r.status); e.status = r.status; throw e; }
+  } finally { if(timer) clearTimeout(timer); }
 }
+// The checkpointer's write: stored in the outbox (then sent from there). Saved, as far as the checkpointer goes, once
+// it is stored on the device.
+function vlWrite(p, opts){
+  const b = vlOutbox(); if(!b) return Promise.reject(new Error('vocal load: not signed in'));
+  b.put(p, opts); return Promise.resolve();
+}
+window.addEventListener('online', ()=>{ vlDrain(); });
 function vlLogWrite(res){ if(res && !res.ok) console.error('vocal load checkpoint not saved', res.reason, res.errors || res.error); }
 function vlStart(){
   const startedAtMs = Date.now();
   const r = vlRun = {startedAtMs, day:VocalLoadStore.dayOf(startedAtMs), buffer:[], ready:false, lastFrame:null, prior:0, pct:null, ending:false};
-  vlFetchState(r.day).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
-    r.prior = st ? (Number(st.dayLoad)||0) : (vlDay.day===r.day ? vlDay.load : 0);
+  // before the new session: checkpoints still waiting go first, then today's total (the server's, plus what is still
+  // waiting on this device). Frames wait in r.buffer meanwhile.
+  vlDrain().then(()=>vlFetchState(r.day)).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
+    const b = vlOutbox();
+    r.prior = st ? (Number(st.dayLoad)||0) + (b ? b.pendingLoad(r.day) : 0) : (vlDay.day===r.day ? vlDay.load : 0);
     const saved = progress && progress.lowestMidi!=null && progress.highestMidi!=null ? {lowMidi:progress.lowestMidi, highMidi:progress.highestMidi} : null;
     r.session = VocalLoad.createSession(VocalLoad.computeBaseline(st ? st.sessions : [], saved), {priorLoadToday:r.prior});
     r.cp = VocalLoadStore.createCheckpointer({session:r.session, sessionId:crypto.randomUUID(), startedAtMs, day:r.day, write:vlWrite});
@@ -16122,7 +16171,7 @@ function finalizeKaraokeNote(idx){
   const chordDurMs = songChordDurMs();
   let pitchAcc = 0;
   if(karaokeCentsBuf.length>0){
-    const avgAbs = vibratoTolerantCents(karaokeCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/karaokeCentsBuf.length;
+    const vt = vibratoTolerantCents(karaokeCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // over its own values (scoring batch item 3)
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   let timingScore = 0;
@@ -25199,7 +25248,7 @@ function studioMigrate(){
   const have = new Set(studioTakes().map(tk=>tk.recordedAt));
   const merged = studioTakes().concat(progress.studioTakes.filter(tk=>tk && tk.base64 && !have.has(tk.recordedAt)));
   if(!studioSaveTakes(merged)) return; // the device is full: they stay where they are
-  progress.studioTakes = [];
+  delete progress.studioTakes; // never a server column: an empty list sent with every save was dropped there (A2's check)
   saveProgress();
 }
 function renderStudioMode(){
@@ -25505,7 +25554,7 @@ function pdFinalizeNote(idx){
   const chordDurMs = songChordDurMs();
   let pitchAcc = 0;
   if(pdCentsBuf.length>0){
-    const avgAbs = vibratoTolerantCents(pdCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/pdCentsBuf.length;
+    const vt = vibratoTolerantCents(pdCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // over its own values (scoring batch item 3)
     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
   }
   let timingScore = 0;
@@ -25714,7 +25763,7 @@ async function runDrillSequence(){
 
     let pitchAcc=0, avgChest=null, registerMatch=false;
     if(centsBuf.length>0){
-      const avgAbs = vibratoTolerantCents(centsBuf).reduce((a,b)=>a+Math.abs(b),0)/centsBuf.length; // natural vibrato isn't a pitch error
+      const vt = vibratoTolerantCents(centsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // natural vibrato isn't a pitch error; over its own values (scoring batch item 3)
       pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
     }
     if(chestBuf.length>0){
