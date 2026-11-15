@@ -2048,6 +2048,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     #panel-dashboard #dashSignedIn[style*="block"]{display:grid !important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:var(--hl-s7);align-items:start;} /* renderDashboard shows it with display:block */
     #panel-dashboard .dash-actions{grid-column:1 / -1;}
   }
+  /* scoring batch B2: the speaker-delay sheet's 4-second bar */
+  #speakerDelayOverlay .sd-progress{margin:var(--hl-s4) 0 var(--hl-s2);}
   /* ---- PROFILE & SETTINGS (phase 7, 2.3): the Voice Card, then Settings with Account; the rest lives elsewhere ---- */
   #panel-profile .profile-elsewhere[hidden]{display:none;}
   #panel-profile #profileSignedIn > .key-card{background:none;border:0;border-radius:0;box-shadow:none;padding:var(--hl-s5) 0 0;margin-top:var(--hl-s5) !important;border-top:var(--hl-hair) solid var(--hl-rule);}
@@ -5578,6 +5580,10 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <span id="playbackVolumeVal" style="font-family:var(--hl-font);font-variant-numeric:tabular-nums;font-size:13px;min-width:44px;text-align:right;">100%</span>
         </div>
 
+        <h2 id="speakerDelayTitle" style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 6px;" data-i18n="settings_sd_title">Speaker delay</h2>
+        <p class="fine-print" style="margin-bottom:12px;" id="sdRowState"></p>
+        <button class="ghost-btn" id="sdMeasureBtn" style="width:100%;justify-content:center;" data-i18n="settings_sd_btn">Measure speaker delay</button>
+
         <h2 style="font-family:var(--hl-font);font-stretch:var(--hl-w-wide);font-weight:500;font-size:16px;margin:22px 0 12px;" data-i18n="settings_feedback_title">Feedback</h2>
         <p class="fine-print" style="margin-bottom:12px;" data-i18n="settings_feedback_sub">Specific feedback is stored so it can be acted on.</p>
         <button class="ghost-btn" data-enter-panel="feedback" style="width:100%;justify-content:center;" data-i18n="settings_feedback_btn">Give Feedback</button>
@@ -5757,6 +5763,19 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
       <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
       <div class="p9-actions"><button class="hl-btn hl-btn--sing" id="warmupContinueBtn" style="display:none;" data-sheet-main data-i18n="wu_continue">Start my session</button></div>
+    </div>
+  </div>
+
+  <!-- scoring batch B2: the speaker delay, measured before the first take of a timing tool, and from Profile → Settings -->
+  <div class="modal-overlay" id="speakerDelayOverlay" role="dialog" aria-modal="true" aria-labelledby="sdTitle" aria-describedby="sdBody" style="display:none;">
+    <div class="modal-card">
+      <h2 class="trial-modal-title" id="sdTitle"></h2>
+      <p class="trial-modal-sub" id="sdBody" aria-live="polite"></p>
+      <div class="progress-bar-thin sd-progress" id="sdProgress" aria-hidden="true"><div class="fill" id="sdProgressFill" style="width:0%;"></div></div>
+      <div class="p9-actions">
+        <button class="hl-btn hl-btn--quiet" id="sdSkipBtn" data-i18n="sd_skip">Skip</button>
+        <button class="hl-btn hl-btn--ink" id="sdContinueBtn" data-sheet-main data-i18n="sd_continue" style="display:none;">Continue</button>
+      </div>
     </div>
   </div>
 
@@ -6998,6 +7017,19 @@ const TRANSLATIONS = {
     settings_feedback_btn:'Give Feedback',
     settings_title:'Settings', settings_language_title:"Language",
     settings_playback_title:"Playback volume", settings_playback_sub:'Reference notes, guides, backing, choir and recordings. Your microphone and your scores are not affected.',
+    settings_sd_title:"Speaker delay",
+    settings_sd_btn:"Measure speaker delay",
+    settings_sd_sub_none:"Measured before your first timing take: 10 short clicks through your speaker. Timing tools subtract it.",
+    settings_sd_sub_measured_tpl:"Measured on this output: {ms} ms. Timing tools subtract it.",
+    settings_sd_sub_estimate_tpl:"Not measured on this output: timing tools subtract an estimate, {ms} ms.",
+    sd_title_measuring:"Measuring your speaker delay",
+    sd_body_measuring:"Stay quiet for 4 seconds.",
+    sd_title_done:"Speaker delay measured",
+    sd_body_done_tpl:"{ms} ms. Timing scores subtract it.",
+    sd_title_failed:"Speaker delay",
+    sd_body_failed:"Couldn't hear the clicks, so timing uses an estimate. With Bluetooth headphones it may read late.",
+    sd_skip:"Skip",
+    sd_continue:"Continue",
     hub_you_profile_title:"Profile & settings", hub_you_profile_desc:"Your Voice Card, language, theme and account.",
     hub_you_journey_title:'21-Day Journey', hub_you_journey_desc:'Baseline, goal, XP, achievements, Day 1 vs. today.',
     hub_you_dashboard_title:"Progress", hub_you_dashboard_desc:"Today's Plan, the weekly challenge, your range and activity.",
@@ -7673,7 +7705,9 @@ const TRANSLATIONS = {
     tt_missed_cutoff:'no cutoff detected',
     tt_summary_tpl:'{hit}/{n} notes caught · average offset {avg} ms',
     tt_counts_tpl:'{early} early · {ontime} on time · {late} late (on time = within ±{tol} ms)',
-    tt_latency_tpl:'Your device reports {ms} ms of audio output latency. It\'s included in these numbers, not subtracted.',
+    tt_latency_tpl:"The delay of your speaker and microphone, {ms} ms ({how}), is subtracted from these numbers.",
+    tt_sd_measured:"measured on this device",
+    tt_sd_estimate:"an estimate",
     tt_bleed:'Speaker bleed detected: the mic picked up the count-in clicks, so some results may be the playback, not you. Use headphones and try again.',
     rehearsal_sub:"Your line is in front, the other parts keep playing around you, and your guide fades out level by level until you sing it alone.",
     rehearsal_choose_part:'Choose your part',
@@ -8412,7 +8446,7 @@ const TRANSLATIONS = {
     rhythm_ms_on:"On the beat",
     rhythm_none:"No onset was caught on a beat. Sing, tap or say \"ta\" right on each click.",
     rhythm_chart_label:"Each beat's timing: above the line late, below early",
-    rhythm_measure:"Two count-in clicks, then 8 scored clicks at 70, 100 or 130 beats a minute. Each time your loudness rises past the onset level, that onset goes to the nearest scored beat not yet caught, if it's within half a beat of it. A beat scores 100 minus 0.6 times how far off it was, in milliseconds (above the line late, below it early); the result is the average of the beats caught. A beat with no onset is missed and left out of the average. The delay of your speaker and microphone isn't taken out.",
+    rhythm_measure:"Two count-in clicks, then 8 scored clicks at 70, 100 or 130 beats a minute. Each time your loudness rises past the onset level, that onset (placed to about a millisecond) goes to the nearest scored beat not yet caught, if it's within half a beat of it. A beat scores 100 minus 0.6 times how far off it was, in milliseconds (above the line late, below it early); the result is the average of the beats caught. A beat with no onset is missed and left out of the average. The delay of your speaker and microphone is subtracted (You, Profile & settings, Speaker delay).",
     action_listen:"Listen",
     drill_avg_label:"Average pitch accuracy",
     drill_matched_label:"Register matched",
@@ -8783,6 +8817,19 @@ const TRANSLATIONS = {
     settings_feedback_btn:'Donner mon avis',
     settings_title:'Paramètres', settings_language_title:"Langue",
     settings_playback_title:"Volume de lecture", settings_playback_sub:'Notes de référence, guides, accompagnement, chœur et enregistrements. Votre micro et vos scores ne sont pas concernés.',
+    settings_sd_title:"Délai du haut-parleur",
+    settings_sd_btn:"Mesurer le délai du haut-parleur",
+    settings_sd_sub_none:"Mesuré avant votre première prise de timing : 10 clics courts dans votre haut-parleur. Les outils de timing le soustraient.",
+    settings_sd_sub_measured_tpl:"Mesuré sur cette sortie : {ms} ms. Les outils de timing le soustraient.",
+    settings_sd_sub_estimate_tpl:"Non mesuré sur cette sortie : les outils de timing soustraient une estimation, {ms} ms.",
+    sd_title_measuring:"Mesure du délai de votre haut-parleur",
+    sd_body_measuring:"Restez silencieux 4 secondes.",
+    sd_title_done:"Délai du haut-parleur mesuré",
+    sd_body_done_tpl:"{ms} ms. Les scores de timing le soustraient.",
+    sd_title_failed:"Délai du haut-parleur",
+    sd_body_failed:"Les clics n'ont pas été entendus, le timing utilise donc une estimation. Avec un casque Bluetooth, il peut indiquer du retard.",
+    sd_skip:"Passer",
+    sd_continue:"Continuer",
     hub_you_profile_title:"Profil et réglages", hub_you_profile_desc:"Votre carte vocale, votre langue, votre thème et votre compte.",
     hub_you_journey_title:'Parcours de 21 jours', hub_you_journey_desc:"Référence de départ, objectif, XP, succès, Jour 1 vs aujourd'hui.",
     hub_you_dashboard_title:"Progrès", hub_you_dashboard_desc:"Le plan du jour, le défi de la semaine, votre tessiture et votre activité.",
@@ -9458,7 +9505,9 @@ const TRANSLATIONS = {
     tt_missed_cutoff:'aucune coupure détectée',
     tt_summary_tpl:'{hit}/{n} notes captées · écart moyen {avg} ms',
     tt_counts_tpl:'{early} en avance · {ontime} à temps · {late} en retard (à temps = à ±{tol} ms près)',
-    tt_latency_tpl:'Votre appareil indique {ms} ms de latence de sortie audio. Elle est incluse dans ces chiffres, pas soustraite.',
+    tt_latency_tpl:"Le délai de votre haut-parleur et de votre micro, {ms} ms ({how}), est soustrait de ces chiffres.",
+    tt_sd_measured:"mesuré sur cet appareil",
+    tt_sd_estimate:"une estimation",
     tt_bleed:'Fuite des haut-parleurs détectée : le micro a capté les clics du décompte, certains résultats peuvent donc venir de la lecture et non de vous. Utilisez un casque et réessayez.',
     rehearsal_sub:"Votre ligne est au premier plan, les autres voix continuent autour de vous, et votre guide s'estompe niveau par niveau jusqu'à ce que vous la chantiez seul.",
     rehearsal_choose_part:'Choisissez votre voix',
@@ -10197,7 +10246,7 @@ const TRANSLATIONS = {
     rhythm_ms_on:"Sur le temps",
     rhythm_none:"Aucune attaque n’a été captée sur un temps. Chantez, tapez ou dites « ta » juste sur chaque clic.",
     rhythm_chart_label:"Le timing de chaque temps : au-dessus de la ligne en retard, en dessous en avance",
-    rhythm_measure:"Deux clics de décompte, puis 8 clics notés à 70, 100 ou 130 temps par minute. Chaque fois que votre volume dépasse le seuil d'attaque, cette attaque va au temps noté le plus proche pas encore capté, s'il est à moins d'un demi-temps. Un temps vaut 100 moins 0,6 fois son écart, en millisecondes (au-dessus de la ligne en retard, en dessous en avance) ; le résultat est la moyenne des temps captés. Un temps sans attaque est manqué et ne compte pas dans la moyenne. Le délai de votre haut-parleur et de votre micro n'est pas retiré.",
+    rhythm_measure:"Deux clics de décompte, puis 8 clics notés à 70, 100 ou 130 temps par minute. Chaque fois que votre volume dépasse le seuil d'attaque, cette attaque (placée à environ une milliseconde près) va au temps noté le plus proche pas encore capté, s'il est à moins d'un demi-temps. Un temps vaut 100 moins 0,6 fois son écart, en millisecondes (au-dessus de la ligne en retard, en dessous en avance) ; le résultat est la moyenne des temps captés. Un temps sans attaque est manqué et ne compte pas dans la moyenne. Le délai de votre haut-parleur et de votre micro est soustrait (Vous, Profil et réglages, Délai du haut-parleur).",
     action_listen:"Écoutez",
     drill_avg_label:"Justesse moyenne",
     drill_matched_label:"Registre atteint",
@@ -10568,6 +10617,19 @@ const TRANSLATIONS = {
     settings_feedback_btn:'Dar mi opinión',
     settings_title:'Configuración', settings_language_title:"Idioma",
     settings_playback_title:"Volumen de reproducción", settings_playback_sub:'Notas de referencia, guías, acompañamiento, coro y grabaciones. Tu micrófono y tus puntuaciones no cambian.',
+    settings_sd_title:"Retardo del altavoz",
+    settings_sd_btn:"Medir el retardo del altavoz",
+    settings_sd_sub_none:"Se mide antes de tu primera toma de ritmo: 10 clics cortos por tu altavoz. Las herramientas de ritmo lo restan.",
+    settings_sd_sub_measured_tpl:"Medido en esta salida: {ms} ms. Las herramientas de ritmo lo restan.",
+    settings_sd_sub_estimate_tpl:"Sin medir en esta salida: las herramientas de ritmo restan una estimación, {ms} ms.",
+    sd_title_measuring:"Midiendo el retardo de tu altavoz",
+    sd_body_measuring:"Quédate en silencio 4 segundos.",
+    sd_title_done:"Retardo del altavoz medido",
+    sd_body_done_tpl:"{ms} ms. Las puntuaciones de ritmo lo restan.",
+    sd_title_failed:"Retardo del altavoz",
+    sd_body_failed:"No se oyeron los clics, así que el ritmo usa una estimación. Con auriculares Bluetooth puede marcar tarde.",
+    sd_skip:"Omitir",
+    sd_continue:"Continuar",
     hub_you_profile_title:"Perfil y ajustes", hub_you_profile_desc:"Tu tarjeta vocal, idioma, tema y cuenta.",
     hub_you_journey_title:'Recorrido de 21 días', hub_you_journey_desc:'Línea base, objetivo, XP, logros, Día 1 frente a hoy.',
     hub_you_dashboard_title:"Progreso", hub_you_dashboard_desc:"El plan de hoy, el reto semanal, tu registro y tu actividad.",
@@ -11243,7 +11305,9 @@ const TRANSLATIONS = {
     tt_missed_cutoff:'no se detectó corte',
     tt_summary_tpl:'{hit}/{n} notas captadas · desfase medio {avg} ms',
     tt_counts_tpl:'{early} adelantadas · {ontime} a tiempo · {late} atrasadas (a tiempo = dentro de ±{tol} ms)',
-    tt_latency_tpl:'Tu dispositivo informa {ms} ms de latencia de salida de audio. Está incluida en estas cifras, no restada.',
+    tt_latency_tpl:"El retardo de tu altavoz y tu micrófono, {ms} ms ({how}), se resta de estas cifras.",
+    tt_sd_measured:"medido en este dispositivo",
+    tt_sd_estimate:"una estimación",
     tt_bleed:'Se detectó sonido de los altavoces: el micrófono captó los clics de la cuenta, así que algunos resultados pueden ser la reproducción y no tú. Usa auriculares e inténtalo de nuevo.',
     rehearsal_sub:"Tu línea está delante, las demás voces siguen sonando a tu alrededor y tu guía se desvanece nivel a nivel hasta que la cantas tú solo.",
     rehearsal_choose_part:'Elige tu voz',
@@ -11982,7 +12046,7 @@ const TRANSLATIONS = {
     rhythm_ms_on:"En el tiempo",
     rhythm_none:"No se captó ningún ataque en un tiempo. Canta, da un toque o di «ta» justo en cada clic.",
     rhythm_chart_label:"El tiempo de cada pulso: por encima de la línea tarde, por debajo antes",
-    rhythm_measure:"Dos clics de conteo y luego 8 clics puntuados a 70, 100 o 130 pulsos por minuto. Cada vez que tu volumen supera el umbral de ataque, ese ataque va al tiempo puntuado más cercano aún no captado, si está a menos de medio tiempo. Un tiempo puntúa 100 menos 0,6 veces su desvío, en milisegundos (por encima de la línea tarde, por debajo antes); el resultado es la media de los tiempos captados. Un tiempo sin ataque es perdido y no cuenta en la media. No se descuenta el retardo de tu altavoz y tu micrófono.",
+    rhythm_measure:"Dos clics de conteo y luego 8 clics puntuados a 70, 100 o 130 pulsos por minuto. Cada vez que tu volumen supera el umbral de ataque, ese ataque (situado con un milisegundo de precisión) va al tiempo puntuado más cercano aún no captado, si está a menos de medio tiempo. Un tiempo puntúa 100 menos 0,6 veces su desvío, en milisegundos (por encima de la línea tarde, por debajo antes); el resultado es la media de los tiempos captados. Un tiempo sin ataque es perdido y no cuenta en la media. Se resta el retardo de tu altavoz y tu micrófono (Tú, Perfil y ajustes, Retardo del altavoz).",
     action_listen:"Escucha",
     drill_avg_label:"Afinación media",
     drill_matched_label:"Registro logrado",
@@ -12353,6 +12417,19 @@ const TRANSLATIONS = {
     settings_feedback_btn:'Geri Bildirim Ver',
     settings_title:'Ayarlar', settings_language_title:"Dil",
     settings_playback_title:"Çalma sesi", settings_playback_sub:'Referans notalar, kılavuzlar, eşlik, koro ve kayıtlar. Mikrofonunuz ve puanlarınız etkilenmez.',
+    settings_sd_title:"Hoparlör gecikmesi",
+    settings_sd_btn:"Hoparlör gecikmesini ölç",
+    settings_sd_sub_none:"İlk zamanlama denemenizden önce ölçülür: hoparlörünüzden 10 kısa tıklama. Zamanlama araçları bunu çıkarır.",
+    settings_sd_sub_measured_tpl:"Bu çıkışta ölçüldü: {ms} ms. Zamanlama araçları bunu çıkarır.",
+    settings_sd_sub_estimate_tpl:"Bu çıkışta ölçülmedi: zamanlama araçları bir tahmini çıkarır, {ms} ms.",
+    sd_title_measuring:"Hoparlör gecikmeniz ölçülüyor",
+    sd_body_measuring:"4 saniye sessiz kalın.",
+    sd_title_done:"Hoparlör gecikmesi ölçüldü",
+    sd_body_done_tpl:"{ms} ms. Zamanlama puanlarından çıkarılır.",
+    sd_title_failed:"Hoparlör gecikmesi",
+    sd_body_failed:"Tıklamalar duyulamadı, bu yüzden zamanlama bir tahmin kullanıyor. Bluetooth kulaklıkla geç görünebilir.",
+    sd_skip:"Atla",
+    sd_continue:"Devam et",
     hub_you_profile_title:"Profil ve ayarlar", hub_you_profile_desc:"Ses kartın, dilin, temanın ve hesabın.",
     hub_you_journey_title:'21 Günlük Yolculuk', hub_you_journey_desc:'Başlangıç, hedef, XP, başarılar, 1. Gün ile bugün karşılaştırması.',
     hub_you_dashboard_title:"İlerleme", hub_you_dashboard_desc:"Bugünün planı, haftalık görev, ses aralığın ve etkinliğin.",
@@ -13028,7 +13105,9 @@ const TRANSLATIONS = {
     tt_missed_cutoff:'kesiş algılanmadı',
     tt_summary_tpl:'{hit}/{n} nota yakalandı · ortalama sapma {avg} ms',
     tt_counts_tpl:'{early} erken · {ontime} zamanında · {late} geç (zamanında = ±{tol} ms içinde)',
-    tt_latency_tpl:'Cihazınız {ms} ms ses çıkış gecikmesi bildiriyor. Bu değer sonuçlara dahildir, çıkarılmamıştır.',
+    tt_latency_tpl:"Hoparlörünüzün ve mikrofonunuzun gecikmesi, {ms} ms ({how}), bu sayılardan çıkarılır.",
+    tt_sd_measured:"bu cihazda ölçüldü",
+    tt_sd_estimate:"tahmini",
     tt_bleed:'Hoparlör sızıntısı algılandı: mikrofon sayım tıklamalarını duydu, bu yüzden bazı sonuçlar sizin değil çalan sesin olabilir. Kulaklık kullanıp tekrar deneyin.',
     rehearsal_sub:"Hattınız önde, diğer partiler etrafınızda çalmaya devam ediyor ve rehberiniz siz tek başınıza söyleyene kadar seviye seviye azalıyor.",
     rehearsal_choose_part:'Partinizi seçin',
@@ -13767,7 +13846,7 @@ const TRANSLATIONS = {
     rhythm_ms_on:"Tam vuruşta",
     rhythm_none:"Hiçbir vuruşta giriş yakalanamadı. Her tıklamada tam üstüne söyleyin, vurun ya da \"ta\" deyin.",
     rhythm_chart_label:"Her vuruşun zamanlaması: çizginin üstü geç, altı erken",
-    rhythm_measure:"İki sayım tıklaması, ardından dakikada 70, 100 ya da 130 vuruşta 8 puanlı tıklama. Ses düzeyiniz giriş eşiğini her aştığında o giriş, henüz yakalanmamış en yakın puanlı vuruşa gider; yarım vuruştan yakınsa. Bir vuruş, sapmasının (milisaniye cinsinden) 0,6 katının 100'den çıkarılmasıyla puanlanır (çizginin üstü geç, altı erken); sonuç yakalanan vuruşların ortalamasıdır. Girişi olmayan vuruş kaçırılmış sayılır ve ortalamaya girmez. Hoparlörünüzün ve mikrofonunuzun gecikmesi çıkarılmaz.",
+    rhythm_measure:"İki sayım tıklaması, ardından dakikada 70, 100 ya da 130 vuruşta 8 puanlı tıklama. Ses düzeyiniz giriş eşiğini her aştığında o giriş (yaklaşık bir milisaniye hassasiyetle yerleştirilir), henüz yakalanmamış en yakın puanlı vuruşa gider; yarım vuruştan yakınsa. Bir vuruş, sapmasının (milisaniye cinsinden) 0,6 katının 100'den çıkarılmasıyla puanlanır (çizginin üstü geç, altı erken); sonuç yakalanan vuruşların ortalamasıdır. Girişi olmayan vuruş kaçırılmış sayılır ve ortalamaya girmez. Hoparlörünüzün ve mikrofonunuzun gecikmesi çıkarılır (Sen, Profil ve ayarlar, Hoparlör gecikmesi).",
     action_listen:"Dinleyin",
     drill_avg_label:"Ortalama perde doğruluğu",
     drill_matched_label:"Eşleşen register",
@@ -14130,6 +14209,8 @@ function applyTranslations(){
     ()=>typeof renderVocalLab==='function' && renderVocalLab(),
     ()=>typeof renderVocalPassport==='function' && renderVocalPassport(),
     ()=>typeof renderVoiceCard==='function' && renderVoiceCard(),
+    ()=>typeof sdRenderRow==='function' && sdRenderRow(), // B2: the Speaker delay row
+    ()=>{ const ov = document.getElementById('speakerDelayOverlay'); if(ov && ov.style.display==='flex' && typeof sdShow==='function'){ const r = sdStored(); sdShow(ov.dataset.sdState, r && r.ms); } },
     ()=>typeof renderSnapshotCompare==='function' && renderSnapshotCompare(),
     ()=>typeof renderReweightCard==='function' && renderReweightCard(),
     ()=>typeof renderPitchMeasure==='function' && renderPitchMeasure(),
@@ -16147,17 +16228,20 @@ let karaokeCurrentIdx = -1;
 let karaokeCentsBuf = [];
 let karaokeFirstVoicedOffset = null;
 let karaokeResults = [];
+let karaokeDelayMs = 0; // the speaker delay this take subtracts (B2)
 
 async function startKaraoke(){
   if(!requireProFeature('Karaoke Coach')) return;
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
+  if(!await sdGate() || tok!==startGen) return;
   buildKaraokeRoll();
   const t0 = await playBackingPad(false);
   if(tok!==startGen) return;
   karaokeActive = true;
   karaokeStartTime = backingClockMs(t0); // note i starts with chord i of the backing
+  karaokeDelayMs = sdDelayMs();
   karaokeCurrentIdx = -1;
   karaokeCentsBuf = [];
   karaokeFirstVoicedOffset = null;
@@ -16193,7 +16277,9 @@ function renderKaraokeNotes(){
 }
 function karaokeLoop(){
   if(!karaokeActive) return;
-  const elapsedMs = performance.now()-karaokeStartTime;
+  const shownMs = performance.now()-karaokeStartTime;
+  // the scoring time: when you sang what the mic hears now (the speaker delay taken off); the roll moves with the song
+  const elapsedMs = shownMs - karaokeDelayMs;
   const totalMs = songTotalDurMs();
   if(elapsedMs >= totalMs){ finishKaraoke(); return; }
 
@@ -16224,7 +16310,7 @@ function karaokeLoop(){
   }
 
   const group = document.getElementById('karaokeNotesGroup');
-  if(group) group.setAttribute('transform', `translate(${-(elapsedMs/1000)*KARAOKE_PX_PER_SEC},0)`);
+  if(group) group.setAttribute('transform', `translate(${-(shownMs/1000)*KARAOKE_PX_PER_SEC},0)`);
 
   karaokeRafId = requestAnimationFrame(karaokeLoop);
 }
@@ -17342,7 +17428,7 @@ document.getElementById('acappellaBtn').addEventListener('click', ()=>{ if(!harm
 // (Entrance) or ends (Cutoff) from songTimeline().
 const TIMING_ONTIME_MS = 40;
 const timingTrainer = {mode:'entrance', active:false, targets:[], results:[], wasVoiced:false, clicks:[], bleedHits:0,
-  window:0, total:0, lastIdx:-2, stopTicker:null, armed:false, silentSince:null};
+  window:0, total:0, lastIdx:-2, stopTicker:null, armed:false, silentSince:null, delayS:0};
 // Edges only count once the trainer has heard this much unbroken silence. A note already sounding when it starts has
 // no start we heard: without this its first tick read as an entrance (and could land on a count-in click as "bleed"),
 // and its end as a cutoff.
@@ -17416,8 +17502,8 @@ function timingTrainerTick(){
   const pendingRelease = timingTrainer.pendingRelease;
   timingTrainer.pendingRelease = isVoiced ? (trailingSilence>=hopSec ? songT - trailingSilence : null) : null;
   if(rising || falling){
-    const edgeT = falling && pendingRelease!==null && pendingRelease!==undefined ? pendingRelease
-      : songT - edgeSecondsAgo(raw, audioCtx.sampleRate, rising);
+    const edgeT = (falling && pendingRelease!==null && pendingRelease!==undefined ? pendingRelease
+      : songT - edgeSecondsAgo(raw, audioCtx.sampleRate, rising)) - timingTrainer.delayS; // less the speaker delay (B2)
     // An "entrance" landing right on a count-in click means the speakers are leaking into the mic.
     if(rising && edgeT<0 && timingTrainer.clicks.some(c=>edgeT>=c-0.01 && edgeT-c<0.08)) timingTrainer.bleedHits++;
     if(rising===(timingTrainer.mode==='entrance')){
@@ -17436,7 +17522,7 @@ function timingTrainerTick(){
     document.getElementById('ttStatus').textContent = idx<0 ? t('tt_countin')
       : t('tt_listening_tpl').replace('{i}', idx+1).replace('{n}', timingTrainer.targets.length);
   }
-  if(songT > timingTrainer.total + 0.6) finishTimingTrainer();
+  if(songT > timingTrainer.total + 0.6 + timingTrainer.delayS) finishTimingTrainer();
 }
 
 // 4-beat count-in scheduled on the same clock as the song; call right after playChoir({leadIn:beat*4}).
@@ -17452,6 +17538,7 @@ async function startTimingTrainer(){
   if(!requireChoirWorld('Entrance & Cutoff Trainer')) return;
   const tok = startGen;
   if(!await initAudio() || tok!==startGen) return;
+  if(!await sdGate() || tok!==startGen) return;
   if(harmonyMemory.active) finishHarmonyMemory(false);
   if(challenge.active) finishChallenge(false);
   if(partRehearsal.active) stopPartRehearsal();
@@ -17462,7 +17549,7 @@ async function startTimingTrainer(){
     active:true, wasVoiced:false, pendingRelease:null, bleedHits:0, lastIdx:-2, armed:false, silentSince:null,
     targets: notes.map(nt=>timingTrainer.mode==='entrance' ? nt.start : nt.end),
     results: notes.map(()=>({claimed:false})),
-    window: tl.chordDur*0.5, total: tl.total,
+    window: tl.chordDur*0.5, total: tl.total, delayS: sdDelayMs()/1000, delayHow: sdNow().how,
   });
   document.getElementById('ttResults').style.display = 'none';
   renderTimingTrainerIntro();
@@ -17502,7 +17589,7 @@ function renderTimingResults(){
   const avgAbs = claimed.length ? Math.round(claimed.reduce((a,r)=>a+Math.abs(r.offsetMs),0)/claimed.length) : 0;
   const avgAcc = claimed.length ? Math.round(claimed.reduce((a,r)=>a+r.accuracy,0)/claimed.length) : 0;
   const count = v => claimed.filter(r=>verdict(r.offsetMs)===v).length;
-  const latMs = Math.round(((audioCtx.outputLatency||0) + (audioCtx.baseLatency||0))*1000);
+  const latMs = Math.round(timingTrainer.delayS*1000);
   const tend = !claimed.length ? 'none' : count('ontime')*2>=claimed.length ? 'ontime' : count('early')>=count('late') ? 'early' : 'late';
   const coach = tend==='ontime' ? t('tt_coach_ontime') : t(`tt_coach_${tend}_${mode}`);
   const dims = ['early','ontime','late'].map(v=>`<div class="record-row vc-dim"><span class="record-label">${t('tt_row_'+v)}</span><span class="record-val">${count(v)}</span></div>`).join('');
@@ -17514,7 +17601,7 @@ function renderTimingResults(){
     ${timingTrainer.bleedHits>=2 ? `<p class="ex-feedback-text hl-coach">${t('tt_bleed')}</p>` : ''}
     <div class="vc-result-dims">${dims}</div>
     <div class="cw-note-rows">${rows}</div>
-    ${cwMeasureHtml(t('tt_ontime_rule_tpl').replace('{tol}', TIMING_ONTIME_MS) + ' ' + t('tt_latency_tpl').replace('{ms}', latMs))}
+    ${cwMeasureHtml(t('tt_ontime_rule_tpl').replace('{tol}', TIMING_ONTIME_MS) + ' ' + t('tt_latency_tpl').replace('{ms}', latMs).replace('{how}', t(timingTrainer.delayHow==='measured' ? 'tt_sd_measured' : 'tt_sd_estimate')))}
   </div>`;
   box.style.display = 'block';
 }
@@ -18203,14 +18290,17 @@ async function ycDecode(base64){
   }
   return yourChoir.buffers[base64];
 }
-// Plays a take into its part's GainNode with its downbeat (take.lead seconds in) on choirStartCtxTime.
+// Plays a take into its part's GainNode with its downbeat (take.lead seconds in) on choirStartCtxTime. You sang it to
+// what you heard, which reached you and came back through the mic a speaker delay late (B2): the take starts that much
+// further in. A take keeps the delay it was recorded with; one recorded before (no delayMs) uses this device's now.
+function ycTakeDelayS(take){ return (take.delayMs!==undefined ? take.delayMs : sdDelayMs())/1000; }
 function ycStartSource(part, buf, take){
   const src = audioCtx.createBufferSource();
   src.buffer = buf;
   src.connect(choirGainNodes[part]);
   const now = audioCtx.currentTime;
   const late = Math.max(0, now - choirStartCtxTime); // if the downbeat is already past, start that far in
-  src.start(Math.max(now, choirStartCtxTime), take.lead + late);
+  src.start(Math.max(now, choirStartCtxTime), Math.min(buf.duration, take.lead + ycTakeDelayS(take) + late));
   yourChoir.sources.push(src);
 }
 // Headroom for the choir output trim: a take contributes its real peak (in units of the synth's envelope
@@ -18226,6 +18316,7 @@ async function ycRecord(part){
   const tok = startGen;
   if(!await initAudio() || typeof MediaRecorder==='undefined'){ ycSetStatus(t('yc_failed')); return; }
   if(tok!==startGen) return;
+  if(!await sdGate() || tok!==startGen) return;
   ensureChoirGainNodes();
   partRehearsal.active = false; // workspace mixing rules (Mute/Solo) apply
   const song = currentSongId, takes = ycTakes(song);
@@ -18261,11 +18352,11 @@ async function ycRecord(part){
   if(rec.cancelled){ done(t('yc_cancelled')); return; }
   if(!clip || rec.startCtx===null){ done(t('yc_failed')); return; }
   // The downbeat's position in the recording, and the take's real peak from there to the end of the song.
-  const take = {...clip, lead: rec.downbeat - rec.startCtx};
+  const take = {...clip, lead: rec.downbeat - rec.startCtx, delayMs: sdDelayMs()};
   let peak = 0;
   try{
     const buf = await ycDecode(take.base64);
-    const sr = buf.sampleRate, from = Math.floor(take.lead*sr), to = Math.min(buf.length, Math.ceil((take.lead+total)*sr));
+    const sr = buf.sampleRate, from = Math.floor((take.lead + ycTakeDelayS(take))*sr), to = Math.min(buf.length, Math.ceil((take.lead + ycTakeDelayS(take) + total)*sr));
     for(let c=0;c<buf.numberOfChannels;c++){ const d = buf.getChannelData(c); for(let i=from;i<to;i++){ const v = Math.abs(d[i]); if(v>peak) peak = v; } }
     take.dur = +(buf.duration - take.lead).toFixed(2);
   }catch(e){ console.error('could not decode the take', e); done(t('yc_failed')); return; }
@@ -21908,6 +21999,7 @@ document.getElementById('bridgeStartBtn').addEventListener('click', ()=>{
 let harmonyActive=false, harmonyStartTime=0, harmonyRafId=null, harmonyCentsSamples=[], harmonySelectedPart='Soprano', harmonySelectedLevel=1, harmonyTransposeShift=0;
 let harmonyTotalFrames=0, harmonyHeardFrames=0, harmonyCurrentIdx=-1, harmonyNoteBuf=[], harmonyNoteResults=[];
 let harmonyPianoGuideOn = false;
+let harmonyDelayMs = 0, harmonyShownIdx = -1; // the speaker delay this take subtracts (B2); the note on screen
 document.getElementById('harmonyPianoGuideBtn')?.addEventListener('click', ()=>{
   harmonyPianoGuideOn = !harmonyPianoGuideOn;
   const btn = document.getElementById('harmonyPianoGuideBtn');
@@ -21966,6 +22058,7 @@ async function startHarmonyArena(){
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
+  if(!await sdGate() || tok!==startGen) return;
   ensureChoirGainNodes();
   const ribbon0 = document.getElementById('harmonyRibbonShape');
   if(ribbon0){ ribbon0.style.transform = 'translateY(0px) rotate(0deg)'; ribbon0.setAttribute('fill','var(--hl-rule)'); }
@@ -21987,6 +22080,7 @@ async function startHarmonyArena(){
   });
 
   harmonyActive=true; harmonyStartTime=backingClockMs(t0); harmonyCentsSamples=[]; // note i starts with chord i of the choir
+  harmonyDelayMs = sdDelayMs(); harmonyShownIdx = -1;
   harmonyTotalFrames=0; harmonyHeardFrames=0; harmonyCurrentIdx=-1; harmonyNoteBuf=[]; harmonyNoteResults=[];
   document.getElementById('harmonyResult').style.display='none';
   gameStartLive('harmonyStartBtn', 'harmonyStartLabel');
@@ -22005,7 +22099,8 @@ function harmonyFinalizeNote(idx){
 }
 function harmonyLoop(){
   if(!harmonyActive) return;
-  const elapsedMs=performance.now()-harmonyStartTime;
+  const shownMs=performance.now()-harmonyStartTime;
+  const elapsedMs=shownMs-harmonyDelayMs; // the scoring time: when you sang what the mic hears now
   const totalMs=songTotalDurMs();
   if(elapsedMs>=totalMs){
     if(harmonyCurrentIdx>=0) harmonyFinalizeNote(harmonyCurrentIdx);
@@ -22013,21 +22108,27 @@ function harmonyLoop(){
     return;
   }
 
+  // the screen and the guide follow the song
+  const chordDur = songChordDurMs();
+  const shownIdx=songIndexAtElapsed(shownMs);
+  const shownMidi = SONG.parts[harmonySelectedPart].notes[shownIdx]+harmonyTransposeShift;
+  const showLabel = !harmonyMemoryModeOn || shownMs - shownIdx*chordDur < chordDur*0.35;
+  document.getElementById('harmonyNoteLabel').textContent = showLabel ? noteNameFromMidi(shownMidi) : '—'; // the part is in the HUD
+  document.getElementById('harmonyProgressFill').style.width=Math.max(0, Math.min(100,(shownMs/totalMs)*100))+'%';
+  if(shownIdx!==harmonyShownIdx){
+    harmonyShownIdx=shownIdx;
+    if(harmonyPianoGuideOn){
+      const guideDur = Math.max(0.15, (songChordDurMs()/1000)*0.75); // fits inside the real chord duration, no overlap
+      playGuideTone(noteToFreq(shownMidi), guideDur, 0); // a guide: quieter than a reference, not a duet partner
+    }
+  }
+
+  // the scoring follows elapsedMs
   const idx=songIndexAtElapsed(elapsedMs);
   const targetMidi = SONG.parts[harmonySelectedPart].notes[idx]+harmonyTransposeShift;
-  const chordDur = songChordDurMs();
-  const elapsedWithinNote = elapsedMs - idx*chordDur;
-  const showLabel = !harmonyMemoryModeOn || elapsedWithinNote < chordDur*0.35;
-  document.getElementById('harmonyNoteLabel').textContent = showLabel ? noteNameFromMidi(targetMidi) : '—'; // the part is in the HUD
-  document.getElementById('harmonyProgressFill').style.width=Math.max(0, Math.min(100,(elapsedMs/totalMs)*100))+'%';
-
   if(idx!==harmonyCurrentIdx){
     if(harmonyCurrentIdx>=0) harmonyFinalizeNote(harmonyCurrentIdx);
     harmonyCurrentIdx=idx; harmonyNoteBuf=[];
-    if(harmonyPianoGuideOn){
-      const guideDur = Math.max(0.15, (songChordDurMs()/1000)*0.75); // fits inside the real chord duration, no overlap
-      playGuideTone(noteToFreq(targetMidi), guideDur, 0); // a guide: quieter than a reference, not a duet partner
-    }
   }
 
   harmonyTotalFrames++;
@@ -22329,6 +22430,7 @@ function stopAllActiveSessions(){
   // false lets that tool's own existing "if(!xxxActive) return;" guard halt its
   // next animation frame naturally — no new loop logic invented here.
   startGen++; // a start still awaiting doesn't go on
+  sdCancel(); // the speaker-delay sheet, if a take was waiting on it
   if(typeof rafId!=='undefined' && rafId){ cancelAnimationFrame(rafId); rafId=null; }
   if(typeof mode!=='undefined') mode=null;
   if(typeof regStop==='function') regStop();
@@ -23732,6 +23834,191 @@ document.getElementById('recordTodayBtn')?.addEventListener('click', async ()=>{
   }
 });
 
+/* ---------------- Speaker delay (scoring batch item 5, B2) ---------------- */
+// A timing score measures when the microphone heard you against when the app played the beat, the backing or the choir.
+// The device's own audio path sits in between: the speaker plays later than scheduled, and the microphone hands the
+// voice over later than it arrived, so an on-time singer read ~100 ms late (SCORING_SURVEY.md item 5). That round trip is
+// measured once per browser and output device, on this device: 10 short clicks through the speaker, each found in the
+// microphone on the audio clock (the clock the app scores on) by a matched filter; the median of the clicks heard is
+// stored. When too few are heard (headphones, a muted speaker, the echo canceller removing them) the delay is an
+// estimate: the latency the browser reports (output + base + the mic track's own) + 50 ms, since the reported values
+// cover only a third to a half of the measured round trip. A new output device (devicechange) is measured before its
+// first timing take. Bluetooth headphones add a delay no click can measure (the microphone doesn't hear them).
+const SD_STORE_KEY = 'vcSpeakerDelay';
+const SD_FALLBACK_EXTRA_MS = 50;
+// The gaps between clicks cycle through three lengths and the search after each click is shorter than the shortest,
+// so the next click never lands in it; a delay longer than the search (a click heard only after the next one) gives
+// aliases that disagree by 30 ms or more (at most 3 of 10 alike), so it fails to the estimate instead of reading short.
+const SD_CLICKS = 10, SD_FIRST_S = 0.45, SD_GAPS_S = [0.33, 0.36, 0.39], SD_SEARCH_S = 0.32; // ~4 s in all
+const sdClickAt = k=>{ let t = 0; for(let i=0;i<k;i++) t += SD_GAPS_S[i % SD_GAPS_S.length]; return t; };
+const SD_SNR = 6, SD_MIN_HEARD = 4, SD_AGREE_MS = 6; // a click is heard at a matched-filter SNR over 6; 4 must agree within ±6 ms
+let sdKeyNow = null, sdRun = null, sdPending = null, sdResolve = null, sdRecReady = null;
+function sdAll(){ try{ return JSON.parse(localStorage.getItem(SD_STORE_KEY)) || {}; }catch(e){ return {}; } }
+function sdSave(key, rec){
+  const all = sdAll(); all[key] = rec;
+  try{ localStorage.setItem(SD_STORE_KEY, JSON.stringify(all)); }catch(e){ console.error('storage error', e); }
+}
+function sdBrowser(){
+  const u = navigator.userAgent;
+  return /Edg\//.test(u) ? 'edge' : /OPR\//.test(u) ? 'opera' : /Firefox\//.test(u) ? 'firefox' : /Chrome\//.test(u) ? 'chrome' : /Safari\//.test(u) ? 'safari' : 'other';
+}
+// This browser and its output device (the default one, by its group: the same device under any of its ids). Device ids
+// are only listed once the microphone is allowed, so the key is read after the mic is open.
+async function sdOutputKey(){
+  let dev = 'default';
+  try{
+    const outs = (await navigator.mediaDevices.enumerateDevices()).filter(d=>d.kind==='audiooutput');
+    const cur = outs.find(d=>d.deviceId==='default') || outs[0];
+    if(cur) dev = cur.groupId || cur.deviceId || 'default';
+  }catch(e){}
+  return sdBrowser() + '|' + dev;
+}
+function sdReportedMs(){
+  const tr = micStream && micStream.getAudioTracks()[0], st = tr && tr.getSettings ? tr.getSettings() : {};
+  return Math.round(((audioCtx && audioCtx.outputLatency || 0) + (audioCtx && audioCtx.baseLatency || 0) + (st.latency || 0))*1000);
+}
+function sdStored(){ return sdKeyNow ? sdAll()[sdKeyNow] || null : null; }
+// The delay a take subtracts: what's stored for this browser and output device, else the estimate. {ms, how}
+// The estimate is read live: the reported output latency moves while audio runs (Chrome: 39–47 ms on one device), so
+// a record of a failed or skipped measurement keeps only that it failed, not a number.
+function sdNow(){ const r = sdStored(); return r && r.how==='measured' ? {ms:r.ms, how:'measured'} : {ms:sdReportedMs() + SD_FALLBACK_EXTRA_MS, how:'estimate'}; }
+function sdDelayMs(){ return sdNow().ms; }
+// Performance Director plays nothing, so only the microphone's share of the round trip applies: the round trip less
+// the output latency the browser reports (all the buffering the browser doesn't report is counted on the input side).
+function sdInputMs(){ return Math.max(0, sdDelayMs() - Math.round(((audioCtx && audioCtx.outputLatency || 0) + (audioCtx && audioCtx.baseLatency || 0))*1000)); }
+if(navigator.mediaDevices && navigator.mediaDevices.addEventListener){
+  navigator.mediaDevices.addEventListener('devicechange', async ()=>{
+    if(!micLive()) return;
+    sdKeyNow = await sdOutputKey(); // a device not measured yet is measured before its next timing take
+    sdRenderRow();
+  });
+}
+
+// The measurement: ~4 s on the app's own microphone path (micG.raw, before the auto gain). Resolves {ok, ms, heard}.
+async function sdMeasure(run){
+  const g = await micGraph();
+  if(!audioCtx.audioWorklet || !window.AudioWorkletNode) return {ok:false, heard:0};
+  if(!sdRecReady){
+    const src = "class VcRec extends AudioWorkletProcessor{process(i){const c=i[0]&&i[0][0];if(c)this.port.postMessage({f:currentFrame,d:c.slice(0)});return true;}}registerProcessor('vc-rec',VcRec);";
+    sdRecReady = audioCtx.audioWorklet.addModule(URL.createObjectURL(new Blob([src], {type:'application/javascript'})));
+  }
+  await sdRecReady;
+  if(run.cancelled) return null;
+  const sr = audioCtx.sampleRate, node = new AudioWorkletNode(audioCtx, 'vc-rec'), sink = audioCtx.createGain(); sink.gain.value = 0;
+  const blocks = []; node.port.onmessage = e=>blocks.push(e.data);
+  g.raw.connect(node); node.connect(sink).connect(audioCtx.destination);
+  // 2 ms of 3 kHz under a Hann window, straight to the speaker (the Playback volume setting is for music, not this)
+  const L = Math.round(sr*0.002), click = new Float32Array(L);
+  for(let i=0;i<L;i++) click[i] = Math.sin(2*Math.PI*3000*i/sr)*0.5*(1-Math.cos(2*Math.PI*i/(L-1)));
+  const buf = audioCtx.createBuffer(1, L, sr); buf.copyToChannel(click, 0);
+  const T0 = audioCtx.currentTime + SD_FIRST_S, times = [], srcs = [];
+  for(let k=0;k<SD_CLICKS;k++){
+    const b = audioCtx.createBufferSource(), gn = audioCtx.createGain(); gn.gain.value = 1.6;
+    b.buffer = buf; b.connect(gn).connect(audioCtx.destination); b.start(T0 + sdClickAt(k)); times.push(T0 + sdClickAt(k)); srcs.push(b);
+  }
+  const endAt = T0 + sdClickAt(SD_CLICKS-1) + SD_SEARCH_S + 0.05;
+  run.endAt = endAt; run.from = audioCtx.currentTime;
+  while(!run.cancelled && audioCtx.currentTime < endAt) await new Promise(r=>setTimeout(r, 50));
+  node.port.onmessage = null; try{ g.raw.disconnect(node); }catch(e){} node.disconnect(); sink.disconnect();
+  if(run.cancelled){ srcs.forEach(b=>{ try{ b.stop(); }catch(e){} }); return null; }
+  if(!blocks.length) return {ok:false, heard:0};
+  // the recording as one array from its first frame
+  const f0 = blocks[0].f, last = blocks[blocks.length-1], n = last.f - f0 + last.d.length, x = new Float32Array(n);
+  for(const b of blocks){ const at = b.f - f0; if(at>=0 && at + b.d.length<=n) x.set(b.d, at); }
+  let pk = 0; for(let i=0;i<L;i++) pk += click[i]*click[i];
+  // the room's level: the quiet before the first click (before each click, the previous click's echo would be in it)
+  const q0 = Math.max(0, Math.round(times[0]*sr) - f0 - Math.round(0.4*sr)), q1 = Math.round(times[0]*sr) - f0 - Math.round(0.02*sr);
+  if(q1 - q0 < Math.round(0.1*sr)) return {ok:false, heard:0};
+  let e = 0; for(let i=q0;i<q1;i++) e += x[i]*x[i];
+  const floor = Math.sqrt(e/(q1-q0)), found = [];
+  for(const at of times){
+    const i0 = Math.round(at*sr) - f0;
+    if(i0<0 || i0 + Math.round(SD_SEARCH_S*sr) + L > n) continue;
+    let best = -1, bi = -1;
+    for(let d=0; d<Math.round(SD_SEARCH_S*sr); d++){ let c = 0; const j = i0 + d; for(let i=0;i<L;i++) c += x[j+i]*click[i]; c = Math.abs(c); if(c>best){ best = c; bi = d; } }
+    if(best/(floor*Math.sqrt(pk*L) + 1e-12) > SD_SNR) found.push(bi/sr*1000);
+  }
+  const med = a=>{ const q = a.slice().sort((p,r)=>p-r); return q.length%2 ? q[q.length>>1] : (q[q.length/2-1] + q[q.length/2])/2; };
+  if(found.length < SD_MIN_HEARD) return {ok:false, heard:found.length};
+  const m = med(found), agree = found.filter(v=>Math.abs(v-m)<=SD_AGREE_MS);
+  if(agree.length < SD_MIN_HEARD) return {ok:false, heard:agree.length};
+  return {ok:true, ms:Math.round(med(agree)), heard:agree.length};
+}
+
+// The sheet: measuring (with Skip), then done (the delay) or couldn't hear the clicks (the estimate), with Continue.
+function sdShow(state, ms){
+  const ttl = document.getElementById('sdTitle'), body = document.getElementById('sdBody');
+  ttl.textContent = t(state==='measuring' ? 'sd_title_measuring' : state==='done' ? 'sd_title_done' : 'sd_title_failed');
+  body.textContent = state==='measuring' ? t('sd_body_measuring') : state==='done' ? t('sd_body_done_tpl').replace('{ms}', ms) : t('sd_body_failed');
+  document.getElementById('sdProgress').style.display = state==='measuring' ? '' : 'none';
+  document.getElementById('sdSkipBtn').style.display = state==='measuring' ? '' : 'none';
+  const cont = document.getElementById('sdContinueBtn'); cont.style.display = state==='measuring' ? 'none' : '';
+  document.getElementById('speakerDelayOverlay').dataset.sdState = state;
+  if(state!=='measuring') cont.focus();
+}
+function sdBar(run){
+  if(sdRun!==run) return;
+  const f = document.getElementById('sdProgressFill');
+  if(run.endAt){ const p = Math.max(0, Math.min(1, (audioCtx.currentTime - run.from)/(run.endAt - run.from))); f.style.width = (p*100).toFixed(1)+'%'; }
+  if(!run.done) requestAnimationFrame(()=>sdBar(run));
+}
+async function sdOpen(){
+  const ov = document.getElementById('speakerDelayOverlay');
+  const run = sdRun = {cancelled:false, done:false};
+  document.getElementById('sdProgressFill').style.width = '0%';
+  sdShow('measuring');
+  ov.style.display = 'flex';
+  openModalWithA11y(ov, ()=>{ if(ov.dataset.sdState==='measuring') sdSkip(); else sdClose(true); }); // Escape: Skip, or Continue
+  document.getElementById('sdSkipBtn').focus();
+  sdBar(run);
+  let r = null;
+  try{ r = await sdMeasure(run); }catch(e){ console.error('speaker delay', e); r = {ok:false, heard:0}; }
+  run.done = true;
+  if(run.cancelled || sdRun!==run) return;
+  if(!sdKeyNow) sdKeyNow = await sdOutputKey();
+  if(r && r.ok){ sdSave(sdKeyNow, {ms:r.ms, how:'measured', heard:r.heard, at:Date.now()}); sdShow('done', r.ms); }
+  else { sdSave(sdKeyNow, {how:'estimate', heard:r ? r.heard : 0, at:Date.now()}); sdShow('failed'); }
+  sdRenderRow();
+}
+function sdClose(go){
+  const ov = document.getElementById('speakerDelayOverlay');
+  if(sdRun){ sdRun.cancelled = !sdRun.done; sdRun.done = true; sdRun = null; }
+  if(ov.style.display!=='none'){ ov.style.display = 'none'; closeModalWithA11y(ov); }
+  const r = sdResolve; sdResolve = null; sdPending = null;
+  if(r) r(go);
+}
+function sdSkip(){
+  if(sdKeyNow && !sdStored()) sdSave(sdKeyNow, {how:'estimate', skipped:true, at:Date.now()});
+  sdClose(true);
+  sdRenderRow();
+}
+// Before a take of a timing tool (after its mic is open): goes straight on if this browser and output device have a
+// delay stored, else measures first. Resolves false if the take shouldn't start (left the screen mid-sheet).
+async function sdGate(){
+  if(!sdKeyNow || !micLive()) sdKeyNow = await sdOutputKey();
+  if(sdStored()) return true;
+  if(sdPending) return sdPending;
+  sdPending = new Promise(res=>{ sdResolve = res; });
+  sdOpen();
+  return sdPending;
+}
+function sdCancel(){ if(sdRun || sdPending) sdClose(false); }
+function sdRenderRow(){
+  const el = document.getElementById('sdRowState');
+  if(!el) return;
+  const r = sdStored();
+  el.textContent = !r ? t('settings_sd_sub_none') : r.how==='measured' ? t('settings_sd_sub_measured_tpl').replace('{ms}', r.ms) : t('settings_sd_sub_estimate_tpl').replace('{ms}', sdDelayMs());
+}
+document.getElementById('sdSkipBtn').addEventListener('click', sdSkip);
+document.getElementById('sdContinueBtn').addEventListener('click', ()=>sdClose(true));
+document.getElementById('sdMeasureBtn').addEventListener('click', async ()=>{
+  if(sdRun) return;
+  if(!await initAudio({noWarmup:true})) return;
+  sdKeyNow = await sdOutputKey();
+  sdOpen();
+});
+sdRenderRow();
+
 /* ---------------- Rhythm Trainer (real onset detection against a real metronome) ---------------- */
 // Shared onset-timing detection — also used by the Entrance & Cutoff Trainers.
 const ONSET_RMS_THRESHOLD = 0.02;
@@ -23750,10 +24037,11 @@ function timingAccuracy(offsetMs){ return Math.max(0, Math.round(100 - Math.abs(
 const RHYTHM_BPM = {slow:70, medium:100, fast:130};
 let rhythmTempo = 'medium';
 let rhythmActive = false;
-let rhythmBeatTimestamps = [];
+let rhythmBeatTimestamps = []; // the 8 scored beats, audio clock seconds (scoring batch B2: was performance.now())
 let rhythmResults = [];
 let rhythmRafId = null;
 let rhythmWasVoiced = false;
+let rhythmStopTicker = null, rhythmDelayS = 0, rhythmBeatS = 0.6;
 
 document.querySelectorAll('#rhythmTempoRow .ex-type-btn').forEach(btn=>{
   btn.addEventListener('click', ()=>{
@@ -23782,6 +24070,7 @@ let rhythmCountInTs = []; // the two count-in clicks (display: the count-in dots
 // Leaving mid-run (stopAllActiveSessions): Start is back, the stage at rest.
 function rhythmStop(){
   cancelAnimationFrame(rhythmRafId);
+  if(rhythmStopTicker){ rhythmStopTicker(); rhythmStopTicker = null; }
   document.getElementById('rhythmStartBtn').disabled = false;
   document.getElementById('rhythmStartLabel').textContent = t('action_start');
   document.getElementById('rhythmLiveStatus').textContent = '';
@@ -23793,6 +24082,7 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
+  if(!await sdGate() || tok!==startGen) return;
   rhythmActive = true;
   rhythmWasVoiced = false;
   rhythmResults = Array.from({length:8}, ()=>({claimed:false, offsetMs:null, accuracy:0}));
@@ -23800,57 +24090,64 @@ document.getElementById('rhythmStartBtn')?.addEventListener('click', async ()=>{
   document.getElementById('rhythmStartBtn').disabled = true;
   document.getElementById('rhythmStartLabel').textContent = t('action_listening');
 
+  // the clicks and the beats on the audio clock (scoring batch B2): the clicks play exactly on the beats they're scored against
   const bpm = RHYTHM_BPM[rhythmTempo];
   const beatMs = 60000/bpm;
-  const t0 = performance.now() + 300;
+  rhythmBeatS = beatMs/1000;
+  const t0 = audioCtx.currentTime + 0.3;
   const totalBeats = 10; // 2 unscored count-in beats + 8 real scored beats
-  const allBeatTimestamps = Array.from({length:totalBeats}, (_,i)=> t0 + i*beatMs);
+  const allBeatTimestamps = Array.from({length:totalBeats}, (_,i)=> t0 + i*rhythmBeatS);
   rhythmBeatTimestamps = allBeatTimestamps.slice(2);
   rhythmCountInTs = allBeatTimestamps.slice(0, 2);
+  rhythmDelayS = sdDelayMs()/1000;
   document.getElementById('rhythmTempoNow').textContent = t('rhythm_'+rhythmTempo+'_btn');
   document.querySelectorAll('#rhythmCountIn .rhythm-cdots i').forEach(d=>d.classList.remove('on'));
 
   allBeatTimestamps.forEach((ts,i)=>{
-    const delaySec = Math.max(0, (ts-performance.now())/1000);
     const isCountIn = i<2;
-    playTone(isCountIn?880:660, 0.08, delaySec, isCountIn?0.14:0.20);
+    scheduleTone(isCountIn?880:660, 0.08, Math.max(0, ts-audioCtx.currentTime), isCountIn?0.14:0.20, false);
   });
 
   document.getElementById('rhythmLiveStatus').textContent = t('rhythm_listen_instructions');
   renderRhythmDots(-1);
   rhythmL = {};
-  rhythmOnsetLoop(beatMs);
+  rhythmStopTicker = await startAudioTicker(rhythmTick);
+  if(!rhythmActive){ if(rhythmStopTicker){ rhythmStopTicker(); rhythmStopTicker = null; } return; }
+  rhythmDraw();
   singingSession(()=>rhythmActive, document.getElementById('rhythmStage')); // the count-in to the last beat
 });
 let rhythmL = null;
 
-function rhythmOnsetLoop(beatMs){
+// Detection on the audio clock (~every 5 ms, as Entrance & Cutoff): a rising edge of the loudness, placed inside the
+// analyser's window in 64-sample hops (edgeSecondsAgo, ~1.3 ms), less the speaker delay, goes to the nearest scored
+// beat not yet caught within half a beat. It was the frame time on performance.now(), with the clicks on another clock.
+function rhythmTick(){
   if(!rhythmActive) return;
-  const now = performance.now();
-  const lastBeatEnd = rhythmBeatTimestamps[7] + beatMs*0.6;
-  if(now > lastBeatEnd){ finishRhythmTrainer(beatMs); return; }
-
-  const rms = computeRMS(readRawMic());
-  const isVoiced = rms > ONSET_RMS_THRESHOLD;
-
+  const now = audioCtx.currentTime;
+  if(now > rhythmBeatTimestamps[7] + rhythmBeatS*0.6 + rhythmDelayS){ finishRhythmTrainer(rhythmBeatS*1000); return; }
+  const raw = readRawMic();
+  const isVoiced = computeRMS(raw) > ONSET_RMS_THRESHOLD;
   if(isVoiced && !rhythmWasVoiced){
-    // Genuine onset (a real rising edge in loudness) — matched to the nearest unclaimed scored beat, within a real window
-    const bestIdx = claimNearestTarget(rhythmBeatTimestamps, rhythmResults, now, beatMs*0.5);
+    const edgeT = now - edgeSecondsAgo(raw, audioCtx.sampleRate, true) - rhythmDelayS;
+    const bestIdx = claimNearestTarget(rhythmBeatTimestamps, rhythmResults, edgeT, rhythmBeatS*0.5);
     if(bestIdx>=0){
-      const offsetMs = Math.round(now - rhythmBeatTimestamps[bestIdx]);
+      const offsetMs = Math.round((edgeT - rhythmBeatTimestamps[bestIdx])*1000);
       rhythmResults[bestIdx] = {claimed:true, offsetMs, accuracy:timingAccuracy(offsetMs)};
     }
   }
   rhythmWasVoiced = isVoiced;
-
-  let nearestIdx = rhythmBeatTimestamps.findIndex(ts => now < ts+beatMs*0.5);
+}
+// The stage, on animation frames: the current beat ringed, the count-in dots lit as they play
+function rhythmDraw(){
+  if(!rhythmActive) return;
+  const now = audioCtx.currentTime, beatS = rhythmBeatS;
+  let nearestIdx = rhythmBeatTimestamps.findIndex(ts => now < ts+beatS*0.5);
   if(nearestIdx<0) nearestIdx = 7;
   vcFeed(rhythmL, ()=>{
-    renderRhythmDots(now < rhythmBeatTimestamps[0]-beatMs*0.5 ? -1 : nearestIdx);
+    renderRhythmDots(now < rhythmBeatTimestamps[0]-beatS*0.5 ? -1 : nearestIdx);
     document.querySelectorAll('#rhythmCountIn .rhythm-cdots i').forEach((d,i)=>d.classList.toggle('on', now >= rhythmCountInTs[i]));
   });
-
-  rhythmRafId = requestAnimationFrame(()=>rhythmOnsetLoop(beatMs));
+  rhythmRafId = requestAnimationFrame(rhythmDraw);
 }
 
 // The beat chart: the 8 beats across; each caught beat a voice-colour dot, its offset up (late) or down (early) from the
@@ -23871,6 +24168,7 @@ function drawRhythmChart(box, beatMs){
 function finishRhythmTrainer(beatMs = 60000/RHYTHM_BPM[rhythmTempo]){
   rhythmActive = false;
   cancelAnimationFrame(rhythmRafId);
+  if(rhythmStopTicker){ rhythmStopTicker(); rhythmStopTicker = null; }
   document.getElementById('rhythmStartBtn').disabled = false;
   document.getElementById('rhythmStartLabel').textContent = t('action_start');
   document.getElementById('rhythmLiveStatus').textContent = '';
@@ -25517,6 +25815,7 @@ let pdFirstVoicedOffset = null;
 let pdResults = [];
 let pdRmsSamples = [];
 let pdCurrentSectionName = null;
+let pdDelayMs = 0, pdShownIdx = -1;
 
 function renderPdBriefing(){
   const wrap = document.getElementById('pdBriefingRows');
@@ -25535,9 +25834,11 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
+  if(!await sdGate() || tok!==startGen) return;
   pdActive = true;
   pdStartTime = performance.now();
-  pdCurrentIdx = -1;
+  pdDelayMs = sdInputMs(); // PD plays nothing: the microphone's share of the delay (B2)
+  pdCurrentIdx = -1; pdShownIdx = -1;
   pdCentsBuf = [];
   pdFirstVoicedOffset = null;
   pdResults = [];
@@ -25570,28 +25871,33 @@ function pdFinalizeNote(idx){
 
 function pdLoop(){
   if(!pdActive) return;
-  const elapsedMs = performance.now()-pdStartTime;
+  const shownMs = performance.now()-pdStartTime;
+  const elapsedMs = shownMs - pdDelayMs; // the scoring time: when you sang what the mic hears now
   const totalMs = songTotalDurMs();
   if(elapsedMs >= totalMs){ pdFinalizeNote(pdCurrentIdx); finishPd(); return; }
 
+  // the screen follows the song; the scoring follows elapsedMs
+  const shownIdx = songIndexAtElapsed(shownMs);
+  if(shownIdx !== pdShownIdx){
+    pdShownIdx = shownIdx;
+    const sections = getSongSections();
+    const sec = sections.find(s=>s.indices.includes(shownIdx));
+    if(sec && sec.id!==pdCurrentSectionName){
+      pdCurrentSectionName = sec.id; // the id: a language switch mid-run still finds its label
+      document.getElementById('pdCurrentSection').textContent = sectionLabel(sec.id);
+      document.getElementById('pdCurrentCue').textContent = PERFORMANCE_DIRECTOR_CUES[sec.id]||'';
+    }
+    document.getElementById('pdCurrentNote').textContent = noteNameFromMidi(SONG.parts.Lead.notes[shownIdx]);
+  }
   const idx = songIndexAtElapsed(elapsedMs);
   if(idx !== pdCurrentIdx){
     if(pdCurrentIdx>=0) pdFinalizeNote(pdCurrentIdx);
     pdCurrentIdx = idx;
     pdCentsBuf = [];
     pdFirstVoicedOffset = null;
-
-    const sections = getSongSections();
-    const sec = sections.find(s=>s.indices.includes(idx));
-    if(sec && sec.id!==pdCurrentSectionName){
-      pdCurrentSectionName = sec.id; // the id: a language switch mid-run still finds its label
-      document.getElementById('pdCurrentSection').textContent = sectionLabel(sec.id);
-      document.getElementById('pdCurrentCue').textContent = PERFORMANCE_DIRECTOR_CUES[sec.id]||'';
-    }
-    document.getElementById('pdCurrentNote').textContent = noteNameFromMidi(SONG.parts.Lead.notes[idx]);
   }
 
-  document.getElementById('pdProgressFill').style.width = Math.min(100,(elapsedMs/totalMs)*100)+'%';
+  document.getElementById('pdProgressFill').style.width = Math.max(0, Math.min(100,(shownMs/totalMs)*100))+'%';
 
   analyser.getFloatTimeDomainData(dataArray);
   const rms = computeRMS(readRawMic());
@@ -25605,8 +25911,8 @@ function pdLoop(){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
     if(cents!==null && Math.abs(cents)<300) pdCentsBuf.push({t:elapsedMs, c:cents});
   }
-  cwVoicePush(elapsedMs/1000, freq);
-  cwLanesFrame(elapsedMs/1000);
+  cwVoicePush(shownMs/1000, freq);
+  cwLanesFrame(shownMs/1000);
 
   requestAnimationFrame(pdLoop);
 }

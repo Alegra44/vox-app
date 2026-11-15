@@ -1,0 +1,90 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Latency probe</title>
+<style>body{font:15px system-ui;margin:24px;background:#fff;color:#111}button{font:inherit;padding:12px 18px}pre{white-space:pre-wrap}</style></head>
+<body>
+<p>Scoring survey, item 5: this device's audio latency. Plays ten short clicks through the speakers and finds them in the
+microphone, on the AudioContext's own clock (the clock the app scores on).</p>
+<button id="go">Measure</button> <button id="tap">Tap along (then tap here or press Space on each click)</button>
+<pre id="out"></pre>
+<script>
+// ?aec=0|1 (echoCancellation on the mic; the app uses 1), ?auto=1 (start without a click: a browser with autoplay allowed),
+// results POSTed to /result when served by latency.js.
+const Q = new URLSearchParams(location.search), AEC = Q.get('aec') === '1', out = document.getElementById('out');
+const log = s => { out.textContent += s + '\n'; };
+const median = a => { const s = a.slice().sort((x, y) => x - y); return s.length ? (s.length % 2 ? s[s.length >> 1] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : null; };
+async function run() {
+  const res = { ua: navigator.userAgent, aec: AEC };
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)(); // the app's: default options
+    if (ac.state !== 'running') await ac.resume();
+    res.sampleRate = ac.sampleRate; res.baseLatency = ac.baseLatency ?? null;
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: AEC, noiseSuppression: false, autoGainControl: false } });
+    const tr = stream.getAudioTracks()[0], st = tr.getSettings ? tr.getSettings() : {};
+    res.track = { label: tr.label, latency: st.latency ?? null, sampleRate: st.sampleRate ?? null, echoCancellation: st.echoCancellation ?? null };
+    // a recorder on the context's clock: each block's samples with the context time of its first sample
+    const src = `class Rec extends AudioWorkletProcessor{process(i){const c=i[0]&&i[0][0];if(c)this.port.postMessage({t:currentTime,d:c.slice(0)});return true;}}registerProcessor('rec',Rec);`;
+    await ac.audioWorklet.addModule(URL.createObjectURL(new Blob([src], { type: 'application/javascript' })));
+    const node = new AudioWorkletNode(ac, 'rec'), mic = ac.createMediaStreamSource(stream), sink = ac.createGain(); sink.gain.value = 0;
+    const blocks = []; node.port.onmessage = e => blocks.push(e.data);
+    mic.connect(node).connect(sink).connect(ac.destination);
+    await new Promise(r => setTimeout(r, 700));
+    res.outputLatency = ac.outputLatency ?? null; // read once the context has been running a while
+    // ten clicks: 2 ms of 3 kHz under a Hann window
+    const sr = ac.sampleRate, L = Math.round(sr * 0.002), click = new Float32Array(L);
+    for (let i = 0; i < L; i++) click[i] = Math.sin(2 * Math.PI * 3000 * i / sr) * 0.5 * (1 - Math.cos(2 * Math.PI * i / (L - 1)));
+    const buf = ac.createBuffer(1, L, sr); buf.copyToChannel(click, 0);
+    const T0 = ac.currentTime + 0.4, times = [];
+    for (let k = 0; k < 10; k++) { const s = ac.createBufferSource(), g = ac.createGain(); g.gain.value = 1.6; s.buffer = buf; s.connect(g).connect(ac.destination); const at = T0 + k * 0.7; s.start(at); times.push(at); }
+    await new Promise(r => setTimeout(r, (0.4 + 10 * 0.7 + 0.6) * 1000));
+    node.port.onmessage = null; stream.getTracks().forEach(t => t.stop());
+    // the recording as one array with a start time
+    const t0 = blocks[0].t, last = blocks[blocks.length - 1], n = Math.round((last.t - t0) * sr) + last.d.length + sr, x = new Float32Array(n);
+    for (const b of blocks) { const at = Math.round((b.t - t0) * sr); if (at >= 0 && at + b.d.length <= n) x.set(b.d, at); } // placed by its own time
+    const delays = [], peaks = [];
+    for (const at of times) {
+      const i0 = Math.round((at - t0) * sr);
+      let e = 0, m = 0; for (let i = i0 - Math.round(0.2 * sr); i < i0 - Math.round(0.02 * sr); i++) { e += x[i] * x[i]; m++; } const floor = Math.sqrt(e / m);
+      // matched filter over 0–400 ms after the click was scheduled; the delay is the best match's start
+      let best = -1, bi = -1;
+      for (let d = 0; d < Math.round(0.4 * sr); d++) { let c = 0; const j = i0 + d; for (let i = 0; i < L; i++) c += x[j + i] * click[i]; c = Math.abs(c); if (c > best) { best = c; bi = d; } }
+      let pk = 0; for (let i = 0; i < L; i++) pk += click[i] * click[i];
+      const snr = best / (floor * Math.sqrt(pk * L) + 1e-12);
+      peaks.push(+snr.toFixed(1)); if (snr > 6) delays.push(bi / sr * 1000);
+    }
+    res.clicks = { heard: delays.length, of: 10, delaysMs: delays.map(d => +d.toFixed(1)), snr: peaks, medianMs: delays.length ? +median(delays).toFixed(1) : null,
+      spreadMs: delays.length ? +(Math.max(...delays) - Math.min(...delays)).toFixed(1) : null };
+    await ac.close();
+  } catch (e) { res.error = String(e && e.message || e); }
+  log(JSON.stringify(res, null, 1));
+  try { await fetch('/result', { method: 'POST', body: JSON.stringify(res) }); } catch (e) {}
+  window.__result = res; return res;
+}
+document.getElementById('go').onclick = run;
+// Tap along: 16 clicks, 600 ms apart; press Space (or tap the button) on each. Each tap's offset from its click, on
+// the AudioContext clock (the tap's event time mapped through getOutputTimestamp), so the result is what a tap-along
+// calibration would set: the output latency plus the tap's own input lag plus how early or late you tap.
+async function tapAlong() {
+  const ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state !== 'running') await ac.resume();
+  const sr = ac.sampleRate, L = Math.round(sr * 0.01), b = ac.createBuffer(1, L, sr), d = b.getChannelData(0);
+  for (let i = 0; i < L; i++) d[i] = Math.sin(2 * Math.PI * 1000 * i / sr) * 0.4 * (1 - i / L);
+  const T0 = ac.currentTime + 1.2, clicks = [];
+  for (let k = 0; k < 16; k++) { const s = ac.createBufferSource(); s.buffer = b; s.connect(ac.destination); s.start(T0 + k * 0.6); clicks.push(T0 + k * 0.6); }
+  const taps = [];
+  // performance.now() → context time: the context's own pairing of the two clocks
+  const ctxAt = ms => { const ts = ac.getOutputTimestamp ? ac.getOutputTimestamp() : null; return ts && ts.performanceTime ? ts.contextTime + (ms - ts.performanceTime) / 1000 : ac.currentTime - (performance.now() - ms) / 1000; };
+  const onTap = e => { if (e.type === 'keydown' && e.code !== 'Space') return; e.preventDefault(); taps.push(ctxAt(e.timeStamp)); };
+  addEventListener('keydown', onTap); document.getElementById('tap').addEventListener('pointerdown', onTap);
+  log('Tap along: 16 clicks from now, press Space on each…');
+  await new Promise(r => setTimeout(r, (1.2 + 16 * 0.6 + 0.5) * 1000));
+  removeEventListener('keydown', onTap); document.getElementById('tap').removeEventListener('pointerdown', onTap);
+  // each click's nearest tap within ±300 ms; the first 4 clicks are for getting in step
+  const offs = clicks.slice(4).map(c => { let best = null; for (const t of taps) if (Math.abs(t - c) < 0.3 && (best === null || Math.abs(t - c) < Math.abs(best - c))) best = t; return best === null ? null : (best - c) * 1000; }).filter(x => x !== null);
+  const res = { ua: navigator.userAgent, tap: { taps: taps.length, used: offs.length, offsetsMs: offs.map(x => +x.toFixed(1)), medianMs: offs.length ? +median(offs).toFixed(1) : null },
+    outputLatency: ac.outputLatency ?? null, baseLatency: ac.baseLatency ?? null };
+  log(JSON.stringify(res, null, 1)); try { await fetch('/result', { method: 'POST', body: JSON.stringify(res) }); } catch (e) {}
+  await ac.close();
+}
+document.getElementById('tap').onclick = e => { if (!window.__tapping) { window.__tapping = true; tapAlong().finally(() => { window.__tapping = false; }); } };
+if (Q.get('auto') === '1') run();
+</script>
+</body></html>

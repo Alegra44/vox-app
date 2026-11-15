@@ -78,3 +78,22 @@ B6. Item 6: migration 0009 (expression_scores, jsonb, default '[]') and the allo
 B CHECKS: survey.js on master and the branch (every stimulus within ±3 of the survey's proposed numbers, or explained); scores and scores4b (changes only in Rhythm, Entrance & Cutoff, Karaoke, Performance Director, Harmony Arena and Emotional Singing); latency.js with a known rig delay (the measurement recovers it within ±5 ms); house, hooks, contrast, copyscan --all, names, focus, targets, bootcheck, youstates.
 B SCREENSHOTS on review/scoringB: the speaker-delay sheet (measuring, done, couldn't hear the clicks), the Profile row, and the results of Rhythm, Entrance & Cutoff, Karaoke, Performance Director, Emotional Singing and Harmony Arena, at 390 (Light and Dark) and 1280 (Light). Secret check, push scoring/b and review/scoringB.
 REPORT, then stop. Nothing from B merges, and the migration isn't applied, until I've reviewed.
+
+## Release B: what the measurements found
+
+### The speaker-delay measurement (decision 6; B2)
+
+latency.js `--rig 0,120,250` (the app's output looped into its mic D ms late in one page, the rig's own path measured
+first): every known delay came back exactly (120 → 120, 250 → 250; 3 runs and 2 runs, ±0 ms); with no loop the sheet
+says it couldn't hear the clicks and uses the estimate. Two faults the rig found, fixed:
+
+- the search after each click (400 ms) was longer than the gap to the next one (330 ms), so the next click could be
+  picked, and a delay longer than the gap would have read short, consistently. The gaps now cycle 330/360/390 ms and
+  the search is 320 ms: a longer round trip gives aliases that disagree (3 of 10 alike at 310 + 36 ms), so it falls
+  back to the estimate instead of reading short;
+- the noise floor was taken just before each click, where the previous click's echo lands: the SNR fell from ~690 to
+  9.5 at 120 ms. It is taken once, in the quiet before the first click.
+
+The estimate is now read live (the reported latency + 50 ms): Chrome's reported output latency moved 39–47 ms on one
+device while audio ran, so a stored number went stale. A failed or skipped measurement is stored as such, with no
+number. The longest round trip the sheet can measure is 320 ms.

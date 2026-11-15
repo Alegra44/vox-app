@@ -91,8 +91,10 @@ const TOOLS = [
       const t0 = window.__t0 = performance.now(); document.getElementById('rhythmStartBtn').click();
       if (!window.__synth) return;
       const until = performance.now() + 5000;
-      while (!(rhythmActive && rhythmBeatTimestamps.length === 8 && rhythmBeatTimestamps[0] > t0) && performance.now() < until) await new Promise(r => setTimeout(r, 5));
-      __synth.pulses(rhythmBeatTimestamps.map(ts => ts + (window.__rhythmLate || 0)), 150);
+      // the beats as performance.now() times: from release B (B2) they are on the audio clock, in seconds
+      const perf = () => typeof rhythmStopTicker === 'undefined' ? rhythmBeatTimestamps.slice() : rhythmBeatTimestamps.map(ts => performance.now() + (ts - audioCtx.currentTime) * 1000);
+      while (!(rhythmActive && rhythmBeatTimestamps.length === 8 && perf()[0] > t0) && performance.now() < until) await new Promise(r => setTimeout(r, 5));
+      __synth.pulses(perf().map(ts => ts + (window.__rhythmLate || 0)), 150);
     }),
     busy: () => rhythmActive,
     nums: () => {
