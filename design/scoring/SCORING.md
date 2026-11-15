@@ -153,3 +153,44 @@ survey.js `--voice`, one run each, PD and Emotional Singing). The sd is the spre
   rule and weren't used to set it.
 - youSeed's Expression is reseeded from real takes on this measure: [36, 49, 54] (vibrato-3131, -2961, -2417 whole
   clips, Emotional Singing).
+
+## Release B review and deploy
+
+Release B review: approved apart from one finding, plus one bug. Add this message to the end of design/scoring/SCORING.md under "Release B review and deploy" and commit it first on scoring/b. AC power, the run lock and time limits on. Rollback target: dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb.
+
+YOUR TWO MISSES
+1. PD on loudlate, 1 of 8: accepted. PD plays no backing, so a chord-start filter there would filter against a backing that doesn't exist. Note it in SCORING.md.
+2. Karaoke ~7 below the proposal: your cause is right, but it shows something bigger (B7).
+
+B7. THE ~20 ms LEFT AFTER CALIBRATION
+- Every timing result in your screenshots reads an on-time singer about 19–20 ms late after the speaker delay is subtracted: Rhythm's beats 16–20 ms late (88–90%), Entrance & Cutoff's average offset 19 ms, Karaoke Timing 85, PD 88. That's ~12 points off every perfectly timed note.
+- Find where it comes from and write it in SCORING.md: the onset detector (frame or hop delay), a path the click measurement doesn't include, or only the rig.
+- Model a real device on the latency rig: a known output delay and a known input delay, with the "singer" starting each note exactly when the beat reaches them. After the measured delay is subtracted, an on-time singer must read 0 ± 5 ms in Rhythm, Entrance & Cutoff, Karaoke, PD and Harmony Arena, and the 150 ms late singer 150 ± 5.
+- If it's the detector: one measured constant in the shared onset code, applied everywhere onsets are timed. If it's only the rig: show it, and change nothing in the app.
+- Then rerun survey.js and update the proposed-numbers table in SCORING.md with the new values.
+
+B8. "ERASE MY PROGRESS" KEEPS THE SCORES
+- Its text says it deletes "range, streak, sessions, scores and history", but the score lists survive. Make it delete everything the text names: every score list (pitch, breath, agility, range, expression and the rest), the personal and song bests, the practice session count and the history. Vocal-load sessions aren't named in the text: leave them as they are.
+- Test: erase on a seeded account, reload, and every list is empty and the Skill Profile reads "No score yet".
+
+CHECKS after B7 and B8: latency-rig with the device model, survey, scores, scores4b, scores6, youstates, an erase check, hooks, bootcheck, allowlist. Secret check, push scoring/b.
+
+If B7's 0 ± 5 ms and B8's test pass, say you're ready and wait for me to type "deploy". If either fails, report and stop.
+
+AFTER I TYPE "deploy" (in this order)
+1. Apply migration 0009 to production and confirm the column exists.
+2. Deploy the api Edge Function with expression_scores on the allow-list, and confirm a progress save with expressionScores round-trips.
+3. Merge scoring/b into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself.
+4. Confirm that https://deploy-alegra1122.vercel.app serves the new deployment. If it doesn't, give me the exact vercel promote line with the real dpl id, and wait.
+Rollback: the app goes back to dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb. The column and the function stay (the old app doesn't send expression_scores, so the function accepting it changes nothing for it).
+
+PRODUCTION CHECKS
+- prod.sh with WITH_CHOIR=1 (Your Choir's playback changed), scores, scores4b, scores6, the speaker-delay sheet and Profile row, an Expression score surviving a reload, the erase check, allowlist, house, bootcheck.
+- Rollback rule as before. Delete the test accounts and push the results to review/scoringB-prod.
+
+WHEN EVERYTHING PASSES
+- Delete scoring/b, scoring/survey, review/scoringB and review/scoringA-prod. Keep review/phase10-prod (the redesign's record) and review/scoringB-prod. Remove the local backup/b-pre-fold branch and the scratch worktree.
+- HANDOFF: release B live with its dpl id, the new rollback target; the scoring batch done.
+REPORT, then stop.
+
+(Added with the message: "after completed "deploy" directly okay": if B7 and B8 pass, go on to the deploy steps without waiting for "deploy".)
