@@ -15804,6 +15804,10 @@ async function playBackingPad(includeLead=false){
   });
   return t0;
 }
+// The backing's own clock (scoring batch B1): its t0 on the audio clock, given as a performance.now() time. A tool that
+// sings with the backing takes its note starts from here, so note i starts when chord i does. Reading performance.now()
+// after playBackingPad (which schedules 80 ms ahead) started every note 80 ms before its chord.
+function backingClockMs(t0){ return performance.now() + (t0 - audioCtx.currentTime)*1000; }
 function stopBackingPad(){
   backingActiveOsc.forEach(o=>{ try{o.stop();}catch(e){} });
   backingActiveOsc = [];
@@ -15925,10 +15929,10 @@ async function startEmotionalSinging(){
   const tok = startGen;
   await initAudio();
   if(tok!==startGen) return;
-  await playBackingPad(false);
+  const t0 = await playBackingPad(false);
   if(tok!==startGen) return;
   emotionActive = true;
-  emotionStartTime = performance.now();
+  emotionStartTime = backingClockMs(t0); // note i starts with chord i of the backing
   emotionCentsSamples = [];
   emotionRmsSamples = [];
   document.getElementById('emotionResult').style.display='none';
@@ -15946,7 +15950,7 @@ function emotionLoop(){
 
   const idx = songIndexAtElapsed(elapsed);
   document.getElementById('emotionChordLabel').textContent = noteNameFromMidi(SONG.parts.Lead.notes[idx]);
-  document.getElementById('emotionProgressFill').style.width = Math.min(100,(elapsed/totalMs)*100)+'%';
+  document.getElementById('emotionProgressFill').style.width = Math.max(0, Math.min(100,(elapsed/totalMs)*100))+'%';
 
   analyser.getFloatTimeDomainData(dataArray);
   const rms = computeRMS(readRawMic());
@@ -16150,10 +16154,10 @@ async function startKaraoke(){
   await initAudio();
   if(tok!==startGen) return;
   buildKaraokeRoll();
-  await playBackingPad(false);
+  const t0 = await playBackingPad(false);
   if(tok!==startGen) return;
   karaokeActive = true;
-  karaokeStartTime = performance.now();
+  karaokeStartTime = backingClockMs(t0); // note i starts with chord i of the backing
   karaokeCurrentIdx = -1;
   karaokeCentsBuf = [];
   karaokeFirstVoicedOffset = null;
@@ -21982,7 +21986,7 @@ async function startHarmonyArena(){
     });
   });
 
-  harmonyActive=true; harmonyStartTime=performance.now(); harmonyCentsSamples=[];
+  harmonyActive=true; harmonyStartTime=backingClockMs(t0); harmonyCentsSamples=[]; // note i starts with chord i of the choir
   harmonyTotalFrames=0; harmonyHeardFrames=0; harmonyCurrentIdx=-1; harmonyNoteBuf=[]; harmonyNoteResults=[];
   document.getElementById('harmonyResult').style.display='none';
   gameStartLive('harmonyStartBtn', 'harmonyStartLabel');
@@ -22015,7 +22019,7 @@ function harmonyLoop(){
   const elapsedWithinNote = elapsedMs - idx*chordDur;
   const showLabel = !harmonyMemoryModeOn || elapsedWithinNote < chordDur*0.35;
   document.getElementById('harmonyNoteLabel').textContent = showLabel ? noteNameFromMidi(targetMidi) : '—'; // the part is in the HUD
-  document.getElementById('harmonyProgressFill').style.width=Math.min(100,(elapsedMs/totalMs)*100)+'%';
+  document.getElementById('harmonyProgressFill').style.width=Math.max(0, Math.min(100,(elapsedMs/totalMs)*100))+'%';
 
   if(idx!==harmonyCurrentIdx){
     if(harmonyCurrentIdx>=0) harmonyFinalizeNote(harmonyCurrentIdx);

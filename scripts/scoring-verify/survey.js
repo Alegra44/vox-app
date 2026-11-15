@@ -86,29 +86,32 @@ const INIT = () => {
 // the taps (after the page's script): every reading of a take, and vibratoTolerantCents' in/out counts
 const TAP = () => {
   if (window.__tapped) return; window.__tapped = true; window.__rec = null;
-  const r0 = computeRMS, a0 = autoCorrelate, v0 = vibratoTolerantCents;
+  const r0 = computeRMS, a0 = autoCorrelate, v0 = vibratoTolerantCents, b0 = playBackingPad;
+  // the backing's own t0 (on the audio clock), as a performance.now() time: where its leak goes in the loud stimuli
+  playBackingPad = async function () { const t0 = await b0.apply(this, arguments); window.__bkPerf = performance.now() + (t0 - audioCtx.currentTime) * 1000; return t0; };
   computeRMS = function (b) { const v = r0.apply(this, arguments); if (window.__rec) window.__rec.rms.push([performance.now(), v]); return v; };
   autoCorrelate = function () { const v = a0.apply(this, arguments); if (window.__rec) window.__rec.f.push([performance.now(), v]); return v; };
   vibratoTolerantCents = function (pts) { const out = v0.apply(this, arguments); if (window.__rec) window.__rec.vtc.push([pts.length, out.length]); return out; };
 };
 
 const START = { pd: ['pdStartBtn', 'pdActive', 'pdStartTime'], karaoke: ['karaokeStartBtn', 'karaokeActive', 'karaokeStartTime'], emotion: ['emotionStartBtn', 'emotionActive', 'emotionStartTime'] };
-// Start, and once the tool's clock is known, the stimulus on it. The backing (Karaoke, Emotional Singing) starts 80 ms
-// after the tool's clock (playBackingPad's t0 = currentTime + 0.08, before the clock is read): the leak is put there.
+// Start, and once the tool's clock is known, the stimulus on it. The backing's leak (Karaoke, Emotional Singing) goes where
+// the backing really starts: its own t0, read from playBackingPad (on master 80 ms after the tool's clock; from release
+// B's B1 the tool's clock is the backing's). PD plays no backing: its leak, harsher than the app, is put on its clock.
 const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active, startVar], plan, key }) => {
   const g = v => new Function('return (' + v + ')')();
   __synth.idle(); if (plan.steady) { __synth.steadyOn(); await new Promise(r => setTimeout(r, 1200)); } // held: sounding well before Start
-  window.__rec = { rms: [], f: [], vtc: [] };
+  window.__rec = { rms: [], f: [], vtc: [] }; window.__bkPerf = null;
   document.getElementById(btn).click();
   const until = performance.now() + 8000;
   while (!g(active) && performance.now() < until) await new Promise(r => setTimeout(r, 2));
   if (!g(active)) return { started: false };
   const t0 = g(startVar), D = songChordDurMs(), lead = SONG.parts.Lead.notes, late = plan.late || 0;
-  window.__rec.t0 = t0; window.__rec.D = D; window.__rec.lead = lead.slice();
+  window.__rec.t0 = t0; window.__rec.bk = window.__bkPerf; window.__rec.D = D; window.__rec.lead = lead.slice();
   if (!plan.steady && !plan.silent) {
     const notes = lead.map((m, i) => ({ semis: m - 69, on: t0 + i * D + late, off: t0 + (i + 0.85) * D + late, gain: plan.gains ? plan.gains[i % plan.gains.length] : 1 }))
       .filter((_, i) => !(plan.skip || []).includes(i));
-    const backing = plan.backing ? { t0: t0 + (key === 'pd' ? 0 : 80), dur: D, level: plan.backing, chords: lead.map((_, i) => ['Soprano', 'Alto', 'Tenor', 'Bass'].map(p => SONG.parts[p].notes[i])) } : null;
+    const backing = plan.backing ? { t0: key === 'pd' || window.__bkPerf == null ? t0 : window.__bkPerf, dur: D, level: plan.backing, chords: lead.map((_, i) => ['Soprano', 'Alto', 'Tenor', 'Bass'].map(p => SONG.parts[p].notes[i])) } : null;
     __synth.play(notes, plan.noise || 0, backing);
     window.__rec.lateBy = Math.max(0, performance.now() - t0); // how late the first note's schedule was made
   } else if (plan.noise) __synth.play([], plan.noise, null);
