@@ -8517,7 +8517,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Begin the performance",
     pd_dim_combined:"Pitch and timing together",
     pd_insight_tpl:"Work on {dim} next: it was your lowest today ({n}).",
-    pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: when your voice started each note, a rise in loudness or a new pitch, held on the note for 150 ms; it scores 100 minus 0.6 × how many milliseconds early or late it was, and a voice already sounding or more than 40 % of the note late scores 0. It's averaged over the notes you sang, with the delay of your microphone subtracted. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
+    pd_measure:"Each chord of the song is one note of the Lead line. Pitch: for each note you sang, 100 minus 0.6 × your average distance from it in cents (natural vibrato taken out), averaged over the notes you sang; it's saved as your pitch score. Timing: when your voice started each note, a rise in loudness or a new pitch, held on the note for 150 ms; it scores 100 minus 0.6 × how many milliseconds early or late it was, and a voice already sounding or more than 40 % of the note late scores 0. It's averaged over every note, so a note you didn't sing scores 0, with the delay of your microphone subtracted. Dynamics: the gap between your loudest and quietest moments as a share of the loudest, × 1.5, at most 100. Pitch and timing together: the average of the two.",
     aiduet_start_btn:"Sing with the choir",
     aiduet_after_tpl:"You sang {part} with the choir.",
     aiduet_rehearse_link:"Rehearse {part} in {cw}",
@@ -10317,7 +10317,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Commencer la performance",
     pd_dim_combined:"Justesse et timing ensemble",
     pd_insight_tpl:"À travailler ensuite : {dim}, votre point le plus bas aujourd'hui ({n}).",
-    pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : le moment où votre voix commence chaque note, une montée du volume ou une nouvelle hauteur, tenue sur la note pendant 150 ms ; elle vaut 100 moins 0,6 × son avance ou son retard en millisecondes, et une voix qui sonnait déjà ou qui arrive après 40 % de la note vaut 0. En moyenne sur les notes chantées, le délai de votre micro soustrait. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
+    pd_measure:"Chaque accord du morceau est une note de la ligne principale. Justesse : pour chaque note chantée, 100 moins 0,6 × votre écart moyen en cents (vibrato naturel retiré), en moyenne sur les notes chantées ; elle est enregistrée comme votre score de justesse. Timing : le moment où votre voix commence chaque note, une montée du volume ou une nouvelle hauteur, tenue sur la note pendant 150 ms ; elle vaut 100 moins 0,6 × son avance ou son retard en millisecondes, et une voix qui sonnait déjà ou qui arrive après 40 % de la note vaut 0. En moyenne sur toutes les notes : une note non chantée vaut 0. Le délai de votre micro est soustrait. Dynamique : l'écart entre vos moments les plus forts et les plus doux, en part du plus fort, × 1,5, 100 au plus. Justesse et timing ensemble : la moyenne des deux.",
     aiduet_start_btn:"Chanter avec le chœur",
     aiduet_after_tpl:"Vous avez chanté {part} avec le chœur.",
     aiduet_rehearse_link:"Répéter {part} dans {cw}",
@@ -12117,7 +12117,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Empezar la actuación",
     pd_dim_combined:"Afinación y ritmo juntos",
     pd_insight_tpl:"Lo siguiente a trabajar: {dim}, tu punto más bajo hoy ({n}).",
-    pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: el momento en que tu voz empieza cada nota, una subida de volumen o una nueva altura, mantenida en la nota 150 ms; vale 100 menos 0,6 × los milisegundos de adelanto o retraso, y una voz que ya sonaba o que entra pasado el 40 % de la nota vale 0. En promedio sobre las notas cantadas, con el retardo de tu micrófono restado. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
+    pd_measure:"Cada acorde de la canción es una nota de la línea principal. Afinación: para cada nota que cantaste, 100 menos 0,6 × tu distancia media en cents (sin el vibrato natural), en promedio sobre las notas cantadas; se guarda como tu puntuación de afinación. Ritmo: el momento en que tu voz empieza cada nota, una subida de volumen o una nueva altura, mantenida en la nota 150 ms; vale 100 menos 0,6 × los milisegundos de adelanto o retraso, y una voz que ya sonaba o que entra pasado el 40 % de la nota vale 0. En promedio sobre todas las notas: una nota que no cantaste vale 0. Se resta el retardo de tu micrófono. Dinámica: la diferencia entre tus momentos más fuertes y más suaves como parte del más fuerte, × 1,5, como máximo 100. Afinación y ritmo juntos: la media de los dos.",
     aiduet_start_btn:"Cantar con el coro",
     aiduet_after_tpl:"Cantaste {part} con el coro.",
     aiduet_rehearse_link:"Ensayar {part} en {cw}",
@@ -13917,7 +13917,7 @@ const TRANSLATIONS = {
     pd_start_btn:"Performansa başla",
     pd_dim_combined:"Perde ve zamanlama birlikte",
     pd_insight_tpl:"Sırada {dim} var: bugünkü en düşük puanınız ({n}).",
-    pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesinizin her notaya başladığı an, ses düzeyinde bir yükselme ya da yeni bir perde, notada 150 ms tutulmuş; 100 eksi 0,6 × kaç milisaniye erken ya da geç olduğu ile puanlanır, zaten sürmekte olan ya da notanın %40'ından sonra gelen ses 0 alır. Söylenen notaların ortalamasıdır, mikrofonunuzun gecikmesi çıkarılır. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
+    pd_measure:"Şarkının her akoru Lead hattının bir notasıdır. Perde: söylediğiniz her nota için 100 eksi 0,6 × sent cinsinden ortalama uzaklığınız (doğal vibrato çıkarılır), söylenen notaların ortalaması; perde puanınız olarak kaydedilir. Zamanlama: sesinizin her notaya başladığı an, ses düzeyinde bir yükselme ya da yeni bir perde, notada 150 ms tutulmuş; 100 eksi 0,6 × kaç milisaniye erken ya da geç olduğu ile puanlanır, zaten sürmekte olan ya da notanın %40'ından sonra gelen ses 0 alır. Tüm notaların ortalamasıdır, yani söylemediğiniz nota 0 alır; mikrofonunuzun gecikmesi çıkarılır. Dinamikler: en yüksek ve en alçak anlarınız arasındaki fark, en yüksek olanın payı olarak, × 1,5, en fazla 100. Perde ve zamanlama birlikte: ikisinin ortalaması.",
     aiduet_start_btn:"Koroyla söyle",
     aiduet_after_tpl:"Koroyla {part} partisini söylediniz.",
     aiduet_rehearse_link:"{part} partisini {cw} içinde çalışın",
@@ -16333,12 +16333,12 @@ function karaokeStop(){ karaokeReset(); }
 function finishKaraoke(){
   finalizeKaraokeNote(karaokeCurrentIdx);
   karaokeReset();
-  const kTim = onsetTimings(karaokeOnset, SONG.parts.Lead.notes.length);
+  const kTim = karaokeLastTim = onsetTimings(karaokeOnset, SONG.parts.Lead.notes.length);
   karaokeResults.forEach((r,i)=>{ if(r){ r.timingScore = kTim[i].score; r.offsetMs = kTim[i].offsetMs; } });
 
   const heardResults = karaokeResults.filter(r=>r && r.heard);
   const avgPitch = heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.pitchAcc,0)/heardResults.length) : 0;
-  const avgTiming = karaokeResults.filter(r=>r).length ? Math.round(karaokeResults.filter(r=>r).reduce((a,b)=>a+b.timingScore,0)/karaokeResults.filter(r=>r).length) : 0;
+  const avgTiming = karaokeTimingAvg(kTim); // B4: every note of the song, a note not heard is 0
 
   document.getElementById('karaokeResult').style.display='grid';
   document.getElementById('karaokePitchVal').textContent = avgPitch+'%';
@@ -16360,6 +16360,9 @@ function finishKaraoke(){
   renderKaraokeMissionObjectives();
   registerExerciseCompletion();
 }
+// Timing over every note of the song (B4): a note not heard, or not reached, is 0
+function karaokeTimingAvg(tim){ return Math.round(tim.reduce((a,b)=>a+b.score,0)/tim.length); }
+let karaokeLastTim = [];
 function renderKaraokeMissionObjectives(){
   const card = document.getElementById('karaokeMissionCard');
   const rowsEl = document.getElementById('karaokeMissionRows');
@@ -16378,7 +16381,7 @@ function renderKaraokeMissionObjectives(){
   const lastResult = karaokeResults[karaokeResults.length-1];
   const allHeard = karaokeResults.length>0 && karaokeResults.every(r=>r && r.heard);
   const heardAll = karaokeResults.filter(r=>r);
-  const overallAvgTiming = heardAll.length ? Math.round(heardAll.reduce((a,b)=>a+b.timingScore,0)/heardAll.length) : 0;
+  const overallAvgTiming = karaokeLastTim.length ? karaokeTimingAvg(karaokeLastTim) : 0; // as the result's Timing
   const overallAvgPitchAll = heardAll.filter(r=>r.heard).length ? Math.round(heardAll.filter(r=>r.heard).reduce((a,b)=>a+b.pitchAcc,0)/heardAll.filter(r=>r.heard).length) : 0;
 
   const core = [
@@ -26021,7 +26024,8 @@ function finishPd(){
   pdResults.forEach((r,i)=>{ if(r){ r.timingScore = tim[i].score; r.offsetMs = tim[i].offsetMs; } });
   const heard = pdResults.filter(r=>r && r.heard);
   const avgPitch = heard.length ? Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length) : 0;
-  const avgTiming = heard.length ? Math.round(heard.reduce((a,b)=>a+b.timingScore,0)/heard.length) : 0;
+  // B4 (scoring batch item 4): every note counts, a note you didn't sing is 0, as in Karaoke (it was the notes heard)
+  const avgTiming = Math.round(tim.reduce((a,b)=>a+b.score,0)/tim.length);
   const technique = Math.round((avgPitch+avgTiming)/2);
 
   let dynamics = 0;
