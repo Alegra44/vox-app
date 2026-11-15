@@ -14,6 +14,7 @@ STEPS=(
   "pd-onsets-nolanes|20|node scripts/scoring-verify/survey.js --tools pd --stims ontime,late150 --runs 2 --stub-lanes --out $OUT/pd-onsets-nolanes.json"
   "vocalset|120|bash scripts/scoring-verify/vocalset.sh $OUT"
   "latency-rig|10|node scripts/scoring-verify/latency.js --rig 0,120,250 --runs 2"
+  "device|30|node scripts/scoring-verify/device.js --out $OUT/device.json"
   "allowlist|3|node scripts/backend-verify/allowlist.js"
   "survey-master|50|node scripts/scoring-verify/survey.js --ref master --runs 2 --out $OUT/survey-master.json"
   "survey-branch|50|node scripts/scoring-verify/survey.js --runs 2 --out $OUT/survey-branch.json"
@@ -29,6 +30,7 @@ STEPS=(
   "targets|15|node scripts/design-verify/targets.js"
   "bootcheck|3|node scripts/design-verify/bootcheck.js"
   "youstates|4|node scripts/design-verify/youstates.js"
+  "erasecheck|4|node scripts/backend-verify/erasecheck.js"
   "shotsB|40|node scripts/scoring-verify/shotsB.js --out $OUT/shots"
 )
 want=" $* "

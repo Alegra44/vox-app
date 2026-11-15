@@ -194,3 +194,137 @@ WHEN EVERYTHING PASSES
 REPORT, then stop.
 
 (Added with the message: "after completed "deploy" directly okay": if B7 and B8 pass, go on to the deploy steps without waiting for "deploy".)
+
+## Release B review: what B7 and B8 found
+
+### PD on loudlate, 1 of 8 (accepted)
+
+Performance Director plays no backing, so it has no chord-start filter: a filter there would filter against a backing
+that doesn't exist. The survey's loud room leaks the backing into every tool, PD included, and its first chord's start
+reads as an onset on note 1. On a real device PD's mic hears no backing of the app's.
+
+### B7: the ~20 ms left after calibration
+
+**Where it came from: mostly the rig, and 5–10 ms of detector.** The screenshots (shotsB) and the survey sing through
+synthmic.js: the "singer" is a second AudioContext whose MediaStream reaches the app's mic about 20 ms late (the hop
+measured in B3). On those pages the stored speaker delay is the rig's 0 ms, so that hop is never subtracted; on a real
+device the singer's voice and the click take the same path into the mic, and the click round trip covers it.
+
+To see what's left, device.js models a real device inside the app's own AudioContext, with no hop: the app's output
+goes through a known output delay (a DelayNode: the speaker) into a room (−30 dB, a −60 dBFS noise floor), and through a
+known input delay (the mic) to the app; the device reports its latencies honestly. The singer is a source in the room
+that starts each note exactly when its beat reaches the room (PD: when the song's time reaches it, PD plays nothing).
+On that rig, with the app as it was, an on-time singer read:
+
+| Tool | On time | 150 ms late |
+|---|---|---|
+| Rhythm | +10 (click leak at −20 dB) / +6 | +4 / +8 |
+| Entrance & Cutoff | +4 to +6 | +4 to +6 |
+| Karaoke | +2 or +10 (per note) | +1 to +25 |
+| Performance Director | +12 (notes 2–8), +0 to +4 | +0 to +12 |
+| Harmony Arena | +2 to +3 | +9 (note 1 +30) |
+
+Not one constant: three faults in the detector, each now fixed in the shared onset code.
+
+1. **A pitch onset wasn't back-dated.** When a voice starts from silence, the pitch tracker often finds it a frame
+   before the level has risen 9 dB, and that pitch onset was stamped at the frame's time, ~10 ms after the edge (the
+   per-note +2 or +10). Now a pitch onset whose level rose is placed at the level edge, as a level onset is; a legato
+   change of note (the voice sounding throughout, no edge) has the pitch tracker's lag taken off: **ONSET_PITCH_LAG_MS
+   = 30**, measured on the device rig (`--legato`: 20–38 ms over 24 changes in Karaoke, PD and Harmony Arena).
+2. **Rhythm and Entrance & Cutoff placed an edge at the voicing threshold (0.02 rms)**: 4–8 ms into a 40 ms attack, later
+   for a quieter singer, so a constant can't correct it. Every tool now places an edge by one shared rule
+   (`onsetEdgeThr`: 4.5 dB over the floor before the voice, at least 0.01).
+3. **A pitch onset held off the next onset for 150 ms.** Where a backing chord holds the Lead's note, the backing's leak
+   gives a quiet pitch onset just after the chord start; it is dropped at the end (not above the room), but it had
+   already held off the singer's onset just after it (Karaoke, 150 ms late, +20–25). Now only a level onset holds off.
+   With a legato singer no frame shows the room, so a pitch onset is also dropped when it is more than
+   ONSET_PITCH_UNDER_DB (15 dB) under the singer's own level (the take's 90th-percentile frame).
+
+The ~2–3 ms left is where a 40 ms attack crosses the edge threshold: when the voice becomes audible over the room, which
+is what "the note's start" means here.
+
+**The device rig after the fixes** (device.js, the checksB `device` step, run checksB-2026-11-15T20-12-53: two
+devices, output/input 40/25 ms and 150/40 ms; the sheet measures each round trip exactly, 65 and 190 ms). Mean error
+per take, ms (reading − where the singer actually started), 8 of 8 notes heard in every take. **DEVICE: PASS, 22 of 22.**
+
+| Tool | 40/25 on time | 40/25 150 late | 150/40 on time | 150/40 150 late |
+|---|---|---|---|---|
+| Rhythm | +3.0 | +2.0 | +2.0 | +1.0 |
+| Entrance & Cutoff | +2.6 | −0.3 | +2.5 | +0.8 |
+| Karaoke | +2.3 | +1.4 | +2.5 | +1.9 |
+| Performance Director | +2.4 | +2.0 | +1.8 | +2.3 |
+| Harmony Arena | +1.9 | +2.0 | +2.0 | +3.0 |
+
+Single notes: −4 to +4 ms. (PD's first note is scheduled 14 ms late by the rig, since its start time had already
+passed; its reading, 16, is compared with that.)
+
+For the record (not gates): at a −20 dB room (the app's own sound as loud at the mic as a singer's attack; a mic with
+echo cancellation, as the app's, takes most of it out) Rhythm, PD and Harmony Arena still read 0 ± 5 and 150 ± 5, and
+every tool reads 0 ± 5 on time, but two late cases don't: Entrance & Cutoff takes the choir's own sound for the late
+singer's entrance (~30 ms), and Karaoke's late singer reads +15 (the backing raises the floor the edge is placed from).
+Legato (`--legato`): the mean of each take within ±5 except Harmony Arena 150 ms late on 40/25 (+5.2); single changes
+−9 to +9 ms (the frame interval).
+
+### B8: "Erase my progress" keeps the scores
+
+PATCH /me/progress merges, and the erase saved only the range, streak, session count, last practice date and history,
+so every score list, every best and the Choir World record survived, and came back with the save's reply. Now
+PROGRESS_ERASED names every column the text covers, each at its default: the range; the streak; the session count, its
+dates, today's count and the session snapshot; every score list (pitch, agility, breath, expression, note attempts,
+One Take, daily metrics, weekly log, breakthroughs); every best (song bests, glider, bridge, harmony, rift, breath,
+bridge seconds, boss wins and the last boss weakness); Choir World's readiness (its runs are scores and history); the
+history, timeline and daily weighting. Kept, not named: XP and level, the Journey's days, the achievements already
+shown, the "tried"/"used" flags, the warm-up count, and the vocal-load sessions (their own table).
+
+Also found: a save already in flight when you erase (the page's own, sent a few ms before) could land after the erase
+and its reply merged the old row back (1 of the first 2 runs). The erase now waits for any save in flight first.
+
+erasecheck.js: an account seeded with every one of those columns, erased, reloaded: every column at its default on the
+server and in the page (what the app rebuilds on load, empty: today's session snapshot with no skill, Choir World's
+empty lists, an even plan weighting), XP kept, the Skill Profile empty and Home's focus "No score yet". Expression's
+list is checked once 0009 is on the backend (production, after the deploy).
+
+### The survey after B7 (proposed numbers, updated)
+
+survey.js on the branch, 2 runs (checksB-2026-11-15T20-12-53 `survey-branch`). A cell is the median, with both runs in
+brackets when they differ. "Survey" is the number the survey proposed (SCORING_SURVEY.md, measured on the scratch
+build); "B" is this branch now. The survey's rig still carries its own ~20 ms MediaStream hop, which no stored speaker
+delay subtracts there (0 ms on the rig). At 0.6 points per ms that is ~12 points, so on time reads ~88, not 100. On a
+real device the click's round trip covers that path (the device rig above: 0 ± 3 ms).
+
+| Stimulus | PD Timing, survey | PD Timing, B | Karaoke Timing, survey | Karaoke Timing, B |
+|---|---|---|---|---|
+| steady | 0 | 0 | 0 | 0 |
+| ontime | 83.5 (83/84) | 86.5 (86/87) | 96 | 89 (88/90) |
+| late150 | 0 | 0 | 6.5 (7/6) | 0 |
+| silence | 0 | 0 | 0 | 0 |
+| loud | 87 | 84.5 (84/85) | 90.5 (90/91) | 87.5 (86/89) |
+| dynamic | 81.5 (82/81) | 82.5 (83/82) | 92.5 (92/93) | 86 |
+| skips (every note) | 65.5 (65/66) | 64 | 70 (69/71) | 66 (67/65) |
+| loudlate | 16.5 (17/16) | 6.5 (7/6) | 2.5 (3/2) | 0 |
+
+| Stimulus | PD Dynamics, survey | PD Dynamics, B | Expression, survey | Expression, B |
+|---|---|---|---|---|
+| steady, ontime, late150, loud, skips, loudlate | 0 | 0 | 0 | 0 |
+| silence | — | — | — | — |
+| dynamic | 91 | 91.5 (92/91) | 90 | 90 |
+
+- **PD and Karaoke now read the same on time** (86.5 and 89, within the run-to-run spread). Both read the rig's hop
+  and nothing else. Before B7, PD read 83.5 against Karaoke's ~86.5, which was the pitch-onset fault (fix 1).
+- **Karaoke's survey 96 was too high.** The scratch build stamped Karaoke's frames ~11 ms early (B3), which cancelled
+  most of the hop.
+- **late150:** 0 in both tools. 150 ms late plus the hop is ~170 ms, past the formula's zero (166.7 ms).
+- **loudlate:** PD 1 of 8 notes takes the backing leak for an onset (accepted, above); its score is 6.5 against the
+  survey's 16.5 (3 of 8 then).
+
+### Checks after B7 and B8 (checksB-2026-11-15T20-12-53)
+
+latency-rig, device, allowlist, survey-branch, scores, hooks, bootcheck, youstates and erasecheck all PASS. scores4b and
+scores6 "fail" their master-versus-branch gate only where B changes scores, as expected:
+- **scores:** no differences.
+- **scores4b:** Rhythm only. onbeat 82 → 91 and late60 48 → 55 (the audio clock, B2, and now the shared edge rule).
+  Emotion Mode's stability 77/87 is the same swing master shows.
+- **scores6:** Performance Director, Karaoke and Emotional Singing only (held tone: Timing and Expression 0; legato
+  Lead: the notes that change pitch near on time, the repeated C5s 0). After B7 the legato notes read higher than in B
+  before B7 (PD 74 → 86–92 per note, Karaoke 65–78 → 83–92): the legato lag is taken off. Stay in Key is unchanged.
+- **erasecheck:** 6 of 6. Expression's list will be checked on production once 0009 is applied.
