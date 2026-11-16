@@ -1,6 +1,6 @@
 # Release C: report (2026-11-17, overnight)
 
-**Status: built and checked on the local Supabase stack, not deployed. Waiting for the user's review and a typed "deploy".**
+**Status: built and checked on the local Supabase stack, not deployed; ready for the user's review and a typed "deploy".** No failure is caused by release C (see the table).
 
 ## What changed
 See DAY.md. In short:
@@ -26,7 +26,7 @@ See DAY.md. In short:
 | home, youstates, warmup-entries, warmup-tracking, hooks, bootcheck | PASS |
 | batch1 | 111/112: Karaoke's held-tone timing 34 vs 40 ms between two takes. This is release B's known onset noise; C doesn't touch timing. |
 | house | 1050/1051: "reduced motion: up within 700 ms of the stop" took 733 ms. Timing noise; C doesn't touch the house lights. Not rerun. |
-| pilot | 28/31: the page-leave keepalive save didn't reach the local server (the other two failures follow from it). **Not yet settled:** it may come from the test harness's request interception during unload rather than from C. The comparison run on master's build was prepared (worktree `../voxcoach-pilotmaster`) but **not run**: the usage limit came first. Run it before deploying. |
+| pilot | 28/31: the page-leave keepalive save doesn't reach the local server, and two failures follow from it. **Master's build fails the same three checks the same way on the local stack** (run 2026-11-17 02:35 from `../voxcoach-pilotmaster`: release C's scripts, master's `deploy/`). So it comes from the local-stack test setup (a keepalive request sent as the page unloads isn't routed to the local stack), not from release C. On production, pilot passed with release B. |
 
 ## Harness fixes made along the way
 - **`scripts/localBackend.js`:** routes the app's production requests to the local stack. The production host resolves
