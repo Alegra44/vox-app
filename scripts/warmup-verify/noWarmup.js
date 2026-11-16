@@ -13,18 +13,11 @@
 // is left alone from then on (to show the warm-up on purpose).
 const pw = require('playwright');
 
+const { SD_RIG } = require('./sdRig');
+
 const SKIP = () => {
   window.__wuAutoSkips = 0;
   const tick = () => {
-    try {
-      if (!window.__sdWrapped && typeof sdGate === 'function' && typeof sdSave === 'function' && typeof sdOutputKey === 'function') {
-        window.__sdWrapped = true; const orig = sdGate;
-        sdGate = async function () {
-          if (!window.__sdAllow) { const k = await sdOutputKey(); if (!sdAll()[k]) sdSave(k, { ms: 0, how: 'measured', heard: 10, rig: true, at: Date.now() }); }
-          return orig.apply(this, arguments);
-        };
-      }
-    } catch (e) {}
     try {
       if (window.__wuAllow) return; // a script showing the warm-up on purpose (phase 9's shots9.js, states9.js) sets this
       if (typeof wuKey !== 'function') return;
@@ -43,10 +36,10 @@ if (!pw.chromium.__noWarmup) {
   pw.chromium.launch = async (...args) => {
     const b = await launch(...args);
     const newContext = b.newContext.bind(b);
-    b.newContext = async (...o) => { const c = await newContext(...o); await c.addInitScript(SKIP); return c; };
+    b.newContext = async (...o) => { const c = await newContext(...o); await c.addInitScript(SD_RIG); await c.addInitScript(SKIP); return c; };
     b.newPage = async (...o) => { const c = await b.newContext(...o); const p = await c.newPage(); p.on('close', () => c.close().catch(() => {})); return p; };
     return b;
   };
   pw.chromium.__noWarmup = true;
 }
-module.exports = { SKIP };
+module.exports = { SKIP, SD_RIG };

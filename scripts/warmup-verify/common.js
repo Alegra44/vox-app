@@ -6,6 +6,7 @@ const { TESTDATA } = require('../testdata'); // test data outside $TMPDIR (scrip
 const { execFileSync } = require('child_process');
 const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db } = require('../choir-verify/testAccounts');
+const { SD_RIG } = require('./sdRig');
 
 const URL_ = process.argv[2] && /^https?:/.test(process.argv[2]) ? process.argv[2] : null;
 const LOCAL = 'http://localhost:8765/', DEPLOY = process.env.WU_DEPLOY || path.resolve(__dirname, '../../deploy');
@@ -40,6 +41,7 @@ async function openPage(b, { signedIn = true, viewport = { width: 1280, height: 
     r.fulfill({ path: p === 'index.html' && html ? html : path.join(DEPLOY, p), contentType: p.endsWith('.js') ? 'text/javascript' : 'text/html' });
   });
   await ctx.addInitScript(INIT);
+  await ctx.addInitScript(SD_RIG); // the speaker-delay sheet stays out of the way (noWarmup.js, 3); the warm-up doesn't
   const page = await ctx.newPage(), errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   let resp;
