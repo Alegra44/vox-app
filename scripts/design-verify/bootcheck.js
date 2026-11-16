@@ -29,8 +29,8 @@ const OLD_STUDIO = [{ base64: 'data:audio/webm;base64,AAAA', mimeType: 'audio/we
     console.log(`== bootcheck · ${C.REMOTE || arg('--base') || 'working copy'}`);
     const { ctx: c0, page: p0 } = await C.openPage(b, { dir }); await C.signUp(p0, 'dvboot', 'Boot Check');
     const uid = await p0.evaluate(async () => (await sb.auth.getSession()).data.session.user.id);
+    const day = await p0.evaluate(() => todayStr()); // the app's day (the device's local date from release C)
     const signedIn = await c0.storageState(); await c0.close();
-    const day = new Date().toISOString().slice(0, 10); // todayStr(): the app's UTC day
     const CASES = [
       { name: 'nothing stored (signed out)' },
       { name: 'a Your Choir take stored', ls: { yourChoirTakes: JSON.stringify(YC_TAKE) } },

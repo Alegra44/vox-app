@@ -32,7 +32,7 @@ STEPS=(
   "home|20|node scripts/design-verify/home.js"
   "youstates|4|node scripts/design-verify/youstates.js"
   "warmup-entries|17|node scripts/warmup-verify/entries.js"
-  "warmup-tracking|3|node scripts/warmup-verify/tracking.js"
+  "warmup-tracking|8|node scripts/warmup-verify/tracking.js"
   "house|94|node scripts/design-verify/house.js"
   "hooks|3|node scripts/design-verify/hooks.js --base master"
   "bootcheck|3|node scripts/design-verify/bootcheck.js"

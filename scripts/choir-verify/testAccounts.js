@@ -43,6 +43,8 @@ function db(sql) {
   for (let i = 0, timeouts = 0; ; i++) {
     try {
       const out = query(sql);
+      // --local prints a statement without rows as its tag ("UPDATE 1"); --linked prints {"rows": []}
+      if (LOCAL_DB && out.indexOf('{') < 0) return [];
       return JSON.parse(out.slice(out.indexOf('{'))).rows;
     } catch (e) {
       if (e.code === 'ETIMEDOUT' || e.signal === 'SIGKILL') {
