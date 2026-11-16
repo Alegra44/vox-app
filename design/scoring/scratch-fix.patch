@@ -1,0 +1,221 @@
+diff --git a/deploy/index.html b/deploy/index.html
+index c9210ef..f177249 100644
+--- a/deploy/index.html
++++ b/deploy/index.html
+@@ -15882,6 +15882,7 @@ async function startEmotionalSinging(){
+   emotionStartTime = performance.now();
+   emotionCentsSamples = [];
+   emotionRmsSamples = [];
++  emotionFrames = [];
+   document.getElementById('emotionResult').style.display='none';
+   document.getElementById('emotionFeedback').textContent = '';
+   document.getElementById('emotionStartLabel').textContent = t('action_stop');
+@@ -15889,6 +15890,7 @@ async function startEmotionalSinging(){
+   emotionLoop();
+   singingSession(()=>emotionActive, document.getElementById('emotionStage'));
+ }
++let emotionFrames = [];
+ function emotionLoop(){
+   if(!emotionActive) return;
+   const elapsed = performance.now()-emotionStartTime;
+@@ -15902,6 +15904,7 @@ function emotionLoop(){
+   analyser.getFloatTimeDomainData(dataArray);
+   const rms = computeRMS(readRawMic());
+   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
++  emotionFrames.push({t:elapsed, idx, rms, freq});
+   if(freq>0){
+     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
+     if(cents!==null && Math.abs(cents)<300) emotionCentsSamples.push({t:elapsed, c:cents, idx});
+@@ -15935,15 +15938,7 @@ function finishEmotionalSinging(){
+     const avgAbs = abs.reduce((a,b)=>a+b,0)/abs.length;
+     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
+   }
+-  if(emotionRmsSamples.length>10){
+-    const voiced = emotionRmsSamples.filter(r=>r>0.012);
+-    if(voiced.length>10){
+-      const mean = voiced.reduce((a,b)=>a+b,0)/voiced.length;
+-      const variance = voiced.reduce((a,b)=>a+(b-mean)*(b-mean),0)/voiced.length;
+-      const cov = Math.sqrt(variance)/mean; // coefficient of variation
+-      expressionScore = Math.max(0, Math.min(100, Math.round(cov*250)));
+-    }
+-  }
++  { const shape = levelShape(emotionFrames); window.__emotionShape = shape; expressionScore = shape.score; }
+ 
+   document.getElementById('emotionResult').style.display='grid';
+   document.getElementById('emotionPitchVal').textContent = pitchAcc!==null ? pitchAcc+'%' : '—';
+@@ -16094,6 +16089,7 @@ let karaokeCurrentIdx = -1;
+ let karaokeCentsBuf = [];
+ let karaokeFirstVoicedOffset = null;
+ let karaokeResults = [];
++let karaokeOnset = null;
+ 
+ async function startKaraoke(){
+   if(!requireProFeature('Karaoke Coach')) return;
+@@ -16109,6 +16105,7 @@ async function startKaraoke(){
+   karaokeCentsBuf = [];
+   karaokeFirstVoicedOffset = null;
+   karaokeResults = [];
++  karaokeOnset = makeOnsetTracker();
+   document.getElementById('karaokeLiveLine').innerHTML = '';
+   document.getElementById('karaokeResult').style.display='none';
+   document.getElementById('karaokeMissionCard').style.display='none';
+@@ -16122,7 +16119,7 @@ function finalizeKaraokeNote(idx){
+   const chordDurMs = songChordDurMs();
+   let pitchAcc = 0;
+   if(karaokeCentsBuf.length>0){
+-    const avgAbs = vibratoTolerantCents(karaokeCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/karaokeCentsBuf.length;
++    const vt = vibratoTolerantCents(karaokeCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // item 3
+     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
+   }
+   let timingScore = 0;
+@@ -16154,6 +16151,7 @@ function karaokeLoop(){
+ 
+   analyser.getFloatTimeDomainData(dataArray);
+   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
++  karaokeOnset.push(elapsedMs, readRawMic(), freq, SONG.parts.Lead.notes[idx]);
+   const cursor = document.getElementById('karaokeLiveCursor');
+   if(freq>0){
+     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
+@@ -16188,6 +16186,8 @@ function karaokeStop(){ karaokeReset(); }
+ function finishKaraoke(){
+   finalizeKaraokeNote(karaokeCurrentIdx);
+   karaokeReset();
++  const kTim = onsetTimings(karaokeOnset.onsets, SONG.parts.Lead.notes.length, songChordDurMs());
++  karaokeResults.forEach((r,i)=>{ if(r){ r.timingScore = kTim[i].score; r.offsetMs = kTim[i].offsetMs; } });
+ 
+   const heardResults = karaokeResults.filter(r=>r && r.heard);
+   const avgPitch = heardResults.length ? Math.round(heardResults.reduce((a,b)=>a+b.pitchAcc,0)/heardResults.length) : 0;
+@@ -25449,6 +25449,74 @@ document.getElementById('emoRetryBtn')?.addEventListener('click', ()=>{
+   document.getElementById('emoPreCard').style.display = 'block';
+ });
+ 
++
++/* ---------------- Scoring batch (scratch, never merged): onsets and level shape ---------------- */
++// A note's timing comes from an onset heard in its window, not from a voice being present. An onset is a rise of
++// ONSET_RISE_DB within ONSET_LOOKBACK_MS to above the voicing threshold (an entrance, or a re-articulation), or a pitch
++// arriving on the note (within 100 ct, none in the last ONSET_PITCH_AWAY_MS: a legato change of note); either is kept
++// only if the next 150 ms hold 3 frames on the note (±300 ct), so a click or a noise burst isn't one. The first onset
++// in [start − ONSET_EARLY_MS, start + 40 % of the note] is the note's; timing = timingAccuracy(onset − start), the
++// Rhythm and Entrance trainers' formula. No onset: 0.
++const ONSET_RISE_DB = 9, ONSET_LOOKBACK_MS = 120, ONSET_GAP_MS = 150, ONSET_PITCH_AWAY_MS = 150, ONSET_EARLY_MS = 150;
++function edgeAgoAbove(buf, sampleRate, thr){
++  const HOP = 64, hops = Math.floor(buf.length/HOP);
++  const loud = k=>{ let s=0; for(let i=k*HOP;i<(k+1)*HOP;i++) s+=buf[i]*buf[i]; return Math.sqrt(s/HOP) > thr; };
++  let k = hops-1; while(k>=0 && loud(k)) k--;
++  return (buf.length - (k+1)*HOP)/sampleRate;
++}
++function makeOnsetTracker(){
++  const hist = [], onsets = []; let lastOnset = -Infinity, lastNear = -Infinity, cand = null;
++  function push(t, raw, freq, target){
++    const rms = computeRMS(raw), db = 20*Math.log10(Math.max(rms, 1e-7));
++    hist.push({t, db}); while(hist.length && t-hist[0].t > ONSET_LOOKBACK_MS) hist.shift();
++    let minDb = Infinity; for(const x of hist) if(x.db<minDb) minDb = x.db;
++    const cents = freq>0 ? centsFromTarget(freq, target) : null;
++    const near = cents!==null && Math.abs(cents)<100, onNote = cents!==null && Math.abs(cents)<300;
++    if(!cand && t-lastOnset >= ONSET_GAP_MS){
++      if(rms>ONSET_RMS_THRESHOLD && db-minDb >= ONSET_RISE_DB){
++        const thr = Math.max(ONSET_RMS_THRESHOLD*0.5, Math.pow(10, (minDb+ONSET_RISE_DB/2)/20));
++        cand = {t: t - edgeAgoAbove(raw, audioCtx.sampleRate, thr)*1000, on:0, kind:'level'};
++      } else if(near && t-lastNear > ONSET_PITCH_AWAY_MS){ cand = {t, on:0, kind:'pitch'}; }
++    }
++    if(near) lastNear = t;
++    if(cand){
++      if(onNote) cand.on++;
++      if(cand.on>=3){ onsets.push(cand.t); lastOnset = cand.t; cand = null; }
++      else if(t-cand.t > 150) cand = null;
++    }
++  }
++  return {push, onsets};
++}
++function onsetTimings(onsets, n, D){
++  return Array.from({length:n}, (_,j)=>{
++    const s = j*D, o = onsets.find(x=>x>=s-ONSET_EARLY_MS && x<=s+D*0.4);
++    return o===undefined ? {offsetMs:null, score:0} : {offsetMs:Math.round(o-s), score:timingAccuracy(o-s)};
++  });
++}
++// Dynamics (Performance Director) and Expression (Emotional Singing): how much the sung level moves from note to note.
++// Per note, the frames of the voice (pitched, within 15 dB of the note's peak); the onset ramp (its first 150 ms) and
++// the release (its last 100 ms) left out; the room (the median power of the note's other frames) taken off the power;
++// the note's level = the median of what's left, in dB. Score from the spread of the note levels (sd, dB): a steady
++// level (sd ≤ 1 dB, a real held note's own wander) 0, a 4 dB sd (about a 12 dB phrase) 100. Under 3 notes: none.
++function levelShape(frames){
++  const byNote = {}; frames.forEach(f=>{ (byNote[f.idx] = byNote[f.idx] || []).push(f); });
++  const levels = [];
++  for(const k of Object.keys(byNote).sort((a,b)=>a-b)){
++    const fs = byNote[k], r = fs.map(f=>f.rms).sort((a,b)=>a-b), peak = r[Math.floor(r.length*0.95)] || 0;
++    if(peak<=0.012) continue;
++    const isV = f=>f.freq>0 && f.rms>=Math.max(0.012, peak*0.18);
++    const v = fs.filter(isV); if(v.length<8) continue;
++    const a = v[0].t+150, b = v[v.length-1].t-100, sus = v.filter(f=>f.t>=a && f.t<=b);
++    if(sus.length<8) continue;
++    const other = fs.filter(f=>!isV(f)).map(f=>f.rms*f.rms).sort((x,y)=>x-y), room = other.length>=5 ? other[other.length>>1] : 0;
++    const p = sus.map(f=>f.rms*f.rms).sort((x,y)=>x-y), med = p[p.length>>1];
++    levels.push(+(10*Math.log10(Math.max(med-room, med*0.1))).toFixed(2));
++  }
++  if(levels.length<3) return {score:null, levels, sd:null};
++  const m = levels.reduce((a,b)=>a+b,0)/levels.length, sd = Math.sqrt(levels.reduce((a,b)=>a+(b-m)*(b-m),0)/levels.length);
++  return {score: Math.max(0, Math.min(100, Math.round((2*sd-2)/6*100))), levels, sd:+sd.toFixed(2)};
++}
++
+ /* ---------------- Performance Director (real section-aware coaching + real multi-dimension report) ---------------- */
+ const PERFORMANCE_DIRECTOR_CUES = {
+   get verse(){return t('pd_cue_verse');}, // by section id (B5: keyed by English names, the cues showed in English only, and not for Pre-chorus)
+@@ -25464,6 +25532,7 @@ let pdFirstVoicedOffset = null;
+ let pdResults = [];
+ let pdRmsSamples = [];
+ let pdCurrentSectionName = null;
++let pdOnset = null, pdFrames = [];
+ 
+ function renderPdBriefing(){
+   const wrap = document.getElementById('pdBriefingRows');
+@@ -25489,6 +25558,7 @@ document.getElementById('pdStartBtn')?.addEventListener('click', async ()=>{
+   pdFirstVoicedOffset = null;
+   pdResults = [];
+   pdRmsSamples = [];
++  pdOnset = makeOnsetTracker(); pdFrames = [];
+   pdCurrentSectionName = null;
+   cwLanePart = 'Lead'; cwVoiceReset();
+   document.getElementById('pdBriefingCard').style.display='none';
+@@ -25505,7 +25575,7 @@ function pdFinalizeNote(idx){
+   const chordDurMs = songChordDurMs();
+   let pitchAcc = 0;
+   if(pdCentsBuf.length>0){
+-    const avgAbs = vibratoTolerantCents(pdCentsBuf).reduce((a,b)=>a+Math.abs(b),0)/pdCentsBuf.length;
++    const vt = vibratoTolerantCents(pdCentsBuf), avgAbs = vt.reduce((a,b)=>a+Math.abs(b),0)/vt.length; // item 3: divided by its own count
+     pitchAcc = Math.max(0, Math.round(100-avgAbs*0.6));
+   }
+   let timingScore = 0;
+@@ -25541,9 +25611,10 @@ function pdLoop(){
+   document.getElementById('pdProgressFill').style.width = Math.min(100,(elapsedMs/totalMs)*100)+'%';
+ 
+   analyser.getFloatTimeDomainData(dataArray);
+-  const rms = computeRMS(readRawMic());
++  const raw = readRawMic(), rms = computeRMS(raw);
+   if(rms>0.008) pdRmsSamples.push(rms);
+   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
++  pdOnset.push(elapsedMs, raw, freq, SONG.parts.Lead.notes[idx]); pdFrames.push({t:elapsedMs, idx, rms, freq});
+   if(freq>0){
+     if(pdFirstVoicedOffset===null){
+       const chordDurMs = songChordDurMs();
+@@ -25572,16 +25643,15 @@ function finishPd(){
+   document.getElementById('pdResultCard').style.display='block';
+   document.getElementById('pdBriefingCard').style.display='block'; // Start again, under the result
+ 
++  const nNotes = SONG.parts.Lead.notes.length, tim = onsetTimings(pdOnset.onsets, nNotes, songChordDurMs());
++  pdResults.forEach((r,i)=>{ if(r){ r.timingScore = tim[i].score; r.offsetMs = tim[i].offsetMs; } });
+   const heard = pdResults.filter(r=>r && r.heard);
+   const avgPitch = heard.length ? Math.round(heard.reduce((a,b)=>a+b.pitchAcc,0)/heard.length) : 0;
+-  const avgTiming = heard.length ? Math.round(heard.reduce((a,b)=>a+b.timingScore,0)/heard.length) : 0;
++  const avgTiming = Math.round(tim.reduce((a,b)=>a+b.score,0)/nNotes); // item 4: every note, a note not sung is 0
+   const technique = Math.round((avgPitch+avgTiming)/2);
+ 
+-  let dynamics = 0;
+-  if(pdRmsSamples.length>3){
+-    const maxR = Math.max(...pdRmsSamples), minR = Math.min(...pdRmsSamples);
+-    dynamics = Math.min(100, Math.round(((maxR-minR)/Math.max(0.001,maxR))*100*1.5));
+-  }
++  const shape = levelShape(pdFrames); window.__pdShape = shape;
++  const dynamics = shape.score===null ? 0 : shape.score;
+ 
+   // "Your performance": Pitch big (the score saved), then Timing, Dynamics, and Technique as "Pitch and timing together"
+   document.getElementById('pdPitchVal').textContent = avgPitch+'%';

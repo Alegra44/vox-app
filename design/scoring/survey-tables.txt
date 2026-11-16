@@ -1,0 +1,199 @@
+
+== pd
+-- Pitch
+   steady    0                  → 0
+   ontime    96.5 (96/97)       → 96
+   late150   96                 → 96
+   silence   0                  → 0
+   loud      96.5 (97/96)       → 96
+   dynamic   96                 → 96
+   skips     96                 → 96
+-- Timing (shown)
+   steady    100                → 0
+   ontime    100                → 83.5 (83/84)
+   late150   100                → 0
+   silence   0                  → 0
+   loud      100                → 87
+   dynamic   100                → 81.5 (82/81)
+   skips     100                → 65.5 (65/66)
+-- Timing, notes heard
+   steady    100                → 0
+   ontime    100                → 83.5 (83/84)
+   late150   100                → 0
+   silence   0                  → 0
+   loud      100                → 87
+   dynamic   100                → 81.5 (82/81)
+   skips     100                → 87.5 (87/88)
+-- Timing, every note
+   steady    100                → 0
+   ontime    100                → 83.5 (83/84)
+   late150   100                → 0
+   silence   0                  → 0
+   loud      100                → 87
+   dynamic   100                → 81.5 (82/81)
+   skips     75                 → 65.5 (65/66)
+-- Dynamics
+   steady    100                → 0
+   ontime    100                → 0
+   late150   100                → 0
+   silence   0                  → 0
+   loud      100                → 0
+   dynamic   100                → 91
+   skips     100                → 0
+-- Technique
+   steady    50                 → 0
+   ontime    98.5 (98/99)       → 90
+   late150   98                 → 48
+   silence   0                  → 0
+   loud      98.5 (99/98)       → 92
+   dynamic   98                 → 89
+   skips     98                 → 81
+-- notes heard
+   steady    6                  → 6
+   ontime    8                  → 8
+   late150   8                  → 8
+   silence   0                  → 0
+   loud      8                  → 8
+   dynamic   8                  → 8
+   skips     6                  → 6
+
+== karaoke
+-- Pitch
+   steady    0                  → 0
+   ontime    96.5 (97/96)       → 96
+   late150   96                 → 96
+   silence   0                  → 0
+   loud      96.5 (97/96)       → 96.5 (96/97)
+   dynamic   96                 → 96
+   skips     96                 → 96.5 (96/97)
+-- Timing (shown)
+   steady    100                → 0
+   ontime    100                → 96
+   late150   100                → 6.5 (7/6)
+   silence   0                  → 0
+   loud      100                → 90.5 (90/91)
+   dynamic   100                → 92.5 (92/93)
+   skips     75                 → 70 (69/71)
+-- Timing, notes heard
+   steady    100                → 0
+   ontime    100                → 96
+   late150   100                → 6.5 (7/6)
+   silence   0                  → 0
+   loud      100                → 90.5 (90/91)
+   dynamic   100                → 92.5 (92/93)
+   skips     100                → 93.5 (92/95)
+-- song best (pitch+timing)/2
+   steady    74.5 (50/99)       → 48 (0/96)
+   ontime    99                 → 96
+   late150   99                 → 96
+   silence   99                 → 96
+   loud      99                 → 96
+   dynamic   99                 → 96
+   skips     99                 → 96
+-- notes heard
+   steady    6                  → 6
+   ontime    8                  → 8
+   late150   8                  → 8
+   silence   0                  → 0
+   loud      8                  → 8
+   dynamic   8                  → 8
+   skips     6                  → 6
+
+== emotion
+-- Pitch
+   steady    0                  → 0
+   ontime    96                 → 96
+   late150   96                 → 96
+   silence   —                  → —
+   loud      96.5 (97/96)       → 96
+   dynamic   96                 → 96
+   skips     96                 → 96
+-- Expression
+   steady    51                 → 0
+   ontime    58.5 (58/59)       → 0
+   late150   58.5 (58/59)       → 0
+   silence   —                  → —
+   loud      83                 → 0
+   dynamic   100                → 90
+   skips     61                 → 0
+-- coach line
+   steady    moreneeded         → moreneeded
+   ontime    gooddynamics       → flatdynamics
+   late150   gooddynamics       → flatdynamics
+   silence   nosignal           → nosignal
+   loud      gooddynamics       → flatdynamics
+   dynamic   gooddynamics       → gooddynamics
+   skips     gooddynamics       → flatdynamics
+
+item 3: vibratoTolerantCents calls whose output count differs from its input count: master 0 of 352, scratch 0 of 352
+scratch pd steady    onset offsets (ms) per note: · · · · · · · · | · · · · · · · · · levels: sd 0.03 dB [-12.3 -12.3 -12.3 -12.3 -12.3 -12.3 -12.2 -12.3] | sd 0.02 dB [-12.3 -12.3 -12.3 -12.3 -12.3 -12.3 -12.2 -12.3]
+scratch pd ontime    onset offsets (ms) per note: 44 26 26 26 26 26 26 26 | 40 25 26 25 26 25 23 23 · levels: sd 0.21 dB [-12.3 -12.0 -12.3 -12.4 -12.3 -12.3 -12.8 -12.3] | sd 0.19 dB [-12.3 -11.9 -12.3 -12.3 -12.3 -12.3 -12.7 -12.3]
+scratch pd late150   onset offsets (ms) per note: 174 174 174 171 164 165 170 164 | 170 168 164 170 169 169 170 168 · levels: sd 0.16 dB [-12.3 -12.2 -12.3 -12.3 -12.3 -12.3 -12.8 -12.3] | sd 0.22 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.3 -12.9 -12.3]
+scratch pd silence   onset offsets (ms) per note: · · · · · · · · | · · · · · · · · · levels: sd null dB [] | sd null dB []
+scratch pd loud      onset offsets (ms) per note: 41 20 20 21 18 18 21 18 | 27 20 19 24 19 19 22 19 · levels: sd 0.25 dB [-12.3 -11.9 -12.3 -12.3 -12.3 -12.2 -12.9 -12.2] | sd 0.2 dB [-12.3 -11.9 -12.3 -12.3 -12.2 -12.3 -12.7 -12.2]
+scratch pd dynamic   onset offsets (ms) per note: 38 33 33 33 17 33 31 20 | 55 38 21 38 21 22 37 21 · levels: sd 3.73 dB [-24.3 -21.1 -18.3 -15.4 -12.3 -16.7 -20.6 -14.2] | sd 3.74 dB [-24.4 -21.1 -18.3 -15.4 -12.3 -16.7 -20.6 -14.2]
+scratch pd skips     onset offsets (ms) per note: 34 20 · 18 20 · 16 20 | 36 18 · 17 17 · 19 17 · levels: sd 0.22 dB [-12.3 -11.9 -12.3 -12.4 -12.7 -12.3] | sd 0.15 dB [-12.3 -12.0 -12.3 -12.3 -12.5 -12.3]
+scratch emotion steady    levels: sd 0.25 dB [-12.3 -12.3 -13.0 -12.3 -12.3 -12.3 -12.3 -12.3] | sd 0.21 dB [-12.3 -12.3 -12.9 -12.3 -12.3 -12.3 -12.3 -12.3]
+scratch emotion ontime    levels: sd 0.11 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.3 -12.4 -12.3] | sd 0.12 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.3 -12.3 -12.3]
+scratch emotion late150   levels: sd 0.12 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.4 -12.3 -12.3] | sd 0.11 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.3 -12.2 -12.3]
+scratch emotion silence   levels: sd null dB [] | sd null dB []
+scratch emotion loud      levels: sd 0.11 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.3 -12.3 -12.3] | sd 0.12 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.4 -12.3 -12.2]
+scratch emotion dynamic   levels: sd 3.7 dB [-24.3 -21.1 -18.3 -15.4 -12.3 -16.8 -20.3 -14.2] | sd 3.69 dB [-24.3 -21.2 -18.3 -15.4 -12.3 -16.8 -20.0 -14.2]
+scratch emotion skips     levels: sd 0.28 dB [-12.3 -12.8 -12.3 -12.3 -12.1 -11.9] | sd 0.29 dB [-12.3 -12.8 -12.3 -12.3 -12.2 -11.8]
+
+== master rerun (steady with the tone sounding before Start; loudlate) vs scratch loudlate
+
+== pd
+-- Pitch
+   steady    0                  → —
+   loudlate  96                 → 96
+-- Timing (shown)
+   steady    100                → —
+   loudlate  100                → 16.5 (17/16)
+-- Timing, notes heard
+   steady    100                → —
+   loudlate  100                → 16.5 (17/16)
+-- Timing, every note
+   steady    100                → —
+   loudlate  100                → 16.5 (17/16)
+-- Dynamics
+   steady    75                 → —
+   loudlate  100                → 0
+-- Technique
+   steady    50                 → —
+   loudlate  98                 → 56.5 (57/56)
+-- notes heard
+   steady    6                  → —
+   loudlate  8                  → 8
+
+== karaoke
+-- Pitch
+   steady    0                  → —
+   loudlate  96                 → 96.5 (97/96)
+-- Timing (shown)
+   steady    100                → —
+   loudlate  100                → 2.5 (3/2)
+-- Timing, notes heard
+   steady    100                → —
+   loudlate  100                → 2.5 (3/2)
+-- song best (pitch+timing)/2
+   steady    74 (50/98)         → —
+   loudlate  98                 → 50
+-- notes heard
+   steady    6                  → —
+   loudlate  8                  → 8
+
+== emotion
+-- Pitch
+   steady    0                  → —
+   loudlate  96                 → 96
+-- Expression
+   steady    51                 → —
+   loudlate  67.5 (68/67)       → 0
+-- coach line
+   steady    moreneeded         → —
+   loudlate  gooddynamics       → flatdynamics
+
+item 3: vibratoTolerantCents calls whose output count differs from its input count: master 0 of 112, scratch 0 of 64
+scratch pd loudlate  onset offsets (ms) per note: 77 166 162 186 103 167 166 102 | 80 166 168 171 104 165 167 105 · levels: sd 0.22 dB [-12.4 -11.9 -12.3 -12.3 -12.2 -12.2 -12.8 -12.2] | sd 0.16 dB [-12.3 -12.0 -12.3 -12.3 -12.3 -12.3 -12.6 -12.2]
+scratch emotion loudlate  levels: sd 0.1 dB [-12.3 -12.1 -12.3 -12.3 -12.3 -12.3 -12.5 -12.3] | sd 0.13 dB [-12.3 -11.9 -12.3 -12.3 -12.3 -12.3 -12.3 -12.3]

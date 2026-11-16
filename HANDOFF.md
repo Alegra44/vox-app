@@ -4,26 +4,30 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-15)
+## Branches on GitHub (2026-11-16)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through the scoring batch's release A (merge 4de6592), live as dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb |
-| `review/scoringA-prod` | Orphan, no code: release A's production checks (all pass after reruns), README |
+| `master` | Everything, through the scoring batch's release B (merge 0b2965c), live as dpl_7n6H9JiTjJzz71wWpw948MUMD4a5 |
+| `review/scoringB-prod` | Orphan, no code: release B's production checks (all pass after reruns), README |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
-| `scoring/survey` | The scoring survey (SCORING_SURVEY.md, survey.js, latency.js); kept until release B ships |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
 Every other branch was deleted on 2026-11-14 after phase 10's production checks passed (PHASE10.md "Deploy" §4): the
 15 merged ones of PHASE10_SURVEY.md h, redesign/phase10, review/phase10, review/phase9-prod and review/phase1-prod …
 review/phase4b-prod. Their commits are in master (all 16 code branches checked as ancestors before deleting).
+On 2026-11-16, after release B's production checks: scoring/b (merged), scoring/survey (its SCORING_SURVEY.md,
+survey-tables.txt and scratch-fix.patch copied to master's design/scoring/; survey.js and latency.js came with B),
+review/scoringB and review/scoringA-prod. Local only: `scratch/scoring-fix` (the survey's scratch build, never pushed;
+its worktree removed).
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-15:
-the scoring batch's release A, **dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb** (deployed by the user from master 4de6592, the
---no-ff merge of scoring/a; page sha256 e5c71fbbc8d286db…), **the rollback target from now on**. The previous target was
-phase 10, dpl_2g7Gq6fiY782p75a2tmokH2dJFLF.
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-16:
+the scoring batch's release B, **dpl_7n6H9JiTjJzz71wWpw948MUMD4a5** (deployed by the user from master 0b2965c, the
+--no-ff merge of scoring/b; page sha256 82f6fcc5b4990875…), **the rollback target from now on**. The previous target was
+release A, dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb. Migration 0009 (`expression_scores`) and the api Edge Function with it on
+the allow-list are live with B; a rollback of the app leaves both.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
 ## Working rules
@@ -720,10 +724,10 @@ These change scores, so they wait until the redesign is finished (survey items i
 6. **Expression joins the Skill Profile after its fix** (PHASE7.md decision). *Corrected 2026-11-15:* Emotional
    Singing and Harmony Arena do **not** store `expressionScores`. `recordSkillScore('expression', …)` pushes onto
    `progress.expressionScores`, but `user_progress` has no such column and the progress PATCH keeps only its allow-list,
-   silently, so the scores last until the page reloads (SCORING_SURVEY.md item 2). No account has any. Until release B
-   it reads "Not in your profile yet".
+   silently, so the scores last until the page reloads (SCORING_SURVEY.md item 2). No account had any. Stored from
+   release B (migration 0009).
 
-**Survey and decisions (2026-11-15):** design/scoring/SCORING_SURVEY.md (on scoring/survey) measured all six on fixed
+**Survey and decisions (2026-11-15):** design/scoring/SCORING_SURVEY.md measured all six on fixed
 stimuli. The decisions are in design/scoring/SCORING.md, "Decisions and release A":
 1. **Past scores stay as they are.** Only scores are stored, and production has 12 accounts. The exception is Your
    Choir: item 5's correction applies at playback, past takes included.
@@ -750,8 +754,23 @@ stimuli. The decisions are in design/scoring/SCORING.md, "Decisions and release 
 **Release A is live (2026-11-15): dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb** (master 4de6592; the new rollback target). The
 production checks (scripts/scoring-verify/prodA.sh: prod.sh's core suites, the vocal-load suite with the outbox cases,
 progresssave, allowlist, and prodE2E, the live outbox end-to-end case) all pass; modecheck and stopcheck timed out
-waiting for Supabase sign-up and passed on rerun. Results on `review/scoringA-prod`. scoring/a is deleted. Release B is
-built on scoring/b, waiting for the user's review: nothing from it merges, and migration 0009 isn't applied, before then.
+waiting for Supabase sign-up and passed on rerun. scoring/a is deleted.
+
+**Release B is live (2026-11-16): dpl_7n6H9JiTjJzz71wWpw948MUMD4a5** (master 0b2965c; the new rollback target).
+Items 1, 2, 4, 5 and 6 (B1–B6), plus the review's two (SCORING.md "Release B review: what B7 and B8 found"):
+- **B7:** the ~20 ms after calibration was mostly the synthetic-mic rig's own MediaStream hop, plus three detector
+  faults fixed in the shared onset code (pitch onsets placed at the level edge or less the tracker's 30 ms legato lag;
+  one edge rule for every tool; only level onsets hold off). On a modelled device (device.js) every timing tool reads
+  0 ± 3 ms on time and 150 ± 3 late. The survey rig still reads ~12 points under 100 on time (its hop).
+- **B8:** "Erase my progress" erases every score list, best, the session count and the history (vocal-load and XP
+  kept), after any save in flight.
+- Order on deploy: 0009 applied, then the api function, then the merge; the user ran Vercel.
+- Production checks (scripts/scoring-verify/prodB.sh: the device rig, exprtrip, erasecheck, allowlist, prod.sh with the
+  choir group, scores/4b/6, shotsB, all on the site) pass after reruns: contrast and shots (sign-up timeouts), batch1
+  (two held-tone Karaoke takes ~10 ms apart), warmup-entries (the speaker-delay sheet opened over its takes: the test
+  now loads sdRig.js), scores4b (Register Drills and Voice Quality order noise; alone, within the gate). Score changes
+  only where B meant them (Rhythm; PD, Karaoke, Emotional Singing). Results on `review/scoringB-prod`.
+- **The scoring batch is done.** Next in this line: the UTC day (R3), its own release with its own spec (migration 0010).
 
 
 ## Later: the day is the UTC date (PHASE7_SURVEY.md item 5; decided in PHASE7.md, not in phase 7)
