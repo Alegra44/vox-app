@@ -24,8 +24,19 @@
   const CADENCE = Object.freeze({ EVERY_ACTIVE_S: 60, PAUSE_MS: 5000, MIN_GAP_MS: 10000 });
   const EPS = 1e-6;
   const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  // The app's todayStr() (index.html): the UTC date. Same expression, so "today" has one meaning.
-  const dayOf = ms => new Date(ms).toISOString().slice(0, 10);
+  // Release C (design/day/DAY.md): the app's one day function. localDayOf(ms) is the device's local date of a time,
+  // YYYY-MM-DD, in the time zone the device is in now (index.html's todayStr() and last14Days() use it; so does dayOf,
+  // a session's day). tzOffsetOf(ms): minutes east of UTC at that time (what a session carries as tzOffsetMin).
+  // dayAtOffset(ms, off): the date at a fixed offset, the rule the database checks a session's day by; for any time,
+  // dayAtOffset(ms, tzOffsetOf(ms)) === localDayOf(ms). utcDayOf(ms): the UTC date, the rule before release C, kept for
+  // the old rows and the switch day only (validateCheckpoint without an offset; the first local day's second key).
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = (y, m, d) => `${String(y).padStart(4, '0')}-${pad(m + 1)}-${pad(d)}`;
+  const localDayOf = ms => { const d = new Date(ms); return ymd(d.getFullYear(), d.getMonth(), d.getDate()); };
+  const dayAtOffset = (ms, off) => { const d = new Date(ms + off * 60000); return ymd(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
+  const utcDayOf = ms => dayAtOffset(ms, 0);
+  const tzOffsetOf = ms => 0 - new Date(ms).getTimezoneOffset() || 0; // || 0: no -0
+  const dayOf = localDayOf;
   const fin = v => typeof v === 'number' && Number.isFinite(v);
 
   // Reasons a checkpoint payload is impossible (empty = fine). The database is the authority; this keeps the client
@@ -35,7 +46,11 @@
     if (!UUID.test(p.sessionId || '')) e.push('sessionId is not a uuid');
     if (!fin(start)) e.push('startedAt is not a time');
     else {
-      if (p.day !== dayOf(start)) e.push('day is not the UTC date of startedAt');
+      const off = p.tzOffsetMin;
+      if (off !== undefined && off !== null) {
+        if (!Number.isInteger(off) || off < -720 || off > 840) e.push('tzOffsetMin out of range');
+        else if (p.day !== dayAtOffset(start, off)) e.push('day is not the date of startedAt at tzOffsetMin');
+      } else if (p.day !== utcDayOf(start)) e.push('day is not the UTC date of startedAt (no tzOffsetMin)');
       if (start > nowMs + B.FUTURE_START_S * 1000) e.push('startedAt is in the future');
       if (start < nowMs - B.MAX_AGE_S * 1000) e.push('startedAt is too long ago');
     }
@@ -53,13 +68,16 @@
   // session: a createSession() from vocal-load.js. Call frame(pushResult, nowMs) after every push; hidden(nowMs) on
   // pagehide / visibilitychange → hidden; end(nowMs) when the session ends. Each returns null or the write's promise,
   // resolving to { ok, reason, payload | errors | error }.
-  function createCheckpointer({ session, sessionId, startedAtMs, write, day = dayOf(startedAtMs), cadence = CADENCE }) {
+  // A session keeps the offset it started with (tzOffsetMin), and its day is the local date at that offset: a time-zone
+  // or clock change mid-session doesn't move it.
+  function createCheckpointer({ session, sessionId, startedAtMs, write, tzOffsetMin = tzOffsetOf(startedAtMs),
+                                day = dayAtOffset(startedAtMs, tzOffsetMin), cadence = CADENCE }) {
     let saved = 0, lastActive = 0, lastActiveChangeMs = startedAtMs, lastWriteMs = -Infinity, ended = false, inflight = false;
     const payload = isEnd => {
       const s = session.snapshot();
       // active seconds to the millisecond: the engine sums frame lengths, so exactly 60 s of singing can come out as
       // 59.999999999998 and miss the 60 s a session needs to count toward the baseline
-      return { sessionId, day, startedAt: new Date(startedAtMs).toISOString(), activeSeconds: Math.round(s.activeSeconds * 1000) / 1000, load: s.load,
+      return { sessionId, day, startedAt: new Date(startedAtMs).toISOString(), tzOffsetMin, activeSeconds: Math.round(s.activeSeconds * 1000) / 1000, load: s.load,
         medianRms: s.medianRms, p5Midi: s.p5Midi, p95Midi: s.p95Midi, ended: isEnd };
     };
     async function save(nowMs, reason, isEnd, opts) {
@@ -184,10 +202,12 @@
       read();
       return Promise.all(Object.keys(mem.entries).map(id => { tries[id] = 0; if (timers[id]) { clearTimer(timers[id]); delete timers[id]; } return trySend(id); }));
     }
-    function pendingLoad(day) {
+    // sinceMs (optional): only sessions started from then on (the first local day's read of the UTC-dated key)
+    function pendingLoad(day, sinceMs) {
       read(); let sum = 0;
       for (const [id, e] of Object.entries(mem.entries)) {
         if (e.payload.day !== day || tooOld(e.payload)) continue;
+        if (sinceMs !== undefined && !(Date.parse(e.payload.startedAt) >= sinceMs)) continue;
         const c = mem.confirmed[id]; sum += Math.max(0, e.payload.load - (c ? c.load : 0));
       }
       return sum;
@@ -197,6 +217,6 @@
     return { put, drain, pendingLoad, size, stop, _state: () => read() };
   }
 
-  const api = { BOUNDS: B, CADENCE, OUTBOX, dayOf, validateCheckpoint, createCheckpointer, createOutbox };
+  const api = { BOUNDS: B, CADENCE, OUTBOX, dayOf, localDayOf, dayAtOffset, utcDayOf, tzOffsetOf, validateCheckpoint, createCheckpointer, createOutbox };
   if (typeof module === 'object' && module.exports) module.exports = api; else root.VocalLoadStore = api;
 })(typeof window !== 'undefined' ? window : this);

@@ -14280,11 +14280,37 @@ initLanguage();
 
 let progress = null;
 
+// Release C (design/day/DAY.md): every day the app makes from a time is localDayOf(ms), the device's local date
+// (deploy/vocal-load-store.js). The day ends at the singer's midnight, in the time zone the device is in now.
+const localDayOf = VocalLoadStore.localDayOf;
 function todayStr(){
-  return new Date().toISOString().slice(0,10);
+  return localDayOf(Date.now());
 }
+// days from date a to date b (YYYY-MM-DD each): both read the same way, so the count is whole
 function daysBetween(a,b){
   return Math.round((new Date(b) - new Date(a)) / 86400000);
+}
+// A YYYY-MM-DD day as a time: that day's local midnight (for a weekday label, or to compare with a local time). Not
+// new Date(day), which reads it as UTC midnight: west of UTC that is the evening before.
+function dayStartMs(day){
+  const [y,m,d] = String(day).split('-').map(Number);
+  return new Date(y, m-1, d).getTime();
+}
+// The switch to the local day (decision 3), once per account, at its first save after release C (saveProgress and
+// recordActivity call this). Its last practice date is a UTC date: west of UTC it can be a day ahead of local today
+// (a gap of -1) or, either side, the same (0). Either counts as today: the streak is kept and the date becomes local
+// today, so tomorrow continues it. East of UTC it can be a day behind (a gap of 1): yesterday, as it is. History keys
+// stay as they are. The switch day (dayBasisSince) is the one day the vocal-load gauge also reads the UTC-dated key.
+function ensureDayBasis(){
+  if(!profile || !progress || progress.dayBasis==='local') return false;
+  const today = todayStr();
+  if(progress.lastPracticeDate){
+    const gap = daysBetween(progress.lastPracticeDate, today);
+    if(gap===-1 || gap===0) progress.lastPracticeDate = today;
+  }
+  progress.dayBasis = 'local';
+  progress.dayBasisSince = today;
+  return true;
 }
 
 async function loadProfile(){
@@ -14384,6 +14410,7 @@ window.addEventListener('online', ()=>{ if(progressRetry.timer && profile){ prog
 // old row back and could be the last write)
 const progressSaving = new Set();
 async function saveProgress(){
+  ensureDayBasis();
   try{
     const req = apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
     progressSaving.add(req); req.catch(()=>{}).finally(()=>progressSaving.delete(req));
@@ -14469,6 +14496,7 @@ function triggerBreakthrough(midi, priorAvg){
 
 async function recordActivity(){
   if(!profile) return; // only track once signed in
+  ensureDayBasis();
   const today = todayStr();
   progress.history[today] = (progress.history[today]||0)+1;
   progress.totalSessions = (progress.totalSessions||0)+1;
@@ -14715,17 +14743,12 @@ function renderDashboard(){
   // last 14 days activity chart
   const chart = document.getElementById('activityChart');
   chart.innerHTML='';
-  const days = [];
-  for(let i=13;i>=0;i--){
-    const d = new Date();
-    d.setDate(d.getDate()-i);
-    days.push(d.toISOString().slice(0,10));
-  }
+  const days = last14Days();
   const maxCount = Math.max(1, ...days.map(d=>progress.history[d]||0));
   days.forEach(d=>{
     const count = progress.history[d]||0;
     const heightPct = Math.max(4, (count/maxCount)*100);
-    const dayLabel = new Date(d).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
+    const dayLabel = new Date(dayStartMs(d)).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
     const col = document.createElement('div');
     col.className='bar-col';
     col.innerHTML = `<div class="bar${count>0?' active':''}" style="height:${heightPct}%"></div><div class="day-label">${dayLabel}</div>`;
@@ -15086,7 +15109,42 @@ let vlToken = null;              // kept so the page-hide checkpoint can be sent
 async function vlRefreshToken(){
   try{ const { data:{ session } } = await sb.auth.getSession(); vlToken = session ? session.access_token : null; }catch(e){}
 }
-async function vlFetchState(day){ await vlRefreshToken(); return apiFetch('/me/vocal-load?day='+day); }
+async function vlFetchState(day, sinceMs){
+  await vlRefreshToken();
+  return apiFetch('/me/vocal-load?day='+day+(sinceMs!==undefined ? '&since='+encodeURIComponent(new Date(sinceMs).toISOString()) : ''));
+}
+// The switch to the local day (release C, decision 3). Sessions the old app saved are under their UTC date, which for
+// part of a local day isn't the local one: east of UTC the date before (from local midnight to UTC midnight), west of
+// it the date after (from UTC midnight to local midnight). So:
+//   - on the switch day the gauge also reads that other key, and
+//   - on the switch day and the day after, each key counts only sessions started since local midnight (west of UTC,
+//     today's key also holds the old app's sessions from yesterday evening, and on the day after the switch, the key
+//     holds the old app's sessions from the switch day's evening).
+// From the second day after, a day's key holds only that local day's sessions. Before the account's first save after
+// the switch (dayBasis not set yet), today is the switch day. Null when no care is needed.
+function vlSwitchKey(day){
+  if(!progress) return null;
+  const since = progress.dayBasis==='local' ? progress.dayBasisSince : day;
+  if(!since) return null;
+  const n = daysBetween(since, day);
+  if(n<0 || n>1) return null;
+  const start = dayStartMs(day), end = start + 86400000 - 1; // a 23 or 25 h day's edges are still the same two dates
+  const a = VocalLoadStore.utcDayOf(start), b = VocalLoadStore.utcDayOf(end);
+  const other = n===0 ? (a!==day ? a : b!==day ? b : null) : null;
+  return {sinceMs:start, other};
+}
+// The day's load: the server's total for the day, plus what is still waiting on this device; around the switch, counted
+// from local midnight, plus on the switch day the other key's share of today (vlSwitchKey).
+async function vlFetchDay(day){
+  const sw = vlSwitchKey(day), b = vlOutbox();
+  const st = await vlFetchState(day, sw ? sw.sinceMs : undefined);
+  let load = (Number(st.dayLoad)||0) + (b ? b.pendingLoad(day, sw ? sw.sinceMs : undefined) : 0);
+  if(sw && sw.other){
+    try{ const s2 = await vlFetchState(sw.other, sw.sinceMs); load += (Number(s2.dayLoad)||0) + (b ? b.pendingLoad(sw.other, sw.sinceMs) : 0); }
+    catch(e){ console.error('vocal load state error (switch day)', e); }
+  }
+  return {sessions:st.sessions, load};
+}
 // The signed-in user's outbox (one per user: its key in this device's storage). Switching user stops the last one's
 // timers; its entries stay stored and go when that user signs in again.
 let vlBox = null, vlBoxUid = null;
@@ -15105,7 +15163,7 @@ async function loadVocalLoadToday(){
   if(!profile){ vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
   const day = todayStr();
   await vlDrain(); // checkpoints still waiting from before (a failed save, a closed tab) go first
-  try{ const st = await vlFetchState(day); const b = vlOutbox(); vlDay = {day, load:(Number(st.dayLoad)||0) + (b ? b.pendingLoad(day) : 0)}; }
+  try{ const st = await vlFetchDay(day); vlDay = {day, load:st.load}; }
   catch(e){ console.error('vocal load state error', e); }
   renderVocalLoadGauge();
 }
@@ -15113,7 +15171,7 @@ async function loadVocalLoadToday(){
 // outbox retries a network error, a 5xx or a 429, and drops any other 4xx). Only for the outbox's own user.
 async function vlSend(p, opts, uid){
   if(!profile || (profile.id || profile.email)!==uid) throw new Error('vocal load: not signed in as this checkpoint\'s user');
-  const body = JSON.stringify({day:p.day, startedAt:p.startedAt, activeSeconds:p.activeSeconds, load:p.load,
+  const body = JSON.stringify({day:p.day, startedAt:p.startedAt, tzOffsetMin:p.tzOffsetMin, activeSeconds:p.activeSeconds, load:p.load,
     medianRms:p.medianRms, p5Midi:p.p5Midi, p95Midi:p.p95Midi, ended:p.ended});
   // page hide: sent right now with the token already in hand (the page may be frozen once the handler returns)
   if(!opts.keepalive) await vlRefreshToken();
@@ -15140,9 +15198,8 @@ function vlStart(){
   const r = vlRun = {startedAtMs, day:VocalLoadStore.dayOf(startedAtMs), buffer:[], ready:false, lastFrame:null, prior:0, pct:null, ending:false};
   // before the new session: checkpoints still waiting go first, then today's total (the server's, plus what is still
   // waiting on this device). Frames wait in r.buffer meanwhile.
-  vlDrain().then(()=>vlFetchState(r.day)).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
-    const b = vlOutbox();
-    r.prior = st ? (Number(st.dayLoad)||0) + (b ? b.pendingLoad(r.day) : 0) : (vlDay.day===r.day ? vlDay.load : 0);
+  vlDrain().then(()=>vlFetchDay(r.day)).catch(e=>{ console.error('vocal load state error', e); return null; }).then(st=>{
+    r.prior = st ? st.load : (vlDay.day===r.day ? vlDay.load : 0);
     const saved = progress && progress.lowestMidi!=null && progress.highestMidi!=null ? {lowMidi:progress.lowestMidi, highMidi:progress.highestMidi} : null;
     r.session = VocalLoad.createSession(VocalLoad.computeBaseline(st ? st.sessions : [], saved), {priorLoadToday:r.prior});
     r.cp = VocalLoadStore.createCheckpointer({session:r.session, sessionId:crypto.randomUUID(), startedAtMs, day:r.day, write:vlWrite});
@@ -18524,7 +18581,7 @@ async function ycExport(){
       if(audioCtx.currentTime > endAt + 2) throw new Error('recorded audio stopped arriving');
     }
     untap(); untap = null;
-    const name = `your-choir-${song}-${new Date().toISOString().slice(0,10)}.wav`;
+    const name = `your-choir-${song}-${todayStr()}.wav`;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(ycWavBlob(ex.out, sr));
     a.download = name;
@@ -19345,9 +19402,16 @@ renderRoster();
 
 /* ---------------- Tier / Paywall / Mock Checkout ---------------- */
 /* ---- 21-Day Trial + Subscription access model ---- */
+// The trial's first day as a local date (release C). The server stamps trial_start_date with its own date (UTC) when the
+// account is made; when it is that UTC date of created_at, the trial starts on created_at's local date instead, so day 1
+// is the day the singer signed up wherever they are. Any other stored date is used as it is.
+function trialStartDay(){
+  const at = profile.createdAt ? Date.parse(profile.createdAt) : NaN;
+  return Number.isFinite(at) && VocalLoadStore.utcDayOf(at)===profile.trialStartDate ? localDayOf(at) : profile.trialStartDate;
+}
 function daysSinceTrialStart(){
   if(!profile || !profile.trialStartDate) return 0;
-  return daysBetween(profile.trialStartDate, todayStr());
+  return daysBetween(trialStartDay(), todayStr());
 }
 function trialDayNumber(){ return daysSinceTrialStart()+1; } // 1-indexed day the user is on
 function trialDaysRemaining(){ return Math.max(0, 21-daysSinceTrialStart()); }
@@ -19759,7 +19823,7 @@ function pickNote(key, lo, hi){
   notePickLast[key] = m;
   return m;
 }
-// The same note all day for this account (One Take): a hash of the account and the UTC day.
+// The same note all day for this account (One Take): a hash of the account and the day (local, release C).
 function dailyNote(key, lo, hi){
   const str = key+':'+((profile && (profile.id||profile.email)) || '')+':'+todayStr();
   let h = 2166136261;
@@ -20364,7 +20428,7 @@ function dailyMetricAvg(day, type){
 }
 function last14Days(){
   const days=[];
-  for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(d.toISOString().slice(0,10)); }
+  for(let i=13;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); days.push(localDayOf(d.getTime())); }
   return days;
 }
 function renderVoiceHealthChart(elId, type){
@@ -20375,7 +20439,7 @@ function renderVoiceHealthChart(elId, type){
   wrap.innerHTML = days.map((d,i)=>{
     const v = values[i];
     const heightPct = v!==null ? Math.max(8,(v/maxVal)*100) : 8;
-    const dayLabel = new Date(d).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
+    const dayLabel = new Date(dayStartMs(d)).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
     return `<div class="h-bar-col"><div class="h-bar${v!==null?' has-data':' no-data'}" style="height:${heightPct}%" title="${v!==null?v+'%':t('voicehealth_nodata_tooltip')}"></div><div class="h-day-label">${dayLabel}</div></div>`;
   }).join('');
   return values;
@@ -20396,7 +20460,7 @@ async function renderVoiceHealthLoad(){
     const values = days.map(d=>d===today ? pct : (vhLoadCache[uid+d]!==undefined ? vhLoadCache[uid+d] : null));
     chart.innerHTML = days.map((d,i)=>{
       const v = values[i], h = v!==null && v>0 ? Math.max(8, Math.min(100, v)) : 8;
-      const dayLabel = new Date(d).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
+      const dayLabel = new Date(dayStartMs(d)).toLocaleDateString(dateLocale(localeForLang()),{weekday:'narrow'});
       const tip = v!==null ? t('vl_gauge_pct_tpl').replace('{p}', Math.round(v)) : t('voicehealth_nodata_tooltip');
       return `<div class="h-bar-col"><div class="h-bar${v!==null && v>0 ? ' has-data' : v===0 ? ' zero' : ' no-data'}" style="height:${h}%" title="${tip}"></div><div class="h-day-label">${dayLabel}</div></div>`;
     }).join('');
@@ -20554,7 +20618,7 @@ function renderWeeklyChallenge(){
     document.getElementById('challengeStatusText').textContent = t('weeklychallenge_signin');
   } else {
     const sevenDaysAgo = new Date(); sevenDaysAgo.setDate(sevenDaysAgo.getDate()-7);
-    const recentLog = (progress.weeklyLog||[]).filter(e=> new Date(e.date) >= sevenDaysAgo);
+    const recentLog = (progress.weeklyLog||[]).filter(e=> dayStartMs(e.date) >= sevenDaysAgo.getTime());
     const result = challenge.check(recentLog);
     document.getElementById('challengeProgressFill').style.width = result.progress+'%';
     document.getElementById('challengeStatusText').innerHTML = result.detail + (result.done ? `<span class="challenge-done-badge">${t('weeklychallenge_done_badge')}</span>` : '');
@@ -22909,7 +22973,7 @@ function renderYouHub(){
     ? `${t('journey_day_p1')} ${Math.min(21, daysBetween(profile.day1StartDate, todayStr())+1)} ${t('journey_day_p2')}` : t('you_notstarted'));
   const ch = WEEKLY_CHALLENGES[isoWeekNumber(new Date()) % WEEKLY_CHALLENGES.length];
   const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate()-7);
-  set('youValProgress', t('you_week_tpl').replace('{p}', ch.check((progress.weeklyLog||[]).filter(e=>new Date(e.date)>=weekAgo)).progress));
+  set('youValProgress', t('you_week_tpl').replace('{p}', ch.check((progress.weeklyLog||[]).filter(e=>dayStartMs(e.date)>=weekAgo.getTime())).progress));
   set('youValRecords', t('you_records_tpl').replace('{n}', youRecordsCount()));
   set('youValPassport', progress.lowestMidi!==null && progress.lowestMidi!==undefined && progress.highestMidi!==null && progress.highestMidi!==undefined
     ? `${noteNameFromMidi(progress.lowestMidi)}–${noteNameFromMidi(progress.highestMidi)}` : '—');

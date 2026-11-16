@@ -33,6 +33,8 @@ export const PROGRESS_PATCHABLE_COLUMNS = [
   "agility_scores",
   "breath_scores",
   "expression_scores", // 0009 (release B, B6)
+  "day_basis", // 0010 (release C, the local day)
+  "day_basis_since", // 0010
   "note_attempt_history",
   "daily_metrics",
   "weekly_log",

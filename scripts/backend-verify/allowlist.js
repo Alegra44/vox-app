@@ -9,6 +9,9 @@
 //      every PATCH /me/progress body sent, its keys against the allow-list. Keys the server itself returned in
 //      GET /me/progress and isn't letting the app write (user_id, updated_at…) are the server's own row coming back,
 //      listed, not failed.
+//   3. The vocal-load checkpoint (release C): every field vlSend puts in the body of PUT /me/vocal-load/sessions/:id is one
+//      the api function's route reads (supabase/functions/api/routes/vocalLoad.ts, b.<field>) and passes on, so a field
+//      like tzOffsetMin can't be dropped on the way either.
 // EXEMPT: a field the app sends that a coming release adds to the server, with that release. An exemption ends by itself
 // once any migration in supabase/migrations defines the column (then it must be on the allow-list like any other).
 // Usage: node scripts/backend-verify/allowlist.js [--only source|app] [--ref <git ref>: part 1 on that ref's deploy/index.html]
@@ -43,6 +46,21 @@ function source() {
   const ex = off.filter(exempt), bad = off.filter(k => !exempt(k));
   check('every progress field the app writes is on the server\'s allow-list', bad.length === 0, bad.length ? `dropped by the server: ${bad.join(', ')}` : 'all on it');
   ex.forEach(k => console.log(`  · exempt: ${k} (${exempt(k)})`));
+}
+
+function vocalLoad() {
+  console.log('\n== 3. the vocal-load checkpoint body');
+  const html = fs.readFileSync(path.join(ROOT, 'deploy/index.html'), 'utf8');
+  const fn = html.slice(html.indexOf('async function vlSend('), html.indexOf('async function vlSend(') + 1500);
+  const obj = (fn.match(/const body = JSON\.stringify\(\{([^}]*)\}\)/) || [])[1] || '';
+  const sent = [...obj.matchAll(/([a-zA-Z0-9_]+)\s*:/g)].map(m => m[1]);
+  const ts = fs.readFileSync(path.join(ROOT, 'supabase/functions/api/routes/vocalLoad.ts'), 'utf8');
+  const read = new Set([...ts.matchAll(/\bb\.([a-zA-Z0-9_]+)/g)].map(m => m[1]));
+  const passed = new Set([...ts.slice(ts.indexOf('vocal_load_checkpoint')).matchAll(/\bb\.([a-zA-Z0-9_]+)/g)].map(m => m[1]));
+  console.log(`  the app sends: ${sent.join(', ')}`);
+  check('the app sends tzOffsetMin', sent.includes('tzOffsetMin'));
+  const bad = sent.filter(k => !read.has(k) || !passed.has(k));
+  check('every field the app sends is read by the route and passed to vocal_load_checkpoint', sent.length > 0 && bad.length === 0, bad.length ? `dropped: ${bad.join(', ')}` : 'all of them');
 }
 
 async function app() {
@@ -80,7 +98,7 @@ async function app() {
 }
 
 (async () => {
-  if (ONLY !== 'app') source();
+  if (ONLY !== 'app') { source(); vocalLoad(); }
   if (ONLY !== 'source') await app();
   console.log(`\n${fail ? 'ALLOWLIST: FAIL' : 'ALLOWLIST: PASS'} (${pass} passed, ${fail} failed)`);
   process.exit(fail ? 1 : 0);

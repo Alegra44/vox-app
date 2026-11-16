@@ -16,7 +16,9 @@ const { execSync, execFileSync, spawn } = require('child_process');
 const fs = require('fs'), os = require('os'), path = require('path');
 
 const TEST_EMAIL = /^voxcoach-[a-z0-9-]+@example\.com$/;
-const DIR = path.join(os.tmpdir(), 'voxcoach-test-accounts');
+// VOX_BACKEND=local (scripts/localBackend.js, release C): the local Supabase stack, with a ledger of its own.
+const LOCAL_DB = process.env.VOX_BACKEND === 'local', WHERE = LOCAL_DB ? '--local' : '--linked';
+const DIR = path.join(os.tmpdir(), LOCAL_DB ? 'voxcoach-test-accounts-local' : 'voxcoach-test-accounts');
 const LOG = path.join(DIR, 'watchdog.log');
 
 // The CLI logs in with a temporary role whose password each query resets, so two queries at once (two scripts running,
@@ -34,8 +36,8 @@ const SUPABASE_BIN = (() => {
 })();
 function query(sql) {
   const opts = { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], timeout: DB_TIMEOUT_MS, killSignal: 'SIGKILL', windowsHide: true };
-  return SUPABASE_BIN ? execFileSync(SUPABASE_BIN, ['db', 'query', '--linked', sql], opts)
-    : execSync(`npx supabase db query --linked "${sql.replace(/"/g, '\\"')}"`, opts);
+  return SUPABASE_BIN ? execFileSync(SUPABASE_BIN, ['db', 'query', WHERE, sql], opts)
+    : execSync(`npx supabase db query ${WHERE} "${sql.replace(/"/g, '\\"')}"`, opts);
 }
 function db(sql) {
   for (let i = 0, timeouts = 0; ; i++) {
