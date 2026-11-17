@@ -25,7 +25,7 @@
 // today under the other UTC date is in today's gauge, and one sung yesterday under that same key is not.
 // Usage: node scripts/day-verify/day.js [--zones Etc/GMT+8,Asia/Kolkata,Pacific/Kiritimati]
 require('../runguard').auto();
-if (process.env.VOX_BACKEND !== 'local') { console.error('day.js runs against the local Supabase stack only (VOX_BACKEND=local, scripts/localBackend.js)'); process.exit(2); }
+if (process.env.VOX_BACKEND !== 'local' && !/^https:\/\/deploy-alegra1122\.vercel\.app/.test(process.env.DV_URL || '')) { console.error('day.js runs against the local stack (VOX_BACKEND=local) or, after the deploy, the live site (DV_URL=https://deploy-alegra1122.vercel.app/)'); process.exit(2); }
 const C = require('../design-verify/common'), { db } = require('../choir-verify/testAccounts');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const ZONES = (arg('--zones') || 'Etc/GMT+8,Asia/Kolkata,Pacific/Kiritimati').split(',');
