@@ -10,13 +10,22 @@
 // device's canceller removes some of the bleed, by an amount this rig can't reproduce (see SURVEY_D.md).
 // --guard: also with the scratch build's bleed guard (the page's window.__bleedGuard, if the build has it).
 // Usage: VOX_BACKEND=local NODE_OPTIONS=… node scripts/survey-d/bleed.js [--ref <git ref>] [--runs 2] [--out <json>]
-//   [--guard | --guard-only] [--gains 0,0.1,0.3,1] [--tools entrance,cutoff,arena,memory,rhythm]
+//   [--guard | --guard-only] [--gains 0,0.1,0.3,1] [--tools entrance,cutoff,arena,memory,rhythm] [--diag]
+//   [--real --volumes 50,100]
 require('../runguard').auto();
 if (process.env.VOX_BACKEND !== 'local') { console.error('bleed.js runs against the local Supabase stack only'); process.exit(2); }
 const fs = require('fs');
 const C = require('../design-verify/common'), { db } = require('../choir-verify/testAccounts');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
 const REF = arg('--ref'), RUNS = +(arg('--runs') || 2), D = 120;
+// --real (release D3's real-device check): no loop. This Mac's own speakers and microphone (Chromium's real capture
+// device, the echo canceller on as the app asks), the system output volume set to each of --volumes (osascript; put
+// back at exit), the speaker delay and bleed gain measured by the app's own sheet code on this device. Nobody sings.
+// A visible browser window: headless Chromium plays nothing through the speakers (a 440 Hz tone at full volume: mic RMS
+// 0.0017 → 0.0027 headless, 0.0033 → 0.169 in a window; 2026-11-17).
+const REAL = process.argv.includes('--real'), VOLUMES = (arg('--volumes') || '50,100').split(',').map(Number);
+const { execFileSync } = require('child_process');
+const osa = cmd => execFileSync('osascript', ['-e', cmd]).toString().trim();
 
 // loopmic.js's LOOP with a gain on the loop
 const LOOP = ({ D, gain }) => {
@@ -64,7 +73,9 @@ const TOOLS = {
 
 (async () => {
   const dir = C.buildDir(REF), res = { ref: REF || 'working copy', D, runs: RUNS, cells: [] };
-  const b = await C.chromium.launch({ args: ['--autoplay-policy=no-user-gesture-required'] });
+  const b = await C.chromium.launch({ headless: !REAL, args: ['--autoplay-policy=no-user-gesture-required', ...(REAL ? ['--use-fake-ui-for-media-stream'] : [])] });
+  const volume0 = REAL ? osa('output volume of (get volume settings)') : null, muted0 = REAL ? osa('output muted of (get volume settings)') : null;
+  if (REAL) osa('set volume without output muted');
   try {
     const { ctx: c0, page: p0 } = await C.openPage(b, { dir }); await C.signUp(p0, 'dvbleed', 'Bleed Check');
     const uid = await p0.evaluate(() => profile.id);
@@ -74,9 +85,10 @@ const TOOLS = {
     const guardModes = process.argv.includes('--guard-only') ? [true] : process.argv.includes('--guard') ? [false, true] : [false];
     console.log(`== speaker bleed, nobody singing · build ${res.ref} · D ${D} ms · ${RUNS} runs`);
     const GAINS = arg('--gains') ? arg('--gains').split(',').map(Number) : [0, 0.1, 0.3, 1], ONLY = arg('--tools') ? arg('--tools').split(',') : null;
-    for (const guard of guardModes) for (const gain of GAINS) for (const [key, tool] of Object.entries(TOOLS)) for (let k = 0; k < RUNS; k++) {
+    for (const guard of guardModes) for (const gain of REAL ? VOLUMES : GAINS) for (const [key, tool] of Object.entries(TOOLS)) for (let k = 0; k < RUNS; k++) {
       if (ONLY && !ONLY.includes(key)) continue;
-      const { ctx, page } = await C.openPage(b, { dir, storageState: state, prepare: c => c.addInitScript(LOOP, { D, gain }) });
+      if (REAL) osa(`set volume output volume ${gain}`);
+      const { ctx, page } = await C.openPage(b, { dir, storageState: state, prepare: REAL ? undefined : c => c.addInitScript(LOOP, { D, gain }) });
       let r;
       try {
         await C.clearOverlays(page);
@@ -90,18 +102,27 @@ const TOOLS = {
           } else sdSave(k, { ms: D, how: 'measured', heard: 10, gain: null, rig: true, at: Date.now() });
         }, { D, guard });
         await C.showPanel(page, tool.panel); await C.clearOverlays(page);
+        // --diag: every frame the guard judges, the mic's level over the bleed it predicts (gain × the output a delay ago),
+        // for frames where the output is playing; with no gain stored, the ratio to the output itself
+        if (process.argv.includes('--diag')) await page.evaluate(() => { const orig = overBleed; window.__diag = []; overBleed = raw => {
+          const m = sdStored(), at = audioCtx.currentTime - ((m && m.ms) || 0) / 1000; let out = 0;
+          for (const h of bleedHist) if (Math.abs(h.t - at) <= BLEED_SPAN_S && h.r > out) out = h.r;
+          if (out > 0.005) window.__diag.push(computeRMS(raw) / (((m && m.gain) || 1) * out)); return orig(raw); }; });
         await page.evaluate(`(${tool.start})()`);
         const t0 = Date.now();
         await page.waitForFunction(`(${tool.busy})()`, null, { timeout: 15000 }).catch(() => {});
         await page.waitForFunction(`!(${tool.busy})()`, null, { timeout: 90000 }).catch(() => {});
         await C.sleep(800);
         r = await page.evaluate(`(${tool.read})()`); r.secs = Math.round((Date.now() - t0) / 1000);
-        if (guard) r.sd = await page.evaluate(() => window.__sdResult && { ms: window.__sdResult.ms, gain: window.__sdResult.gain });
+        if (process.argv.includes('--diag')) r.diag = await page.evaluate(() => { const d = (window.__diag || []).slice().sort((a, b) => a - b), q = p => d.length ? +d[Math.min(d.length - 1, Math.floor(p * d.length))].toFixed(2) : null;
+          return { frames: d.length, p50: q(0.5), p90: q(0.9), p99: q(0.99), max: q(1), over2: d.filter(x => x > 2).length }; });
+        if (guard) r.sd = await page.evaluate(() => window.__sdResult && { ms: window.__sdResult.ms, gain: window.__sdResult.gain, heard: window.__sdResult.heard });
+        if (REAL) r.aec = await page.evaluate(() => micStream ? micStream.getAudioTracks()[0].getSettings().echoCancellation : null);
       } catch (e) { r = { error: String(e).split('\n')[0].slice(0, 120) }; }
       finally { await ctx.close(); }
-      res.cells.push({ guard, gain, tool: key, run: k + 1, ...r });
-      console.log(`${guard ? 'guard ' : 'master'} gain ${String(gain).padEnd(3)} ${key.padEnd(8)} #${k + 1}: ${JSON.stringify(r)}`);
+      res.cells.push({ guard, [REAL ? 'volume' : 'gain']: gain, tool: key, run: k + 1, ...r });
+      console.log(`${guard ? 'guard ' : 'master'} ${REAL ? 'volume' : 'gain'} ${String(gain).padEnd(3)} ${key.padEnd(8)} #${k + 1}: ${JSON.stringify(r)}`);
     }
-  } finally { await b.close(); C.cleanup(); }
+  } finally { if (REAL && volume0 !== null) { osa(`set volume output volume ${volume0}`); if (muted0 === 'true') osa('set volume with output muted'); } await b.close(); C.cleanup(); }
   if (arg('--out')) fs.writeFileSync(arg('--out'), JSON.stringify(res, null, 1));
 })();
