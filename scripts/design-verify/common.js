@@ -39,16 +39,17 @@ const panelKeys = page => page.evaluate(() => [...document.querySelectorAll('.pa
 
 // theme: 'light' | 'dark' | 'system' | null (leave the page's default). The device scheme follows the theme unless given.
 // dir may also be a site URL (https://…): that site is opened as it is, like DV_URL, for this page only.
-// prepare(ctx) is awaited before the page opens (extra routes and init scripts: synthmic.js).
+// prepare(ctx) is awaited before the page opens (extra routes and init scripts: synthmic.js). timezoneId: the device's
+// time zone (release C's day.js).
 async function openPage(b, opts = {}) { return G.step('open a page', 60, () => openPage_(b, opts)); }
-async function openPage_(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en', prepare } = {}) {
+async function openPage_(b, { dir = DEPLOY, viewport = { width: 390, height: 844 }, storageState, scheme, theme, reducedMotion, lang = 'en', prepare, timezoneId } = {}) {
   const site = /^https?:\/\//.test(dir) ? dir : REMOTE;
   if (site && storageState && typeof storageState === 'object' && storageState.origins) { // a session made on the local side: copied to the site's origin
     const o = new URL(site).origin;
     if (!storageState.origins.some(x => x.origin === o)) storageState = { ...storageState, origins: [...storageState.origins, ...storageState.origins.map(x => ({ ...x, origin: o }))] };
   }
   const ctx = await b.newContext({ viewport, deviceScaleFactor: 1, ...(storageState ? { storageState } : {}),
-    colorScheme: scheme || (theme === 'light' ? 'light' : 'dark'), ...(reducedMotion ? { reducedMotion } : {}) });
+    colorScheme: scheme || (theme === 'light' ? 'light' : 'dark'), ...(reducedMotion ? { reducedMotion } : {}), ...(timezoneId ? { timezoneId } : {}) });
   if (!site) await ctx.route(LOCAL + '**', r => {
     const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html', f = path.join(dir, p);
     if (!fs.existsSync(f)) return r.fulfill({ status: 404, body: '' });

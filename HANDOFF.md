@@ -9,6 +9,7 @@ on a decision, and how to set the machine up again. It contains no secrets.
 | Branch | What it is |
 |---|---|
 | `master` | Everything, through the scoring batch's release B (merge 0b2965c), live as dpl_7n6H9JiTjJzz71wWpw948MUMD4a5 |
+| `day/local` | Release C, the UTC day (DAY.md): built and checked on the local stack, waiting for the user's review and "deploy" |
 | `review/scoringB-prod` | Orphan, no code: release B's production checks (all pass after reruns), README |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
@@ -770,14 +771,21 @@ Items 1, 2, 4, 5 and 6 (B1–B6), plus the review's two (SCORING.md "Release B r
   (two held-tone Karaoke takes ~10 ms apart), warmup-entries (the speaker-delay sheet opened over its takes: the test
   now loads sdRig.js), scores4b (Register Drills and Voice Quality order noise; alone, within the gate). Score changes
   only where B meant them (Rhythm; PD, Karaoke, Emotional Singing). Results on `review/scoringB-prod`.
-- **The scoring batch is done.** Next in this line: the UTC day (R3), its own release with its own spec (migration 0010).
+- **The scoring batch is done.** Next in this line: the UTC day (R3), release C (below).
 
 
-## Later: the day is the UTC date (PHASE7_SURVEY.md item 5; decided in PHASE7.md, not in phase 7)
+## Release C, the UTC day (`day/local`, spec `design/day/DAY.md`): BUILT 2026-11-16, waiting for the user's review
 
-`todayStr()` is `toISOString().slice(0,10)`: streaks, `history`, `dailyMetrics`, the Journey day and the vocal-load
-budget roll over at UTC midnight, and the 14-day labels print the day before west of UTC. Not fixed in phase 7 because
-the vocal-load budget and the server share that day; needs a plan that moves both together.
+The day is the device's local date (`localDayOf(ms)` in vocal-load-store.js; every use is listed in DAY.md).
+Vocal-load sessions carry `tzOffsetMin`. Migration 0010 (`tz_offset_min`, the day CHECK at the offset or the UTC rule
+when null, pruning day − 2, `user_progress.day_basis` / `day_basis_since`), the api function (tzOffsetMin, since) and the
+app go out together. Order at deploy: 0010 first, then the api function, then the app. The typed "deploy" gate applies:
+it changes a rule on a live table. Every check ran against the local Supabase stack (below); nothing touched
+production. The rollback target stays release B, dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Rolling back the app leaves the
+column, the CHECK and the function: old clients send no offset and get the UTC rule.
+
+Release note: "Your day now ends at your midnight. On the day of the switch, one day of history may show twice or not
+at all; no streak is lost."
 
 ## Waiting on the user (don't start without a go-ahead)
 
@@ -840,5 +848,23 @@ billing columns server-only · vibrato tolerance in pitch graders.
    scripts/vq-verify/gatestim.py` builds noisegate's stimuli (it needs vibfix's `stim-S1.wav`: run vibfix once first);
    vibfix builds its own.
 
-8. **Claude Code memory.** Claude's notes were stored on the Windows machine and won't come along. This file
+8. **Local database (Supabase on Colima), since 2026-11-16.** Database changes are checked here first, never on
+   production before their deploy. Installed with `brew install colima docker` (both stay installed).
+   - **Start:** `colima start --memory 6 --cpu 4 --disk 40` (this Mac has 16 GB; use `--memory 4` on an 8 GB machine),
+     then `npx supabase start` from the repo. The first start pulls the images (a few GB, ~10 min). It applies every
+     migration in `supabase/migrations` to an empty database and serves the api Edge Function from
+     `supabase/functions` at http://127.0.0.1:54321/functions/v1/api. `npx supabase status` prints the URLs and keys.
+   - **Stop:** `npx supabase stop` (the data is kept in Docker volumes), then `colima stop`. Nothing keeps running.
+   - **Reset the local database:** `npx supabase db reset --local` reapplies every migration to an empty database.
+     `--version 0009` stops at that migration, and `npx supabase migration up --local` applies the rest (that is how
+     `scripts/day-verify/migration.js` checks 0010 on old rows).
+   - **Running a check against it:** `VOX_BACKEND=local NODE_OPTIONS="--require $PWD/scripts/localBackend.js" node
+     scripts/…`. The browser's requests for the production project go to the local stack, the production host
+     resolves to nowhere, Node's fetch is rewritten, and `testAccounts.js` queries `--local`. It refuses to run when
+     the stack is down. `scripts/day-verify/checksC.sh` sets this for every step. Without `VOX_BACKEND=local` a
+     script runs against production as before.
+   - **SQL by hand:** `npx supabase db query --local "…"`, or
+     `docker exec -i supabase_db_voxcoach-app psql -U postgres` (several statements in one session).
+
+9. **Claude Code memory.** Claude's notes were stored on the Windows machine and won't come along. This file
    replaces them. On the Mac, ask Claude to read `HANDOFF.md` and `CHOIR_WORLD_ROADMAP.md` first.
