@@ -90,10 +90,16 @@ function flatten(tool, r) {
   return o;
 }
 
+// Release D4 (Survey D d): the mic's echo canceller off in every score run, master and branch alike. Chrome's canceller
+// adapts to whatever ran before (Voice Quality's centroid +4–15 Hz with it on); off, a run doesn't depend on the last.
+const AEC_OFF = () => {
+  const gum = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+  navigator.mediaDevices.getUserMedia = c => gum(c && c.audio ? { ...c, audio: { ...(typeof c.audio === 'object' ? c.audio : {}), echoCancellation: false } } : c);
+};
 async function oneRun(b, dir, state, tools, stim) {
   const syn = SYNTH[stim];
   const { ctx, page, errors } = await C.openPage(b, { dir, theme: 'light', storageState: state,
-    prepare: syn ? c => SYN.attach(c, S.STIM.steady, { level: syn.level }) : undefined });
+    prepare: async c => { await c.addInitScript(AEC_OFF); if (syn) await SYN.attach(c, S.STIM.steady, { level: syn.level }); } });
   const out = {};
   try {
     await C.clearOverlays(page); await page.evaluate(T.CAPTURE_TAP); await S.warmMic(page);
@@ -141,16 +147,19 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
     for (const stim of STIMS) {
       const st = data.stims[stim] = data.stims[stim] || { master: [], branch: [] };
       const tools = toolsFor(stim); if (!tools.length) continue;
-      const b = SYNTH[stim] ? await SYN.launch() : await S.launchMic(stimFile(stim));
-      try {
+      // Release D4 (Survey D d): a browser of its own per run, so the file-backed fake mic starts each run at the start of
+      // its file (one browser loops it on, and Emotion Mode's take landed wherever the loop was: 77 or 87).
+      const launch = () => SYNTH[stim] ? SYN.launch() : S.launchMic(stimFile(stim));
+      {
         for (let k = 0; k < RUNS; k++) for (const side of k % 2 && !ALTERNATE ? ['branch', 'master'] : ['master', 'branch']) {
           if (st[side].length > k) continue;
-          const t0 = Date.now(); const r = await oneRun(b, dirs[side], tools.some(t => t.fresh) ? onSite(await freshState(dirs.master)) : state, tools, stim);
+          const b = await launch(), t0 = Date.now();
+          const r = await oneRun(b, dirs[side], tools.some(t => t.fresh) ? onSite(await freshState(dirs.master)) : state, tools, stim).finally(() => b.close());
           st[side].push(r);
           log(`${stim} ${side.padEnd(6)} #${k + 1} (${Math.round((Date.now() - t0) / 1000)} s): ` + tools.map(t => `${t.key} ${r[t.key].done ? '' : '(not done) '}${JSON.stringify(Object.fromEntries(Object.entries(r[t.key].nums).filter(([n]) => /score$|big|overall|type|^pitch$|accuracy$|average|rate|^ok$|%$/.test(n))))}`).join(' · ') + (r.__errors.length ? ` · page errors: ${r.__errors.slice(0, 2).join(' | ')}` : ''));
           fs.writeFileSync(OUT + '.json', JSON.stringify(data));
         }
-      } finally { await b.close(); }
+      }
     }
     // the table
     for (const stim of STIMS) {
