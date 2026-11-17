@@ -95,12 +95,19 @@ function fly(seenY, truthY, gapH) {
     console.log(`== Pitch Mountain under noise · build ${res.ref} · guard ${hasGuard ? 'present, variant ' + VARIANT : 'none'}`);
     for (const useGuard of hasGuard ? (GUARD_ONLY ? [true] : [false, true]) : [false]) {
       for (const snr of SNRS) for (const noise of NOISES) {
-        let frames = 0, oct = 0, c135 = 0, c100 = 0, o135 = 0, o100 = 0; const who = {};
+        let frames = 0, oct = 0, c135 = 0, c100 = 0, o135 = 0, o100 = 0, wins = 0, w25 = 0, w50 = 0; const who = {};
         for (const voice of VOICES) {
           const r = await page.evaluate(TRACK, { voice, noise, snr, useGuard, variant: VARIANT });
           let vo = 0;
           r.clean.forEach((m, k) => { if (m === null) return; frames++; const s = r.noisy[k]; if (s !== null && Math.abs(Math.abs(s - m) - 12) <= 3) { oct++; vo++; } });
           if (vo) who[voice.replace('.wav', '')] = vo;
+          // Pitch Dragon and the Rift: frames 300 ct or more from the target are dropped, not scored, so an octave slip
+          // costs frames, not a crash. Per 1.6 s window (96 frames, a Rift round) with 20+ voiced frames: the share of
+          // its voiced frames lost to octave slips (25 % or more, 50 % or more: the note then scored on half or less).
+          for (let w0 = 0; w0 + 96 <= r.clean.length; w0 += 48) {
+            let v = 0, o = 0; for (let k = w0; k < w0 + 96; k++) { if (r.clean[k] === null) continue; v++; const q = r.noisy[k]; if (q !== null && Math.abs(Math.abs(q - r.clean[k]) - 12) <= 3) o++; }
+            if (v < 20) continue; wins++; if (o / v >= 0.25) w25++; if (o / v >= 0.5) w50++;
+          }
           // the counterfactual: octave frames replaced by the truth
           const fixedY = r.seenY.map((y, k) => (r.clean[k] !== null && r.noisy[k] !== null && Math.abs(Math.abs(r.noisy[k] - r.clean[k]) - 12) <= 3) ? r.cleanY[k] : y);
           for (const [gap, set] of [[135, 'a'], [100, 'b']]) {
@@ -108,9 +115,9 @@ function fly(seenY, truthY, gapH) {
             if (set === 'a') { c135 += f; o135 += Math.max(0, f - g); } else { c100 += f; o100 += Math.max(0, f - g); }
           }
         }
-        const cell = { guard: useGuard, snr, noise, frames, octavePct: +(oct / Math.max(1, frames) * 100).toFixed(2), crashes135: c135, octaveCrashes135: o135, crashes100: c100, octaveCrashes100: o100, voicesWithOctave: who };
+        const cell = { guard: useGuard, snr, noise, frames, windows: wins, windowsOct25: w25, windowsOct50: w50, octavePct: +(oct / Math.max(1, frames) * 100).toFixed(2), crashes135: c135, octaveCrashes135: o135, crashes100: c100, octaveCrashes100: o100, voicesWithOctave: who };
         res.cells.push(cell);
-        console.log(`${useGuard ? 'guard ' : 'master'} ${String(snr).padStart(2)} dB ${noise.padEnd(8)} octave frames ${cell.octavePct.toFixed(2).padStart(5)} %  crashes 135px ${String(c135).padStart(3)} (octave ${String(o135).padStart(3)})  100px ${String(c100).padStart(3)} (octave ${String(o100).padStart(3)})  ${Object.entries(who).map(([k, v]) => k + ':' + v).join(' ')}`);
+        console.log(`${useGuard ? 'guard ' : 'master'} ${String(snr).padStart(2)} dB ${noise.padEnd(8)} octave frames ${cell.octavePct.toFixed(2).padStart(5)} %  crashes 135px ${String(c135).padStart(3)} (octave ${String(o135).padStart(3)})  100px ${String(c100).padStart(3)} (octave ${String(o100).padStart(3)})  1.6 s windows ${wins}: ≥25 % octave ${w25}, ≥50 % ${w50}  ${Object.entries(who).map(([k, v]) => k + ':' + v).join(' ')}`);
       }
       for (const leap of [[57, 69], [69, 57], [62, 69], [69, 62]]) {
         const r = await page.evaluate(TRACK, { leap, useGuard, variant: VARIANT });
