@@ -57,9 +57,10 @@ function ensureVib() {
 const SYNTH = { onbeat: { level: 0, late: 0 }, late60: { level: 0, late: 60 }, louder: { level: 1 }, lead: { level: 1, melody: true } };
 const stimFile = stim => stim === 'vibrato' ? VIB_FILE : S.STIM[stim];
 const TOL = 2;
-// Rhythm's average on master's own build, min–max of the six runs of the A/A (scores-2026-10-26T15-24-34: onbeat
-// master 83/86/87, branch 82/84/84; late60 master 44/44/48, branch 48/52/48)
-let RHYTHM_AA = { onbeat: [82, 87], late60: [44, 52] };
+// Rhythm's average on master's own build, min–max of the ten runs of the A/A. Rebaselined in release D4 (a browser per
+// run, the canceller off: scores-2026-11-17T21-15-24, 5 runs a side: onbeat master 90/91/91/91/91, branch 91 ×5; late60
+// master 55/55/55/54/52, branch 52/55/56/54/56). Before D4: [82, 87] and [44, 52] (scores-2026-10-26T15-24-34).
+let RHYTHM_AA = { onbeat: [90, 91], late60: [52, 56] };
 const RHYTHM_GATED = ['average', 'result: average'], RHYTHM_REPORTED = /^beat \d/;
 // tool → stimulus → the value names gated by master's own range when it is wider than ±2 (4b.2); since PHASE8.md: by
 // master's range or ±1% of master's median, whichever is wider. A value newly found to be noisier than ±2 is added here.
