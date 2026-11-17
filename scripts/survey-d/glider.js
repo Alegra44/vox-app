@@ -10,7 +10,8 @@
 // truth's height. A crash: the glider's edge (±8 px) outside the gap. Gaps: 135 px (beginner's standard gap, 100 ×
 // 1.35) and 100 px (intermediate). Each crash is put down to octave errors when the same flight with those frames
 // replaced by the truth doesn't crash there.
-// --fix: the frames also go through window.gliderPitchGuard (the scratch build's guard), if the build has it.
+// The frames also go through window.gliderPitchGuard(--variant: last | prev | median3), if the build has it;
+// --guard-only skips the unguarded pass.
 // A real leap: a clean voice-like tone holding A3 then leaping to A4 (and A4 → A3, and a fifth), the frames until the
 // glider is within 10 px of the new height, with and without the guard.
 // Usage: node scripts/survey-d/glider.js [--ref <git ref>] [--out <json>]
@@ -18,7 +19,7 @@ require('../runguard').auto();
 const fs = require('fs'), path = require('path'), os = require('os');
 const C = require('../design-verify/common');
 const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : null; };
-const REF = arg('--ref');
+const REF = arg('--ref'), VARIANT = arg('--variant') || 'last', GUARD_ONLY = process.argv.includes('--guard-only');
 const TD = path.join(os.homedir(), 'VoxCoachTestData');
 const VOICES = fs.readdirSync(path.join(TD, 'vocalset')).filter(f => /\.wav$/.test(f)).sort();
 const NOISES = arg('--noises') ? arg('--noises').split(',') : ['white', 'pink', 'babble', 'talker', 'traffic', 'tv', 'rumble'];
@@ -35,7 +36,7 @@ const SETUP = async files => { // decode every file to 48 kHz mono, kept on wind
   }
   return Object.keys(window.__a).length;
 };
-const TRACK = async ({ voice, noise, snr, useGuard, leap }) => {
+const TRACK = async ({ voice, noise, snr, useGuard, leap, variant }) => {
   const SR = 48000;
   let x;
   if (leap) { // a clean leap: 1.5 s at a, then 1.5 s at b
@@ -61,7 +62,7 @@ const TRACK = async ({ voice, noise, snr, useGuard, leap }) => {
     for (let i = 0; i < N; i++) y[i] = x[i] + g * nz[(off + i) % nz.length];
     noisy = track(await lowpass(y));
   }
-  const guard = useGuard && typeof window.gliderPitchGuard === 'function' ? window.gliderPitchGuard() : (m => m);
+  const guard = useGuard && typeof window.gliderPitchGuard === 'function' ? window.gliderPitchGuard(variant) : (m => m);
   const seen = noisy.map(m => guard(m));
   const H = 320, toY = m => gliderMidiToY(m, H);
   return { clean, noisy, seen, cleanY: clean.map(m => m === null ? null : toY(m)), seenY: seen.map(m => m === null ? null : toY(m)), range: registerRangeBounds() };
@@ -91,12 +92,12 @@ function fly(seenY, truthY, gapH) {
     const { page } = await C.openPage(b, { dir: C.buildDir(REF) });
     await page.evaluate(SETUP, files);
     const hasGuard = await page.evaluate(() => typeof window.gliderPitchGuard === 'function');
-    console.log(`== Pitch Mountain under noise · build ${res.ref} · guard ${hasGuard ? 'present' : 'none'}`);
-    for (const useGuard of hasGuard ? [false, true] : [false]) {
+    console.log(`== Pitch Mountain under noise · build ${res.ref} · guard ${hasGuard ? 'present, variant ' + VARIANT : 'none'}`);
+    for (const useGuard of hasGuard ? (GUARD_ONLY ? [true] : [false, true]) : [false]) {
       for (const snr of SNRS) for (const noise of NOISES) {
         let frames = 0, oct = 0, c135 = 0, c100 = 0, o135 = 0, o100 = 0; const who = {};
         for (const voice of VOICES) {
-          const r = await page.evaluate(TRACK, { voice, noise, snr, useGuard });
+          const r = await page.evaluate(TRACK, { voice, noise, snr, useGuard, variant: VARIANT });
           let vo = 0;
           r.clean.forEach((m, k) => { if (m === null) return; frames++; const s = r.noisy[k]; if (s !== null && Math.abs(Math.abs(s - m) - 12) <= 3) { oct++; vo++; } });
           if (vo) who[voice.replace('.wav', '')] = vo;
@@ -112,7 +113,7 @@ function fly(seenY, truthY, gapH) {
         console.log(`${useGuard ? 'guard ' : 'master'} ${String(snr).padStart(2)} dB ${noise.padEnd(8)} octave frames ${cell.octavePct.toFixed(2).padStart(5)} %  crashes 135px ${String(c135).padStart(3)} (octave ${String(o135).padStart(3)})  100px ${String(c100).padStart(3)} (octave ${String(o100).padStart(3)})  ${Object.entries(who).map(([k, v]) => k + ':' + v).join(' ')}`);
       }
       for (const leap of [[57, 69], [69, 57], [62, 69], [69, 62]]) {
-        const r = await page.evaluate(TRACK, { leap, useGuard });
+        const r = await page.evaluate(TRACK, { leap, useGuard, variant: VARIANT });
         const ys = fly(r.seenY, r.cleanY, 1e9).ys, k0 = 90, target = r.cleanY[r.cleanY.length - 5];
         let k = k0; while (k < ys.length && !(ys[k] !== null && Math.abs(ys[k] - target) <= 10)) k++;
         const ms = Math.round((k - k0) * 1000 / 60);
