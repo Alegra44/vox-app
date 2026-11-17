@@ -6245,6 +6245,16 @@ let mode = null; // 'tuner' | 'rangeLow' | 'rangeHigh'
 let stabilityBuffer = [];
 let tunerSessionStartTime = null, vocalHealthWarningShown = false;
 let tunerVib = makeVibratoTolerantLive();
+// The Tuner's reading: the vibrato centre only when the gate is sure it's a vibrato (tunerVib.vibratoSure). An irregular
+// ±20–25 ct wobble passes the gate for a cycle or two; shown as the centre it read "steady" and "In tune" almost all the
+// time (Survey D c), so until the gate is sure the reading is shown, and judged, as it is.
+function tunerReading(t, c){
+  const v = tunerVib(t, c), centre = c!==null && v!==c && !(tunerVib.vibratoDepth>0 && !tunerVib.vibratoSure);
+  // the stability window starts afresh when the reading switches to the vibrato centre (the raw swing before it isn't the note)
+  if(centre && !tunerVib.wasCentre) stabilityBuffer = [];
+  tunerVib.wasCentre = centre;
+  return centre ? v : c;
+}
 let liveFreq = null;
 
 /* ---------------- The mic: one stream, one graph ----------------
@@ -6344,7 +6354,7 @@ function loop(){
   liveFreq = freq>0 ? freq : null;
 
   if(mode==='tuner'){ // natural vibrato shows as the note's centre, not as a wobble or a missed lock
-    const held = tunerVib(performance.now(), freq>0 ? 6900+1200*Math.log2(freq/440) : null);
+    const held = tunerReading(performance.now(), freq>0 ? 6900+1200*Math.log2(freq/440) : null);
     updateTunerUI(freq>0 ? 440*Math.pow(2, (held-6900)/1200) : freq);
   }
   if(mode==='rangeLow') updateRangeLiveUI(freq, 'lowLiveNote');
@@ -6390,7 +6400,7 @@ function updateTunerUI(freq){
   tickVoiceAmbient();
 
   stabilityBuffer.push(note.cents);
-  if(stabilityBuffer.length>30) stabilityBuffer.shift();
+  if(stabilityBuffer.length>TUNER_STAB_FRAMES) stabilityBuffer.shift(); // 1.5 s, so a slow drift shows
   if(stabilityBuffer.length>5){
     const mean = stabilityBuffer.reduce((a,b)=>a+b,0)/stabilityBuffer.length;
     const variance = stabilityBuffer.reduce((a,b)=>a+(b-mean)*(b-mean),0)/stabilityBuffer.length;
@@ -6403,6 +6413,7 @@ function updateTunerUI(freq){
   setNeedle(pct, locked);
 }
 
+const TUNER_STAB_FRAMES = 90;
 const TUNER_RING_CIRC = 553; // 2*pi*88
 function resetTunerRing(){
   const ring = document.getElementById('tunerRingFill');
