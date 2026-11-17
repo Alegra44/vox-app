@@ -5767,10 +5767,11 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   </div>
 
   <!-- scoring batch B2: the speaker delay, measured before the first take of a timing tool, and from Profile → Settings -->
-  <div class="modal-overlay" id="speakerDelayOverlay" role="dialog" aria-modal="true" aria-labelledby="sdTitle" aria-describedby="sdBody" style="display:none;">
+  <div class="modal-overlay" id="speakerDelayOverlay" role="dialog" aria-modal="true" aria-labelledby="sdTitle" aria-describedby="sdBody sdLoud" style="display:none;">
     <div class="modal-card">
       <h2 class="trial-modal-title" id="sdTitle"></h2>
       <p class="trial-modal-sub" id="sdBody" aria-live="polite"></p>
+      <p class="trial-modal-sub" id="sdLoud" data-i18n="sd_loud" hidden>Your speakers are loud at the mic. Headphones will give truer scores.</p>
       <div class="progress-bar-thin sd-progress" id="sdProgress" aria-hidden="true"><div class="fill" id="sdProgressFill" style="width:0%;"></div></div>
       <div class="p9-actions">
         <button class="hl-btn hl-btn--quiet" id="sdSkipBtn" data-i18n="sd_skip">Skip</button>
@@ -6659,6 +6660,18 @@ const PLAYBACK_CEILING = 0.949; // just under the 0.95 the choir and backing tri
 const PLAYBACK_VOLUME_KEY = 'playbackVolume';
 let playbackVolume = (()=>{ try{ const v = parseFloat(localStorage.getItem(PLAYBACK_VOLUME_KEY)); return v>=0 && v<=1 ? v : 1; }catch(e){ return 1; } })();
 let playbackIn = null, playbackOutNode = null, playbackChainReady = null;
+// One output bus (release D3): every sound the app makes reaches the speakers through appOut, a unity gain with an
+// analyser on it (outAn), so the bleed guard knows what the speakers are playing a moment ago. Nothing connects to
+// audioCtx.destination except appOut.
+let appOut = null, outAn = null;
+function appOutBus(){
+  if(!appOut || appOut.context!==audioCtx){
+    appOut = audioCtx.createGain(); appOut.connect(audioCtx.destination);
+    outAn = audioCtx.createAnalyser(); outAn.fftSize = 512; appOut.connect(outAn);
+    bleedStart();
+  }
+  return appOut;
+}
 // The limiter: gain = a moving average (L samples) of the sliding minimum (L samples) of each sample's cap
 // (ceiling / |x|), applied to the input delayed by L−1 samples, so every output sample's gain is at most its own cap;
 // a 80 ms release on top lets the gain recover smoothly. Pure arithmetic per sample, no allocation.
@@ -6693,7 +6706,7 @@ function playbackDest(){
   if(!playbackIn){
     playbackIn = audioCtx.createGain();
     playbackIn.gain.value = playbackVolume;
-    playbackIn.connect(audioCtx.destination); playbackOutNode = playbackIn; // until the limiter is in
+    playbackIn.connect(appOutBus()); playbackOutNode = playbackIn; // until the limiter is in
     ensurePlaybackChain();
   }
   return playbackIn;
@@ -6714,7 +6727,7 @@ function ensurePlaybackChain(){
       lim = audioCtx.createDynamicsCompressor();
       lim.threshold.value = -1; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.08;
     }
-    playbackIn.disconnect(); playbackIn.connect(lim); lim.connect(audioCtx.destination); playbackOutNode = lim;
+    playbackIn.disconnect(); playbackIn.connect(lim); lim.connect(appOutBus()); playbackOutNode = lim;
   })();
   return playbackChainReady;
 }
@@ -7041,6 +7054,8 @@ const TRANSLATIONS = {
     sd_body_failed:"Couldn't hear the clicks, so timing uses an estimate. With Bluetooth headphones it may read late.",
     sd_skip:"Skip",
     sd_continue:"Continue",
+    sd_loud:"Your speakers are loud at the mic. Headphones will give truer scores.",
+    sd_body_remeasuring:"Measuring once more: timing tools now also check how loud your speakers are at the mic. Stay quiet for 4 seconds.",
     hub_you_profile_title:"Profile & settings", hub_you_profile_desc:"Your Voice Card, language, theme and account.",
     hub_you_journey_title:'21-Day Journey', hub_you_journey_desc:'Baseline, goal, XP, achievements, Day 1 vs. today.',
     hub_you_dashboard_title:"Progress", hub_you_dashboard_desc:"Today's Plan, the weekly challenge, your range and activity.",
@@ -8842,6 +8857,8 @@ const TRANSLATIONS = {
     sd_body_failed:"Les clics n'ont pas été entendus, le timing utilise donc une estimation. Avec un casque Bluetooth, il peut indiquer du retard.",
     sd_skip:"Passer",
     sd_continue:"Continuer",
+    sd_loud:"Vos haut-parleurs sont forts au micro. Avec un casque, les scores seront plus justes.",
+    sd_body_remeasuring:"Nouvelle mesure : les outils de timing vérifient désormais aussi le volume de vos haut-parleurs au micro. Restez silencieux 4 secondes.",
     hub_you_profile_title:"Profil et réglages", hub_you_profile_desc:"Votre carte vocale, votre langue, votre thème et votre compte.",
     hub_you_journey_title:'Parcours de 21 jours', hub_you_journey_desc:"Référence de départ, objectif, XP, succès, Jour 1 vs aujourd'hui.",
     hub_you_dashboard_title:"Progrès", hub_you_dashboard_desc:"Le plan du jour, le défi de la semaine, votre tessiture et votre activité.",
@@ -10643,6 +10660,8 @@ const TRANSLATIONS = {
     sd_body_failed:"No se oyeron los clics, así que el ritmo usa una estimación. Con auriculares Bluetooth puede marcar tarde.",
     sd_skip:"Omitir",
     sd_continue:"Continuar",
+    sd_loud:"Tus altavoces suenan fuerte en el micrófono. Con auriculares, las puntuaciones serán más fieles.",
+    sd_body_remeasuring:"Midiendo una vez más: las herramientas de ritmo ahora también comprueban cuánto se oyen tus altavoces en el micrófono. Quédate en silencio 4 segundos.",
     hub_you_profile_title:"Perfil y ajustes", hub_you_profile_desc:"Tu tarjeta vocal, idioma, tema y cuenta.",
     hub_you_journey_title:'Recorrido de 21 días', hub_you_journey_desc:'Línea base, objetivo, XP, logros, Día 1 frente a hoy.',
     hub_you_dashboard_title:"Progreso", hub_you_dashboard_desc:"El plan de hoy, el reto semanal, tu registro y tu actividad.",
@@ -12444,6 +12463,8 @@ const TRANSLATIONS = {
     sd_body_failed:"Tıklamalar duyulamadı, bu yüzden zamanlama bir tahmin kullanıyor. Bluetooth kulaklıkla geç görünebilir.",
     sd_skip:"Atla",
     sd_continue:"Devam et",
+    sd_loud:"Hoparlörleriniz mikrofonda yüksek duyuluyor. Kulaklıkla puanlar daha doğru olur.",
+    sd_body_remeasuring:"Bir kez daha ölçülüyor: zamanlama araçları artık hoparlörlerinizin mikrofonda ne kadar yüksek duyulduğunu da kontrol ediyor. 4 saniye sessiz kalın.",
     hub_you_profile_title:"Profil ve ayarlar", hub_you_profile_desc:"Ses kartın, dilin, temanın ve hesabın.",
     hub_you_journey_title:'21 Günlük Yolculuk', hub_you_journey_desc:'Başlangıç, hedef, XP, başarılar, 1. Gün ile bugün karşılaştırması.',
     hub_you_dashboard_title:"İlerleme", hub_you_dashboard_desc:"Bugünün planı, haftalık görev, ses aralığın ve etkinliğin.",
@@ -17563,7 +17584,7 @@ async function startAudioTicker(onTick){
       await tickWorkletReady;
       const node = new AudioWorkletNode(audioCtx, 'vc-tick', {numberOfInputs:0, numberOfOutputs:1});
       const sink = audioCtx.createGain(); sink.gain.value = 0;
-      node.connect(sink).connect(audioCtx.destination);
+      node.connect(sink).connect(appOutBus());
       node.port.onmessage = onTick;
       return ()=>{ node.port.onmessage = null; node.disconnect(); sink.disconnect(); };
     }
@@ -17587,7 +17608,7 @@ function timingTrainerTick(){
   if(!timingTrainer.active) return;
   const songT = audioCtx.currentTime - choirStartCtxTime;
   const raw = readRawMic();
-  const isVoiced = computeRMS(raw) > ONSET_RMS_THRESHOLD;
+  const isVoiced = computeRMS(raw) > ONSET_RMS_THRESHOLD && overBleed(raw);
   if(!timingTrainer.armed){
     if(isVoiced) timingTrainer.silentSince = null;
     else if(timingTrainer.silentSince===null) timingTrainer.silentSince = songT;
@@ -18543,7 +18564,7 @@ async function ycTapOutput(onBlock){
   // channelCount 1 (explicit): a stereo take is mixed down to mono, a mono one passes through unchanged.
   const node = new AudioWorkletNode(audioCtx, 'vc-tap', {numberOfInputs:1, numberOfOutputs:1, channelCount:1, channelCountMode:'explicit'});
   const sink = audioCtx.createGain(); sink.gain.value = 0; // keeps the node pulled by the graph; adds nothing to the speakers
-  choirOutNode.connect(node); node.connect(sink).connect(audioCtx.destination);
+  choirOutNode.connect(node); node.connect(sink).connect(appOutBus());
   node.port.onmessage = e=>onBlock(e.data.f, e.data.d);
   return ()=>{ node.port.onmessage = null; try{ choirOutNode.disconnect(node); }catch(e){} node.disconnect(); sink.disconnect(); };
 }
@@ -18681,7 +18702,7 @@ const RD_SONGS = ['hymn','ballad'];
 function captureNoteFrame(run, idx, nt, songT){
   if(songT<nt.start || songT>nt.end) return;
   analyser.getFloatTimeDomainData(dataArray);
-  const f = autoCorrelate(dataArray, audioCtx.sampleRate);
+  const f = overBleed(readRawMic()) ? autoCorrelate(dataArray, audioCtx.sampleRate) : -1;
   if(f<=0) return;
   cwVoicePush(songT, f); // the stage's voice line, from this same reading
   const at = songT - nt.start;
@@ -18690,6 +18711,32 @@ function captureNoteFrame(run, idx, nt, songT){
     run.cents[idx].push(centsFromTarget(f, nt.midi));
     run.times[idx].push(at);
   }
+}
+
+/* ---- The speaker guard (release D3; Survey D a) ----
+   With speakers, the mic hears the app's own output: Entrance & Cutoff, Rhythm, Harmony Arena and Harmony Memory
+   credited it as singing with nobody singing. The output bus's level is kept every 5 ms; the speaker-delay measurement
+   gives the round trip (ms) and the bleed's gain (output → mic). A mic frame counts as a voice only when its level is
+   above BLEED_K (+6 dB) × the bleed predicted for now: gain × the output's level ms ago (the loudest within ±50 ms).
+   Off (every frame counts) when this output has no measured gain: headphones, a failed or skipped measurement. */
+const BLEED_K = 2, BLEED_SPAN_S = 0.05, SD_LOUD_GAIN = 0.5;
+const bleedHist = []; let bleedTimer = null;
+function bleedStart(){
+  if(bleedTimer) clearInterval(bleedTimer);
+  bleedHist.length = 0;
+  const buf = new Float32Array(outAn.fftSize), an = outAn, ctx = audioCtx;
+  bleedTimer = setInterval(()=>{
+    if(ctx.state!=='running') return;
+    an.getFloatTimeDomainData(buf); let q = 0; for(let i=0;i<buf.length;i++) q += buf[i]*buf[i];
+    bleedHist.push({t:ctx.currentTime, r:Math.sqrt(q/buf.length)}); while(bleedHist.length>400) bleedHist.shift();
+  }, 5);
+}
+function overBleed(raw){
+  if(window.__bleedGuardOn===false) return true; // the measuring rigs' "guard off" pass
+  const m = sdStored(); if(!m || m.how!=='measured' || !(m.gain>0) || !outAn) return true;
+  const at = audioCtx.currentTime - (m.ms||0)/1000; let out = 0;
+  for(const h of bleedHist) if(Math.abs(h.t-at)<=BLEED_SPAN_S && h.r>out) out = h.r;
+  return computeRMS(raw) > BLEED_K*m.gain*out;
 }
 
 /* ---- Performance Report ---- */
@@ -22268,7 +22315,7 @@ function harmonyLoop(){
   harmonyTotalFrames++;
   analyser.getFloatTimeDomainData(dataArray);
   const raw=readRawMic(), micMs=micClockMs(harmonyStartCtx)-harmonyDelayMs; // stamped as it's read (micClockMs)
-  const freq=autoCorrelate(dataArray, audioCtx.sampleRate);
+  const freq=overBleed(raw) ? autoCorrelate(dataArray, audioCtx.sampleRate) : -1;
   harmonyOnset.push(micMs, raw, freq, targetMidi);
   const ribbon = document.getElementById('harmonyRibbonShape');
   if(freq>0){
@@ -24033,7 +24080,7 @@ if(navigator.mediaDevices && navigator.mediaDevices.addEventListener){
   });
 }
 
-// The measurement: ~4 s on the app's own microphone path (micG.raw, before the auto gain). Resolves {ok, ms, heard}.
+// The measurement: ~4 s on the app's own microphone path (micG.raw, before the auto gain). Resolves {ok, ms, heard, gain}.
 async function sdMeasure(run){
   const g = await micGraph();
   if(!audioCtx.audioWorklet || !window.AudioWorkletNode) return {ok:false, heard:0};
@@ -24045,7 +24092,7 @@ async function sdMeasure(run){
   if(run.cancelled) return null;
   const sr = audioCtx.sampleRate, node = new AudioWorkletNode(audioCtx, 'vc-rec'), sink = audioCtx.createGain(); sink.gain.value = 0;
   const blocks = []; node.port.onmessage = e=>blocks.push(e.data);
-  g.raw.connect(node); node.connect(sink).connect(audioCtx.destination);
+  g.raw.connect(node); node.connect(sink).connect(appOutBus());
   // 2 ms of 3 kHz under a Hann window, straight to the speaker (the Playback volume setting is for music, not this)
   const L = Math.round(sr*0.002), click = new Float32Array(L);
   for(let i=0;i<L;i++) click[i] = Math.sin(2*Math.PI*3000*i/sr)*0.5*(1-Math.cos(2*Math.PI*i/(L-1)));
@@ -24053,7 +24100,7 @@ async function sdMeasure(run){
   const T0 = audioCtx.currentTime + SD_FIRST_S, times = [], srcs = [];
   for(let k=0;k<SD_CLICKS;k++){
     const b = audioCtx.createBufferSource(), gn = audioCtx.createGain(); gn.gain.value = 1.6;
-    b.buffer = buf; b.connect(gn).connect(audioCtx.destination); b.start(T0 + sdClickAt(k)); times.push(T0 + sdClickAt(k)); srcs.push(b);
+    b.buffer = buf; b.connect(gn).connect(appOutBus()); b.start(T0 + sdClickAt(k)); times.push(T0 + sdClickAt(k)); srcs.push(b);
   }
   const endAt = T0 + sdClickAt(SD_CLICKS-1) + SD_SEARCH_S + 0.05;
   run.endAt = endAt; run.from = audioCtx.currentTime;
@@ -24069,26 +24116,28 @@ async function sdMeasure(run){
   const q0 = Math.max(0, Math.round(times[0]*sr) - f0 - Math.round(0.4*sr)), q1 = Math.round(times[0]*sr) - f0 - Math.round(0.02*sr);
   if(q1 - q0 < Math.round(0.1*sr)) return {ok:false, heard:0};
   let e = 0; for(let i=q0;i<q1;i++) e += x[i]*x[i];
-  const floor = Math.sqrt(e/(q1-q0)), found = [];
+  const floor = Math.sqrt(e/(q1-q0)), found = [], gains = []; // gains: the bleed's level, output → mic (each click's matched-filter peak over its own)
   for(const at of times){
     const i0 = Math.round(at*sr) - f0;
     if(i0<0 || i0 + Math.round(SD_SEARCH_S*sr) + L > n) continue;
     let best = -1, bi = -1;
     for(let d=0; d<Math.round(SD_SEARCH_S*sr); d++){ let c = 0; const j = i0 + d; for(let i=0;i<L;i++) c += x[j+i]*click[i]; c = Math.abs(c); if(c>best){ best = c; bi = d; } }
-    if(best/(floor*Math.sqrt(pk*L) + 1e-12) > SD_SNR) found.push(bi/sr*1000);
+    if(best/(floor*Math.sqrt(pk*L) + 1e-12) > SD_SNR){ found.push(bi/sr*1000); gains.push(best/(pk*1.6)); }
   }
   const med = a=>{ const q = a.slice().sort((p,r)=>p-r); return q.length%2 ? q[q.length>>1] : (q[q.length/2-1] + q[q.length/2])/2; };
   if(found.length < SD_MIN_HEARD) return {ok:false, heard:found.length};
   const m = med(found), agree = found.filter(v=>Math.abs(v-m)<=SD_AGREE_MS);
   if(agree.length < SD_MIN_HEARD) return {ok:false, heard:agree.length};
-  return {ok:true, ms:Math.round(med(agree)), heard:agree.length};
+  return {ok:true, ms:Math.round(med(agree)), heard:agree.length, gain:+med(gains).toFixed(4)};
 }
 
 // The sheet: measuring (with Skip), then done (the delay) or couldn't hear the clicks (the estimate), with Continue.
-function sdShow(state, ms){
-  const ttl = document.getElementById('sdTitle'), body = document.getElementById('sdBody');
+// again: a device measured before release D (a delay, no gain), measured once more; gain: the bleed's, for the loud line.
+function sdShow(state, ms, opts){
+  const o = opts || {}, ttl = document.getElementById('sdTitle'), body = document.getElementById('sdBody');
   ttl.textContent = t(state==='measuring' ? 'sd_title_measuring' : state==='done' ? 'sd_title_done' : 'sd_title_failed');
-  body.textContent = state==='measuring' ? t('sd_body_measuring') : state==='done' ? t('sd_body_done_tpl').replace('{ms}', ms) : t('sd_body_failed');
+  body.textContent = state==='measuring' ? t(o.again ? 'sd_body_remeasuring' : 'sd_body_measuring') : state==='done' ? t('sd_body_done_tpl').replace('{ms}', ms) : t('sd_body_failed');
+  document.getElementById('sdLoud').hidden = !(state==='done' && o.gain>=SD_LOUD_GAIN);
   document.getElementById('sdProgress').style.display = state==='measuring' ? '' : 'none';
   document.getElementById('sdSkipBtn').style.display = state==='measuring' ? '' : 'none';
   const cont = document.getElementById('sdContinueBtn'); cont.style.display = state==='measuring' ? 'none' : '';
@@ -24105,7 +24154,8 @@ async function sdOpen(){
   const ov = document.getElementById('speakerDelayOverlay');
   const run = sdRun = {cancelled:false, done:false};
   document.getElementById('sdProgressFill').style.width = '0%';
-  sdShow('measuring');
+  const prev = sdStored(), again = sdNeedsGain(prev);
+  sdShow('measuring', null, {again});
   ov.style.display = 'flex';
   openModalWithA11y(ov, ()=>{ if(ov.dataset.sdState==='measuring') sdSkip(); else sdClose(true); }); // Escape: Skip, or Continue
   document.getElementById('sdSkipBtn').focus();
@@ -24115,7 +24165,8 @@ async function sdOpen(){
   run.done = true;
   if(run.cancelled || sdRun!==run) return;
   if(!sdKeyNow) sdKeyNow = await sdOutputKey();
-  if(r && r.ok){ sdSave(sdKeyNow, {ms:r.ms, how:'measured', heard:r.heard, at:Date.now()}); sdShow('done', r.ms); }
+  if(r && r.ok){ sdSave(sdKeyNow, {ms:r.ms, how:'measured', heard:r.heard, gain:r.gain, at:Date.now()}); sdShow('done', r.ms, {gain:r.gain}); }
+  else if(again){ sdSave(sdKeyNow, {...prev, gain:null}); sdShow('done', prev.ms); } // keeps its delay; not asked again
   else { sdSave(sdKeyNow, {how:'estimate', heard:r ? r.heard : 0, at:Date.now()}); sdShow('failed'); }
   sdRenderRow();
 }
@@ -24127,7 +24178,9 @@ function sdClose(go){
   if(r) r(go);
 }
 function sdSkip(){
-  if(sdKeyNow && !sdStored()) sdSave(sdKeyNow, {how:'estimate', skipped:true, at:Date.now()});
+  const r = sdKeyNow && sdStored();
+  if(sdKeyNow && !r) sdSave(sdKeyNow, {how:'estimate', skipped:true, at:Date.now()});
+  else if(sdNeedsGain(r)) sdSave(sdKeyNow, {...r, gain:null}); // the once-more measurement skipped: keeps its delay
   sdClose(true);
   sdRenderRow();
 }
@@ -24135,12 +24188,15 @@ function sdSkip(){
 // delay stored, else measures first. Resolves false if the take shouldn't start (left the screen mid-sheet).
 async function sdGate(){
   if(!sdKeyNow || !micLive()) sdKeyNow = await sdOutputKey();
-  if(sdStored()) return true;
+  if(sdStored() && !sdNeedsGain(sdStored())) return true;
   if(sdPending) return sdPending;
   sdPending = new Promise(res=>{ sdResolve = res; });
   sdOpen();
   return sdPending;
 }
+// A delay measured before release D has no bleed gain (the guard is off for it): the sheet measures it once more before
+// the next timing take. A failed or skipped once-more keeps the delay and stores gain null, so it's asked only once.
+function sdNeedsGain(r){ return !!(r && r.how==='measured' && !('gain' in r)); }
 function sdCancel(){ if(sdRun || sdPending) sdClose(false); }
 function sdRenderRow(){
   const el = document.getElementById('sdRowState');
@@ -24265,7 +24321,7 @@ function rhythmTick(){
   const now = audioCtx.currentTime;
   if(now > rhythmBeatTimestamps[7] + rhythmBeatS*0.6 + rhythmDelayS){ finishRhythmTrainer(rhythmBeatS*1000); return; }
   const raw = readRawMic();
-  const isVoiced = computeRMS(raw) > ONSET_RMS_THRESHOLD;
+  const isVoiced = computeRMS(raw) > ONSET_RMS_THRESHOLD && overBleed(raw);
   if(isVoiced && !rhythmWasVoiced){
     const edgeT = now - edgeSecondsAgo(raw, audioCtx.sampleRate, true) - rhythmDelayS;
     const bestIdx = claimNearestTarget(rhythmBeatTimestamps, rhythmResults, edgeT, rhythmBeatS*0.5);

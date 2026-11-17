@@ -10,6 +10,7 @@
 // device's canceller removes some of the bleed, by an amount this rig can't reproduce (see SURVEY_D.md).
 // --guard: also with the scratch build's bleed guard (the page's window.__bleedGuard, if the build has it).
 // Usage: VOX_BACKEND=local NODE_OPTIONS=… node scripts/survey-d/bleed.js [--ref <git ref>] [--runs 2] [--out <json>]
+//   [--guard | --guard-only] [--gains 0,0.1,0.3,1] [--tools entrance,cutoff,arena,memory,rhythm]
 require('../runguard').auto();
 if (process.env.VOX_BACKEND !== 'local') { console.error('bleed.js runs against the local Supabase stack only'); process.exit(2); }
 const fs = require('fs');
@@ -72,7 +73,9 @@ const TOOLS = {
     const state = await c0.storageState(); await c0.close();
     const guardModes = process.argv.includes('--guard-only') ? [true] : process.argv.includes('--guard') ? [false, true] : [false];
     console.log(`== speaker bleed, nobody singing · build ${res.ref} · D ${D} ms · ${RUNS} runs`);
-    for (const guard of guardModes) for (const gain of [0, 0.1, 0.3, 1]) for (const [key, tool] of Object.entries(TOOLS)) for (let k = 0; k < RUNS; k++) {
+    const GAINS = arg('--gains') ? arg('--gains').split(',').map(Number) : [0, 0.1, 0.3, 1], ONLY = arg('--tools') ? arg('--tools').split(',') : null;
+    for (const guard of guardModes) for (const gain of GAINS) for (const [key, tool] of Object.entries(TOOLS)) for (let k = 0; k < RUNS; k++) {
+      if (ONLY && !ONLY.includes(key)) continue;
       const { ctx, page } = await C.openPage(b, { dir, storageState: state, prepare: c => c.addInitScript(LOOP, { D, gain }) });
       let r;
       try {
@@ -82,9 +85,9 @@ const TOOLS = {
           const k = await sdOutputKey();
           if (guard) { // the build's own measurement on this rig (its delay and, in the guard build, the bleed's gain)
             await initAudio(); const r = await sdMeasure({});
-            sdSave(k, { ms: r && r.ok ? r.ms : D, how: 'measured', heard: r ? r.heard : 0, gain: r && r.gain, rig: true, at: Date.now() });
+            sdSave(k, { ms: r && r.ok ? r.ms : D, how: 'measured', heard: r ? r.heard : 0, gain: (r && r.gain) || null, rig: true, at: Date.now() });
             window.__sdResult = r;
-          } else sdSave(k, { ms: D, how: 'measured', heard: 10, rig: true, at: Date.now() });
+          } else sdSave(k, { ms: D, how: 'measured', heard: 10, gain: null, rig: true, at: Date.now() });
         }, { D, guard });
         await C.showPanel(page, tool.panel); await C.clearOverlays(page);
         await page.evaluate(`(${tool.start})()`);
