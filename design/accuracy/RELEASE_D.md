@@ -22,4 +22,121 @@ Standing rules from the same message: AC power, the run lock and time limits on.
 
 ## Results
 
-(Filled in as each item lands.)
+Checks: `scripts/survey-d/logs/checksD-2026-11-17T10-29-39/` (local stack, run lock, time limits, AC; the queue paused
+19:58–01:10 on battery, as its rule says). D3's rig, voiceguard and real-device logs: review/accuracyD.
+
+### D1, Tuner: c2 and the follow-up, both kept
+
+`tunerReading`: the vibrato centre only when `tunerVib.vibratoSure` (c2); the stability window (90 frames, 1.5 s) starts
+afresh when the readout switches to the centre.
+
+| input | master steady % | D1 steady % |
+|---|---|---|
+| vibrato 5.5 Hz ±40 ct | 100.0 | 100.0 (gate ≥95 ✓) |
+| glide 10 ct/s | 100.0 | 2.7 (gate ≤20 ✓) |
+| glide 20 ct/s | 89.6 | 0.0 (gate ≤20 ✓) |
+| glide 40 ct/s | 0.0 | 0.0 |
+| wobble ±20 ct, 3–7 Hz | 95.8 | 21.8 |
+| wobble ±25 ct, 3–7 Hz | 95.7 | 95.3 |
+| random walk 15 ct/s | 56.0 | 7.2 |
+| steady, steady + noise 20/10/5 dB | 100 | 100 |
+
+Both gates pass, so the follow-up stays. One trade to know: the ±20 ct wobble (too shallow for `vibratoSure`) now reads
+steady 22 % of the time, from 96 %: it's no longer called vibrato, so its ±20 ct swing counts against stability. c2 alone
+gave 11 % there; the follow-up doesn't cause it.
+
+### D2, Pitch Mountain: the octave hold, anchored on the median of the last 5 frames
+
+`window.gliderPitchGuard`: a reading 9–15 semitones from the median of the last 5 frames is held at that median, for up to
+4 frames. **This isn't either of the two fixes the step named**; both were measured first and both fail the gate:
+
+| variant | octave crashes 135 px, 10 dB babble/talker/tv | 20 dB | falling fifth | octave leaps |
+|---|---|---|---|---|
+| survey's hold | 0 / 5 / 2 | 0 / 2 / 0 | 183 ms | 217 / 183 ms |
+| away from the frame before | 61 / 38 / 38 | 21 / 19 / 20 | 33 ms | 167 / 133 ms |
+| median of the last 3 | 1 / 10 / 15 | 0 / 2 / 0 | 50 ms | 183 / 150 ms |
+| a scratch try ("jump9", not shipped) | 0 / 7 / 3 | 0 / 2 / 0 | 117 ms | 217 / 183 ms |
+| **median of the last 5 (shipped)** | **0 / 4 / 3** | **0 / 1 / 1** | **50 ms** | **200 / 167 ms** |
+| master (no hold) | 113 / 47 / 53 | 40 / 22 / 24 | 50 ms | 150 / 117 ms |
+
+(Leaps: A3→A4 / A4→A3; the falling fifth is A4→D4.) Gates: the falling fifth 50 ms ✓ (≤70); an octave leap +50 ms over master both ways ✓ (≤+67);
+octave crashes no worse than the survey's hold: in total yes (7 vs 7 at 10 dB, 2 vs 2 at 20 dB), **but TV is one worse
+at each SNR (3 vs 2, 1 vs 0)** while talker is one better. Your call whether that counts.
+
+Pitch Dragon and the Rift (numbers only): they drop a frame ±300 ct or more from the target, so an octave slip costs
+frames, not a crash. 1.6 s windows (279 per cell) losing ≥25 % / ≥50 % of their frames to octave errors:
+
+| | white | babble | talker | tv |
+|---|---|---|---|---|
+| 20 dB | 0 / 0 | 9 / 2 | 8 / 1 | 8 / 1 |
+| 10 dB | 0 / 0 | 73 / 25 | 38 / 7 | 45 / 17 |
+
+### D3, the speaker guard: passes the rig, fails the real-device check
+
+- One output bus (`appOutBus`: a unity gain, the analyser `outAn` on it; the 6 `audioCtx.destination` connections go
+  through it; nothing patches `AudioNode.prototype`). The bus level every 5 ms; a mic frame counts only above
+  2 × gain × the output's level the measured delay ago (loudest within ±50 ms). In Entrance & Cutoff, Rhythm, Harmony
+  Arena and Harmony Memory (`overBleed`).
+- `sdMeasure` returns the bleed gain; stored with the delay. A record measured before D (no `gain` key) opens the sheet
+  once more before the next timing take; a failed or skipped once-more keeps the delay, stores gain null, isn't asked again.
+- Gain ≥ 0.5: the sheet's headphones line (`sd_loud`, en/fr/es/tr); the once-more sheet says why (`sd_body_remeasuring`).
+
+Rig (bleed.js, the loop over a −60 dBFS floor, D 120 ms): **every guard cell credits 0** (5 tools × −20/−10/0 dB × 2 runs).
+Master at −20 dB credits Entrance 8/8, Cutoff 8/8, Arena 75 %; at 0 dB also Rhythm 8/8. ✓
+Voiceguard (Rhythm, the on-beat voice, no bleed): no guard 90/91; −20 dB 91/91; −10 dB 90/91 ✓ (±2); 0 dB 45/44
+(the guard expects bleed louder than the voice: blocked, as designed for a device that loud).
+
+**Real device (this Mac's speakers and mic, the canceller on, nobody singing): fails.**
+
+| volume | Entrance | Cutoff | Arena Acc | Memory | Rhythm |
+|---|---|---|---|---|---|
+| 50 % | 7/8 (clicks not heard: guard off) | 0/8 | 17 % | 0/8 | 0/8 |
+| 100 % | 1/8 | 1/8 | 45 % (clicks not heard) | 0/8 | 0/8 |
+| 50 %, diag run | 7/8 (not heard), 0/8 | | 7 %, 33 % | | |
+| 100 %, diag run | 6/8, 4/8 | | 22 %, 40 % (one not heard) | | |
+
+Why (`--diag`: the mic level ÷ the predicted bleed, per frame): with the canceller on, (1) the sheet's clicks often aren't
+heard at all (heard 0–1 of 10), so no gain is stored and the guard is off; (2) when a gain is measured, the real bleed of
+music runs 1.2–10× the prediction (median up to 2.5): the canceller cuts the short clicks harder than sustained tones, so
+the click gain underestimates the music's bleed. I couldn't confirm the room was quiet.
+
+Options, for you to choose:
+1. Measure the gain with a music-like burst (a held chord, 300 ms) instead of the clicks: same sheet, longer.
+2. Learn the gain during the take: the lead-in bars before the entrance play with nobody expected to sing; take the
+   mic ÷ output ratio there (no sheet change; a singer who comes in early would be read as bleed).
+3. A conservative default when nothing's measured or the clicks aren't heard (e.g. gain 0.3): would block a quiet singer
+   on loud speakers; headphones unaffected.
+1 + 3 together are what I'd try first.
+
+### D4, tests
+
+scores.js: the fake-mic browser launched per run, the canceller off (an init script, both sides). Rebaselined: Rhythm's
+A/A range (5 runs a side, master vs master) is onbeat 90–91, late60 52–56 (was 82–87, 44–52: with the canceller off
+the takes score higher and steadier). Per-note timing in Performance Director and Karaoke ("lead") moves by a frame
+(3 points) between runs: master vs master spans 80–96.
+
+### Checks
+
+| check | result |
+|---|---|
+| tuner (master, branch) | pass; the table above |
+| glider | pass; the table above |
+| bleed (master; the branch with the guard) | master credits bleed as above; the guard 0 in all cells (bleed-d3b) |
+| voiceguard | pass at −20 / −10 dB (above) |
+| hygiene (master, branch) | pass, both: the canceller off on every track; Voice Quality f0 440, HNR 33 both sides; Emotion Mode the same distribution |
+| scores (4a tools) | pass |
+| scores4b | first run: 4 rows out, all Rhythm's average against the old A/A range, **master too** (88/91/88, 55/55/55); re-gated on the same runs with D4's new range: pass |
+| scores6 | first run (3 a side): 6 rows out, per-note timing in Performance Director and Karaoke on "lead" (master 92/92/92, branch 86–89). Bisected: D3's own commit passes against master, the commit before D3 fails 2, D3 with its 5 ms timer off fails 7 the other way: a frame of jitter, not D. Re-run with 5 a side: pass |
+| house, hooks, contrast, copyscan --all, names, focus, targets, bootcheck | pass |
+
+Logs: checksD-2026-11-17T10-29-39; scores-2026-11-17T21-15-24 (Rhythm A/A), …21-19-23 (Performance Director and
+Karaoke A/A), …21-30-18 (scores4b re-gated), …21-30-37 (scores6, 5 a side); the bisect logs on review/accuracyD.
+
+### Screenshots (review/accuracyD)
+
+The sheet's headphones line (a new device, gain ≥ 0.5) and the once-more prompt (measuring, done), at 390 Light, 390
+Dark and 1280 Light.
+
+### Not merged
+
+Nothing from D merges until reviewed. Open: D3's real-device failure (options 1–3 above), and D2's TV cell.
