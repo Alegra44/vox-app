@@ -4,13 +4,13 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-16)
+## Branches on GitHub (2026-11-17)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through the scoring batch's release B (merge 0b2965c), live as dpl_7n6H9JiTjJzz71wWpw948MUMD4a5 |
-| `day/local` | Release C, the UTC day (DAY.md): built and checked on the local stack, waiting for the user's review and "deploy" |
-| `review/scoringB-prod` | Orphan, no code: release B's production checks (all pass after reruns), README |
+| `master` | Everything, through release C, the local day (merge 511eeb5), live as dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z |
+| `review/dayC-prod` | Release C's production checks (scripts/day-verify/logs/prodC-*, prodC-notes.txt) |
+| `survey/d` | Survey D (design/accuracy/SURVEY_D.md and scripts/survey-d/); stays until release D ships |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
@@ -19,15 +19,18 @@ Every other branch was deleted on 2026-11-14 after phase 10's production checks 
 review/phase4b-prod. Their commits are in master (all 16 code branches checked as ancestors before deleting).
 On 2026-11-16, after release B's production checks: scoring/b (merged), scoring/survey (its SCORING_SURVEY.md,
 survey-tables.txt and scratch-fix.patch copied to master's design/scoring/; survey.js and latency.js came with B),
-review/scoringB and review/scoringA-prod. Local only: `scratch/scoring-fix` (the survey's scratch build, never pushed;
+review/scoringB and review/scoringA-prod. On 2026-11-17, after release C's production checks: day/local (merged) and
+review/scoringB-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
 its worktree removed).
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-16:
-the scoring batch's release B, **dpl_7n6H9JiTjJzz71wWpw948MUMD4a5** (deployed by the user from master 0b2965c, the
---no-ff merge of scoring/b; page sha256 82f6fcc5b4990875…), **the rollback target from now on**. The previous target was
-release A, dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb. Migration 0009 (`expression_scores`) and the api Edge Function with it on
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-17:
+release C, the local day, **dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z** (deployed by the user from day/local at cab6480, the
+same app files as master's merge 511eeb5), **the rollback target from now on**. The previous target was release B,
+dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Migration 0010 and the api Edge Function with it are live. Before C, release B's
+migration 0009 (`expression_scores`) and the api function with it went live on 2026-11-16; release A,
+dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb, came before that. Migration 0009 (`expression_scores`) and the api Edge Function with it on
 the allow-list are live with B; a rollback of the app leaves both.
 `deploy/index.html` is the only client (the old `voxcoach-prototype.html` mirror was deleted on 2026-10-02).
 
@@ -774,18 +777,25 @@ Items 1, 2, 4, 5 and 6 (B1–B6), plus the review's two (SCORING.md "Release B r
 - **The scoring batch is done.** Next in this line: the UTC day (R3), release C (below).
 
 
-## Release C, the UTC day (`day/local`, spec `design/day/DAY.md`): BUILT 2026-11-16, waiting for the user's review
+## Release C, the local day: LIVE 2026-11-17, dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z (the rollback target)
 
-The day is the device's local date (`localDayOf(ms)` in vocal-load-store.js; every use is listed in DAY.md).
-Vocal-load sessions carry `tzOffsetMin`. Migration 0010 (`tz_offset_min`, the day CHECK at the offset or the UTC rule
-when null, pruning day − 2, `user_progress.day_basis` / `day_basis_since`), the api function (tzOffsetMin, since) and the
-app go out together. Order at deploy: 0010 first, then the api function, then the app. The typed "deploy" gate applies:
-it changes a rule on a live table. Every check ran against the local Supabase stack (below); nothing touched
-production. The rollback target stays release B, dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Rolling back the app leaves the
-column, the CHECK and the function: old clients send no offset and get the UTC rule.
-
-Release note: "Your day now ends at your midnight. On the day of the switch, one day of history may show twice or not
-at all; no streak is lost."
+The day is the device's local date (`localDayOf(ms)` in vocal-load-store.js; every use is listed in design/day/DAY.md).
+Vocal-load sessions carry `tzOffsetMin`. Migration 0010 adds `tz_offset_min`, the day CHECK at the offset (or the UTC
+rule when null), pruning at day − 2, and `user_progress.day_basis` / `day_basis_since`. The api function takes
+tzOffsetMin and since. Rolling back the app leaves the column, the CHECK and the function in place: old clients send no
+offset and get the UTC rule.
+- **Deploy (2026-11-17):** the user ran `vercel deploy --prod` from day/local before typing "deploy", so the app went
+  out first. Migration 0010 and the api function followed about 10 minutes later; in that gap some vocal-load saves
+  were refused (the outbox retried them). Then the --no-ff merge 511eeb5 (secret check clean) was pushed.
+  apicheck.js confirmed that a checkpoint with tzOffsetMin and one without it both save.
+- **Production checks** (scripts/day-verify/prodC.sh; results on `review/dayC-prod`): all pass, including pilot (the
+  page-leave save failed only on the local stack) and day.js 111/0 in all three zones and the switch. Reruns: the
+  outbox's two-tab lease (2 PUTs once, the session still stored once) and day.js (its local-only guard, now allowing
+  the live site). batch3b's Performance Director "feed off vs on" case reads 82 vs 88 on production; release B's build
+  fails it the same way, so it is the harness, not C.
+- Release note: "Your day now ends at your midnight. On the day of the switch, one day of history may show twice or not
+  at all; no streak is lost."
+- Next in this line: release D (Survey D's fixes) on `accuracy/d`, spec design/accuracy/RELEASE_D.md.
 
 ## Waiting on the user (don't start without a go-ahead)
 
