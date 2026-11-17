@@ -123,7 +123,7 @@ the takes score higher and steadier). Per-note timing in Performance Director an
 | glider | pass; the table above |
 | bleed (master; the branch with the guard) | master credits bleed as above; the guard 0 in all cells (bleed-d3b) |
 | voiceguard | pass at −20 / −10 dB (above) |
-| hygiene (master, branch) | pass, both: the canceller off on every track; Voice Quality f0 440, HNR 33 both sides; Emotion Mode the same distribution |
+| hygiene (master, branch) | pass, both: the canceller off on every track; Voice Quality f0 440, HNR 33 both sides; Emotion Mode's offline sweep identical |
 | scores (4a tools) | pass |
 | scores4b | first run: 4 rows out, all Rhythm's average against the old A/A range, **master too** (88/91/88, 55/55/55); re-gated on the same runs with D4's new range: pass |
 | scores6 | first run (3 a side): 6 rows out, per-note timing in Performance Director and Karaoke on "lead" (master 92/92/92, branch 86–89). Bisected: D3's own commit passes against master, the commit before D3 fails 2, D3 with its 5 ms timer off fails 7 the other way: a frame of jitter, not D. Re-run with 5 a side: pass |
