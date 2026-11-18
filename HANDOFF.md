@@ -4,13 +4,12 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-17)
+## Branches on GitHub (2026-11-18)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through release C, the local day (merge 511eeb5), live as dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z |
-| `review/dayC-prod` | Release C's production checks (scripts/day-verify/logs/prodC-*, prodC-notes.txt) |
-| `survey/d` | Survey D (design/accuracy/SURVEY_D.md and scripts/survey-d/); stays until release D ships |
+| `master` | Everything, through release D, Survey D's fixes (merge dc64605), live as dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm |
+| `review/accuracyD-prod` | Release D's production checks (design/accuracy/review-d-prod/: logs, NOTES.md) |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
@@ -20,15 +19,16 @@ review/phase4b-prod. Their commits are in master (all 16 code branches checked a
 On 2026-11-16, after release B's production checks: scoring/b (merged), scoring/survey (its SCORING_SURVEY.md,
 survey-tables.txt and scratch-fix.patch copied to master's design/scoring/; survey.js and latency.js came with B),
 review/scoringB and review/scoringA-prod. On 2026-11-17, after release C's production checks: day/local (merged) and
-review/scoringB-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
+review/scoringB-prod. On 2026-11-18, after release D's production checks: accuracy/d (merged), review/accuracyD,
+survey/d (its SURVEY_D.md and scripts/survey-d/out/ copied to master) and review/dayC-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
 its worktree removed).
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-17:
-release C, the local day, **dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z** (deployed by the user from day/local at cab6480, the
-same app files as master's merge 511eeb5), **the rollback target from now on**. The previous target was release B,
-dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Migration 0010 and the api Edge Function with it are live. Before C, release B's
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-18:
+release D, Survey D's fixes, **dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm** (master's merge dc64605), **the rollback target from
+now on** (app-only: no migration, no Edge Function). Before it, release C, the local day,
+dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z (2026-11-17); before that release B, dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Migration 0010 and the api Edge Function with it are live. Before C, release B's
 migration 0009 (`expression_scores`) and the api function with it went live on 2026-11-16; release A,
 dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb, came before that. Migration 0009 (`expression_scores`) and the api Edge Function with it on
 the allow-list are live with B; a rollback of the app leaves both.
@@ -795,7 +795,28 @@ offset and get the UTC rule.
   fails it the same way, so it is the harness, not C.
 - Release note: "Your day now ends at your midnight. On the day of the switch, one day of history may show twice or not
   at all; no streak is lost."
-- Next in this line: release D (Survey D's fixes) on `accuracy/d`, spec design/accuracy/RELEASE_D.md.
+- Next in this line: release D (below).
+
+## Release D, Survey D's fixes: LIVE 2026-11-18, dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm (the rollback target)
+
+Spec, results and the user's review: design/accuracy/RELEASE_D.md (survey: design/accuracy/SURVEY_D.md).
+- **D1 Tuner:** the vibrato centre only when `tunerVib.vibratoSure`; the 1.5 s stability window (90 frames) starts
+  afresh when the reading switches to the centre. Vibrato 100 % steady, 10–20 ct/s glides 2.7 %/0 %; a ±20 ct wobble
+  reads steady 22 % (was 96 %), accepted.
+- **D2 Pitch Mountain:** `gliderPitchGuard`, an octave (9–15 st) from the median of the last 5 frames held up to 4
+  frames. Octave crashes as few as the survey's hold in total; falling fifth 50 ms; octave leaps +50 ms.
+- **D3 the speaker guard: not shipped.** It passed the loop rig and failed on the Mac's own speakers (canceller on:
+  the clicks often unheard, music bleed 1.2–10× the click prediction). Reverted (84632db); it comes back as a
+  real-device survey, `survey/guard`, design/accuracy/GUARD.md (step 5 of the review).
+- **D4 tests:** scores.js launches the fake-mic browser per run and turns the canceller off on both sides; Rhythm's A/A
+  range rebaselined to onbeat 90–91, late60 52–56. PD/Karaoke per-note timing and Emotion Mode's take-1 stability move
+  by a frame / 77-or-87 between runs: run scores6 with --runs 5 and re-run a tool with 5 runs before calling a diff.
+- **Deploy (2026-11-18):** --no-ff merge dc64605, secret check clean; the user's `vercel deploy --prod` (a first
+  "Not authorized", then deployed); the site serves master's deploy/index.html byte for byte.
+- **Production checks** (scripts/survey-d/prodD.sh: prod.sh core + scores6 ×5; results on `review/accuracyD-prod`):
+  all pass. livevq failed once at sign-in ("JWT issued at future", before any app code) and passed re-run. 0 test
+  accounts left.
+- Queue: Pitch Dragon and the Rift's octave slips (frames lost, not crashes; numbers in RELEASE_D.md D2).
 
 ## Waiting on the user (don't start without a go-ahead)
 
@@ -807,7 +828,6 @@ offset and get the UTC rule.
   the unprocessed mic. That path has only been verified on desktop Chrome.
 - **`recordActivity()` race:** it checks `profile` but not `progress`, so an exercise started during sign-in can
   drop one XP tick. The user said not to fix it yet.
-- **Tuner false-steady** with vibrato (logged as a follow-up).
 - **Vocal Puzzle** isn't wired into Vocal Load (it never reads the mic). The user still has to decide.
 - **Your Choir** has a ~67 ms take latency. A round-trip calibration step is wanted before it's marketed seriously.
 - Choir World rehearsal view isn't plan-gated (gating deferred).
