@@ -6245,6 +6245,16 @@ let mode = null; // 'tuner' | 'rangeLow' | 'rangeHigh'
 let stabilityBuffer = [];
 let tunerSessionStartTime = null, vocalHealthWarningShown = false;
 let tunerVib = makeVibratoTolerantLive();
+// The Tuner's reading: the vibrato centre only when the gate is sure it's a vibrato (tunerVib.vibratoSure). An irregular
+// ±20–25 ct wobble passes the gate for a cycle or two; shown as the centre it read "steady" and "In tune" almost all the
+// time (Survey D c), so until the gate is sure the reading is shown, and judged, as it is.
+function tunerReading(t, c){
+  const v = tunerVib(t, c), centre = c!==null && v!==c && !(tunerVib.vibratoDepth>0 && !tunerVib.vibratoSure);
+  // the stability window starts afresh when the reading switches to the vibrato centre (the raw swing before it isn't the note)
+  if(centre && !tunerVib.wasCentre) stabilityBuffer = [];
+  tunerVib.wasCentre = centre;
+  return centre ? v : c;
+}
 let liveFreq = null;
 
 /* ---------------- The mic: one stream, one graph ----------------
@@ -6344,7 +6354,7 @@ function loop(){
   liveFreq = freq>0 ? freq : null;
 
   if(mode==='tuner'){ // natural vibrato shows as the note's centre, not as a wobble or a missed lock
-    const held = tunerVib(performance.now(), freq>0 ? 6900+1200*Math.log2(freq/440) : null);
+    const held = tunerReading(performance.now(), freq>0 ? 6900+1200*Math.log2(freq/440) : null);
     updateTunerUI(freq>0 ? 440*Math.pow(2, (held-6900)/1200) : freq);
   }
   if(mode==='rangeLow') updateRangeLiveUI(freq, 'lowLiveNote');
@@ -6390,7 +6400,7 @@ function updateTunerUI(freq){
   tickVoiceAmbient();
 
   stabilityBuffer.push(note.cents);
-  if(stabilityBuffer.length>30) stabilityBuffer.shift();
+  if(stabilityBuffer.length>TUNER_STAB_FRAMES) stabilityBuffer.shift(); // 1.5 s, so a slow drift shows
   if(stabilityBuffer.length>5){
     const mean = stabilityBuffer.reduce((a,b)=>a+b,0)/stabilityBuffer.length;
     const variance = stabilityBuffer.reduce((a,b)=>a+(b-mean)*(b-mean),0)/stabilityBuffer.length;
@@ -6403,6 +6413,7 @@ function updateTunerUI(freq){
   setNeedle(pct, locked);
 }
 
+const TUNER_STAB_FRAMES = 90;
 const TUNER_RING_CIRC = 553; // 2*pi*88
 function resetTunerRing(){
   const ring = document.getElementById('tunerRingFill');
@@ -21317,9 +21328,27 @@ function glideFollow(y, desiredY, H){
 }
 function gliderPitchToY(freq, H){
   if(!(freq>0)) return null; // autoCorrelate returns -1 for "no pitch": null makes the glider fall ("go quiet to fall")
-  const midi = 69+12*Math.log2(freq/440);
+  const midi = gliderGuard(69+12*Math.log2(freq/440));
   return gliderMidiToY(midi, H);
 }
+// Pitch Mountain's octave-jump hold (release D2; Survey D b): in voice-like noise autoCorrelate slips an octave for a
+// frame or two, and the glider, a quarter of the way to the new height each frame, crashed. A pitch 9–15 semitones from
+// the median of the last 5 frames read is held at that median for up to GLIDER_OCTAVE_HOLD frames (67 ms); a jump that
+// lasts longer is a real leap and is flown. The median, not the last pitch flown: at a falling fifth the detector reads
+// the octave below the new note for one frame, and a hold anchored on that frame held the real note (183 ms, not 50);
+// 5 frames, not 3: two slips in a row moved a 3-frame median onto the wrong octave (glider.js, RELEASE_D.md D2).
+const GLIDER_OCTAVE_HOLD = 4, GLIDER_MEDIAN_FRAMES = 5;
+window.gliderPitchGuard = ()=>{
+  const recent = []; let held = 0;
+  return m=>{
+    if(m===null || m===undefined) return m;
+    const r = recent.slice().sort((a,b)=>a-b), anchor = r.length ? r[Math.floor((r.length-1)/2)] : null;
+    recent.push(m); if(recent.length>GLIDER_MEDIAN_FRAMES) recent.shift(); // every frame read, held or not
+    if(anchor!==null && Math.abs(Math.abs(m-anchor)-12)<=3 && held<GLIDER_OCTAVE_HOLD){ held++; return anchor; }
+    held = 0; return m;
+  };
+};
+let gliderGuard = window.gliderPitchGuard();
 // "For you": the course that trains the weakest of pitch, agility and range (the one gliderComputeDifficulty adapts to).
 const GLIDER_FOR_WEAKEST = {pitch:'melody', agility:'agility', range:'interval'};
 function renderGliderForYou(){
@@ -21345,6 +21374,7 @@ async function startGlider(){
   gliderActive=true; gliderScroll=0; gliderScoreVal=0; gliderCombo=0; gliderCoins=0; gliderPoints=[];
   gliderEnsurePoints(0);
   gliderY = gliderPoints[0].gapY; // start in the middle of the lead-in gap
+  gliderGuard = window.gliderPitchGuard();
   gliderTookOff = false;          // held there, not scrolling or scoring, until the first sung note
   document.getElementById('gliderGameOver').style.display='none';
   gameStartLive('gliderStartBtn', 'gliderStartLabel');

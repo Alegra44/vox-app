@@ -57,9 +57,10 @@ function ensureVib() {
 const SYNTH = { onbeat: { level: 0, late: 0 }, late60: { level: 0, late: 60 }, louder: { level: 1 }, lead: { level: 1, melody: true } };
 const stimFile = stim => stim === 'vibrato' ? VIB_FILE : S.STIM[stim];
 const TOL = 2;
-// Rhythm's average on master's own build, min–max of the six runs of the A/A (scores-2026-10-26T15-24-34: onbeat
-// master 83/86/87, branch 82/84/84; late60 master 44/44/48, branch 48/52/48)
-let RHYTHM_AA = { onbeat: [82, 87], late60: [44, 52] };
+// Rhythm's average on master's own build, min–max of the ten runs of the A/A. Rebaselined in release D4 (a browser per
+// run, the canceller off: scores-2026-11-17T21-15-24, 5 runs a side: onbeat master 90/91/91/91/91, branch 91 ×5; late60
+// master 55/55/55/54/52, branch 52/55/56/54/56). Before D4: [82, 87] and [44, 52] (scores-2026-10-26T15-24-34).
+let RHYTHM_AA = { onbeat: [90, 91], late60: [52, 56] };
 const RHYTHM_GATED = ['average', 'result: average'], RHYTHM_REPORTED = /^beat \d/;
 // tool → stimulus → the value names gated by master's own range when it is wider than ±2 (4b.2); since PHASE8.md: by
 // master's range or ±1% of master's median, whichever is wider. A value newly found to be noisier than ±2 is added here.
@@ -90,10 +91,16 @@ function flatten(tool, r) {
   return o;
 }
 
+// Release D4 (Survey D d): the mic's echo canceller off in every score run, master and branch alike. Chrome's canceller
+// adapts to whatever ran before (Voice Quality's centroid +4–15 Hz with it on); off, a run doesn't depend on the last.
+const AEC_OFF = () => {
+  const gum = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+  navigator.mediaDevices.getUserMedia = c => gum(c && c.audio ? { ...c, audio: { ...(typeof c.audio === 'object' ? c.audio : {}), echoCancellation: false } } : c);
+};
 async function oneRun(b, dir, state, tools, stim) {
   const syn = SYNTH[stim];
   const { ctx, page, errors } = await C.openPage(b, { dir, theme: 'light', storageState: state,
-    prepare: syn ? c => SYN.attach(c, S.STIM.steady, { level: syn.level }) : undefined });
+    prepare: async c => { await c.addInitScript(AEC_OFF); if (syn) await SYN.attach(c, S.STIM.steady, { level: syn.level }); } });
   const out = {};
   try {
     await C.clearOverlays(page); await page.evaluate(T.CAPTURE_TAP); await S.warmMic(page);
@@ -141,16 +148,19 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
     for (const stim of STIMS) {
       const st = data.stims[stim] = data.stims[stim] || { master: [], branch: [] };
       const tools = toolsFor(stim); if (!tools.length) continue;
-      const b = SYNTH[stim] ? await SYN.launch() : await S.launchMic(stimFile(stim));
-      try {
+      // Release D4 (Survey D d): a browser of its own per run, so the file-backed fake mic starts each run at the start of
+      // its file (one browser loops it on, and Emotion Mode's take landed wherever the loop was: 77 or 87).
+      const launch = () => SYNTH[stim] ? SYN.launch() : S.launchMic(stimFile(stim));
+      {
         for (let k = 0; k < RUNS; k++) for (const side of k % 2 && !ALTERNATE ? ['branch', 'master'] : ['master', 'branch']) {
           if (st[side].length > k) continue;
-          const t0 = Date.now(); const r = await oneRun(b, dirs[side], tools.some(t => t.fresh) ? onSite(await freshState(dirs.master)) : state, tools, stim);
+          const b = await launch(), t0 = Date.now();
+          const r = await oneRun(b, dirs[side], tools.some(t => t.fresh) ? onSite(await freshState(dirs.master)) : state, tools, stim).finally(() => b.close());
           st[side].push(r);
           log(`${stim} ${side.padEnd(6)} #${k + 1} (${Math.round((Date.now() - t0) / 1000)} s): ` + tools.map(t => `${t.key} ${r[t.key].done ? '' : '(not done) '}${JSON.stringify(Object.fromEntries(Object.entries(r[t.key].nums).filter(([n]) => /score$|big|overall|type|^pitch$|accuracy$|average|rate|^ok$|%$/.test(n))))}`).join(' · ') + (r.__errors.length ? ` · page errors: ${r.__errors.slice(0, 2).join(' | ')}` : ''));
           fs.writeFileSync(OUT + '.json', JSON.stringify(data));
         }
-      } finally { await b.close(); }
+      }
     }
     // the table
     for (const stim of STIMS) {
