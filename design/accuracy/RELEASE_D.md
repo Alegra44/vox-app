@@ -140,3 +140,33 @@ Dark and 1280 Light.
 ### Not merged
 
 Nothing from D merges until reviewed. Open: D3's real-device failure (options 1–3 above), and D2's TV cell.
+
+## Review and deploy
+
+The user's review of 2026-11-18, verbatim:
+
+> Release D review. Add this message to design/accuracy/RELEASE_D.md under "Review and deploy" and commit it first on accuracy/d. AC power, the run lock and time limits on. Rollback target: dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z.
+>
+> DECISIONS
+> - D1 Tuner: approved, the follow-up window included. The ±20 ct wobble at 22% (from 96%) is fine.
+> - D2 Pitch Mountain, median of 5: approved. One more TV crash per SNR with the same totals is within the noise. Pitch Dragon and the Rift go in the queue with your numbers (octave slips cost frames there, not crashes).
+> - D4 tests: approved, with the new A/A range.
+> - D3 the speaker guard: not shipping in D. It works on the rig and not on a real Mac, which is the case that matters. Revert e93de00 on accuracy/d (keep 728d1d3's scripts). D3 comes back as its own job, real device first (step 5).
+>
+> 1. THE REVERT
+> - git revert e93de00. Then rerun bleed (now equal to master), scores, scores4b, scores6, house, hooks, contrast and bootcheck. The headphones line and the re-measure prompt go with it, so no screenshots are needed.
+> - Secret check, push accuracy/d.
+>
+> 2. WAIT FOR "deploy". Say you're ready and wait for me to type it.
+>
+> 3. AFTER I TYPE "deploy": D is app-only (no migration, no Edge Function). Merge accuracy/d into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself. Confirm that https://deploy-alegra1122.vercel.app serves the new deployment; if it doesn't, give me the exact vercel promote line with the real dpl id.
+>
+> 4. PRODUCTION CHECKS: prod.sh (core), scores, scores4b, scores6, house, bootcheck. Rollback rule as before. Delete the test accounts; push the results to review/accuracyD-prod. When everything passes: delete accuracy/d, review/accuracyD, survey/d and review/dayC-prod. HANDOFF: release D live, its dpl id the rollback target.
+>
+> 5. THEN THE GUARD AGAIN, AS A REAL-DEVICE SURVEY (no app changes yet). Branch survey/guard from master. Save this step as design/accuracy/GUARD.md and commit it first. It plays sound out loud: only between 09:00 and 21:00 my time, and tell me before each loud part.
+> a) Release B's speaker-delay sheet on this Mac with the echo canceller on: 10 runs at 50% volume and 10 at 100%. How often it hears the clicks, and what it reads against a reference taken with the canceller off. If it often misses them, try a short chirp or a held chord for the measurement, and a separate canceller-off stream used only for those 4 seconds, and compare.
+> b) The guard on this Mac's speakers, canceller on, nobody singing, at 50% and 100%: your held chord plus a cautious default together, and learning during the lead-in made robust (a low quantile of the lead-in, with a cap so an early singer can't raise it much). Pass: nothing credited in Entrance & Cutoff, Rhythm, Harmony Arena and Harmony Memory.
+> c) A real voice that isn't the Mac's own output: tell me which VocalSet file to put on my phone and when to play it next to the Mac (or I'll sing). Pass: each approach scores that voice within ±3 of the same recording with headphones on the Mac.
+> Write the numbers in GUARD.md with your recommendation and its effort. Secret check, push survey/guard. REPORT, then stop.
+>
+> Also: ../voxcoach-master-wt has 43 uncommitted changes. Don't touch it. Tell me what they are (a git status summary and the files), so I can say whether they matter.
