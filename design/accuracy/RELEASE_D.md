@@ -170,3 +170,23 @@ The user's review of 2026-11-18, verbatim:
 > Write the numbers in GUARD.md with your recommendation and its effort. Secret check, push survey/guard. REPORT, then stop.
 >
 > Also: ../voxcoach-master-wt has 43 uncommitted changes. Don't touch it. Tell me what they are (a git status summary and the files), so I can say whether they matter.
+
+### 1. The revert (2026-11-18)
+
+84632db reverts e93de00's app changes (deploy/index.html now equals 9bcef7f's: no output bus, guard, headphones line or
+re-measure prompt). The revert conflicted in bleed.js (728d1d3 changed it after); the scripts keep their current state
+(728d1d3's --real/--diag and shotsD.js, and D3's rig `gain: null` and `--gains`/`--tools`, inert without the guard).
+The app's diff from master is now the Tuner's reading (D1) and Pitch Mountain's hold (D2) only.
+
+Checks (checksD-2026-11-18T03-01-27, local stack, run lock, time limits, AC throughout):
+
+| check | result |
+|---|---|
+| bleed-branch (no guard) | equal to master: every credited count the same in all 40 cells; accuracies within 3 (Arena −10 dB 87/87 vs 86/85) |
+| scores | pass |
+| scores4b | 3 rows out, all Emotion Mode take 1 stability (master 77/77/87, branch 87/87/87: its known 77-or-87 split, hygiene's offline sweep); emotionmode re-run 5 a side: pass |
+| scores6 (5 a side) | 1 row out, Karaoke note 3 timing (master 89/89/83/86/86, branch 89/99/96/92/83: a frame); karaoke re-run 5 a side: pass |
+| house, hooks, contrast, bootcheck | pass |
+
+Neither Emotion Mode nor Karaoke calls anything D changes (tunerReading and the stability window are the Tuner's loop
+only; gliderGuard is Pitch Mountain's only).
