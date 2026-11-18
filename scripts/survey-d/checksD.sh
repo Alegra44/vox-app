@@ -3,8 +3,9 @@
 # AC power only, against the LOCAL Supabase stack (VOX_BACKEND=local, scripts/localBackend.js: no request reaches
 # production). Branch = accuracy/d's working copy; master = master's build in the same run.
 # tuner, glider: master's build and the branch's (glider: the guard off is master's behaviour, in the same run).
-# bleed: master's build, then the branch with the guard (its own measurement). voiceguard: the branch, gains 0–1.
-# hygiene: master and the branch. scores, scores4b, scores6: master vs the branch (D4: a browser per run, the canceller
+# bleed: master's build, then the branch with the guard (its own measurement); bleed-branch: the branch, no guard (after
+# D3's revert: equal to master). voiceguard: the branch, gains 0–1.
+# hygiene: master and the branch. scores, scores4b, scores6 (5 runs a side: per-note timing moves a frame between runs): master vs the branch (D4: a browser per run, the canceller
 # off, both sides).
 # Logs: scripts/survey-d/logs/checksD-<stamp>/. Usage: bash scripts/survey-d/checksD.sh [step …]   (no steps: all)
 cd "$(dirname "$0")/../.."
@@ -17,12 +18,13 @@ STEPS=(
   "glider|60|node scripts/survey-d/glider.js --noises white,babble,talker,tv --snrs 20,10 --out $OUT/glider.json"
   "bleed-master|90|node scripts/survey-d/bleed.js --ref master --runs 2 --out $OUT/bleed-master.json"
   "bleed|90|node scripts/survey-d/bleed.js --guard-only --runs 2 --out $OUT/bleed.json"
+  "bleed-branch|90|node scripts/survey-d/bleed.js --runs 2 --out $OUT/bleed-branch.json"
   "voiceguard|40|node scripts/survey-d/voiceguard.js --runs 2"
   "hygiene-master|60|node scripts/survey-d/hygiene.js --ref master --runs 5 --out $OUT/hygiene-master.json"
   "hygiene|60|node scripts/survey-d/hygiene.js --runs 5 --out $OUT/hygiene.json"
   "scores|60|node scripts/design-verify/scores.js"
   "scores4b|80|node scripts/design-verify/scores.js --tools onetake,mirror,rhythm,registerdrills,vibrato,voicequality,emotionmode"
-  "scores6|70|node scripts/design-verify/scores.js --tools pd,staykey,karaoke,emotion"
+  "scores6|90|node scripts/design-verify/scores.js --tools pd,staykey,karaoke,emotion --runs 5"
   "house|94|node scripts/design-verify/house.js --base master"
   "hooks|3|node scripts/design-verify/hooks.js --base master"
   "contrast|86|node scripts/design-verify/contrast.js"
