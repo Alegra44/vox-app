@@ -1,0 +1,20 @@
+pageload 2026-11-18T13-43-10  url: https://deploy-alegra1122.vercel.app  loads: 10  pace 30000 ms  timeout 60000 ms
+sign-up load: ready 5604 ms  (voxcoach-pageload-1795009390727@example.com)
+load  1  ready 1929 ms  | /me/progress 200 1396 ms  | /me 200 1395 ms  | auth none
+load  2  ready 1749 ms  | /me/progress 200 1079 ms  | /me 200 1314 ms  | auth none
+load  3  ready 1434 ms  | /me/progress 200 930 ms  | /me 200 933 ms  | auth none
+load  4  ready 2423 ms  | /me/progress 200 1369 ms  | /me 200 1942 ms  | auth none
+load  5  ready 2755 ms  | /me/progress 200 2308 ms  | /me 200 1392 ms  | auth none
+load  6  ready 1931 ms  | /me/progress 200 1037 ms  | /me 200 1490 ms  | auth none
+load  7  ready 1528 ms  | /me/progress 200 1124 ms  | /me 200 1126 ms  | auth none
+load  8  ready 1659 ms  | /me/progress 200 834 ms  | /me 200 1245 ms  | auth none
+load  9  ready 1173 ms  | /me/progress 200 768 ms  | /me 200 763 ms  | auth none
+load 10  ready 2179 ms  | /me/progress 200 1729 ms  | /me 200 1730 ms  | auth none
+
+== 10 loads: ready (profile+progress) min 1173 / median 1929 / p90 2755 / max 2755 ms; over 20 s: 0; timeouts: 0
+   /me/progress: min 768 / median 1124 / max 2308 ms over 10 requests
+   401 / 403 / 429: none
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/pageload-prod-2026-11-18T13-43-10.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/pageload-prod-2026-11-18T13-43-10.json
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-pageload-1795009390727@example.com

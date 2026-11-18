@@ -1,0 +1,19 @@
+page errors: [
+  'Failed to load resource: the server responded with a status of 404 ()',
+  'profile load error Error: JWT issued at future\n' +
+    '    at apiFetch (https://deploy-alegra1122.vercel.app/:6948:15)\n' +
+    '    at async loadProfile (https://deploy-alegra1122.vercel.app/:14331:17)\n' +
+    '    at async Promise.all (index 0)\n' +
+    '    at async onSignedIn (https://deploy-alegra1122.vercel.app/:14613:3)\n' +
+    '    at async HTMLButtonElement.<anonymous> (https://deploy-alegra1122.vercel.app/:14664:5)'
+]
+page.waitForFunction: Timeout 20000ms exceeded.
+    at auth (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/livevq.js:39:14)
+    at async /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/livevq.js:53:5
+    at async session (/Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/livevq.js:31:5)
+    at async /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/livevq.js:52:3 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vq-1795016288047@example.com
