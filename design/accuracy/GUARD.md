@@ -41,4 +41,58 @@ Scripts in scripts/guard-verify/ (on this branch); the approaches live in a loca
 
 ## Results
 
-(Filled in as each part lands.)
+### a. The sheet on this Mac (2026-11-19 09:01–09:11, quiet room; `guard/sdreal.json`, `guard/sdreal.log`)
+
+| volume | reference, canceller off | sheet, canceller on (×10) |
+|---|---|---|
+| 50 % | ok 5/5, 108 ms (10/10 clicks heard) | ok **3/10**, clicks heard 0/5/0/2/1/3/4/5/0/2 of 10, 97 ms when ok |
+| 100 % | ok 5/5, 109 ms | ok **2/10**, heard 8/5/0/0/0/0/0/0/0/0, 98 ms when ok |
+
+The probes (heard of 10, chord of 6; median delay; gain = recorded ÷ sent amplitude):
+
+| probe | stream | 50 % | 100 % |
+|---|---|---|---|
+| click | app's (canceller on) | 0–5 heard, 97 ms, gain 0.04 | 0 heard |
+| chirp | app's | 0–3 heard, gain 0.03 | 0–1 heard |
+| chord | app's | **0** | 1 run of 10 (a false 0 ms) |
+| click | separate, canceller off | 10/10 every run, 76 ms, gain 0.28 | 10/10, 80 ms, gain 1.58 |
+| chirp | separate, canceller off | 10/10, 76 ms, gain 0.14 | 10/10, 80 ms, gain 0.63 |
+| chord | separate, canceller off | 6/6, 86 ms, gain **0.125** | 6/6, 89 ms, gain **0.58** |
+
+- With the canceller on, as the app asks, Chrome's echo canceller removes the sheet's own clicks most of the time: the
+  sheet stores a measured delay in 3 and 2 runs of 10 (the estimate otherwise), 11 ms shorter than the reference when it
+  does. The chirp and the held chord do no better on that stream: the canceller removes what the page itself plays.
+- A separate canceller-off stream, opened only for the measurement, hears every probe in every run, with a steady gain
+  (±2 %). Its delay is 20–30 ms shorter than the reference's: a different capture path, so a delay from it can't be stored
+  for the app's stream as it is.
+- So the room's coupling (output → mic before the canceller) is 0.125 at 50 % and 0.58 at 100 % for a held chord. Part b
+  uses a default of 0.3 and a cap of 0.6 (the 100 % chord gain: the most the bleed can be).
+
+### b. The approaches, nobody singing (09:12–10:02; `guard/guardreal-app.*`, `guard/guardreal-aecoff.*`)
+
+Each cell: run 1, run 2 (credited of 8; Arena: its overall accuracy). Pass: nothing credited.
+
+| volume | approach | Entrance | Cutoff | Memory | Rhythm | Arena |
+|---|---|---|---|---|---|---|
+| 50 % | off (control) | 4, 7 | 4, 4 | 1, 0 | 0, 0 | 12 %, 20 % |
+| 50 % | chord (app stream; default 0.3) | **0, 0** | **0, 0** | **0, 0** | **0, 0** | 17 %, 2 % |
+| 50 % | chord, gain from a canceller-off stream | **0, 0** | **0, 0** | **0, 0** | **0, 0** | 1 %, 5 % |
+| 50 % | leadin | 5, 4 | 5, 6 | 0, 0 | 0, 0 | 17 %, 21 % |
+| 100 % | off (control) | 8, 7 | 7, 5 | 0, 0 | 2, 3 | 20 %, 45 % |
+| 100 % | chord (app stream) | **0, 0** | **0, 0** | **0, 0** | 0, **1** | 34 %, 22 % |
+| 100 % | chord, canceller-off stream | **0, 0** | **0, 0** | **0, 0** | **0, 0** | 18 %, 51 % |
+| 100 % | leadin | 5, 4 | 7, 4 | 0, 0 | 0, 0 | 35 %, 31 % |
+
+- **The bleed is real through the canceller:** with no guard the music alone is credited as entrances and cutoffs (up to
+  8/8), Rhythm onsets at 100 % (2–3/8) and 12–45 % in Arena.
+- **chord** stops it in Entrance & Cutoff and Memory. On the app's stream the chord is never heard (part a), so it runs on
+  the default 0.3, which let 1 Rhythm onset through in one run at 100 %. With the gain from the canceller-off stream
+  (0.12–0.14 at 50 %, 0.60 at 100 %) Rhythm is 0 too.
+- **leadin fails:** the learned gain is 0.0023–0.0026 in Entrance & Cutoff (the floor), because the canceller has adapted
+  to the steady count-in pad and removes it; the bleed that gets through comes once the music moves. Learning in the
+  lead-in measures the canceller's best case, not the take.
+- **Arena fails with every approach** (1–51 %), also with the gain at 0.6. On the loop rig (no room) both chord variants
+  gave 0 %, so it is something the room adds; not yet tested: the room's tail after each chord change (the prediction
+  uses the output's level one delay earlier, and the tail outlasts it), or Arena's own scoring path.
+- Pass for part b: chord with the canceller-off gain passes four tools of five; nothing passes Arena.
+

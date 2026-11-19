@@ -4,7 +4,8 @@
 // tool, listens for the block's sync beep (2 kHz) on the app's own mic path, and starts the tool with its timeline's zero
 // at the beep + X − the delay (window.__forceT0): the phone's voice then lands on the tool's timeline as a singer on time
 // would. Conditions, one per pass of the track (--conditions approach:volume,…): the headphones file with off:<vol>,
-// the speakers file with chord:50,leadin:50,chord:100,leadin:100. Arena sings the Alto part (set here, every condition).
+// the speakers file with chord:50,leadin:50,chord:100,leadin:100 (chordoff: the chord's gain measured on a separate
+// canceller-off stream, added after part b). Arena sings the Alto part (set here, every condition).
 // LOUD unless --synth: the system volume set per condition (put back at exit), a visible window, this Mac's mic.
 // --synth <dir>: silent, headless: the voice fed in as the mic (synthmic.js) from <dir>/<tool>.wav, one block per file.
 // The LOCAL stack, a throwaway account (choir plan, level 10), deleted at exit.
@@ -20,7 +21,8 @@ const REF = arg('--ref') || 'scratch/guard', MS = +(arg('--ms') || 150), SYNTH =
 const DEF = +(arg('--def') || 0.3), CAP = +(arg('--cap') || 0.6), Q = +(arg('--q') || 0.2);
 const LAYOUT = JSON.parse(fs.readFileSync(arg('--track'), 'utf8'));
 const CONDS = arg('--conditions').split(',').map(s => { const [approach, vol] = s.split(':'); return { approach, vol: +vol }; });
-const APPROACHES = { off: { mode: 'off' }, chord: { mode: 'chord', def: DEF, max: true }, leadin: { mode: 'leadin', def: DEF, q: Q, cap: CAP, pad: true, arenaLeadIn: true } };
+const APPROACHES = { off: { mode: 'off' }, chord: { mode: 'chord', def: DEF, max: true },
+  chordoff: { mode: 'chord', def: DEF, max: true, sdStream: 'aecoff' }, leadin: { mode: 'leadin', def: DEF, q: Q, cap: CAP, pad: true, arenaLeadIn: true } };
 const osa = cmd => execFileSync('osascript', ['-e', cmd]).toString().trim();
 const D = 120;
 const TOOLS = {
