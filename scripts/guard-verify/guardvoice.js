@@ -70,7 +70,7 @@ const LISTEN = async timeoutMs => {
 
 (async () => {
   const dir = C.buildDir(REF), res = { ref: REF, ms: MS, conditions: CONDS, synth: !!SYNTH, cells: [] };
-  const b = SYNTH ? await SYN.launch() : await C.chromium.launch({ headless: false, args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream'] });
+  const b = SYNTH ? await SYN.launch() : await C.chromium.launch({ headless: false, args: ['--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] }); // the beep listener polls every 20 ms: no throttling if the window is behind another
   const volume0 = SYNTH ? null : osa('output volume of (get volume settings)'), muted0 = SYNTH ? null : osa('output muted of (get volume settings)');
   if (!SYNTH) osa('set volume without output muted');
   try {
