@@ -96,3 +96,37 @@ Each cell: run 1, run 2 (credited of 8; Arena: its overall accuracy). Pass: noth
   uses the output's level one delay earlier, and the tail outlasts it), or Arena's own scoring path.
 - Pass for part b: chord with the canceller-off gain passes four tools of five; nothing passes Arena.
 
+
+### c. A real voice (not run yet: parked 2026-11-21)
+
+Not measured. Two tries, no numbers:
+
+- **2026-11-19 18:09**, headphones pass: `no sync beep heard` in the first block (`guard/guardvoice-headphones.log`).
+- **2026-11-21 00:10–00:45**, a beep check first (a 64 s file of 15 beeps, 4 s apart, the Mac listening on the app's
+  stream and on a raw stream side by side): the two streams heard the same, so neither the canceller nor macOS's mic
+  mode removes the beep. The few beeps heard were clear (2 kHz share 0.98, level 0.03–0.07 against a threshold of
+  0.003). A raw recording of the mic showed why so few: the phone was playing a voice file (the Alto part, pitch-tracked
+  G4 B4 A4 A4 G4 A4 B4 G4, 3.3 s each), not the beep file, and it went on playing into the next test (its player moved
+  to the next file). The detector is fine; the phone has to play exactly one file.
+- In both voice files every sync beep has 25–30 s of silence before it and ≥ 7.7 s after it (nothing within 0.5 s
+  either side), so nothing masks it; the files don't need rebuilding.
+- guardvoice.js now launches its window with Chrome's timer throttling off (1203aca), so the 20 ms beep listener can't
+  slow to once a second if the window is behind another.
+
+**What's left (needs the user, somewhere quiet, 09:00–21:00 IST):**
+
+1. Rebuild the three phone files (the session scratchpad holding them is temporary): `timeline.json` dumped from the
+   scratch build (`songTimeline()`: the Alto part, chordDur 3.33 s; `SONG.parts.Alto.notes`; `RHYTHM_BPM`, tempo
+   medium), then `python3 -I scripts/guard-verify/phonetrack.py timeline.json 1-headphones.wav 1` and
+   `… 2-speakers.wav 6`, `afconvert -f m4af -d aac -b 192000` each; AirDrop to the phone.
+2. Phone setup: play from the **Files app** (one file, no next track; or Music with Autoplay and Repeat off),
+   **Do Not Disturb on**, full volume, ~30 cm from the Mac, speaker facing it. The Mac's input on **MacBook
+   Microphone** (System Settings → Sound → Input), headphones without a mic for the first pass.
+3. The local stack (`colima start`, `supabase start`), AC power, the run lock.
+4. **Headphones pass** (5 min, the reference): `guardvoice.js --track 1-headphones.wav.json --conditions off:50
+   --out guard/guardvoice-headphones.json`; press play at READY (the first beep is 30 s in).
+5. **Speakers pass** (30 min, loud, headphones out): `--track 2-speakers.wav.json --conditions
+   chord:50,chordoff:50,leadin:50,chord:100,chordoff:100,leadin:100` (six passes: chordoff, the gain from a canceller-off
+   stream, is part b's best approach, so it's added to chord and leadin).
+6. Pass: each approach's score within ±3 of the headphones pass in every tool; then the recommendation and its effort
+   here, secret check, push survey/guard, report.
