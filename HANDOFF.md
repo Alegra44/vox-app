@@ -839,7 +839,7 @@ Spec, results and the user's review: design/accuracy/RELEASE_E.md.
   scores4b's Register Drills chest on the sharp stimulus differed once. Run 2: those pass but live (Live Feedback pitch
   ct 37 → 40) and scores6 (PD timing on lead 89 → 96, bimodal 86/96), both first measurements and off release E's
   code; run 3: both pass. 0 test accounts left.
-- The 2026-11-21 cleanup: ../voxcoach-master-wt removed (nothing in it missing from master).
+- The 2026-11-22 cleanup: ../voxcoach-master-wt removed (nothing in it missing from master).
 
 ## Waiting on the user (don't start without a go-ahead)
 
