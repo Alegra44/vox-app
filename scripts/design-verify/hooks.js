@@ -90,6 +90,14 @@ const ALLOWED_REMOVALS = {
   'data-i18n=skilltree_h2': "phase 8 §2.8: the §7 heading goes; the page's one line (skilltree_line); key stays in TRANSLATIONS",
   'data-i18n=skilltree_desc': 'phase 8 §2.8: the §7 description goes; key stays in TRANSLATIONS',
 };
+// release F3 (design/warmup/RELEASE_F.md): Smart Warmup's Play buttons and Mark warmup done go (Coach → Warm-up is the
+// pre-session warm-up); their ids and data-i18n, and the 20 keys they and its context line used, retired in four languages
+const F3_RETIRED = 'release F3: Smart Warmup\'s Play buttons, weakest-category hint and Mark warmup done removed (one warm-up)';
+for (const id of ['warmupStep1Sub', 'warmupPlay1', 'warmupPlay2', 'warmupStep3Sub', 'warmupPlay3', 'warmupCompleteBtn', 'warmupDoneNote']) ALLOWED_REMOVALS[`id=${id}`] = F3_RETIRED;
+const F3_KEYS = ['warmup_step1_title', 'warmup_step2_title', 'warmup_step2_sub', 'warmup_step3_title', 'warmup_play_btn', 'warmup_complete_btn',
+  'warmup_glide_prefix', 'warmup_stylescale', 'warmup_defaultpattern', 'warmup_focus_nohistory', 'warmup_focus_leantoward_p1', 'warmup_focus_leantoward_p2',
+  'warmup_genrenote_p1', 'warmup_genrenote_p2', 'warmup_time_morning', 'warmup_time_midday', 'warmup_time_evening', 'warmup_gapnote_p1', 'warmup_gapnote_p2', 'warmup_completed_prefix'];
+for (const k of F3_KEYS) ALLOWED_REMOVALS[`data-i18n=${k}`] = F3_RETIRED;
 // Phase 10 A1: .legacy-tabs goes (its markup, CSS and the click path enterPanel used; enterPanel now calls
 // showPanelByName). Every id and data-panel value that lived only on its buttons in master may go, read from master's
 // own nav so nothing else is excused.
@@ -206,6 +214,7 @@ function translations(src) {
       arcade_pro_level_template arcade_trial_included arcade_unlocks_at_level_template studio_recording_label studio_no_gamification studio_session_title
       cw_trainers_label rhythm_running
     `.trim().split(/\s+/)) INTENDED[k] ||= 'PHASE10.md A1: referenced by no code or markup (unusedkeys.js), removed in all four languages';
+    for (const k of F3_KEYS) INTENDED[k] ||= F3_RETIRED;
     const T0 = translations(master), gone = Object.keys(T0.en).filter(k => !(k in T.en));
     const dropped = gone.filter(k => !(k in INTENDED)), meant = gone.filter(k => k in INTENDED);
     check(`no TRANSLATIONS key from ${BASE} removed`, dropped.length === 0,

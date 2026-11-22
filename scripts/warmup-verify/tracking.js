@@ -75,6 +75,7 @@ const RUN = async ({ what, seq }) => {
     await page.reload(); await sleep(3500); await page.waitForFunction(() => !!profile && !!progress, null, { timeout: 20000 });
     await rearm(page);
     await page.evaluate(() => { warmupGate(); });            // a session asked: the warm-up is open
+    await page.waitForFunction(() => !!wuResolve, null, { timeout: 8000 }); // release F5: the gate asks the server first
     // same starting height as the glider (before the first note neither moves, so this is set after frame 0)
     const warmup = await page.evaluate(async ({ RUNsrc, seq, y0 }) => {
       const RUN = eval('(' + RUNsrc + ')');
@@ -128,6 +129,7 @@ const RUN = async ({ what, seq }) => {
     if (!await warm(page)) throw new Error('fake mic silent');
     await rearm(page);
     await page.evaluate(() => { window.__sessionGo = false; warmupGate().then(() => { window.__sessionGo = true; }); });
+    await page.waitForFunction(() => !!wuResolve, null, { timeout: 8000 }); // release F5: the gate asks the server first
     const yC4 = await page.evaluate(() => gliderMidiToY(60, 320));
     for (const id of ['trill', 'siren', 'glide', 'hum']) {
       await page.locator(`#warmupList [data-wu-item="${id}"]`).click();
@@ -144,6 +146,9 @@ const RUN = async ({ what, seq }) => {
         `y ${s.y && s.y.toFixed(1)} vs ${yC4.toFixed(1)} · voiced ${(s.voiced * 100).toFixed(0)}% · dot px ${s.px} · during "${s.go}" · after "${after.go}", continue ${after.cont}, "${after.status}"`);
     }
     const waiting = await page.evaluate(() => !window.__sessionGo && !!wuPending);
+    await page.locator('#warmupContinueBtn').click(); await sleep(300); // release F4: the first press shows the summary
+    const summed = await page.evaluate(() => getComputedStyle(document.getElementById('wuSummary')).display !== 'none' && !window.__sessionGo);
+    check('"Start my session" after exercises: the summary first, the session still waiting', summed);
     await page.locator('#warmupContinueBtn').click(); await sleep(300);
     const go = await page.evaluate(() => ({ go: window.__sessionGo, overlay: getComputedStyle(document.getElementById('warmupOverlay')).display, stored: localStorage.getItem(wuKey()) }));
     check('several done, then "Start my session": the waiting session goes, stored "done" for today', waiting && go.go && go.overlay === 'none' && go.stored === 'done', JSON.stringify({ waiting, ...go }));
@@ -153,6 +158,7 @@ const RUN = async ({ what, seq }) => {
     const songs = await page.evaluate(() => Object.keys(SONGS));
     await rearm(page);
     await page.evaluate(() => { selectSong('ballad'); warmupGate(); }); // the session's song is Autumn Requiem
+    await page.waitForFunction(() => !!wuResolve, null, { timeout: 8000 }); // release F5: the gate asks the server first
     await page.locator('#warmupOverlay [data-wu-mode="song"]').click();
     const listed = await page.evaluate(() => [...document.querySelectorAll('#warmupList [data-wu-item]')].map(b => b.dataset.wuItem + ' ' + b.querySelector('b').textContent));
     check(`song list = the library (${songs.length} songs)`, listed.length === songs.length && songs.every(id => listed.some(l => l.startsWith('song:' + id))), listed.join(' | '));
@@ -220,6 +226,7 @@ const RUN = async ({ what, seq }) => {
     check('skip mid-song: pad stopped, song restored, gate released, closed', mid.song && mid.pad > 0 && !afterSong.run && afterSong.pad === 0 && afterSong.song && !afterSong.pending && afterSong.overlay === 'none', JSON.stringify({ mid, afterSong }));
     await rearm(page);
     await page.evaluate(() => { warmupGate(); });
+    await page.waitForFunction(() => !!wuResolve, null, { timeout: 8000 }); // release F5: the gate asks the server first
     await page.locator(`#warmupList [data-wu-item="siren"]`).click();
     await page.waitForFunction(() => wuRun && wuRun.started, null, { timeout: 8000 }).catch(() => {});
     await page.locator('#warmupSkipBtn').click(); await sleep(400);
