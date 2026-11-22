@@ -179,14 +179,16 @@ async function entry(page, E) {
       const escClosed = !await overlayShown(page), escRan = await waitFor(page, E.active, 8000);
       check('the next day: shown again; Escape skips it and the session starts', next && escClosed && escRan, `shown ${next} · closed ${escClosed} · started ${escRan}${escRan ? '' : ' · ' + await why(page)}`);
       await waitFor(page, `!(${E.active})`, 10000);
-      // Smart Warmup (its own panel) marked done on a new day: counts as warmed up
+      // release F3: an exercise finished in Coach → Warm-up on a new day counts as warmed up (Smart Warmup's Mark done is gone)
       await clearCelebrations(page);
       await page.evaluate(d => { todayStr = () => d; }, dayPlus(2));
-      await reach(page, { panel: 'warmup', startBtn: 'warmupCompleteBtn' }); await page.locator('#warmupCompleteBtn').click(); await sleep(1500);
+      await reach(page, { panel: 'warmup', startBtn: 'warmupList' });
+      await page.locator('#warmupList [data-wu-item="hum"]').click();
+      const hummed = await waitFor(page, () => wuDone.has('hum') && !wuRun, 40000); await sleep(1500);
       await clearCelebrations(page);
       await reach(page, E); await page.locator('#pitchListenBtn').click();
       const [smart, smartRan] = await Promise.all([waitFor(page, () => getComputedStyle(document.getElementById('warmupOverlay')).display !== 'none', 2500), waitFor(page, E.active, 5000)]);
-      check('Smart Warmup marked done today: not shown, session starts', !smart && smartRan, `shown ${smart} · started ${smartRan}${smartRan ? '' : ' · ' + await why(page)}`);
+      check('an exercise finished in Coach → Warm-up today: not shown, session starts', hummed && !smart && smartRan, `finished ${hummed} · shown ${smart} · started ${smartRan}${smartRan ? '' : ' · ' + await why(page)}`);
       await waitFor(page, `!(${E.active})`, 10000);
       await page.evaluate(() => { todayStr = window.__todayStr; });
 

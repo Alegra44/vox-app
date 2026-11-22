@@ -69,8 +69,7 @@ for(let ch=0;ch<o[0].length;ch++)o[0][ch].set(i[0][ch]||i[0][0]);}return true;}}
   rows.push(await measure('Key Trainer: Play major scale', click('playScaleBtn'), 3600));
   rows.push(await measure('Ear Training: Play interval', ear('interval', [0, 7]), 2200));
   rows.push(await measure('Ear Training: block chord, 4 notes (A3 maj7)', ear('chord', [0, 4, 7, 11]), 1500));
-  rows.push(await measure('Smart Warmup: siren', `enterPanel('warmup'); ${click('warmupPlay1')}`, 4800));
-  rows.push(await measure('Smart Warmup: 5-note scale', click('warmupPlay3'), 4200));
+  // Smart Warmup's siren and 5-note scale: gone in release F3 (Coach → Warm-up is the pre-session warm-up; no reference sounds)
   rows.push(await measure('Pitch Dragon training: Play the note', `window._bossTrainTargetMidi = 57; ${click('bossTrainPlayBtn')}`, 1300));
   rows.push(await measure('Guide note (Harmony piano guide, plays while the mic listens)', guide(57, 0.9), 1300));
   rows.push(await measure('Count-in click (880 Hz, first beat)', `playTone(880, 0.08, 0, 0.20)`, 600));

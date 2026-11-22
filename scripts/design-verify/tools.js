@@ -107,9 +107,9 @@ const TOOLS = [
   { key: 'genre', name: 'Genre Coach', panel: 'genre', sung: false, result: '#genreTipsList',
     open: async page => { await C.showPanel(page, 'genre'); await C.clearOverlays(page); },
     act: page => page.evaluate(() => { const g = document.querySelectorAll('#genreGrid button, #genreGrid [data-genre]'); if (g[1]) g[1].click(); document.getElementById('genreApplyBtn').click(); }) },
-  { key: 'warmup', name: 'Smart Warmup', panel: 'warmup', sung: false, result: '#warmupDoneNote',
+  { key: 'warmup', name: 'Warm-up', panel: 'warmup', sung: false, result: '#wuXpCard', // release F3: the same warm-up as the pre-session one
     open: async page => { await C.showPanel(page, 'warmup'); await C.clearOverlays(page); },
-    act: page => page.evaluate(() => { document.getElementById('warmupPlay1').click(); document.getElementById('warmupCompleteBtn').click(); }) },
+    act: page => page.evaluate(() => renderWarmupContext()) },
   { key: 'ear', idle: '#earPlayBtn', name: 'Ear Training', panel: 'exercises', sung: false, result: '#earFeedback',
     open: async page => { await C.showPanel(page, 'exercises'); await C.clearOverlays(page); await exTab(page, 'ear'); },
     act: async page => {

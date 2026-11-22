@@ -3,7 +3,7 @@
 // level (a level is 50 XP) and the snapshot set to the counters now (levelupSnapshotNow, so only this case's change
 // counts), one action that gives XP, called as the app calls it, then the sheet's text. Each case passes when the
 // level-up shows, its why-line isn't empty and it contains the words of the source (the English keys' text, {n} = 1).
-// F3 adds the warm-up's case (finishing the day's first exercise: +5, named once, as a warm-up only).
+// F3: the warm-up's case (finishing the day's first exercise: +5, named once, as a warm-up; Smart Warmup's click is gone).
 // Usage: VOX_BACKEND=local NODE_OPTIONS="--require $PWD/scripts/localBackend.js" node scripts/warmup-verify/whyline.js [out.json] [url]
 require('../runguard').auto();
 const fs = require('fs');
@@ -20,6 +20,8 @@ const CASES = {
   'Glider, a new best over a prior one (+10–60)': ['progress.gliderBest = 20', 'gliderTookOff = true; gliderScoreVal = 60; finishGlider(); await new Promise(r => setTimeout(r, 1500))', ['1 new record']],
   'Glider, the first best (+10–60)': ['progress.gliderBest = 0', 'gliderTookOff = true; gliderScoreVal = 60; finishGlider(); await new Promise(r => setTimeout(r, 1500))', ['1 first best']],
   'a Boss Battle won (+50)': ['', 'progress.bossVictories = (progress.bossVictories || 0) + 1; progress.xp += 50; await saveProgress()', ['1 Boss Battle won']],
+  // F3: the day's first finished warm-up exercise (wuEndRun → wuCount): +5, named once, as a warm-up and not a session
+  'the warm-up, the first exercise of the day (+5)': ['progress.lastWarmupDay = null', 'await wuCount()', ['1 warm-up'], ['session']],
   'a curriculum day (+15, and its session)': ['progress.curriculumDaysCompleted = {}', "renderTodaysCurriculum(1); document.getElementById('curriculumDoneBtn').click(); await new Promise(r => setTimeout(r, 1500))", ['1 curriculum day']],
 };
 (async () => {

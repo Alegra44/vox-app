@@ -2422,9 +2422,12 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   /* ---- PHASE 9 (2.7): the warm-up card on the stage's own controls (house down) ---- */
   .wu-card .wu-top{align-items:center;margin-bottom:var(--hl-s2);}
   .wu-card .wu-top .trial-modal-title{margin:0;}
-  .wu-card .hl-seg.wu-tabs{display:flex;margin:0 0 var(--hl-s4);}
-  .wu-card .hl-seg.wu-tabs button{flex:1;}
-  .wu-card .hl-seg.wu-tabs button.active{background:var(--hl-ink);color:var(--hl-bg);}
+  .wu-card .hl-seg.wu-tabs, .wu-host .hl-seg.wu-tabs{display:flex;margin:0 0 var(--hl-s4);}
+  .wu-card .hl-seg.wu-tabs button, .wu-host .hl-seg.wu-tabs button{flex:1;}
+  .wu-card .hl-seg.wu-tabs button.active, .wu-host .hl-seg.wu-tabs button.active{background:var(--hl-ink);color:var(--hl-bg);}
+  .wu-host .warmup-context{margin:0 0 var(--hl-s3);}
+  .wu-xp-card{padding:14px 16px;border-radius:var(--hl-r2);}
+  .wu-xp-card #wuXpHow{margin-top:4px;}
   .wu-list{gap:0;border-top:var(--hl-hair) solid var(--hl-rule);margin-bottom:var(--hl-s4);}
   .wu-item{background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;min-height:60px;color:var(--hl-ink);}
   .wu-item:hover{border-color:var(--hl-rule);background:none;}
@@ -3558,33 +3561,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
     </div>
   </section>
 
-  <!-- SMART WARMUP PANEL -->
+  <!-- WARM-UP PANEL (release F3): the same warm-up as the pre-session one; #wuBody moves in here while it's open -->
   <section class="panel" id="panel-warmup">
     <div class="journey-hero">
-      <div class="j-title" data-i18n="warmup_title">Smart Warmup</div>
-      <div class="j-sub" data-i18n="warmup_sub">A short warmup shaped by the time of day, how long since you last practised, and your weakest Skill Profile category.</div>
+      <div class="j-title" data-i18n="warmup_title">Warm-up</div>
+      <div class="j-sub" data-i18n="warmup_sub">The same warm-up that's offered before your first session. Finish one exercise to count today.</div>
     </div>
-    <div class="key-card">
-      <div class="warmup-context" id="warmupContext"></div>
-
-      <div class="warmup-step">
-        <div><div class="ws-title" data-i18n="warmup_step1_title">1. Lip trill siren</div><div class="ws-sub" id="warmupStep1Sub">Gentle glide, low to high and back</div></div>
-        <button class="solid-btn" id="warmupPlay1" data-i18n="warmup_play_btn">Play</button>
-      </div>
-      <div class="warmup-step">
-        <div><div class="ws-title" data-i18n="warmup_step2_title">2. Hum siren</div><div class="ws-sub" data-i18n="warmup_step2_sub">Same glide, hummed "mmm"</div></div>
-        <button class="solid-btn" id="warmupPlay2" data-i18n="warmup_play_btn">Play</button>
-      </div>
-      <div class="warmup-step">
-        <div><div class="ws-title" data-i18n="warmup_step3_title">3. Gentle 5-note scale</div><div class="ws-sub" id="warmupStep3Sub">1-2-3-4-5-4-3-2-1 in a comfortable key</div></div>
-        <button class="solid-btn" id="warmupPlay3" data-i18n="warmup_play_btn">Play</button>
-      </div>
-
-      <div class="hl-raised warmup-action">
-      <div class="btn-row">
-        <button class="solid-btn" id="warmupCompleteBtn" data-i18n="warmup_complete_btn">Mark warmup done</button>
-      </div>
-      <p class="fine-print" id="warmupDoneNote"></p>
+    <div class="key-card wu-host" id="warmupPanelHost">
+      <p class="hl-meta warmup-context" id="warmupContext"></p>
+      <div class="hl-raised wu-xp-card" id="wuXpCard">
+        <div class="hl-spread"><b id="wuXpTitle"></b><span class="hl-item-meta" id="wuXpRule"></span></div>
+        <div class="hl-item-meta" id="wuXpHow"></div>
       </div>
     </div>
   </section>
@@ -5754,6 +5741,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
         <button class="hl-btn hl-btn--quiet" id="warmupSkipBtn" data-i18n="wu_skip">Skip warm-up</button>
       </div>
       <p class="trial-modal-sub" data-i18n="wu_sub">A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.</p>
+      <div id="wuBody">
       <div class="hl-seg wu-tabs" role="group">
         <button type="button" class="active" data-wu-mode="exercises" aria-pressed="true" data-i18n="wu_mode_exercises">Exercises</button>
         <button type="button" data-wu-mode="song" aria-pressed="false" data-i18n="wu_mode_song">Song warm-up</button>
@@ -5762,6 +5750,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" data-i18n-aria-label="warmup_canvas_label" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
       <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
       <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
+      </div>
       <div class="p9-actions"><button class="hl-btn hl-btn--sing" id="warmupContinueBtn" style="display:none;" data-sheet-main data-i18n="wu_continue">Start my session</button></div>
     </div>
   </div>
@@ -7097,10 +7086,8 @@ const TRANSLATIONS = {
     range_step2:'Step 2 of 2', range_high_h2:'Now your highest comfortable note', range_high_p:"Don't strain — comfortable, not maximum.", range_capture_high_btn:'Capture highest note',
     range_result_label:'Your result', range_share_note:'This card is built to share — a Pro account tracks how this number grows every week.',
     range_share_btn:'Share this result', range_restart_btn:'Run it again',
-    warmup_title:'Smart Warmup', warmup_sub:"A short warmup shaped by the time of day, how long since you last practised, and your weakest Skill Profile category.",
-    warmup_step1_title:'1. Lip trill siren', warmup_play_btn:'Play', warmup_step2_title:'2. Hum siren', warmup_step2_sub:'Same glide, hummed "mmm"',
-    warmup_step3_title:'3. Gentle 5-note scale', warmup_complete_btn:'Mark warmup done',
-    exercises_title:'Daily Exercises', exercises_sub:"Four ways to train pitch and ear. Each scores your voice live, in any octave, at Beginner, Intermediate or Professional.",
+    warmup_title:'Warm-up', warmup_sub:'The same warm-up that\'s offered before your first session. Finish one exercise to count today.', wu_ctx_morning:'Morning: voices are usually cooler early on, so start gently.', wu_ctx_midday:'Midday: a good time for the whole warm-up.', wu_ctx_evening:'Evening: if your voice has been busy today, one exercise is enough.', wu_ctx_gap:'You haven\'t sung for {n} days, so take the first exercise easy.', wu_xp_title_todo:'Today\'s warm-up', wu_xp_title_done:'Warmed up today', wu_xp_rule:'+5 XP · once a day', wu_xp_how:'Counted when you finish one exercise. Doing more today is welcome; it doesn\'t add XP.',
+            exercises_title:'Daily Exercises', exercises_sub:"Four ways to train pitch and ear. Each scores your voice live, in any octave, at Beginner, Intermediate or Professional.",
     exercises_focus_label:"Today's Recommended Focus", exercises_focus_tag:'ADAPTIVE — RECALCULATED DAILY',
     exercises_focus_desc:"Not a fixed weekly plan: it's worked out again from your Skill Profile each time you open this tab. Weaker categories get more of today's time; categories with no data yet get a fair starting share so they can get a first score.",
     exercises_level_label:'Level — trains a different ability, not just "harder":',
@@ -8240,16 +8227,7 @@ const TRANSLATIONS = {
     voicehealth_stability:'stability', voicehealth_breathconsistency:'breath consistency',
     voicehealth_declining_p1:'Your', voicehealth_declining_p2:'has been trending down over your last few practice days — that can be a sign of fatigue. Consider a lighter session or a rest day before pushing higher notes.',
     voicehealth_ok:'No concerning trend across your recent sessions — stability and breath consistency look steady or improving.',
-    warmup_gapnote_p1:"It's been", warmup_gapnote_p2:'days since your last session, so this runs a touch longer today.',
-    warmup_focus_nohistory:'No practice history yet, so this is a generic warmup.',
-    warmup_focus_leantoward_p1:"Today we'll lean toward", warmup_focus_leantoward_p2:'your lowest current Skill Profile score.',
-    warmup_time_morning:'Morning — starting gentler and a bit longer since voices are usually cooler early on.',
-    warmup_time_midday:'Midday — a standard-length warmup.',
-    warmup_time_evening:'Evening — shorter is fine if your voice has already been active today.',
-    warmup_genrenote_p1:'Scale below is set to your', warmup_genrenote_p2:'preference.',
-    warmup_glide_prefix:'Gentle glide, low to high and back', warmup_stylescale:'{genre}-style scale',
-    warmup_defaultpattern:'1-2-3-4-5-4-3-2-1 pattern',
-    warmup_completed_prefix:'Warmups completed:', warmup_signin_streaks:'Sign in to track warmup streaks.',
+                                        warmup_signin_streaks:'Sign in to track warmup streaks.',
     genre_applied_prefix:'Applied — Smart Warmup and Vibrato feedback now use', genre_applied_suffix:'defaults.',
     skilltree_label_control:"Control", skilltree_label_pitch:"Pitch", skilltree_label_range:"Range", skilltree_label_agility:"Agility",
     skilltree_label_headvoice:"Head voice", skilltree_label_chestvoice:"Chest voice", skilltree_label_mixedvoice:"Mixed voice", skilltree_label_vocalmaster:"Vocal master",
@@ -8898,10 +8876,8 @@ const TRANSLATIONS = {
     range_step2:'Étape 2 sur 2', range_high_h2:'Maintenant votre note la plus haute confortable', range_high_p:'Ne forcez pas — confortable, pas maximale.', range_capture_high_btn:'Capturer la note la plus haute',
     range_result_label:'Votre résultat', range_share_note:'Cette fiche est conçue pour être partagée — un compte Pro suit la progression de ce chiffre chaque semaine.',
     range_share_btn:'Partager ce résultat', range_restart_btn:'Recommencer',
-    warmup_title:'Échauffement intelligent', warmup_sub:"Un échauffement court, adapté à l'heure, au temps écoulé depuis votre dernière séance et à votre catégorie la plus faible du Profil de compétences.",
-    warmup_step1_title:'1. Sirène lèvres roulées', warmup_play_btn:'Jouer', warmup_step2_title:'2. Sirène fredonnée', warmup_step2_sub:'Même glissando, fredonné "mmm"',
-    warmup_step3_title:'3. Gamme douce à 5 notes', warmup_complete_btn:"Marquer l'échauffement comme fait",
-    exercises_title:'Exercices quotidiens', exercises_sub:"Quatre façons d'entraîner la justesse et l'oreille. Chacune note votre voix en direct, dans n'importe quelle octave, en Débutant, Intermédiaire ou Professionnel.",
+    warmup_title:'Échauffement', warmup_sub:'Le même échauffement que celui proposé avant votre première séance. Terminez un exercice pour qu\'il compte aujourd\'hui.', wu_ctx_morning:'Matin : la voix est souvent plus froide tôt, commencez en douceur.', wu_ctx_midday:'Midi : un bon moment pour l\'échauffement complet.', wu_ctx_evening:'Soir : si votre voix a déjà beaucoup servi aujourd’hui, un exercice suffit.', wu_ctx_gap:'Vous n\'avez pas chanté depuis {n} jours : prenez le premier exercice en douceur.', wu_xp_title_todo:'L\'échauffement du jour', wu_xp_title_done:'Échauffé aujourd’hui', wu_xp_rule:'+5 XP · une fois par jour', wu_xp_how:'Compté quand vous terminez un exercice. En faire plus aujourd\'hui est bienvenu, mais ne rapporte pas d\'XP.',
+            exercises_title:'Exercices quotidiens', exercises_sub:"Quatre façons d'entraîner la justesse et l'oreille. Chacune note votre voix en direct, dans n'importe quelle octave, en Débutant, Intermédiaire ou Professionnel.",
     exercises_focus_label:'Focus recommandé du jour', exercises_focus_tag:'ADAPTATIF — RECALCULÉ CHAQUE JOUR',
     exercises_focus_desc:"Pas un plan hebdomadaire figé : il est recalculé à partir de votre Profil de compétences chaque fois que vous ouvrez cet onglet. Les catégories plus faibles reçoivent plus du temps d'aujourd'hui ; celles sans données reçoivent une part de départ équitable pour obtenir un premier score.",
     exercises_level_label:'Niveau — entraîne une capacité différente, pas juste "plus difficile" :',
@@ -10041,16 +10017,7 @@ const TRANSLATIONS = {
     voicehealth_stability:'stabilité', voicehealth_breathconsistency:'constance respiratoire',
     voicehealth_declining_p1:'Votre', voicehealth_declining_p2:'a été en baisse ces derniers jours de pratique — cela peut être un signe de fatigue. Envisagez une séance plus légère ou un jour de repos avant de pousser les notes aiguës.',
     voicehealth_ok:'Aucune tendance préoccupante dans vos séances récentes — la stabilité et la constance respiratoire semblent stables ou en amélioration.',
-    warmup_gapnote_p1:'Cela fait', warmup_gapnote_p2:'jours depuis votre dernière séance, donc celle-ci dure un peu plus longtemps aujourd\'hui.',
-    warmup_focus_nohistory:'Pas encore d\'historique de pratique, donc c\'est un échauffement générique.',
-    warmup_focus_leantoward_p1:'Aujourd\'hui, on va pencher vers', warmup_focus_leantoward_p2:'votre score de Profil de compétences le plus bas actuellement.',
-    warmup_time_morning:'Matin — on commence plus doucement et un peu plus longtemps car les voix sont généralement plus froides tôt.',
-    warmup_time_midday:'Midi — un échauffement de durée standard.',
-    warmup_time_evening:'Soir — plus court convient si votre voix a déjà été active aujourd\'hui.',
-    warmup_genrenote_p1:'La gamme ci-dessous est réglée sur votre préférence', warmup_genrenote_p2:'.',
-    warmup_glide_prefix:'Glissando doux, du grave à l\'aigu et retour', warmup_stylescale:'Gamme de style {genre}',
-    warmup_defaultpattern:'Motif 1-2-3-4-5-4-3-2-1',
-    warmup_completed_prefix:'Échauffements terminés :', warmup_signin_streaks:'Connectez-vous pour suivre vos séries d\'échauffement.',
+                                        warmup_signin_streaks:'Connectez-vous pour suivre vos séries d\'échauffement.',
     genre_applied_prefix:'Appliqué — l\'échauffement intelligent et le retour vibrato utilisent maintenant les réglages par défaut de', genre_applied_suffix:'.',
     skilltree_label_control:"Contrôle", skilltree_label_pitch:"Justesse", skilltree_label_range:"Tessiture", skilltree_label_agility:"Agilité",
     skilltree_label_headvoice:"Voix de tête", skilltree_label_chestvoice:"Voix de poitrine", skilltree_label_mixedvoice:"Voix mixte", skilltree_label_vocalmaster:"Maître vocal",
@@ -10699,10 +10666,8 @@ const TRANSLATIONS = {
     range_step2:'Paso 2 de 2', range_high_h2:'Ahora tu nota más alta cómoda', range_high_p:'No fuerces — cómoda, no máxima.', range_capture_high_btn:'Capturar nota más alta',
     range_result_label:'Tu resultado', range_share_note:'Esta tarjeta está diseñada para compartir — una cuenta Pro rastrea cómo crece este número cada semana.',
     range_share_btn:'Compartir este resultado', range_restart_btn:'Repetirlo',
-    warmup_title:'Calentamiento inteligente', warmup_sub:"Un calentamiento corto según la hora del día, el tiempo desde tu última práctica y tu categoría más débil del Perfil de habilidades.",
-    warmup_step1_title:'1. Sirena con labios vibrando', warmup_play_btn:'Reproducir', warmup_step2_title:'2. Sirena tarareada', warmup_step2_sub:'Mismo deslizamiento, tarareado "mmm"',
-    warmup_step3_title:'3. Escala suave de 5 notas', warmup_complete_btn:'Marcar calentamiento como hecho',
-    exercises_title:'Ejercicios diarios', exercises_sub:"Cuatro formas de entrenar afinación y oído. Cada una puntúa tu voz en directo, en cualquier octava, en Principiante, Intermedio o Profesional.",
+    warmup_title:'Calentamiento', warmup_sub:'El mismo calentamiento que se ofrece antes de tu primera sesión. Termina un ejercicio para que cuente hoy.', wu_ctx_morning:'Mañana: la voz suele estar más fría temprano, así que empieza con suavidad.', wu_ctx_midday:'Mediodía: buen momento para el calentamiento completo.', wu_ctx_evening:'Noche: si tu voz ya ha trabajado mucho hoy, basta con un ejercicio.', wu_ctx_gap:'Llevas {n} días sin cantar, así que toma el primer ejercicio con calma.', wu_xp_title_todo:'El calentamiento de hoy', wu_xp_title_done:'Calentaste hoy', wu_xp_rule:'+5 XP · una vez al día', wu_xp_how:'Cuenta cuando terminas un ejercicio. Hacer más hoy está bien, pero no suma XP.',
+            exercises_title:'Ejercicios diarios', exercises_sub:"Cuatro formas de entrenar afinación y oído. Cada una puntúa tu voz en directo, en cualquier octava, en Principiante, Intermedio o Profesional.",
     exercises_focus_label:'Enfoque recomendado de hoy', exercises_focus_tag:'ADAPTATIVO — RECALCULADO A DIARIO',
     exercises_focus_desc:"No es un plan semanal fijo: se vuelve a calcular a partir de tu Perfil de habilidades cada vez que abres esta pestaña. Las categorías más débiles reciben más tiempo hoy; las que aún no tienen datos reciben una parte inicial justa para conseguir una primera puntuación.",
     exercises_level_label:'Nivel — entrena una habilidad diferente, no solo "más difícil":',
@@ -11842,16 +11807,7 @@ const TRANSLATIONS = {
     voicehealth_stability:'estabilidad', voicehealth_breathconsistency:'constancia respiratoria',
     voicehealth_declining_p1:'Tu', voicehealth_declining_p2:'ha estado bajando en tus últimos días de práctica — eso puede ser señal de fatiga. Considera una sesión más ligera o un día de descanso antes de forzar notas más altas.',
     voicehealth_ok:'Ninguna tendencia preocupante en tus sesiones recientes — la estabilidad y la constancia respiratoria se ven estables o en mejora.',
-    warmup_gapnote_p1:'Han pasado', warmup_gapnote_p2:'días desde tu última sesión, así que este dura un poco más hoy.',
-    warmup_focus_nohistory:'Aún no hay historial de práctica, así que este es un calentamiento genérico.',
-    warmup_focus_leantoward_p1:'Hoy nos inclinaremos hacia', warmup_focus_leantoward_p2:'tu puntuación actual más baja del Perfil de habilidades.',
-    warmup_time_morning:'Mañana — empezando más suave y un poco más largo ya que las voces suelen estar más frías temprano.',
-    warmup_time_midday:'Mediodía — un calentamiento de duración estándar.',
-    warmup_time_evening:'Tarde/noche — más corto está bien si tu voz ya ha estado activa hoy.',
-    warmup_genrenote_p1:'La escala de abajo está ajustada a tu preferencia', warmup_genrenote_p2:'.',
-    warmup_glide_prefix:'Deslizamiento suave, de grave a agudo y de vuelta', warmup_stylescale:'Escala de estilo {genre}',
-    warmup_defaultpattern:'Patrón 1-2-3-4-5-4-3-2-1',
-    warmup_completed_prefix:'Calentamientos completados:', warmup_signin_streaks:'Inicia sesión para seguir tus rachas de calentamiento.',
+                                        warmup_signin_streaks:'Inicia sesión para seguir tus rachas de calentamiento.',
     genre_applied_prefix:'Aplicado — el Calentamiento inteligente y el feedback de vibrato ahora usan los valores predeterminados de', genre_applied_suffix:'.',
     skilltree_label_control:"Control", skilltree_label_pitch:"Afinación", skilltree_label_range:"Rango", skilltree_label_agility:"Agilidad",
     skilltree_label_headvoice:"Voz de cabeza", skilltree_label_chestvoice:"Voz de pecho", skilltree_label_mixedvoice:"Voz mixta", skilltree_label_vocalmaster:"Maestro vocal",
@@ -12500,10 +12456,8 @@ const TRANSLATIONS = {
     range_step2:'2 Adımdan 2.', range_high_h2:'Şimdi en yüksek rahat notanız', range_high_p:'Zorlamayın — rahat olsun, maksimum değil.', range_capture_high_btn:'En yüksek notayı yakala',
     range_result_label:'Sonucunuz', range_share_note:'Bu kart paylaşılmak üzere tasarlandı — bir Pro hesap bu sayının her hafta nasıl büyüdüğünü takip eder.',
     range_share_btn:'Bu sonucu paylaş', range_restart_btn:'Tekrar çalıştır',
-    warmup_title:'Akıllı Isınma', warmup_sub:"Günün saatine, son pratiğinizden bu yana geçen süreye ve Yetenek Profilinizdeki en zayıf kategoriye göre şekillenen kısa bir ısınma.",
-    warmup_step1_title:'1. Dudak titretme sireni', warmup_play_btn:'Çal', warmup_step2_title:'2. Mırıldanma sireni', warmup_step2_sub:'Aynı kayma, "mmm" mırıldanarak',
-    warmup_step3_title:'3. Yumuşak 5 notalı gam', warmup_complete_btn:'Isınmayı tamamlandı olarak işaretle',
-    exercises_title:'Günlük Egzersizler', exercises_sub:"Perdeyi ve kulağı çalıştırmanın dört yolu. Her biri sesinizi canlı olarak, hangi oktavda olursa olsun, Başlangıç, Orta veya Profesyonel seviyede puanlar.",
+    warmup_title:'Isınma', warmup_sub:'İlk seansınızdan önce sunulan ısınmanın aynısı. Bugün sayılması için bir egzersizi bitirin.', wu_ctx_morning:'Sabah: ses erken saatlerde genelde daha soğuktur, yumuşak başlayın.', wu_ctx_midday:'Öğle: ısınmanın tamamı için iyi bir zaman.', wu_ctx_evening:'Akşam: sesiniz bugün çok çalıştıysa bir egzersiz yeterli.', wu_ctx_gap:'{n} gündür şarkı söylemediniz, ilk egzersizi rahat alın.', wu_xp_title_todo:'Bugünün ısınması', wu_xp_title_done:'Bugün ısınıldı', wu_xp_rule:'+5 XP · günde bir kez', wu_xp_how:'Bir egzersizi bitirdiğinizde sayılır. Bugün daha fazlası iyidir ama XP eklemez.',
+            exercises_title:'Günlük Egzersizler', exercises_sub:"Perdeyi ve kulağı çalıştırmanın dört yolu. Her biri sesinizi canlı olarak, hangi oktavda olursa olsun, Başlangıç, Orta veya Profesyonel seviyede puanlar.",
     exercises_focus_label:"Bugünün Önerilen Odağı", exercises_focus_tag:'UYARLANABİLİR — HER GÜN YENİDEN HESAPLANIR',
     exercises_focus_desc:"Sabit bir haftalık plan değil: bu sekmeyi her açtığınızda Yetenek Profilinizden yeniden hesaplanır. Zayıf kategoriler bugünün zamanından daha fazla pay alır; henüz verisi olmayan kategoriler ilk puanlarını alabilmeleri için adil bir başlangıç payı alır.",
     exercises_level_label:'Seviye — sadece "daha zor" değil, farklı bir yeteneği eğitir:',
@@ -13643,16 +13597,7 @@ const TRANSLATIONS = {
     voicehealth_stability:'kararlılık', voicehealth_breathconsistency:'nefes tutarlılığı',
     voicehealth_declining_p1:'Son birkaç antrenman gününüzde', voicehealth_declining_p2:'düşüş eğiliminde — bu yorgunluk belirtisi olabilir. Daha tiz notalara geçmeden önce daha hafif bir oturum veya bir dinlenme günü düşünün.',
     voicehealth_ok:'Son oturumlarınızda endişe verici bir eğilim yok — kararlılık ve nefes tutarlılığı istikrarlı veya gelişiyor gibi görünüyor.',
-    warmup_gapnote_p1:'Son oturumunuzun üzerinden', warmup_gapnote_p2:'gün geçti, bu yüzden bugün biraz daha uzun sürüyor.',
-    warmup_focus_nohistory:'Henüz pratik geçmişi yok, bu yüzden bu genel bir ısınma.',
-    warmup_focus_leantoward_p1:'Bugün şuna ağırlık vereceğiz:', warmup_focus_leantoward_p2:'mevcut en düşük Yetenek Profili puanınız.',
-    warmup_time_morning:'Sabah — sesler genellikle erken saatte daha soğuk olduğundan daha yumuşak ve biraz daha uzun başlıyoruz.',
-    warmup_time_midday:'Öğlen — standart uzunlukta bir ısınma.',
-    warmup_time_evening:'Akşam — sesiniz bugün zaten aktifse daha kısa olması sorun değil.',
-    warmup_genrenote_p1:'Aşağıdaki gam,', warmup_genrenote_p2:'tercihinize göre ayarlandı.',
-    warmup_glide_prefix:'Yumuşak kayma, pesten tize ve geri', warmup_stylescale:'{genre} tarzı gam',
-    warmup_defaultpattern:'1-2-3-4-5-4-3-2-1 örüntüsü',
-    warmup_completed_prefix:'Tamamlanan ısınmalar:', warmup_signin_streaks:'Isınma serilerinizi takip etmek için oturum açın.',
+                                        warmup_signin_streaks:'Isınma serilerinizi takip etmek için oturum açın.',
     genre_applied_prefix:'Uygulandı — Akıllı Isınma ve Vibrato geri bildirimi artık', genre_applied_suffix:'varsayılanlarını kullanıyor.',
     skilltree_label_control:"Kontrol", skilltree_label_pitch:"Perde", skilltree_label_range:"Ses aralığı", skilltree_label_agility:"Çeviklik",
     skilltree_label_headvoice:"Baş sesi", skilltree_label_chestvoice:"Göğüs sesi", skilltree_label_mixedvoice:"Karma ses", skilltree_label_vocalmaster:"Vokal usta",
@@ -20574,67 +20519,26 @@ function renderVoiceHealth(){
   }
 }
 
-/* ---------------- Smart Warmup ---------------- */
+/* ---------------- Coach → Warm-up (release F3) ---------------- */
+// The same warm-up as the pre-session one (wuBody moves into this panel while it's open), with a context line: the
+// time of day and the days since you last sang. Smart Warmup's Play buttons, its weakest-category hint and Mark warmup
+// done are gone; the warm-up counts itself (wuCount) when an exercise is finished.
 function renderWarmupContext(){
   const hour = new Date().getHours();
-  const timeBucket = hour<11 ? 'morning' : hour<17 ? 'midday' : 'evening';
-  const sirenDuration = timeBucket==='morning' ? 4.5 : timeBucket==='midday' ? 3.0 : 3.5;
-
-  let gapNote = '';
-  if(profile && progress.lastPracticeDate){
-    const gap = daysBetween(progress.lastPracticeDate, todayStr());
-    if(gap>=2) gapNote = ` ${t('warmup_gapnote_p1')} ${gap} ${t('warmup_gapnote_p2')}`;
-  }
-
-  const scores = profile ? computeSkillProfile() : {pitch:null,range:null,breath:null,agility:null,expression:null};
-  const rows = [{key:'pitch',label:t('skill_pitch')},{key:'range',label:t('skill_range')},{key:'breath',label:t('skill_breath')},{key:'agility',label:t('skill_agility')}];
-  const available = rows.filter(r=>scores[r.key]!==null);
-  let focusNote = t('warmup_focus_nohistory');
-  let focusLabel = null;
-  if(available.length>0){
-    const weakest = available.reduce((a,b)=> scores[a.key]<=scores[b.key]?a:b);
-    focusLabel = weakest.label;
-    focusNote = `${t('warmup_focus_leantoward_p1')} ${weakest.label.toLowerCase()} — ${t('warmup_focus_leantoward_p2')}`;
-  }
-
-  const timeBucketText = timeBucket==='morning' ? t('warmup_time_morning') : timeBucket==='midday' ? t('warmup_time_midday') : t('warmup_time_evening');
-  document.getElementById('warmupContext').textContent =
-    `${timeBucketText}${gapNote} ${focusNote}${(profile && profile.genre) ? ` ${t('warmup_genrenote_p1')} ${GENRES[profile.genre].name}${/^[.,]/.test(t('warmup_genrenote_p2')) ? '' : ' '}${t('warmup_genrenote_p2')}` : ''}`;
-
-  document.getElementById('warmupStep1Sub').textContent = `${t('warmup_glide_prefix')} (${sirenDuration} s)`;
-
-  const genreScaleKey = (profile && profile.genre && GENRES[profile.genre]) ? GENRES[profile.genre].warmupScale : 'beginnerPattern';
-  document.getElementById('warmupStep3Sub').textContent = (profile && profile.genre)
-    ? t('warmup_stylescale').replace('{genre}', GENRES[profile.genre].name)
-    : t('warmup_defaultpattern');
-
-  const stepDurEl = sirenDuration;
-  document.getElementById('warmupPlay1').onclick = ()=>{
-    const {lowMidi,highMidi} = registerRangeBounds();
-    playSiren(lowMidi, Math.min(highMidi, lowMidi+7), stepDurEl);
-  };
-  document.getElementById('warmupPlay2').onclick = ()=>{
-    const {lowMidi,highMidi} = registerRangeBounds();
-    playSiren(lowMidi, Math.min(highMidi, lowMidi+7), stepDurEl);
-  };
-  document.getElementById('warmupPlay3').onclick = ()=>{
-    const {lowMidi} = registerRangeBounds();
-    const steps = SCALE_PATTERNS[genreScaleKey] || SCALE_PATTERNS.beginnerPattern;
-    let t=0;
-    steps.forEach(step=>{ playTone(noteToFreq(lowMidi+4+step), 0.4, t); t+=0.42; });
-  };
-
-  const doneNote = document.getElementById('warmupDoneNote');
-  doneNote.textContent = profile ? `${t('warmup_completed_prefix')} ${progress.warmupsCompleted||0}` : t('warmup_signin_streaks');
+  let line = t(hour<11 ? 'wu_ctx_morning' : hour<17 ? 'wu_ctx_midday' : 'wu_ctx_evening');
+  const last = profile && progress ? [progress.lastPracticeDate, progress.lastWarmupDay].filter(Boolean).sort().pop() : null;
+  const gap = last ? daysBetween(last, todayStr()) : 0;
+  if(gap>=2) line += ' ' + t('wu_ctx_gap').replace('{n}', gap);
+  document.getElementById('warmupContext').textContent = line;
+  wuRenderXpCard();
+  if(document.getElementById('panel-warmup').classList.contains('active')) wuEnterPanel(); // startup and sign-in call this too
 }
-document.getElementById('warmupCompleteBtn').addEventListener('click', async ()=>{
-  if(!profile){ requireSignIn('Smart Warmup'); return; }
-  progress.warmupsCompleted = (progress.warmupsCompleted||0)+1;
-  wuMarkPassed('done'); // warmed up today: the pre-session warm-up isn't offered again today
-  await saveProgress();
-  await recordActivity();
-  renderWarmupContext();
-});
+function wuRenderXpCard(){
+  const done = wuCountedToday();
+  document.getElementById('wuXpTitle').textContent = t(done ? 'wu_xp_title_done' : 'wu_xp_title_todo');
+  document.getElementById('wuXpRule').textContent = profile ? t('wu_xp_rule') : '';
+  document.getElementById('wuXpHow').textContent = profile ? t('wu_xp_how') : t('warmup_signin_streaks');
+}
 
 /* ---------------- Weekly Challenge (real progress, sample leaderboard) ---------------- */
 function isoWeekNumber(d){
@@ -21554,6 +21458,39 @@ const WU_EXERCISES = [
 ];
 const WU_ROLL = {svg:'warmupRollSvg', group:'warmupNotesGroup', cursor:'warmupLiveCursor', rect:'wu-note-rect'};
 let wuPending = null, wuResolve = null, wuPassedKey = null, wuMode = 'exercises', wuRun = null, wuGen = 0, wuDone = new Set();
+// F3: where the warm-up's body is: 'overlay' (before the day's first session), 'panel' (Coach → Warm-up) or null
+let wuHost = null;
+const wuIsOpen = ()=>wuHost==='overlay' ? !!wuResolve : wuHost==='panel' && document.getElementById('panel-warmup').classList.contains('active');
+function wuMoveBody(where){
+  const body = document.getElementById('wuBody');
+  if(where==='panel') document.getElementById('wuXpCard').before(body);
+  else document.querySelector('#warmupOverlay .wu-card .p9-actions').before(body);
+  wuHost = where;
+}
+function wuEnterPanel(){ // showPanelByName('warmup') → renderWarmupContext
+  if(wuHost==='overlay') return; // the pre-session warm-up is open over it
+  if(wuHost==='panel'){ wuRender(); return; } // already here (a language change re-renders): nothing stops
+  wuStop(); wuMode = 'exercises'; wuStatus('');
+  wuMoveBody('panel'); wuRender();
+}
+// F3: one XP rule. Finishing the day's first exercise or song counts the warm-up: +5 XP and warmups_completed + 1, once
+// per account and local day, whichever entry was used (the overlay or Coach → Warm-up). Not a session: no
+// recordActivity. The day is the server's (user_progress.last_warmup_day, F5), read again before counting so another
+// device's warm-up today is seen.
+const wuCountedToday = ()=>!!(progress && progress.lastWarmupDay===todayStr());
+let wuCounting = null;
+function wuCount(){ return wuCounting || (wuCounting = wuCountNow().finally(()=>{ wuCounting = null; })); }
+async function wuCountNow(){
+  if(!profile || !progress) return;
+  try{ const row = await apiFetch('/me/progress'); if(row && 'last_warmup_day' in row){ progress.lastWarmupDay = row.last_warmup_day; } }catch(e){}
+  wuMarkPassed('done'); // warmed up today: the pre-session warm-up isn't offered again today
+  if(wuCountedToday()) return;
+  progress.lastWarmupDay = todayStr();
+  progress.warmupsCompleted = (progress.warmupsCompleted||0)+1;
+  progress.xp = (progress.xp||0)+5;
+  await saveProgress();
+  if(document.getElementById('panel-warmup').classList.contains('active')) wuRenderXpCard();
+}
 
 function wuKey(){ return 'warmup:'+(profile && (profile.id || profile.email) || '')+':'+todayStr(); }
 function wuPassed(){
@@ -21568,6 +21505,7 @@ function warmupGate(){
   return wuPending;
 }
 function wuOpen(){
+  wuStop(); wuMoveBody('overlay');
   wuDone = new Set();
   wuMode = 'exercises';
   document.getElementById('warmupStatus').textContent = '';
@@ -21589,6 +21527,8 @@ function wuFinish(how){
   closeModalWithA11y(document.getElementById('warmupOverlay'));
   vlPlaceBreak(); // F1: the banner goes back to the panel
   const r = wuResolve; wuResolve = null; wuPending = null;
+  wuHost = null;
+  if(document.getElementById('panel-warmup').classList.contains('active')) wuEnterPanel(); // opened from Coach → Warm-up's own mic: back in the panel
   if(r) r();
 }
 function wuRender(){
@@ -21609,7 +21549,7 @@ function wuRender(){
       }).join('');
   document.getElementById('warmupStage').style.display = wuRun && wuRun.kind==='ex' ? 'block' : 'none';
   document.getElementById('warmupRollWrap').style.display = wuRun && wuRun.kind==='song' ? 'block' : 'none';
-  document.getElementById('warmupContinueBtn').style.display = wuDone.size ? 'flex' : 'none';
+  document.getElementById('warmupContinueBtn').style.display = wuDone.size && wuHost==='overlay' ? 'flex' : 'none';
 }
 function wuStatus(key){ document.getElementById('warmupStatus').textContent = key ? t(key) : ''; }
 
@@ -21620,7 +21560,7 @@ function wuEndRun(completed){
   wuRun = null;
   cancelAnimationFrame(run.raf);
   if(run.kind==='song'){ stopBackingPad(); SONG = run.savedSong; }
-  if(completed){ wuDone.add(run.kind==='ex' ? run.ex.id : 'song:'+run.id); wuStatus('wu_after'); }
+  if(completed){ wuDone.add(run.kind==='ex' ? run.ex.id : 'song:'+run.id); wuStatus('wu_after'); wuCount(); }
   else wuStatus('');
   wuRender();
 }
@@ -21630,7 +21570,7 @@ async function wuStartExercise(id){
   wuStop();
   const gen = wuGen;
   const ok = await initAudio({noWarmup:true});
-  if(gen!==wuGen || !wuResolve) return; // skipped or switched while the mic was opening
+  if(gen!==wuGen || !wuIsOpen()) return; // skipped, left or switched while the mic was opening
   if(!ok || !analyser){ wuStatus('wu_mic_needed'); return; }
   await initAudioOnly(); // resume a suspended context
   if(gen!==wuGen) return;
@@ -21684,7 +21624,7 @@ async function wuStartSong(id){
   wuStop();
   const gen = wuGen;
   const ok = await initAudio({noWarmup:true});
-  if(gen!==wuGen || !wuResolve) return;
+  if(gen!==wuGen || !wuIsOpen()) return;
   if(!ok || !analyser){ wuStatus('wu_mic_needed'); return; }
   await initAudioOnly(); // context running: playBackingPad below then schedules without a real wait
   if(gen!==wuGen || !SONGS[id]) return;
@@ -22658,6 +22598,7 @@ function stopAllActiveSessions(){
   if(typeof partRehearsal!=='undefined' && partRehearsal.active && typeof stopPartRehearsal==='function') stopPartRehearsal();
   if(typeof partRehearsal!=='undefined' && partRehearsal.acappella) setAcappella(false);
   if(typeof choirIsPlaying!=='undefined' && choirIsPlaying && typeof stopChoir==='function') stopChoir();
+  if(wuHost==='panel') wuStop(); // F3: Coach → Warm-up's exercise or song stops when you leave
   houseUpNow();
 }
 function enterPanel(panelName){
