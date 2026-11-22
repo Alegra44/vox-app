@@ -46,8 +46,9 @@ const state = page => page.evaluate(() => {
       await page.locator('.snb-item[data-shell="train"]').click(); await sleep(400);
       await page.locator('#panel-train-hub [data-enter-panel="tuner"]').click(); await sleep(800);
       await warm(page);
-      await page.locator('#micBtn').click(); await sleep(1500);
-      check(`${name}: the warm-up overlay is up before the Tuner starts`, await overlayShown(page));
+      const tc = Date.now(); await page.locator('#micBtn').click();
+      const up = await page.waitForFunction(() => getComputedStyle(document.getElementById('warmupOverlay')).display !== 'none', null, { timeout: 8000 }).then(() => true).catch(() => false);
+      check(`${name}: the warm-up overlay is up before the Tuner starts`, up, `${Date.now() - tc} ms after the click`);
       await page.locator('#warmupList [data-wu-item="siren"]').click();
       let s; const t0 = Date.now();
       do { await sleep(200); s = await state(page); } while (!(s.exists && s.displayed) && Date.now() - t0 < 15000);

@@ -21498,7 +21498,7 @@ const wuIsOpen = ()=>wuHost==='overlay' ? !!wuResolve : wuHost==='panel' && docu
 function wuMoveBody(where){
   const body = document.getElementById('wuBody');
   if(where==='panel') document.getElementById('wuXpCard').before(body);
-  else document.querySelector('#warmupOverlay .wu-card .p9-actions').before(body);
+  else document.querySelector('#warmupOverlay .wu-card > .p9-actions').before(body); // the card's own row (Start my session), not the body's Finish row
   wuHost = where;
 }
 function wuEnterPanel(){ // showPanelByName('warmup') → renderWarmupContext
