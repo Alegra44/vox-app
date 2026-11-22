@@ -21593,7 +21593,7 @@ function wuFinish(how, go = true){ // go false: the session that asked doesn't s
   if(r) r(go);
 }
 function wuRender(){
-  document.querySelectorAll('#warmupOverlay [data-wu-mode]').forEach(b=>{
+  document.querySelectorAll('#wuBody [data-wu-mode]').forEach(b=>{
     const on = b.dataset.wuMode===wuMode; b.classList.toggle('active', on); b.setAttribute('aria-pressed', on?'true':'false');
   });
   const running = wuRun && (wuRun.kind==='ex' ? wuRun.ex.id : 'song:'+wuRun.id);
@@ -21752,7 +21752,7 @@ document.getElementById('wuSumOpenBtn').addEventListener('click', e=>{
   if(wuHost==='overlay') wuFinish('done', false); // the session that asked for the warm-up doesn't start
   enterPanel(panel);
 });
-document.querySelectorAll('#warmupOverlay [data-wu-mode]').forEach(b=>b.addEventListener('click', ()=>{
+document.querySelectorAll('#wuBody [data-wu-mode]').forEach(b=>b.addEventListener('click', ()=>{
   if(wuMode===b.dataset.wuMode) return;
   wuStop(); wuStatus(''); wuMode = b.dataset.wuMode; wuRender();
 }));
