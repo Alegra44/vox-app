@@ -66,6 +66,11 @@ const RHYTHM_GATED = ['average', 'result: average'], RHYTHM_REPORTED = /^beat \d
 // master's range or ±1% of master's median, whichever is wider. A value newly found to be noisier than ±2 is added here.
 const SPREAD = { mirror: { '*': /^note \d/ }, voicequality: { '*': /^centroid Hz$/ }, emotionmode: { louder: /./ }, registerdrills: { '*': /^note \d/ },
   pd: { '*': /./ }, staykey: { '*': /./ }, karaoke: { '*': /./ }, emotion: { '*': /./ } }; // phase 6: master's own range where it spreads wider than ±2
+// tool → stimulus → value name → the branch's expected range, in place of the ±2 against master (an intended change).
+// Release E: the vibrato gate became a blend, so Emotion Mode on the steady stimulus (S1) reads 76–79 wherever its take
+// starts (was 77 or 87); take 2 reads 77–78, so the take 2 − take 1 rows sit in −2..+2 (RELEASE_E.md).
+const EXPECTED = { emotionmode: { steady: { 'take 1 stability': [76, 79], 'pitch stability points': [-2, 2], 'result: row 3': [-2, 2] } } };
+const expectedOf = (key, stim, n) => EXPECTED[key]?.[stim]?.[n] || null;
 const spreadOf = (key, stim, n) => { const t = SPREAD[key]; const re = t && (t[stim] || t['*']); return !!re && re.test(n); };
 const ALTERNATE = process.argv.includes('--alternate');
 
@@ -179,12 +184,13 @@ const median = a => { const v = a.filter(x => x !== null && x !== undefined); if
           const bySpread = !byRange && typeof m === 'number' && spreadOf(tool.key, stim, n);
           const pct = typeof m === 'number' ? Math.abs(m) * 0.01 : 0;
           const sg = bySpread ? [Math.min(mr[0], m - pct, m - TOL), Math.max(mr[1], m + pct, m + TOL)] : null;
-          const ok = reported ? true : byRange ? b !== null && b >= aa[0] && b <= aa[1]
+          const ex = !reported && expectedOf(tool.key, stim, n);
+          const ok = reported ? true : ex ? typeof b === 'number' && b >= ex[0] && b <= ex[1] : byRange ? b !== null && b >= aa[0] && b <= aa[1]
             : bySpread ? typeof b === 'number' && b >= sg[0] && b <= sg[1]
             : typeof m === 'string' || typeof b === 'string' ? m === b : (m === null && b === null) || (m !== null && b !== null && Math.abs(b - m) <= TOL);
           if (!ok) fail++;
           const runs = s => data.stims[stim][s].map(r => r[tool.key].nums[n] ?? '—').join('/');
-          const how = reported ? '  [reported]' : byRange ? `  [A/A range ${aa[0]}–${aa[1]}]` : bySpread ? `  [master's range ${mr[0]}–${mr[1]} or ±1%: ${+sg[0].toFixed(1)}–${+sg[1].toFixed(1)}]` : '';
+          const how = reported ? '  [reported]' : ex ? `  [expected ${ex[0]}–${ex[1]}, RELEASE_E.md]` : byRange ? `  [A/A range ${aa[0]}–${aa[1]}]` : bySpread ? `  [master's range ${mr[0]}–${mr[1]} or ±1%: ${+sg[0].toFixed(1)}–${+sg[1].toFixed(1)}]` : '';
           log(`   ${reported ? '·' : ok ? '✓' : '✗'} ${n.padEnd(26)} ${String(m ?? '—').padStart(7)} → ${String(b ?? '—').padEnd(7)} (master ${runs('master')}; branch ${runs('branch')})${how}`);
         }
         const notDone = ['master', 'branch'].flatMap(s => data.stims[stim][s].map((r, i) => r[tool.key].done && r[tool.key].started ? null : `${s} #${i + 1}`)).filter(Boolean);
