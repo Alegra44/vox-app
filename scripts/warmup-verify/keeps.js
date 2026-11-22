@@ -69,7 +69,8 @@ const vlAdded = (a, b) => b.vl.n - a.vl.n;
     await waitDone(page, 'song:' + song, 240000); await sleep(2500);
     cur = await snap(page, `song warm-up ${song} to the end`);
     expect('the song warm-up: adds no XP', prev, cur, 0, 0); check('the song: one vocal-load row', vlAdded(prev, cur) === 1, `+${vlAdded(prev, cur)}`); prev = cur;
-    await page.locator('#warmupContinueBtn').click(); await sleep(3000);
+    await page.locator('#warmupContinueBtn').click(); await sleep(600); // F4: the summary
+    await page.locator('#warmupContinueBtn').click(); await sleep(3000); // the session
     await page.locator('#micBtn').click().catch(() => {}); await sleep(3000); // the Tuner off: its own session ends
     prev = await snap(page, 'Start my session (the Tuner ran ~3 s, then stopped)');
     // Coach → Warm-up (F3)

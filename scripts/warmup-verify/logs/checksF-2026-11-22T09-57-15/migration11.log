@@ -1,0 +1,18 @@
+1. the local database at 0010 (production's schema today), empty
+  ✓ the local migrations end at 0010 — 0010
+  ✓ 0010's schema: no last_warmup_day yet
+2. old rows, as release E writes them
+  ✓ two users (handle_new_user makes their progress rows)
+  ✓ A's old row: streak 6, warm-ups 9, xp 420 — 6|9|420
+3. 0011 applied
+  ✓ the local migrations end at 0011 — 0011
+4. after
+  ✓ last_warmup_day: date, nullable, no default — date|YES|
+  ✓ warmup_streak: integer, not null, default 0 — integer|NO|0
+  ✓ A's old row unchanged; last_warmup_day null, warmup_streak 0 — 6|9|420|null|0
+  ✓ as A (authenticated, RLS): both written and read back — 2026-11-22|4
+  ✓ as A, B's row isn't touched — B's streak 0
+  ✓ a negative streak is refused — ERROR:  new row for relation "user_progress" violates check constraint "user_progress_warmup_streak_nonneg"
+  ✓ PROGRESS_PATCHABLE_COLUMNS lists last_warmup_day and warmup_streak
+
+12 passed, 0 failed

@@ -144,6 +144,9 @@ const RUN = async ({ what, seq }) => {
         `y ${s.y && s.y.toFixed(1)} vs ${yC4.toFixed(1)} · voiced ${(s.voiced * 100).toFixed(0)}% · dot px ${s.px} · during "${s.go}" · after "${after.go}", continue ${after.cont}, "${after.status}"`);
     }
     const waiting = await page.evaluate(() => !window.__sessionGo && !!wuPending);
+    await page.locator('#warmupContinueBtn').click(); await sleep(300); // release F4: the first press shows the summary
+    const summed = await page.evaluate(() => getComputedStyle(document.getElementById('wuSummary')).display !== 'none' && !window.__sessionGo);
+    check('"Start my session" after exercises: the summary first, the session still waiting', summed);
     await page.locator('#warmupContinueBtn').click(); await sleep(300);
     const go = await page.evaluate(() => ({ go: window.__sessionGo, overlay: getComputedStyle(document.getElementById('warmupOverlay')).display, stored: localStorage.getItem(wuKey()) }));
     check('several done, then "Start my session": the waiting session goes, stored "done" for today', waiting && go.go && go.overlay === 'none' && go.stored === 'done', JSON.stringify({ waiting, ...go }));
