@@ -62,3 +62,31 @@ lists F3's retired ids and keys as intended removals.
 F needs migration 0011 **and** the api Edge Function (the allow-list) on production with the app; without the function,
 PATCH drops the two columns silently and F5 falls back to this device's mark. Rollback of the app leaves both harmless
 (an old app never sends them).
+
+## Review and deploy
+
+The user's message (2026-11-23), verbatim:
+
+> Release F review: approved with one fix. Add this message to design/warmup/RELEASE_F.md under "Review and deploy" and commit it first on warmup/f. AC power, the run lock and time limits on. Rollback target: dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB.
+>
+> THE FIX (F6)
+> - The banner-inside shots (390 Light and Dark) show the warm-up streak's icon alone on its own line, with no text, between the banner and the tabs. When there's no streak to show, the whole line goes, icon included. Check every state (no streak, a streak, warmed up today; in the overlay and in Coach → Warm-up) and retake the banner-inside shots.
+> - Your four check changes (warmup-tracking and keeps pressing Start twice, levelup's running total, hooks' removals) are approved.
+>
+> 1. WAIT FOR "deploy". Say you're ready and wait for me to type it.
+>
+> 2. AFTER I TYPE "deploy", in this order
+> a) supabase migration list against the linked project: confirm it's production (ccharikhpeqtzpobarxi) and that 0011 is the only migration pending; otherwise stop and tell me. Apply 0011, then confirm the two columns exist.
+> b) Deploy the api Edge Function. Confirm a progress save with last_warmup_day and warmup_streak round-trips, and one without them still saves.
+> c) Merge warmup/f into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself.
+> d) Confirm that https://deploy-alegra1122.vercel.app serves the new deployment; otherwise give me the exact vercel promote line with the real dpl id.
+> Rollback: the app goes back to dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB. The columns and the function stay (the old app doesn't send the new fields).
+>
+> 3. PRODUCTION CHECKS: prod.sh (core), warmup-entries, warmup-tracking, bannerbehind, whyline, keeps, summary, streak (two contexts as two devices, on production), allowlist, levelup, home, youstates, house, bootcheck. Rollback rule as before. Delete the test accounts; push the results to review/warmupF-prod. When everything passes: delete warmup/f, review/warmupF, survey/warmup and review/accuracyE-prod. HANDOFF: release F live, its dpl id the rollback target.
+>
+> 4. THEN RELEASE G, silent: the octave hold for Pitch Dragon and the Rift. New branch accuracy/g from master. Save this step as design/accuracy/RELEASE_G.md and commit it first.
+> - RELEASE_D.md measured them: at 10 dB, up to 73 of 279 windows (babble) lose a quarter or more of their frames to octave slips.
+> - Use Pitch Mountain's median-of-5 hold in both: the same function, shared, not a copy.
+> - Pass: at 10 dB, the windows losing 25% or more are cut by two-thirds or more in babble, talker and TV; at 20 dB, 2 or fewer; white stays 0. A real octave leap costs no more than +67 ms, and the falling fifth 70 ms or less. Clean takes unchanged (scores, scores4b and gamestates within their gates).
+> - Also list any other tool that drops off-target frames the same way, with its numbers (measure only).
+> - Secret check, push accuracy/g. REPORT, then stop. Nothing from G merges until I've reviewed.
