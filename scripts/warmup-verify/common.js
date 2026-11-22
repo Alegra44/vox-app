@@ -34,8 +34,8 @@ const INIT = () => {
 };
 const account = { email: null, password: 'WU-' + Math.random().toString(36).slice(2) + '!x9', auth: null };
 // html: serve this file as index.html instead of deploy/index.html (local only)
-async function openPage(b, { signedIn = true, viewport = { width: 1280, height: 900 }, html } = {}) {
-  const ctx = await b.newContext({ permissions: ['microphone'], viewport, ...(signedIn && account.auth ? { storageState: account.auth } : {}) });
+async function openPage(b, { signedIn = true, viewport = { width: 1280, height: 900 }, html, colorScheme = 'light' } = {}) {
+  const ctx = await b.newContext({ permissions: ['microphone'], viewport, colorScheme, ...(signedIn && account.auth ? { storageState: account.auth } : {}) });
   if (!URL_) await ctx.route(LOCAL + '**', r => {
     const p = new URL(r.request().url()).pathname.replace(/^\//, '') || 'index.html';
     r.fulfill({ path: p === 'index.html' && html ? html : path.join(DEPLOY, p), contentType: p.endsWith('.js') ? 'text/javascript' : 'text/html' });

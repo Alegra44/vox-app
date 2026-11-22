@@ -15348,6 +15348,13 @@ function vlShowBreak(day, level, disclaimer){
   box.style.display = '';
 }
 function vlPlaceBreak(box = document.getElementById('vlBreak')){ // a new banner isn't in the page yet: passed in
+  // Release F1: while the warm-up is open, the banner goes in its card (under the intro), where you're singing; the
+  // overlay covers the panel. wuOpen and wuFinish call this again, so it follows the warm-up in and back out.
+  const wu = document.getElementById('warmupOverlay'), card = wu && wu.style.display!=='none' && wu.querySelector('.wu-card');
+  if(card){
+    if(box && !card.contains(box)){ const intro = card.querySelector(':scope > .trial-modal-sub'); if(intro) intro.after(box); else card.prepend(box); }
+    return;
+  }
   const panel = document.querySelector('section.panel.active');
   if(!box || !panel || panel.contains(box)) return;
   const hero = panel.querySelector(':scope > .journey-hero'); // under the feature's title, above its controls
@@ -21546,6 +21553,7 @@ function wuOpen(){
   ov.style.display = 'flex';
   openModalWithA11y(ov, ()=>wuFinish('skipped')); // B6: focus stays inside; Escape = Skip; focus goes back to the opener
   document.getElementById('warmupSkipBtn').focus();
+  vlPlaceBreak(); // F1: a break banner already showing comes into the warm-up
 }
 function wuMarkPassed(how){ // how: 'skipped' | 'done'
   wuPassedKey = wuKey();
@@ -21556,6 +21564,7 @@ function wuFinish(how){
   wuMarkPassed(how);
   document.getElementById('warmupOverlay').style.display = 'none';
   closeModalWithA11y(document.getElementById('warmupOverlay'));
+  vlPlaceBreak(); // F1: the banner goes back to the panel
   const r = wuResolve; wuResolve = null; wuPending = null;
   if(r) r();
 }
