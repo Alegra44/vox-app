@@ -4,12 +4,15 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-18)
+## Branches on GitHub (2026-11-22)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through release D, Survey D's fixes (merge dc64605), live as dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm |
-| `review/accuracyD-prod` | Release D's production checks (design/accuracy/review-d-prod/: logs, NOTES.md) |
+| `master` | Everything, through release E, the vibrato blend (merge 4da3fe8), live as dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB |
+| `review/accuracyE-prod` | Release E's production checks (design/accuracy/review-e-prod/: logs, NOTES.md) |
+| `survey/guard` | The speaker-guard survey (design/accuracy/GUARD.md), parked before part c (a real voice from a phone) |
+| `survey/warmup` | The warm-up survey (design/warmup/WARMUP.md, mockups); stays until release F ships |
+| `warmup/f` | Release F, the warm-up (design/warmup/RELEASE_F.md), in review; with migration 0011, not applied to production |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
@@ -20,14 +23,16 @@ On 2026-11-16, after release B's production checks: scoring/b (merged), scoring/
 survey-tables.txt and scratch-fix.patch copied to master's design/scoring/; survey.js and latency.js came with B),
 review/scoringB and review/scoringA-prod. On 2026-11-17, after release C's production checks: day/local (merged) and
 review/scoringB-prod. On 2026-11-18, after release D's production checks: accuracy/d (merged), review/accuracyD,
-survey/d (its SURVEY_D.md and scripts/survey-d/out/ copied to master) and review/dayC-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
+survey/d (its SURVEY_D.md and scripts/survey-d/out/ copied to master) and review/dayC-prod. On 2026-11-22, after
+release E's production checks: accuracy/e (merged) and review/accuracyD-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
 its worktree removed).
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-18:
-release D, Survey D's fixes, **dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm** (master's merge dc64605), **the rollback target from
-now on** (app-only: no migration, no Edge Function). Before it, release C, the local day,
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-22:
+release E, the vibrato blend, **dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB** (master's merge 4da3fe8), **the rollback target from
+now on** (app-only: no migration, no Edge Function). Before it, release D, Survey D's fixes,
+dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm (2026-11-18); before that release C, the local day,
 dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z (2026-11-17); before that release B, dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Migration 0010 and the api Edge Function with it are live. Before C, release B's
 migration 0009 (`expression_scores`) and the api function with it went live on 2026-11-16; release A,
 dpl_m7QV3oh9ZRHG6MNiqBcQxfQq6WEb, came before that. Migration 0009 (`expression_scores`) and the api Edge Function with it on
@@ -817,6 +822,24 @@ Spec, results and the user's review: design/accuracy/RELEASE_D.md (survey: desig
   all pass. livevq failed once at sign-in ("JWT issued at future", before any app code) and passed re-run. 0 test
   accounts left.
 - Queue: Pitch Dragon and the Rift's octave slips (frames lost, not crashes; numbers in RELEASE_D.md D2).
+
+## Release E, the vibrato blend: LIVE 2026-11-22, dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB (the rollback target)
+
+Spec, results and the user's review: design/accuracy/RELEASE_E.md.
+- **The change:** `vibratoTolerantCents`' switch on the vibrato gate is a blend: strength 0–1 from the gate's evidence
+  (`vibratoStrength`, `VIB_BLEND`: the depth ramp 8→13 ct carries it; the periodicity edge stays a near-step,
+  0.400→0.402, because a wider ramp moved a real VocalSet take by 7 points; the user chose this over cand3). Reading =
+  (1−s)·raw + s·centre. The live path (`makeVibratoTolerantLive`: Tuner, Live Feedback, Stay in Key, Pitch Mountain) is
+  unchanged. Emotion Mode on the steady stimulus reads 76–79 wherever its take starts (was 77 or 87); scores.js
+  expects that (EXPECTED).
+- **Deploy (2026-11-22):** --no-ff merge 4da3fe8, secret check clean; the user's `vercel deploy --prod` (a first
+  "Not authorized", then deployed); the site serves master's deploy/index.html byte for byte.
+- **Production checks** (scripts/accuracy-e/prodE.sh; results on `review/accuracyE-prod`, NOTES.md): all pass after
+  reruns. Run 1: stopcheck, live, livevq and scores6 stopped at sign-up ("JWT issued at future", as on D's run);
+  scores4b's Register Drills chest on the sharp stimulus differed once. Run 2: those pass but live (Live Feedback pitch
+  ct 37 → 40) and scores6 (PD timing on lead 89 → 96, bimodal 86/96), both first measurements and off release E's
+  code; run 3: both pass. 0 test accounts left.
+- The 2026-11-21 cleanup: ../voxcoach-master-wt removed (nothing in it missing from master).
 
 ## Waiting on the user (don't start without a go-ahead)
 
