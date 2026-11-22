@@ -2427,6 +2427,17 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .wu-card .hl-seg.wu-tabs button.active, .wu-host .hl-seg.wu-tabs button.active{background:var(--hl-ink);color:var(--hl-bg);}
   .wu-host .warmup-context{margin:0 0 var(--hl-s3);}
   .wu-xp-card{padding:14px 16px;border-radius:var(--hl-r2);}
+  .wu-summary{margin-bottom:var(--hl-s3);}
+  .wu-sum-meta{margin:0 0 var(--hl-s3);}
+  .wu-sum-range{padding:6px 0 10px;align-items:baseline;}
+  .wu-sum-row{padding:10px 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .wu-sum-row .wu-sum-pct{font-weight:560;}
+  .wu-sum-row .hl-meter{margin-top:6px;--part:var(--hl-ink);} /* F4: a result, in ink, not the voice colour (Rule 1) */
+  .wu-sum-row .wu-sum-note{margin-top:4px;}
+  .wu-sum-coach{margin:16px 0 8px;}
+  .wu-sum-next{padding:12px 0;border-top:var(--hl-hair) solid var(--hl-rule);}
+  .wu-sum-next .hl-spread{margin-top:4px;}
+  .wu-summing > .wu-tabs, .wu-summing > .trial-modal-sub{display:none;}
   .wu-xp-card #wuXpHow{margin-top:4px;}
   .wu-list{gap:0;border-top:var(--hl-hair) solid var(--hl-rule);margin-bottom:var(--hl-s4);}
   .wu-item{background:none;border:0;border-bottom:var(--hl-hair) solid var(--hl-rule);border-radius:0;padding:var(--hl-s3) 0;min-height:60px;color:var(--hl-ink);}
@@ -5750,6 +5761,24 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       <div class="arcade-canvas-wrap wu-stage" id="warmupStage" style="display:none;"><canvas id="warmupCanvas" width="600" height="320" role="img" data-i18n-aria-label="warmup_canvas_label" aria-label="Warm-up pitch trace: your voice as a line following the dotted guide"></canvas></div>
       <div class="karaoke-roll-wrap wu-stage" id="warmupRollWrap" style="display:none;"><svg class="karaoke-roll" id="warmupRollSvg" viewBox="0 0 600 160" preserveAspectRatio="none"></svg></div>
       <p class="wu-status" id="warmupStatus" aria-live="polite"></p>
+      <div class="p9-actions wu-finish-row"><button class="hl-btn hl-btn--quiet" id="wuFinishBtn" style="display:none;" data-i18n="wu_finish">Finish warm-up</button></div>
+      </div>
+      <!-- release F4: the summary, shown in place of the list after at least one exercise -->
+      <div class="wu-summary" id="wuSummary" style="display:none;" aria-live="polite">
+        <p class="hl-item-meta wu-sum-meta" id="wuSumMeta"></p>
+        <div class="hl-label" data-i18n="wu_sum_range">Range reached</div>
+        <div class="hl-spread wu-sum-range"><span class="hl-stat-value" id="wuSumRange"></span><span class="hl-item-meta" id="wuSumStored"></span></div>
+        <div class="hl-label" data-i18n="wu_sum_follow">How closely you followed the line</div>
+        <div id="wuSumRows"></div>
+        <p class="hl-coach wu-sum-coach" id="wuSumCoach"></p>
+        <div class="wu-sum-next" id="wuSumNext">
+          <div class="hl-label" data-i18n="wu_sum_next">Next</div>
+          <div class="hl-spread"><b id="wuSumNextName"></b><span class="hl-item-meta" id="wuSumNextWhy"></span></div>
+        </div>
+        <div class="p9-actions wu-sum-actions">
+          <button class="hl-btn hl-btn--quiet" id="wuSumBackBtn" style="display:none;" data-i18n="wu_back">Back to the exercises</button>
+          <button class="hl-btn hl-btn--quiet" id="wuSumOpenBtn" style="display:none;"></button>
+        </div>
       </div>
       <div class="p9-actions"><button class="hl-btn hl-btn--sing" id="warmupContinueBtn" style="display:none;" data-sheet-main data-i18n="wu_continue">Start my session</button></div>
     </div>
@@ -6329,7 +6358,7 @@ async function micGraph(){
 }
 
 async function initAudio(opts){
-  if(!(opts && opts.noWarmup)) await warmupGate(); // the warm-up's own exercises pass noWarmup
+  if(!(opts && opts.noWarmup) && await warmupGate()===false) return false; // the warm-up's own exercises pass noWarmup; false: you left for another tool from its summary (F4)
   if(audioCtx && analyser && micLive()) return true;
   try{
     await micOpen();
@@ -8083,7 +8112,7 @@ const TRANSLATIONS = {
     vl_break_80:"You've reached 80% of today's vocal load budget. This is a good moment for a break: rest your voice for a while and drink some water.",
     vl_break_100:"You've reached 100% of today's vocal load budget. Consider resting your voice for the rest of the day, or keeping your singing light.",
     vl_break_dismiss:'Dismiss',
-    wu_title:"Warm up first?",
+    wu_title:"Warm up first?", wu_finish:'Finish warm-up', wu_back:'Back to the exercises', wu_sum_title:'Warmed up', wu_sum_meta_one:'{n} exercise · {t} sung', wu_sum_meta_other:'{n} exercises · {t} sung', wu_sum_range:'Range reached', wu_sum_stored:'your stored range {r}', wu_sum_nostored:'no stored range yet', wu_sum_follow:'How closely you followed the line', wu_sum_within:'of the sung time within a semitone of the line', wu_sum_lost:'lost the line above {note}', wu_sum_hum:'±{c} cents around {note}', wu_sum_next:'Next', wu_sum_open:'Open {tool}', wu_next_register_why:'the line broke above {note}', wu_next_tuner_why:'your hum moved ±{c} cents', wu_next_easy:'An easy day', wu_next_easy_why:'today you stayed well inside your range', wu_next_range_why:'no stored range yet', wu_next_session:'Your session', wu_next_session_why:'the one you were about to start', wu_coach_lost:'{ex} lost the line above {note} today. That\'s normal early on; go easy upward.', wu_coach_hum:'Your hum moved ±{c} cents. Hold it on one easy breath next time.', wu_coach_good:'You stayed on the line in every exercise.', wu_coach_weakest:'{ex} was the hardest today: {p}% of it within a semitone of the line.',
     wu_sub:"A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.",
     wu_skip:"Skip warm-up",
     wu_continue:"Start my session",
@@ -9873,7 +9902,7 @@ const TRANSLATIONS = {
     vl_break_80:'Vous avez atteint 80 % du budget de charge vocale du jour. C’est un bon moment pour faire une pause : reposez votre voix un moment et buvez un peu d’eau.',
     vl_break_100:'Vous avez atteint 100 % du budget de charge vocale du jour. Pensez à reposer votre voix pour le reste de la journée, ou à chanter légèrement.',
     vl_break_dismiss:'Fermer',
-    wu_title:"Un échauffement d’abord ?",
+    wu_title:"Un échauffement d’abord ?", wu_finish:'Terminer l\'échauffement', wu_back:'Revenir aux exercices', wu_sum_title:'Échauffé', wu_sum_meta_one:'{n} exercice · {t} chantées', wu_sum_meta_other:'{n} exercices · {t} chantées', wu_sum_range:'Tessiture atteinte', wu_sum_stored:'votre tessiture enregistrée : {r}', wu_sum_nostored:'pas encore de tessiture enregistrée', wu_sum_follow:'À quel point vous avez suivi la ligne', wu_sum_within:'du temps chanté à moins d\'un demi-ton de la ligne', wu_sum_lost:'ligne perdue au-dessus de {note}', wu_sum_hum:'±{c} cents autour de {note}', wu_sum_next:'Ensuite', wu_sum_open:'Ouvrir {tool}', wu_next_register_why:'la ligne a cassé au-dessus de {note}', wu_next_tuner_why:'votre fredonnement a bougé de ±{c} cents', wu_next_easy:'Une journée tranquille', wu_next_easy_why:'aujourd\'hui, votre voix est restée bien dans votre tessiture', wu_next_range_why:'pas encore de tessiture enregistrée', wu_next_session:'Votre séance', wu_next_session_why:'celle que vous alliez commencer', wu_coach_lost:'{ex} : ligne perdue au-dessus de {note} aujourd\'hui. C\'est normal au début ; allez-y doucement vers l\'aigu.', wu_coach_hum:'Votre fredonnement a bougé de ±{c} cents. La prochaine fois, tenez-le sur un souffle calme.', wu_coach_good:'Votre voix est restée sur la ligne dans chaque exercice.', wu_coach_weakest:'{ex} a été le plus difficile aujourd\'hui : {p} % à moins d\'un demi-ton de la ligne.',
     wu_sub:"Une ou deux minutes de chant facile avant de vous entraîner. Faites un exercice, plusieurs, ou passez directement à votre séance.",
     wu_skip:"Passer l’échauffement",
     wu_continue:"Commencer ma séance",
@@ -11663,7 +11692,7 @@ const TRANSLATIONS = {
     vl_break_80:'Has llegado al 80 % del presupuesto de carga vocal de hoy. Es un buen momento para hacer una pausa: descansa la voz un rato y bebe un poco de agua.',
     vl_break_100:'Has llegado al 100 % del presupuesto de carga vocal de hoy. Considera descansar la voz el resto del día o cantar de forma ligera.',
     vl_break_dismiss:'Cerrar',
-    wu_title:"¿Calentamos primero?",
+    wu_title:"¿Calentamos primero?", wu_finish:'Terminar el calentamiento', wu_back:'Volver a los ejercicios', wu_sum_title:'Calentamiento hecho', wu_sum_meta_one:'{n} ejercicio · {t} cantados', wu_sum_meta_other:'{n} ejercicios · {t} cantados', wu_sum_range:'Rango alcanzado', wu_sum_stored:'tu rango guardado: {r}', wu_sum_nostored:'aún no hay rango guardado', wu_sum_follow:'Qué tan de cerca seguiste la línea', wu_sum_within:'del tiempo cantado a menos de un semitono de la línea', wu_sum_lost:'perdiste la línea por encima de {note}', wu_sum_hum:'±{c} cents alrededor de {note}', wu_sum_next:'Siguiente', wu_sum_open:'Abrir {tool}', wu_next_register_why:'la línea se rompió por encima de {note}', wu_next_tuner_why:'tu tarareo se movió ±{c} cents', wu_next_easy:'Un día tranquilo', wu_next_easy_why:'hoy te quedaste bien dentro de tu rango', wu_next_range_why:'aún no hay rango guardado', wu_next_session:'Tu sesión', wu_next_session_why:'la que ibas a empezar', wu_coach_lost:'{ex}: perdiste la línea por encima de {note} hoy. Es normal al principio; ve con calma hacia arriba.', wu_coach_hum:'Tu tarareo se movió ±{c} cents. La próxima vez, sostenlo con una respiración tranquila.', wu_coach_good:'Te mantuviste en la línea en todos los ejercicios.', wu_coach_weakest:'{ex} fue lo más difícil hoy: {p} % a menos de un semitono de la línea.',
     wu_sub:"Uno o dos minutos de canto suave antes de practicar. Haz un ejercicio, varios, o ve directo a tu sesión.",
     wu_skip:"Saltar calentamiento",
     wu_continue:"Empezar mi sesión",
@@ -13453,7 +13482,7 @@ const TRANSLATIONS = {
     vl_break_80:'Bugünkü ses yükü bütçenizin %80’ine ulaştınız. Mola vermek için iyi bir an: sesinizi bir süre dinlendirin ve biraz su için.',
     vl_break_100:'Bugünkü ses yükü bütçenizin %100’üne ulaştınız. Günün geri kalanında sesinizi dinlendirmeyi ya da hafif şarkı söylemeyi düşünün.',
     vl_break_dismiss:'Kapat',
-    wu_title:"Önce ısınalım mı?",
+    wu_title:"Önce ısınalım mı?", wu_finish:'Isınmayı bitir', wu_back:'Egzersizlere dön', wu_sum_title:'Isınıldı', wu_sum_meta_one:'{n} egzersiz · {t} söylendi', wu_sum_meta_other:'{n} egzersiz · {t} söylendi', wu_sum_range:'Ulaşılan ses aralığı', wu_sum_stored:'kayıtlı aralığınız: {r}', wu_sum_nostored:'henüz kayıtlı aralık yok', wu_sum_follow:'Çizgiyi ne kadar yakından izlediniz', wu_sum_within:'söylenen sürenin çizgiye yarım tondan yakın kısmı', wu_sum_lost:'{note} üstünde çizgi kaçtı', wu_sum_hum:'{note} çevresinde ±{c} sent', wu_sum_next:'Sıradaki', wu_sum_open:'{tool} aç', wu_next_register_why:'çizgi {note} üstünde koptu', wu_next_tuner_why:'mırıldanmanız ±{c} sent oynadı', wu_next_easy:'Rahat bir gün', wu_next_easy_why:'bugün aralığınızın epey içinde kaldınız', wu_next_range_why:'henüz kayıtlı aralık yok', wu_next_session:'Seansınız', wu_next_session_why:'başlamak üzere olduğunuz seans', wu_coach_lost:'{ex}: bugün {note} üstünde çizgi kaçtı. Başta bu normal; yukarı doğru rahat gidin.', wu_coach_hum:'Mırıldanmanız ±{c} sent oynadı. Bir dahaki sefere tek ve rahat bir nefeste tutun.', wu_coach_good:'Her egzersizde çizgide kaldınız.', wu_coach_weakest:'Bugün en zoru {ex} oldu: %{p} kadarı çizgiye yarım tondan yakın.',
     wu_sub:"Çalışmadan önce bir iki dakika rahat şarkı söyleyin. Bir egzersiz ya da birkaç tane yapın veya doğrudan seansınıza geçin.",
     wu_skip:"Isınmayı atla",
     wu_continue:"Seansımı başlat",
@@ -14923,7 +14952,7 @@ function midiToY(midi, lowMidi, highMidi, topY, bottomY){
 const REG_FFT = 2048, REG_SMOOTH = 0.8, REG_IDLE_MS = 3000;
 let regIn = null, regOpening = null;
 async function openRegisterInput({quiet=false}={}){ // quiet: no toast if it fails (a feature's own mic is already open)
-  if(!quiet) await warmupGate(); // quiet is the sidecar, which only runs next to a session that already passed it
+  if(!quiet && await warmupGate()===false) return false; // quiet is the sidecar, which only runs next to a session that already passed it; false: F4's Open
   await initAudioOnly();
   if(regIn) return true;
   if(!regOpening) regOpening = (async ()=>{
@@ -21460,6 +21489,7 @@ const WU_ROLL = {svg:'warmupRollSvg', group:'warmupNotesGroup', cursor:'warmupLi
 let wuPending = null, wuResolve = null, wuPassedKey = null, wuMode = 'exercises', wuRun = null, wuGen = 0, wuDone = new Set();
 // F3: where the warm-up's body is: 'overlay' (before the day's first session), 'panel' (Coach → Warm-up) or null
 let wuHost = null;
+let wuStats = {}; // F4: each finished exercise's measures (wuExStats), and each song's voiced pitches
 const wuIsOpen = ()=>wuHost==='overlay' ? !!wuResolve : wuHost==='panel' && document.getElementById('panel-warmup').classList.contains('active');
 function wuMoveBody(where){
   const body = document.getElementById('wuBody');
@@ -21470,7 +21500,7 @@ function wuMoveBody(where){
 function wuEnterPanel(){ // showPanelByName('warmup') → renderWarmupContext
   if(wuHost==='overlay') return; // the pre-session warm-up is open over it
   if(wuHost==='panel'){ wuRender(); return; } // already here (a language change re-renders): nothing stops
-  wuStop(); wuMode = 'exercises'; wuStatus('');
+  wuStop(); wuMode = 'exercises'; wuStatus(''); wuSummaryHide();
   wuMoveBody('panel'); wuRender();
 }
 // F3: one XP rule. Finishing the day's first exercise or song counts the warm-up: +5 XP and warmups_completed + 1, once
@@ -21499,14 +21529,14 @@ function wuPassed(){
 }
 function warmupGate(){
   if(wuPending) return wuPending;
-  if(wuPassed()) return Promise.resolve();
+  if(wuPassed()) return Promise.resolve(true);
   wuPending = new Promise(res=>{ wuResolve = res; });
   wuOpen();
   return wuPending;
 }
 function wuOpen(){
-  wuStop(); wuMoveBody('overlay');
-  wuDone = new Set();
+  wuStop(); wuMoveBody('overlay'); wuSummaryHide();
+  wuDone = new Set(); wuStats = {};
   wuMode = 'exercises';
   document.getElementById('warmupStatus').textContent = '';
   wuRender();
@@ -21520,8 +21550,8 @@ function wuMarkPassed(how){ // how: 'skipped' | 'done'
   wuPassedKey = wuKey();
   try{ localStorage.setItem(wuPassedKey, how); }catch(e){}
 }
-function wuFinish(how){
-  wuStop();
+function wuFinish(how, go = true){ // go false: the session that asked doesn't start (F4: you left for another tool)
+  wuStop(); wuSummaryHide();
   wuMarkPassed(how);
   document.getElementById('warmupOverlay').style.display = 'none';
   closeModalWithA11y(document.getElementById('warmupOverlay'));
@@ -21529,7 +21559,7 @@ function wuFinish(how){
   const r = wuResolve; wuResolve = null; wuPending = null;
   wuHost = null;
   if(document.getElementById('panel-warmup').classList.contains('active')) wuEnterPanel(); // opened from Coach → Warm-up's own mic: back in the panel
-  if(r) r();
+  if(r) r(go);
 }
 function wuRender(){
   document.querySelectorAll('#warmupOverlay [data-wu-mode]').forEach(b=>{
@@ -21550,6 +21580,7 @@ function wuRender(){
   document.getElementById('warmupStage').style.display = wuRun && wuRun.kind==='ex' ? 'block' : 'none';
   document.getElementById('warmupRollWrap').style.display = wuRun && wuRun.kind==='song' ? 'block' : 'none';
   document.getElementById('warmupContinueBtn').style.display = wuDone.size && wuHost==='overlay' ? 'flex' : 'none';
+  document.getElementById('wuFinishBtn').style.display = wuHasExercise() && wuHost==='panel' && !wuSummaryShown() ? '' : 'none';
 }
 function wuStatus(key){ document.getElementById('warmupStatus').textContent = key ? t(key) : ''; }
 
@@ -21560,7 +21591,8 @@ function wuEndRun(completed){
   wuRun = null;
   cancelAnimationFrame(run.raf);
   if(run.kind==='song'){ stopBackingPad(); SONG = run.savedSong; }
-  if(completed){ wuDone.add(run.kind==='ex' ? run.ex.id : 'song:'+run.id); wuStatus('wu_after'); wuCount(); }
+  if(completed){ wuDone.add(run.kind==='ex' ? run.ex.id : 'song:'+run.id); wuStatus('wu_after'); wuCount();
+    wuStats[run.kind==='ex' ? run.ex.id : 'song:'+run.id] = run.kind==='ex' ? wuExStats(run) : {midis:run.midis||[], voicedSec:(run.midis||[]).length/60}; }
   else wuStatus('');
   wuRender();
 }
@@ -21592,6 +21624,9 @@ function wuExLoop(run){
   const desiredY = gliderPitchToY(freq, H), now = performance.now();
   if(desiredY!==null && !run.started){ run.started = true; run.t0 = now; }
   const tSec = run.started ? (now-run.t0)/1000 : 0;
+  if(run.started && tSec < WU_EX_SEC){ // F4: what the summary measures, every frame: the guide and the voice (null: unvoiced)
+    (run.frames || (run.frames = [])).push({g:run.ex.guide(run.p, tSec), m:(freq>0 && desiredY!==null) ? 69+12*Math.log2(freq/440) : null});
+  }
   if(run.started){
     run.y = glideFollow(run.y, desiredY, H);
     run.trail.push({t:tSec, y:run.y, voiced:desiredY!==null});
@@ -21655,6 +21690,7 @@ function wuSongLoop(run){
   analyser.getFloatTimeDomainData(dataArray);
   const freq = autoCorrelate(dataArray, audioCtx.sampleRate);
   const cursor = document.getElementById(WU_ROLL.cursor);
+  if(freq>0) (run.midis || (run.midis = [])).push(69+12*Math.log2(freq/440)); // F4: the range reached
   if(freq>0 && cursor){
     const cents = centsFromTarget(freq, SONG.parts.Lead.notes[idx]);
     const liveMidi = 69+12*Math.log2(freq/440);
@@ -21670,7 +21706,18 @@ function wuSongLoop(run){
 }
 
 document.getElementById('warmupSkipBtn').addEventListener('click', ()=>wuFinish('skipped'));
-document.getElementById('warmupContinueBtn').addEventListener('click', ()=>wuFinish('done'));
+// F4: Start my session shows the summary first (after at least one exercise); pressed again, the session starts
+document.getElementById('warmupContinueBtn').addEventListener('click', ()=>{
+  if(wuHasExercise() && !wuSummaryShown()){ wuStop(); wuSummaryShow(); return; }
+  wuFinish('done');
+});
+document.getElementById('wuFinishBtn').addEventListener('click', ()=>{ wuStop(); wuSummaryShow(); });
+document.getElementById('wuSumBackBtn').addEventListener('click', ()=>{ wuSummaryHide(); wuRender(); });
+document.getElementById('wuSumOpenBtn').addEventListener('click', e=>{
+  const panel = e.currentTarget.dataset.panel; if(!panel) return;
+  if(wuHost==='overlay') wuFinish('done', false); // the session that asked for the warm-up doesn't start
+  enterPanel(panel);
+});
 document.querySelectorAll('#warmupOverlay [data-wu-mode]').forEach(b=>b.addEventListener('click', ()=>{
   if(wuMode===b.dataset.wuMode) return;
   wuStop(); wuStatus(''); wuMode = b.dataset.wuMode; wuRender();
@@ -21682,6 +21729,105 @@ document.getElementById('warmupList').addEventListener('click', e=>{
   if(running===key){ wuStop(); return; }
   if(key.startsWith('song:')) wuStartSong(key.slice(5)); else wuStartExercise(key);
 });
+
+/* ---------------- The warm-up's summary (release F4) ---------------- */
+// Only measured things: the range reached (the 2nd–98th percentile of every voiced frame, exercises and songs, so a
+// stray octave jump of the pitch tracker doesn't set it) against the stored range; per exercise, the share of voiced
+// time within a semitone of the guide and, for the sirens and glides, where the line was lost (the guide's pitch above
+// which it stays under half: the last semitone below that is named); for Humming, the spread in cents (SD) around the
+// note held. One coach line from the weakest, and one next step, the first rule that matches:
+//   1. the line lost above a pitch in the sirens or glides → Register Coach (the break is there)
+//   2. Humming's spread over 20 ct → Tuner (steadiness)
+//   3. the range reached 3+ semitones inside the stored one at both ends → no tool, an easy day
+//   4. no stored range → Range Finder
+//   5. otherwise: before a session, the session you were going to start; in Coach → Warm-up, no next step
+const WU_SUM = {WITHIN:1, LOST_SHARE:0.5, MIN_BIN:6, HUM_SPREAD:20, EASY:3};
+const wuPct = (a, q)=>{ const s = a.slice().sort((x,y)=>x-y); return s[Math.min(s.length-1, Math.max(0, Math.round(q*(s.length-1))))]; };
+function wuExStats(run){
+  const fr = run.frames || [], v = fr.filter(f=>f.m!==null), n = v.length;
+  const within = v.filter(f=>Math.abs(f.m-f.g)<=WU_SUM.WITHIN).length;
+  const st = {id:run.ex.id, share:n ? within/n : 0, voicedSec:n/60, midis:v.map(f=>f.m), lostAbove:null, spread:null, note:null};
+  if(run.ex.id==='siren' || run.ex.id==='glide'){
+    const bins = {};
+    v.forEach(f=>{ const k = Math.round(f.g); (bins[k] || (bins[k] = {n:0, w:0})).n++; if(Math.abs(f.m-f.g)<=WU_SUM.WITHIN) bins[k].w++; });
+    const ks = Object.keys(bins).map(Number).filter(k=>bins[k].n>=WU_SUM.MIN_BIN).sort((a,b)=>a-b);
+    const ok = k=>bins[k].w/bins[k].n>=WU_SUM.LOST_SHARE;
+    let i = ks.length; while(i>0 && !ok(ks[i-1])) i--; // from the top down: the bins where it stayed lost
+    if(i>0 && i<ks.length) st.lostAbove = ks[i-1]; // followed somewhere below, lost from there up
+  }
+  if(run.ex.id==='hum' && n){
+    const mean = v.reduce((a,f)=>a+f.m,0)/n;
+    st.spread = Math.round(Math.sqrt(v.reduce((a,f)=>a+(f.m-mean)*(f.m-mean)*1e4,0)/n));
+    st.note = Math.round(mean);
+  }
+  return st;
+}
+const wuHasExercise = ()=>WU_EXERCISES.some(ex=>wuStats[ex.id]);
+const wuSummaryShown = ()=>document.getElementById('wuSummary').style.display!=='none';
+const wuNote = m=>noteNameFromMidi(Math.round(m));
+function wuSummaryData(){
+  const rows = WU_EXERCISES.map(ex=>wuStats[ex.id]).filter(Boolean);
+  const all = Object.values(wuStats).flatMap(s=>s.midis);
+  const reached = all.length ? {lo:Math.round(wuPct(all, 0.02)), hi:Math.round(wuPct(all, 0.98))} : null;
+  const stored = userRange();
+  const sec = Math.round(Object.values(wuStats).reduce((a,s)=>a+s.voicedSec,0));
+  const lost = rows.find(r=>r.lostAbove!==null), hum = rows.find(r=>r.id==='hum');
+  let next = null;
+  if(lost) next = {rule:1, panel:'register', tool:'tool_register_coach', why:t('wu_next_register_why').replace('{note}', wuNote(lost.lostAbove))};
+  else if(hum && hum.spread>WU_SUM.HUM_SPREAD) next = {rule:2, panel:'tuner', tool:'tool_tuner', why:t('wu_next_tuner_why').replace('{c}', hum.spread)};
+  else if(stored && reached && reached.lo>=stored.lowMidi+WU_SUM.EASY && reached.hi<=stored.highMidi-WU_SUM.EASY) next = {rule:3, name:t('wu_next_easy'), why:t('wu_next_easy_why')};
+  else if(!stored) next = {rule:4, panel:'range', tool:'tool_range_finder', why:t('wu_next_range_why')};
+  else if(wuHost==='overlay') next = {rule:5, name:t('wu_next_session'), why:t('wu_next_session_why')};
+  const weakest = rows.slice().sort((a,b)=>a.share-b.share)[0];
+  const exName = id=>t('wu_ex_'+id);
+  let coach;
+  if(weakest.lostAbove!==null) coach = t('wu_coach_lost').replace('{ex}', exName(weakest.id)).replace('{note}', wuNote(weakest.lostAbove));
+  else if(hum && hum.spread>WU_SUM.HUM_SPREAD) coach = t('wu_coach_hum').replace('{c}', hum.spread);
+  else if(rows.every(r=>r.share>=0.9)) coach = t('wu_coach_good');
+  else coach = t('wu_coach_weakest').replace('{ex}', exName(weakest.id)).replace('{p}', Math.round(weakest.share*100));
+  return {rows, reached, stored, sec, next, coach, n:rows.length};
+}
+function wuSummaryShow(){
+  const D = wuSummaryData(), el = document.getElementById('wuSummary');
+  const sumMeta = t(D.n===1 ? 'wu_sum_meta_one' : 'wu_sum_meta_other').replace('{n}', D.n).replace('{t}', fmtSecs(D.sec, 0));
+  document.getElementById('wuSumMeta').textContent = sumMeta;
+  document.getElementById('wuSumRange').textContent = D.reached ? `${wuNote(D.reached.lo)} – ${wuNote(D.reached.hi)}` : '—';
+  document.getElementById('wuSumStored').textContent = D.stored ? t('wu_sum_stored').replace('{r}', `${wuNote(D.stored.lowMidi)} – ${wuNote(D.stored.highMidi)}`) : t('wu_sum_nostored');
+  const rows = document.getElementById('wuSumRows'); rows.textContent = '';
+  D.rows.forEach(r=>{
+    const pct = Math.round(r.share*100), row = document.createElement('div'); row.className = 'wu-sum-row'; row.dataset.ex = r.id;
+    row.innerHTML = '<div class="hl-spread"><span class="wu-sum-ex"></span><span class="hl-tabular wu-sum-pct"></span></div>'
+      + '<div class="hl-meter" role="meter" aria-valuemin="0" aria-valuemax="100"><i></i></div><div class="hl-item-meta wu-sum-note"></div>';
+    row.querySelector('.wu-sum-ex').textContent = t('wu_ex_'+r.id);
+    row.querySelector('.wu-sum-pct').textContent = pct+' %';
+    const m = row.querySelector('.hl-meter'); m.setAttribute('aria-valuenow', pct); m.setAttribute('aria-label', t('wu_ex_'+r.id)); m.querySelector('i').style.setProperty('--val', pct+'%');
+    row.querySelector('.wu-sum-note').textContent = r.id==='hum' && r.spread!==null ? t('wu_sum_hum').replace('{c}', r.spread).replace('{note}', wuNote(r.note))
+      : r.lostAbove!==null ? t('wu_sum_lost').replace('{note}', wuNote(r.lostAbove)) : t('wu_sum_within');
+    rows.append(row);
+  });
+  document.getElementById('wuSumCoach').textContent = D.coach;
+  const nx = document.getElementById('wuSumNext'), open = document.getElementById('wuSumOpenBtn');
+  nx.style.display = D.next ? '' : 'none'; nx.dataset.rule = D.next ? D.next.rule : '';
+  if(D.next){ document.getElementById('wuSumNextName').textContent = D.next.tool ? t(D.next.tool) : D.next.name; document.getElementById('wuSumNextWhy').textContent = D.next.why; }
+  open.style.display = D.next && D.next.panel ? '' : 'none'; open.dataset.panel = D.next && D.next.panel || '';
+  if(D.next && D.next.tool) open.textContent = t('wu_sum_open').replace('{tool}', t(D.next.tool));
+  // the summary in place of the list
+  const host = wuHost==='overlay' ? document.querySelector('#warmupOverlay .wu-card') : document.getElementById('warmupPanelHost');
+  document.getElementById('wuBody').style.display = 'none';
+  host.classList.add('wu-summing');
+  document.getElementById('wuBody').after(el);
+  el.style.display = '';
+  document.getElementById('wuSumBackBtn').style.display = wuHost==='panel' ? '' : 'none';
+  document.getElementById('wuFinishBtn').style.display = 'none';
+  if(wuHost==='overlay'){ document.getElementById('warmupTitle').textContent = t('wu_sum_title'); }
+}
+function wuSummaryHide(){
+  const el = document.getElementById('wuSummary'); if(!el) return;
+  el.style.display = 'none';
+  document.getElementById('wuBody').style.display = '';
+  document.querySelectorAll('.wu-summing').forEach(h=>h.classList.remove('wu-summing'));
+  document.getElementById('warmupTitle').textContent = t('wu_title');
+}
 
 /* ---------------- Game 2: Karaoke Boss Battle (Pro) ---------------- */
 let bossActive=false, bossStartTime=0, bossRafId=null, bossHealth=100, playerHealth=100, bossCurrentIdx=-1, bossCentsBuf=[];
