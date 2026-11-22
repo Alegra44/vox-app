@@ -116,8 +116,10 @@ async function levelUp(page, { sessions = 0, records = 0, breakthroughs = 0 }) {
       check(`level-up 1 (${l1.from} → ${l1.to}) shown, counted from the start of the account`, l1.shown && l1.to === l1.from + 1 && l1.why === want1 && /2 new records/.test(l1.why) && /1 breakthrough/.test(l1.why),
         `"${l1.why}" (sessions ${l1.snap.sessions}, records ${l1.snap.records})`);
       // key by key: once saved, the snapshot comes back from jsonb, which orders keys its own way
-      const keys1 = Object.keys(l1.counters), snapKeys1 = Object.keys(l1.snap).filter(k => k !== 'level' && k !== 'at');
-      check('snapshot 1 = the counters at level-up 1', snapKeys1.length === keys1.length && keys1.every(k => l1.snap[k] === l1.counters[k]) && l1.snap.level === l1.to,
+      // release F2: the snapshot also keeps scores_improved_total, the running total scores_improved is read from (equal to it here)
+      const keys1 = Object.keys(l1.counters), snapKeys1 = Object.keys(l1.snap).filter(k => k !== 'level' && k !== 'at' && k !== 'scores_improved_total');
+      check('snapshot 1 = the counters at level-up 1', snapKeys1.length === keys1.length && keys1.every(k => l1.snap[k] === l1.counters[k]) && l1.snap.level === l1.to
+        && l1.snap.scores_improved_total === l1.counters.scores_improved,
         `${JSON.stringify(l1.snap)} vs counters ${JSON.stringify(l1.counters)}`);
       // second level-up: only what happened since the first
       const l2 = await levelUp(A.page, { sessions: 1, records: 1 });
