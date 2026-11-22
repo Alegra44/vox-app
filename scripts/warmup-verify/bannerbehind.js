@@ -56,6 +56,8 @@ const state = page => page.evaluate(() => {
       check(`${name}: the banner is displayed, level 80`, s.exists && s.displayed && s.level === '80', `${s.pct?.toFixed(2)} %`);
       check(`${name}: it is in the warm-up's card, inside the overlay`, s.inOverlay && s.inCard, `panel: ${s.panel}`);
       check(`${name}: it is visible (the point on it is the banner's own, in the viewport)`, s.seen && s.inViewport, `hit: ${s.hitIn}`);
+      const sl = await page.evaluate(() => { const l = document.getElementById('wuStreakLine'); return { d: getComputedStyle(l).display, h: l.getBoundingClientRect().height }; });
+      check(`${name}: no streak yet, so no streak line between the banner and the tabs (F6)`, sl.d === 'none' && sl.h === 0, `display ${sl.d}, h ${sl.h}`);
       await page.screenshot({ path: path.join(OUT, `banner-inside-${name}.png`) });
       await page.locator('#warmupSkipBtn').click(); await sleep(800);
       const after = await state(page);

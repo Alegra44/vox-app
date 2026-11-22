@@ -3,7 +3,7 @@
 # its normal time), on AC power only, against the LOCAL Supabase stack started from this checkout (VOX_BACKEND=local,
 # scripts/localBackend.js: no request reaches production; 0011 and the api's allow-list as this branch has them).
 #   migration11   0011 on the local stack (reset to 0010, an old row, migration up; ends with every migration applied)
-#   bannerbehind  F1   whyline F2   keeps F3 (and F2/F5's expectations)   summary F4   streak F5   shots (shotsF.js)
+#   bannerbehind  F1   whyline F2   keeps F3 (and F2/F5's expectations)   summary F4   streak F5   streakline F6   shots (shotsF.js)
 #   then the standing checks: warmup-entries, warmup-tracking, allowlist, levelup, home, youstates, house, contrast,
 #   copyscan (--all), names, focus, targets, hooks (against master), bootcheck
 # Logs and outputs: scripts/warmup-verify/logs/checksF-<stamp>/. Usage: bash scripts/warmup-verify/checksF.sh [step …]
@@ -18,6 +18,7 @@ STEPS=(
   "keeps|14|node scripts/warmup-verify/keeps.js $OUT/keeps.json"
   "summary|15|node scripts/warmup-verify/summary.js $OUT/summary.json"
   "streak|8|node scripts/warmup-verify/streak.js $OUT/streak.json"
+  "streakline|8|node scripts/warmup-verify/streakline.js"
   "shots|15|node scripts/warmup-verify/shotsF.js $OUT/shots"
   "warmup-entries|20|node scripts/warmup-verify/entries.js"
   "warmup-tracking|8|node scripts/warmup-verify/tracking.js"
