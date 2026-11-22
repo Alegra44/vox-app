@@ -2428,6 +2428,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .wu-host .warmup-context{margin:0 0 var(--hl-s3);}
   .wu-xp-card{padding:14px 16px;border-radius:var(--hl-r2);}
   .wu-streak{margin:0 0 var(--hl-s3);gap:6px;}
+  .wu-streak[hidden], .shell-wu-streak[hidden], #shellWuSep[hidden]{display:none;} /* hl-row's flex would show a hidden line */
   .wu-summary{margin-bottom:var(--hl-s3);}
   .wu-sum-meta{margin:0 0 var(--hl-s3);}
   .wu-sum-range{padding:6px 0 10px;align-items:baseline;}
@@ -21853,7 +21854,7 @@ function wuSummaryShow(){
   el.style.display = '';
   document.getElementById('wuSumBackBtn').style.display = wuHost==='panel' ? '' : 'none';
   document.getElementById('wuFinishBtn').style.display = 'none';
-  if(wuHost==='overlay'){ document.getElementById('warmupTitle').textContent = t('wu_sum_title'); }
+  if(wuHost==='overlay'){ document.getElementById('warmupTitle').textContent = t('wu_sum_title'); document.getElementById('warmupSkipBtn').style.visibility = 'hidden'; } // as mock-1: no Skip once warmed up
 }
 function wuSummaryHide(){
   const el = document.getElementById('wuSummary'); if(!el) return;
@@ -21861,6 +21862,7 @@ function wuSummaryHide(){
   document.getElementById('wuBody').style.display = '';
   document.querySelectorAll('.wu-summing').forEach(h=>h.classList.remove('wu-summing'));
   document.getElementById('warmupTitle').textContent = t('wu_title');
+  document.getElementById('warmupSkipBtn').style.visibility = '';
 }
 
 /* ---------------- Game 2: Karaoke Boss Battle (Pro) ---------------- */

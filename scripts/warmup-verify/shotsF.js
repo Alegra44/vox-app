@@ -12,7 +12,7 @@
 require('../runguard').auto();
 const fs = require('fs'), path = require('path');
 const { execFileSync } = require('child_process');
-const { sleep, launch, openPage, TMP } = require('./common');
+const { sleep, launch, openPage, TMP, db, uid } = require('./common');
 const { cleanup } = require('../choir-verify/testAccounts');
 const OUT = process.argv[2] && !/^https?:/.test(process.argv[2]) ? process.argv[2] : 'design/warmup/shots-f';
 fs.mkdirSync(OUT, { recursive: true });
@@ -29,19 +29,30 @@ const CONFIGS = [['390', { width: 390, height: 844 }, 'light'], ['390-dark', { w
       const { page, ctx } = await openPage(b, { viewport, colorScheme });
       const shot = async f => { await sleep(500); await page.screenshot({ path: path.join(OUT, `${f}-${name}.png`) }); console.log(`  ${f}-${name}`); };
       const closeSheets = () => page.evaluate(() => ['levelupOverlay', 'newRecordOverlay', 'breakthroughOverlay'].forEach(id => { const o = document.getElementById(id); if (o && o.classList.contains('levelup-show')) momentClose(o); }));
-      // three days warmed up, the last yesterday; today not yet; the stored range C3–C5
+      // three days warmed up, the last yesterday; today not yet; the stored range C3–C5. After the sign-up's own saves
+      // (a save still in flight would write its older row back over these), and checked in the database before the reload.
+      await sleep(3000);
+      for (let i = 0; i < 3; i++) {
       await page.evaluate(async ({ r, y }) => {
         window.__wuAllow = true; lowNote = null; highNote = null;
         progress.lowestMidi = r.lo; progress.highestMidi = r.hi; progress.lastWarmupDay = y; progress.warmupStreak = 3;
         wuPassedKey = null; try { localStorage.removeItem(wuKey()); } catch (e) {}
         await saveProgress();
       }, { r: RANGE, y: DAY(-1) });
+        await sleep(1500);
+        const row = db(`select lowest_midi, last_warmup_day::text as d, warmup_streak as s from public.user_progress where user_id = '${uid()}'`)[0];
+        if (+row.lowest_midi === RANGE.lo && row.d === DAY(-1) && +row.s === 3) break;
+        if (i === 2) throw new Error('the seeded state did not stick: ' + JSON.stringify(row));
+      }
       await page.reload({ waitUntil: 'load' }); await sleep(3000);
       await page.evaluate(() => { window.__wuAllow = true; const o = document.getElementById('onboardingOverlay'); if (o) o.style.display = 'none'; });
       await closeSheets();
       // Coach → Warm-up
       await page.locator('.snb-item[data-shell="train"]').click(); await sleep(400);
       await page.locator('#panel-train-hub [data-enter-panel="warmup"]').click(); await sleep(800);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      const seen = await page.evaluate(() => ({ lo: progress.lowestMidi, streak: wuStreakNow() }));
+      if (seen.lo !== 48 || seen.streak !== 3) throw new Error('the page did not load the seeded state: ' + JSON.stringify(seen));
       await shot('coach-warmup');
       // the pre-session warm-up's header
       await page.evaluate(() => { initAudio({ noWarmup: true }); }); await page.waitForFunction(() => !!analyser, null, { timeout: 15000 });
