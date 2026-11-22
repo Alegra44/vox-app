@@ -63,6 +63,15 @@ F needs migration 0011 **and** the api Edge Function (the allow-list) on product
 PATCH drops the two columns silently and F5 falls back to this device's mark. Rollback of the app leaves both harmless
 (an old app never sends them).
 
+## F6 (the review's fix)
+
+The banner-inside shots in the review (390 Light and Dark) showed the streak line's icon alone. Those shots came from
+bannerbehind's 15:30 run; the fix (`.wu-streak[hidden]{display:none}`, as hl-row's flex overrode `hidden`) landed in
+fa1a77c at 15:46, and bannerbehind wasn't run again before the shots were committed. The app needed no further change.
+Added: streakline.js (checksF step `streakline`): none, one day, a broken streak → no line at all (display none,
+height 0, icon 0 px); a streak not yet today and warmed up today → icon and text on one line; each in Coach → Warm-up
+and in the overlay: 20/20. bannerbehind now asserts no streak line in its shots (21/21). Shots retaken on review/warmupF.
+
 ## Review and deploy
 
 The user's message (2026-11-23), verbatim:
