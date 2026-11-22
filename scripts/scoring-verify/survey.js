@@ -19,6 +19,7 @@
 // and every vibratoTolerantCents call (readings in, values out: item 3).
 // Release B added, for its own measurements (SCORING.md):
 //   --voice <wav> [--voice-from <s>, default 5] [--voice-to <s>, default its end] [--voice-gain-db <dB>, default 0]
+//                [--voice-midi <m>: the voice's own pitch; each Lead note then sung on pitch, in the voice's nearest octave (release E)]
 //                                                another recording as the voice, looped from..to, at a gain (B5: VocalSet)
 //   --stub-lanes  Performance Director's lanes not drawn (cwLanesFrame, cwVoicePush stubbed): does drawing move its onsets?
 //   each take also keeps the tool's onsets (time, the frame it was found in, kind) and its frame intervals (B3: PD's ~20 ms)
@@ -30,6 +31,7 @@ const arg = n => { const i = process.argv.indexOf(n); return i > 0 ? process.arg
 const REF = arg('--ref'), RUNS = +(arg('--runs') || 2);
 const STIMS = (arg('--stims') || 'steady,ontime,late150,silence,loud,dynamic,skips,loudlate').split(',');
 const TOOLS = (arg('--tools') || 'pd,karaoke,emotion').split(',').map(k => T6.byKey(k));
+const VOICE_MIDI = arg('--voice-midi') ? +arg('--voice-midi') : null; // the voice's own pitch (MIDI, may be fractional): shifted onto the nearest octave of each Lead note (the tools fold octaves), so a vibrato's rate changes by ×1.41 at most
 const VOICE = arg('--voice'), VOICE_FROM = +(arg('--voice-from') || 5), VOICE_TO = arg('--voice-to') ? +arg('--voice-to') : null, VOICE_GAIN_DB = +(arg('--voice-gain-db') || 0), STUB_LANES = process.argv.includes('--stub-lanes');
 const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
 const OUT = arg('--out') || path.join(__dirname, 'logs', `survey-${REF || 'working'}-${stamp}.json`.replace(/\//g, '_'));
@@ -126,7 +128,7 @@ const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active,
   const t0 = hasCtx ? (fc => fc.perf + (g(ctxVar) - fc.ctx) * 1000)(__freshClock(audioCtx)) : g(startVar), D = songChordDurMs(), lead = SONG.parts.Lead.notes, late = plan.late || 0;
   window.__rec.t0 = t0; window.__rec.bk = window.__bkPerf; window.__rec.D = D; window.__rec.lead = lead.slice();
   if (!plan.steady && !plan.silent) {
-    const notes = lead.map((m, i) => ({ semis: m - 69, on: t0 + i * D + late, off: t0 + (i + 0.85) * D + late, gain: plan.gains ? plan.gains[i % plan.gains.length] : 1 }))
+    const notes = lead.map((m, i) => ({ semis: window.__voiceMidi ? (d => d - 12 * Math.round(d / 12))(m - window.__voiceMidi) : m - 69, on: t0 + i * D + late, off: t0 + (i + 0.85) * D + late, gain: plan.gains ? plan.gains[i % plan.gains.length] : 1 }))
       .filter((_, i) => !(plan.skip || []).includes(i));
     const backing = plan.backing ? { t0: key === 'pd' || hasCtx || window.__bkPerf == null ? t0 : window.__bkPerf, dur: D, level: plan.backing, chords: lead.map((_, i) => ['Soprano', 'Alto', 'Tenor', 'Bass'].map(p => SONG.parts[p].notes[i])) } : null;
     __synth.play(notes, plan.noise || 0, backing);
@@ -145,7 +147,7 @@ const startTake = (page, key, plan) => page.evaluate(async ({ ids: [btn, active,
     const body = fs.readFileSync(VOICE || S.STIM.steady);
     for (let run = 0; run < RUNS; run++) for (const stim of STIMS) {
       const { ctx, page, errors } = await C.openPage(b, { dir, theme: 'light', storageState: state,
-        prepare: async c => { await c.route('**/__stim.wav', r => r.fulfill({ status: 200, contentType: 'audio/wav', body })); await c.addInitScript(([f, t, gdb]) => { window.__voiceFrom = f; window.__voiceTo = t; window.__voiceGainDb = gdb; }, [VOICE_FROM, VOICE_TO, VOICE_GAIN_DB]); await c.addInitScript(INIT); } });
+        prepare: async c => { await c.route('**/__stim.wav', r => r.fulfill({ status: 200, contentType: 'audio/wav', body })); await c.addInitScript(([f, t, gdb, vm]) => { window.__voiceFrom = f; window.__voiceTo = t; window.__voiceGainDb = gdb; window.__voiceMidi = vm; }, [VOICE_FROM, VOICE_TO, VOICE_GAIN_DB, VOICE_MIDI]); await c.addInitScript(INIT); } });
       try {
         await C.clearOverlays(page); await page.evaluate(stub => { window.__stubLanes = stub; }, STUB_LANES); await page.evaluate(TAP); await S.warmMic(page);
         for (const tool of TOOLS) {

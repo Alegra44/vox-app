@@ -6177,17 +6177,34 @@ function vibratoGate(pts){
     && out.depth>=VIB_TOL.minCents && out.depth<=VIB_TOL.maxCents && n*dt >= 2*out.periodMs; // under ±8 ct: straight (as the Vibrato Analyzer reads it)
   return out;
 }
-// One note's readings → the cents to score, one per reading: the centre line when the note carries vibrato, else as read.
-// In a vibrato note a detector slip (a reading 3+ semitones off the note's median: the detector jumping a fourth or an
-// octave at a deep trough, often for a few hundred ms) is scored as the centre line at that moment, not as read: one
-// such burst otherwise outweighed the whole note in a mean-|cents| score. Without vibrato every reading stays as read.
+// How strongly a note's readings are a vibrato, 0 to 1, from the gate's own evidence (release E): each test the gate
+// makes, as a ramp that starts at the gate's own threshold (0 there, so a note just past it takes almost nothing of the
+// centre line) and reaches 1 a little inside it. 0 whenever the gate says no. The swing's depth carries most of it: a
+// near-straight voice whose few-cent wobble passes the gate in some stretches and not in others (survey D: the steady
+// stimulus read 77 or 87 by where its take started) now reads alike either way. The other ramps are narrow because real
+// voices sit right at those edges (VocalSet: a deep vibrato at periodicity 0.403, notes held 2.2 periods): a wide ramp
+// there moved real takes by up to 45 points, so those edges stay close to the gate's own (RELEASE_E.md).
+const VIB_BLEND = {depth:[8, 13], maxDepth:[160, 150], periodicity:[0.400, 0.402], rateLo:[4.0, 4.25], rateHi:[8.0, 7.75], periods:[2, 2.25]};
+function vibratoStrength(g, pts){
+  if(!g.vibrato) return 0;
+  const lin = (v, [a, b])=>Math.max(0, Math.min(1, (v-a)/(b-a))), kept = g.kept || pts, B = VIB_BLEND;
+  const periods = (kept[kept.length-1].t - kept[0].t)/g.periodMs;
+  return lin(g.depth, B.depth) * lin(g.depth, B.maxDepth) * lin(g.periodicity, B.periodicity)
+    * lin(g.rateHz, B.rateLo) * lin(g.rateHz, B.rateHi) * lin(periods, B.periods);
+}
+// One note's readings → the cents to score, one per reading: (1 − strength) × the reading + strength × the centre line
+// (vibratoStrength: 1 for a clear vibrato, 0 for none). In a vibrato note a detector slip (a reading 3+ semitones off
+// the note's median: the detector jumping a fourth or an octave at a deep trough, often for a few hundred ms) is taken
+// toward the centre line by the same strength, not scored as read: one such burst otherwise outweighed the whole note in
+// a mean-|cents| score. Without vibrato every reading stays as read.
 function vibratoTolerantCents(pts){
-  const g = vibratoGate(pts);
-  if(!g.vibrato) return pts.map(p=>p.c);
+  const g = vibratoGate(pts), s = vibratoStrength(g, pts);
+  if(!(s > 0)) return pts.map(p=>p.c);
   const kept = g.kept || pts, x = g.x, P = g.periodMs/VIB_TOL.dtMs, t0 = kept[0].t, centre = new Float64Array(x.length);
   for(let k=0;k<x.length;k++) centre[k] = vibratoBoxMean(x, Math.max(0, Math.min(x.length-P, k-P/2)), P);
   return pts.map(p=>{
-    const u = Math.max(0, (p.t-t0)/VIB_TOL.dtMs), k = Math.floor(u), f = u-k; return k+1<centre.length ? centre[k]*(1-f)+centre[k+1]*f : centre[centre.length-1];
+    const u = Math.max(0, (p.t-t0)/VIB_TOL.dtMs), k = Math.floor(u), f = u-k, c = k+1<centre.length ? centre[k]*(1-f)+centre[k+1]*f : centre[centre.length-1];
+    return s>=1 ? c : (1-s)*p.c + s*c;
   });
 }
 // Live form for per-frame readouts: pass the reading (or null when there's no pitch); returns what to show and judge now.
