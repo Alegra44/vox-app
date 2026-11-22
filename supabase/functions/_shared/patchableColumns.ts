@@ -62,6 +62,8 @@ export const PROGRESS_PATCHABLE_COLUMNS = [
   "used_key_recommendation",
   "choir_readiness",
   "levelup_snapshot",
+  "last_warmup_day", // 0011 (release F5, the warm-up's day)
+  "warmup_streak", // 0011
 ] as const;
 
 export function pickAllowed(

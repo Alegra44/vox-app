@@ -76,8 +76,12 @@ const warm = page => page.evaluate(async () => {
   let heard = false; while (!heard && performance.now() - t0 < 5000) { await new Promise(r => setTimeout(r, 20)); an.getFloatTimeDomainData(buf); heard = buf.some(v => Math.abs(v) > 0.001); }
   st.getTracks().forEach(t => t.stop()); await ac.close(); window.__gum = []; return heard;
 });
-// Arms the gate again as if no warm-up had happened today.
-const rearm = page => page.evaluate(() => { wuPassedKey = null; try { localStorage.removeItem(wuKey()); } catch (e) {} });
+// Arms the gate again as if no warm-up had happened today. Since release F5 the day is on the server too
+// (user_progress.last_warmup_day): cleared there as well (the streak is left as it is).
+const rearm = page => page.evaluate(async () => {
+  wuPassedKey = null; try { localStorage.removeItem(wuKey()); } catch (e) {}
+  if (profile && progress && 'lastWarmupDay' in progress) { progress.lastWarmupDay = null; await saveProgress(); }
+});
 const overlayShown = page => page.evaluate(() => getComputedStyle(document.getElementById('warmupOverlay')).display !== 'none');
 
 module.exports = { URL_, LOCAL, DEPLOY, TMP, sleep, check, totals, tone, launch, openPage, account, uid, db, warm, rearm, overlayShown };

@@ -2427,6 +2427,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
   .wu-card .hl-seg.wu-tabs button.active, .wu-host .hl-seg.wu-tabs button.active{background:var(--hl-ink);color:var(--hl-bg);}
   .wu-host .warmup-context{margin:0 0 var(--hl-s3);}
   .wu-xp-card{padding:14px 16px;border-radius:var(--hl-r2);}
+  .wu-streak{margin:0 0 var(--hl-s3);gap:6px;}
   .wu-summary{margin-bottom:var(--hl-s3);}
   .wu-sum-meta{margin:0 0 var(--hl-s3);}
   .wu-sum-range{padding:6px 0 10px;align-items:baseline;}
@@ -2713,6 +2714,8 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
           <span class="shell-streak" id="shellStreak" role="img"><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-flame"/></svg><span class="shell-streak-n">0</span></span>
           <span class="home-stats-sep" aria-hidden="true">·</span>
           <span class="shell-level" id="shellLevel"><span data-i18n="journey_level_label">Level</span> <span class="shell-level-n">1</span></span>
+          <span class="home-stats-sep" id="shellWuSep" aria-hidden="true" hidden>·</span>
+          <span class="shell-wu-streak" id="shellWuStreak" hidden></span>
         </div>
         <div class="home-streak-line" id="homeStreakLine">Sign in to start tracking your streak</div>
       </div>
@@ -5753,6 +5756,7 @@ try{var t=localStorage.getItem('theme');if(t==='cyberpunk'||t==='aurora'||t==='v
       </div>
       <p class="trial-modal-sub" data-i18n="wu_sub">A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.</p>
       <div id="wuBody">
+      <p class="hl-row hl-meta wu-streak" id="wuStreakLine" hidden><svg class="hl-icon hl-icon--s" aria-hidden="true"><use href="#hl-warmup"/></svg><span id="wuStreakText"></span></p>
       <div class="hl-seg wu-tabs" role="group">
         <button type="button" class="active" data-wu-mode="exercises" aria-pressed="true" data-i18n="wu_mode_exercises">Exercises</button>
         <button type="button" data-wu-mode="song" aria-pressed="false" data-i18n="wu_mode_song">Song warm-up</button>
@@ -8112,7 +8116,7 @@ const TRANSLATIONS = {
     vl_break_80:"You've reached 80% of today's vocal load budget. This is a good moment for a break: rest your voice for a while and drink some water.",
     vl_break_100:"You've reached 100% of today's vocal load budget. Consider resting your voice for the rest of the day, or keeping your singing light.",
     vl_break_dismiss:'Dismiss',
-    wu_title:"Warm up first?", wu_finish:'Finish warm-up', wu_back:'Back to the exercises', wu_sum_title:'Warmed up', wu_sum_meta_one:'{n} exercise · {t} sung', wu_sum_meta_other:'{n} exercises · {t} sung', wu_sum_range:'Range reached', wu_sum_stored:'your stored range {r}', wu_sum_nostored:'no stored range yet', wu_sum_follow:'How closely you followed the line', wu_sum_within:'of the sung time within a semitone of the line', wu_sum_lost:'lost the line above {note}', wu_sum_hum:'±{c} cents around {note}', wu_sum_next:'Next', wu_sum_open:'Open {tool}', wu_next_register_why:'the line broke above {note}', wu_next_tuner_why:'your hum moved ±{c} cents', wu_next_easy:'An easy day', wu_next_easy_why:'today you stayed well inside your range', wu_next_range_why:'no stored range yet', wu_next_session:'Your session', wu_next_session_why:'the one you were about to start', wu_coach_lost:'{ex} lost the line above {note} today. That\'s normal early on; go easy upward.', wu_coach_hum:'Your hum moved ±{c} cents. Hold it on one easy breath next time.', wu_coach_good:'You stayed on the line in every exercise.', wu_coach_weakest:'{ex} was the hardest today: {p}% of it within a semitone of the line.',
+    wu_title:"Warm up first?", wu_streak_keep:'{n} days warmed up in a row · one exercise keeps it', wu_streak_done:'{n} days warmed up in a row · today counted', home_wu_streak_one:'{n} day warmed up', home_wu_streak_other:'{n} days warmed up', wu_finish:'Finish warm-up', wu_back:'Back to the exercises', wu_sum_title:'Warmed up', wu_sum_meta_one:'{n} exercise · {t} sung', wu_sum_meta_other:'{n} exercises · {t} sung', wu_sum_range:'Range reached', wu_sum_stored:'your stored range {r}', wu_sum_nostored:'no stored range yet', wu_sum_follow:'How closely you followed the line', wu_sum_within:'of the sung time within a semitone of the line', wu_sum_lost:'lost the line above {note}', wu_sum_hum:'±{c} cents around {note}', wu_sum_next:'Next', wu_sum_open:'Open {tool}', wu_next_register_why:'the line broke above {note}', wu_next_tuner_why:'your hum moved ±{c} cents', wu_next_easy:'An easy day', wu_next_easy_why:'today you stayed well inside your range', wu_next_range_why:'no stored range yet', wu_next_session:'Your session', wu_next_session_why:'the one you were about to start', wu_coach_lost:'{ex} lost the line above {note} today. That\'s normal early on; go easy upward.', wu_coach_hum:'Your hum moved ±{c} cents. Hold it on one easy breath next time.', wu_coach_good:'You stayed on the line in every exercise.', wu_coach_weakest:'{ex} was the hardest today: {p}% of it within a semitone of the line.',
     wu_sub:"A minute or two of easy singing before you practise. Do one exercise, a few, or skip straight to your session.",
     wu_skip:"Skip warm-up",
     wu_continue:"Start my session",
@@ -9902,7 +9906,7 @@ const TRANSLATIONS = {
     vl_break_80:'Vous avez atteint 80 % du budget de charge vocale du jour. C’est un bon moment pour faire une pause : reposez votre voix un moment et buvez un peu d’eau.',
     vl_break_100:'Vous avez atteint 100 % du budget de charge vocale du jour. Pensez à reposer votre voix pour le reste de la journée, ou à chanter légèrement.',
     vl_break_dismiss:'Fermer',
-    wu_title:"Un échauffement d’abord ?", wu_finish:'Terminer l\'échauffement', wu_back:'Revenir aux exercices', wu_sum_title:'Échauffé', wu_sum_meta_one:'{n} exercice · {t} chantées', wu_sum_meta_other:'{n} exercices · {t} chantées', wu_sum_range:'Tessiture atteinte', wu_sum_stored:'votre tessiture enregistrée : {r}', wu_sum_nostored:'pas encore de tessiture enregistrée', wu_sum_follow:'À quel point vous avez suivi la ligne', wu_sum_within:'du temps chanté à moins d\'un demi-ton de la ligne', wu_sum_lost:'ligne perdue au-dessus de {note}', wu_sum_hum:'±{c} cents autour de {note}', wu_sum_next:'Ensuite', wu_sum_open:'Ouvrir {tool}', wu_next_register_why:'la ligne a cassé au-dessus de {note}', wu_next_tuner_why:'votre fredonnement a bougé de ±{c} cents', wu_next_easy:'Une journée tranquille', wu_next_easy_why:'aujourd\'hui, votre voix est restée bien dans votre tessiture', wu_next_range_why:'pas encore de tessiture enregistrée', wu_next_session:'Votre séance', wu_next_session_why:'celle que vous alliez commencer', wu_coach_lost:'{ex} : ligne perdue au-dessus de {note} aujourd\'hui. C\'est normal au début ; allez-y doucement vers l\'aigu.', wu_coach_hum:'Votre fredonnement a bougé de ±{c} cents. La prochaine fois, tenez-le sur un souffle calme.', wu_coach_good:'Votre voix est restée sur la ligne dans chaque exercice.', wu_coach_weakest:'{ex} a été le plus difficile aujourd\'hui : {p} % à moins d\'un demi-ton de la ligne.',
+    wu_title:"Un échauffement d’abord ?", wu_streak_keep:'{n} jours d\'échauffement d\'affilée · un exercice suffit pour continuer', wu_streak_done:'{n} jours d\'échauffement d\'affilée · aujourd\'hui compté', home_wu_streak_one:'{n} jour d\'échauffement', home_wu_streak_other:'{n} jours d\'échauffement', wu_finish:'Terminer l\'échauffement', wu_back:'Revenir aux exercices', wu_sum_title:'Échauffé', wu_sum_meta_one:'{n} exercice · {t} chantées', wu_sum_meta_other:'{n} exercices · {t} chantées', wu_sum_range:'Tessiture atteinte', wu_sum_stored:'votre tessiture enregistrée : {r}', wu_sum_nostored:'pas encore de tessiture enregistrée', wu_sum_follow:'À quel point vous avez suivi la ligne', wu_sum_within:'du temps chanté à moins d\'un demi-ton de la ligne', wu_sum_lost:'ligne perdue au-dessus de {note}', wu_sum_hum:'±{c} cents autour de {note}', wu_sum_next:'Ensuite', wu_sum_open:'Ouvrir {tool}', wu_next_register_why:'la ligne a cassé au-dessus de {note}', wu_next_tuner_why:'votre fredonnement a bougé de ±{c} cents', wu_next_easy:'Une journée tranquille', wu_next_easy_why:'aujourd\'hui, votre voix est restée bien dans votre tessiture', wu_next_range_why:'pas encore de tessiture enregistrée', wu_next_session:'Votre séance', wu_next_session_why:'celle que vous alliez commencer', wu_coach_lost:'{ex} : ligne perdue au-dessus de {note} aujourd\'hui. C\'est normal au début ; allez-y doucement vers l\'aigu.', wu_coach_hum:'Votre fredonnement a bougé de ±{c} cents. La prochaine fois, tenez-le sur un souffle calme.', wu_coach_good:'Votre voix est restée sur la ligne dans chaque exercice.', wu_coach_weakest:'{ex} a été le plus difficile aujourd\'hui : {p} % à moins d\'un demi-ton de la ligne.',
     wu_sub:"Une ou deux minutes de chant facile avant de vous entraîner. Faites un exercice, plusieurs, ou passez directement à votre séance.",
     wu_skip:"Passer l’échauffement",
     wu_continue:"Commencer ma séance",
@@ -11692,7 +11696,7 @@ const TRANSLATIONS = {
     vl_break_80:'Has llegado al 80 % del presupuesto de carga vocal de hoy. Es un buen momento para hacer una pausa: descansa la voz un rato y bebe un poco de agua.',
     vl_break_100:'Has llegado al 100 % del presupuesto de carga vocal de hoy. Considera descansar la voz el resto del día o cantar de forma ligera.',
     vl_break_dismiss:'Cerrar',
-    wu_title:"¿Calentamos primero?", wu_finish:'Terminar el calentamiento', wu_back:'Volver a los ejercicios', wu_sum_title:'Calentamiento hecho', wu_sum_meta_one:'{n} ejercicio · {t} cantados', wu_sum_meta_other:'{n} ejercicios · {t} cantados', wu_sum_range:'Rango alcanzado', wu_sum_stored:'tu rango guardado: {r}', wu_sum_nostored:'aún no hay rango guardado', wu_sum_follow:'Qué tan de cerca seguiste la línea', wu_sum_within:'del tiempo cantado a menos de un semitono de la línea', wu_sum_lost:'perdiste la línea por encima de {note}', wu_sum_hum:'±{c} cents alrededor de {note}', wu_sum_next:'Siguiente', wu_sum_open:'Abrir {tool}', wu_next_register_why:'la línea se rompió por encima de {note}', wu_next_tuner_why:'tu tarareo se movió ±{c} cents', wu_next_easy:'Un día tranquilo', wu_next_easy_why:'hoy te quedaste bien dentro de tu rango', wu_next_range_why:'aún no hay rango guardado', wu_next_session:'Tu sesión', wu_next_session_why:'la que ibas a empezar', wu_coach_lost:'{ex}: perdiste la línea por encima de {note} hoy. Es normal al principio; ve con calma hacia arriba.', wu_coach_hum:'Tu tarareo se movió ±{c} cents. La próxima vez, sostenlo con una respiración tranquila.', wu_coach_good:'Te mantuviste en la línea en todos los ejercicios.', wu_coach_weakest:'{ex} fue lo más difícil hoy: {p} % a menos de un semitono de la línea.',
+    wu_title:"¿Calentamos primero?", wu_streak_keep:'{n} días seguidos de calentamiento · un ejercicio lo mantiene', wu_streak_done:'{n} días seguidos de calentamiento · hoy contado', home_wu_streak_one:'{n} día de calentamiento', home_wu_streak_other:'{n} días de calentamiento', wu_finish:'Terminar el calentamiento', wu_back:'Volver a los ejercicios', wu_sum_title:'Calentamiento hecho', wu_sum_meta_one:'{n} ejercicio · {t} cantados', wu_sum_meta_other:'{n} ejercicios · {t} cantados', wu_sum_range:'Rango alcanzado', wu_sum_stored:'tu rango guardado: {r}', wu_sum_nostored:'aún no hay rango guardado', wu_sum_follow:'Qué tan de cerca seguiste la línea', wu_sum_within:'del tiempo cantado a menos de un semitono de la línea', wu_sum_lost:'perdiste la línea por encima de {note}', wu_sum_hum:'±{c} cents alrededor de {note}', wu_sum_next:'Siguiente', wu_sum_open:'Abrir {tool}', wu_next_register_why:'la línea se rompió por encima de {note}', wu_next_tuner_why:'tu tarareo se movió ±{c} cents', wu_next_easy:'Un día tranquilo', wu_next_easy_why:'hoy te quedaste bien dentro de tu rango', wu_next_range_why:'aún no hay rango guardado', wu_next_session:'Tu sesión', wu_next_session_why:'la que ibas a empezar', wu_coach_lost:'{ex}: perdiste la línea por encima de {note} hoy. Es normal al principio; ve con calma hacia arriba.', wu_coach_hum:'Tu tarareo se movió ±{c} cents. La próxima vez, sostenlo con una respiración tranquila.', wu_coach_good:'Te mantuviste en la línea en todos los ejercicios.', wu_coach_weakest:'{ex} fue lo más difícil hoy: {p} % a menos de un semitono de la línea.',
     wu_sub:"Uno o dos minutos de canto suave antes de practicar. Haz un ejercicio, varios, o ve directo a tu sesión.",
     wu_skip:"Saltar calentamiento",
     wu_continue:"Empezar mi sesión",
@@ -13482,7 +13486,7 @@ const TRANSLATIONS = {
     vl_break_80:'Bugünkü ses yükü bütçenizin %80’ine ulaştınız. Mola vermek için iyi bir an: sesinizi bir süre dinlendirin ve biraz su için.',
     vl_break_100:'Bugünkü ses yükü bütçenizin %100’üne ulaştınız. Günün geri kalanında sesinizi dinlendirmeyi ya da hafif şarkı söylemeyi düşünün.',
     vl_break_dismiss:'Kapat',
-    wu_title:"Önce ısınalım mı?", wu_finish:'Isınmayı bitir', wu_back:'Egzersizlere dön', wu_sum_title:'Isınıldı', wu_sum_meta_one:'{n} egzersiz · {t} söylendi', wu_sum_meta_other:'{n} egzersiz · {t} söylendi', wu_sum_range:'Ulaşılan ses aralığı', wu_sum_stored:'kayıtlı aralığınız: {r}', wu_sum_nostored:'henüz kayıtlı aralık yok', wu_sum_follow:'Çizgiyi ne kadar yakından izlediniz', wu_sum_within:'söylenen sürenin çizgiye yarım tondan yakın kısmı', wu_sum_lost:'{note} üstünde çizgi kaçtı', wu_sum_hum:'{note} çevresinde ±{c} sent', wu_sum_next:'Sıradaki', wu_sum_open:'{tool} aç', wu_next_register_why:'çizgi {note} üstünde koptu', wu_next_tuner_why:'mırıldanmanız ±{c} sent oynadı', wu_next_easy:'Rahat bir gün', wu_next_easy_why:'bugün aralığınızın epey içinde kaldınız', wu_next_range_why:'henüz kayıtlı aralık yok', wu_next_session:'Seansınız', wu_next_session_why:'başlamak üzere olduğunuz seans', wu_coach_lost:'{ex}: bugün {note} üstünde çizgi kaçtı. Başta bu normal; yukarı doğru rahat gidin.', wu_coach_hum:'Mırıldanmanız ±{c} sent oynadı. Bir dahaki sefere tek ve rahat bir nefeste tutun.', wu_coach_good:'Her egzersizde çizgide kaldınız.', wu_coach_weakest:'Bugün en zoru {ex} oldu: %{p} kadarı çizgiye yarım tondan yakın.',
+    wu_title:"Önce ısınalım mı?", wu_streak_keep:'Art arda {n} gün ısınıldı · bir egzersiz seriyi sürdürür', wu_streak_done:'Art arda {n} gün ısınıldı · bugün sayıldı', home_wu_streak_one:'{n} gün ısınıldı', home_wu_streak_other:'{n} gün ısınıldı', wu_finish:'Isınmayı bitir', wu_back:'Egzersizlere dön', wu_sum_title:'Isınıldı', wu_sum_meta_one:'{n} egzersiz · {t} söylendi', wu_sum_meta_other:'{n} egzersiz · {t} söylendi', wu_sum_range:'Ulaşılan ses aralığı', wu_sum_stored:'kayıtlı aralığınız: {r}', wu_sum_nostored:'henüz kayıtlı aralık yok', wu_sum_follow:'Çizgiyi ne kadar yakından izlediniz', wu_sum_within:'söylenen sürenin çizgiye yarım tondan yakın kısmı', wu_sum_lost:'{note} üstünde çizgi kaçtı', wu_sum_hum:'{note} çevresinde ±{c} sent', wu_sum_next:'Sıradaki', wu_sum_open:'{tool} aç', wu_next_register_why:'çizgi {note} üstünde koptu', wu_next_tuner_why:'mırıldanmanız ±{c} sent oynadı', wu_next_easy:'Rahat bir gün', wu_next_easy_why:'bugün aralığınızın epey içinde kaldınız', wu_next_range_why:'henüz kayıtlı aralık yok', wu_next_session:'Seansınız', wu_next_session_why:'başlamak üzere olduğunuz seans', wu_coach_lost:'{ex}: bugün {note} üstünde çizgi kaçtı. Başta bu normal; yukarı doğru rahat gidin.', wu_coach_hum:'Mırıldanmanız ±{c} sent oynadı. Bir dahaki sefere tek ve rahat bir nefeste tutun.', wu_coach_good:'Her egzersizde çizgide kaldınız.', wu_coach_weakest:'Bugün en zoru {ex} oldu: %{p} kadarı çizgiye yarım tondan yakın.',
     wu_sub:"Çalışmadan önce bir iki dakika rahat şarkı söyleyin. Bir egzersiz ya da birkaç tane yapın veya doğrudan seansınıza geçin.",
     wu_skip:"Isınmayı atla",
     wu_continue:"Seansımı başlat",
@@ -21512,27 +21516,54 @@ let wuCounting = null;
 function wuCount(){ return wuCounting || (wuCounting = wuCountNow().finally(()=>{ wuCounting = null; })); }
 async function wuCountNow(){
   if(!profile || !progress) return;
-  try{ const row = await apiFetch('/me/progress'); if(row && 'last_warmup_day' in row){ progress.lastWarmupDay = row.last_warmup_day; } }catch(e){}
+  await wuServerSync(5000);
   wuMarkPassed('done'); // warmed up today: the pre-session warm-up isn't offered again today
   if(wuCountedToday()) return;
+  // F5: the streak: one more if the last counted day was yesterday, else it starts again at 1 (the practice streak isn't touched)
+  progress.warmupStreak = progress.lastWarmupDay && daysBetween(progress.lastWarmupDay, todayStr())===1 ? (progress.warmupStreak||0)+1 : 1;
   progress.lastWarmupDay = todayStr();
   progress.warmupsCompleted = (progress.warmupsCompleted||0)+1;
   progress.xp = (progress.xp||0)+5;
   await saveProgress();
   if(document.getElementById('panel-warmup').classList.contains('active')) wuRenderXpCard();
+  wuRender(); updateShellTopbar();
 }
 
 function wuKey(){ return 'warmup:'+(profile && (profile.id || profile.email) || '')+':'+todayStr(); }
 function wuPassed(){
   if(wuPassedKey===wuKey()) return true;
+  if(profile && progress && progress.lastWarmupDay===todayStr()) return true; // F5: the server's day (another device's warm-up too)
   try{ return !!localStorage.getItem(wuKey()); }catch(e){ return false; }
 }
 function warmupGate(){
   if(wuPending) return wuPending;
   if(wuPassed()) return Promise.resolve(true);
-  wuPending = new Promise(res=>{ wuResolve = res; });
-  wuOpen();
-  return wuPending;
+  // F5: the server is asked first (1.5 s at most), so a warm-up done today on another device since this page loaded counts
+  const p = wuPending = (async ()=>{
+    if(await wuServerDone()){ if(wuPending===p) wuPending = null; return true; }
+    return new Promise(res=>{ wuResolve = res; wuOpen(); });
+  })();
+  return p;
+}
+// F5: the server's warm-up day and streak into progress; true if today's warm-up already counted (then cached locally)
+async function wuServerSync(ms){
+  if(!profile || !progress) return false;
+  try{
+    const row = await Promise.race([apiFetch('/me/progress'), new Promise((_, no)=>setTimeout(()=>no(new Error('slow')), ms))]);
+    if(row && 'last_warmup_day' in row){ progress.lastWarmupDay = row.last_warmup_day; progress.warmupStreak = row.warmup_streak||0; }
+  }catch(e){}
+  return progress.lastWarmupDay===todayStr();
+}
+async function wuServerDone(){
+  if(!await wuServerSync(1500)) return false;
+  wuMarkPassed('done');
+  return true;
+}
+// F5: the warm-up streak as it stands today: shown while the last counted day is today or yesterday, 0 once a day is missed
+function wuStreakNow(){
+  const last = progress && progress.lastWarmupDay;
+  if(!last) return 0;
+  return daysBetween(last, todayStr())<=1 ? (progress.warmupStreak||0) : 0;
 }
 function wuOpen(){
   wuStop(); wuMoveBody('overlay'); wuSummaryHide();
@@ -21580,6 +21611,9 @@ function wuRender(){
   document.getElementById('warmupStage').style.display = wuRun && wuRun.kind==='ex' ? 'block' : 'none';
   document.getElementById('warmupRollWrap').style.display = wuRun && wuRun.kind==='song' ? 'block' : 'none';
   document.getElementById('warmupContinueBtn').style.display = wuDone.size && wuHost==='overlay' ? 'flex' : 'none';
+  const n = profile ? wuStreakNow() : 0, sl = document.getElementById('wuStreakLine'); // F5: 2 days or more
+  sl.hidden = n<2;
+  if(n>=2) document.getElementById('wuStreakText').textContent = t(wuCountedToday() ? 'wu_streak_done' : 'wu_streak_keep').replace('{n}', n);
   document.getElementById('wuFinishBtn').style.display = wuHasExercise() && wuHost==='panel' && !wuSummaryShown() ? '' : 'none';
 }
 function wuStatus(key){ document.getElementById('warmupStatus').textContent = key ? t(key) : ''; }
@@ -22826,6 +22860,9 @@ function updateShellTopbar(){
   streakEl.setAttribute('aria-label', `${t('home_streak_p1')}${progress.streak||0}${t('home_streak_p2')}`); // the streak sentence, not just the number
   const {level}=levelForXp(progress.xp||0);
   levelEl.querySelector('.shell-level-n').textContent = level;
+  // F5: the warm-up streak, in words ("4 days warmed up"), separate from the practice streak
+  const wn = typeof wuStreakNow==='function' ? wuStreakNow() : 0, we = document.getElementById('shellWuStreak');
+  if(we){ we.hidden = document.getElementById('shellWuSep').hidden = wn<1; we.textContent = wn>=1 ? t(wn===1 ? 'home_wu_streak_one' : 'home_wu_streak_other').replace('{n}', wn) : ''; }
 }
 
 document.getElementById('homeSignInBtn')?.addEventListener('click', openAuthModal);
