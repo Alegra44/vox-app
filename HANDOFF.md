@@ -4,15 +4,13 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-22)
+## Branches on GitHub (2026-11-23)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through release E, the vibrato blend (merge 4da3fe8), live as dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB |
-| `review/accuracyE-prod` | Release E's production checks (design/accuracy/review-e-prod/: logs, NOTES.md) |
+| `master` | Everything, through release F, the warm-up (merge dc3abb2), live as dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h |
+| `review/warmupF-prod` | Release F's production checks (design/warmup/review-f-prod/: logs, NOTES.md, prodF.sh) |
 | `survey/guard` | The speaker-guard survey (design/accuracy/GUARD.md), parked before part c (a real voice from a phone) |
-| `survey/warmup` | The warm-up survey (design/warmup/WARMUP.md, mockups); stays until release F ships |
-| `warmup/f` | Release F, the warm-up (design/warmup/RELEASE_F.md), in review; with migration 0011, not applied to production |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
 
@@ -24,14 +22,18 @@ survey-tables.txt and scratch-fix.patch copied to master's design/scoring/; surv
 review/scoringB and review/scoringA-prod. On 2026-11-17, after release C's production checks: day/local (merged) and
 review/scoringB-prod. On 2026-11-18, after release D's production checks: accuracy/d (merged), review/accuracyD,
 survey/d (its SURVEY_D.md and scripts/survey-d/out/ copied to master) and review/dayC-prod. On 2026-11-22, after
-release E's production checks: accuracy/e (merged) and review/accuracyD-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
+release E's production checks: accuracy/e (merged) and review/accuracyD-prod. On 2026-11-23, after release F's
+production checks: warmup/f (merged), review/warmupF, survey/warmup (its WARMUP.md, measurements and shots copied to
+master's design/warmup/, c46ca45) and review/accuracyE-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
 its worktree removed).
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-22:
-release E, the vibrato blend, **dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB** (master's merge 4da3fe8), **the rollback target from
-now on** (app-only: no migration, no Edge Function). Before it, release D, Survey D's fixes,
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-23:
+release F, the warm-up, **dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h** (master's merge dc3abb2), **the rollback target from now
+on**, with migration 0011 (`last_warmup_day`, `warmup_streak`) and the api Edge Function with them on the allow-list
+(a rollback of the app leaves both: the old app doesn't send the fields). Before it, release E, the vibrato blend,
+dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB (2026-11-22); before that release D, Survey D's fixes,
 dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm (2026-11-18); before that release C, the local day,
 dpl_9zyqvjdkw6dus1h6mnDm2qru7S9Z (2026-11-17); before that release B, dpl_7n6H9JiTjJzz71wWpw948MUMD4a5. Migration 0010 and the api Edge Function with it are live. Before C, release B's
 migration 0009 (`expression_scores`) and the api function with it went live on 2026-11-16; release A,
@@ -840,6 +842,24 @@ Spec, results and the user's review: design/accuracy/RELEASE_E.md.
   ct 37 → 40) and scores6 (PD timing on lead 89 → 96, bimodal 86/96), both first measurements and off release E's
   code; run 3: both pass. 0 test accounts left.
 - The 2026-11-22 cleanup: ../voxcoach-master-wt removed (nothing in it missing from master).
+
+## Release F, the warm-up: LIVE 2026-11-23, dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h (the rollback target)
+
+Spec, results and the user's review: design/warmup/RELEASE_F.md (the survey: design/warmup/WARMUP.md).
+- **The change:** F1 the Vocal Load banner inside the open warm-up; F2 the level-up line names every XP source (first
+  bests, scores above average); F3 one warm-up (Coach → Warm-up is the pre-session one; +5 XP once per account and day,
+  not a session; Smart Warmup's Play buttons and 20 keys gone); F4 the summary after the exercises; F5 the warm-up
+  streak on the server (migration 0011; the gate asks the server first, 1.5 s at most); F6 the streak line's states
+  checked (streakline.js).
+- **Deploy (2026-11-23):** 0011 applied to production (the only migration pending), the api function deployed,
+  roundtrip.js 4/4; --no-ff merge dc3abb2, secret check clean; the user's `vercel deploy --prod` (a first "Not
+  authorized", then deployed); the site serves master's deploy/index.html byte for byte.
+- **Production checks** (scripts/warmup-verify/prodF.sh, on `review/warmupF-prod`, NOTES.md): all pass after reruns.
+  whyline, batch1, batch3c, warmup-entries and live each failed once and passed on the rerun. warmup-tracking's
+  timeout repeated: the check's `rearm` moves the warm-up day back and raced a save still in flight (an answer landing
+  late put today back); `rearm` now waits out saves in flight (b294585), 28/28 twice. 0 test accounts left.
+- Observed, not changed: saveProgress merges each PATCH's answer into progress, so overlapping saves answered out of
+  order leave the older values in memory until the next save (every progress field; not new with F).
 
 ## Waiting on the user (don't start without a go-ahead)
 
