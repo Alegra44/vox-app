@@ -19713,7 +19713,7 @@ function centsFromTarget(freq, targetMidi){
   return diff*100;
 }
 
-/* opts: {accuracyMultiplier, splitAttackLanding, showCentsDetail} */
+/* opts: {accuracyMultiplier, splitAttackLanding, showCentsDetail, octaveHold} */
 // opts.waitForVoiceMs: the window opens at the first voiced frame instead of at once (no voice by then: {noVoice:true}),
 // and opts.graceMs of it (the onset and its settling) isn't scored. Without them: the window starts at once, as before.
 async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
@@ -19723,6 +19723,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
   let totalFrames = 0;
   const start = performance.now();
   let voiceAt = opts.waitForVoiceMs ? null : 0, frameErr = false;
+  const hold = opts.octaveHold ? makeOctaveHold() : null; // release G (the Rift): a new hold for each capture, one note each
   return new Promise(resolve=>{
     function frame(){
       // opts.active (phase 8, the Rift): once it returns false the capture ends at once, unscored (its game was stopped)
@@ -19739,7 +19740,7 @@ async function captureAccuracyForTarget(targetMidi, durationMs=1600, opts={}){
       if(t >= grace){
         totalFrames++;
         if(freq>0){
-          const cents = centsFromTarget(freq, targetMidi);
+          const cents = centsFromTarget(hold ? octaveHoldFreq(hold, freq) : freq, targetMidi);
           if(cents!==null && Math.abs(cents) < 300){
             samples.push({t, cents});
             if(opts.onFrame){ try{ opts.onFrame(t, cents); }catch(e){ if(!frameErr){ frameErr = true; console.error('onFrame', e); } } } // drawing only: it can never touch scoring (the first error per take is logged)
@@ -21316,24 +21317,32 @@ function gliderPitchToY(freq, H){
   const midi = gliderGuard(69+12*Math.log2(freq/440));
   return gliderMidiToY(midi, H);
 }
-// Pitch Mountain's octave-jump hold (release D2; Survey D b): in voice-like noise autoCorrelate slips an octave for a
-// frame or two, and the glider, a quarter of the way to the new height each frame, crashed. A pitch 9–15 semitones from
-// the median of the last 5 frames read is held at that median for up to GLIDER_OCTAVE_HOLD frames (67 ms); a jump that
-// lasts longer is a real leap and is flown. The median, not the last pitch flown: at a falling fifth the detector reads
-// the octave below the new note for one frame, and a hold anchored on that frame held the real note (183 ms, not 50);
-// 5 frames, not 3: two slips in a row moved a 3-frame median onto the wrong octave (glider.js, RELEASE_D.md D2).
-const GLIDER_OCTAVE_HOLD = 4, GLIDER_MEDIAN_FRAMES = 5;
-window.gliderPitchGuard = ()=>{
+// The octave hold (release D2 for Pitch Mountain; release G shares it with Pitch Dragon and the Rift): in voice-like
+// noise autoCorrelate slips an octave for a frame or two. Pitch Mountain's glider, a quarter of the way to the new height
+// each frame, crashed; Pitch Dragon and the Rift drop a frame 300 ct or more from the note, so a slip cost frames.
+// makeOctaveHold() returns a hold for one stream of readings (midi in, midi out): a pitch 9–15 semitones from the median
+// of the last 5 frames read is held at that median for up to OCTAVE_HOLD_FRAMES frames (67 ms); a jump that lasts
+// longer is a real leap and is followed. The median, not the last pitch: at a falling fifth the detector reads the octave
+// below the new note for one frame, and a hold anchored on that frame held the real note (183 ms, not 50); 5 frames,
+// not 3: two slips in a row moved a 3-frame median onto the wrong octave (glider.js, RELEASE_D.md D2).
+const OCTAVE_HOLD_FRAMES = 4, OCTAVE_HOLD_MEDIAN = 5;
+function makeOctaveHold(){
   const recent = []; let held = 0;
   return m=>{
     if(m===null || m===undefined) return m;
     const r = recent.slice().sort((a,b)=>a-b), anchor = r.length ? r[Math.floor((r.length-1)/2)] : null;
-    recent.push(m); if(recent.length>GLIDER_MEDIAN_FRAMES) recent.shift(); // every frame read, held or not
-    if(anchor!==null && Math.abs(Math.abs(m-anchor)-12)<=3 && held<GLIDER_OCTAVE_HOLD){ held++; return anchor; }
+    recent.push(m); if(recent.length>OCTAVE_HOLD_MEDIAN) recent.shift(); // every frame read, held or not
+    if(anchor!==null && Math.abs(Math.abs(m-anchor)-12)<=3 && held<OCTAVE_HOLD_FRAMES){ held++; return anchor; }
     held = 0; return m;
   };
-};
-let gliderGuard = window.gliderPitchGuard();
+}
+// A frequency through a hold (autoCorrelate's -1 for "no pitch" passes untouched)
+function octaveHoldFreq(hold, freq){
+  if(!(freq>0)) return freq;
+  return 440*Math.pow(2, (hold(69+12*Math.log2(freq/440))-69)/12);
+}
+window.gliderPitchGuard = makeOctaveHold; // the name the measurement scripts look for (scripts/survey-d/glider.js)
+let gliderGuard = makeOctaveHold();
 // "For you": the course that trains the weakest of pitch, agility and range (the one gliderComputeDifficulty adapts to).
 const GLIDER_FOR_WEAKEST = {pitch:'melody', agility:'agility', range:'interval'};
 function renderGliderForYou(){
@@ -21359,7 +21368,7 @@ async function startGlider(){
   gliderActive=true; gliderScroll=0; gliderScoreVal=0; gliderCombo=0; gliderCoins=0; gliderPoints=[];
   gliderEnsurePoints(0);
   gliderY = gliderPoints[0].gapY; // start in the middle of the lead-in gap
-  gliderGuard = window.gliderPitchGuard();
+  gliderGuard = makeOctaveHold();
   gliderTookOff = false;          // held there, not scrolling or scoring, until the first sung note
   document.getElementById('gliderGameOver').style.display='none';
   gameStartLive('gliderStartBtn', 'gliderStartLabel');
@@ -21867,6 +21876,7 @@ function wuSummaryHide(){
 
 /* ---------------- Game 2: Karaoke Boss Battle (Pro) ---------------- */
 let bossActive=false, bossStartTime=0, bossRafId=null, bossHealth=100, playerHealth=100, bossCurrentIdx=-1, bossCentsBuf=[];
+let bossOctaveHold=null; // release G: Pitch Dragon's octave hold (makeOctaveHold), new each battle; null for the other bosses
 let bossRmsBuf=[], bossChestBuf=[], bossNoteOnsetTime=null, bossNoteWindowStart=0, bossUsesRegisterInput=false;
 let bossNoteResults=[]; // per-note pitchAcc, real data used to find the actual weakest note
 let bossCurrentTargetMidi=null;
@@ -21922,6 +21932,7 @@ async function startBoss(){
   await playBackingPad(false);
   if(tok!==startGen) return;
   bossActive=true; bossStartTime=performance.now(); bossHealth=100; playerHealth=100; bossCurrentIdx=-1; bossCentsBuf=[]; bossNoteResults=[];
+  bossOctaveHold = selectedBossType==='pitch' ? makeOctaveHold() : null;
   bossRmsBuf=[]; bossChestBuf=[]; bossNoteOnsetTime=null; bossNoteWindowStart=performance.now();
   document.getElementById('bossGameOver').style.display='none';
   document.getElementById('bossTrainingSection').style.display='none';
@@ -22048,7 +22059,8 @@ function bossLoop(){
   else { analyser.getFloatTimeDomainData(dataArray); freq=autoCorrelate(dataArray, audioCtx.sampleRate); buf=readRawMic(); } // loudness from the raw path
   if(freq>0){
     if(bossNoteOnsetTime===null) bossNoteOnsetTime=performance.now();
-    const cents=centsFromTarget(freq, targetMidi);
+    // release G: Pitch Dragon's readings through the octave hold (one hold for the whole battle, as Pitch Mountain's)
+    const cents=centsFromTarget(bossOctaveHold ? octaveHoldFreq(bossOctaveHold, freq) : freq, targetMidi);
     if(cents!==null && Math.abs(cents)<300) bossCentsBuf.push({t:elapsedMs, c:cents});
     bossRmsBuf.push(computeRMS(buf));
     if(chestScore!==null) bossChestBuf.push(chestScore);
@@ -24794,7 +24806,7 @@ async function riftRunNextRound(){
   await new Promise(r=>setTimeout(r, 450));
   if(!riftActive) return;
 
-  const result = await captureAccuracyForTarget(targetMidi, params.durationMs, {accuracyMultiplier: params.accuracyMultiplier, active: ()=>riftActive});
+  const result = await captureAccuracyForTarget(targetMidi, params.durationMs, {accuracyMultiplier: params.accuracyMultiplier, active: ()=>riftActive, octaveHold: true});
   if(!riftActive) return;
   riftRounds.push({type: params.label, targetMidi, accuracy: result.accuracy, heard: result.heard});
   riftPrevMidi = targetMidi;
