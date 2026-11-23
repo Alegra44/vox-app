@@ -1,0 +1,144 @@
+[sweep] deleted 0 leftover voxcoach-vlb-* account(s) from earlier runs
+== https://deploy-alegra1122.vercel.app/
+   mic: 261.63 Hz (MIDI 60)
+   signed up voxcoach-vlb-1795380460714@example.com
+  ✓ sidecar allowed in this browser (desktop Chromium; on the single stream there is no block at all) 
+
+-- Pitch Match (drill): target C4, a pass
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 0
+  ✓ feature result identical with the sidecar live                     off {"acc":"100%","fb":"Right on it."} | on {"acc":"100%","fb":"Right on it."}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.272 | off 261.7 Hz rms 0.2697
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":3.016,"ended":true,"load":5.80971496613415,"median_rms":0.26559484221594,"p5_midi":60.0028216212841,"p95_midi":60.0030255703758}]
+  ✓ active seconds ≈ time the feature listened (3.08 s, −1.8/+0.3)     3.016 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 5.8097 vs hand 5.8086
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge = today's stored total / 6800                                "0.1% of daily budget" pct 0.085437 vs 0.085437
+
+-- Pitch Match (drill): target D4, a miss
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0.1% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 1
+  ✓ feature result identical with the sidecar live                     off {"acc":"10%","fb":"Off target — try matching the tone before you start singing."} | on {"acc":"10%","fb":"Off target — try matching the tone before you start singing."}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.6 Hz rms 0.2688 | off 261.7 Hz rms 0.2715
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":3.023,"ended":true,"load":5.82357821883441,"median_rms":0.266242499152791,"p5_midi":60.0026639461212,"p95_midi":60.0030885378468}]
+  ✓ active seconds ≈ time the feature listened (3.01 s, −1.8/+0.3)     3.023 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 5.8236 vs hand 5.8221
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge = today's stored total / 6800                                "0.2% of daily budget" pct 0.171078 vs 0.171078
+
+-- Stay in Key (song drill, runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0.2% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 2
+  ✓ feature result identical with the sidecar live                     off {"shown":"75%","inKeyShare":0.75} | on {"shown":"75%","inKeyShare":0.75}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.265 | off 261.7 Hz rms 0.265
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":26.662,"ended":true,"load":51.353274065868,"median_rms":0.266040045668698,"p5_midi":60.002591052759,"p95_midi":60.0029831493049}]
+  ✓ active seconds ≈ time the feature listened (26.70 s, −1.8/+0.3)    26.662 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 51.3533 vs hand 51.3490
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 0.3140% vs before 0.1711%
+  ✓ gauge = today's stored total / 6800                                "0.9% of daily budget" pct 0.926273 vs 0.926273
+
+-- Karaoke (song game, runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "0.9% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 3
+  ✗ feature result identical with the sidecar live                     off {"notes":"100/34/h 0/0/h 100/0/h 100/0/h 100/0/h 100/0/h 0/0/h 100/0/h","pitch":"75%","timing":"4%"} | on {"notes":"100/36/h 0/0/h 100/0/h 100/0/h 100/0/h 100/0/h 0/0/h 100/0/h","pitch":"75%","timing":"5%"}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2645 | off 261.7 Hz rms 0.2704
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":26.75,"ended":true,"load":51.5223691966796,"median_rms":0.266019535287161,"p5_midi":60.002663695102,"p95_midi":60.0029697522169}]
+  ✓ active seconds ≈ time the feature listened (26.77 s, −1.8/+0.3)    26.750 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 51.5224 vs hand 51.5185
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 1.0684% vs before 0.9263%
+  ✓ gauge = today's stored total / 6800                                "1.7% of daily budget" pct 1.683955 vs 1.683955
+
+-- Harmony Memory stage 1, Lead (Choir World individual practice)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "1.7% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 4
+  ✓ feature result identical with the sidecar live                     off {"held":"10111101","score":75,"passed":true} | on {"held":"10111101","score":75,"passed":true}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2659 | off 261.6 Hz rms 0.2644
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":30.381,"ended":true,"load":58.5163230227204,"median_rms":0.266037664575878,"p5_midi":60.0026368591224,"p95_midi":60.0031399535036}]
+  ✓ active seconds ≈ time the feature listened (30.50 s, −1.8/+0.3)    30.381 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 58.5163 vs hand 58.5116
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 1.8257% vs before 1.6840%
+  ✓ gauge = today's stored total / 6800                                "2.5% of daily budget" pct 2.544489 vs 2.544489
+  ✓ page errors                                                        none
+
+-- reload: every gauge resumes today's total from the server
+  ✓ pitch: same total after reload, not 0                              "2.5% of daily budget"
+  ✓ staykey: same total after reload, not 0                            "2.5% of daily budget"
+  ✓ karaoke: same total after reload, not 0                            "2.5% of daily budget"
+  ✓ hmem: same total after reload, not 0                               "2.5% of daily budget"
+  ✓ glider: same total after reload, not 0                             "2.5% of daily budget"
+  ✓ boss: same total after reload, not 0                               "2.5% of daily budget"
+  ✓ coach: same total after reload, not 0                              "2.5% of daily budget"
+
+-- Pitch Dragon boss, beginner (runs to the end)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "2.5% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 5
+  ✓ feature result identical with the sidecar live                     off {"boss":0,"player":82,"notes":"100 0 100 100 100 100 0"} | on {"boss":0,"player":82,"notes":"100 0 100 100 100 100 0"}
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 261.7 Hz rms 0.2643 | off 261.7 Hz rms 0.2653
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":20.012,"ended":true,"load":38.5454818644168,"median_rms":0.265997615574118,"p5_midi":60.0025507880456,"p95_midi":60.0032108661116}]
+  ✓ active seconds ≈ time the feature listened (20.00 s, −1.8/+0.3)    20.012 s
+  ✓ stored load = active × 1.925926 (hand), within 0.5%                stored 38.5455 vs hand 38.5416
+  ✓ pitch stored ≈ 60                                                  p5 60.003, p95 60.003
+  ✓ gauge moved while the feature ran                                  mid-run 2.6870% vs before 2.5445%
+  ✓ gauge = today's stored total / 6800                                "3.1% of daily budget" pct 3.111334 vs 3.111334
+  ✓ page errors                                                        none
+
+   mic: 202.29 Hz (MIDI 55.546875)
+
+-- Glider (arcade game, Melody Road, beginner; runs until the crash)
+  ✓ reached through its hub, start button visible                      
+  ✓ gauge visible in the panel, today's total so far                   "Vocal load today" "3.1% of daily budget"
+  ✓ sidecar stubbed out: no register input opened, no session stored   opened [], rows 6
+  ✓ feature result identical with the sidecar live                     off {"score":497,"coins":18,"title":"end","startY":230,"firstGapY":230,"tookOffOnFrame":1} | on {"score":497,"coins":18,"title":"end","startY":230,"firstGapY":230,"tookOffOnFrame":1}
+  ✓ off: starts at the first gap's centre, takes off on frame 1 (no wait) start y 230, first gap 230, took off on frame 1
+  ✓ on: starts at the first gap's centre, takes off on frame 1 (no wait) start y 230, first gap 230, took off on frame 1
+  ✓ one stream: the feature's analyser and the register input both on it, nothing opened for the load opened this run []
+  ✓ feature's own track still live, unmuted, NS/AGC/EC unchanged       on: ns false agc false ec true muted false | off: ns false agc false ec true
+  ✓ feature's own analyser hears the same tone                         on 202.3 Hz rms 0.2715 | off 202.4 Hz rms 0.2703
+  ✓ stored: exactly 1 new session, ended                               [{"active_seconds":44.264,"ended":true,"load":73.0961529762267,"median_rms":0.267542148358911,"p5_midi":55.5503081127144,"p95_midi":55.5507987621239}]
+  ✓ active seconds ≈ time the feature listened (44.32 s, −1.8/+0.3)    44.264 s
+  ✓ stored load = active × 1.651042 (hand), within 0.5%                stored 73.0962 vs hand 73.0817
+  ✓ pitch stored ≈ 55.546875                                           p5 55.550, p95 55.551
+  ✓ gauge moved while the feature ran                                  mid-run 3.2331% vs before 3.1113%
+  ✓ gauge = today's stored total / 6800                                "4.2% of daily budget" pct 4.186278 vs 4.186278
+  ✓ daily table = sum of every session                                 [{"day":"2026-11-23","total_load":284.66689431088}] vs 284.6669
+
+-- all four languages (switched with the Profile language buttons)
+  ✓ fr: all 7 gauges' label and value in fr                            "Charge vocale du jour" "4,2 % du budget quotidien"
+  ✓ es: all 7 gauges' label and value in es                            "Carga vocal de hoy" "4,2 % del presupuesto diario"
+  ✓ tr: all 7 gauges' label and value in tr                            "Bugünkü ses yükü" "Günlük bütçe: %4,2"
+  ✓ en: all 7 gauges' label and value in en                            "Vocal load today" "4.2% of daily budget"
+  ✓ page errors                                                        none
+
+-- Safari user agent: one stream, so Glider feeds the load here too and every gauge shows
+  ✓ no sidecar block left (VL_SIDECAR_BLOCKED gone)                    
+  ✓ Glider fed the load on the one stream: one session stored          opened [], rows 7→8, score 497
+  ✓ Glider started at the first gap's centre and took off on frame 1   start y 230, first gap 230, frame 1
+  ✓ every gauge shown                                                  ok
+
+-- signed out
+  ✓ every gauge hidden when signed out                                 all hidden
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlb-1795380460714@example.com
+
+111 passed, 1 failed

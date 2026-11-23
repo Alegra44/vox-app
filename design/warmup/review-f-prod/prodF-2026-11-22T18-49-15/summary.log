@@ -1,0 +1,35 @@
+   signed up voxcoach-wu-1795373869644@example.com
+  ✓ before an exercise is finished: no Start my session, no summary        {"cont":"none","sum":"none"}
+  exact: 100 % · "of the sung time within a semitone of the line" · next rule 5 Your session (the one you were about to start) · "You stayed on the line in every exercise." · range D3 – A#4 (your stored range C3 – C5)
+  ✓ exact: the summary shows in place of the list, titled "Warmed up"      1 exercise · 20 s sung
+  ✓ exact: the sirens sung on the guide read 95 % or more                  100 %
+  ✓ exact: rule 5, the next step is your session                           Your session · the one you were about to start
+  ✓ the bars are in ink, not the voice colour (Rule 1)                     rgb(241, 242, 244) (ink rgb(241, 242, 244), voice rgb(127, 140, 255))
+  ✓ Start my session keeps the start-singing style (hl-btn--sing)          Start my session
+  ✓ exact: Start my session again closes it                                
+  off2: 0 % · "of the sung time within a semitone of the line" · next rule 5 Your session (the one you were about to start) · "Sirens was the hardest today: 0% of it within a semitone of the line." · range E3 – C5 (your stored range C3 – C5)
+  ✓ off2: the summary shows in place of the list, titled "Warmed up"       1 exercise · 20 s sung
+  ✓ off2: 2 semitones off reads 10 % or less                               0 %
+  ✓ off2: Start my session again closes it                                 
+  lost: 67 % · "lost the line above E4" · next rule 1 Register Coach (the line broke above E4) · "Sirens lost the line above E4 today. That's normal early on; go easy upward." · range D3 – G4 (your stored range C3 – C5)
+  ✓ lost: the summary shows in place of the list, titled "Warmed up"       1 exercise · 20 s sung
+  ✓ lost: rule 1, Register Coach, and where the line was lost              lost the line above E4 · the line broke above E4
+  ✓ lost: Start my session again closes it                                 
+  wobble: 100 % · "±27 cents around G#3" · next rule 2 Tuner (your hum moved ±27 cents) · "Your hum moved ±27 cents. Hold it on one easy breath next time." · range G#3 – A3 (your stored range C3 – C5)
+  ✓ wobble: the summary shows in place of the list, titled "Warmed up"     1 exercise · 20 s sung
+  ✓ wobble: rule 2, Tuner, the hum's spread over 20 ct                     spread 27 ct · ±27 cents around G#3
+  ✓ wobble: Start my session again closes it                               
+  easy: 100 % · "±0 cents around F#3" · next rule 3 An easy day (today you stayed well inside your range) · "You stayed on the line in every exercise." · range F#3 – F#3 (your stored range E2 – G#5)
+  ✓ easy: the summary shows in place of the list, titled "Warmed up"       1 exercise · 20 s sung
+  ✓ easy: rule 3, an easy day, no tool                                     F#3 – F#3 inside your stored range E2 – G#5
+  ✓ easy: Start my session again closes it                                 
+  norange: 100 % · "±0 cents around F#3" · next rule 4 Range Finder (no stored range yet) · "You stayed on the line in every exercise." · range F#3 – F#3 (no stored range yet)
+  ✓ norange: the summary shows in place of the list, titled "Warmed up"    1 exercise · 20 s sung
+  ✓ norange: rule 4, Range Finder                                          no stored range yet
+  ✓ norange: Start my session again closes it                              
+  ✓ Coach → Warm-up: Finish shows the summary in the panel; Back returns to the exercises {"fin":true,"inPanel":true,"shown":true,"rule":4,"back":true}
+  ✓ no page errors                                                         
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-wu-1795373869644@example.com
+
+24 passed, 0 failed

@@ -1,0 +1,20 @@
+  (exemption for expression_scores has ended: a migration defines it)
+
+== 1. the source (44 columns on the allow-list)
+  44 fields written; recordSkillScore categories: breath, pitch, expression, agility; dynamic writes progress[var] = …: 1 (recordSkillScore's own)
+  ✓ every progress field the app writes is on the server's allow-list — all on it
+
+== 3. the vocal-load checkpoint body
+  the app sends: day, startedAt, tzOffsetMin, activeSeconds, load, medianRms, p5Midi, p95Midi, ended
+  ✓ the app sends tzOffsetMin
+  ✓ every field the app sends is read by the route and passed to vocal_load_checkpoint — all of them
+
+== 2. the app: what it sends
+  5 PATCH bodies, 43 distinct fields; categories recorded: pitch, breath, agility, expression
+  ✓ saves were sent and seen — 5 PATCH, 1 GET
+  ✓ every field the app sends in PATCH /me/progress is on the allow-list — all on it
+  · the server's own row coming back (not writable, not the app's data): user_id
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvallow-1795374515083@example.com
+
+ALLOWLIST: PASS (5 passed, 0 failed)

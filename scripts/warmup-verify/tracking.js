@@ -14,7 +14,7 @@
 // Usage (from the main checkout): node scripts/warmup-verify/tracking.js [url]
 const { execFileSync } = require('child_process');
 const path = require('path'), fs = require('fs');
-const { URL_, TMP, sleep, check, totals, tone, launch, openPage, warm, rearm, overlayShown } = require('./common');
+const { URL_, TMP, sleep, check, totals, tone, launch, openPage, warm, rearm, overlayShown, db, account } = require('./common');
 
 // ---- A: the scripted stream (Hz per frame; -1 is autoCorrelate's "no pitch") ----
 const hz = m => 440 * Math.pow(2, (m - 69) / 12);
@@ -158,7 +158,12 @@ const RUN = async ({ what, seq }) => {
     const songs = await page.evaluate(() => Object.keys(SONGS));
     await rearm(page);
     await page.evaluate(() => { selectSong('ballad'); warmupGate(); }); // the session's song is Autumn Requiem
-    await page.waitForFunction(() => !!wuResolve, null, { timeout: 8000 }); // release F5: the gate asks the server first
+    await page.waitForFunction(() => !!wuResolve, null, { timeout: 8000 }).catch(async e => { // release F5: the gate asks the server first
+      const st = await page.evaluate(() => ({ wuPending: !!wuPending, wuPassed: wuPassed(), wuPassedKey, key: wuKey(), stored: localStorage.getItem(wuKey()), lastWarmupDay: progress.lastWarmupDay,
+        today: todayStr(), saving: progressSaving.size, overlay: getComputedStyle(document.getElementById('warmupOverlay')).display, host: wuHost }));
+      console.log('   the gate after 8 s: ' + JSON.stringify(st) + ' · server: ' + JSON.stringify(db(`select last_warmup_day::text as d, warmup_streak as s from public.user_progress where user_id = (select id from auth.users where email = '${account.email}')`)[0]));
+      throw e;
+    });
     await page.locator('#warmupOverlay [data-wu-mode="song"]').click();
     const listed = await page.evaluate(() => [...document.querySelectorAll('#warmupList [data-wu-item]')].map(b => b.dataset.wuItem + ' ' + b.querySelector('b').textContent));
     check(`song list = the library (${songs.length} songs)`, listed.length === songs.length && songs.every(id => listed.some(l => l.startsWith('song:' + id))), listed.join(' | '));
