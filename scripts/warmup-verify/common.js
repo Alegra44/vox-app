@@ -8,7 +8,7 @@ const path = require('path'), os = require('os'), fs = require('fs');
 const { track, db } = require('../choir-verify/testAccounts');
 const { SD_RIG } = require('./sdRig');
 
-const URL_ = process.argv[2] && /^https?:/.test(process.argv[2]) ? process.argv[2] : null;
+const URL_ = process.env.WU_URL || (process.argv[2] && /^https?:/.test(process.argv[2]) ? process.argv[2] : null); // WU_URL: scripts whose argv[2] is an output path (release F's production run)
 const LOCAL = 'http://localhost:8765/', DEPLOY = process.env.WU_DEPLOY || path.resolve(__dirname, '../../deploy');
 const TMP = TESTDATA; fs.mkdirSync(TMP, { recursive: true });
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -78,9 +78,15 @@ const warm = page => page.evaluate(async () => {
 });
 // Arms the gate again as if no warm-up had happened today. Since release F5 the day is on the server too
 // (user_progress.last_warmup_day): cleared there as well (the streak is left as it is).
+// Saves still in flight are waited out first, before and after: one sent before (a warm-up that just counted, with
+// today's day) whose answer lands after this one's would put today back into progress, and the gate would pass
+// (seen on production, where an answer takes longer: the day only ever moves forward for a user, never back as here).
 const rearm = page => page.evaluate(async () => {
+  const drain = async () => { for (let i = 0; i < 100 && typeof progressSaving !== 'undefined' && progressSaving.size; i++) await Promise.allSettled([...progressSaving]); };
+  await drain();
   wuPassedKey = null; try { localStorage.removeItem(wuKey()); } catch (e) {}
-  if (profile && progress && 'lastWarmupDay' in progress) { progress.lastWarmupDay = null; await saveProgress(); }
+  if (profile && progress && 'lastWarmupDay' in progress) { progress.lastWarmupDay = null; await saveProgress(); await drain(); }
+  wuPassedKey = null; try { localStorage.removeItem(wuKey()); } catch (e) {}
 });
 const overlayShown = page => page.evaluate(() => getComputedStyle(document.getElementById('warmupOverlay')).display !== 'none');
 
