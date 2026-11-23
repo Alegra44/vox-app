@@ -10,6 +10,7 @@ on a decision, and how to set the machine up again. It contains no secrets.
 |---|---|
 | `master` | Everything, through release F, the warm-up (merge dc3abb2), live as dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h |
 | `review/warmupF-prod` | Release F's production checks (design/warmup/review-f-prod/: logs, NOTES.md, prodF.sh) |
+| `accuracy/g` | Release G, the octave hold in Pitch Dragon and the Rift: failed its gate, not shipping (design/accuracy/RELEASE_G.md); kept as a record, never to merge |
 | `survey/guard` | The speaker-guard survey (design/accuracy/GUARD.md), parked before part c (a real voice from a phone) |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
 | `exp/single-stream` | The mic-diagnostics stream-settings experiment, never merged; kept |
@@ -860,6 +861,12 @@ Spec, results and the user's review: design/warmup/RELEASE_F.md (the survey: des
   late put today back); `rearm` now waits out saves in flight (b294585), 28/28 twice. 0 test accounts left.
 - Observed, not changed: saveProgress merges each PATCH's answer into progress, so overlapping saves answered out of
   order leave the older values in memory until the next save (every progress field; not new with F).
+- **Release G (2026-11-23), not shipping:** the median-of-5 octave hold in Pitch Dragon and the Rift failed its gate
+  (design/accuracy/RELEASE_G.md; `accuracy/g` kept as a record). Crediting a reading an octave from the target was
+  rejected (a singer really an octave off would score as right).
+- Queue: Octave slips in noisy rooms: a short hold can't bridge long slips. The next idea is in the detector itself
+  (prefer the octave that continues the last steady pitch when both peaks are close), which touches every tool, so it
+  waits.
 
 ## Waiting on the user (don't start without a go-ahead)
 
