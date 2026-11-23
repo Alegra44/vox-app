@@ -1,0 +1,22 @@
+== the octave hold in Pitch Dragon and the Rift · build working copy · makeOctaveHold present
+clean VocalSet: 11930 voiced frames; changed by the hold: Pitch Dragon 57, the Rift (1.4 s rounds, overlapping) 74; makeOctaveHold is window.gliderPitchGuard (Pitch Mountain's): true
+20 dB white   1.6 s: none   0 /   0 of 279 · Pitch Dragon   0 /   0 of 279 · the Rift   0 /   0 of 279 | own lengths: Dragon chord 2.86 s   0 /   0 of 154 →   0 /   0 of 154, 3.33 s   0 /   0 of 130 →   0 /   0 of 130; Rift 0.65 s   0 /   0 of 643 →   3 /   0 of 643, 1.4 s   0 /   0 of 319 →   0 /   0 of 319, 2.4 s   0 /   0 of 185 →   0 /   0 of 185
+20 dB babble  1.6 s: none   9 /   2 of 279 · Pitch Dragon   8 /   2 of 279 · the Rift   8 /   2 of 279 | own lengths: Dragon chord 2.86 s   4 /   1 of 154 →   3 /   1 of 154, 3.33 s   2 /   0 of 130 →   2 /   2 of 130; Rift 0.65 s  17 /   5 of 643 →  18 /   5 of 643, 1.4 s  10 /   2 of 319 →   7 /   2 of 319, 2.4 s   5 /   2 of 185 →   4 /   2 of 185
+20 dB talker  1.6 s: none   8 /   1 of 279 · Pitch Dragon  10 /   1 of 279 · the Rift  10 /   1 of 279 | own lengths: Dragon chord 2.86 s   3 /   0 of 154 →   4 /   0 of 154, 3.33 s   2 /   0 of 130 →   4 /   0 of 130; Rift 0.65 s  25 /  11 of 643 →  28 /  12 of 643, 1.4 s  12 /   1 of 319 →  12 /   2 of 319, 2.4 s   5 /   0 of 185 →   5 /   0 of 185
+20 dB tv      1.6 s: none   8 /   1 of 279 · Pitch Dragon  10 /   1 of 279 · the Rift   9 /   1 of 279 | own lengths: Dragon chord 2.86 s   4 /   0 of 154 →   3 /   0 of 154, 3.33 s   3 /   0 of 130 →   3 /   0 of 130; Rift 0.65 s  25 /   8 of 643 →  29 /   9 of 643, 1.4 s  11 /   0 of 319 →  10 /   2 of 319, 2.4 s   5 /   0 of 185 →   4 /   0 of 185
+10 dB white   1.6 s: none   0 /   0 of 279 · Pitch Dragon   0 /   0 of 279 · the Rift   0 /   0 of 279 | own lengths: Dragon chord 2.86 s   0 /   0 of 154 →   0 /   0 of 154, 3.33 s   0 /   0 of 130 →   0 /   0 of 130; Rift 0.65 s   0 /   0 of 643 →   3 /   0 of 643, 1.4 s   0 /   0 of 319 →   0 /   0 of 319, 2.4 s   0 /   0 of 185 →   0 /   0 of 185
+10 dB babble  1.6 s: none  73 /  25 of 279 · Pitch Dragon  73 /  30 of 279 · the Rift  75 /  30 of 279 | own lengths: Dragon chord 2.86 s  36 /  10 of 154 →  37 /  12 of 154, 3.33 s  33 /   3 of 130 →  33 /   4 of 130; Rift 0.65 s 155 /  69 of 643 → 155 /  78 of 643, 1.4 s  79 /  25 of 319 →  78 /  31 of 319, 2.4 s  50 /  14 of 185 →  48 /  16 of 185
+10 dB talker  1.6 s: none  38 /   7 of 279 · Pitch Dragon  42 /   7 of 279 · the Rift  42 /   8 of 279 | own lengths: Dragon chord 2.86 s  19 /   2 of 154 →  22 /   1 of 154, 3.33 s  12 /   2 of 130 →  15 /   1 of 130; Rift 0.65 s  91 /  35 of 643 → 100 /  32 of 643, 1.4 s  50 /   9 of 319 →  47 /  10 of 319, 2.4 s  19 /   3 of 185 →  21 /   2 of 185
+10 dB tv      1.6 s: none  45 /  17 of 279 · Pitch Dragon  50 /  16 of 279 · the Rift  50 /  17 of 279 | own lengths: Dragon chord 2.86 s  26 /   7 of 154 →  29 /   6 of 154, 3.33 s  18 /   4 of 130 →  20 /   4 of 130; Rift 0.65 s 107 /  47 of 643 → 117 /  50 of 643, 1.4 s  57 /  20 of 319 →  59 /  20 of 319, 2.4 s  28 /   8 of 185 →  29 /   8 of 185
+leap 57→69: on the new note after 0 ms without the hold, 50 ms with it
+leap 69→57: on the new note after 0 ms without the hold, 17 ms with it
+leap 69→62: on the new note after 0 ms without the hold, 0 ms with it
+leap 62→69: on the new note after 0 ms without the hold, 0 ms with it
+
+== the other tools that drop a frame ±300 ct from the note (no hold; measure only): windows losing ≥25 % / ≥50 %
+Pitch Match, Interval, custom notes, Harmony Memory, Eve, Boss training (1.6 s): 20 dB babble 9/2 of 279 · 20 dB talker 8/1 of 279 · 20 dB tv 8/1 of 279 · 10 dB babble 73/25 of 279 · 10 dB talker 38/7 of 279 · 10 dB tv 45/17 of 279
+the five-note loop (1.5 s): 20 dB babble 9/3 of 298 · 20 dB talker 11/0 of 298 · 20 dB tv 10/0 of 298 · 10 dB babble 74/26 of 298 · 10 dB talker 45/9 of 298 · 10 dB tv 53/17 of 298
+Scales (0.65 s at the fastest level): 20 dB babble 17/5 of 643 · 20 dB talker 25/11 of 643 · 20 dB tv 25/8 of 643 · 10 dB babble 155/69 of 643 · 10 dB talker 91/35 of 643 · 10 dB tv 107/47 of 643
+Karaoke, Performance Director, Emotional Singing, Harmony Arena, the other bosses (a chord, 2.86 s): 20 dB babble 4/1 of 154 · 20 dB talker 3/0 of 154 · 20 dB tv 4/0 of 154 · 10 dB babble 36/10 of 154 · 10 dB talker 19/2 of 154 · 10 dB tv 26/7 of 154
+
+[exited with code 0]
