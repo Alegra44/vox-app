@@ -58,3 +58,41 @@ Not changed, and why:
   can still reach it out of order (then the server keeps the older one until the next save, which sends the page's
   values, now the newest, again). That is the requests, not the answers, and a fix would need a version column on
   the server; not in this release.
+
+## Results (scripts/reliability-verify/checksH.sh, local stack, 2026-11-23 08:45–10:21; logs scripts/reliability-verify/logs/checksH-2026-11-23T03-15-58/)
+
+| check | result |
+|---|---|
+| outoforder (the new check, this branch) | PASS 13/13 |
+| outoforder on master's deploy/ | FAILS as it should: 7 of 13 (every case: progress ×2, retry, profile ×2, warm-up day, vocal load) |
+| progresssave (release A's retry) | PASS 5/5 |
+| erasecheck | PASS 6/6 |
+| vocal-load suite: verify, persist, live, batch1, batch2, batch3a, batch3b, batch3c | PASS 118, 101, 10, 112, 150, 169, 179, 40 |
+| outbox (release A's outbox) | 40/41 in the suite run; see below |
+| pilot | 28/31; see below |
+| roundtrip | PASS 4/4 |
+| streak | PASS 15/15 |
+| warmup-tracking (with F's in-flight fix) | PASS 30/30 |
+| levelup | PASS 47/47 |
+| youstates | PASS (equal except the expected changes) |
+| house | PASS 1051/1051 |
+| hooks (against master) | PASS 21/21 |
+| bootcheck | PASS 9/9 |
+
+The two that didn't pass, run again on master and this branch in the same run, twice each (master's deploy/ and scripts
+from a worktree of master; logs scripts/reliability-verify/logs/cmp-*):
+
+| | master 1 | branch 1 | master 2 | branch 2 |
+|---|---|---|---|---|
+| outbox: "two tabs at once: one tab sent it" | ✗ (2 PUTs) | ✗ (2 PUTs) | ✗ (2 PUTs) | ✓ 41/41 |
+| pilot: the page-leave keepalive save, and the two checks that follow from it | ✗ ×3 | ✗ ×3 | ✗ ×3 | ✗ ×3 |
+
+- **outbox:** the two-tab case fails on master too (2 of 2), and on the branch 2 of 3 runs. In every run the session is
+  stored once and both outboxes end empty (that check passes); only "one tab sent it" varies: both tabs read the
+  entry before either wrote its lease. It doesn't come from H (H adds a counter and a list of the sends out; the
+  sending is untouched).
+- **pilot:** the same 3 checks fail on master, the same way. That's the local stack's known limitation (design/day/
+  REPORT.md, release C): a keepalive request sent as the page unloads isn't routed to the local stack. On production
+  pilot passed with release B.
+
+Nothing in H touched production: every check ran with VOX_BACKEND=local.
