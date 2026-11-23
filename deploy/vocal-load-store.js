@@ -122,6 +122,8 @@
   // drain() sends everything now (on sign-in, on `online`, before a new session); entries whose session started more
   // than 35 h ago are dropped, logged (the database refuses a start over 36 h old). The server's upsert takes absolute
   // totals per session, so a payload sent twice (a retry after a lost reply, two tabs) changes nothing.
+  // confirmedCount() and sending() (release H): how many checkpoints this page has had confirmed, and the sends now out,
+  // so a read of the day's total can tell a checkpoint landed (or may have landed) while it was out.
   // pendingLoad(day): the load still waiting for that day, net of what the server already has for each session (its last
   // confirmed load), so the gauge can add it to the server's dayLoad without counting anything twice.
   // storage: { getItem, setItem, removeItem } (localStorage in the app); any of them may throw (private mode, full), and
@@ -133,6 +135,7 @@
                           log = () => {}, tabId = Math.random().toString(36).slice(2), config = OUTBOX }) {
     let mem = { entries: {}, confirmed: {} };
     const inflight = {}, timers = {}, tries = {};
+    let confirms = 0; // release H: checkpoints this page has had confirmed (confirmedCount), so a read can tell one landed while it was out
     const read = () => {
       try { const s = storage && storage.getItem(key); if (s) { const j = JSON.parse(s); mem = { entries: j.entries || {}, confirmed: j.confirmed || {} }; } else mem = { entries: {}, confirmed: {} }; }
       catch (e) { /* storage unreadable: the page's own copy stands */ }
@@ -170,6 +173,7 @@
       const sent = mem.entries[id].payload, seq = mem.entries[id].seq;
       const p = Promise.resolve().then(() => send(sent, opts || {})).then(() => {
         delete inflight[id]; tries[id] = 0; if (timers[id]) { clearTimer(timers[id]); delete timers[id]; }
+        confirms++;
         read();
         mem.confirmed[id] = { load: sent.load, day: sent.day, startMs: startMs(sent) };
         const now = mem.entries[id];
@@ -214,7 +218,7 @@
     }
     const size = () => Object.keys(read().entries).length;
     function stop() { for (const id of Object.keys(timers)) { clearTimer(timers[id]); delete timers[id]; } }
-    return { put, drain, pendingLoad, size, stop, _state: () => read() };
+    return { put, drain, pendingLoad, size, stop, confirmedCount: () => confirms, sending: () => Object.values(inflight), _state: () => read() };
   }
 
   const api = { BOUNDS: B, CADENCE, OUTBOX, dayOf, localDayOf, dayAtOffset, utcDayOf, tzOffsetOf, validateCheckpoint, createCheckpointer, createOutbox };
