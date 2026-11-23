@@ -80,3 +80,13 @@ Windows losing ≥25 % / ≥50 % of their voiced frames to octave slips, at each
 Also dropping off-note frames, not windowed above: One Take (runOneTake), the drills (runDrillSequence), Song
 onsets (makeOnsetTracker: a note kept only if 3 of the next frames are within ±300 ct), and the vibrato gate's outlier
 filter (vibratoGate: points 300 ct from the take's median).
+
+## Decision (the user's review, 2026-11-23): not shipping
+
+Release G is not shipping, and accuracy/g stays pushed as a record; it does not merge. Crediting a reading an octave
+from the target note was rejected: a singer who really is an octave off would score as right. And the problem only
+bites in a very noisy room (10 dB); at 20 dB it is about 3 % of windows.
+
+Queued in HANDOFF: "Octave slips in noisy rooms: a short hold can't bridge long slips. The next idea is in the detector
+itself (prefer the octave that continues the last steady pitch when both peaks are close), which touches every tool,
+so it waits."
