@@ -113,3 +113,12 @@ FIRST, a test-only fix: the outbox check's "two tabs at once: one tab sent it" c
 - Pass to aim for: wrong-octave frames at 10 dB cut by half or more; at 20 dB, 1% or less; a real octave leap recognised within 67 ms; clean takes unchanged in every tool (scores, scores4b, scores6, gamestates, survey.js within their gates).
 - Every tool uses this detector, so list them all and what each would gain.
 - Secret check, push survey/octave. REPORT, then stop.
+
+## The outbox check's two-tab case (test-only fix, before the deploy)
+
+scripts/vocal-load-verify/outbox.js: "two tabs at once" now asserts the outcome only: the session stored exactly once on
+the server and both outboxes empty. How many PUTs went out is printed, not checked: both tabs can read the entry before
+either writes its lease, and then both send; the server's upsert takes absolute totals, so the second PUT changes
+nothing. Run 5 times on master's deploy/ and 5 on this branch, alternating, local stack: **10 of 10 PASS (40/40 each)**.
+The session went out as 2 PUTs in 8 runs and 1 PUT in 2, every time stored once.
+prodH.sh (the production checks) and outoforder.js's DV_URL mode (the deployed page, production backend) are ready.

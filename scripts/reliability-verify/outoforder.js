@@ -1,5 +1,5 @@
-// Release H (design/reliability/RELEASE_H.md): server answers that arrive out of order. On the LOCAL stack only
-// (VOX_BACKEND=local; refuses otherwise). A throwaway account (deleted at exit). In each case the server has already
+// Release H (design/reliability/RELEASE_H.md): server answers that arrive out of order. On the LOCAL stack, or on the
+// deployed site after a deploy (DV_URL; see below). A throwaway account (deleted at exit). In each case the server has already
 // done the work of the older request (the browser fetched its real answer); only the answer's delivery to the page is
 // held until a newer request has been answered, then released:
 //   progress  saveProgress #1 (xp +3, warmupsCompleted +1) answered after saveProgress #2 (xp +4 more): the page must
@@ -11,9 +11,11 @@
 //             warm-up: the page keeps today's day and streak
 //   vocal     loadVocalLoadToday's read of /me/vocal-load answered after a checkpoint the outbox sent meanwhile was
 //             confirmed: the gauge's total includes that checkpoint
-// Usage: node scripts/reliability-verify/outoforder.js [--ref <git ref>]   (default: the working copy's deploy/)
+// Usage: node scripts/reliability-verify/outoforder.js [--ref <git ref>]   (default: the working copy's deploy/; DV_URL: that site)
 require('../runguard').auto();
-if (process.env.VOX_BACKEND !== 'local') { console.error('outoforder.js runs on the local stack only (VOX_BACKEND=local)'); process.exit(2); }
+// The local stack (VOX_BACKEND=local), or the deployed site with DV_URL=https://… (the production checks after a deploy,
+// production backend, the account deleted at exit); never production from a local build.
+if (process.env.VOX_BACKEND !== 'local' && !/^https:\/\//.test(process.env.DV_URL || '')) { console.error('outoforder.js: VOX_BACKEND=local, or DV_URL=<the deployed site>'); process.exit(2); }
 const C = require('../design-verify/common'), { db } = require('../choir-verify/testAccounts');
 const ri = process.argv.indexOf('--ref'), REF = ri > 0 ? process.argv[ri + 1] : null;
 let pass = 0, fail = 0;
@@ -21,7 +23,7 @@ const check = (name, ok, detail) => { console.log(`  ${ok ? '✓' : '✗'} ${nam
 const waitFor = async (fn, ms) => { const t = Date.now() + ms; for (;;) { const v = await fn(); if (v || Date.now() > t) return v; await C.sleep(100); } };
 
 (async () => {
-  console.log(`build: ${REF ? `${REF}'s deploy/` : 'the working copy'}`);
+  console.log(`build: ${process.env.DV_URL && !REF ? process.env.DV_URL : REF ? `${REF}'s deploy/` : 'the working copy'}`);
   const b = await C.chromium.launch();
   try {
     // hold[path+method] = true: the next such request is sent to the server at once, its answer kept back until released
