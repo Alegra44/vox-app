@@ -96,3 +96,20 @@ from a worktree of master; logs scripts/reliability-verify/logs/cmp-*):
   pilot passed with release B.
 
 Nothing in H touched production: every check ran with VOX_BACKEND=local.
+
+## Review and deploy (the user's message, verbatim)
+
+Release H approved: I've read the diff on GitHub. Add this message to design/reliability/RELEASE_H.md under "Review and deploy" and commit it first on save/h. AC power, the run lock and time limits on. Rollback target: dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h.
+
+FIRST, a test-only fix: the outbox check's "two tabs at once: one tab sent it" case is racy (it fails on master too). Make it assert the outcome (the session stored exactly once on the server, both outboxes empty) instead of which tab sent it. Run it 5 times on master and the branch; it should pass every time on both. Secret check, push save/h.
+
+1. WAIT FOR "deploy". Say you're ready and wait for me to type it.
+2. AFTER I TYPE "deploy": H is app-only (no migration, no Edge Function). Merge save/h into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself. Confirm deploy-alegra1122.vercel.app serves the new deployment; otherwise give me the exact promote line with the real dpl id.
+3. PRODUCTION CHECKS: prod.sh (core), outoforder, progresssave, outbox, roundtrip, streak, warmup-tracking, levelup, youstates, house, bootcheck. Rollback rule as before. Delete the test accounts; push the results to review/saveH-prod. When everything passes: delete save/h and review/warmupF-prod. HANDOFF: release H live, its dpl id the rollback target. Keep accuracy/g (the record) and survey/guard (parked).
+
+4. THEN SURVEY I, silent: the pitch detector's octave decisions in noise (the deeper fix release G couldn't make). Branch survey/octave from master. Save this step as design/accuracy/SURVEY_I.md and commit it first. No app changes; trial ideas on a local scratch branch only.
+- Measure per detector frame, on VocalSet takes in babble, talker, TV and white at 10 and 20 dB: how often the detector picks the wrong octave, and how long the wrong runs last.
+- Try a continuity rule in the detector itself: when the candidate an octave away and the one continuing the last steady pitch are close in strength, keep the one that continues. Tune how close "close" is.
+- Pass to aim for: wrong-octave frames at 10 dB cut by half or more; at 20 dB, 1% or less; a real octave leap recognised within 67 ms; clean takes unchanged in every tool (scores, scores4b, scores6, gamestates, survey.js within their gates).
+- Every tool uses this detector, so list them all and what each would gain.
+- Secret check, push survey/octave. REPORT, then stop.
