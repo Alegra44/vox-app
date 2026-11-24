@@ -113,11 +113,11 @@ octave errors, at the tool's own length (of the windows in that cell), master �
 
 | tools | window | 10 dB babble | 10 dB talker | 10 dB TV | 20 dB babble / talker / TV |
 |---|---|---|---|---|---|
-| Pitch Match, Interval Match, custom notes, Eve, Boss training, Hear Your Mistake's sing-back (captureAccuracyForTarget) | 1.6 s, of 279 | 73 → 56 (44) | 38 → 31 (27) | 45 → 35 (30) | 9→3, 8→5, 8→5 |
+| the 1.6 s captures (captureAccuracyForTarget: Pitch Match, Interval Match, custom notes, Eve, Boss training, Can You Hear Your Mistake) | 1.6 s, of 279 | 73 → 56 (44) | 38 → 31 (27) | 45 → 35 (30) | 9→3, 8→5, 8→5 |
 | Sing It 5 Ways | 1.5 s, of 298 | 74 → 61 (46) | 45 → 38 (32) | 53 → 39 (39) | 9→3, 11→7, 10→8 |
 | Scale Run (fastest level), the Rift's quick round | 0.65 s, of 643 | 155 → 115 (101) | 91 → 74 (71) | 107 → 84 (80) | 17→9, 25→21, 25→21 |
 | the Rift's pitch round | 1.4 s, of 319 | 79 → 63 (50) | 50 → 39 (38) | 57 → 44 (42) | 10→3, 12→12, 11→8 |
-| Karaoke Coach, Performance Director, Emotional Singing, Stay in Key, Harmony Arena, Pitch Dragon, the other bosses (a chord) | 2.86 s, of 154 | 36 → 25 (18) | 19 → 13 (12) | 26 → 19 (16) | 4→3, 3→1, 4→3 |
+| Karaoke Coach, Performance Director, Emotional Singing, Harmony Arena, Pitch Dragon, the other bosses (a chord, RELEASE_G's grouping) | 2.86 s, of 154 | 36 → 25 (18) | 19 → 13 (12) | 26 → 19 (16) | 4→3, 3→1, 4→3 |
 
 Not windowed (they read every frame live or keep their own filters), each would read fewer octave-low frames in a noisy
 room, at the per-frame rates of section 2:
@@ -126,7 +126,7 @@ room, at the per-frame rates of section 2:
   worst case for it; fewer of those;
 - Pitch Mountain (gliderLoop; already holds 4 frames, makeOctaveHold): fewer slips to hold;
 - the warm-up's exercises and songs (wuExLoop, wuSongLoop), Mirror Echo (mirrorEchoLoop), One Take (runOneTake),
-  Emotion Mode's rounds (runEmoRound), Harmony Memory and Hear Your Mistake's challenge (captureNoteFrame), Choir
+  Emotion Mode's rounds (runEmoRound), Stay in Key (stayKeyLoop), Harmony Memory and the song challenge (captureNoteFrame), Choir
   World's Hear me lane (cwHearFrame), Register Coach (readRegisterFrame), Voice Quality and the vibrato tools (vqCapture:
   the pitch track under the HNR and vibrato measures), Vocal Load (its pitch-weighted dose reads the same frames).
 
