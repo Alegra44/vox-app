@@ -266,3 +266,10 @@ THEN SURVEY J, silent: a tab left open overwriting another device's progress. Br
 - Size it: which fields are counters or lists (XP, sessions, warm-ups, history, score lists) and which are plain values.
 - Propose the fix with its effort, tried on a scratch branch: for example, counters sent as increments and merged on the server, score lists appended, plain values last-writer-wins; or a version number on the row, with a conflict answer that makes the page reload and merge. Say what each needs (a migration, the api function, the app) and what it does to release A's retry and to H2.
 - Push survey/stale. REPORT, then stop.
+
+## Before "deploy" (2026-11-24)
+
+- live.js, youSeed.js and homeStates.js (youstates, house) now use the local day (7c9e013, test-only).
+- Performance Director's first-note timing, 20 runs each side alternating, proxy off, same session
+  (scripts/reliability-verify/logs/pd20-12-10/): off/on mismatched on the branch 6 of 20, on master 4 of 20. Both sides
+  read 82 or 88 (once 85) run to run, the run without the load feed included. Not clearly worse on the branch.
