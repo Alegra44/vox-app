@@ -245,3 +245,24 @@ branch's rate is higher in these runs, and that is said as measured, not explain
 Earlier on 2026-11-24: batch3c reproduced its production failure on master with the browser on a date different from
 UTC's (TZ=America/New_York: the same 7 failures, 101 % on the Home card) and passed on UTC (logs
 scripts/reliability-verify/logs/localday-03-34/ in the main checkout).
+
+## H2 review and deploy (the user's message, verbatim)
+
+H2 approved: I've read wuMergeServer and the vocal-load merge. Add this message to RELEASE_H.md under "H2 review and deploy" and commit it first on save/h2. AC power, the run lock and time limits on. Rollback target: dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h.
+
+BEFORE "deploy"
+- The two other checks with the UTC-date assumption, live.js and the daysAgo helper (youstates, house): switch them to the local day now, test-only.
+- Performance Director's first-note timing mismatched in 6 of 12 runs on the branch against 2 of 11 on master. H2 touches no audio code, but show it: 20 runs each, master and the branch, in the same session, proxy off. If the branch is still clearly worse, stop and tell me.
+- Secret check, push save/h2. Then say you're ready and wait for me to type "deploy".
+
+AFTER I TYPE "deploy": app-only. Merge save/h2 into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself. Confirm deploy-alegra1122.vercel.app serves the new deployment; otherwise give me the exact promote line with the real dpl id.
+
+PRODUCTION CHECKS: prod.sh (core), outoforder, warmup-tracking, streak, progresssave, outbox, roundtrip, levelup, youstates, house, bootcheck, batch3c, warmup-entries. Rollback rule as before, and before calling a rollback, run the failing check against F's deployment in the same run, as you did last time. Delete the test accounts; push the results to review/saveH2-prod. When everything passes: delete save/h, save/h2 and review/saveH-prod. HANDOFF: H2 live, its dpl id the rollback target. Keep survey/octave as Survey I's record.
+
+QUEUE (HANDOFF): "Octave slips, part 2: the continuity rule gains only 13–19% at 10 dB (most wrong frames come where there's no steady pitch). Next idea: take the first peak within 85% of the highest (babble 15.5% → 8.5%), but it changes clean frames, so it needs its own survey. Low priority."
+
+THEN SURVEY J, silent: a tab left open overwriting another device's progress. Branch survey/stale from master. Save this step as design/reliability/SURVEY_J.md and commit it first. No app changes.
+- saveProgress sends the whole row. Reproduce it through the slow proxy on the local stack: a laptop tab loaded in the morning and left open; the phone then earns XP, scores and a session; then one save from the laptop tab. What does the server keep, field by field?
+- Size it: which fields are counters or lists (XP, sessions, warm-ups, history, score lists) and which are plain values.
+- Propose the fix with its effort, tried on a scratch branch: for example, counters sent as increments and merged on the server, score lists appended, plain values last-writer-wins; or a version number on the row, with a conflict answer that makes the page reload and merge. Say what each needs (a migration, the api function, the app) and what it does to release A's retry and to H2.
+- Push survey/stale. REPORT, then stop.
