@@ -14333,11 +14333,15 @@ async function loadProfile(){
       ...profile, ...objSnakeToCamel(row) };
   }catch(e){ console.error('profile load error', e); profile = null; }
 }
+// Release H: each save is numbered; an answer is merged only if it answers the newest save sent (an older one landing
+// late would put its values back, and the next save would store them)
+let profileSeq = 0;
 async function saveProfile(p){
   profile = p;
+  const seq = ++profileSeq;
   try{
     const row = await apiFetch('/me', { method:'PATCH', body: JSON.stringify(objCamelToSnake(p)) });
-    profile = { ...p, ...objSnakeToCamel(row) };
+    if(seq===profileSeq) profile = { ...p, ...objSnakeToCamel(row) };
   }catch(e){ console.error('profile save error', e); showToast(t('err_save_profile_failed'), 'warn'); }
 }
 // glider_best/boss_victories are jsonb columns defaulting to '{}' in Postgres
@@ -14437,15 +14441,25 @@ window.addEventListener('online', ()=>{ if(progressRetry.timer && profile){ prog
 // B8: the saves in flight; Erase my progress waits for them first (a save sent just before it, landing after, merged the
 // old row back and could be the last write)
 const progressSaving = new Set();
+// Release H: each save is numbered (progressSeq). Only the answer to the newest save sent is merged into progress: an
+// older answer landing after a newer save went out holds older values (merged, they stayed in memory and the next save
+// stored them). The newest save's answer carries everything the older ones sent. Likewise only the newest save's
+// result touches the retry: an older save's success doesn't cancel a retry the newer one needs, and an older save's
+// failure needs none (the newer save sent its fields again). A read of /me/progress (wuServerSync) is applied only if
+// no save went out while it was out (progressSeq unchanged).
+let progressSeq = 0;
 async function saveProgress(){
   ensureDayBasis();
+  const seq = ++progressSeq;
   try{
     const req = apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
     progressSaving.add(req); req.catch(()=>{}).finally(()=>progressSaving.delete(req));
     const row = await req;
-    progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
-    progressRetryClear(true);
-  }catch(e){ console.error('progress save error', e); progressRetryLater(e); }
+    if(seq===progressSeq){
+      progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
+      progressRetryClear(true);
+    }
+  }catch(e){ console.error('progress save error', e); if(seq===progressSeq) progressRetryLater(e); }
   if(profile && typeof levelForXp==='function'){
     const {level, name} = levelForXp(progress.xp||0);
     const priorLevel = lastKnownLevel;
@@ -15132,6 +15146,7 @@ function updateBestBridgeLabel(){
 // whatever their plan.
 const VL_IDLE_MS = 3000;
 let vlDay = {day:null, load:0};  // today's total as last known: the server's, plus sessions finished on this page
+let vlDaySeq = 0;                // release H: each write of vlDay (a day read started, a session finished) is numbered
 let vlRun = null;                // the session in progress
 let vlToken = null;              // kept so the page-hide checkpoint can be sent synchronously
 
@@ -15164,8 +15179,23 @@ function vlSwitchKey(day){
 }
 // The day's load: the server's total for the day, plus what is still waiting on this device; around the switch, counted
 // from local midnight, plus on the switch day the other key's share of today (vlSwitchKey).
+// Release H: a checkpoint confirmed while the read was out may be missing from the server's total (read before it
+// landed) and is no longer pending here (counted nowhere); one still out when the answer comes may already be in the
+// server's total and is still pending here (counted twice). Either way the sends out are waited for and the day read
+// again (at most twice more).
 async function vlFetchDay(day){
-  const sw = vlSwitchKey(day), b = vlOutbox();
+  const b = vlOutbox();
+  for(let i=0;; i++){
+    const c0 = b ? b.confirmedCount() : 0;
+    const st = await vlFetchDayOnce(day, b);
+    if(!b || i>=2) return st;
+    const out = b.sending();
+    if(b.confirmedCount()===c0 && !out.length) return st;
+    await Promise.allSettled(out);
+  }
+}
+async function vlFetchDayOnce(day, b){
+  const sw = vlSwitchKey(day);
   const st = await vlFetchState(day, sw ? sw.sinceMs : undefined);
   let load = (Number(st.dayLoad)||0) + (b ? b.pendingLoad(day, sw ? sw.sinceMs : undefined) : 0);
   if(sw && sw.other){
@@ -15189,10 +15219,11 @@ function vlOutbox(){
 }
 const vlDrain = ()=>{ const b = vlOutbox(); return b ? b.drain() : Promise.resolve([]); };
 async function loadVocalLoadToday(){
-  if(!profile){ vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
-  const day = todayStr();
+  if(!profile){ vlDaySeq++; vlDay = {day:null, load:0}; renderVocalLoadGauge(); return; }
+  const day = todayStr(), seq = ++vlDaySeq;
   await vlDrain(); // checkpoints still waiting from before (a failed save, a closed tab) go first
-  try{ const st = await vlFetchDay(day); vlDay = {day, load:st.load}; }
+  // release H: applied only if nothing newer wrote vlDay meanwhile (a session finished, a later read)
+  try{ const st = await vlFetchDay(day); if(seq===vlDaySeq) vlDay = {day, load:st.load}; }
   catch(e){ console.error('vocal load state error', e); }
   renderVocalLoadGauge();
 }
@@ -15261,7 +15292,7 @@ function vlEnd(){
 }
 function vlFinish(r){
   const w = r.cp.end(Date.now()); if(w) w.then(vlLogWrite);
-  vlDay = {day:r.day, load:r.prior + r.session.finish().load};
+  vlDaySeq++; vlDay = {day:r.day, load:r.prior + r.session.finish().load};
   renderVocalLoadGauge();
 }
 setInterval(()=>{ if(vlRun && vlRun.lastFrame!==null && performance.now()-vlRun.lastFrame > VL_IDLE_MS) vlEnd(); }, 1000);
@@ -21549,9 +21580,10 @@ function warmupGate(){
 // F5: the server's warm-up day and streak into progress; true if today's warm-up already counted (then cached locally)
 async function wuServerSync(ms){
   if(!profile || !progress) return false;
+  const seq = progressSeq; // release H: a save sent while this read is out is newer than its answer
   try{
     const row = await Promise.race([apiFetch('/me/progress'), new Promise((_, no)=>setTimeout(()=>no(new Error('slow')), ms))]);
-    if(row && 'last_warmup_day' in row){ progress.lastWarmupDay = row.last_warmup_day; progress.warmupStreak = row.warmup_streak||0; }
+    if(row && 'last_warmup_day' in row && seq===progressSeq){ progress.lastWarmupDay = row.last_warmup_day; progress.warmupStreak = row.warmup_streak||0; }
   }catch(e){}
   return progress.lastWarmupDay===todayStr();
 }
