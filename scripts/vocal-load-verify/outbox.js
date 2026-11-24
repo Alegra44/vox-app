@@ -177,7 +177,11 @@ async function app() {
         const r = rows();
         check(`${how}: once the server answers, the retry stores it and the outbox empties`, done && r.length === n0 + 1 && r[r.length - 1].ended && r[r.length - 1].id === ob.ids[0], `${r.length - n0} new row, ended ${r[r.length - 1] && r[r.length - 1].ended}, ${(await box(page)).n} waiting`);
         check(`${how}: stored with the device's load`, r.length && Math.abs(r[r.length - 1].load - ob.load[0]) < 1e-6, `${r[r.length - 1] && r[r.length - 1].load} vs ${ob.load[0]}`);
-        await page.reload(); await page.waitForFunction(() => !!profile && !!progress, null, { timeout: 30000 }); await C.sleep(2500);
+        await page.reload(); await page.waitForFunction(() => !!profile && !!progress, null, { timeout: 30000 });
+        // the day's read after a reload (the outbox drained first, then the read): waited for, up to 15 s, not a fixed
+        // 2.5 s (slow answers outlasted it: the gauge still read 0, on master too); the value is still checked below
+        const want = r.reduce((a, x) => a + x.load, 0);
+        await waitFor(async () => Math.abs(await page.evaluate(() => vlDay.load) - want) < 1e-3, 15000); await C.sleep(1000);
         const g2 = await page.evaluate(() => vlDay.load);
         check(`${how}: after a reload the gauge reads the server's total, not counted twice`, Math.abs(g2 - r.reduce((a, x) => a + x.load, 0)) < 1e-3, `${g2.toFixed(3)} vs stored ${r.reduce((a, x) => a + x.load, 0).toFixed(3)}`);
         await page.close();
