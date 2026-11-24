@@ -1,0 +1,8 @@
+21:55:05Z batch3c H2 exit 1 (50 s) 3 passed, 1 failed
+21:55:55Z batch3c F exit 1 (50 s) 3 passed, 1 failed
+22:01:10Z pageload H2 exit 0 (314 s) 
+22:06:25Z pageload F exit 0 (315 s) 
+22:16:25Z stopcheck H2 exit 124 (600 s) ✗ FAIL: stopcheck-H2 timed out (its limit, 10 min): killed with its browsers
+22:26:25Z stopcheck F exit 124 (600 s) ✗ FAIL: stopcheck-F timed out (its limit, 10 min): killed with its browsers
+22:26:26Z outoforder H2 exit 2 (1 s) 
+22:26:26Z outoforder F exit 2 (0 s) 

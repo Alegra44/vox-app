@@ -1,0 +1,14 @@
+== https://deploy-d36t8mpvs-alegra1122.vercel.app/
+   signed up voxcoach-vlc-1795557305364@example.com
+
+-- Home card, a new account
+  ✓ card shown, right after the Choir card                                   {"card":true,"afterChoir":true,"gauge":true}
+  ✓ gauge: label, today's total (0) in the gauges' format                    "Vocal load today" "0% of daily budget"
+  ✓ disclaimer under the gauge, in English                                   "This is an estimate based on your pitch and loudness, not a medical measurement. If you have pain or hoarseness, see a voice professional."
+
+-- 80%: Register Coach sings across it
+  ✗ ran to the end                                                           Command failed: /Users/alegramusenge/Documents/voxcoach-app/node_modules/@supabase/cli-darwin-arm64/bin/supabase db query --linked insert into public.vocal_load_sessions (user_id, session_id, day, started_at, ended, active_seconds, load, median_rms, p5_midi, p95_midi) values ('662b77f4-8ed3-4572-84b5-0f79a570bd2a', gen_random_uuid(), '2026-11-25', now(), true, 59, 1808.800000, 0.27, 60, 60)
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-vlc-1795557305364@example.com
+
+3 passed, 1 failed

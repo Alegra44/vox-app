@@ -1,0 +1,11 @@
+pageload 2026-11-24T20-00-20  url: https://deploy-alegra1122.vercel.app  loads: 10  pace 30000 ms  timeout 60000 ms
+ERROR Error: sign-up load never became ready: GET api/me → 404; profile/progress not set within 60000 ms (profile false, progress true)
+    at /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/pageload.js:75:31
+
+== 0 loads: ready (profile+progress) min undefined / median undefined / p90 undefined / max undefined ms; over 20 s: 0; timeouts: 0
+   /me/progress: min undefined / median undefined / max undefined ms over 0 requests
+   401 / 403 / 429: none
+
+log: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/pageload-prod-2026-11-24T20-00-20.log  json: /Users/alegramusenge/Documents/voxcoach-app/scripts/vq-verify/logs/pageload-prod-2026-11-24T20-00-20.json
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-pageload-1795550420680@example.com
