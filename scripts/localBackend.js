@@ -10,6 +10,11 @@
 //   3. patches Node's fetch the same way (scripts that call the api directly: live.js, protected-columns.js);
 //   4. tells testAccounts.js to query the local database (`db query --local`), so sign-up clean-up and SQL checks run
 //      there too.
+//   5. (release H2) puts a proxy in front of the local stack that slows and shuffles its answers, so races show up
+//      here before production: every answer is held a random 200–1500 ms after the stack has answered (the stack does
+//      the work at once; only the delivery waits), and about one answer in four, when another request is out, waits
+//      for the next answer and is delivered right after it (two answers swapped). On by default; VOX_SLOW=0 turns it
+//      off. VOX_SLOW_SEED=<n> repeats a run's draws (each run prints its seed). CORS preflights (OPTIONS) go straight.
 // Nothing here can reach production: requests for it are rewritten or aborted.
 'use strict';
 if (process.env.VOX_BACKEND === 'local' && !global.__voxLocalBackend) {
@@ -31,10 +36,49 @@ if (process.env.VOX_BACKEND === 'local' && !global.__voxLocalBackend) {
           env: { ...process.env, NODE_OPTIONS: '' }, timeout: 30000 }));
   } catch (e) { throw new Error('VOX_BACKEND=local but the local Supabase stack is not running (supabase start): refusing to run'); }
   process.env.VOX_LOCAL_STATUS = JSON.stringify({ API_URL: st.API_URL, PUBLISHABLE_KEY: st.PUBLISHABLE_KEY, ANON_KEY: st.ANON_KEY });
-  const LOCAL = st.API_URL.replace(/\/$/, ''), KEY = st.PUBLISHABLE_KEY || st.ANON_KEY;
+  const STACK = st.API_URL.replace(/\/$/, ''), KEY = st.PUBLISHABLE_KEY || st.ANON_KEY;
+  // 5. the slow, shuffled proxy (started on the first request; its port is this process's own)
+  const SLOW = process.env.VOX_SLOW !== '0';
+  let LOCAL = STACK, proxyReady = null;
+  const startProxy = () => proxyReady || (proxyReady = new Promise((resolve, reject) => {
+    const http = require('http');
+    let seed = Number(process.env.VOX_SLOW_SEED) || (Date.now() % 2147483647) || 1;
+    console.error(`[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=${seed} (VOX_SLOW=0: off)`);
+    const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+    const target = new URL(STACK);
+    let out = 0, waiting = 0, held = null; // requests the stack hasn't answered yet; answers in their delay; the answer waiting to be swapped behind the next
+    const server = http.createServer((req, res) => {
+      const chunks = [];
+      req.on('data', c => chunks.push(c));
+      req.on('end', () => {
+        const fwd = http.request({ host: target.hostname, port: target.port, method: req.method, path: req.url,
+          headers: { ...req.headers, host: target.host } }, up => {
+          const body = [];
+          up.on('data', c => body.push(c));
+          up.on('end', () => {
+            out--;
+            const deliver = () => { if (res.writableEnded) return; res.writeHead(up.statusCode, up.headers); res.end(Buffer.concat(body)); };
+            if (req.method === 'OPTIONS') return deliver();
+            waiting++;
+            setTimeout(() => {
+              waiting--;
+              if (held) { const h = held; held = null; clearTimeout(h.timer); deliver(); h.deliver(); return; } // swapped: this one first
+              if (out + waiting > 0 && rnd() < 0.25) { held = { deliver, timer: setTimeout(() => { if (held && held.deliver === deliver) held = null; deliver(); }, 1500) }; return; }
+              deliver();
+            }, 200 + Math.round(rnd() * 1300));
+          });
+        });
+        fwd.on('error', e => { out--; if (!res.headersSent) { res.writeHead(502); res.end(String(e.message)); } });
+        out++; fwd.end(Buffer.concat(chunks));
+      });
+    });
+    server.on('error', reject);
+    server.listen(0, '127.0.0.1', () => { server.unref(); LOCAL = `http://127.0.0.1:${server.address().port}`; resolve(LOCAL); });
+  }));
+  const ready = () => SLOW ? startProxy() : Promise.resolve(LOCAL);
   const swap = v => typeof v === 'string' ? v.split(PROD_KEY).join(KEY) : v;
   const swapHeaders = h => { const o = {}; for (const [k, v] of Object.entries(h || {})) o[k] = swap(v); return o; };
-  module.exports = { LOCAL, KEY, PROD };
+  module.exports = { get LOCAL() { return LOCAL; }, STACK, KEY, PROD, ready };
 
   // 2. the browser. Three layers, so a script's own route handlers can't send a request to production either:
   //   a. the context's own route (registered first, so it is the last handler): production → the local stack
@@ -48,9 +92,10 @@ if (process.env.VOX_BACKEND === 'local' && !global.__voxLocalBackend) {
     const P = Object.getPrototypeOf(route); if (P.__voxLocal) return; P.__voxLocal = true;
     const cont = P.continue, fetch_ = P.fetch;
     P.continue = function (o = {}) { return SUPA.test(o.url || this.request().url()) ? this.fallback(o) : cont.call(this, o); };
-    P.fetch = function (o = {}) {
+    P.fetch = async function (o = {}) {
       const u = o.url || this.request().url();
       if (!SUPA.test(u)) return fetch_.call(this, o);
+      await ready();
       return fetch_.call(this, { ...o, url: toLocal(u), headers: swapHeaders(o.headers || this.request().headers()) });
     };
   };
@@ -72,6 +117,7 @@ if (process.env.VOX_BACKEND === 'local' && !global.__voxLocalBackend) {
           const u = r.request().url();
           if (!u.startsWith(PROD + '/')) return r.abort();
           try {
+            await ready();
             const resp = await r.fetch({ url: toLocal(u), headers: swapHeaders(r.request().headers()) });
             await r.fulfill({ response: resp });
           } catch (e) { await r.abort().catch(() => {}); }
@@ -94,9 +140,8 @@ if (process.env.VOX_BACKEND === 'local' && !global.__voxLocalBackend) {
       let url = typeof input === 'string' ? input : input && input.url;
       if (url && /^https:\/\/[a-z0-9-]+\.supabase\.co\//.test(url)) {
         if (!url.startsWith(PROD + '/')) return Promise.reject(new Error('localBackend: blocked ' + url));
-        url = LOCAL + url.slice(PROD.length);
         const h = init.headers instanceof Headers ? Object.fromEntries(init.headers) : init.headers;
-        return f(url, { ...init, headers: swapHeaders(h) });
+        return ready().then(L => f(L + url.slice(PROD.length), { ...init, headers: swapHeaders(h) }));
       }
       return f(input, init);
     };

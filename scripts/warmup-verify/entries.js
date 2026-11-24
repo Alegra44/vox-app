@@ -112,7 +112,9 @@ const why = page => page.evaluate(() => JSON.stringify({ overlays: [...document.
 // the run's ~40 sessions queue level-up / record / breakthrough celebrations; they open over the page after a reload
 const clearCelebrations = page => page.evaluate(() => ['levelupOverlay', 'newRecordOverlay', 'breakthroughOverlay'].forEach(id => { const o = document.getElementById(id); if (o) o.style.display = 'none'; }));
 // the app's UTC day n days from today (a far-off date would end the 21-day trial, and the session would hit the paywall)
-const dayPlus = n => new Date(Date.now() + n * 86400000).toISOString().slice(0, 10);
+// the app's day n days from now: the device's local date (release C). The UTC date + n was today itself from local
+// midnight to UTC midnight east of UTC, so "the next day" wasn't one
+const OFF = -new Date().getTimezoneOffset(), dayPlus = n => new Date(Date.now() + n * 86400000 + OFF * 60000).toISOString().slice(0, 10);
 const waitFor = (page, expr, ms) => page.waitForFunction(expr, null, { timeout: ms, polling: 50 }).then(() => true).catch(() => false);
 
 // One start: warm-up shown, Skip in view, one click closes it and the session begins.
@@ -170,7 +172,7 @@ async function entry(page, E) {
       const [again, ran] = await Promise.all([waitFor(page, () => getComputedStyle(document.getElementById('warmupOverlay')).display !== 'none', 2500), waitFor(page, E.active, 5000)]);
       check('after a reload, the same day: not shown again, session starts', !again && ran, `shown ${again} · started ${ran} · stored ${await page.evaluate(() => localStorage.getItem(wuKey()))}${ran ? '' : ' · ' + await why(page)}`);
       await waitFor(page, `!(${E.active})`, 10000);
-      // the next day (todayStr is the app's UTC day)
+      // the next day (todayStr is the app's local day)
       await clearCelebrations(page);
       await page.evaluate(d => { window.__todayStr = todayStr; todayStr = () => d; }, dayPlus(1));
       await page.locator('#pitchListenBtn').click();

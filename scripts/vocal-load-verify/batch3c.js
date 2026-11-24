@@ -100,7 +100,10 @@ async function goHome(page) { await page.locator('.snb-item[data-shell="home"]')
 async function enter(page, p) { await page.locator('.snb-item[data-shell="train"]').click(); await sleep(400); await page.locator(`#panel-train-hub [data-enter-panel="${p}"]`).click(); await sleep(800); }
 
 const uid = () => db(`select id from auth.users where email = '${email}'`)[0].id;
-const dayTotal = () => Number(db(`select coalesce(sum(load), 0) as s from public.vocal_load_sessions where user_id = '${uid()}' and day = (now() at time zone 'UTC')::date`)[0].s);
+// the app's day: the device's local date since release C (on the UTC date, from local midnight to UTC midnight east of
+// UTC, the seeded sessions sat under the date before, and on an account's switch day the gauge counts both keys)
+const OFF = -new Date().getTimezoneOffset(), LDAY = () => new Date(Date.now() + OFF * 60000).toISOString().slice(0, 10);
+const dayTotal = () => Number(db(`select coalesce(sum(load), 0) as s from public.vocal_load_sessions where user_id = '${uid()}' and day = '${LDAY()}'`)[0].s);
 // Stored sessions that bring today's total to pct % of the budget: each under 60 active s, so none counts toward the
 // rolling baseline (the last 5 sessions with ≥ 60 s), and none over 37.1 load per active second (the table's bound).
 function seedTo(pct) {
@@ -109,7 +112,7 @@ function seedTo(pct) {
   const n = Math.ceil(need / (37 * 59)), each = need / n;
   // (one line: the CLI call can't take a line break)
   for (let i = 0; i < n; i++) db('insert into public.vocal_load_sessions (user_id, session_id, day, started_at, ended, active_seconds, load, median_rms, p5_midi, p95_midi) '
-    + `values ('${id}', gen_random_uuid(), (now() at time zone 'UTC')::date, now(), true, 59, ${each.toFixed(6)}, 0.27, 60, 60)`);
+    + `values ('${id}', gen_random_uuid(), '${LDAY()}', now(), true, 59, ${each.toFixed(6)}, 0.27, 60, 60)`);
   return dayTotal();
 }
 // sings in a feature until the banner is up (or the time runs out), polling every 100 ms; returns the banner at the
@@ -199,7 +202,7 @@ async function stopTuner(page) { if (await page.evaluate(TUNER)) await page.loca
     const total = dayTotal(), p = total / BUDGET * 100;
     await reload(); await goHome(page); h = await home(page);
     check('Home card = today\'s stored total / 6800, marked over', h.card && Math.abs(h.pct - p) < 1e-6 && h.val === shown(p, 'en') && h.over, `"${h.val}" (${p.toFixed(3)}%)`);
-    const daily = db(`select total_load from public.vocal_load_daily where user_id = '${uid()}' and day = (now() at time zone 'UTC')::date`);
+    const daily = db(`select total_load from public.vocal_load_daily where user_id = '${uid()}' and day = '${LDAY()}'`);
     check('daily table = sum of today\'s sessions', daily.length === 1 && Math.abs(Number(daily[0].total_load) - total) < 1e-6, `${daily[0]?.total_load} vs ${total.toFixed(4)}`);
     for (const l of ['fr', 'es', 'tr', 'en']) {
       await setLang(page, l); const x = await home(page);
