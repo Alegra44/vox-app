@@ -202,3 +202,46 @@ shuffled order; with VOX_SLOW=0, 15 ms.
 First runs through it (scripts/reliability-verify/logs/h2-dev-03-44/): outoforder on this branch 22/22; on H1 (save/h)
 20/22 (both "quiet" checks); on master 10/22 (every H case, and H2's: on master the proxy's own swap put an older save's
 answer over the count, the original H bug, unprompted).
+
+## H2: results (local stack through the slow proxy, 2026-11-24 09:17–14:10 IST)
+
+Logs: scripts/reliability-verify/logs/checksH2-2026-11-24T03-47-14/ (phases A and B), checksH2-2026-11-24T06-38-33/
+(phase C), pd-cmp-08-10/ (Performance Director alone). Master = master's deploy/ (6913a1e, = production) with this
+branch's scripts. Nothing touched production.
+
+**Phase A: the race checks, 5 times each, master and branch alternating:**
+
+| check | master | branch |
+|---|---|---|
+| outoforder (22 checks) | **fails 5/5** (10–12 failed each run) | **passes 5/5** (22/22) |
+| warmup-tracking (30) | 5/5 | 5/5 |
+| streak (15) | 5/5 | 5/5 |
+| progresssave (5) | 5/5 | 5/5 |
+| outbox (40), as it was | 2/5 | 4/5 |
+| outbox, after its fix (phase C) | 5/5 | 5/5 |
+
+Every outbox failure, on both sides, was "after a reload the gauge reads the server's total" reading 0 at a fixed 2.5 s
+(the same check failed once on production with H). Through the proxy the day's read can take longer; the check now
+waits up to 15 s for the value (test-only, e7ac02f) and then still checks it: 10/10.
+
+**Phase B: the rest, this branch:** erasecheck 6/6, verify 118, persist 101, live 10, batch1 112, batch3a 169,
+batch3c 40 (with its local-day fix), roundtrip 4/4, levelup 47/47, youstates (equal except the expected changes),
+house 1051/1051, hooks 21/21 (against master), bootcheck 9/9: **pass**. Three didn't, compared in the same run (phase C):
+
+| check | branch | master | verdict |
+|---|---|---|---|
+| pilot: the keepalive save on leaving the page, and two that follow | ✗ 3 (B, C) | ✗ 3 (C) | the local stack's known limit (keepalive isn't routed to it); same as H1 and C |
+| batch2 / batch3b: "gauge moved while the feature ran" | ✗ 1 of 3 batch2, 1 of 3 batch3b | ✗ 1 of 2 batch2, 1 of 2 batch3b | the harness's own note: a capture can end before the day's state has come back; slow answers make it more likely. Both builds |
+| batch3b: One Take "ran to the end" (15 s) | ✗ 1 of 3 | ✗ 1 of 2 | both builds |
+| batch3b: "feature result identical with the load feed live" (Performance Director's first note, timing 82 or 88) | ✗ 3 of 3 | ✓ 2 of 2 | see below |
+
+Performance Director alone (VLB_ONLY=pd), alternating, 6 through the proxy and 3 without: the first note's timing
+score lands on 82 or 88 (one frame of onset) run to run, also with the load feed off, and on master too: master
+mismatched 2 of 9 (once with the proxy off, once where the run *without* the feed read 88), the branch 3 of 9. Over all
+runs: branch 6 of 12, master 2 of 11. It is the check's timing (one frame at the song's start), on both builds; the
+branch's rate is higher in these runs, and that is said as measured, not explained away. The note's pitch score was
+100 in every run.
+
+Earlier on 2026-11-24: batch3c reproduced its production failure on master with the browser on a date different from
+UTC's (TZ=America/New_York: the same 7 failures, 101 % on the Home card) and passed on UTC (logs
+scripts/reliability-verify/logs/localday-03-34/ in the main checkout).
