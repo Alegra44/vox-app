@@ -102,6 +102,7 @@ async function enter(page, p) { await page.locator('.snb-item[data-shell="train"
 const uid = () => db(`select id from auth.users where email = '${email}'`)[0].id;
 // the app's day: the device's local date since release C (on the UTC date, from local midnight to UTC midnight east of
 // UTC, the seeded sessions sat under the date before, and on an account's switch day the gauge counts both keys)
+// the seeded rows carry the device's offset (tz_offset_min, 0010): without one the day CHECK wants the UTC date
 const OFF = -new Date().getTimezoneOffset(), LDAY = () => new Date(Date.now() + OFF * 60000).toISOString().slice(0, 10);
 const dayTotal = () => Number(db(`select coalesce(sum(load), 0) as s from public.vocal_load_sessions where user_id = '${uid()}' and day = '${LDAY()}'`)[0].s);
 // Stored sessions that bring today's total to pct % of the budget: each under 60 active s, so none counts toward the
@@ -111,8 +112,8 @@ function seedTo(pct) {
   if (need <= 0) throw new Error(`already at ${(dayTotal() / BUDGET * 100).toFixed(3)}%`);
   const n = Math.ceil(need / (37 * 59)), each = need / n;
   // (one line: the CLI call can't take a line break)
-  for (let i = 0; i < n; i++) db('insert into public.vocal_load_sessions (user_id, session_id, day, started_at, ended, active_seconds, load, median_rms, p5_midi, p95_midi) '
-    + `values ('${id}', gen_random_uuid(), '${LDAY()}', now(), true, 59, ${each.toFixed(6)}, 0.27, 60, 60)`);
+  for (let i = 0; i < n; i++) db('insert into public.vocal_load_sessions (user_id, session_id, day, started_at, ended, active_seconds, load, median_rms, p5_midi, p95_midi, tz_offset_min) '
+    + `values ('${id}', gen_random_uuid(), '${LDAY()}', now(), true, 59, ${each.toFixed(6)}, 0.27, 60, 60, ${OFF})`);
   return dayTotal();
 }
 // sings in a feature until the banner is up (or the time runs out), polling every 100 ms; returns the banner at the
