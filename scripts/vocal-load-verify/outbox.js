@@ -202,10 +202,8 @@ async function app() {
       const [t1, t2] = await Promise.all([open(), open()]);
       const done = await waitFor(async () => (await box(t1.page)).n === 0 && (await box(t2.page)).n === 0, 30000);
       const r = rows(), sent = puts.slice(p0).filter(x => x.id === ob.ids[0]);
-      // release H: the outcome only. Which tab sends is a race (both can read the entry before either writes its lease,
-      // and then both send); the server's upsert takes absolute totals, so a second PUT changes nothing
-      check('two tabs at once: the session stored exactly once on the server, both outboxes empty', done && r.length === n0 + 1 && r.filter(x => x.id === ob.ids[0]).length === 1,
-        `${r.length - n0} new row; ${sent.length} PUT(s) for the session (not checked)`);
+      check('two tabs at once: the session stored once, both outboxes empty', done && r.length === n0 + 1 && r.filter(x => x.id === ob.ids[0]).length === 1, `${r.length - n0} new row`);
+      check('two tabs at once: one tab sent it (the other saw its lease)', sent.length === 1, `${sent.length} PUT(s) for the session`);
       await t1.page.close(); await t2.page.close();
     });
     await C.G.step('35 h drop', 90, async () => {
