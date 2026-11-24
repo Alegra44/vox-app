@@ -1,0 +1,167 @@
+== Survey I: octave decisions · build working copy · 18 VocalSet takes · 4 rule setting(s)
+   rule 1: δ 0.5 · ε ∞ (never up) · K ∞ · S 2 · G 10
+   rule 2: δ 0.5 · ε ∞ (never up) · K 4 · S 4 · G 10
+   rule 3: continuing first peak: an earlier ACF peak ≥ 0.7 × the highest, kept when it continues the steady pitch · S 2 · G 10
+   rule 4: first peak ≥ 0.85 × the highest (no continuity)
+
+-- clean VocalSet (no noise): frames the rule changes
+   rule 1: 26 of 11930 frames (26 to another octave)
+   rule 2: 5 of 11930 frames (5 to another octave)
+   rule 3: 76 of 11930 frames (31 to another octave)
+   rule 4: 246 of 11930 frames (125 to another octave)
+
+-- 20 dB white: 11930 voiced frames
+   app      wrong octave     2 ( 0.02%) · up 2 down 0 · in runs of 1–4 2, 5–15 0, 16+ 0 · 2 runs, longest 1 · after a steady pitch 0, not 2 (note start 2, after a dropout 0, after another wrong reading 0)
+   rule 1   wrong octave    26 ( 0.22%) · up 26 down 0 · in runs of 1–4 8, 5–15 18, 16+ 0 · 6 runs, longest 12 · after a steady pitch 0, not 26 (note start 26, after a dropout 0, after another wrong reading 0)
+   rule 2   wrong octave    10 ( 0.08%) · up 10 down 0 · in runs of 1–4 10, 5–15 0, 16+ 0 · 4 runs, longest 4 · after a steady pitch 0, not 10 (note start 10, after a dropout 0, after another wrong reading 0)
+   rule 3   wrong octave    31 ( 0.26%) · up 31 down 0 · in runs of 1–4 12, 5–15 19, 16+ 0 · 8 runs, longest 13 · after a steady pitch 0, not 31 (note start 31, after a dropout 0, after another wrong reading 0)
+   rule 4   wrong octave   125 ( 1.05%) · up 125 down 0 · in runs of 1–4 56, 5–15 69, 16+ 0 · 42 runs, longest 11 · after a steady pitch 41, not 84 (note start 59, after a dropout 0, after another wrong reading 25)
+
+-- 20 dB babble: 11930 voiced frames
+   app      wrong octave   208 ( 1.74%) · up 2 down 206 · in runs of 1–4 140, 5–15 68, 16+ 0 · 91 runs, longest 13 · after a steady pitch 51, not 157 (note start 97, after a dropout 0, after another wrong reading 60)
+   rule 1   wrong octave    81 ( 0.68%) · up 27 down 54 · in runs of 1–4 30, 5–15 51, 16+ 0 · 26 runs, longest 12 · after a steady pitch 1, not 80 (note start 68, after a dropout 0, after another wrong reading 12)
+   rule 2   wrong octave   111 ( 0.93%) · up 7 down 104 · in runs of 1–4 73, 5–15 38, 16+ 0 · 44 runs, longest 10 · after a steady pitch 22, not 89 (note start 59, after a dropout 0, after another wrong reading 30)
+   rule 3   wrong octave    85 ( 0.71%) · up 31 down 54 · in runs of 1–4 33, 5–15 52, 16+ 0 · 28 runs, longest 13 · after a steady pitch 1, not 84 (note start 72, after a dropout 0, after another wrong reading 12)
+   rule 4   wrong octave   159 ( 1.33%) · up 128 down 31 · in runs of 1–4 79, 5–15 80, 16+ 0 · 62 runs, longest 11 · after a steady pitch 40, not 119 (note start 87, after a dropout 0, after another wrong reading 32)
+
+-- 20 dB talker: 11930 voiced frames
+   app      wrong octave   292 ( 2.45%) · up 3 down 289 · in runs of 1–4 56, 5–15 103, 16+ 133 · 52 runs, longest 24 · after a steady pitch 114, not 178 (note start 152, after a dropout 15, after another wrong reading 11)
+   rule 1   wrong octave   154 ( 1.29%) · up 26 down 128 · in runs of 1–4 31, 5–15 50, 16+ 73 · 25 runs, longest 24 · after a steady pitch 30, not 124 (note start 109, after a dropout 14, after another wrong reading 1)
+   rule 2   wrong octave   227 ( 1.90%) · up 8 down 219 · in runs of 1–4 45, 5–15 92, 16+ 90 · 43 runs, longest 24 · after a steady pitch 108, not 119 (note start 99, after a dropout 11, after another wrong reading 9)
+   rule 3   wrong octave   158 ( 1.32%) · up 30 down 128 · in runs of 1–4 35, 5–15 50, 16+ 73 · 27 runs, longest 24 · after a steady pitch 30, not 128 (note start 113, after a dropout 14, after another wrong reading 1)
+   rule 4   wrong octave   219 ( 1.84%) · up 130 down 89 · in runs of 1–4 81, 5–15 114, 16+ 24 · 62 runs, longest 24 · after a steady pitch 91, not 128 (note start 88, after a dropout 12, after another wrong reading 28)
+
+-- 20 dB tv: 11930 voiced frames
+   app      wrong octave   288 ( 2.41%) · up 2 down 286 · in runs of 1–4 69, 5–15 176, 16+ 43 · 66 runs, longest 26 · after a steady pitch 95, not 193 (note start 132, after a dropout 16, after another wrong reading 45)
+   rule 1   wrong octave   143 ( 1.20%) · up 26 down 117 · in runs of 1–4 30, 5–15 75, 16+ 38 · 28 runs, longest 21 · after a steady pitch 33, not 110 (note start 92, after a dropout 16, after another wrong reading 2)
+   rule 2   wrong octave   226 ( 1.89%) · up 7 down 219 · in runs of 1–4 72, 5–15 115, 16+ 39 · 54 runs, longest 22 · after a steady pitch 76, not 150 (note start 105, after a dropout 16, after another wrong reading 29)
+   rule 3   wrong octave   147 ( 1.23%) · up 30 down 117 · in runs of 1–4 34, 5–15 75, 16+ 38 · 30 runs, longest 21 · after a steady pitch 33, not 114 (note start 96, after a dropout 16, after another wrong reading 2)
+   rule 4   wrong octave   197 ( 1.65%) · up 126 down 71 · in runs of 1–4 96, 5–15 79, 16+ 22 · 67 runs, longest 22 · after a steady pitch 64, not 133 (note start 79, after a dropout 9, after another wrong reading 45)
+
+-- 10 dB white: 11930 voiced frames
+   app      wrong octave    18 ( 0.15%) · up 4 down 14 · in runs of 1–4 18, 5–15 0, 16+ 0 · 15 runs, longest 2 · after a steady pitch 1, not 17 (note start 7, after a dropout 10, after another wrong reading 0)
+   rule 1   wrong octave    38 ( 0.32%) · up 26 down 12 · in runs of 1–4 20, 5–15 18, 16+ 0 · 17 runs, longest 12 · after a steady pitch 1, not 37 (note start 29, after a dropout 8, after another wrong reading 0)
+   rule 2   wrong octave    24 ( 0.20%) · up 11 down 13 · in runs of 1–4 24, 5–15 0, 16+ 0 · 16 runs, longest 4 · after a steady pitch 1, not 23 (note start 14, after a dropout 9, after another wrong reading 0)
+   rule 3   wrong octave    41 ( 0.34%) · up 29 down 12 · in runs of 1–4 22, 5–15 19, 16+ 0 · 18 runs, longest 13 · after a steady pitch 1, not 40 (note start 32, after a dropout 8, after another wrong reading 0)
+   rule 4   wrong octave   138 ( 1.16%) · up 126 down 12 · in runs of 1–4 68, 5–15 70, 16+ 0 · 51 runs, longest 11 · after a steady pitch 53, not 85 (note start 63, after a dropout 8, after another wrong reading 14)
+
+-- 10 dB babble: 11930 voiced frames
+   app      wrong octave  1845 (15.47%) · up 23 down 1822 · in runs of 1–4 768, 5–15 597, 16+ 480 · 490 runs, longest 76 · after a steady pitch 175, not 1670 (note start 658, after a dropout 335, after another wrong reading 677)
+   rule 1   wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76 · after a steady pitch 102, not 1160 (note start 456, after a dropout 313, after another wrong reading 391)
+   rule 2   wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76 · after a steady pitch 114, not 1381 (note start 507, after a dropout 332, after another wrong reading 542)
+   rule 3   wrong octave  1279 (10.72%) · up 49 down 1230 · in runs of 1–4 414, 5–15 394, 16+ 471 · 280 runs, longest 136 · after a steady pitch 125, not 1154 (note start 481, after a dropout 460, after another wrong reading 213)
+   rule 4   wrong octave  1015 ( 8.51%) · up 161 down 854 · in runs of 1–4 625, 5–15 291, 16+ 99 · 368 runs, longest 75 · after a steady pitch 131, not 884 (note start 326, after a dropout 238, after another wrong reading 320)
+
+-- 10 dB talker: 11930 voiced frames
+   app      wrong octave  1084 ( 9.09%) · up 6 down 1078 · in runs of 1–4 208, 5–15 420, 16+ 456 · 182 runs, longest 70 · after a steady pitch 492, not 592 (note start 316, after a dropout 165, after another wrong reading 111)
+   rule 1   wrong octave   853 ( 7.15%) · up 25 down 828 · in runs of 1–4 155, 5–15 290, 16+ 408 · 140 runs, longest 68 · after a steady pitch 279, not 574 (note start 336, after a dropout 161, after another wrong reading 77)
+   rule 2   wrong octave   940 ( 7.88%) · up 11 down 929 · in runs of 1–4 194, 5–15 301, 16+ 445 · 162 runs, longest 68 · after a steady pitch 373, not 567 (note start 317, after a dropout 156, after another wrong reading 94)
+   rule 3   wrong octave   870 ( 7.29%) · up 30 down 840 · in runs of 1–4 153, 5–15 284, 16+ 433 · 141 runs, longest 66 · after a steady pitch 242, not 628 (note start 326, after a dropout 165, after another wrong reading 137)
+   rule 4   wrong octave   939 ( 7.87%) · up 124 down 815 · in runs of 1–4 233, 5–15 321, 16+ 385 · 185 runs, longest 68 · after a steady pitch 371, not 568 (note start 343, after a dropout 144, after another wrong reading 81)
+
+-- 10 dB tv: 11930 voiced frames
+   app      wrong octave  1332 (11.17%) · up 3 down 1329 · in runs of 1–4 329, 5–15 426, 16+ 577 · 259 runs, longest 69 · after a steady pitch 383, not 949 (note start 486, after a dropout 319, after another wrong reading 144)
+   rule 1   wrong octave   974 ( 8.16%) · up 26 down 948 · in runs of 1–4 206, 5–15 287, 16+ 481 · 172 runs, longest 65 · after a steady pitch 164, not 810 (note start 431, after a dropout 310, after another wrong reading 69)
+   rule 2   wrong octave  1118 ( 9.37%) · up 4 down 1114 · in runs of 1–4 294, 5–15 300, 16+ 524 · 221 runs, longest 65 · after a steady pitch 287, not 831 (note start 360, after a dropout 312, after another wrong reading 159)
+   rule 3   wrong octave  1006 ( 8.43%) · up 30 down 976 · in runs of 1–4 197, 5–15 309, 16+ 500 · 167 runs, longest 65 · after a steady pitch 165, not 841 (note start 440, after a dropout 311, after another wrong reading 90)
+   rule 4   wrong octave   964 ( 8.08%) · up 134 down 830 · in runs of 1–4 274, 5–15 316, 16+ 374 · 211 runs, longest 48 · after a steady pitch 244, not 720 (note start 347, after a dropout 244, after another wrong reading 129)
+
+-- leaps (ms until on the new note and staying 5 frames)
+   57→69 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 20 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 20 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 20 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 20 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 10 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 10 dB babble  app 17 ms · rule 1 17 · rule 2 17 · rule 3 17 · rule 4 0
+   57→69 10 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   57→69 10 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 20 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 20 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 20 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 20 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 10 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 10 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→57 10 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 20 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 20 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 20 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 20 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 10 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 10 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   69→62 10 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 20 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 20 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 20 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 20 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 10 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 10 dB babble  app 400 ms · rule 1 0 · rule 2 400 · rule 3 0 · rule 4 0
+   62→69 10 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   62→69 10 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 20 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 20 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 20 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 20 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 10 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 10 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   50→62 10 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 20 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 20 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 20 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 20 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 10 dB white   app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 10 dB talker  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+   74→62 10 dB tv      app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0
+
+-- the tools' windows losing ≥25 % / ≥50 % of their voiced frames to octave errors (app → rule 1)
+   20 dB white  Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 0/0 → 0/0 of 279
+   20 dB white  the five-note loop (1.5 s)                                   0/0 → 2/0 of 298
+   20 dB white  Scales, the Rift quick (0.65 s)                              0/0 → 3/1 of 643
+   20 dB white  the Rift pitch (1.4 s)                                       0/0 → 1/0 of 319
+   20 dB white  Karaoke, Performance Director, Emotional Singing, Harmony Ar 0/0 → 0/0 of 154
+   20 dB babble Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 9/2 → 3/0 of 279
+   20 dB babble the five-note loop (1.5 s)                                   9/3 → 5/1 of 298
+   20 dB babble Scales, the Rift quick (0.65 s)                              17/5 → 6/2 of 643
+   20 dB babble the Rift pitch (1.4 s)                                       10/2 → 3/0 of 319
+   20 dB babble Karaoke, Performance Director, Emotional Singing, Harmony Ar 4/1 → 2/0 of 154
+   20 dB talker Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 8/1 → 4/0 of 279
+   20 dB talker the five-note loop (1.5 s)                                   11/0 → 8/0 of 298
+   20 dB talker Scales, the Rift quick (0.65 s)                              25/11 → 15/6 of 643
+   20 dB talker the Rift pitch (1.4 s)                                       12/1 → 7/0 of 319
+   20 dB talker Karaoke, Performance Director, Emotional Singing, Harmony Ar 3/0 → 0/0 of 154
+   20 dB tv     Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 8/1 → 3/0 of 279
+   20 dB tv     the five-note loop (1.5 s)                                   10/0 → 7/0 of 298
+   20 dB tv     Scales, the Rift quick (0.65 s)                              25/8 → 14/4 of 643
+   20 dB tv     the Rift pitch (1.4 s)                                       11/0 → 5/0 of 319
+   20 dB tv     Karaoke, Performance Director, Emotional Singing, Harmony Ar 4/0 → 1/0 of 154
+   10 dB white  Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 0/0 → 0/0 of 279
+   10 dB white  the five-note loop (1.5 s)                                   0/0 → 2/0 of 298
+   10 dB white  Scales, the Rift quick (0.65 s)                              0/0 → 3/1 of 643
+   10 dB white  the Rift pitch (1.4 s)                                       0/0 → 1/0 of 319
+   10 dB white  Karaoke, Performance Director, Emotional Singing, Harmony Ar 0/0 → 0/0 of 154
+   10 dB babble Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 73/25 → 44/13 of 279
+   10 dB babble the five-note loop (1.5 s)                                   74/26 → 46/13 of 298
+   10 dB babble Scales, the Rift quick (0.65 s)                              155/69 → 101/44 of 643
+   10 dB babble the Rift pitch (1.4 s)                                       79/25 → 50/13 of 319
+   10 dB babble Karaoke, Performance Director, Emotional Singing, Harmony Ar 36/10 → 18/6 of 154
+   10 dB talker Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 38/7 → 27/5 of 279
+   10 dB talker the five-note loop (1.5 s)                                   45/9 → 32/6 of 298
+   10 dB talker Scales, the Rift quick (0.65 s)                              91/35 → 71/30 of 643
+   10 dB talker the Rift pitch (1.4 s)                                       50/9 → 38/7 of 319
+   10 dB talker Karaoke, Performance Director, Emotional Singing, Harmony Ar 19/2 → 12/1 of 154
+   10 dB tv     Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 45/17 → 30/10 of 279
+   10 dB tv     the five-note loop (1.5 s)                                   53/17 → 39/10 of 298
+   10 dB tv     Scales, the Rift quick (0.65 s)                              107/47 → 80/35 of 643
+   10 dB tv     the Rift pitch (1.4 s)                                       57/20 → 42/14 of 319
+   10 dB tv     Karaoke, Performance Director, Emotional Singing, Harmony Ar 26/7 → 16/4 of 154
+
+done

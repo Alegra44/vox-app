@@ -1,0 +1,137 @@
+== Survey I: octave decisions · build working copy · 18 VocalSet takes · 36 rule setting(s)
+   rule 1: δ 0.5 · ε ∞ (never up) · K 4 · S 2 · G 10
+   rule 2: δ 0.5 · ε ∞ (never up) · K 4 · S 2 · G 30
+   rule 3: δ 0.5 · ε ∞ (never up) · K 4 · S 2 · G 60
+   rule 4: δ 0.5 · ε ∞ (never up) · K 4 · S 4 · G 10
+   rule 5: δ 0.5 · ε ∞ (never up) · K 4 · S 4 · G 30
+   rule 6: δ 0.5 · ε ∞ (never up) · K 4 · S 4 · G 60
+   rule 7: δ 0.5 · ε ∞ (never up) · K ∞ · S 2 · G 10
+   rule 8: δ 0.5 · ε ∞ (never up) · K ∞ · S 2 · G 30
+   rule 9: δ 0.5 · ε ∞ (never up) · K ∞ · S 2 · G 60
+   rule 10: δ 0.5 · ε ∞ (never up) · K ∞ · S 4 · G 10
+   rule 11: δ 0.5 · ε ∞ (never up) · K ∞ · S 4 · G 30
+   rule 12: δ 0.5 · ε ∞ (never up) · K ∞ · S 4 · G 60
+   rule 13: δ 0.7 · ε ∞ (never up) · K 4 · S 2 · G 10
+   rule 14: δ 0.7 · ε ∞ (never up) · K 4 · S 2 · G 30
+   rule 15: δ 0.7 · ε ∞ (never up) · K 4 · S 2 · G 60
+   rule 16: δ 0.7 · ε ∞ (never up) · K 4 · S 4 · G 10
+   rule 17: δ 0.7 · ε ∞ (never up) · K 4 · S 4 · G 30
+   rule 18: δ 0.7 · ε ∞ (never up) · K 4 · S 4 · G 60
+   rule 19: δ 0.7 · ε ∞ (never up) · K ∞ · S 2 · G 10
+   rule 20: δ 0.7 · ε ∞ (never up) · K ∞ · S 2 · G 30
+   rule 21: δ 0.7 · ε ∞ (never up) · K ∞ · S 2 · G 60
+   rule 22: δ 0.7 · ε ∞ (never up) · K ∞ · S 4 · G 10
+   rule 23: δ 0.7 · ε ∞ (never up) · K ∞ · S 4 · G 30
+   rule 24: δ 0.7 · ε ∞ (never up) · K ∞ · S 4 · G 60
+   rule 25: continuing first peak: an earlier ACF peak ≥ 0.5 × the highest, kept when it continues the steady pitch · S 2 · G 10
+   rule 26: continuing first peak: an earlier ACF peak ≥ 0.5 × the highest, kept when it continues the steady pitch · S 2 · G 60
+   rule 27: continuing first peak: an earlier ACF peak ≥ 0.5 × the highest, kept when it continues the steady pitch · S 4 · G 10
+   rule 28: continuing first peak: an earlier ACF peak ≥ 0.5 × the highest, kept when it continues the steady pitch · S 4 · G 60
+   rule 29: continuing first peak: an earlier ACF peak ≥ 0.7 × the highest, kept when it continues the steady pitch · S 2 · G 10
+   rule 30: continuing first peak: an earlier ACF peak ≥ 0.7 × the highest, kept when it continues the steady pitch · S 2 · G 60
+   rule 31: continuing first peak: an earlier ACF peak ≥ 0.7 × the highest, kept when it continues the steady pitch · S 4 · G 10
+   rule 32: continuing first peak: an earlier ACF peak ≥ 0.7 × the highest, kept when it continues the steady pitch · S 4 · G 60
+   rule 33: continuing first peak: an earlier ACF peak ≥ 0.85 × the highest, kept when it continues the steady pitch · S 2 · G 10
+   rule 34: continuing first peak: an earlier ACF peak ≥ 0.85 × the highest, kept when it continues the steady pitch · S 2 · G 60
+   rule 35: continuing first peak: an earlier ACF peak ≥ 0.85 × the highest, kept when it continues the steady pitch · S 4 · G 10
+   rule 36: continuing first peak: an earlier ACF peak ≥ 0.85 × the highest, kept when it continues the steady pitch · S 4 · G 60
+
+-- clean VocalSet (no noise): frames the rule changes
+   rule 1: 16 of 11930 frames (16 to another octave)
+   rule 2: 16 of 11930 frames (16 to another octave)
+   rule 3: 16 of 11930 frames (16 to another octave)
+   rule 4: 5 of 11930 frames (5 to another octave)
+   rule 5: 5 of 11930 frames (5 to another octave)
+   rule 6: 5 of 11930 frames (5 to another octave)
+   rule 7: 26 of 11930 frames (26 to another octave)
+   rule 8: 26 of 11930 frames (26 to another octave)
+   rule 9: 26 of 11930 frames (26 to another octave)
+   rule 10: 13 of 11930 frames (13 to another octave)
+   rule 11: 13 of 11930 frames (13 to another octave)
+   rule 12: 13 of 11930 frames (13 to another octave)
+   rule 13: 16 of 11930 frames (16 to another octave)
+   rule 14: 16 of 11930 frames (16 to another octave)
+   rule 15: 16 of 11930 frames (16 to another octave)
+   rule 16: 5 of 11930 frames (5 to another octave)
+   rule 17: 5 of 11930 frames (5 to another octave)
+   rule 18: 5 of 11930 frames (5 to another octave)
+   rule 19: 26 of 11930 frames (26 to another octave)
+   rule 20: 26 of 11930 frames (26 to another octave)
+   rule 21: 26 of 11930 frames (26 to another octave)
+   rule 22: 13 of 11930 frames (13 to another octave)
+   rule 23: 13 of 11930 frames (13 to another octave)
+   rule 24: 13 of 11930 frames (13 to another octave)
+   rule 25: 78 of 11930 frames (32 to another octave)
+   rule 26: 78 of 11930 frames (32 to another octave)
+   rule 27: 32 of 11930 frames (24 to another octave)
+   rule 28: 32 of 11930 frames (24 to another octave)
+   rule 29: 76 of 11930 frames (31 to another octave)
+   rule 30: 76 of 11930 frames (31 to another octave)
+   rule 31: 32 of 11930 frames (24 to another octave)
+   rule 32: 32 of 11930 frames (24 to another octave)
+   rule 33: 28 of 11930 frames (16 to another octave)
+   rule 34: 28 of 11930 frames (16 to another octave)
+   rule 35: 17 of 11930 frames (12 to another octave)
+   rule 36: 17 of 11930 frames (12 to another octave)
+
+-- 10 dB babble: 11930 voiced frames
+   app      wrong octave  1845 (15.47%) · up 23 down 1822 · in runs of 1–4 768, 5–15 597, 16+ 480 · 490 runs, longest 76
+   rule 1   wrong octave  1375 (11.53%) · up 41 down 1334 · in runs of 1–4 473, 5–15 442, 16+ 460 · 322 runs, longest 76
+   rule 2   wrong octave  1375 (11.53%) · up 41 down 1334 · in runs of 1–4 473, 5–15 442, 16+ 460 · 322 runs, longest 76
+   rule 3   wrong octave  1375 (11.53%) · up 41 down 1334 · in runs of 1–4 473, 5–15 442, 16+ 460 · 322 runs, longest 76
+   rule 4   wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76
+   rule 5   wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76
+   rule 6   wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76
+   rule 7   wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76
+   rule 8   wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76
+   rule 9   wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76
+   rule 10  wrong octave  1366 (11.45%) · up 33 down 1333 · in runs of 1–4 516, 5–15 416, 16+ 434 · 333 runs, longest 76
+   rule 11  wrong octave  1366 (11.45%) · up 33 down 1333 · in runs of 1–4 516, 5–15 416, 16+ 434 · 333 runs, longest 76
+   rule 12  wrong octave  1366 (11.45%) · up 33 down 1333 · in runs of 1–4 516, 5–15 416, 16+ 434 · 333 runs, longest 76
+   rule 13  wrong octave  1375 (11.53%) · up 41 down 1334 · in runs of 1–4 473, 5–15 442, 16+ 460 · 322 runs, longest 76
+   rule 14  wrong octave  1375 (11.53%) · up 41 down 1334 · in runs of 1–4 473, 5–15 442, 16+ 460 · 322 runs, longest 76
+   rule 15  wrong octave  1375 (11.53%) · up 41 down 1334 · in runs of 1–4 473, 5–15 442, 16+ 460 · 322 runs, longest 76
+   rule 16  wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76
+   rule 17  wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76
+   rule 18  wrong octave  1495 (12.53%) · up 27 down 1468 · in runs of 1–4 555, 5–15 496, 16+ 444 · 367 runs, longest 76
+   rule 19  wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76
+   rule 20  wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76
+   rule 21  wrong octave  1262 (10.58%) · up 49 down 1213 · in runs of 1–4 444, 5–15 364, 16+ 454 · 294 runs, longest 76
+   rule 22  wrong octave  1366 (11.45%) · up 33 down 1333 · in runs of 1–4 516, 5–15 416, 16+ 434 · 333 runs, longest 76
+   rule 23  wrong octave  1366 (11.45%) · up 33 down 1333 · in runs of 1–4 516, 5–15 416, 16+ 434 · 333 runs, longest 76
+   rule 24  wrong octave  1366 (11.45%) · up 33 down 1333 · in runs of 1–4 516, 5–15 416, 16+ 434 · 333 runs, longest 76
+   rule 25  wrong octave  1280 (10.73%) · up 50 down 1230 · in runs of 1–4 411, 5–15 398, 16+ 471 · 279 runs, longest 136
+   rule 26  wrong octave  1280 (10.73%) · up 50 down 1230 · in runs of 1–4 411, 5–15 398, 16+ 471 · 279 runs, longest 136
+   rule 27  wrong octave  1380 (11.57%) · up 35 down 1345 · in runs of 1–4 496, 5–15 423, 16+ 461 · 323 runs, longest 130
+   rule 28  wrong octave  1386 (11.62%) · up 35 down 1351 · in runs of 1–4 491, 5–15 428, 16+ 467 · 322 runs, longest 136
+   rule 29  wrong octave  1279 (10.72%) · up 49 down 1230 · in runs of 1–4 414, 5–15 394, 16+ 471 · 280 runs, longest 136
+   rule 30  wrong octave  1279 (10.72%) · up 49 down 1230 · in runs of 1–4 414, 5–15 394, 16+ 471 · 280 runs, longest 136
+   rule 31  wrong octave  1379 (11.56%) · up 34 down 1345 · in runs of 1–4 499, 5–15 419, 16+ 461 · 324 runs, longest 130
+   rule 32  wrong octave  1385 (11.61%) · up 34 down 1351 · in runs of 1–4 494, 5–15 424, 16+ 467 · 323 runs, longest 136
+   rule 33  wrong octave  1321 (11.07%) · up 39 down 1282 · in runs of 1–4 440, 5–15 393, 16+ 488 · 294 runs, longest 130
+   rule 34  wrong octave  1321 (11.07%) · up 39 down 1282 · in runs of 1–4 440, 5–15 393, 16+ 488 · 294 runs, longest 130
+   rule 35  wrong octave  1446 (12.12%) · up 31 down 1415 · in runs of 1–4 526, 5–15 443, 16+ 477 · 345 runs, longest 130
+   rule 36  wrong octave  1450 (12.15%) · up 31 down 1419 · in runs of 1–4 523, 5–15 448, 16+ 479 · 345 runs, longest 132
+
+-- leaps (ms until on the new note and staying 5 frames)
+   57→69 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   57→69 10 dB babble  app 17 ms · rule 1 17 · rule 2 17 · rule 3 17 · rule 4 17 · rule 5 17 · rule 6 17 · rule 7 17 · rule 8 17 · rule 9 17 · rule 10 17 · rule 11 17 · rule 12 17 · rule 13 17 · rule 14 17 · rule 15 17 · rule 16 17 · rule 17 17 · rule 18 17 · rule 19 17 · rule 20 17 · rule 21 17 · rule 22 17 · rule 23 17 · rule 24 17 · rule 25 17 · rule 26 17 · rule 27 17 · rule 28 17 · rule 29 17 · rule 30 17 · rule 31 17 · rule 32 17 · rule 33 17 · rule 34 17 · rule 35 17 · rule 36 17
+   69→57 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   69→57 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   69→62 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   69→62 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   62→69 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   62→69 10 dB babble  app 400 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 400 · rule 5 400 · rule 6 400 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 400 · rule 11 400 · rule 12 400 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 400 · rule 17 400 · rule 18 400 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 400 · rule 23 400 · rule 24 400 · rule 25 0 · rule 26 0 · rule 27 400 · rule 28 400 · rule 29 0 · rule 30 0 · rule 31 400 · rule 32 400 · rule 33 0 · rule 34 0 · rule 35 400 · rule 36 400
+   50→62 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   50→62 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   74→62 clean         app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+   74→62 10 dB babble  app 0 ms · rule 1 0 · rule 2 0 · rule 3 0 · rule 4 0 · rule 5 0 · rule 6 0 · rule 7 0 · rule 8 0 · rule 9 0 · rule 10 0 · rule 11 0 · rule 12 0 · rule 13 0 · rule 14 0 · rule 15 0 · rule 16 0 · rule 17 0 · rule 18 0 · rule 19 0 · rule 20 0 · rule 21 0 · rule 22 0 · rule 23 0 · rule 24 0 · rule 25 0 · rule 26 0 · rule 27 0 · rule 28 0 · rule 29 0 · rule 30 0 · rule 31 0 · rule 32 0 · rule 33 0 · rule 34 0 · rule 35 0 · rule 36 0
+
+-- the tools' windows losing ≥25 % / ≥50 % of their voiced frames to octave errors (app → rule 1)
+   10 dB babble Pitch Match, Interval, custom notes, Harmony Memory, Eve, Bo 73/25 → 48/13 of 279
+   10 dB babble the five-note loop (1.5 s)                                   74/26 → 49/15 of 298
+   10 dB babble Scales, the Rift quick (0.65 s)                              155/69 → 109/44 of 643
+   10 dB babble the Rift pitch (1.4 s)                                       79/25 → 54/14 of 319
+   10 dB babble Karaoke, Performance Director, Emotional Singing, Harmony Ar 36/10 → 22/6 of 154
+
+done
