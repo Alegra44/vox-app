@@ -13,7 +13,7 @@ const YOU_STATES = ['signedout', 'new', 'active', 'activecw'];
 // Runs in the page.
 function seedInPage(name) {
   window.saveProgress = async () => {};
-  const today = todayStr(), daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); };
+  const today = todayStr(), daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.toLocaleDateString('en-CA'); }; // the local date, as todayStr() (not the UTC date)
   for (const k of ['day1Snapshot', 'day1Goal', 'day1StartDate']) delete profile[k];
   Object.assign(profile, { onboardingPriority: null });
   Object.assign(progress, {

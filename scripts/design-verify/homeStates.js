@@ -6,7 +6,7 @@ const HOME_STATES = ['new', 'priority', 'weakest', 'struggling', 'today', 'expir
 
 // Runs in the page. Resets every field the two screens read, then adds the state's own.
 function seedInPage(name) {
-  const today = todayStr(), daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.toISOString().slice(0, 10); };
+  const today = todayStr(), daysAgo = n => { const d = new Date(); d.setDate(d.getDate() - n); return d.toLocaleDateString('en-CA'); }; // the local date, as todayStr() (not the UTC date)
   Object.assign(profile, { onboardingPriority: null, trialStartDate: today, subscriptionPlan: null });
   Object.assign(progress, {
     pitchScores: [], breathScores: [], agilityScores: [], lowestMidi: null, highestMidi: null, noteAttemptHistory: {},

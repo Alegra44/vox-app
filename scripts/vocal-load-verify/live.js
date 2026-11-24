@@ -18,9 +18,10 @@ const call = async (method, path, token, body, base = API) => {
   if (!token) throw new Error('sign-up gave no session: ' + JSON.stringify(su.body).slice(0, 200));
   console.log(`signed up ${email}`);
 
-  const now = Date.now(), day = new Date(now).toISOString().slice(0, 10); // the app's todayStr()
+  // the app's todayStr(): the device's local date since release C (not the UTC date), with the offset the app sends
+  const now = Date.now(), tzOffsetMin = -new Date(now - 5 * 60000).getTimezoneOffset(), day = new Date(now + -new Date(now).getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const sid = crypto.randomUUID(), startedAt = new Date(now - 5 * 60000).toISOString();
-  const cp = (o) => ({ day, startedAt, activeSeconds: 100, load: 150, medianRms: 0.05, p5Midi: 50, p95Midi: 60, ended: false, ...o });
+  const cp = (o) => ({ day, startedAt, tzOffsetMin, activeSeconds: 100, load: 150, medianRms: 0.05, p5Midi: 50, p95Midi: 60, ended: false, ...o });
 
   let r = await call('PUT', `/me/vocal-load/sessions/${sid}`, token, cp());
   check('checkpoint 100 s / 150', r.status === 200 && r.body.active_seconds === 100 && r.body.load === 150, `${r.status} ${JSON.stringify(r.body).slice(0, 90)}`);
