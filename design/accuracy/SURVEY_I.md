@@ -131,3 +131,38 @@ room, at the per-frame rates of section 2:
   the pitch track under the HNR and vibrato measures), Vocal Load (its pitch-weighted dose reads the same frames).
 
 At 20 dB, where most rooms are, B leaves 1.9 % of frames wrong in talker and TV (master 2.4 %).
+
+## 4. Clean takes in every tool (setting B on the local scratch build, master in the same run)
+
+`scratch/octave` (local only, never pushed): setting B inside the app's `autoCorrelate`, its state kept per buffer
+(each reader passes its own). A first try kept one state for the page: Register Coach reads two buffers a frame, the two
+mixed, and scores4b moved 7 values; those runs are in out/checksI-shared-state/ and are not the result. The result
+(out/checksI/, local stack through the slow proxy):
+
+| check | result |
+|---|---|
+| bootcheck | 9/9 |
+| scores (the 4a tools, steady and sharp A4) | **within the gate** |
+| scores4b (the take tools) | ✗ 3 beyond the gate: Register Drills note 1 chest 62/62/65 (master 70/65/68); Emotion Mode dynamic range and its result row 100–103 (master 98–101; also 101–103 in the shared-state run) |
+| scores6 (Performance Director, Stay in Key, Karaoke, Emotional Singing; 5 runs a side) | ✗ 1: Performance Director note 2 timing 92/92/92/89/89 (master 89/89/86/89/86, range 86–91) |
+| gamestates (one run a side) | ✗ 3, Harmony Castle: timing 35 → 47, overall and best 72 → 75 |
+| survey.js (compare.js: no gate of its own) | every value within ±2 or master's own spread; the largest move, Timing with "loudlate", 3 (master's runs 0 and 6) → 7 |
+
+So B doesn't leave every tool unchanged either, though these stimuli are steady synthetic notes on which it shouldn't
+fire; why it moves them (onsets, where a note's first frames read low, are the likely place) isn't settled here.
+
+## Conclusion
+
+The continuity rule in the detector cuts wrong-octave frames at 10 dB by 13–19 % in the version that keeps real leaps
+within 67 ms (B), and by 21–32 % in one that doesn't (A): short of half either way. At 20 dB it brings babble under 1 %
+but not talker or TV. The reason is measured, not guessed: 99 % of the wrong octaves are the detector reading low, and at
+10 dB 55–91 % of them start where there is no steady pitch to continue (a note's start, after a dropout, after another
+wrong reading). A rule that looks back can't reach those.
+
+What the numbers point at instead, for a later decision (not tried in the app): the low readings are the
+autocorrelation's peak at twice the period winning over the period's own. A detector that doesn't simply take the
+highest peak (the first peak within k of the highest: 15.5 → 8.5 % at 10 dB babble, the best cut seen) fixes more, but
+as measured here it moves 246 clean frames (125 to another octave), so it would need its own survey: which of those
+clean frames were the clean reading's own errors, and what it does to every tool.
+
+Nothing in the app changed; master and production are untouched. scratch/octave stays local.

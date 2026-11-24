@@ -1,0 +1,146 @@
+gamestates 2026-11-24T11-04-46  master vs working copy  1 run(s) per side  games glider, bridge, boss, wraith, harmony, rift
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=221963707 (VOX_SLOW=0: off)
+  master glider #1: started true, ended itself · house live down, after up · vlFeed 515 · {"score":113,"coins":2,"combo":2,"took off":1,"best":113}
+  master bridge #1: started true, ended itself · house live down, after up · vlFeed 1182 · {"score":307,"lives":0,"lane":"chest","best":307}
+  master boss #1: started true, ended itself · house live down, after up · vlFeed 1402 · {"outcome":"win","boss health":0,"your health":86,"victories":1,"notes heard":8,"note 1":100,"note 2":91,"note 3":73,"note 4":97,"note 5":64,"note 6":94,"note 7":82,"note 8":100,"weakest note":"C5","weakest %":64}
+  master wraith #1: started true, ended itself · house live down, after up · vlFeed 1602 · {"outcome":"win","boss health":0,"your health":72,"victories":1,"notes heard":8,"note 1":85,"note 2":79,"note 3":58,"note 4":82,"note 5":49,"note 6":79,"note 7":70,"note 8":85,"weakest note":"C5","weakest %":49}
+  master harmony #1: started true, ended itself · house live down, after up · vlFeed 1606 · {"overall":72,"pitch":88,"timing":35,"part":75,"independence":88,"best":72,"note 1":100,"note 2":91,"note 3":73,"note 4":97,"note 5":64,"note 6":94,"note 7":82,"note 8":100}
+  master rift #1: started true, ended itself · house live down, after up · vlFeed 3602 · {"rounds":24,"heard":18,"average":30,"best":30,"round 1 target":68,"round 1":38,"round 2 target":69,"round 2":96,"round 3 target":56,"round 3":39,"round 4 target":58,"round 4":39,"round 5 target":62,"round 5":"missed","round 6 target":68,"round 6":41,"round 7 target":60,"round 7":0,"round 8 target":51,"round 8":"missed","round 9 target":56,"round 9":39,"round 10 target":60,"round 10":0,"round 11 target":58,"round 11":41,"round 12 target":67,"round 12":0}
+  branch glider #1: started true, ended itself · house live down, after up · vlFeed 515 · {"score":113,"coins":2,"combo":2,"took off":1,"best":113}
+  branch bridge #1: started true, ended itself · house live down, after up · vlFeed 1182 · {"score":307,"lives":0,"lane":"chest","best":307}
+  branch boss #1: started true, ended itself · house live down, after up · vlFeed 1403 · {"outcome":"win","boss health":0,"your health":86,"victories":1,"notes heard":8,"note 1":100,"note 2":91,"note 3":73,"note 4":97,"note 5":64,"note 6":94,"note 7":82,"note 8":100,"weakest note":"C5","weakest %":64}
+  branch wraith #1: started true, ended itself · house live down, after up · vlFeed 1599 · {"outcome":"win","boss health":0,"your health":72,"victories":1,"notes heard":8,"note 1":85,"note 2":79,"note 3":58,"note 4":82,"note 5":49,"note 6":79,"note 7":70,"note 8":85,"weakest note":"C5","weakest %":49}
+  branch harmony #1: started true, ended itself · house live down, after up · vlFeed 1605 · {"overall":75,"pitch":88,"timing":47,"part":75,"independence":88,"best":75,"note 1":100,"note 2":91,"note 3":73,"note 4":97,"note 5":64,"note 6":94,"note 7":82,"note 8":100}
+  branch rift #1: started true, ended itself · house live down, after up · vlFeed 3594 · {"rounds":24,"heard":18,"average":30,"best":30,"round 1 target":68,"round 1":39,"round 2 target":69,"round 2":97,"round 3 target":56,"round 3":39,"round 4 target":58,"round 4":39,"round 5 target":62,"round 5":"missed","round 6 target":68,"round 6":40,"round 7 target":60,"round 7":0,"round 8 target":51,"round 8":"missed","round 9 target":56,"round 9":39,"round 10 target":60,"round 10":0,"round 11 target":58,"round 11":41,"round 12 target":67,"round 12":0}
+
+-- At 390: the result's big number in view when the game ends (branch)
+   ✓ Pitch Mountain                 number at 262–330 px of 844 · result shown true
+   ✓ Register Canyon                number at 297–366 px of 844 · result shown true
+   ✓ Boss Arena (Pitch Dragon)      number at 262–331 px of 844 · result shown true
+   ✓ Boss Arena (Register Wraith)   number at 262–331 px of 844 · result shown true
+   ✓ Harmony Castle                 number at 262–330 px of 844 · result shown true
+   ✓ The Rift                       number at 262–331 px of 844 · result shown true
+
+-- Pitch Mountain
+   ✓ score                 113 → 113
+   ✓ coins                   2 → 2
+   ✓ combo                   2 → 2
+   ✓ took off                1 → 1
+   ✓ best                  113 → 113
+   ✓ master #1: started true, vocal load fed (515 vlFeed calls)
+   ✓ branch #1: started true, vocal load fed (515 vlFeed calls)
+   ✓ branch #1: house down while playing (down), up after (up) · result shown true · shows the score 113 true
+   · master #1: house while playing down, after up
+
+-- Register Canyon
+   ✓ score                 307 → 307
+   ✓ lives                   0 → 0
+   ✓ lane                chest → chest
+   ✓ best                  307 → 307
+   ✓ master #1: started true, vocal load fed (1182 vlFeed calls)
+   ✓ branch #1: started true, vocal load fed (1182 vlFeed calls)
+   ✓ branch #1: house down while playing (down), up after (up) · result shown true · shows the score 307 true
+   · master #1: house while playing down (expected up on master: no house session), after up
+
+-- Boss Arena (Pitch Dragon)
+   ✓ outcome               win → win
+   ✓ boss health             0 → 0
+   ✓ your health            86 → 86
+   ✓ victories               1 → 1
+   ✓ notes heard             8 → 8
+   ✓ note 1                100 → 100
+   ✓ note 2                 91 → 91
+   ✓ note 3                 73 → 73
+   ✓ note 4                 97 → 97
+   ✓ note 5                 64 → 64
+   ✓ note 6                 94 → 94
+   ✓ note 7                 82 → 82
+   ✓ note 8                100 → 100
+   ✓ weakest note           C5 → C5
+   ✓ weakest %              64 → 64
+   ✓ master #1: started true, vocal load fed (1402 vlFeed calls)
+   ✓ branch #1: started true, vocal load fed (1403 vlFeed calls)
+   ✓ branch #1: house down while playing (down), up after (up) · result shown true
+   · master #1: house while playing down, after up
+
+-- Boss Arena (Register Wraith)
+   ✓ outcome               win → win
+   ✓ boss health             0 → 0
+   ✓ your health            72 → 72
+   ✓ victories               1 → 1
+   ✓ notes heard             8 → 8
+   ✓ note 1                 85 → 85
+   ✓ note 2                 79 → 79
+   ✓ note 3                 58 → 58
+   ✓ note 4                 82 → 82
+   ✓ note 5                 49 → 49
+   ✓ note 6                 79 → 79
+   ✓ note 7                 70 → 70
+   ✓ note 8                 85 → 85
+   ✓ weakest note           C5 → C5
+   ✓ weakest %              49 → 49
+   ✓ master #1: started true, vocal load fed (1602 vlFeed calls)
+   ✓ branch #1: started true, vocal load fed (1599 vlFeed calls)
+   ✓ branch #1: house down while playing (down), up after (up) · result shown true
+   · master #1: house while playing down (expected up on master: no house session), after up
+
+-- Harmony Castle
+   ✗ overall                72 → 75
+   ✓ pitch                  88 → 88
+   ✗ timing                 35 → 47
+   ✓ part                   75 → 75
+   ✓ independence           88 → 88
+   ✗ best                   72 → 75
+   ✓ note 1                100 → 100
+   ✓ note 2                 91 → 91
+   ✓ note 3                 73 → 73
+   ✓ note 4                 97 → 97
+   ✓ note 5                 64 → 64
+   ✓ note 6                 94 → 94
+   ✓ note 7                 82 → 82
+   ✓ note 8                100 → 100
+   ✓ master #1: started true, vocal load fed (1606 vlFeed calls)
+   ✓ branch #1: started true, vocal load fed (1605 vlFeed calls)
+   ✓ branch #1: house down while playing (down), up after (up) · result shown true · shows the score 75 true
+   · master #1: house while playing down, after up
+
+-- The Rift
+   ✓ rounds                 24 → 24
+   ✓ heard                  18 → 18
+   ✓ average                30 → 30
+   ✓ best                   30 → 30
+   ✓ round 1 target         68 → 68
+   ✓ round 1                38 → 39
+   ✓ round 2 target         69 → 69
+   ✓ round 2                96 → 97
+   ✓ round 3 target         56 → 56
+   ✓ round 3                39 → 39
+   ✓ round 4 target         58 → 58
+   ✓ round 4                39 → 39
+   ✓ round 5 target         62 → 62
+   ✓ round 5            missed → missed
+   ✓ round 6 target         68 → 68
+   ✓ round 6                41 → 40
+   ✓ round 7 target         60 → 60
+   ✓ round 7                 0 → 0
+   ✓ round 8 target         51 → 51
+   ✓ round 8            missed → missed
+   ✓ round 9 target         56 → 56
+   ✓ round 9                39 → 39
+   ✓ round 10 target        60 → 60
+   ✓ round 10                0 → 0
+   ✓ round 11 target        58 → 58
+   ✓ round 11               41 → 41
+   ✓ round 12 target        67 → 67
+   ✓ round 12                0 → 0
+   ✓ master #1: started true, vocal load fed (3602 vlFeed calls)
+   ✓ branch #1: started true, vocal load fed (3594 vlFeed calls)
+   ✓ branch #1: house down while playing (down), up after (up) · result shown true · shows the score 30 true
+   · master #1: house while playing down, after up
+✓ master: page errors 0
+✓ branch: page errors 0
+
+GAMESTATES: FAIL: 3 (numbers within ±2, load fed, the branch's house down while playing and up after)
+log: scripts/design-verify/logs/gamestates-2026-11-24T11-04-46.log  json: scripts/design-verify/logs/gamestates-2026-11-24T11-04-46.json
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvgs-1795518292531@example.com

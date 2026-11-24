@@ -1,0 +1,183 @@
+scores 2026-11-24T10-24-34  master vs branch (working copy)  5 runs per side  stimuli steady, lead  tools pd, staykey, karaoke, emotion
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=219552120 (VOX_SLOW=0: off)
+steady master #1 (121 s): pd {"pitch":0} · staykey {"in key %":38,"result: big number":38} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady branch #1 (119 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady branch #2 (119 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady master #2 (119 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady master #3 (119 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady branch #3 (119 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady branch #4 (120 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady master #4 (122 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady master #5 (121 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+steady branch #5 (122 s): pd {"pitch":0} · staykey {"in key %":37,"result: big number":37} · karaoke {"pitch":0} · emotion {"pitch":0}
+lead master #1 (120 s): pd {"pitch":96} · staykey {"in key %":97,"result: big number":97} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead branch #1 (120 s): pd {"pitch":96} · staykey {"in key %":96,"result: big number":96} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead branch #2 (119 s): pd {"pitch":95} · staykey {"in key %":98,"result: big number":98} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead master #2 (121 s): pd {"pitch":96} · staykey {"in key %":98,"result: big number":98} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead master #3 (121 s): pd {"pitch":96} · staykey {"in key %":97,"result: big number":97} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead branch #3 (120 s): pd {"pitch":96} · staykey {"in key %":98,"result: big number":98} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead branch #4 (119 s): pd {"pitch":96} · staykey {"in key %":98,"result: big number":98} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead master #4 (119 s): pd {"pitch":96} · staykey {"in key %":98,"result: big number":98} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead master #5 (120 s): pd {"pitch":96} · staykey {"in key %":97,"result: big number":97} · karaoke {"pitch":96} · emotion {"pitch":96}
+lead branch #5 (120 s): pd {"pitch":95} · staykey {"in key %":98,"result: big number":98} · karaoke {"pitch":96} · emotion {"pitch":96}
+
+== steady: median of 5 runs, master → branch (gate ±2)
+-- Performance Director
+   ✓ note 1 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 1 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 2 pitch               not heard → not heard (master not heard/not heard/not heard/not heard/not heard; branch not heard/not heard/not heard/not heard/not heard)
+   ✓ note 2 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 3 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 3 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 4 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 4 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 5 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 5 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 6 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 6 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 7 pitch               not heard → not heard (master not heard/not heard/not heard/not heard/not heard; branch not heard/not heard/not heard/not heard/not heard)
+   ✓ note 7 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 8 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 8 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ notes heard                      6 → 6       (master 6/6/6/6/6; branch 6/6/6/6/6)  [master's range 6–6 or ±1%: 4–8]
+   ✓ pitch                            0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ timing                           0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ technique                        0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: technique                0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: pitch                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: timing                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: dynamics                 0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ skill pitch recorded             0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+-- Stay in Key
+   ✓ in key %                        37 → 37      (master 38/37/37/37/37; branch 37/37/37/37/37)  [master's range 37–38 or ±1%: 35–39]
+   ✓ scored (over 10 voiced frames)       1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ result: big number              37 → 37      (master 38/37/37/37/37; branch 37/37/37/37/37)  [master's range 37–38 or ±1%: 35–39]
+   ✓ skill pitch recorded            37 → 37      (master 38/37/37/37/37; branch 37/37/37/37/37)  [master's range 37–38 or ±1%: 35–39]
+-- Karaoke Coach
+   ✓ note 1 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 1 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 2 pitch               not heard → not heard (master not heard/not heard/not heard/not heard/not heard; branch not heard/not heard/not heard/not heard/not heard)
+   ✓ note 2 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 3 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 3 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 4 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 4 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 5 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 5 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 6 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 6 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 7 pitch               not heard → not heard (master not heard/not heard/not heard/not heard/not heard; branch not heard/not heard/not heard/not heard/not heard)
+   ✓ note 7 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 8 pitch                     0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 8 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ notes heard                      6 → 6       (master 6/6/6/6/6; branch 6/6/6/6/6)  [master's range 6–6 or ±1%: 4–8]
+   ✓ pitch                            0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ timing                           0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: pitch                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: timing                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ song best                        0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 1 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 1 value                  0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 2 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 2 value                  0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 3 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 3 value                  0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 4 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 4 value                  6 → 6       (master 6/6/6/6/6; branch 6/6/6/6/6)  [master's range 6–6 or ±1%: 4–8]
+   ✓ mission 5 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 5 value                  0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 6 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 6 value                  0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 7 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 7 value                  0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ skill pitch recorded             0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+-- Emotional Singing
+   ✓ pitch                            0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ expression                       0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: pitch                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: expression               0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ coach line                 flatlevel → flatlevel (master flatlevel/flatlevel/flatlevel/flatlevel/flatlevel; branch flatlevel/flatlevel/flatlevel/flatlevel/flatlevel)
+   ✓ skill expression recorded        0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+
+== lead: median of 5 runs, master → branch (gate ±2)
+-- Performance Director
+   ✓ note 1 pitch                    95 → 95      (master 95/95/95/95/95; branch 95/94/95/95/94)  [master's range 95–95 or ±1%: 93–97]
+   ✓ note 1 timing                   89 → 89      (master 92/89/86/89/92; branch 92/86/92/89/89)  [master's range 86–92 or ±1%: 86–92]
+   ✓ note 2 pitch                    95 → 95      (master 95/95/95/96/96; branch 95/95/95/95/95)  [master's range 95–96 or ±1%: 93–97]
+   ✓ note 2 timing                   89 → 89      (master 89/86/89/96/86; branch 89/86/89/89/92)  [master's range 86–96 or ±1%: 86–96]
+   ✓ note 3 pitch                    95 → 95      (master 95/95/96/95/95; branch 95/95/95/95/95)  [master's range 95–96 or ±1%: 93–97]
+   ✓ note 3 timing                   86 → 89      (master 92/86/89/86/86; branch 89/86/89/89/83)  [master's range 86–92 or ±1%: 84–92]
+   ✓ note 4 pitch                    96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ note 4 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 5 pitch                    97 → 97      (master 97/97/97/97/97; branch 97/97/97/97/97)  [master's range 97–97 or ±1%: 95–99]
+   ✓ note 5 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 6 pitch                    96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ note 6 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 7 pitch                    95 → 95      (master 95/95/95/95/95; branch 95/95/95/95/95)  [master's range 95–95 or ±1%: 93–97]
+   ✓ note 7 timing                   89 → 89      (master 92/86/89/96/86; branch 89/86/89/89/92)  [master's range 86–96 or ±1%: 86–96]
+   ✓ note 8 pitch                    96 → 95      (master 95/95/96/96/96; branch 96/95/96/95/95)  [master's range 95–96 or ±1%: 94–98]
+   ✓ note 8 timing                   89 → 89      (master 92/86/89/96/86; branch 89/86/89/89/92)  [master's range 86–96 or ±1%: 86–96]
+   ✓ notes heard                      8 → 8       (master 8/8/8/8/8; branch 8/8/8/8/8)  [master's range 8–8 or ±1%: 6–10]
+   ✓ pitch                           96 → 96      (master 96/96/96/96/96; branch 96/95/96/96/95)  [master's range 96–96 or ±1%: 94–98]
+   ✓ timing                          55 → 56      (master 57/54/55/58/55; branch 56/54/56/56/56)  [master's range 54–58 or ±1%: 53–58]
+   ✓ technique                       76 → 76      (master 77/75/76/77/76; branch 76/75/76/76/76)  [master's range 75–77 or ±1%: 74–78]
+   ✓ result: technique               76 → 76      (master 77/75/76/77/76; branch 76/75/76/76/76)  [master's range 75–77 or ±1%: 74–78]
+   ✓ result: pitch                   96 → 96      (master 96/96/96/96/96; branch 96/95/96/96/95)  [master's range 96–96 or ±1%: 94–98]
+   ✓ result: timing                  55 → 56      (master 57/54/55/58/55; branch 56/54/56/56/56)  [master's range 54–58 or ±1%: 53–58]
+   ✓ result: dynamics                 0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ skill pitch recorded            96 → 96      (master 96/96/96/96/96; branch 96/95/96/96/95)  [master's range 96–96 or ±1%: 94–98]
+-- Stay in Key
+   ✓ in key %                        97 → 98      (master 97/98/97/98/97; branch 96/98/98/98/98)  [master's range 97–98 or ±1%: 95–99]
+   ✓ scored (over 10 voiced frames)       1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ result: big number              97 → 98      (master 97/98/97/98/97; branch 96/98/98/98/98)  [master's range 97–98 or ±1%: 95–99]
+   ✓ skill pitch recorded            97 → 98      (master 97/98/97/98/97; branch 96/98/98/98/98)  [master's range 97–98 or ±1%: 95–99]
+-- Karaoke Coach
+   ✓ note 1 pitch                    96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ note 1 timing                   34 → 34      (master 34/37/34/34/37; branch 34/34/34/34/34)  [master's range 34–37 or ±1%: 32–37]
+   ✓ note 2 pitch                    95 → 95      (master 96/95/95/95/95; branch 95/95/95/95/95)  [master's range 95–96 or ±1%: 93–97]
+   ✗ note 2 timing                   89 → 92      (master 89/89/86/89/86; branch 92/92/92/89/89)  [master's range 86–89 or ±1%: 86–91]
+   ✓ note 3 pitch                    95 → 95      (master 95/95/95/95/95; branch 95/95/95/95/95)  [master's range 95–95 or ±1%: 93–97]
+   ✓ note 3 timing                   89 → 89      (master 89/89/86/89/86; branch 80/92/92/89/89)  [master's range 86–89 or ±1%: 86–91]
+   ✓ note 4 pitch                    96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ note 4 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 5 pitch                    97 → 97      (master 97/97/97/97/97; branch 97/97/97/97/97)  [master's range 97–97 or ±1%: 95–99]
+   ✓ note 5 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 6 pitch                    96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ note 6 timing                    0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ note 7 pitch                    95 → 95      (master 95/95/95/95/95; branch 95/95/95/95/95)  [master's range 95–95 or ±1%: 93–97]
+   ✓ note 7 timing                   89 → 89      (master 89/89/86/89/86; branch 83/92/94/89/89)  [master's range 86–89 or ±1%: 86–91]
+   ✓ note 8 pitch                    95 → 95      (master 96/95/95/95/95; branch 95/95/95/95/96)  [master's range 95–96 or ±1%: 93–97]
+   ✓ note 8 timing                   89 → 89      (master 89/89/86/89/86; branch 92/92/83/89/89)  [master's range 86–89 or ±1%: 86–91]
+   ✓ notes heard                      8 → 8       (master 8/8/8/8/8; branch 8/8/8/8/8)  [master's range 8–8 or ±1%: 6–10]
+   ✓ pitch                           96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ timing                          49 → 49      (master 49/49/47/49/48; branch 48/50/49/49/49)  [master's range 47–49 or ±1%: 47–51]
+   ✓ result: pitch                   96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ result: timing                  49 → 49      (master 49/49/47/49/48; branch 48/50/49/49/49)  [master's range 47–49 or ±1%: 47–51]
+   ✓ song best                       73 → 73      (master 73/73/73/73/73; branch 73/73/73/73/73)  [master's range 73–73 or ±1%: 71–75]
+   ✓ mission 1 done                   1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ mission 1 value                 96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ mission 2 done                   1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ mission 2 value                 97 → 97      (master 97/97/97/97/97; branch 97/97/97/97/97)  [master's range 97–97 or ±1%: 95–99]
+   ✓ mission 3 done                   1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ mission 3 value                 95 → 95      (master 96/95/95/95/95; branch 95/95/95/95/96)  [master's range 95–96 or ±1%: 93–97]
+   ✓ mission 4 done                   1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ mission 4 value                  — → —       (master —/—/—/—/—; branch —/—/—/—/—)
+   ✓ mission 5 done                   1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ mission 5 value                 97 → 97      (master 97/97/97/97/97; branch 97/97/97/97/97)  [master's range 97–97 or ±1%: 95–99]
+   ✓ mission 6 done                   0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ mission 6 value                 49 → 49      (master 49/49/47/49/48; branch 48/50/49/49/49)  [master's range 47–49 or ±1%: 47–51]
+   ✓ mission 7 done                   1 → 1       (master 1/1/1/1/1; branch 1/1/1/1/1)  [master's range 1–1 or ±1%: -1–3]
+   ✓ mission 7 value                 96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ skill pitch recorded            96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+-- Emotional Singing
+   ✓ pitch                           96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ expression                       0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ result: pitch                   96 → 96      (master 96/96/96/96/96; branch 96/96/96/96/96)  [master's range 96–96 or ±1%: 94–98]
+   ✓ result: expression               0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+   ✓ coach line                 flatdynamics → flatdynamics (master flatdynamics/flatdynamics/flatdynamics/flatdynamics/flatdynamics; branch flatdynamics/flatdynamics/flatdynamics/flatdynamics/flatdynamics)
+   ✓ skill expression recorded        0 → 0       (master 0/0/0/0/0; branch 0/0/0/0/0)  [master's range 0–0 or ±1%: -2–2]
+
+GATE: 1 differences beyond the gate (±2; Rhythm's average within the A/A range {"onbeat":[90,91],"late60":[52,56]}, its per-beat values reported; master's own range or ±1%, whichever is wider, on mirror, voicequality, emotionmode, registerdrills, pd, staykey, karaoke, emotion)
+log: scripts/design-verify/logs/scores-2026-11-24T10-24-34.log  json: scripts/design-verify/logs/scores-2026-11-24T10-24-34.json
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvsc-1795515880955@example.com
