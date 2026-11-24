@@ -9,6 +9,13 @@
 //   profile   saveProfile #1 (name A) answered after saveProfile #2 (name B): the page keeps B; the server keeps B
 //   warmup    wuServerSync's read of /me/progress (yesterday's warm-up day) answered after the save that counts today's
 //             warm-up: the page keeps today's day and streak
+//   (H2) warm-up count, while its read of /me/progress is out a save goes out (a score, +2 XP: the page's whole row):
+//   elsewhere the warm-up was already counted today on another device (the server: today, streak +1, XP +5, warm-ups +1
+//             when the read was served): counted once: today, streak +1 once, XP +5 once (plus the score's 2),
+//             warm-ups +1 once, on the page and the server
+//   nowhere   not counted anywhere yet: counted once, the same
+//   quiet     (no save meanwhile) counted on another device: the page takes the count's XP too, and keeps it at its next
+//             save (F took only the day and streak: the other device's +5 was lost)
 //   vocal     loadVocalLoadToday's read of /me/vocal-load answered after a checkpoint the outbox sent meanwhile was
 //             confirmed: the gauge's total includes that checkpoint
 // Usage: node scripts/reliability-verify/outoforder.js [--ref <git ref>]   (default: the working copy's deploy/; DV_URL: that site)
@@ -34,11 +41,12 @@ const waitFor = async (fn, ms) => { const t = Date.now() + ms; for (;;) { const 
       if (fail503[k]) { fail503[k]--; return r.fulfill({ status: 503, contentType: 'application/json', body: '{"error":"Service Unavailable"}' }); }
       if (!hold[k]) return r.continue();
       hold[k] = false;
-      const resp = await r.fetch(); // the server has done it
+      const fetched = r.fetch(); // sent on to the server at once (through the local stack's slow proxy, only its answer waits)
       let release; const p = new Promise(res => { release = res; });
-      held[k] = { release, answered: false, body: await resp.text() };
+      held[k] = { release, answered: false };
+      const resp = await fetched, body = await resp.text();
       await p;
-      await r.fulfill({ response: resp, body: held[k].body });
+      await r.fulfill({ response: resp, body });
       held[k].answered = true;
     }) });
     const holdNext = k => { hold[k] = true; delete held[k]; };
@@ -110,6 +118,53 @@ const waitFor = async (fn, ms) => { const t = Date.now() + ms; for (;;) { const 
       const now = await page.evaluate(() => ({ day: progress.lastWarmupDay, streak: progress.warmupStreak, counted: wuCountedToday() }));
       check('warm-up day: the page keeps today\'s day and streak after the older read lands', now.day === today && now.streak === 3 && now.counted,
         `day ${now.day} (want ${today}), streak ${now.streak}, counted today ${now.counted}`);
+    });
+
+    // H2: the warm-up count (wuCount: its read of /me/progress, then the count if today's isn't counted)
+    const yday = () => page.evaluate(() => { const d = new Date(); d.setDate(d.getDate() - 1); return d.toLocaleDateString('en-CA'); });
+    const row = () => db(`select xp, warmups_completed as w, last_warmup_day::text as d, warmup_streak as s from public.user_progress where user_id = '${uid}'`)[0];
+    // the page and the server on yesterday's warm-up (streak 2), the page's xp and warm-ups on the server too
+    const fromYesterday = async () => {
+      await page.evaluate(() => Promise.allSettled([...progressSaving]));
+      const y = await yday();
+      await page.evaluate(async d => { progress.lastWarmupDay = d; progress.warmupStreak = 2; await saveProgress(); await Promise.allSettled([...progressSaving]); }, y);
+      return { ...await page.evaluate(() => ({ xp: progress.xp || 0, w: progress.warmupsCompleted || 0, today: todayStr() })), y };
+    };
+    const countWith = async (k0, { elsewhere, save }) => {
+      const k = 'GET /me/progress';
+      if (elsewhere) db(`update public.user_progress set last_warmup_day = '${k0.today}', warmup_streak = 3, xp = ${k0.xp + 5}, warmups_completed = ${k0.w + 1} where user_id = '${uid}'`);
+      holdNext(k);
+      await page.evaluate(() => { window.__s = null; window.__c = wuCount(); });
+      const ok = !!await whenHeld(k);
+      // a score's save (the page's whole row) goes out while the read is out; the read's answer lands 300 ms later
+      if (save) { await page.evaluate(() => { progress.xp += 2; window.__s = saveProgress(); }); await C.sleep(300); }
+      await releaseAndWait(k); await page.evaluate(() => Promise.all([window.__c, window.__s]));
+      await page.evaluate(() => Promise.allSettled([...progressSaving])); await C.sleep(500);
+      return ok;
+    };
+    const counted = async (name, k0, extra) => {
+      const p = await page.evaluate(() => ({ xp: progress.xp, w: progress.warmupsCompleted, d: progress.lastWarmupDay, s: progress.warmupStreak }));
+      const s = row(), want = { xp: k0.xp + 5 + extra, w: k0.w + 1, d: k0.today, s: 3 };
+      const same = o => o.xp === want.xp && o.w === want.w && o.d === want.d && o.s === want.s;
+      check(`${name}: counted once on the page (today, streak 3, XP +5${extra ? ` +${extra}` : ''}, warm-ups +1)`, same(p), `page ${JSON.stringify(p)} want ${JSON.stringify(want)}`);
+      check(`${name}: …and on the server`, same(s), `server ${JSON.stringify(s)}`);
+    };
+
+    await C.G.step('warmup-elsewhere', 60, async () => {
+      const k0 = await fromYesterday();
+      check('elsewhere: the count\'s read reached the server (today already counted there), its answer held', await countWith(k0, { elsewhere: true, save: true }));
+      await counted('elsewhere', k0, 2);
+    });
+    await C.G.step('warmup-nowhere', 60, async () => {
+      const k0 = await fromYesterday();
+      check('nowhere: the count\'s read reached the server (yesterday), its answer held', await countWith(k0, { elsewhere: false, save: true }));
+      await counted('nowhere', k0, 2);
+    });
+    await C.G.step('warmup-quiet', 60, async () => {
+      const k0 = await fromYesterday();
+      check('quiet: the count\'s read reached the server (today already counted there), its answer held', await countWith(k0, { elsewhere: true, save: false }));
+      await page.evaluate(async () => { progress.lastBossWeakness = 'h2-quiet'; await saveProgress(); await Promise.allSettled([...progressSaving]); }); // the page's next save
+      await counted('quiet (after the page\'s next save)', k0, 0);
     });
 
     await C.G.step('vocal', 40, async () => {

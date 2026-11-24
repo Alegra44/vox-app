@@ -83,6 +83,8 @@ const warm = page => page.evaluate(async () => {
 // (seen on production, where an answer takes longer: the day only ever moves forward for a user, never back as here).
 const rearm = page => page.evaluate(async () => {
   const drain = async () => { for (let i = 0; i < 100 && typeof progressSaving !== 'undefined' && progressSaving.size; i++) await Promise.allSettled([...progressSaving]); };
+  // a warm-up count still out (its server read, up to 5 s, then its save) would bring today back after the day is cleared
+  for (let i = 0; i < 20 && typeof wuCounting !== 'undefined' && wuCounting; i++) await Promise.allSettled([wuCounting]);
   await drain();
   wuPassedKey = null; try { localStorage.removeItem(wuKey()); } catch (e) {}
   if (profile && progress && 'lastWarmupDay' in progress) { progress.lastWarmupDay = null; await saveProgress(); await drain(); }
