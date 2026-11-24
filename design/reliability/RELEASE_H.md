@@ -151,3 +151,54 @@ batch3c (7 failures) and warmup-entries (1) failed on F's live deployment too, a
 4. THEN SURVEY I, silent, exactly as in my last message (the detector's octave decisions in noise, on survey/octave from master; no app changes).
 
 REPORT, then stop. Nothing merges or deploys until I've reviewed H2.
+
+## H2: what changed
+
+### Every read H throws away when a save goes out, and what H2 does
+
+| read | its fields | H | H2 |
+|---|---|---|---|
+| `wuServerSync` (GET /me/progress: the warm-up count's read, 5 s; the gate's, 1.5 s) | `lastWarmupDay`, `warmupStreak`; and, H2, `xp`, `warmupsCompleted` | thrown away if any progress save went out while it was out: the count then ran from the page's memory, on a warm-up already counted (production's warmup-tracking timeout) | **merged field by field** (`wuMergeServer`), whether or not a save went out. A later warm-up day than the page's is a count the page hasn't seen: the page takes its day and streak and what it added, XP the higher of (the page's + 5) and the server's, the warm-up count the higher of (the page's + 1) and the server's, so a score's XP saved meanwhile isn't lost and the count isn't added twice. Same day: the higher streak. If a save went out meanwhile (it sent the page's whole row, so the server may now be behind) and the merge moved anything, progress is saved again. All four fields only move forward: Erase my progress keeps them (PROGRESS_ERASED). Applied only to the account the read was for |
+| `loadVocalLoadToday` (GET /me/vocal-load: the day's total, `vlDay`) | `vlDay.load` for `vlDay.day` | thrown away if a newer read started or a session finished (`vlFinish`) meanwhile | applied as before when nothing newer wrote vlDay; otherwise **merged** when it is the same account's same day: the higher total (a day's load only grows; both totals count what had reached the server or the outbox by then). A read for another day or account is still thrown away |
+
+Not merged, and why: an **older save's answer** (`saveProgress`, `saveProfile`) is still dropped. It is the server's
+row after an older write; the newest save's answer carries everything the older ones sent, and merging an older row
+(even forward-only fields) would bring back values a newer save replaced. `loadProgress` / `loadProfile` were never
+dropped (they run before anything saves).
+
+Also found, F's and H's both (outoforder's new "quiet" case): with no save in between, the read took only the other
+device's day and streak, not its +5 XP and warm-up, so this page's next save wrote over them. H2's merge takes them.
+
+Still not fixed (not this release's): saveProgress sends the page's whole row, so two devices saving close together
+still overwrite each other's other fields (the last write wins). Only a server that adds (xp + 5) instead of storing
+totals would fix that.
+
+### The check that timed out on production
+
+warmup-tracking's `rearm` (scripts/warmup-verify/common.js) clears the warm-up day and saves; a count still out (its
+read, then its save) put today back. `rearm` now waits out `wuCounting` first, as it already waited out saves. With
+H2's merge, a read answered before the clear still brings today back (correctly: the server said so when it answered),
+so the wait is needed for any build.
+
+### outoforder.js's new cases (H2)
+
+A save (a score: +2 XP, the page's whole row) goes out while the warm-up count's read is out:
+- **elsewhere:** the warm-up already counted today on another device (on the server when the read was served: today,
+  streak 3, XP +5, warm-ups +1): counted once, on the page and the server: today, streak 3, XP +5 once (+2), warm-ups +1.
+- **nowhere:** not counted anywhere yet: counted once, the same.
+- **quiet** (no save in between): counted on another device: the page takes its +5 and +1, and keeps them at its next save.
+
+Requests are now held from when they are sent on to the stack (the stack does the work at once; only the answer to
+the page waits), so the warm-up count's 5 s read limit holds under the slow proxy.
+
+### The slow, shuffled proxy (scripts/localBackend.js, from now on for every local-stack check)
+
+Every answer from the local stack reaches the page or the script 200–1500 ms late (random; the stack itself answers
+at once), and about one answer in four, when another request is out, waits for the next answer and is delivered right
+after it. On by default with VOX_BACKEND=local; VOX_SLOW=0 turns it off; each process prints its VOX_SLOW_SEED, and
+setting it repeats the draws. CORS preflights go straight. Checked: 12 requests at once answered in 255–1509 ms, in a
+shuffled order; with VOX_SLOW=0, 15 ms.
+
+First runs through it (scripts/reliability-verify/logs/h2-dev-03-44/): outoforder on this branch 22/22; on H1 (save/h)
+20/22 (both "quiet" checks); on master 10/22 (every H case, and H2's: on master the proxy's own swap put an older save's
+answer over the count, the original H bug, unprompted).
