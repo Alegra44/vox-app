@@ -122,3 +122,32 @@ either writes its lease, and then both send; the server's upsert takes absolute 
 nothing. Run 5 times on master's deploy/ and 5 on this branch, alternating, local stack: **10 of 10 PASS (40/40 each)**.
 The session went out as 2 PUTs in 8 runs and 1 PUT in 2, every time stored once.
 prodH.sh (the production checks) and outoforder.js's DV_URL mode (the deployed page, production backend) are ready.
+
+## Rolled back (2026-11-24)
+
+Deployed as dpl_486d1VkPCWcntBPadLbHLyaMuh39 (merge 6bc489f). On production, warmup-tracking timed out twice on H and
+passed 28/28 on F's deployment in the same run (review/saveH-prod, design/reliability/review-h-prod/NOTES.md), so the
+user promoted F back (dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h) and master reverted the merge (c0c11f9). Likely cause: H drops
+wuServerSync's read when a progress save went out while it was out, so the warm-up count decides from memory alone; a
+warm-up already counted today (on another device, or written back by a save) can be counted again.
+
+## H2: the user's step (verbatim)
+
+I've run the rollback line. AC power, the run lock and time limits on.
+
+1. CONFIRM AND REVERT
+- Confirm deploy-alegra1122.vercel.app serves dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h again.
+- Revert the H merge on master (git revert -m 1 6bc489f), so master matches production. Secret check, push. HANDOFF: H rolled back and why (a read thrown away when a save went out, so a warm-up done on another device could count twice); the rollback target stays F.
+
+2. THE TWO CHECKS THAT ALSO FAIL ON F
+batch3c (7 failures) and warmup-entries (1) failed on F's live deployment too, and both passed during F's own production run. Find out what changed: the check, the time of day (the run was around 4 AM, near the local-day switch), data, or the app. Report the cause. Don't change the app without my review.
+
+3. H AGAIN, on a new branch save/h2 from master
+- Bring H back (revert the revert), then the fix: wuServerSync merges the server's answer field by field instead of throwing it away. The later warm-up day wins; on the same day, the higher streak. Check every other read that H throws away when a save goes out, and use a merge wherever its fields only move forward. List each in RELEASE_H.md.
+- New cases in outoforder.js: a save goes out while the warm-up read is out, and the warm-up was already counted on another device: counted once (XP +5 once, streak +1 once). And the reverse: not yet counted anywhere: counted once.
+- Slow, shuffled answers for every local-stack check from now on: a proxy in front of the local stack that delays each response by a random 200–1500 ms (and sometimes swaps two), so races show up before production. Run outoforder, warmup-tracking, streak, progresssave and the outbox through it, 5 times each, on master and the branch.
+- The rest as before: progresssave, the vocal-load suite with the outbox, roundtrip, levelup, youstates, house, bootcheck. Secret check, push save/h2.
+
+4. THEN SURVEY I, silent, exactly as in my last message (the detector's octave decisions in noise, on survey/octave from master; no app changes).
+
+REPORT, then stop. Nothing merges or deploys until I've reviewed H2.
