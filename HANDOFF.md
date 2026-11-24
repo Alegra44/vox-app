@@ -4,12 +4,14 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-23)
+## Branches on GitHub (2026-11-24)
 
 | Branch | What it is |
 |---|---|
 | `master` | Everything, through release F, the warm-up (merge dc3abb2), live as dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h |
 | `review/warmupF-prod` | Release F's production checks (design/warmup/review-f-prod/: logs, NOTES.md, prodF.sh) |
+| `save/h` | Release H, saves whose answers arrive out of order: deployed 2026-11-23, rolled back (below); its merge is reverted on master |
+| `review/saveH-prod` | Release H's production checks (design/reliability/review-h-prod/: logs, NOTES.md) |
 | `accuracy/g` | Release G, the octave hold in Pitch Dragon and the Rift: failed its gate, not shipping (design/accuracy/RELEASE_G.md); kept as a record, never to merge |
 | `survey/guard` | The speaker-guard survey (design/accuracy/GUARD.md), parked before part c (a real voice from a phone) |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
@@ -867,6 +869,14 @@ Spec, results and the user's review: design/warmup/RELEASE_F.md (the survey: des
 - Queue: Octave slips in noisy rooms: a short hold can't bridge long slips. The next idea is in the detector itself
   (prefer the octave that continues the last steady pitch when both peaks are close), which touches every tool, so it
   waits.
+- **Release H (2026-11-23/24), rolled back:** merged (6bc489f) and deployed as dpl_486d1VkPCWcntBPadLbHLyaMuh39;
+  production warmup-tracking timed out twice on H and passed 28/28 on F's deployment in the same run, so the user
+  promoted F back (dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h, confirmed with `vercel inspect`). Why: H throws away a read
+  whose answer lands after a save went out. wuServerSync's read of /me/progress is one, so the warm-up count decides
+  from memory alone, and a warm-up already done today on another device could be counted twice (+5 XP and the
+  streak twice). The merge is reverted on master (git revert -m 1 6bc489f) so master matches production. **The
+  rollback target stays F, dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h.** H again, with that read merged instead of dropped,
+  is on `save/h2` (design/reliability/RELEASE_H.md).
 
 ## Waiting on the user (don't start without a go-ahead)
 
