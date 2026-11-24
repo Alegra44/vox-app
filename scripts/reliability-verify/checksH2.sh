@@ -7,7 +7,9 @@
 #     proxy and the test fixes), M=<dir>, default ../voxcoach-m
 #   phase B (the rest, this branch): erasecheck, the vocal-load suite (verify, persist, live, pilot, batch1, batch2,
 #     batch3a, batch3b, batch3c; the outbox is in A), roundtrip, levelup, youstates, house, hooks, bootcheck
-# Logs: scripts/reliability-verify/logs/checksH2-<stamp>/. Usage: bash scripts/reliability-verify/checksH2.sh [A] [B]
+#   phase C (the ones that failed in A or B, master and this branch alternating): outbox ×5 (after its reload-wait fix),
+#     batch2 ×2, batch3b ×2, pilot ×1
+# Logs: scripts/reliability-verify/logs/checksH2-<stamp>/. Usage: bash scripts/reliability-verify/checksH2.sh [A] [B] [C]
 cd "$(dirname "$0")/../.."
 B_DIR=$PWD; M_DIR=${M:-$(cd ../voxcoach-m && pwd)}
 [ -z "$VOXCOACH_RUN_LOCK" ] && exec node scripts/runguard.js run --name "checksH2 $*" --limit-min 0 -- bash "$PWD/scripts/reliability-verify/checksH2.sh" "$@"
@@ -62,6 +64,16 @@ if [[ " $PHASES " == *" B "* ]]; then
   for s in "${REST[@]}"; do
     IFS='|' read -r name mins cmd <<< "$s"
     run "$B_DIR" "$name" "$mins" "$cmd"
+  done
+fi
+if [[ " $PHASES " == *" C "* ]]; then
+  for s in "outbox|24|5|node scripts/vocal-load-verify/outbox.js" "batch2|70|2|node scripts/vocal-load-verify/batch2.js" \
+           "batch3b|90|2|node scripts/vocal-load-verify/batch3b.js" "pilot|40|1|node scripts/vocal-load-verify/pilot.js"; do
+    IFS='|' read -r name mins times cmd <<< "$s"
+    for i in $(seq 1 "$times"); do
+      run "$M_DIR" "$name-master-$i" "$mins" "$cmd"
+      run "$B_DIR" "$name-branch-$i" "$mins" "$cmd"
+    done
   done
 fi
 echo "$(date +%T) ALL DONE" >> "$OUT/progress.txt"
