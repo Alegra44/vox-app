@@ -4,14 +4,15 @@ State of the project when it moved machines. The detailed history of every featu
 and the commit messages carry deploy IDs and check results. This file covers what's in flight, what's waiting
 on a decision, and how to set the machine up again. It contains no secrets.
 
-## Branches on GitHub (2026-11-24)
+## Branches on GitHub (2026-11-25)
 
 | Branch | What it is |
 |---|---|
-| `master` | Everything, through release F, the warm-up (merge dc3abb2), live as dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h |
+| `master` | Everything, through release H2, saves answered out of order (merge fee7bcf), live as dpl_A5EJRUAnPUdykqW7nckBa8957xx3 |
 | `review/warmupF-prod` | Release F's production checks (design/warmup/review-f-prod/: logs, NOTES.md, prodF.sh) |
-| `save/h` | Release H, saves whose answers arrive out of order: deployed 2026-11-23, rolled back (below); its merge is reverted on master |
-| `review/saveH-prod` | Release H's production checks (design/reliability/review-h-prod/: logs, NOTES.md) |
+| `review/saveH2-prod` | Release H2's production checks (design/reliability/review-h2-prod/: logs, NOTES.md) and batch3c's seed fix (2d626e6, test-only, not on master yet) |
+| `survey/octave` | Survey I, octave slips in noisy rooms (design/accuracy/SURVEY_I.md, scripts/survey-i/): kept as its record |
+| `survey/stale` | Survey J, a tab left open overwriting another device's progress (design/reliability/SURVEY_J.md) |
 | `accuracy/g` | Release G, the octave hold in Pitch Dragon and the Rift: failed its gate, not shipping (design/accuracy/RELEASE_G.md); kept as a record, never to merge |
 | `survey/guard` | The speaker-guard survey (design/accuracy/GUARD.md), parked before part c (a real voice from a phone) |
 | `review/phase10-prod` | Orphan, no code: phase 10's production checks (all pass after reruns), README |
@@ -27,14 +28,15 @@ review/scoringB-prod. On 2026-11-18, after release D's production checks: accura
 survey/d (its SURVEY_D.md and scripts/survey-d/out/ copied to master) and review/dayC-prod. On 2026-11-22, after
 release E's production checks: accuracy/e (merged) and review/accuracyD-prod. On 2026-11-23, after release F's
 production checks: warmup/f (merged), review/warmupF, survey/warmup (its WARMUP.md, measurements and shots copied to
-master's design/warmup/, c46ca45) and review/accuracyE-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
+master's design/warmup/, c46ca45) and review/accuracyE-prod. On 2026-11-25, after release H2's production checks:
+save/h, save/h2 (merged) and review/saveH-prod. Local only: `scratch/survey-d` (Survey D's trial fixes, never pushed) and `scratch/scoring-fix` (the survey's scratch build, never pushed;
 its worktree removed).
 
 **The House Lights redesign is complete (phases 1–10, HOUSE_LIGHTS.md v3.0).**
 
-Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-23:
-release F, the warm-up, **dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h** (master's merge dc3abb2), **the rollback target from now
-on**, with migration 0011 (`last_warmup_day`, `warmup_streak`) and the api Edge Function with them on the allow-list
+Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-24:
+release H2, saves answered out of order, **dpl_A5EJRUAnPUdykqW7nckBa8957xx3** (master's merge fee7bcf; app-only),
+**the rollback target from now on**. Before it, release F, the warm-up, dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h (merge dc3abb2), with migration 0011 (`last_warmup_day`, `warmup_streak`) and the api Edge Function with them on the allow-list
 (a rollback of the app leaves both: the old app doesn't send the fields). Before it, release E, the vibrato blend,
 dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB (2026-11-22); before that release D, Survey D's fixes,
 dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm (2026-11-18); before that release C, the local day,
@@ -877,6 +879,17 @@ Spec, results and the user's review: design/warmup/RELEASE_F.md (the survey: des
   streak twice). The merge is reverted on master (git revert -m 1 6bc489f) so master matches production. **The
   rollback target stays F, dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h.** H again, with that read merged instead of dropped,
   is on `save/h2` (design/reliability/RELEASE_H.md).
+- **Release H2 (2026-11-24/25), live: dpl_A5EJRUAnPUdykqW7nckBa8957xx3, the rollback target.** H's save numbering
+  plus wuServerSync's read merged field by field (wuMergeServer) and the vocal-load day read kept when the server's
+  is higher (RELEASE_H.md "H2"). Merged --no-ff (fee7bcf), deployed by the user, confirmed with `vercel inspect`
+  and a byte comparison. Production checks (review/saveH2-prod, NOTES.md) all pass: pageload, stopcheck and
+  outoforder timed out at sign-up once and passed on the rerun (F's deployment in the same run alike); batch3c's
+  seed was refused from local midnight to UTC midnight (no `tz_offset_min`, so 0010's CHECK wanted the UTC date) on
+  H2 and F alike, fixed test-only (2d626e6 on review/saveH2-prod: to bring to master), then 40/40. 0 test accounts left.
+  Local-stack checks go through scripts/localBackend.js's slow, shuffled proxy from now on (VOX_SLOW=0 turns it off).
+- Queue: Octave slips, part 2: the continuity rule gains only 13–19% at 10 dB (most wrong frames come where there's
+  no steady pitch). Next idea: take the first peak within 85% of the highest (babble 15.5% → 8.5%), but it changes
+  clean frames, so it needs its own survey. Low priority. (Survey I: design/accuracy/SURVEY_I.md on `survey/octave`.)
 
 ## Waiting on the user (don't start without a go-ahead)
 
