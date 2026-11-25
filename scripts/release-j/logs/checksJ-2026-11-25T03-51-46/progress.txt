@@ -1,0 +1,850 @@
+09:21:46 start merge-unit-1
+09:21:48 done  merge-unit-1 PASS (0 min) MERGE-UNIT: PASS (0 failed)
+09:21:48 start stale-master-1
+09:25:01 done  stale-master-1 FAIL (exit 1) (3 min) STALE: LOST (82: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+09:25:01 start stale-branch-1
+09:28:38 done  stale-branch-1 PASS (3 min) STALE: NOTHING LOST (0: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+09:28:38 start lostanswer-master-1
+09:29:03 done  lostanswer-master-1 FAIL (exit 1) (0 min) LOSTANSWER: FAIL (1 passed, 1 failed)
+09:29:03 start lostanswer-branch-1
+09:29:30 done  lostanswer-branch-1 PASS (0 min) LOSTANSWER: PASS (2 passed, 0 failed)
+09:29:30 start erase-stale-master-1
+09:30:02 done  erase-stale-master-1 FAIL (exit 1) (0 min) ERASE-STALE: FAIL (4 passed, 6 failed)
+09:30:02 start erase-stale-branch-1
+09:30:38 done  erase-stale-branch-1 PASS (0 min) ERASE-STALE: PASS (10 passed, 0 failed)
+09:30:38 start twotabs-master-1
+09:31:15 done  twotabs-master-1 FAIL (exit 1) (0 min) TWOTABS: FAIL (1 passed, 6 failed)
+09:31:15 start twotabs-branch-1
+09:32:02 done  twotabs-branch-1 PASS (0 min) TWOTABS: PASS (7 passed, 0 failed)
+09:32:02 start outoforder-master-1
+09:32:48 done  outoforder-master-1 PASS (0 min) OUTOFORDER: PASS (22 passed, 0 failed)
+09:32:48 start outoforder-branch-1
+09:34:03 done  outoforder-branch-1 PASS (1 min) OUTOFORDER: PASS (30 passed, 0 failed)
+09:34:03 start oldapp-branch-1
+09:34:31 done  oldapp-branch-1 PASS (0 min) OLDAPP: PASS (6 passed, 0 failed)
+09:34:31 start progresssave-master-1
+09:35:32 done  progresssave-master-1 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+09:35:32 start progresssave-branch-1
+09:36:35 done  progresssave-branch-1 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+09:36:35 start erasecheck-master-1
+09:36:59 done  erasecheck-master-1 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+09:36:59 start erasecheck-branch-1
+09:37:22 done  erasecheck-branch-1 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+09:37:22 start streak-master-1
+09:38:37 done  streak-master-1 PASS (1 min) 15 passed, 0 failed
+09:38:37 start streak-branch-1
+09:39:55 done  streak-branch-1 PASS (1 min) 15 passed, 0 failed
+09:39:55 start roundtrip-master-1
+09:40:02 done  roundtrip-master-1 PASS (0 min) 4 passed, 0 failed
+09:40:03 start roundtrip-branch-1
+09:40:10 done  roundtrip-branch-1 PASS (0 min) 4 passed, 0 failed
+09:40:10 start levelup-master-1
+09:41:35 done  levelup-master-1 FAIL (exit 1) (1 min) 44 passed, 3 failed
+09:41:35 start levelup-branch-1
+09:43:03 done  levelup-branch-1 PASS (1 min) 47 passed, 0 failed
+09:43:03 start outbox-master-1
+09:44:32 done  outbox-master-1 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+09:44:32 start outbox-branch-1
+09:46:01 done  outbox-branch-1 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+09:46:01 start warmup-tracking-master-1
+09:49:34 done  warmup-tracking-master-1 FAIL (exit 1) (3 min) ==== warm-up tracking: 27 passed, 3 failed
+09:49:34 start warmup-tracking-branch-1
+09:53:12 done  warmup-tracking-branch-1 FAIL (exit 1) (3 min) ==== warm-up tracking: 27 passed, 3 failed
+09:53:12 start bootcheck-master-1
+09:53:58 done  bootcheck-master-1 PASS (0 min) 9 passed, 0 failed
+09:53:58 start bootcheck-branch-1
+09:54:43 done  bootcheck-branch-1 PASS (0 min) 9 passed, 0 failed
+09:54:43 start youstates-1
+09:55:42 done  youstates-1 PASS (0 min) YOUSTATES: PASS: equal except the expected changes
+09:55:42 start hooks-1
+09:55:44 done  hooks-1 PASS (0 min) 21 passed, 0 failed (base master)
+09:55:44 start merge-unit-2
+09:55:46 done  merge-unit-2 PASS (0 min) MERGE-UNIT: PASS (0 failed)
+09:55:46 start stale-master-2
+09:59:05 done  stale-master-2 FAIL (exit 1) (3 min) STALE: LOST (82: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+09:59:05 start stale-branch-2
+10:03:02 done  stale-branch-2 PASS (3 min) STALE: NOTHING LOST (0: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+10:03:02 start lostanswer-master-2
+10:03:28 done  lostanswer-master-2 FAIL (exit 1) (0 min) LOSTANSWER: FAIL (1 passed, 1 failed)
+10:03:28 start lostanswer-branch-2
+10:03:55 done  lostanswer-branch-2 PASS (0 min) LOSTANSWER: PASS (2 passed, 0 failed)
+10:03:55 start erase-stale-master-2
+10:04:32 done  erase-stale-master-2 FAIL (exit 1) (0 min) ERASE-STALE: FAIL (4 passed, 6 failed)
+10:04:32 start erase-stale-branch-2
+10:05:07 done  erase-stale-branch-2 PASS (0 min) ERASE-STALE: PASS (10 passed, 0 failed)
+10:05:07 start twotabs-master-2
+10:05:45 done  twotabs-master-2 FAIL (exit 1) (0 min) TWOTABS: FAIL (1 passed, 6 failed)
+10:05:45 start twotabs-branch-2
+10:06:32 done  twotabs-branch-2 PASS (0 min) TWOTABS: PASS (7 passed, 0 failed)
+10:06:32 start outoforder-master-2
+10:07:15 done  outoforder-master-2 PASS (0 min) OUTOFORDER: PASS (22 passed, 0 failed)
+10:07:15 start outoforder-branch-2
+10:08:29 done  outoforder-branch-2 PASS (1 min) OUTOFORDER: PASS (30 passed, 0 failed)
+10:08:29 start oldapp-branch-2
+10:09:01 done  oldapp-branch-2 PASS (0 min) OLDAPP: PASS (6 passed, 0 failed)
+10:09:01 start progresssave-master-2
+10:10:04 done  progresssave-master-2 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+10:10:04 start progresssave-branch-2
+10:11:06 done  progresssave-branch-2 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+10:11:06 start erasecheck-master-2
+10:11:29 done  erasecheck-master-2 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+10:11:29 start erasecheck-branch-2
+10:11:53 done  erasecheck-branch-2 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+10:11:53 start streak-master-2
+10:12:26 done  streak-master-2 FAIL (exit 2) (0 min) 
+10:12:26 on battery: waiting
+10:13:26 on battery: waiting
+10:14:26 on battery: waiting
+10:15:26 on battery: waiting
+10:16:26 on battery: waiting
+10:17:26 on battery: waiting
+10:18:26 on battery: waiting
+10:19:26 on battery: waiting
+10:20:26 on battery: waiting
+10:21:26 on battery: waiting
+10:22:27 on battery: waiting
+10:23:27 on battery: waiting
+10:24:27 on battery: waiting
+10:25:27 on battery: waiting
+10:26:27 on battery: waiting
+10:27:27 on battery: waiting
+10:28:27 on battery: waiting
+10:29:27 on battery: waiting
+10:30:27 on battery: waiting
+10:31:27 on battery: waiting
+10:32:27 on battery: waiting
+10:33:27 on battery: waiting
+10:34:27 on battery: waiting
+10:35:27 on battery: waiting
+10:36:27 on battery: waiting
+10:37:27 on battery: waiting
+10:38:27 on battery: waiting
+10:39:27 on battery: waiting
+10:40:27 on battery: waiting
+10:41:27 on battery: waiting
+10:42:27 on battery: waiting
+10:43:28 on battery: waiting
+10:44:28 on battery: waiting
+10:45:28 on battery: waiting
+10:46:28 on battery: waiting
+10:47:28 on battery: waiting
+10:48:28 on battery: waiting
+10:49:28 on battery: waiting
+10:50:28 on battery: waiting
+10:51:28 on battery: waiting
+10:52:28 on battery: waiting
+10:53:28 on battery: waiting
+10:54:28 on battery: waiting
+10:55:28 on battery: waiting
+10:56:28 on battery: waiting
+10:57:28 on battery: waiting
+10:58:28 on battery: waiting
+10:59:28 on battery: waiting
+11:00:28 on battery: waiting
+11:01:28 on battery: waiting
+11:02:28 on battery: waiting
+11:03:28 on battery: waiting
+11:04:29 on battery: waiting
+11:05:29 on battery: waiting
+11:06:29 on battery: waiting
+11:07:29 on battery: waiting
+11:08:29 on battery: waiting
+11:09:29 on battery: waiting
+11:10:29 on battery: waiting
+11:11:29 on battery: waiting
+11:12:29 on battery: waiting
+11:13:29 on battery: waiting
+11:14:29 on battery: waiting
+11:15:29 on battery: waiting
+11:16:29 on battery: waiting
+11:17:29 on battery: waiting
+11:18:29 on battery: waiting
+11:19:29 on battery: waiting
+11:20:29 on battery: waiting
+11:21:29 on battery: waiting
+11:22:29 on battery: waiting
+11:23:29 on battery: waiting
+11:24:29 on battery: waiting
+11:25:30 on battery: waiting
+11:26:30 on battery: waiting
+11:27:30 on battery: waiting
+11:28:30 on battery: waiting
+11:29:30 on battery: waiting
+11:30:30 on battery: waiting
+11:31:30 on battery: waiting
+11:32:30 on battery: waiting
+11:33:30 on battery: waiting
+11:34:30 on battery: waiting
+11:35:30 on battery: waiting
+11:36:30 on battery: waiting
+11:37:30 on battery: waiting
+11:38:30 on battery: waiting
+11:39:30 on battery: waiting
+11:40:30 on battery: waiting
+11:41:30 on battery: waiting
+11:42:30 on battery: waiting
+11:43:30 on battery: waiting
+11:44:30 on battery: waiting
+11:45:30 on battery: waiting
+11:46:31 on battery: waiting
+11:47:31 on battery: waiting
+11:48:31 on battery: waiting
+11:49:31 on battery: waiting
+11:50:31 on battery: waiting
+11:51:31 on battery: waiting
+11:52:31 on battery: waiting
+11:53:31 on battery: waiting
+11:54:31 on battery: waiting
+11:55:31 on battery: waiting
+11:56:31 on battery: waiting
+11:57:31 on battery: waiting
+11:58:31 on battery: waiting
+11:59:31 on battery: waiting
+12:00:31 on battery: waiting
+12:01:31 on battery: waiting
+12:02:31 on battery: waiting
+12:03:31 on battery: waiting
+12:04:31 on battery: waiting
+12:05:31 on battery: waiting
+12:06:31 on battery: waiting
+12:07:31 on battery: waiting
+12:08:32 on battery: waiting
+12:09:32 on battery: waiting
+12:10:32 on battery: waiting
+12:11:32 on battery: waiting
+12:12:32 on battery: waiting
+12:13:32 on battery: waiting
+12:14:32 on battery: waiting
+12:15:32 on battery: waiting
+12:16:32 on battery: waiting
+12:17:32 on battery: waiting
+12:18:32 on battery: waiting
+12:19:32 on battery: waiting
+12:20:32 on battery: waiting
+12:21:32 on battery: waiting
+12:22:32 on battery: waiting
+12:23:32 on battery: waiting
+12:24:32 on battery: waiting
+12:25:32 on battery: waiting
+12:26:32 on battery: waiting
+12:27:32 on battery: waiting
+12:28:32 on battery: waiting
+12:29:32 on battery: waiting
+12:30:33 on battery: waiting
+12:31:33 on battery: waiting
+12:32:33 on battery: waiting
+12:33:33 on battery: waiting
+12:34:33 on battery: waiting
+12:35:33 on battery: waiting
+12:36:33 on battery: waiting
+12:37:33 on battery: waiting
+12:38:33 on battery: waiting
+12:39:33 on battery: waiting
+12:40:33 on battery: waiting
+12:41:33 on battery: waiting
+12:42:33 on battery: waiting
+12:43:33 on battery: waiting
+12:44:33 on battery: waiting
+12:45:33 on battery: waiting
+12:46:33 on battery: waiting
+12:47:33 on battery: waiting
+12:48:33 on battery: waiting
+12:49:33 on battery: waiting
+12:50:33 on battery: waiting
+12:51:33 on battery: waiting
+12:52:34 on battery: waiting
+12:53:34 on battery: waiting
+12:54:34 on battery: waiting
+12:55:34 on battery: waiting
+12:56:34 on battery: waiting
+12:57:34 on battery: waiting
+12:58:34 on battery: waiting
+12:59:34 on battery: waiting
+13:00:34 on battery: waiting
+13:01:34 on battery: waiting
+13:02:34 on battery: waiting
+13:03:34 on battery: waiting
+13:04:34 on battery: waiting
+13:05:34 on battery: waiting
+13:06:34 on battery: waiting
+13:07:34 on battery: waiting
+13:08:34 on battery: waiting
+13:09:34 on battery: waiting
+13:10:34 on battery: waiting
+13:11:34 on battery: waiting
+13:12:34 on battery: waiting
+13:13:35 on battery: waiting
+13:14:35 on battery: waiting
+13:15:35 on battery: waiting
+13:16:35 on battery: waiting
+13:17:35 on battery: waiting
+13:18:35 on battery: waiting
+13:19:35 on battery: waiting
+13:20:35 on battery: waiting
+13:21:35 on battery: waiting
+13:22:35 on battery: waiting
+13:23:35 on battery: waiting
+13:24:35 on battery: waiting
+13:25:35 on battery: waiting
+13:26:35 on battery: waiting
+13:27:35 on battery: waiting
+13:28:35 on battery: waiting
+13:29:35 on battery: waiting
+13:30:35 on battery: waiting
+13:31:35 on battery: waiting
+13:32:35 on battery: waiting
+13:33:35 on battery: waiting
+13:34:35 on battery: waiting
+13:35:36 on battery: waiting
+13:36:36 on battery: waiting
+13:37:36 on battery: waiting
+13:38:36 on battery: waiting
+13:39:36 on battery: waiting
+13:40:36 on battery: waiting
+13:41:36 on battery: waiting
+13:42:36 on battery: waiting
+13:43:36 on battery: waiting
+13:44:36 on battery: waiting
+13:45:36 on battery: waiting
+13:46:36 on battery: waiting
+13:47:36 on battery: waiting
+13:48:36 on battery: waiting
+13:49:36 on battery: waiting
+13:50:36 on battery: waiting
+13:51:36 on battery: waiting
+13:52:36 on battery: waiting
+13:53:36 on battery: waiting
+13:54:36 on battery: waiting
+13:55:36 on battery: waiting
+13:56:37 on battery: waiting
+13:57:37 on battery: waiting
+13:58:37 on battery: waiting
+13:59:37 on battery: waiting
+14:00:37 on battery: waiting
+14:01:37 on battery: waiting
+14:02:37 on battery: waiting
+14:03:37 on battery: waiting
+14:04:37 on battery: waiting
+14:05:37 on battery: waiting
+14:06:37 on battery: waiting
+14:07:37 on battery: waiting
+14:08:37 on battery: waiting
+14:09:37 on battery: waiting
+14:10:37 on battery: waiting
+14:11:37 on battery: waiting
+14:12:37 on battery: waiting
+14:13:37 on battery: waiting
+14:14:37 on battery: waiting
+14:15:37 on battery: waiting
+14:16:37 on battery: waiting
+14:17:38 on battery: waiting
+14:18:38 on battery: waiting
+14:19:38 on battery: waiting
+14:20:38 on battery: waiting
+14:21:38 on battery: waiting
+14:22:38 on battery: waiting
+14:23:38 on battery: waiting
+14:24:38 on battery: waiting
+14:25:38 on battery: waiting
+14:26:38 on battery: waiting
+14:27:38 on battery: waiting
+14:28:38 on battery: waiting
+14:29:38 on battery: waiting
+14:30:38 on battery: waiting
+14:31:38 on battery: waiting
+14:32:38 on battery: waiting
+14:33:38 on battery: waiting
+14:34:38 on battery: waiting
+14:35:38 on battery: waiting
+14:36:38 on battery: waiting
+14:37:38 on battery: waiting
+14:38:38 on battery: waiting
+14:39:39 on battery: waiting
+14:40:39 on battery: waiting
+14:41:39 on battery: waiting
+14:42:39 on battery: waiting
+14:43:39 on battery: waiting
+14:44:39 on battery: waiting
+14:45:39 on battery: waiting
+14:46:39 on battery: waiting
+14:47:39 on battery: waiting
+14:48:39 on battery: waiting
+14:49:39 on battery: waiting
+14:50:39 on battery: waiting
+14:51:39 on battery: waiting
+14:52:39 on battery: waiting
+14:53:39 on battery: waiting
+14:54:39 on battery: waiting
+14:55:39 on battery: waiting
+14:56:39 on battery: waiting
+14:57:39 on battery: waiting
+14:58:39 on battery: waiting
+14:59:39 on battery: waiting
+15:00:39 on battery: waiting
+15:01:39 on battery: waiting
+15:02:40 on battery: waiting
+15:03:40 on battery: waiting
+15:04:40 on battery: waiting
+15:05:40 on battery: waiting
+15:06:40 on battery: waiting
+15:07:40 on battery: waiting
+15:08:40 on battery: waiting
+15:09:40 on battery: waiting
+15:10:40 on battery: waiting
+15:11:40 on battery: waiting
+15:12:40 on battery: waiting
+15:13:40 on battery: waiting
+15:14:40 on battery: waiting
+15:15:40 on battery: waiting
+15:16:40 on battery: waiting
+15:17:40 on battery: waiting
+15:18:40 on battery: waiting
+15:19:40 on battery: waiting
+15:20:40 on battery: waiting
+15:21:40 on battery: waiting
+15:22:41 on battery: waiting
+15:23:41 on battery: waiting
+15:24:41 on battery: waiting
+15:25:41 on battery: waiting
+15:26:41 on battery: waiting
+15:27:41 on battery: waiting
+15:28:41 on battery: waiting
+15:29:41 on battery: waiting
+15:30:41 on battery: waiting
+15:31:41 on battery: waiting
+15:32:41 on battery: waiting
+15:33:41 on battery: waiting
+15:34:41 on battery: waiting
+15:35:41 on battery: waiting
+15:36:41 on battery: waiting
+15:37:41 on battery: waiting
+15:38:41 on battery: waiting
+15:39:41 on battery: waiting
+15:40:41 start streak-branch-2
+15:41:03 done  streak-branch-2 FAIL (exit 2) (0 min) 
+15:41:03 start roundtrip-master-2
+15:41:10 done  roundtrip-master-2 PASS (0 min) 4 passed, 0 failed
+15:41:10 start roundtrip-branch-2
+15:41:17 done  roundtrip-branch-2 PASS (0 min) 4 passed, 0 failed
+15:41:17 start levelup-master-2
+15:41:21 done  levelup-master-2 FAIL (exit 1) (0 min) 0 passed, 1 failed
+15:41:21 start levelup-branch-2
+15:41:24 done  levelup-branch-2 FAIL (exit 1) (0 min) 0 passed, 1 failed
+15:41:24 start outbox-master-2
+15:41:28 done  outbox-master-2 FAIL (exit 1) (0 min) 
+15:41:28 start outbox-branch-2
+15:41:33 done  outbox-branch-2 FAIL (exit 1) (0 min) 
+15:41:33 start warmup-tracking-master-2
+15:45:06 done  warmup-tracking-master-2 FAIL (exit 1) (3 min) ==== warm-up tracking: 29 passed, 1 failed
+15:45:06 start warmup-tracking-branch-2
+15:48:30 done  warmup-tracking-branch-2 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+15:48:30 start bootcheck-master-2
+15:49:07 done  bootcheck-master-2 PASS (0 min) 9 passed, 0 failed
+15:49:07 start bootcheck-branch-2
+15:49:43 done  bootcheck-branch-2 PASS (0 min) 9 passed, 0 failed
+15:49:43 start youstates-2
+15:50:37 done  youstates-2 PASS (0 min) YOUSTATES: PASS: equal except the expected changes
+15:50:37 start hooks-2
+15:50:39 done  hooks-2 PASS (0 min) 21 passed, 0 failed (base master)
+15:50:39 start merge-unit-3
+15:50:40 done  merge-unit-3 PASS (0 min) MERGE-UNIT: PASS (0 failed)
+15:50:40 start stale-master-3
+15:53:57 done  stale-master-3 FAIL (exit 1) (3 min) STALE: LOST (82: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+15:53:57 start stale-branch-3
+15:57:33 done  stale-branch-3 PASS (3 min) STALE: NOTHING LOST (0: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+15:57:33 start lostanswer-master-3
+15:57:59 done  lostanswer-master-3 FAIL (exit 1) (0 min) LOSTANSWER: FAIL (1 passed, 1 failed)
+15:57:59 start lostanswer-branch-3
+15:58:29 done  lostanswer-branch-3 PASS (0 min) LOSTANSWER: PASS (2 passed, 0 failed)
+15:58:29 start erase-stale-master-3
+15:59:00 done  erase-stale-master-3 FAIL (exit 1) (0 min) ERASE-STALE: FAIL (4 passed, 6 failed)
+15:59:00 start erase-stale-branch-3
+15:59:35 done  erase-stale-branch-3 PASS (0 min) ERASE-STALE: PASS (10 passed, 0 failed)
+15:59:35 start twotabs-master-3
+16:00:15 done  twotabs-master-3 FAIL (exit 1) (0 min) TWOTABS: FAIL (1 passed, 6 failed)
+16:00:15 start twotabs-branch-3
+16:01:03 done  twotabs-branch-3 PASS (0 min) TWOTABS: PASS (7 passed, 0 failed)
+16:01:03 start outoforder-master-3
+16:01:47 done  outoforder-master-3 PASS (0 min) OUTOFORDER: PASS (22 passed, 0 failed)
+16:01:47 start outoforder-branch-3
+16:03:02 done  outoforder-branch-3 PASS (1 min) OUTOFORDER: PASS (30 passed, 0 failed)
+16:03:02 start oldapp-branch-3
+16:03:31 done  oldapp-branch-3 PASS (0 min) OLDAPP: PASS (6 passed, 0 failed)
+16:03:31 start progresssave-master-3
+16:04:29 done  progresssave-master-3 PASS (0 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+16:04:29 start progresssave-branch-3
+16:05:32 done  progresssave-branch-3 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+16:05:32 start erasecheck-master-3
+16:05:54 done  erasecheck-master-3 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+16:05:54 start erasecheck-branch-3
+16:06:16 done  erasecheck-branch-3 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+16:06:16 start streak-master-3
+16:07:23 done  streak-master-3 PASS (1 min) 15 passed, 0 failed
+16:07:23 start streak-branch-3
+16:08:33 done  streak-branch-3 PASS (1 min) 15 passed, 0 failed
+16:08:33 start roundtrip-master-3
+16:08:41 done  roundtrip-master-3 PASS (0 min) 4 passed, 0 failed
+16:08:41 start roundtrip-branch-3
+16:08:50 done  roundtrip-branch-3 PASS (0 min) 4 passed, 0 failed
+16:08:50 start levelup-master-3
+16:10:09 done  levelup-master-3 FAIL (exit 1) (1 min) 44 passed, 3 failed
+16:10:09 start levelup-branch-3
+16:11:33 done  levelup-branch-3 PASS (1 min) 47 passed, 0 failed
+16:11:33 start outbox-master-3
+16:13:06 done  outbox-master-3 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+16:13:06 start outbox-branch-3
+16:14:38 done  outbox-branch-3 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+16:14:38 start warmup-tracking-master-3
+16:18:06 done  warmup-tracking-master-3 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+16:18:06 start warmup-tracking-branch-3
+16:21:32 done  warmup-tracking-branch-3 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+16:21:32 start bootcheck-master-3
+16:22:08 done  bootcheck-master-3 PASS (0 min) 9 passed, 0 failed
+16:22:08 start bootcheck-branch-3
+16:22:46 done  bootcheck-branch-3 PASS (0 min) 9 passed, 0 failed
+16:22:46 start youstates-3
+16:23:41 done  youstates-3 PASS (0 min) YOUSTATES: PASS: equal except the expected changes
+16:23:42 start hooks-3
+16:23:43 done  hooks-3 PASS (0 min) 21 passed, 0 failed (base master)
+16:23:43 start merge-unit-4
+16:23:45 done  merge-unit-4 PASS (0 min) MERGE-UNIT: PASS (0 failed)
+16:23:45 start stale-master-4
+16:27:01 done  stale-master-4 FAIL (exit 1) (3 min) STALE: LOST (78: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+16:27:01 start stale-branch-4
+16:30:41 done  stale-branch-4 PASS (3 min) STALE: NOTHING LOST (0: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+16:30:41 start lostanswer-master-4
+16:31:04 done  lostanswer-master-4 FAIL (exit 1) (0 min) LOSTANSWER: FAIL (1 passed, 1 failed)
+16:31:04 start lostanswer-branch-4
+16:31:32 done  lostanswer-branch-4 PASS (0 min) LOSTANSWER: PASS (2 passed, 0 failed)
+16:31:32 start erase-stale-master-4
+16:32:05 done  erase-stale-master-4 FAIL (exit 1) (0 min) ERASE-STALE: FAIL (4 passed, 6 failed)
+16:32:05 start erase-stale-branch-4
+16:32:41 done  erase-stale-branch-4 PASS (0 min) ERASE-STALE: PASS (10 passed, 0 failed)
+16:32:41 start twotabs-master-4
+16:33:21 done  twotabs-master-4 FAIL (exit 1) (0 min) TWOTABS: FAIL (1 passed, 6 failed)
+16:33:21 start twotabs-branch-4
+16:34:08 done  twotabs-branch-4 PASS (0 min) TWOTABS: PASS (7 passed, 0 failed)
+16:34:08 start outoforder-master-4
+16:34:52 done  outoforder-master-4 PASS (0 min) OUTOFORDER: PASS (22 passed, 0 failed)
+16:34:52 start outoforder-branch-4
+16:36:04 done  outoforder-branch-4 PASS (1 min) OUTOFORDER: PASS (30 passed, 0 failed)
+16:36:04 start oldapp-branch-4
+16:36:34 done  oldapp-branch-4 PASS (0 min) OLDAPP: PASS (6 passed, 0 failed)
+16:36:34 start progresssave-master-4
+16:37:33 done  progresssave-master-4 PASS (0 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+16:37:33 start progresssave-branch-4
+16:38:33 done  progresssave-branch-4 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+16:38:33 start erasecheck-master-4
+16:38:54 done  erasecheck-master-4 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+16:38:54 start erasecheck-branch-4
+16:39:17 done  erasecheck-branch-4 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+16:39:17 start streak-master-4
+16:40:26 done  streak-master-4 PASS (1 min) 15 passed, 0 failed
+16:40:26 start streak-branch-4
+16:41:37 done  streak-branch-4 PASS (1 min) 15 passed, 0 failed
+16:41:37 start roundtrip-master-4
+16:41:46 done  roundtrip-master-4 PASS (0 min) 4 passed, 0 failed
+16:41:46 start roundtrip-branch-4
+16:41:53 done  roundtrip-branch-4 PASS (0 min) 4 passed, 0 failed
+16:41:53 start levelup-master-4
+16:43:12 done  levelup-master-4 PASS (1 min) 47 passed, 0 failed
+16:43:12 start levelup-branch-4
+16:44:36 done  levelup-branch-4 PASS (1 min) 47 passed, 0 failed
+16:44:36 start outbox-master-4
+16:46:05 done  outbox-master-4 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+16:46:05 start outbox-branch-4
+16:47:41 done  outbox-branch-4 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+16:47:41 start warmup-tracking-master-4
+16:51:06 done  warmup-tracking-master-4 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+16:51:06 start warmup-tracking-branch-4
+16:54:30 done  warmup-tracking-branch-4 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+16:54:30 start bootcheck-master-4
+16:55:07 done  bootcheck-master-4 PASS (0 min) 9 passed, 0 failed
+16:55:07 start bootcheck-branch-4
+16:55:44 done  bootcheck-branch-4 PASS (0 min) 9 passed, 0 failed
+16:55:44 start youstates-4
+16:56:41 done  youstates-4 PASS (0 min) YOUSTATES: PASS: equal except the expected changes
+16:56:41 start hooks-4
+16:56:43 done  hooks-4 PASS (0 min) 21 passed, 0 failed (base master)
+16:56:43 start merge-unit-5
+16:56:44 done  merge-unit-5 PASS (0 min) MERGE-UNIT: PASS (0 failed)
+16:56:44 start stale-master-5
+16:59:59 done  stale-master-5 FAIL (exit 1) (3 min) STALE: LOST (82: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+16:59:59 start stale-branch-5
+17:03:39 done  stale-branch-5 PASS (3 min) STALE: NOTHING LOST (0: the phone's changes lost, the laptop's gains lost, levels announced twice; 5 cases)
+17:03:39 start lostanswer-master-5
+17:04:04 done  lostanswer-master-5 FAIL (exit 1) (0 min) LOSTANSWER: FAIL (1 passed, 1 failed)
+17:04:04 start lostanswer-branch-5
+17:04:29 done  lostanswer-branch-5 PASS (0 min) LOSTANSWER: PASS (2 passed, 0 failed)
+17:04:29 start erase-stale-master-5
+17:05:00 done  erase-stale-master-5 FAIL (exit 1) (0 min) ERASE-STALE: FAIL (4 passed, 6 failed)
+17:05:00 start erase-stale-branch-5
+17:05:36 done  erase-stale-branch-5 PASS (0 min) ERASE-STALE: PASS (10 passed, 0 failed)
+17:05:36 start twotabs-master-5
+17:06:17 done  twotabs-master-5 FAIL (exit 1) (0 min) TWOTABS: FAIL (1 passed, 6 failed)
+17:06:17 start twotabs-branch-5
+17:07:03 done  twotabs-branch-5 PASS (0 min) TWOTABS: PASS (7 passed, 0 failed)
+17:07:03 start outoforder-master-5
+17:07:47 done  outoforder-master-5 PASS (0 min) OUTOFORDER: PASS (22 passed, 0 failed)
+17:07:47 start outoforder-branch-5
+17:09:03 done  outoforder-branch-5 PASS (1 min) OUTOFORDER: PASS (30 passed, 0 failed)
+17:09:03 start oldapp-branch-5
+17:09:31 done  oldapp-branch-5 PASS (0 min) OLDAPP: PASS (6 passed, 0 failed)
+17:09:32 start progresssave-master-5
+17:10:31 done  progresssave-master-5 PASS (0 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+17:10:32 start progresssave-branch-5
+17:11:35 done  progresssave-branch-5 PASS (1 min) PROGRESSSAVE: PASS (5 passed, 0 failed)
+17:11:35 start erasecheck-master-5
+17:11:56 done  erasecheck-master-5 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+17:11:56 start erasecheck-branch-5
+17:12:18 done  erasecheck-branch-5 PASS (0 min) ERASE: PASS (6 passed, 0 failed)
+17:12:18 start streak-master-5
+17:13:27 done  streak-master-5 PASS (1 min) 15 passed, 0 failed
+17:13:27 start streak-branch-5
+17:14:38 done  streak-branch-5 PASS (1 min) 15 passed, 0 failed
+17:14:38 start roundtrip-master-5
+17:14:46 done  roundtrip-master-5 PASS (0 min) 4 passed, 0 failed
+17:14:46 start roundtrip-branch-5
+17:14:55 done  roundtrip-branch-5 PASS (0 min) 4 passed, 0 failed
+17:14:55 start levelup-master-5
+17:16:12 done  levelup-master-5 PASS (1 min) 47 passed, 0 failed
+17:16:12 start levelup-branch-5
+17:17:36 done  levelup-branch-5 PASS (1 min) 47 passed, 0 failed
+17:17:36 start outbox-master-5
+17:19:08 done  outbox-master-5 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+17:19:08 start outbox-branch-5
+17:20:38 done  outbox-branch-5 PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+17:20:39 start warmup-tracking-master-5
+17:24:05 done  warmup-tracking-master-5 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+17:24:05 start warmup-tracking-branch-5
+17:27:30 done  warmup-tracking-branch-5 PASS (3 min) ==== warm-up tracking: 30 passed, 0 failed
+17:27:30 start bootcheck-master-5
+17:28:06 done  bootcheck-master-5 PASS (0 min) 9 passed, 0 failed
+17:28:06 start bootcheck-branch-5
+17:28:43 done  bootcheck-branch-5 PASS (0 min) 9 passed, 0 failed
+17:28:43 start youstates-5
+17:29:38 done  youstates-5 PASS (0 min) YOUSTATES: PASS: equal except the expected changes
+17:29:38 start hooks-5
+17:29:40 done  hooks-5 PASS (0 min) 21 passed, 0 failed (base master)
+17:29:40 start house-master-1
+18:16:16 done  house-master-1 PASS (46 min) 1051 passed, 0 failed
+18:16:16 start house-branch-1
+19:02:58 done  house-branch-1 PASS (46 min) 1051 passed, 0 failed
+19:02:58 start house-master-2
+19:49:39 done  house-master-2 PASS (46 min) 1051 passed, 0 failed
+19:49:39 start house-branch-2
+20:36:33 done  house-branch-2 PASS (46 min) 1051 passed, 0 failed
+20:36:33 on battery: waiting
+20:37:33 on battery: waiting
+20:38:34 on battery: waiting
+20:39:34 on battery: waiting
+20:40:34 on battery: waiting
+20:41:34 on battery: waiting
+20:42:34 on battery: waiting
+20:43:34 on battery: waiting
+20:44:34 on battery: waiting
+20:45:34 on battery: waiting
+20:46:34 on battery: waiting
+20:47:34 on battery: waiting
+20:48:34 on battery: waiting
+20:49:34 on battery: waiting
+20:50:34 on battery: waiting
+20:51:34 on battery: waiting
+20:52:34 on battery: waiting
+20:53:34 on battery: waiting
+20:54:34 on battery: waiting
+20:55:34 on battery: waiting
+20:56:34 on battery: waiting
+20:57:34 on battery: waiting
+20:58:34 on battery: waiting
+20:59:34 on battery: waiting
+21:00:34 on battery: waiting
+21:01:34 on battery: waiting
+21:02:34 on battery: waiting
+21:03:34 on battery: waiting
+21:04:34 on battery: waiting
+21:05:34 on battery: waiting
+21:06:35 on battery: waiting
+21:07:35 on battery: waiting
+21:08:35 on battery: waiting
+21:09:35 on battery: waiting
+21:10:35 on battery: waiting
+21:11:35 on battery: waiting
+21:12:35 on battery: waiting
+21:13:35 on battery: waiting
+21:14:35 on battery: waiting
+21:15:35 on battery: waiting
+21:16:35 on battery: waiting
+21:17:35 on battery: waiting
+21:18:35 on battery: waiting
+21:19:35 on battery: waiting
+21:20:35 on battery: waiting
+21:21:35 on battery: waiting
+21:22:35 on battery: waiting
+21:23:35 on battery: waiting
+21:24:35 on battery: waiting
+21:25:35 on battery: waiting
+21:26:35 on battery: waiting
+21:27:35 on battery: waiting
+21:28:35 on battery: waiting
+21:29:35 on battery: waiting
+21:30:35 on battery: waiting
+21:31:35 on battery: waiting
+21:32:35 on battery: waiting
+21:33:35 on battery: waiting
+21:34:35 on battery: waiting
+21:35:35 on battery: waiting
+21:36:36 on battery: waiting
+21:37:36 on battery: waiting
+21:38:36 on battery: waiting
+21:39:36 on battery: waiting
+21:40:36 on battery: waiting
+21:41:36 on battery: waiting
+21:42:36 on battery: waiting
+21:43:36 on battery: waiting
+21:44:36 on battery: waiting
+21:45:36 on battery: waiting
+21:46:36 on battery: waiting
+21:47:36 on battery: waiting
+21:48:36 on battery: waiting
+21:49:36 on battery: waiting
+21:50:36 on battery: waiting
+21:51:36 on battery: waiting
+21:52:36 on battery: waiting
+21:53:36 on battery: waiting
+21:54:36 on battery: waiting
+21:55:36 on battery: waiting
+21:56:36 on battery: waiting
+21:57:36 on battery: waiting
+21:58:36 on battery: waiting
+21:59:36 on battery: waiting
+22:00:36 on battery: waiting
+22:01:36 on battery: waiting
+22:02:36 on battery: waiting
+22:03:37 on battery: waiting
+22:04:37 on battery: waiting
+22:05:37 on battery: waiting
+22:06:37 on battery: waiting
+22:07:37 on battery: waiting
+22:08:37 on battery: waiting
+22:09:37 on battery: waiting
+22:10:37 on battery: waiting
+22:11:37 on battery: waiting
+22:12:37 on battery: waiting
+22:13:37 on battery: waiting
+22:14:37 on battery: waiting
+22:15:37 on battery: waiting
+22:16:37 on battery: waiting
+22:17:37 on battery: waiting
+22:18:37 on battery: waiting
+22:19:37 on battery: waiting
+22:20:37 on battery: waiting
+22:21:37 on battery: waiting
+22:22:37 on battery: waiting
+22:23:37 on battery: waiting
+22:24:37 on battery: waiting
+22:25:37 on battery: waiting
+22:26:37 on battery: waiting
+22:27:38 on battery: waiting
+22:28:38 on battery: waiting
+22:29:38 on battery: waiting
+22:30:38 on battery: waiting
+22:31:38 on battery: waiting
+22:32:38 on battery: waiting
+22:33:38 on battery: waiting
+22:34:38 on battery: waiting
+22:35:38 on battery: waiting
+22:36:38 on battery: waiting
+22:37:38 on battery: waiting
+22:38:38 on battery: waiting
+22:39:38 on battery: waiting
+22:40:38 on battery: waiting
+22:41:38 on battery: waiting
+22:42:38 on battery: waiting
+22:43:38 on battery: waiting
+22:44:38 on battery: waiting
+22:45:38 on battery: waiting
+22:46:38 on battery: waiting
+22:47:38 on battery: waiting
+22:48:38 on battery: waiting
+22:49:38 on battery: waiting
+22:50:38 on battery: waiting
+22:51:38 on battery: waiting
+22:52:38 on battery: waiting
+22:53:39 on battery: waiting
+22:54:39 on battery: waiting
+22:55:39 on battery: waiting
+22:56:39 on battery: waiting
+22:57:39 on battery: waiting
+22:58:39 on battery: waiting
+22:59:39 on battery: waiting
+23:00:39 on battery: waiting
+23:01:39 on battery: waiting
+23:02:39 on battery: waiting
+23:03:39 on battery: waiting
+23:04:39 on battery: waiting
+23:05:39 on battery: waiting
+23:06:39 on battery: waiting
+23:07:39 on battery: waiting
+23:08:39 on battery: waiting
+23:09:39 on battery: waiting
+23:10:39 on battery: waiting
+23:11:39 on battery: waiting
+23:12:39 on battery: waiting
+23:13:39 on battery: waiting
+23:14:39 on battery: waiting
+23:15:39 on battery: waiting
+23:16:39 on battery: waiting
+23:17:39 on battery: waiting
+23:18:39 on battery: waiting
+23:19:39 on battery: waiting
+23:20:39 on battery: waiting
+23:21:39 on battery: waiting
+23:22:39 on battery: waiting
+23:23:39 on battery: waiting
+23:24:39 on battery: waiting
+23:25:39 on battery: waiting
+23:26:39 on battery: waiting
+23:27:39 on battery: waiting
+23:28:39 on battery: waiting
+23:29:39 on battery: waiting
+23:30:39 on battery: waiting
+23:31:40 on battery: waiting
+23:32:40 on battery: waiting
+23:33:40 on battery: waiting
+23:34:40 on battery: waiting
+23:35:40 on battery: waiting
+23:36:40 on battery: waiting
+23:37:40 on battery: waiting
+23:38:40 on battery: waiting
+23:39:40 on battery: waiting
+23:40:40 on battery: waiting
+23:41:40 on battery: waiting
+23:42:40 on battery: waiting
+23:43:40 on battery: waiting
+23:44:40 start house-master-3
+00:31:28 done  house-master-3 PASS (46 min) 1051 passed, 0 failed
+00:31:28 start house-branch-3
+01:18:24 done  house-branch-3 PASS (46 min) 1051 passed, 0 failed
+01:18:24 start house-master-4
+02:05:13 done  house-master-4 PASS (46 min) 1051 passed, 0 failed
+02:05:13 start house-branch-4
+02:52:05 done  house-branch-4 PASS (46 min) 1051 passed, 0 failed
+02:52:05 start house-master-5
+03:38:53 done  house-master-5 PASS (46 min) 1051 passed, 0 failed
+03:38:53 start house-branch-5
+04:25:39 done  house-branch-5 PASS (46 min) 1051 passed, 0 failed
+04:25:39 ALL DONE
+04:26:06 start streak-master-2-rerun
+04:27:22 done  streak-master-2-rerun PASS (1 min) 15 passed, 0 failed
+04:27:22 start streak-branch-2-rerun
+04:28:35 done  streak-branch-2-rerun PASS (1 min) 15 passed, 0 failed
+04:28:35 start levelup-master-2-rerun
+04:29:58 done  levelup-master-2-rerun PASS (1 min) 47 passed, 0 failed
+04:29:58 start levelup-branch-2-rerun
+04:31:25 done  levelup-branch-2-rerun PASS (1 min) 47 passed, 0 failed
+04:31:25 start outbox-master-2-rerun
+04:32:59 done  outbox-master-2-rerun PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+04:32:59 start outbox-branch-2-rerun
+04:34:37 done  outbox-branch-2-rerun PASS (1 min) OUTBOX: PASS (40 passed, 0 failed)
+04:34:37 RERUN DONE

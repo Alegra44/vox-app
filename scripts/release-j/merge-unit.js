@@ -33,7 +33,11 @@ const w={type:'pitch',score:85,date:'2026-11-25'};m=progressMerge3({weeklyLog:[]
 // plain: mine changed -> mine; mine unchanged -> theirs
 m=progressMerge3({lastBossWeakness:'a'},{lastBossWeakness:'b'},{lastBossWeakness:'c'});eq('plain mine',m.lastBossWeakness,'b');
 m=progressMerge3({lastBossWeakness:'a'},{lastBossWeakness:'a'},{lastBossWeakness:'c'});eq('plain theirs',m.lastBossWeakness,'c');
-console.log('cols',PJ_COLS.length,new Set(PJ_COLS).size);
+// the 44 columns: the api's allow-list (PROGRESS_PATCHABLE_COLUMNS), each once
+const api=require('fs').readFileSync(require('path').join(__dirname,'../../supabase/functions/_shared/patchableColumns.ts'),'utf8');
+const allow=api.slice(api.indexOf('PROGRESS_PATCHABLE_COLUMNS')).match(/"([a-z0-9_]+)"/g).map(x=>x.slice(1,-1));
+const snake=PJ_COLS.map(k=>k.replace(/[A-Z]/g,c=>'_'+c.toLowerCase()));
+eq('PJ_COLS = the api\'s 44 columns',[PJ_COLS.length,new Set(PJ_COLS).size,snake.slice().sort()],[allow.length,allow.length,allow.slice().sort()]);
 // erase same day, laptop session again today: streak 1 from today
 const b5={...base,history:{'2026-11-25':1},totalSessions:1,streak:4,lastPracticeDate:'2026-11-25'};
 const e5={...b5,history:{},totalSessions:0,streak:0,lastPracticeDate:null};

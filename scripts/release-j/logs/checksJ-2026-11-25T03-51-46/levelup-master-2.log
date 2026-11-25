@@ -1,0 +1,11 @@
+== local deploy/ (production backend)
+
+-- text, four languages
+ERROR page.evaluate: ReferenceError: Cannot access 'currentLanguage' before initialization
+    at setLanguage (http://localhost:8765/:14254:19)
+    at eval (eval at evaluate (:311:30), <anonymous>:1:6)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at /Users/alegramusenge/Documents/voxcoach-jm/scripts/levelup-verify/levelup.js:94:20
+
+0 passed, 1 failed

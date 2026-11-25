@@ -1,0 +1,10 @@
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=306486975 (VOX_SLOW=0: off)
+  ✓ a 503: retried after ~2 s, ~5 s, ~15 s (±20 %, plus the request's own time), then sent — 503, 503, 503, pass; gaps 1.9, 5.0, 12.7 s
+  ✓ …and stored: the server has the new XP — server 3, page 3
+  ✓ a request aborted (no response): retried and stored — abort, pass, server 10
+  ✓ a 400 (the server refusing the body): not retried — 1 PATCH in 9 s
+  ✓ signed out with a retry waiting: cancelled, nothing more sent — waiting true, 1 PATCH
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvsave-1795602815793@example.com
+
+PROGRESSSAVE: PASS (5 passed, 0 failed)

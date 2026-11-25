@@ -1,0 +1,40 @@
+
+== part 1: the outbox on its own
+  ✓ 503: retried at 2, 5, 15, 60 s, then every 5 min (jitter 0 at random 0.5) — 2000, 5000, 15000, 60000, 300000, 300000 ms
+  ✓ 503: still kept on the device after 2 h of failures — 1 entry
+  ✓ a network error (no status): retried, jitter within ±20 % (1.6, 6, 12, 72, 240, 360 s at the extremes) — 1600, 6000, 12000, 72000, 240000, 360000
+  ✓ 429: retried, kept — 4 send(s), 1 kept
+  ✓ 500: retried, kept — 4 send(s), 1 kept
+  ✓ 401: retried, kept — 4 send(s), 1 kept
+  ✓ 400: a refused payload: dropped, logged, not retried — 1 send(s), 0 kept
+  ✓ 403: a refused payload: dropped, logged, not retried — 1 send(s), 0 kept
+  ✓ 422: a refused payload: dropped, logged, not retried — 1 send(s), 0 kept
+  ✓ one send in flight per session: three puts while the first is out, one send — sent 10
+  ✓ the latest payload goes once the first is answered (not the one in between) — sent 10, 30
+  ✓ still kept until the latest is confirmed — 1
+  ✓ pending load meanwhile: net of the first confirmed (60 − 20) — 40
+  ✓ confirmed: removed, nothing pending — 0 kept, pending 0
+  ✓ two tabs draining at once: one sends, the other sees its lease — sends by A
+  ✓ then both tabs see the outbox empty — 0 / 0
+  ✓ and nobody sends it again — 1 send(s)
+  ✓ a dead tab's lease (20 s) is waited out, then the entry is sent — 20050 ms
+  ✓ 35 h: an older session is not counted as pending — 20
+  ✓ 35 h: the older entry dropped and logged, the newer one sent — 1 sent, 0 kept, log: outbox: dropped a session older than 35 h a
+  ✓ pending load counts only that day — 30 / 12
+  ✓ another user's outbox (its own key) sees none of it — 0
+  ✓ storage that throws: kept in memory, retried, sent — 2 sends
+
+== part 2: the app (local build, production backend)
+
+[cleanup] deleted 0 test account(s) this run created; 0 left of voxcoach-dvvlo-1795601488252@example.com
+page.evaluate: ReferenceError: Cannot access 'authMode' before initialization
+    at setAuthMode (http://localhost:8765/:14613:12)
+    at openAuthModal (http://localhost:8765/:14627:3)
+    at eval (eval at evaluate (:311:30), <anonymous>:1:9)
+    at UtilityScript.evaluate (<anonymous>:313:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+    at signUp_ (/Users/alegramusenge/Documents/voxcoach-jm/scripts/design-verify/common.js:82:14)
+    at /Users/alegramusenge/Documents/voxcoach-jm/scripts/design-verify/common.js:79:80
+    at async Object.step (/Users/alegramusenge/Documents/voxcoach-jm/scripts/runguard.js:93:17) {
+  log: []
+}

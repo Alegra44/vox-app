@@ -1,0 +1,21 @@
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=310614931 (VOX_SLOW=0: off)
+   signed up voxcoach-wu-1795606943763@example.com
+  ✓ the columns exist on the local stack (0011): last_warmup_day null, warmup_streak 0 {"d":null,"n":0,"s":0,"streak":0,"xp":0}
+  ✓ A: one exercise counts the day on the server (last_warmup_day today, streak 1) {"d":"2026-11-25","n":0,"s":1,"streak":0,"xp":5}
+  ✓ A: the practice streak and sessions are untouched, XP +5               streak 0→0 · sessions 0→0 · xp 0→5
+  ✓ B (open since before): a session start isn't offered the warm-up; the server says today counted overlay false · gate passed true · B had in memory {"ls":null,"last":null}
+  ✓ B: Coach → Warm-up says "Warmed up today"                              Warmed up today
+  ✓ C (opened after): warmed up today from the server row it loaded        wuPassed true
+  ✓ day D: counts 1                                                        {"now":1,"server":{"d":"2026-11-25","n":0,"s":1,"streak":0,"xp":10}}
+  ✓ D+1 (past local midnight): carries on, 2                               {"before":1,"now":2,"server":{"d":"2026-11-26","n":0,"s":2,"streak":0,"xp":15}}
+  ✓ the warm-up's header: "2 days warmed up in a row · today counted"      2 days warmed up in a row · today counted
+  ✓ Home's stats line, in words: "2 days warmed up"                        2 days warmed up
+  ✓ D+3 (D+2 missed): broken before warming up (0; nothing on Home or in the header) {"now":0,"home":null,"header":false}
+  ✓ D+3: warming up starts it again at 1                                   {"now":1,"server":{"d":"2026-11-28","n":0,"s":1,"streak":0,"xp":20}}
+  ✓ D+3, a second exercise: no change (once a day)                         xp 20 → 20
+  ✓ over the days: the practice streak and sessions never moved; XP +5 a counted day (3 days) streak 0→0 · sessions 0→0 · xp +15
+  ✓ no page errors                                                         
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-wu-1795606943763@example.com
+
+15 passed, 0 failed

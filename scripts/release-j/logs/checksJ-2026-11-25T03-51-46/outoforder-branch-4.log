@@ -1,0 +1,36 @@
+build: the working copy
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=308368440 (VOX_SLOW=0: off)
+  ✓ save #1 reached the server, its answer held
+  ✓ progress: no second save goes while #1 is out — 1 PATCH sent
+  ✓ progress: after #1's answer, exactly one more save, carrying both changes — 2 PATCH, the last xp 8 (want 8)
+  ✓ progress: page and server on xp +8, warm-ups +1 — page {"xp":8,"w":1}, server {"warmups_completed":1,"xp":8}
+  ✓ retry: the 503 leaves release A's retry waiting — retry timer true, server xp 8
+  ✓ retry: the newer save goes at once; the server ends on the newest values; no retry left waiting — server xp 15 (want 15), retry waiting false
+  ✓ retry: nothing sent again after the good save — 2 PATCH (the 503 and the good one)
+  ✓ conflicts: 5 in a row, then release A's back-off waiting (the save kept) — 5 PATCH, retry waiting true, server 15
+  ✓ conflicts: the save lands on the retry, counted once — server 24 (want 24), 7 PATCH
+  ✓ the save reached the server, its answer held
+  ✓ …it landed (server +3) — server 27
+  ✓ own-read: the read doesn't count the page's own save twice — page xp 27 (want 27)
+  ✓ own-read: after the save's answer, page and server +3 — page 27, server 27
+  ✓ saveProfile #1 reached the server, its answer held
+  ✓ profile: the page keeps the newest name after the older answer lands — name "Order B"
+  ✓ profile: the next save keeps the server on the newest name — server "Order B"
+  ✓ the warm-up day's read reached the server (yesterday), its answer held
+  ✓ warm-up day: the page keeps today's day and streak after the older read lands — day 2026-11-25 (want 2026-11-25), streak 3, counted today true
+  ✓ elsewhere: the count's read reached the server (today already counted there), its answer held
+  ✓ elsewhere: counted once on the page (today, streak 3, XP +5 +2, warm-ups +1) — page {"xp":34,"w":2,"d":"2026-11-25","s":3} want {"xp":34,"w":2,"d":"2026-11-25","s":3}
+  ✓ elsewhere: …and on the server — server {"d":"2026-11-25","s":3,"w":2,"xp":34}
+  ✓ nowhere: the count's read reached the server (yesterday), its answer held
+  ✓ nowhere: counted once on the page (today, streak 3, XP +5 +2, warm-ups +1) — page {"xp":41,"w":3,"d":"2026-11-25","s":3} want {"xp":41,"w":3,"d":"2026-11-25","s":3}
+  ✓ nowhere: …and on the server — server {"d":"2026-11-25","s":3,"w":3,"xp":41}
+  ✓ quiet: the count's read reached the server (today already counted there), its answer held
+  ✓ quiet (after the page's next save): counted once on the page (today, streak 3, XP +5, warm-ups +1) — page {"xp":46,"w":4,"d":"2026-11-25","s":3} want {"xp":46,"w":4,"d":"2026-11-25","s":3}
+  ✓ quiet (after the page's next save): …and on the server — server {"d":"2026-11-25","s":3,"w":4,"xp":46}
+  ✓ the day's vocal-load read reached the server, its answer held
+  ✓ …the checkpoint was confirmed meanwhile — {"ok":true,"left":0}
+  ✓ vocal load: the gauge's total includes the checkpoint confirmed while the read was out — before 0, after 120 (want 120); server's sessions total 120
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-hsave-1795604697260@example.com
+
+OUTOFORDER: PASS (30 passed, 0 failed)

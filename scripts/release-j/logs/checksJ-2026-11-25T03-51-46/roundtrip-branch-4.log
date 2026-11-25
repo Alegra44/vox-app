@@ -1,0 +1,10 @@
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=308779035 (VOX_SLOW=0: off)
+   signed up voxcoach-wu-rt-1795605107925@example.com on https://ccharikhpeqtzpobarxi.supabase.co
+  ✓ GET: the row has the two columns (0011), empty                                 {"d":null,"s":0}
+  ✓ PATCH with last_warmup_day and warmup_streak: GET returns them                 {"d":"2026-11-23","s":4,"xp":5}
+  ✓ PATCH without them (as the old app): saves                                     {"xp":42,"n":1}
+  ✓ … and leaves the warm-up columns as they were                                  {"d":"2026-11-23","s":4}
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-wu-rt-1795605107925@example.com
+
+4 passed, 0 failed

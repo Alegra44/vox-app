@@ -1,0 +1,11 @@
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=308440868 (VOX_SLOW=0: off)
+  ✓ the old app (master) saves without a version — 1 PATCH, if_version [null]
+  ✓ …and is accepted (200), as before J — [200]
+  ✓ …the server has its score and XP; the version moved on — pitch [77], xp 5 (the old page 5), version 2 → 4
+  ✓ the J page's save: 409 (the old app moved the row), merged, sent again (200) — [409,200]
+  ✓ …the server keeps the old app's score and XP, plus the J page's — pitch [77], agility [66], xp 10 (want 10)
+  ✓ the old app's next save is accepted too (no version, no 409) — [200]
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-joldapp-1795604769687@example.com
+
+OLDAPP: PASS (6 passed, 0 failed)
