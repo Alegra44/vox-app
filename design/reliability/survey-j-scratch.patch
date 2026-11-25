@@ -1,0 +1,270 @@
+diff --git a/deploy/index.html b/deploy/index.html
+index 3d9257d..ed803d8 100644
+--- a/deploy/index.html
++++ b/deploy/index.html
+@@ -6986,6 +6986,7 @@ async function apiFetch(path, options={}){
+   if(!res.ok){
+     const body = await res.json().catch(()=>({}));
+     const e = new Error(body.error || ('Request failed: ' + res.status)); e.status = res.status; // a network error has none
++    e.body = body; // Survey J (scratch): a 409 carries the row
+     throw e;
+   }
+   return res.status===204 ? null : res.json();
+@@ -14362,6 +14363,7 @@ async function loadProgress(){
+     if(session){
+       const row = await apiFetch('/me/progress');
+       progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
++      progressVersion = null; progressUnacked = null; progressSeen(row); // Survey J (scratch)
+       levelupSnapshotUpgrade();
+       if(typeof studioMigrate==='function') studioMigrate(); // Studio's takes move to this device once (phase 6)
+       if(Array.isArray(progress.history)) progress.history = {}; // defends against pre-migration rows
+@@ -14447,20 +14449,144 @@ const progressSaving = new Set();
+ // result touches the retry: an older save's success doesn't cancel a retry the newer one needs, and an older save's
+ // failure needs none (the newer save sent its fields again). A read of /me/progress (wuServerSync) is merged field by
+ // field into progress, whether or not a save went out while it was out (release H2, wuMergeServer).
+-let progressSeq = 0;
++// Survey J (scratch, design/reliability/SURVEY_J.md): the progress row has a version (0012). A save says which
++// version it was made from (if_version); a row changed since (another device, another tab) answers 409 with the row
++// as it is, and the page merges it with its own changes, field by field (progressMerge3: counters add what each side
++// added, score lists keep both sides' new scores, bests the best, "tried" flags either, plain values this page's
++// change if it made one, else the server's), then sends again. One save in flight at a time: a save asked for while
++// one is out goes when it's answered, with everything since (the H/H2 answer-order rules aren't needed: an answer is
++// always to the one save out). Each save has an id; the row keeps the last 8 (recent_save_ids), so a row read back
++// that already holds this page's save (a retry after a lost answer, release A; a read answered after the save landed)
++// is merged from what that save sent, not counted twice. A read (wuServerSync) is merged the same way. Erase my
++// progress is sent without a version (it replaces, it doesn't merge).
++let progressBase = null, progressVersion = null, progressUnacked = null, progressForce = false;
++let progressInFlight = null, progressAgain = false;
++const pjClone = o => JSON.parse(JSON.stringify(o === undefined ? null : o));
++const pjSame = (a, b) => JSON.stringify(a === undefined ? null : a) === JSON.stringify(b === undefined ? null : b);
++const pjNum = v => typeof v==='number' && isFinite(v) ? v : 0;
++const pjObj = v => v && typeof v==='object' && !Array.isArray(v);
++const PJ_SKIP = ['version', 'lastSaveId', 'recentSaveIds', 'userId', 'updatedAt', 'createdAt'];
++const PJ_SUM = ['xp', 'totalSessions', 'breakthroughCount', 'warmupsCompleted', 'bossVictories'];
++const PJ_MAX = ['highestMidi', 'gliderBest', 'bridgeBest', 'harmonyBest', 'riftBest', 'bestBreathDuration', 'bestBridgeSeconds'];
++const PJ_MIN = ['lowestMidi'];
++const PJ_OR = ['triedKaraoke', 'triedEmotion', 'usedChoirSolo', 'usedKeyRecommendation'];
++const PJ_LIST = {pitchScores:20, agilityScores:20, breathScores:20, expressionScores:20, weeklyLog:80, timelineEvents:0};
++const PJ_WHOLE = ['levelupSnapshot', 'sessionSnapshot', 'lastBossWeakness', 'dayBasis', 'dayBasisSince'];
++const PJ_PAIRS = [['lastPracticeDate', 'streak', false], ['lastWarmupDay', 'warmupStreak', false], ['lastExerciseDate', 'exercisesToday', true]];
++function pjAppended(b, m){ // m's items after b: the longest end of b that m starts with (the lists drop their oldest)
++  b = Array.isArray(b) ? b : []; m = Array.isArray(m) ? m : [];
++  for(let k = Math.min(b.length, m.length); k > 0; k--) if(pjSame(b.slice(b.length-k), m.slice(0, k))) return m.slice(k);
++  return m.slice();
++}
++function pjList(b, m, t, cap){ const out = (Array.isArray(t) ? t : []).concat(pjAppended(b, m)); return cap && out.length>cap ? out.slice(out.length-cap) : out; }
++function pjKeyed(b, m, t, both){ // per key: whichever side changed it; both: both(b, m, t)
++  b = pjObj(b) ? b : {}; m = pjObj(m) ? m : {}; t = pjObj(t) ? t : {};
++  const out = {};
++  for(const k of new Set([...Object.keys(m), ...Object.keys(t), ...Object.keys(b)])){
++    const v = pjSame(m[k], b[k]) ? t[k] : pjSame(t[k], b[k]) ? m[k] : both(b[k], m[k], t[k], k);
++    if(v!==undefined && v!==null) out[k] = v;
++  }
++  return out;
++}
++const pjSum = (b, m, t) => pjNum(t) + pjNum(m) - pjNum(b);
++function pjNote(b, m, t){ b = b || {}; m = m || {}; t = t || {};
++  return {...t, attempts:pjSum(b.attempts, m.attempts, t.attempts), sumAccuracy:pjSum(b.sumAccuracy, m.sumAccuracy, t.sumAccuracy),
++    bestAccuracy:Math.max(pjNum(m.bestAccuracy), pjNum(t.bestAccuracy)), streak:m.streak, preStreakAvg:m.preStreakAvg}; }
++function pjChoir(b, m, t){
++  return pjKeyed(b, m, t, (x, y, z, k)=>{
++    if(k==='parts') return pjKeyed(x, y, z, (p, q, r)=>pjKeyed(p, q, r, (u, v, w)=>(Date.parse((v||{}).updated||0) >= Date.parse((w||{}).updated||0) ? v : w)));
++    if(k==='log') return pjList(x, y, z, 0);
++    if(k==='runs') return pjList(x, y, z, typeof RD_RUNS_MAX==='number' ? RD_RUNS_MAX : 0);
++    if(typeof y==='number' && typeof z==='number') return pjSum(x, y, z);
++    return pjObj(y) && pjObj(z) ? pjKeyed(x, y, z, (p, q)=>q) : y;
++  });
++}
++function progressMerge3(base, mine, theirs){
++  base = base || {};
++  const out = {...theirs};
++  for(const k of new Set([...Object.keys(mine), ...Object.keys(theirs)])){
++    if(PJ_SKIP.includes(k)) continue;
++    const b = base[k], m = mine[k], t = theirs[k];
++    if(pjSame(m, b)){ out[k] = t; continue; }       // this page didn't change it: the server's
++    if(pjSame(t, b) || !(k in theirs)){ out[k] = m; continue; } // only this page did
++    if(PJ_SUM.includes(k)) out[k] = pjSum(b, m, t);
++    else if(PJ_MAX.includes(k)) out[k] = m==null ? t : t==null ? m : Math.max(m, t);
++    else if(PJ_MIN.includes(k)) out[k] = m==null ? t : t==null ? m : Math.min(m, t);
++    else if(PJ_OR.includes(k)) out[k] = !!(m || t);
++    else if(k in PJ_LIST) out[k] = pjList(b, m, t, PJ_LIST[k]);
++    else if(k==='notifiedAchievements') out[k] = [...new Set([...(t||[]), ...(m||[])])];
++    else if(k==='history') out[k] = pjKeyed(b, m, t, pjSum);
++    else if(k==='dailyMetrics') out[k] = pjKeyed(b, m, t, (x, y, z)=>pjKeyed(x, y, z, (p, q, r)=>pjList(p, q, r, 0)));
++    else if(k==='noteAttemptHistory') out[k] = pjKeyed(b, m, t, pjNote);
++    else if(k==='songBestScores') out[k] = pjKeyed(b, m, t, (x, y, z)=>Math.max(pjNum(y), pjNum(z)));
++    else if(k==='choirReadiness') out[k] = pjChoir(b, m, t);
++    else if(PJ_WHOLE.includes(k)) out[k] = m;
++    else if(pjObj(m) && pjObj(t)) out[k] = pjKeyed(b, m, t, (x, y)=>y); // keyed by day, song…: per key, this page's change
++    else out[k] = m;                                 // a plain value both changed: this page's, the later write
++  }
++  for(const [dk, vk, counter] of PJ_PAIRS){ // a streak or a day's count goes with its day
++    const md = mine[dk] || '', td = theirs[dk] || '', bd = base[dk] || '';
++    if(pjSame(mine[dk], base[dk]) && pjSame(mine[vk], base[vk])) continue; // this page changed neither: the server's
++    if(pjSame(theirs[dk], base[dk]) && pjSame(theirs[vk], base[vk])) continue; // the server changed neither: this page's
++    if(md > td){ out[dk] = mine[dk]; out[vk] = mine[vk]; }
++    else if(td > md){ out[dk] = theirs[dk]; out[vk] = theirs[vk]; }
++    else { out[dk] = mine[dk]; out[vk] = counter ? pjNum(theirs[vk]) + pjNum(mine[vk]) - (bd===md ? pjNum(base[vk]) : 0) : Math.max(pjNum(mine[vk]), pjNum(theirs[vk])); }
++  }
++  return out;
++}
++function progressSeen(row){ // the server's row (snake): this page's base, if it's no older than the one it has
++  if(typeof row.version==='number' && progressVersion!==null && row.version < progressVersion) return false;
++  progressBase = normalizeJsonbScoreDefaults(objSnakeToCamel(pjClone(row)));
++  progressVersion = typeof row.version==='number' ? row.version : null;
++  return true;
++}
++function progressMergeIn(row){ // a newer row than this page's base: merged with this page's own changes
++  if(typeof row.version!=='number' || (progressVersion!==null && row.version <= progressVersion)) return false;
++  const theirs = normalizeJsonbScoreDefaults(objSnakeToCamel(pjClone(row)));
++  const own = progressUnacked && Array.isArray(row.recent_save_ids) && row.recent_save_ids.includes(progressUnacked.id);
++  progress = normalizeJsonbScoreDefaults(progressMerge3(own ? progressUnacked.sent : progressBase, progress, theirs));
++  if(own) progressUnacked = null;
++  progressSeen(row);
++  // a level reached on the other device was announced there
++  if(typeof levelForXp==='function' && lastKnownLevel!==null) lastKnownLevel = Math.max(lastKnownLevel, levelForXp(theirs.xp||0).level);
++  return true;
++}
++async function progressSendOnce(){
++  for(let tries = 0; tries < 5 && profile && progress; tries++){
++    if(!progressUnacked) progressUnacked = {id:(crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random()), sent:pjClone(progress)};
++    const id = progressUnacked.id, sent = pjClone(progress), force = progressForce;
++    const body = objCamelToSnake(sent); body.save_id = id;
++    if(progressVersion!==null && !force) body.if_version = progressVersion;
++    let row;
++    try{
++      const req = apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(body) });
++      progressSaving.add(req); req.catch(()=>{}).finally(()=>progressSaving.delete(req));
++      row = await req;
++    }catch(e){
++      if(e.status===409 && e.body && e.body.row){ if(!progressMergeIn(e.body.row)) progressVersion = e.body.row.version; continue; }
++      console.error('progress save error', e); progressRetryLater(e); return; // progressUnacked kept: the retry reuses its id
++    }
++    if(force) progressForce = false;
++    progressUnacked = null;
++    progressSeen(row);
++    if(pjSame(progress, sent)) progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
++    else progressAgain = true; // changed while it was out (a merged read): those go next
++    progressRetryClear(true);
++    return;
++  }
++}
+ async function saveProgress(){
+   ensureDayBasis();
+-  const seq = ++progressSeq;
+-  try{
+-    const req = apiFetch('/me/progress', { method:'PATCH', body: JSON.stringify(objCamelToSnake(progress)) });
+-    progressSaving.add(req); req.catch(()=>{}).finally(()=>progressSaving.delete(req));
+-    const row = await req;
+-    if(seq===progressSeq){
+-      progress = normalizeJsonbScoreDefaults({ ...progress, ...objSnakeToCamel(row) });
+-      progressRetryClear(true);
+-    }
+-  }catch(e){ console.error('progress save error', e); if(seq===progressSeq) progressRetryLater(e); }
+-  if(profile && typeof levelForXp==='function'){
++  if(progressInFlight){ progressAgain = true; return progressInFlight; }
++  progressInFlight = (async ()=>{
++    try{
++      do { progressAgain = false; await progressSendOnce(); progressLevelCheck(); } while(progressAgain && profile && progress);
++    } finally { progressInFlight = null; }
++  })();
++  return progressInFlight;
++}
++function progressLevelCheck(){
++  if(profile && progress && typeof levelForXp==='function'){
+     const {level, name} = levelForXp(progress.xp||0);
+     const priorLevel = lastKnownLevel;
+     lastKnownLevel = level;
+@@ -14708,6 +14834,7 @@ document.getElementById('dashSignOutBtn').addEventListener('click', async ()=>{
+   progressRetryClear(true); // a retry waiting for this account's save stops
+   if(typeof renderVocalLoadGauge==='function') renderVocalLoadGauge();
+   lastKnownLevel = null;
++  progressBase = null; progressVersion = null; progressUnacked = null; progressForce = false; // Survey J (scratch)
+   renderAccountBar();
+   renderDashboard();
+   applyChoirGateUI();
+@@ -14741,6 +14868,7 @@ document.getElementById('dashResetBtn').addEventListener('click', async ()=>{
+   if(!confirm(t('profile_reset_confirm'))) return; // phase 7: it erases the account's saved progress, not only this device's (the old text said "locally")
+   await Promise.allSettled([...progressSaving]);
+   progress = normalizeJsonbScoreDefaults({ ...progress, ...JSON.parse(JSON.stringify(PROGRESS_ERASED)) });
++  progressForce = true; // Survey J (scratch): an erase replaces, it isn't merged
+   await saveProgress();
+   renderDashboard();
+   if(typeof renderHomeScreen==='function') renderHomeScreen();
+@@ -21591,11 +21719,12 @@ function warmupGate(){
+ // the merge moved a field past what that save sent, progress is saved again, so the server has it too.
+ async function wuServerSync(ms){
+   if(!profile || !progress) return false;
+-  const seq = progressSeq, uid = profile.id;
++  const uid = profile.id;
+   try{
+     const row = await Promise.race([apiFetch('/me/progress'), new Promise((_, no)=>setTimeout(()=>no(new Error('slow')), ms))]);
+-    if(row && 'last_warmup_day' in row && profile && profile.id===uid && progress && wuMergeServer(row)){
+-      if(seq!==progressSeq) saveProgress();
++    // Survey J (scratch): the read is merged like a 409's row (every field, by its kind); a save already out is
++    // refused at its old version and merged again; one that landed is in the row (its id) and isn't counted twice
++    if(row && profile && profile.id===uid && progress && progressMergeIn(row)){
+       if(typeof updateShellTopbar==='function') updateShellTopbar(); // the XP shown
+     }
+   }catch(e){}
+diff --git a/supabase/functions/api/routes/progress.ts b/supabase/functions/api/routes/progress.ts
+index 972fc85..12b523e 100644
+--- a/supabase/functions/api/routes/progress.ts
++++ b/supabase/functions/api/routes/progress.ts
+@@ -35,14 +35,21 @@ app.patch("/", async (c) => {
+     return c.json({ error: "No patchable fields in body" }, 400);
+   }
+ 
+-  const { data, error } = await supabase
+-    .from("user_progress")
+-    .update(patch)
+-    .eq("user_id", userId)
+-    .select()
+-    .single();
++  // Survey J (scratch): if_version, the row's version the page last saw. Given, the update is made only if the row is
++  // still at it; otherwise 409 with the row as it is, for the page to merge and send again. Absent (old clients), the
++  // update is made as before (last writer wins). last_save_id is written with every versioned save.
++  const ifVersion = typeof body.if_version === "number" ? body.if_version : null;
++  if (typeof body.save_id === "string") patch.last_save_id = body.save_id;
++  let q = supabase.from("user_progress").update(patch).eq("user_id", userId);
++  if (ifVersion !== null) q = q.eq("version", ifVersion);
++  const { data, error } = await q.select().maybeSingle();
+ 
+   if (error) return c.json({ error: error.message }, 400);
++  if (!data) {
++    const { data: row, error: e2 } = await supabase.from("user_progress").select("*").eq("user_id", userId).single();
++    if (e2) return c.json({ error: e2.message }, 404);
++    return c.json({ error: "version conflict", row }, 409);
++  }
+   return c.json(data);
+ });
+ 
+diff --git a/supabase/migrations/0012_progress_version.sql b/supabase/migrations/0012_progress_version.sql
+new file mode 100644
+index 0000000..dcebdcf
+--- /dev/null
++++ b/supabase/migrations/0012_progress_version.sql
+@@ -0,0 +1,23 @@
++-- Survey J, scratch (design/reliability/SURVEY_J.md): a version on the progress row, so a save from a page that hasn't
++-- seen the row's latest version is refused (409) and the page merges instead of overwriting another device's progress.
++-- version: bumped by the database on every update (any path), never written by a client.
++-- last_save_id / recent_save_ids: the client's id for each save, the last 8 kept, so a page can tell its own save in a
++-- row it reads back (a save retried after its first try did land, release A; a read answered after the page's own save
++-- landed) and merge only what that save didn't carry, instead of counting it twice.
++alter table public.user_progress add column version bigint not null default 0;
++alter table public.user_progress add column last_save_id uuid;
++alter table public.user_progress add column recent_save_ids uuid[] not null default '{}';
++
++create function public.user_progress_bump_version() returns trigger language plpgsql as $$
++begin
++  new.version := old.version + 1;
++  if new.last_save_id is not null and new.last_save_id is distinct from old.last_save_id then
++    new.recent_save_ids := (old.recent_save_ids || new.last_save_id)[greatest(1, cardinality(old.recent_save_ids) - 6):];
++  else
++    new.recent_save_ids := old.recent_save_ids;
++  end if;
++  return new;
++end $$;
++
++create trigger user_progress_bump_version before update on public.user_progress
++  for each row execute function public.user_progress_bump_version();

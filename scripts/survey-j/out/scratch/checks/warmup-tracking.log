@@ -1,0 +1,14 @@
+warm-up tracking · local deploy/ against the production backend
+
+-- A. exercise tracking = Glider tracking, frame by frame
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=267589169 (VOX_SLOW=0: off)
+
+==== warm-up tracking: 0 passed, 0 failed
+page.waitForFunction: Timeout 20000ms exceeded.
+    at openPage (/Users/alegramusenge/Documents/voxcoach-scratch-j/scripts/warmup-verify/common.js:61:16)
+    at async /Users/alegramusenge/Documents/voxcoach-scratch-j/scripts/warmup-verify/tracking.js:72:37 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-wu-1795563917987@example.com
