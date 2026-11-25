@@ -1,11 +1,17 @@
-// Release H (design/reliability/RELEASE_H.md): server answers that arrive out of order. On the LOCAL stack, or on the
-// deployed site after a deploy (DV_URL; see below). A throwaway account (deleted at exit). In each case the server has already
-// done the work of the older request (the browser fetched its real answer); only the answer's delivery to the page is
-// held until a newer request has been answered, then released:
-//   progress  saveProgress #1 (xp +3, warmupsCompleted +1) answered after saveProgress #2 (xp +4 more): the page must
-//             keep #2's values, and the next save must not write #1's back to the server
-//   retry     saveProgress #1 answered late (a success) after #2 failed with a 503: #2's retry still goes, the server ends
-//             on #2's values (an older save's success must not cancel the newer one's retry)
+// Release H (design/reliability/RELEASE_H.md), rewritten for release J (RELEASE_J.md): server answers that arrive out of
+// order, and what replaces that for progress. On the LOCAL stack, or on the deployed site after a deploy (DV_URL; see
+// below). A throwaway account (deleted at exit). Where an answer is held, the server has already done the work (the
+// browser fetched its real answer); only the answer's delivery to the page is held, then released.
+// Release J: one progress save in flight at a time, so a save's answer can't arrive after a newer save's (H's case);
+// what's tested instead:
+//   progress  saveProgress #1 (xp +3, warmupsCompleted +1) held; two more saves meanwhile (xp +4, +1): no PATCH goes
+//             while #1 is out; after #1's answer exactly one more PATCH carries both; page and server xp +8, warm-ups +1
+//   retry     a save answered 503 (not written), then a newer save before the back-off fires: it goes at once, the
+//             server ends on the newest values, no retry left waiting, nothing sent twice
+//   conflicts (J3) six conflicts in a row (another writer moves the row before each of the page's PATCHes): after 5
+//             release A's back-off takes over; the save isn't dropped: it lands on the retry, counted once
+//   own-read  a read of /me/progress (wuServerSync) answered after this page's save landed but before that save's own
+//             answer (held): the row holds the page's save id, so its XP isn't counted twice (page and server +3)
 //   profile   saveProfile #1 (name A) answered after saveProfile #2 (name B): the page keeps B; the server keeps B
 //   warmup    wuServerSync's read of /me/progress (yesterday's warm-up day) answered after the save that counts today's
 //             warm-up: the page keeps today's day and streak
@@ -34,11 +40,12 @@ const waitFor = async (fn, ms) => { const t = Date.now() + ms; for (;;) { const 
   const b = await C.chromium.launch();
   try {
     // hold[path+method] = true: the next such request is sent to the server at once, its answer kept back until released
-    const hold = {}, held = {}, fail503 = {};
+    const hold = {}, held = {}, fail503 = {}, bump = {}; let bumpUid = null;
     const key = (u, m) => `${m} ${new URL(u).pathname.replace(/^.*\/api/, '')}`;
     const { ctx, page } = await C.openPage(b, { dir: C.buildDir(REF), prepare: c => c.route(/\/api\/me(\/progress|\/vocal-load)?(\?.*)?$/, async r => {
       const k = key(r.request().url(), r.request().method());
       if (fail503[k]) { fail503[k]--; return r.fulfill({ status: 503, contentType: 'application/json', body: '{"error":"Service Unavailable"}' }); }
+      if (bump[k] && bumpUid) { bump[k]--; db(`update public.user_progress set boss_victories = boss_victories where user_id = '${bumpUid}'`); } // another writer: the version moves on
       if (!hold[k]) return r.continue();
       hold[k] = false;
       const fetched = r.fetch(); // sent on to the server at once (through the local stack's slow proxy, only its answer waits)
@@ -57,37 +64,69 @@ const waitFor = async (fn, ms) => { const t = Date.now() + ms; for (;;) { const 
     const uid = await page.evaluate(() => profile.id);
     await page.evaluate(() => Promise.allSettled([...progressSaving])); await C.sleep(1500);
 
+    const patches = []; page.on('request', r => { if (/\/me\/progress$/.test(r.url()) && r.method() === 'PATCH') patches.push(JSON.parse(r.postData() || '{}')); });
+    const srv = () => db(`select xp, warmups_completed from public.user_progress where user_id = '${uid}'`)[0];
+    const idle = () => waitFor(() => page.evaluate(() => !progressInFlight && !progressRetry.timer && progressSaving.size === 0), 20000);
+
     await C.G.step('progress', 40, async () => {
       const k = 'PATCH /me/progress';
       const x0 = await page.evaluate(() => progress.xp || 0), w0 = await page.evaluate(() => progress.warmupsCompleted || 0);
-      holdNext(k);
+      holdNext(k); const n0 = patches.length;
       await page.evaluate(() => { progress.xp = (progress.xp || 0) + 3; progress.warmupsCompleted = (progress.warmupsCompleted || 0) + 1; window.__s1 = saveProgress(); });
       check('save #1 reached the server, its answer held', !!await whenHeld(k));
-      await page.evaluate(async () => { progress.xp += 4; progress.warmupsCompleted += 1; await saveProgress(); });
-      await releaseAndWait(k); await page.evaluate(() => window.__s1);
-      const now = await page.evaluate(() => ({ xp: progress.xp, w: progress.warmupsCompleted }));
-      check('progress: the page keeps the newest save\'s values after the older answer lands', now.xp === x0 + 7 && now.w === w0 + 2,
-        `xp ${now.xp} (want ${x0 + 7}), warmupsCompleted ${now.w} (want ${w0 + 2})`);
-      await page.evaluate(async () => { progress.lastBossWeakness = 'h-check'; await saveProgress(); }); // the next save, of another field
-      const s = db(`select xp, warmups_completed from public.user_progress where user_id = '${uid}'`)[0];
-      check('progress: the next save keeps the server on the newest values', s.xp === x0 + 7 && s.warmups_completed === w0 + 2,
-        `server xp ${s.xp}, warmups_completed ${s.warmups_completed}`);
+      await page.evaluate(() => { progress.xp += 4; window.__s2 = saveProgress(); progress.xp += 1; window.__s3 = saveProgress(); });
+      await C.sleep(2500);
+      check('progress: no second save goes while #1 is out', patches.length === n0 + 1, `${patches.length - n0} PATCH sent`);
+      await releaseAndWait(k); await page.evaluate(() => Promise.all([window.__s1, window.__s2, window.__s3])); await idle();
+      const last = patches[patches.length - 1];
+      check('progress: after #1\'s answer, exactly one more save, carrying both changes', patches.length === n0 + 2 && last.xp === x0 + 8,
+        `${patches.length - n0} PATCH, the last xp ${last && last.xp} (want ${x0 + 8})`);
+      const now = await page.evaluate(() => ({ xp: progress.xp, w: progress.warmupsCompleted })), s = srv();
+      check('progress: page and server on xp +8, warm-ups +1', now.xp === x0 + 8 && now.w === w0 + 1 && s.xp === x0 + 8 && s.warmups_completed === w0 + 1,
+        `page ${JSON.stringify(now)}, server ${JSON.stringify(s)}`);
     });
 
     await C.G.step('retry', 40, async () => {
       const k = 'PATCH /me/progress';
+      const x0 = await page.evaluate(() => progress.xp || 0), n0 = patches.length;
+      fail503[k] = 1;
+      await page.evaluate(async () => { progress.xp += 2; await saveProgress(); });
+      const waiting = await page.evaluate(() => !!progressRetry.timer);
+      check('retry: the 503 leaves release A\'s retry waiting', waiting && srv().xp === x0, `retry timer ${waiting}, server xp ${srv().xp}`);
+      await page.evaluate(async () => { progress.xp += 5; await saveProgress(); });
+      await idle(); await C.sleep(6000); // past the first back-off (2 s)
+      const s = srv(), left = await page.evaluate(() => !!progressRetry.timer);
+      check('retry: the newer save goes at once; the server ends on the newest values; no retry left waiting', s.xp === x0 + 7 && !left,
+        `server xp ${s.xp} (want ${x0 + 7}), retry waiting ${left}`);
+      check('retry: nothing sent again after the good save', patches.length === n0 + 2, `${patches.length - n0} PATCH (the 503 and the good one)`);
+    });
+
+    await C.G.step('conflicts', 60, async () => {
+      const k = 'PATCH /me/progress';
+      const x0 = await page.evaluate(() => progress.xp || 0), n0 = patches.length;
+      bumpUid = uid; bump[k] = 6;
+      await page.evaluate(async () => { progress.xp += 9; await saveProgress(); });
+      const after5 = patches.length - n0, waiting = await page.evaluate(() => !!progressRetry.timer);
+      check('conflicts: 5 in a row, then release A\'s back-off waiting (the save kept)', after5 === 5 && waiting && srv().xp === x0, `${after5} PATCH, retry waiting ${waiting}, server ${srv().xp}`);
+      const ok = await waitFor(() => srv().xp === x0 + 9, 15000); await idle();
+      check('conflicts: the save lands on the retry, counted once', !!ok && srv().xp === x0 + 9 && await page.evaluate(() => progress.xp) === x0 + 9 && !bump[k],
+        `server ${srv().xp} (want ${x0 + 9}), ${patches.length - n0} PATCH`);
+      bumpUid = null; bump[k] = 0;
+    });
+
+    await C.G.step('own-read', 40, async () => {
+      const k = 'PATCH /me/progress';
       const x0 = await page.evaluate(() => progress.xp || 0);
       holdNext(k);
-      await page.evaluate(() => { progress.xp += 2; window.__s1 = saveProgress(); });
-      check('save #1 reached the server, its answer held', !!await whenHeld(k));
-      fail503[k] = 1;
-      await page.evaluate(async () => { progress.xp += 5; await saveProgress(); });
-      await releaseAndWait(k); await page.evaluate(() => window.__s1);
-      const ok = await waitFor(() => db(`select xp from public.user_progress where user_id = '${uid}'`)[0].xp === x0 + 7, 8000);
-      const s = db(`select xp from public.user_progress where user_id = '${uid}'`)[0].xp;
-      check('retry: save #2 (503) is still retried after #1\'s late success; the server ends on #2\'s values', !!ok,
-        `server xp ${s} (want ${x0 + 7}), page ${await page.evaluate(() => progress.xp)}`);
-      await page.evaluate(() => Promise.allSettled([...progressSaving])); await C.sleep(500);
+      await page.evaluate(() => { progress.xp += 3; window.__s1 = saveProgress(); });
+      check('the save reached the server, its answer held', !!await whenHeld(k));
+      check('…it landed (server +3)', srv().xp === x0 + 3, `server ${srv().xp}`);
+      await page.evaluate(() => wuServerSync(8000)); // a read, answered with the row that holds this page's save
+      const mid = await page.evaluate(() => progress.xp);
+      check('own-read: the read doesn\'t count the page\'s own save twice', mid === x0 + 3, `page xp ${mid} (want ${x0 + 3})`);
+      await releaseAndWait(k); await page.evaluate(() => window.__s1); await idle();
+      const now = await page.evaluate(() => progress.xp), s = srv();
+      check('own-read: after the save\'s answer, page and server +3', now === x0 + 3 && s.xp === x0 + 3, `page ${now}, server ${s.xp}`);
     });
 
     await C.G.step('profile', 40, async () => {
