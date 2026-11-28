@@ -1,0 +1,28 @@
+build: the working copy
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=282998310 (VOX_SLOW=0: off)
+  ✓ save #1 reached the server, its answer held
+  ✓ progress: the page keeps the newest save's values after the older answer lands — xp 7 (want 7), warmupsCompleted 2 (want 2)
+  ✓ progress: the next save keeps the server on the newest values — server xp 7, warmups_completed 2
+  ✓ save #1 reached the server, its answer held
+  ✓ retry: save #2 (503) is still retried after #1's late success; the server ends on #2's values — server xp 14 (want 14), page 14
+  ✓ saveProfile #1 reached the server, its answer held
+  ✓ profile: the page keeps the newest name after the older answer lands — name "Order B"
+  ✓ profile: the next save keeps the server on the newest name — server "Order B"
+  ✓ the warm-up day's read reached the server (yesterday), its answer held
+  ✓ warm-up day: the page keeps today's day and streak after the older read lands — day 2026-11-25 (want 2026-11-25), streak 3, counted today true
+  ✓ elsewhere: the count's read reached the server (today already counted there), its answer held
+  ✓ elsewhere: counted once on the page (today, streak 3, XP +5 +2, warm-ups +1) — page {"xp":21,"w":3,"d":"2026-11-25","s":3} want {"xp":21,"w":3,"d":"2026-11-25","s":3}
+  ✓ elsewhere: …and on the server — server {"d":"2026-11-25","s":3,"w":3,"xp":21}
+  ✓ nowhere: the count's read reached the server (yesterday), its answer held
+  ✓ nowhere: counted once on the page (today, streak 3, XP +5 +2, warm-ups +1) — page {"xp":28,"w":4,"d":"2026-11-25","s":3} want {"xp":28,"w":4,"d":"2026-11-25","s":3}
+  ✓ nowhere: …and on the server — server {"d":"2026-11-25","s":3,"w":4,"xp":28}
+  ✓ quiet: the count's read reached the server (today already counted there), its answer held
+  ✓ quiet (after the page's next save): counted once on the page (today, streak 3, XP +5, warm-ups +1) — page {"xp":33,"w":5,"d":"2026-11-25","s":3} want {"xp":33,"w":5,"d":"2026-11-25","s":3}
+  ✓ quiet (after the page's next save): …and on the server — server {"d":"2026-11-25","s":3,"w":5,"xp":33}
+  ✓ the day's vocal-load read reached the server, its answer held
+  ✓ …the checkpoint was confirmed meanwhile — {"ok":true,"left":0}
+  ✓ vocal load: the gauge's total includes the checkpoint confirmed while the read was out — before 0, after 120 (want 120); server's sessions total 120
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-hsave-1795579327127@example.com
+
+OUTOFORDER: PASS (22 passed, 0 failed)

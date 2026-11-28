@@ -1,0 +1,49 @@
+
+== part 1: the outbox on its own
+  ✓ 503: retried at 2, 5, 15, 60 s, then every 5 min (jitter 0 at random 0.5) — 2000, 5000, 15000, 60000, 300000, 300000 ms
+  ✓ 503: still kept on the device after 2 h of failures — 1 entry
+  ✓ a network error (no status): retried, jitter within ±20 % (1.6, 6, 12, 72, 240, 360 s at the extremes) — 1600, 6000, 12000, 72000, 240000, 360000
+  ✓ 429: retried, kept — 4 send(s), 1 kept
+  ✓ 500: retried, kept — 4 send(s), 1 kept
+  ✓ 401: retried, kept — 4 send(s), 1 kept
+  ✓ 400: a refused payload: dropped, logged, not retried — 1 send(s), 0 kept
+  ✓ 403: a refused payload: dropped, logged, not retried — 1 send(s), 0 kept
+  ✓ 422: a refused payload: dropped, logged, not retried — 1 send(s), 0 kept
+  ✓ one send in flight per session: three puts while the first is out, one send — sent 10
+  ✓ the latest payload goes once the first is answered (not the one in between) — sent 10, 30
+  ✓ still kept until the latest is confirmed — 1
+  ✓ pending load meanwhile: net of the first confirmed (60 − 20) — 40
+  ✓ confirmed: removed, nothing pending — 0 kept, pending 0
+  ✓ two tabs draining at once: one sends, the other sees its lease — sends by A
+  ✓ then both tabs see the outbox empty — 0 / 0
+  ✓ and nobody sends it again — 1 send(s)
+  ✓ a dead tab's lease (20 s) is waited out, then the entry is sent — 20050 ms
+  ✓ 35 h: an older session is not counted as pending — 20
+  ✓ 35 h: the older entry dropped and logged, the newer one sent — 1 sent, 0 kept, log: outbox: dropped a session older than 35 h a
+  ✓ pending load counts only that day — 30 / 12
+  ✓ another user's outbox (its own key) sees none of it — 0
+  ✓ storage that throws: kept in memory, retried, sent — 2 sends
+
+== part 2: the app (local build, production backend)
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=310932251 (VOX_SLOW=0: off)
+  ✓ 503: the session ended by the idle timer
+  ✓ 503: the end PUT failed (1 attempt(s), all 503) and the session is kept on the device, ended — {"n":1,"ids":["b896b6b9-aeb0-4878-9508-a7b36e9497c5"],"pending":7.691064930115876,"ended":[true],"load":[7.691064930115876]}
+  ✓ 503: nothing stored on the server yet — 0 new rows
+  ✓ 503: the gauge still counts the session (today's total = the server's + the one waiting) — gauge load 7.691, stored 0.000 + waiting 7.691
+  ✓ 503: once the server answers, the retry stores it and the outbox empties — 1 new row, ended true, 0 waiting
+  ✓ 503: stored with the device's load — 7.69106493011588 vs 7.691064930115876
+  ✓ 503: after a reload the gauge reads the server's total, not counted twice — 7.691 vs stored 7.691
+  ✓ abort: the session ended by the idle timer
+  ✓ abort: the end PUT failed (1 attempt(s), all abort) and the session is kept on the device, ended — {"n":1,"ids":["c7ec0b1c-63a8-4e62-b41f-b5abe05d320e"],"pending":7.678738888304468,"ended":[true],"load":[7.678738888304468]}
+  ✓ abort: nothing stored on the server yet — 0 new rows
+  ✓ abort: the gauge still counts the session (today's total = the server's + the one waiting) — gauge load 15.370, stored 7.691 + waiting 7.679
+  ✓ abort: once the server answers, the retry stores it and the outbox empties — 1 new row, ended true, 0 waiting
+  ✓ abort: stored with the device's load — 7.67873888830447 vs 7.678738888304468
+  ✓ abort: after a reload the gauge reads the server's total, not counted twice — 15.370 vs stored 15.370
+  ✓ a page closed with an entry waiting: the next page sends it on sign-in, stored, the outbox empty — 1 waiting before, 1 PUT on load, 1 new row
+  ✓ two tabs at once: the session stored exactly once on the server, both outboxes empty — 1 new row; 1 PUT(s) for the session (not checked)
+  ✓ an entry whose session started 36 h ago: dropped on load, never sent, logged — kept false, 0 PUT, log 1
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-dvvlo-1795607261067@example.com
+
+OUTBOX: PASS (40 passed, 0 failed)

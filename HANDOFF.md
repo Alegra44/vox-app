@@ -36,7 +36,7 @@ its worktree removed).
 
 Production: https://deploy-alegra1122.vercel.app (Vercel project `deploy`, scope `alegra1122`). Live since 2026-11-24:
 release H2, saves answered out of order, **dpl_A5EJRUAnPUdykqW7nckBa8957xx3** (master's merge fee7bcf; app-only),
-**the rollback target from now on**. Before it, release F, the warm-up, dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h (merge dc3abb2), with migration 0011 (`last_warmup_day`, `warmup_streak`) and the api Edge Function with them on the allow-list
+**the rollback target from now on**. On Wednesday 2026-11-26 production was promoted back to F (dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h) by accident: the user ran Monday's rollback line again. It was not a problem with H2. Release J's rollback target is H2, dpl_A5EJRUAnPUdykqW7nckBa8957xx3, which passed its production checks (review/saveH2-prod). J's deploy (design/reliability/RELEASE_J.md, "Review and deploy") replaces F directly. Before it, release F, the warm-up, dpl_Ca1xNVr4JqZpFLi5xTqyYcUmZK5h (merge dc3abb2), with migration 0011 (`last_warmup_day`, `warmup_streak`) and the api Edge Function with them on the allow-list
 (a rollback of the app leaves both: the old app doesn't send the fields). Before it, release E, the vibrato blend,
 dpl_12MtZ8zxUpCcdzRBUjBDsQw7osHB (2026-11-22); before that release D, Survey D's fixes,
 dpl_HNBqZiW6idUPUjFccqbhvLnX8hsm (2026-11-18); before that release C, the local day,

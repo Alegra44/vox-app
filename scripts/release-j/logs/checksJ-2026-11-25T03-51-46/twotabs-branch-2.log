@@ -1,0 +1,13 @@
+build: the working copy
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=285021441 (VOX_SLOW=0: off)
+  ✓ in turn: every tab's XP kept (30 + 4 × 3) — server xp 42
+  ✓ in turn: every tab's score kept, once — [41,42,43,44]
+  ✓ the merged XP: 42 + 5 + 6 + 1 — server xp 54
+  ✓ level 2, crossed by the merge, announced once across the two tabs — tab A [], tab B [2]
+  ✓ …on the tab whose merge crossed it (B) — tab B [2]
+  ✓ …and once in the server's timeline — [2]
+  ✓ both tabs end on the server's XP after their next read or save — A 53, B 54, server 54
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-jtabs-1795581350260@example.com
+
+TWOTABS: PASS (7 passed, 0 failed)

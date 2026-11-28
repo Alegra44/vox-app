@@ -1,0 +1,19 @@
+== https://ccharikhpeqtzpobarxi.supabase.co/functions/v1/api
+
+   signed up voxcoach-japi-1795851758066@example.com
+  ✓ GET /me/progress returns the row with its version                      HTTP 200, version 0
+  ✓ 1  if_version at the row's version: 200                                HTTP 200
+  ✓    …saved, version + 1, the save id kept                               xp 7, version 0 → 1, last_save_id ok
+  ✓    …the response carries the new version                               1
+  ✓ 2  if_version at an old version: 409                                   HTTP 409
+  ✓    …with the row as it is                                              row version 1, xp 7
+  ✓    …nothing written                                                    xp 7, version 1
+  ✓ 3  no if_version (the live app today): 200                             HTTP 200
+  ✓    …saved, version + 1, save ids unchanged                             xp 12, pitch [77], version 1 → 2
+  ✓ 4  the api ignores version and recent_save_ids from a client           HTTP 200, version 3, xp 13
+  ✓    a direct PostgREST write of version: refused, or the trigger wins   HTTP 204, version 3 → 4
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-japi-1795851758066@example.com
+  ✓ the test account is deleted                                            0 left
+
+APICHECK: PASS (12 passed, 0 failed)

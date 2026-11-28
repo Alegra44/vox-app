@@ -1,0 +1,17 @@
+build: the working copy
+[localBackend] slow, shuffled answers: 200–1500 ms, swaps; VOX_SLOW_SEED=284947994 (VOX_SLOW=0: off)
+  ✓ the phone's erase reached the server — sessions 0, pitch [], highest null
+  morning xp 20, sessions 2; erased: xp 20, sessions 0; server now: xp 30, sessions 1; the laptop's gain 10 XP
+  ✓ XP: the erase keeps XP; plus the laptop's gain once — server 30, want 30
+  ✓ sessions: the erase (0) plus the laptop's one session — server 1
+  ✓ history: only the laptop's session — {"2026-11-25":1}
+  ✓ streak: 1, from today (not the morning's streak carried over) — streak 1, day 2026-11-25
+  ✓ scores: the morning's erased; only the laptop's new breath score — pitch [], agility [], breath [55]
+  ✓ range: erased — null–null
+  ✓ timeline: the morning's record erased — 0 events
+  ✓ exercises today: erased (the laptop's session isn't an exercise) — 0, null
+  ✓ the laptop page now shows the merged row — {"xp":30,"s":1}
+
+[cleanup] deleted 1 test account(s) this run created; 0 left of voxcoach-jerase-1795581276814@example.com
+
+ERASE-STALE: PASS (10 passed, 0 failed)
