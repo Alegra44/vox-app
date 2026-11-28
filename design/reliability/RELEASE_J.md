@@ -233,3 +233,23 @@ The failures that aren't J's:
 - **warmup-tracking round 1, both sides, the same 3 checks:** in the song warm-up (hymn, ballad, hymn +100 ct),
   a few notes have the cursor about 180 px off, an octave slip in pitch detection on the synthesised voice. The
   numbers are identical on master and the branch, and rounds 3–5 pass 30/30 on both. Audio, not saves.
+
+## Review and deploy
+
+The user's review and deploy step, verbatim (2026-11-28):
+
+> Release J approved: I've read 0012, the api change and the merge (progressMerge3, progressMergeIn, progressSendOnce) on GitHub. Add this message to RELEASE_J.md under "Review and deploy" and commit it first on save/j. Keep the Mac on AC power this time; the run lock and time limits on. Restart the local stack from the main checkout before any local check.
+>
+> PRODUCTION: the promote back to F on Wednesday was an accident on my side (Monday's rollback line run again), not a problem with H2. J's rollback target is H2, dpl_A5EJRUAnPUdykqW7nckBa8957xx3, which passed its production checks. Write that in HANDOFF.
+>
+> 1. WAIT FOR "deploy". Say you're ready and wait for me to type it.
+>
+> 2. AFTER I TYPE "deploy", in this order
+> a) supabase migration list against the linked project: confirm it's production and that 0012 is the only migration pending; otherwise stop. Apply 0012, then confirm version, last_save_id, recent_save_ids and the trigger exist, and that version isn't on the api's allow-list (clients never write it).
+> b) Deploy the api Edge Function. Confirm: a save with if_version at the row's version works; one at an old version gets a 409 with the row; one without if_version (the live app today) still works.
+> c) Merge save/j into master with --no-ff, run the secret check, push master, and tell me it's pushed. I run the Vercel line myself.
+> d) Confirm deploy-alegra1122.vercel.app serves the new deployment; otherwise give me the exact promote line with the real dpl id.
+> Rollback: the app goes back to H2 (dpl_A5EJRUAnPUdykqW7nckBa8957xx3). 0012 and the function stay, since a save without if_version works as before.
+>
+> 3. PRODUCTION CHECKS: prod.sh (core), Survey J's five repro cases, the retry case, erase then a stale save, an old-app save, two tabs with a level crossed, outoforder (J's), progresssave, erasecheck, streak, roundtrip, levelup, outbox, warmup-tracking, youstates, house, bootcheck. Rollback rule as before; before calling a rollback, run the repeating failure against H2's deployment in the same run. Delete the test accounts; push the results to review/saveJ-prod. When everything passes: delete save/j, survey/stale, review/saveH2-prod and review/warmupF-prod. HANDOFF: J live, its dpl id the rollback target.
+> REPORT, then stop.
